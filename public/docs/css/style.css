@@ -1,0 +1,173 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0px;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+a:hover,
+a:focus {
+  outline: none;
+  text-decoration: none;
+}
+
+.body {
+  font-size: 14px;
+}
+
+img {
+  max-width: 100%;
+  padding-top: 30px;
+}
+
+.wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.left-side {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 300px;
+  height: 100%;
+  background-color: #f8f8f8;
+}
+
+.logo {
+  background-color: #f1f1f1;
+  text-align: center;
+}
+
+.logo img {
+  width: auto;
+  max-width: 65%;
+  height: auto;
+  margin: 20px auto;
+}
+
+.left-content {
+  text-align: center;
+}
+
+.left-content ul li {
+  border-bottom-color: #ccc;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  display: block;
+  height: 50px;
+}
+
+.left-content ul li.active {
+  background-color: #222;
+}
+
+.left-content ul li.active a {
+  color: #f8f8f8;
+}
+
+.left-content ul li a {
+  color: #222;
+  line-height: 50px;
+  padding-right: 30px;
+  display: block;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.copyright {
+  background-color: #222;
+  border-top: 1px solid #999;
+  bottom: 0;
+  color: #ffffff;
+  left: 0;
+  padding: 20px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.copyright p {
+  margin-bottom: 0px;
+}
+
+.copyright p a {
+  color: #fff;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.copyright p a:hover {
+  color: #ff6d3c;
+}
+
+.right-side {
+  padding-left: 300px;
+}
+
+.right-content {
+  padding: 50px;
+}
+
+.content {
+  display: none;
+}
+
+.content.active {
+  display: block;
+}
+
+pre {
+  background: url(../img/pre_bg.png);
+  line-height: 19px;
+  text-align: left;
+  padding: 0px;
+  margin-top: 35px;
+  font-size: 13px;
+  margin-bottom: 35px;
+}
+
+.content a {
+  color: #ff7f46;
+}
+
+.content h1 {
+  font-weight: 700;
+  padding-bottom: 35px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid #ddd;
+}
+
+#one > h1 span {
+  color: #ff7f46;
+}
+
+.content#source > ul li span {
+  font-weight: 700;
+  display: block;
+}
+
+.content#source > ul li > ul {
+  padding-left: 25px;
+}
+
+.satisfication-area.color-bg::after {
+  background: red none repeat scroll 0 0 !important;
+}
+
+#two img {
+  width: 357px;
+}

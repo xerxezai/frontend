@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      SEOZ - SEO & Digital Marketing Agency React.js Template Documentation
+    </title>
+    <meta
+      name="description"
+      content="Comprehensive documentation for SEOZ - SEO & Digital Marketing Agency React.js Template Documentation"
+    />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="left-side">
+        <div class="logo">
+          <a href="#">
+            <img src="img/black-logo.svg" alt="Seoz Template Logo" />
+          </a>
+        </div>
+
+        <div class="left-content">
+          <ul role="tablist">
+            <li class="active"><a href="#one" data-toggle="tab">Welcome</a></li>
+            <li>
+              <a href="#prerequisites" data-toggle="tab">Prerequisites</a>
+            </li>
+            <li><a href="#installation" data-toggle="tab">Installation</a></li>
+            <li><a href="#two" data-toggle="tab">File Structure</a></li>
+            <li><a href="#three" data-toggle="tab">Configuration</a></li>
+            <li><a href="#four" data-toggle="tab">Components</a></li>
+            <li><a href="#five" data-toggle="tab">SCSS Structure</a></li>
+            <li><a href="#six" data-toggle="tab">Context API</a></li>
+            <li><a href="#seven" data-toggle="tab">Pages Structure</a></li>
+            <li><a href="#scripts" data-toggle="tab">Available Scripts</a></li>
+            <li>
+              <a href="#customization" data-toggle="tab">Customization</a>
+            </li>
+            <li><a href="#eight" data-toggle="tab">Deployment</a></li>
+            <li><a href="#source" data-toggle="tab">Sources & Credits</a></li>
+            <li><a href="#support" data-toggle="tab">Support</a></li>
+          </ul>
+        </div>
+
+        <div class="copyright">
+          <p>
+            &copy; Copyright
+            <a href="https://themeforest.net/user/preoit" target="_blank"
+              >preoiT</a
+            >
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+            .
+          </p>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="right-content tab-content">
+          <div id="one" class="content tab-pane active fade in">
+            <h1>
+              <span>Seoz</span> - SEO & Digital Marketing Agency React.js
+              Template
+            </h1>
+            <div class="created">
+              <p>
+                Created : 29 July 2025 <br />
+                Last Update : 29 July 2025<br />
+                By :
+                <a href="https://themeforest.net/user/preoit" target="_blank"
+                  >preoiT</a
+                ><br />
+                Email : preoitinfo@gmail.com<br />
+                <br />
+                Thank you for purchasing our **Seoz** - SEO & Digital Marketing
+                Agency React.js Template!
+                <br /><br />
+                This document provides a comprehensive guide to setting up,
+                understanding, and customizing the template. It covers the file
+                structure, how to configure settings, work with components and
+                styles, manage state, deploy your project, and find support.
+                <br /><br />
+                We've built this template using modern React.js features and
+                best practices to provide a performant and developer-friendly
+                experience.
+                <br /><br />
+                If you have any questions or encounter any issues, please don't
+                hesitate to reach out for support.
+              </p>
+            </div>
+          </div>
+
+          <div id="prerequisites" class="content tab-pane fade">
+            <h1>Prerequisites</h1>
+            <p>
+              Before you begin working with the Seoz React.js template, ensure
+              you have the following software installed on your system:
+            </p>
+            <ul>
+              <li>
+                **Node.js**: We recommend using the latest LTS (Long Term
+                Support) version of Node.js. You can download it from
+                <a href="https://nodejs.org/" target="_blank">nodejs.org</a>.
+                Node.js includes npm (Node Package Manager).
+              </li>
+              <li>
+                **npm, yarn, or pnpm**: You will need a package manager to
+                install dependencies. npm is included with Node.js, but you can
+                also use yarn or pnpm.
+                <ul>
+                  <li>To install yarn: <code>npm install -g yarn</code></li>
+                  <li>To install pnpm: <code>npm install -g pnpm</code></li>
+                </ul>
+                We recommend using the same package manager that was used to
+                create the `package-lock.json`, `yarn.lock`, or `pnpm-lock.yaml`
+                file provided in the template package.
+              </li>
+              <li>
+                **Code Editor**: A modern code editor like VS Code, Sublime
+                Text, Atom, etc., is highly recommended for a better development
+                experience.
+              </li>
+              <li>
+                **Git (Recommended)**: Git is useful for version control and
+                deploying to platforms like Vercel.
+              </li>
+            </ul>
+          </div>
+
+          <div id="installation" class="content tab-pane fade">
+            <h1>Installation</h1>
+            <p>
+              Follow these simple steps to get the template running on your
+              local machine:
+            </p>
+            <ol>
+              <li>
+                **Unzip the main file**: Extract the contents of the downloaded
+                template zip file to your desired directory.
+              </li>
+              <li>
+                **Navigate to the template directory**: Open your terminal or
+                command prompt and change the directory to the extracted
+                template folder (the one containing `package.json`).
+                <pre><code>cd path/to/your/main_file</code></pre>
+              </li>
+              <li>
+                **Install dependencies**: Run the appropriate command based on
+                your preferred package manager (`npm`, `yarn`, or `pnpm`).
+                <pre><code>npm install</code></pre>
+                or
+                <pre><code>yarn install</code></pre>
+                or
+                <pre><code>pnpm install</code></pre>
+                <p>
+                  This will install all the necessary libraries and packages
+                  listed in the `package.json` file.
+                </p>
+              </li>
+              <li>
+                **Configure environment variables**: Ensure that the .env file
+                in your template's root directory contains the following line.
+                <pre><code>VITE_APP_BASE_PATH=/</code></pre>
+              </li>
+              <li>
+                **Run the development server**: Start the local development
+                server.
+                <pre><code>npm run dev</code></pre>
+                or
+                <pre><code>yarn dev</code></pre>
+                or
+                <pre><code>pnpm dev</code></pre>
+              </li>
+              <li>
+                **View the template**: Open your web browser and go to
+                `http://localhost:5173` (or the address shown in your terminal).
+                You should see the template running.
+              </li>
+            </ol>
+            <p>You are now ready to start customizing the template!</p>
+          </div>
+
+          <div id="two" class="content tab-pane fade">
+            <h1>File Structure</h1>
+            <p>
+              This template follows a standard React project structure, often
+              used with build tools like Vite, making it straightforward to
+              understand and modify. All files are logically organized for a
+              smooth development experience.
+            </p>
+            <h3>Root Directory:</h3>
+            <p>
+              After setting up your project, you'll find the following files and
+              folders in the root:
+            </p>
+            <ul>
+              <li>
+                <code>/src</code>: This is the heart of your application,
+                containing all your React source code.
+              </li>
+              <li>
+                <code>/public</code>: This directory holds static assets such as
+                images, fonts, and any other files that should be served
+                directly by the browser.
+              </li>
+              <li>
+                <code>.env</code>: Environment variables file used to store
+                sensitive or environment-specific values (e.g., API keys, base
+                URLs).
+              </li>
+              <li>
+                <code>.gitignore</code>: Specifies files and directories that
+                Git should intentionally ignore in your version control.
+              </li>
+              <li>
+                <code>index.html</code>: The main HTML entry point for your
+                React application. Vite uses this to inject your React app.
+              </li>
+              <li>
+                <code>package-lock.json</code> or <code>yarn.lock</code> or
+                <code>pnpm-lock.yaml</code>: These files lock down the specific
+                versions of your project's dependencies.
+              </li>
+              <li>
+                <code>package.json</code>: This file lists your project's
+                dependencies, scripts for running and building your app, and
+                other project metadata.
+              </li>
+              <li>
+                <code>README.md</code>: A markdown file containing general
+                information about your project, often including setup
+                instructions.
+              </li>
+              <li>
+                <code>tsconfig.json</code>: If you're using TypeScript (as
+                indicated by some of your files), this file configures your
+                TypeScript compiler options.
+              </li>
+              <li>
+                <code>vite-env.d.ts</code>: TypeScript declaration file for
+                Vite's environment variables.
+              </li>
+              <li>
+                <code>vite.config.ts</code> or <code>vite.config.js</code>: This
+                is Vite's configuration file, where you can customize build
+                options, server settings, and more.
+              </li>
+            </ul>
+
+            <h3>Inside the <code>/src</code> Folder:</h3>
+            <p>
+              This is where the majority of your application logic and UI
+              components will reside. Common subdirectories include:
+            </p>
+            <ul>
+              <li>
+                <code>/components</code>: This folder typically houses your
+                reusable React components, which are the building blocks of your
+                user interface.
+              </li>
+              <li>
+                <code>/context</code>: If you're using the React Context API for
+                managing global state, related files will likely be here.
+              </li>
+              <li>
+                <code>/data</code>: This might contain static data or mock data
+                used within your application.
+              </li>
+              <li>
+                <code>/pages</code>: In many React projects (though not strictly
+                enforced by Vite like Next.js), this folder can contain your
+                top-level components that represent different views or screens
+                of your application. With React Router or similar libraries,
+                components in this folder often become your routed pages.
+              </li>
+              <li>
+                <code>/styles</code> or <code>/scss</code>: This folder is where
+                you'll keep your SCSS, or other styling files.
+              </li>
+              <li>
+                <code>/types</code>: If you're using TypeScript, this folder
+                will contain your custom type definitions and interfaces to
+                ensure type safety.
+              </li>
+              <li>
+                <code>App.tsx</code> or <code>App.jsx</code>: This is often the
+                root component of your application, which renders other
+                components and sets up the overall structure.
+              </li>
+              <li>
+                <code>custom.d.ts</code>: A custom TypeScript declaration file
+                for any global type definitions specific to your project.
+              </li>
+              <li>
+                <code>main.tsx</code> or <code>main.jsx</code>: This is the
+                entry point that renders your root <code>App</code> component
+                into the DOM, usually targeting an element in your
+                <code>index.html</code>.
+              </li>
+            </ul>
+
+            <h3>Understanding Key Folders:</h3>
+            <ul>
+              <li>
+                **<code>/components</code>**: Components in this folder are
+                designed to be modular and reusable across your application.
+                You'll build your UI by composing these components together
+                within your pages or other components.
+              </li>
+              <li>
+                **<code>/public</code>**: Static assets placed here are served
+                at the root of your application. For example, an image in
+                <code>/public/assets/img/logo.png</code> can be accessed in your
+                code as <code>/assets/img/logo.png</code>.
+              </li>
+              <li>
+                **<code>/data</code>**: The files within this folder can hold
+                static information used in your application. This is useful for
+                things like lists of items, configuration data, or demo content.
+              </li>
+              <li>
+                **<code>/styles</code>**: This is where you'll organize your
+                stylesheets. You might have global styles, component-specific
+                styles, or use SCSS-in-JS approaches depending on your
+                preference.
+              </li>
+              <li>
+                **<code>/types</code>**: Using TypeScript types defined here
+                helps you catch potential errors early in development and makes
+                your codebase more maintainable by ensuring that data and
+                components use the expected structures.
+              </li>
+              <li>
+                **<code>App.tsx</code> (or <code>.jsx</code>)**: This component
+                is typically the starting point for your application's UI. It
+                often includes routing setup (if you're using a router) and
+                provides the main structure for your application.
+              </li>
+              <li>
+                **<code>main.tsx</code> (or <code>.jsx</code>)**: This script is
+                responsible for taking your root <code>App</code> component and
+                rendering it into the
+                <code>&lt;div id="root"&gt;&lt;/div&gt;</code> element in your
+                <code>index.html</code> file. It's the entry point that makes
+                your React application come alive in the browser.
+              </li>
+            </ul>
+            <img
+              src="img/file.png"
+              alt="React Vite template file structure screenshot"
+            />
+          </div>
+
+          <div id="three" class="content tab-pane fade">
+            <h1>Configuration</h1>
+            <p>
+              Beyond the initial setup, here are key areas you might want to
+              configure in your React Vite application:
+            </p>
+            <h3>Modifying Demo Data:</h3>
+            <p>
+              The template likely includes some placeholder or demo data for
+              various UI elements. This data is often located within the
+              <code>/src/data</code> folder, potentially in files like
+              <code>index.js</code>, <code>index.ts</code>, or separate files
+              for different data sets.
+            </p>
+            <p>
+              To replace this with your own content, simply open the relevant
+              file(s) in the
+              <code>/src/data</code>
+              directory and modify the JavaScript objects and arrays. If you're
+              using TypeScript, ensure you adhere to the types defined in your
+              <code>/src/types</code> folder to maintain consistency.
+            </p>
+            <h3>Vite Configuration:</h3>
+            <p>
+              The <code>vite.config.ts</code> (or <code>vite.config.js</code>)
+              file in the root directory is where you configure Vite's behavior.
+              This includes settings for the development server (like port and
+              proxying), build optimizations, handling static assets, and
+              integrating plugins.
+            </p>
+            <p>
+              Refer to the official Vite documentation for a comprehensive
+              overview of the available configuration options to tailor your
+              build process and development environment.
+            </p>
+            <h3>Environment Variables:</h3>
+            <p>
+              Environment variables are crucial for managing configuration that
+              varies between different environments (e.g., development,
+              production) or for sensitive information like API keys.
+            </p>
+            <p>
+              Create a <code>.env.local</code> file in the root of your project
+              to define your local environment variables. For production
+              variables, you might use <code>.env.production</code>, and so on.
+            </p>
+            <p>
+              Vite automatically loads variables from these files. To access
+              them in your code, use
+              <code>import.meta.env.YOUR_VARIABLE_NAME</code>. For variables
+              that should be exposed to the browser, they need to be prefixed
+              with <code>VITE_</code> in your <code>.env</code> files.
+            </p>
+            <pre><code># Example .env.local file
+                VITE_API_URL=https://your-api-url.com/api
+                SERVER_SECRET_KEY=your_server_secret # Not exposed to the browser
+                VITE_APP_TITLE=My Awesome App      # Exposed to the browser
+                </code></pre>
+            <p>Access these variables in your code like this:</p>
+            <pre><code>console.log(import.meta.env.VITE_API_URL);
+                // For server-side only variables (not prefixed with VITE_), you might access them
+                // via process.env if your server-side rendering or API routes are set up to handle them.
+                // However, in a purely client-side Vite app, focus on VITE_ prefixed variables.
+                console.log(import.meta.env.VITE_APP_TITLE);
+                </code></pre>
+          </div>
+
+          <div id="four" class="content tab-pane fade">
+            <h1>Components</h1>
+            <p>
+              This template leverages modular and reusable React components,
+              carefully organized within the
+              <code>/src/components</code> directory to ensure a clean and
+              maintainable codebase.
+            </p>
+            <p>
+              Within <code>/src/components</code>, you'll often find
+              sub-directories that group components by their functionality or
+              the specific area of the application they serve (e.g.,
+              <code>Header</code>, <code>Footer</code>, <code>common</code>,
+              <code>ui</code>, or perhaps feature-specific folders).
+            </p>
+            <p>
+              The primary views or screens of your application are built as page
+              components, which you've clearly organized within the
+              <code>/src/pages</code> directory. Your <code>App.tsx</code> file
+              acts as the central routing configuration, utilizing the
+              <code>&lt;BrowserRouter&gt;</code>, <code>&lt;Routes&gt;</code>,
+              and <code>&lt;Route&gt;</code> components from the
+              <code>react-router-dom</code> library. This setup maps specific
+              URL paths (like <code>/</code>, <code>/about</code>,
+              <code>/course/:slug</code>) to their corresponding page components
+              (e.g., <code>HomePage1</code>, <code>AboutPage</code>,
+              <code>CourseDetailPage</code>).
+            </p>
+            <p>
+              These page components, located in <code>/src/pages</code>, then
+              import and compose the smaller, reusable building blocks from the
+              <code>/src/components</code> directory to construct the user
+              interface. Data is passed down to these components via
+              <code>props</code>, allowing for dynamic content rendering. By
+              inspecting a component's code, you can understand the props it
+              expects and how it utilizes data, potentially sourced from files
+              in <code>/src/data</code>.
+            </p>
+            <p>
+              To customize the template, you can either modify the existing
+              components in
+              <code>/src/components</code> or create new ones. Similarly, you
+              can add or adjust the page components and their corresponding
+              routes within <code>/src/pages</code> and <code>App.tsx</code> to
+              build the specific features and navigation of your application.
+            </p>
+            <img
+              src="img/component.png"
+              alt="React Vite template components folder structure screenshot"
+            />
+          </div>
+
+          <div id="five" class="content tab-pane fade">
+            <h1>SCSS Structure</h1>
+            <p>
+              The template uses SCSS for styling. The SCSS files are located in
+              the
+              <code>/src/styles</code> folder.
+            </p>
+            <ul>
+              <li>
+                **Variables**: Look for files defining SCSS variables (e.g., for
+                colors, fonts, spacing) to easily customize the template's
+                appearance globally.
+              </li>
+              <li>**Base/Generic Styles**: Resets, typography base styles.</li>
+              <li>**Layout/Object Styles**: Styles for structural patterns.</li>
+              <li>
+                **Component Styles**: Specific styles for individual UI
+                components.
+              </li>
+              <li>**Utility Classes**: Helper classes for common styles.</li>
+            </ul>
+            <img
+              src="img/css.png"
+              alt="Seoz template CSS folder structure screenshot"
+            />
+          </div>
+
+          <div id="six" class="content tab-pane fade">
+            <h1>Context API</h1>
+            <p>
+              The template utilizes React's Context API, managed within the
+              <code>/src/context</code> folder (specifically
+              <code>context.tsx</code>), for global state management.
+            </p>
+            <p>
+              This approach helps avoid "prop drilling" (passing props down
+              through many nested components) by making certain state values and
+              functions available directly to any component that needs them,
+              regardless of how deep they are in the component tree.
+            </p>
+            <p>
+              The <code>context.tsx</code> file contains the provider component
+              and defines the state and functions shared across the app. To
+              access this shared state or functions within any component, you'll
+              use a custom hook provided by the context, likely named
+              <code>useCustomContext</code> (as mentioned).
+            </p>
+            <pre><code>// Example of consuming context in a component
+import { useCustomContext } from '../context/context'; // Adjust import path if needed
+
+const MyComponent = () => {
+  const { sharedState, updateStateFunction } = useCustomContext();
+
+  // Use sharedState and updateStateFunction here
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Shared State Value: {sharedState}&lt;/p&gt;
+      &lt;button onClick={() => updateStateFunction('new value')}&gt;Update State&lt;/button&gt;
+    &lt;/div&gt;
+  );
+};
+</code></pre>
+            <p>
+              Review the <code>context.tsx</code> file for details on what state
+              is managed and the available functions. The functions are
+              documented within the file for your better understanding.
+            </p>
+            <img
+              src="img/context.png"
+              alt="Seoz template context API file screenshot"
+            />
+          </div>
+
+          <div id="seven" class="content tab-pane fade">
+            <h1>Pages Structure</h1>
+            <p>
+              In this React project, you're using React Router DOM for
+              navigation, which provides a flexible way to define routes within
+              your application. Unlike Next.js's file-system routing, React
+              Router DOM uses explicit configuration within your code.
+            </p>
+            <p>
+              As seen in your <code>App.tsx</code> file, the
+              <code>&lt;BrowserRouter&gt;</code> component enables client-side
+              routing. Inside it, the <code>&lt;Routes&gt;</code> component acts
+              as a container for your individual
+              <code>&lt;Route&gt;</code> definitions.
+            </p>
+            <p>
+              Each <code>&lt;Route&gt;</code> component specifies a
+              <code>path</code> (the URL route) and an
+              <code>element</code>
+              (the React component to render when that route is matched). For
+              example:
+            </p>
+            <pre>
+  <code>
+    &lt;Route path="/" element={&lt;HomePage1 /&gt;} /&gt;
+    &lt;Route path="/home-2" element={&lt;HomePage2 /&gt;} /&gt;
+    &lt;Route path="/home-3" element={&lt;HomePage3 /&gt;} /&gt;
+  </code>
+</pre>
+            <p>
+              Here, when a user navigates to the root path (<code>/</code>), the
+              <code>HomePage1</code> component will be rendered. Similarly,
+              <code>/about</code> renders <code>AboutPage</code>. The
+              <code>/course/:slug</code> route demonstrates dynamic routing,
+              where <code>:slug</code> is a parameter that can be accessed
+              within the <code>CourseDetailPage</code> component to fetch and
+              display specific course information.
+            </p>
+            <p>
+              Your page components, which represent the different views of your
+              application (like
+              <code>HomePage1</code>, <code>AboutPage</code>,
+              <code>CoursePage</code>, etc.), are organized within the
+              <code>/src/pages</code>
+              directory. These components are responsible for fetching data,
+              managing their own state, and rendering the necessary UI, often by
+              importing and composing smaller, reusable components from the
+              <code>/src/components</code> directory.
+            </p>
+            <p>
+              To add new pages or modify existing routes, you'll primarily work
+              within your
+              <code>App.tsx</code> file to define the
+              <code>&lt;Route&gt;</code> configurations and create or update the
+              corresponding page components in the
+              <code>/src/pages</code> directory.
+            </p>
+            <img
+              src="img/app.png"
+              alt="React Vite template app directory structure screenshot 1"
+            />
+            <img
+              src="img/page.png"
+              alt="React Vite template app directory structure screenshot 2"
+            />
+          </div>
+
+          <div id="scripts" class="content tab-pane fade">
+            <h1>Available Scripts</h1>
+            <p>
+              In the project directory, you can run the following standard
+              React.js scripts using your package manager:
+            </p>
+            <ul>
+              <li>
+                <code>npm run dev</code> or <code>yarn dev</code> or
+                <code>pnpm dev</code>
+                <p>
+                  Runs the application in development mode with hot-reloading.
+                  Opens [http://localhost:5173](http://localhost:5173) by
+                  default.
+                </p>
+              </li>
+              <li>
+                <code>npm run build</code> or <code>yarn build</code> or
+                <code>pnpm build</code>
+                <p>
+                  Builds the application for production to the
+                  <code>dist</code> folder. Optimizes the build for the best
+                  performance.
+                </p>
+              </li>
+              <li>
+                <code>npm run start</code> or <code>yarn start</code> or
+                <code>pnpm start</code>
+                <p>
+                  Starts the production server. You must run
+                  <code>npm run build</code> first. Opens
+                  [http://localhost:5173](http://localhost:5173) by default.
+                </p>
+              </li>
+              <li>
+                <code>npm run lint</code> or <code>yarn lint</code> or
+                <code>pnpm lint</code>
+                <p>
+                  Runs ESLint to check for code quality and potential errors.
+                </p>
+              </li>
+            </ul>
+            <p>
+              Consult the <code>package.json</code> file for any additional
+              custom scripts that might be included.
+            </p>
+          </div>
+
+          <div id="customization" class="content tab-pane fade">
+            <h1>Customization</h1>
+            <p>Here are some common customization tasks you might perform:</p>
+            <h3>Colors and Typography:</h3>
+            <p>
+              The main color palette and typography settings are defined using
+              CSS variables. Look for files like
+              <code>/src/styles/scss/_variables.scss</code> in the :root (path
+              may vary slightly) to modify global color schemes, font families,
+              font sizes, etc.
+            </p>
+            <h3>Images and Assets:</h3>
+            <p>
+              The template leverages environment variables to manage the base
+              path for images and other static assets, allowing for flexible
+              deployment and content management.
+            </p>
+            <p>
+              Your <code>Image</code> component currently uses
+              <code>VITE_APP_BASE_PATH</code> from your <code>.env</code> file
+              to construct the full image source:
+            </p>
+            <pre><code class="language-typescript">// src/components/Image.tsx (or similar, depending on your file structure)
+                interface Props {
+                  src: string; // The relative path to the image, e.g., "assets/img/hero.jpg"
+                  alt: string;
+                  width: number;
+                  height: number;
+                  className?: string;
+                }
+                
+                const Image = ({ src, alt, width, height, className }: Props) => {
+                  const basePath = import.meta.env.VITE_APP_BASE_PATH; // This fetches the value from your .env
+                  return (
+                    &lt;img
+                      src={`${basePath}${src}`} // Combines the base path with the image's relative path
+                      alt={alt}
+                      className={className ? className : ""}
+                      width={width}
+                      height={height}
+                      loading="lazy"
+                    />
+                  );
+                };
+                
+                export default Image;
+                </code></pre>
+
+            <h4>How to Customize the Asset Path:</h4>
+            <p>
+              To change where your images are loaded from, you'll modify the
+              <code>VITE_APP_BASE_PATH</code>
+              variable in your
+              <code>.env</code> file.
+            </p>
+            <ol>
+              <li>
+                **Locate your <code>.env</code> file**: This file should be in
+                the root directory of your project (the same directory as
+                <code>package.json</code>).
+              </li>
+              <li>
+                **Edit <code>VITE_APP_BASE_PATH</code>**:
+                <ul>
+                  <li>
+                    **For a local directory**: If your images are hosted in a
+                    sub-directory relative to your application's root (e.g.,
+                    <code>http://localhost:5173/my-images/</code>), you would
+                    set:
+                    <pre><code>VITE_APP_BASE_PATH=/my-images/</code></pre>
+                    <em>Remember to include the trailing slash!</em>
+                  </li>
+                  <li>
+                    **For an API Endpoint (CDN, external server)**: If your
+                    images are served from an external API or a Content Delivery
+                    Network (CDN), you can set the full URL here:
+                    <pre><code>VITE_APP_BASE_PATH=https://your-cdn.com/images/</code></pre>
+                    or
+                    <pre><code>VITE_APP_BASE_PATH=https://api.yourdomain.com/assets/</code></pre>
+                    <em
+                      >Ensure this path correctly points to the base URL where
+                      your images are located.</em
+                    >
+                  </li>
+                </ul>
+              </li>
+            </ol>
+            <h4>Important Notes:</h4>
+            <ul>
+              <li>
+                **Restart your development server**: After making any changes to
+                your <code>.env</code> file, you **must** restart your
+                development server (<code>npm run dev</code>,
+                <code>yarn dev</code>, or <code>pnpm dev</code>) for the changes
+                to take effect.
+              </li>
+              <li>
+                **Vite Prefix**: In Vite, all environment variables exposed to
+                the client-side code must be prefixed with
+                <code>VITE_</code>. Do not change
+                <code>VITE_APP_BASE_PATH</code> to <code>APP_BASE_PATH</code> as
+                it will not be accessible in your component.
+              </li>
+              <li>
+                **Production Builds**: When you build your application for
+                production (<code>npm run build</code>), Vite will statically
+                replace these <code>import.meta.env</code> references with the
+                values from your <code>.env.production</code> file (or
+                <code>.env</code> if no production-specific file exists). Ensure
+                your production environment variables are correctly configured.
+              </li>
+            </ul>
+            <p>
+              This setup gives you the flexibility to easily switch between
+              local development asset paths and production API endpoints or CDN
+              URLs without modifying your component code.
+            </p>
+
+            <h3>Content:</h3>
+            <p>
+              As mentioned in the
+              <a href="#three" data-toggle="tab">Configuration</a> section,
+              modify the data in <code>/src/data/index.ts</code> to change the
+              content displayed in various sections like courses, testimonials,
+              etc.
+            </p>
+            <h3>Components:</h3>
+            <p>
+              Customize the structure and appearance of individual sections or
+              UI elements by editing the relevant component files in the
+              <code>/src/components</code> folder.
+            </p>
+            <h3>Styling:</h3>
+            <p>
+              Modify the SCSS files in <code>/src/styles/scss</code> to adjust
+              specific styles. Follow the existing SCSS structure and
+              methodology for consistency.
+            </p>
+          </div>
+
+          <div id="eight" class="content tab-pane fade">
+            <h1>Deployment</h1>
+            <p>
+              Deploying your React Vite application is a straightforward
+              process. While Vercel is excellent for Next.js, there are many
+              fantastic platforms well-suited for deploying modern front-end
+              applications like yours.
+            </p>
+
+            <h3>Recommended Deployment Platforms:</h3>
+            <p>
+              Here are a few popular and recommended platforms for deploying
+              your React Vite template:
+            </p>
+            <ul>
+              <li>
+                <strong>Vercel</strong>: While optimized for Next.js, Vercel
+                also provides excellent support for static site generation (SSG)
+                and client-side rendered (CSR) React applications built with
+                tools like Vite. You can connect your Git repository, and Vercel
+                will handle the build and deployment. Ensure your build settings
+                in Vercel are configured to use Vite's build command (usually
+                <code>npm run build</code> or <code>yarn build</code>) and point
+                to the <code>dist</code>
+                folder as the output directory. Remember to also set any
+                necessary **environment variables** (like
+                <code>VITE_APP_BASE_PATH</code>) within Vercel's project
+                settings.
+                <a href="https://vercel.com/" target="_blank"
+                  >https://vercel.com/</a
+                >
+              </li>
+              <li>
+                <strong>Netlify</strong>: Similar to Vercel, Netlify offers
+                seamless deployment from Git repositories. It automatically
+                detects your project type and provides CI/CD pipelines, HTTPS,
+                and a global CDN. Configure your build command to
+                <code>npm run build</code> (or <code>yarn build</code>) and set
+                the publish directory to <code>dist</code>. Any **environment
+                variables** (e.g., <code>VITE_APP_BASE_PATH</code>) needed for
+                your application should be added in Netlify's build settings.
+                <a href="https://www.netlify.com/" target="_blank"
+                  >https://www.netlify.com/</a
+                >
+              </li>
+              <li>
+                <strong>Surge.sh</strong>: A very simple and quick way to deploy
+                static websites and single-page applications. After building
+                your project (<code>npm run build</code> or
+                <code>yarn build</code>), you can deploy by simply running
+                <code>surge ./dist</code> in your terminal. Note that for Surge,
+                you might need to handle **environment variables** like
+                <code>VITE_APP_BASE_PATH</code> by ensuring they are correctly
+                resolved during the build step, as Surge primarily hosts static
+                files.
+                <a href="https://surge.sh/" target="_blank"
+                  >https://surge.sh/</a
+                >
+              </li>
+              <li>
+                <strong>GitHub Pages</strong>: If your site is primarily static
+                and you're using GitHub, GitHub Pages offers free hosting
+                directly from your repository. You'll need to configure your
+                build process to output to a specific branch (usually
+                <code>gh-pages</code>) or a <code>/docs</code> folder in your
+                main branch. For **environment variables** such as
+                <code>VITE_APP_BASE_PATH</code>, ensure they are correctly set
+                in your CI/CD workflow (e.g., GitHub Actions) that builds and
+                deploys to GitHub Pages.
+                <a href="https://pages.github.com/" target="_blank"
+                  >https://pages.github.com/</a
+                >
+              </li>
+              <li>
+                <strong>Firebase Hosting</strong>: A fast and secure hosting
+                service from Google. It offers features like global CDNs, custom
+                domains, and free SSL. You'll need the Firebase CLI to deploy
+                after building your project. You can manage **environment
+                variables** like <code>VITE_APP_BASE_PATH</code> through
+                Firebase's project configuration or by ensuring they are
+                embedded during your Vite build process.
+                <a
+                  href="https://firebase.google.com/products/hosting"
+                  target="_blank"
+                  >https://firebase.google.com/products/hosting</a
+                >
+              </li>
+            </ul>
+
+            <h3>General Deployment Steps:</h3>
+            <p>
+              While the specifics vary by platform, here are the general steps
+              you'll typically follow:
+            </p>
+            <ol>
+              <li>
+                **Build Your Project**: Run the build command for your Vite
+                project. This is usually defined in your
+                <code>package.json</code> under the <code>build</code> script
+                (e.g., <code>npm run build</code> or <code>yarn build</code>).
+                This command will generate an optimized production build of your
+                application, typically in a <code>dist</code> folder.
+              </li>
+              <li>
+                **Choose a Hosting Platform**: Select a hosting provider that
+                suits your needs (some recommendations are above).
+              </li>
+              <li>
+                **Connect Your Project**: For platforms like Vercel, Netlify,
+                and GitHub Pages, you'll typically connect your Git repository
+                to the platform.
+              </li>
+              <li>
+                **Configure Deployment Settings**: Specify the build command
+                (e.g.,
+                <code>npm run build</code>) and the output/publish directory
+                (usually <code>dist</code>). Crucially, you will also need to
+                configure any necessary **environment variables** (like
+                <code>VITE_APP_BASE_PATH</code>) on the hosting platform. This
+                ensures your application can correctly load assets, connect to
+                APIs, and more in the production environment.
+              </li>
+              <li>
+                **Deploy**: Trigger the deployment process through the
+                platform's interface or CLI.
+              </li>
+              <li>
+                **Verify**: Once deployed, visit the provided URL to ensure your
+                application is running correctly.
+              </li>
+            </ol>
+
+            <p>
+              For detailed instructions specific to your chosen hosting
+              platform, please refer to their official documentation. Each
+              platform has its own nuances and best practices for deploying
+              React applications.
+            </p>
+          </div>
+          <div id="source" class="content tab-pane fade">
+            <h1>Sources &amp; Credits</h1>
+            <p>
+              This template utilizes the following libraries, fonts, and assets:
+            </p>
+            <ul>
+              <li>
+                <span>Fonts:</span>
+                <ul>
+                  <li>
+                    <a
+                      href="https://fonts.google.com/specimen/Outfit"
+                      target="_blank"
+                      >Outfit</a
+                    >
+                    (Google Fonts)
+                  </li>
+                  <li>
+                    <a
+                      href="https://fonts.google.com/specimen/Inter"
+                      target="_blank"
+                      >Inter</a
+                    >
+                    (Google Fonts)
+                  </li>
+                  <li>
+                    <a
+                      href="https://fonts.google.com/specimen/DM+Sans"
+                      target="_blank"
+                      >DM Sans</a
+                    >
+                    (Google Fonts)
+                  </li>
+                  <li>
+                    Any other fonts included in `/public/fonts` or
+                    `/src/styles/fonts`.
+                  </li>
+                </ul>
+              </li>
+              <br />
+              <li>
+                <span>Icons:</span>
+                <ul>
+                  <li>
+                    <a href="https://fontawesome.com/" target="_blank"
+                      >Font Awesome</a
+                    >
+                  </li>
+                  <li>Any custom SVG icons included in the template.</li>
+                </ul>
+              </li>
+              <br />
+              <li>
+                <span>CSS Framework:</span>
+                <ul>
+                  <li>
+                    <a href="https://getbootstrap.com/" target="_blank"
+                      >Bootstrap</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://sass-lang.com/" target="_blank">Sass</a>
+                  </li>
+                </ul>
+              </li>
+              <br />
+              <li>
+                <span>React Libraries & Dependencies:</span>
+                <ul>
+                  <li>
+                    <a href="https://vite.dev/" target="_blank">Vite.js</a>
+                  </li>
+                  <li>
+                    <a href="https://react.dev/" target="_blank">React</a>
+                  </li>
+                  <li>
+                    <a href="https://swiperjs.com/" target="_blank">Swiperjs</a>
+                    (For carousels/sliders)
+                  </li>
+                  <li>
+                    <a
+                      href="https://fkhadra.github.io/react-toastify/introduction/"
+                      target="_blank"
+                      >React Toastify</a
+                    >
+                    (For toasts)
+                  </li>
+                </ul>
+              </li>
+              <br />
+              <li>
+                <span>State Management:</span>
+                <ul>
+                  <li>
+                    <a
+                      href="https://react.dev/learn/passing-data-deeply-with-context"
+                      target="_blank"
+                      >React Context API</a
+                    >
+                  </li>
+                </ul>
+              </li>
+              <br />
+              <li>
+                <span>Images:</span>
+                <ul>
+                  <li>Placeholder images.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div id="support" class="content tab-pane fade">
+            <h1>Support</h1>
+            <p>
+              Thank you for choosing our Seoz template! We strive to provide
+              high-quality products and support.
+            </p>
+            <p>
+              If you have carefully read through this documentation and still
+              have questions, encounter bugs, or need assistance with specific
+              issues related to the template's code and features as advertised,
+              please reach out to us via the ThemeForest support channel.
+            </p>
+            <p>
+              You can contact us through our profile page:
+              <a href="https://themeforest.net/user/preoit" target="_blank"
+                >preoiT on ThemeForest</a
+              >.
+            </p>
+            <p>
+              We aim to provide timely and helpful support to ensure you have a
+              smooth experience using our template.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
