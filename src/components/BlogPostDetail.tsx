@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import apiService from '../services/api'
+import apiService from '../services/api';
 
 interface BlogPost {
   id: number;
@@ -44,14 +44,13 @@ export const BlogPostDetail = () => {
     try {
       const response = await apiService.getBlogPost(parseInt(id!));
       if (response.success) {
-        setPost(response.data as BlogPost);
-        // Increment view count
+        setPost(response.data as BlogPost);          // explicit cast: BlogDataType → BlogPost
         await apiService.get(`/blog/posts/${id}/increment_views/`);
       } else {
-        setError(response.message || null);
+        setError(response.message ?? null);          // ?? null: undefined → null
       }
     } catch (err: any) {
-       setError(err.message || null);
+      setError(err.message ?? null);                 // ?? null: undefined → null
     } finally {
       setLoading(false);
     }
@@ -61,7 +60,7 @@ export const BlogPostDetail = () => {
     try {
       const response = await apiService.get('/blog/comments/', { post_id: id });
       if (response.success) {
-        setComments((response.data || []) as Comment[]);
+        setComments((response.data ?? []) as Comment[]);  // unknown → cast to Comment[]
       }
     } catch (err) {
       console.error('Failed to fetch comments:', err);

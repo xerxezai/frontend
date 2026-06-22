@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import apiService from '../services/api'
+import apiService from '../services/api';
 
 interface BlogPost {
   id: number;
@@ -29,16 +29,16 @@ export const BlogPostsList = () => {
     try {
       const response = await apiService.getBlogPosts({ page });
       if (response.success) {
-        setPosts((response.data || []) as BlogPost[]);
+        setPosts((response.data ?? []) as BlogPost[]);  // ?? instead of ||, explicit cast
         if (response.pagination) {
           setTotalPages(Math.ceil(response.pagination.count / response.pagination.page_size));
         }
         setError(null);
       } else {
-        setError(response.message || null);
+        setError(response.message ?? null);  // ?? null converts undefined → null
       }
     } catch (err: any) {
-      setError(err.message || null);
+      setError(err.message ?? null);
     } finally {
       setLoading(false);
     }
