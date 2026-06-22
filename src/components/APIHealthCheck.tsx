@@ -27,7 +27,7 @@ export const APIHealthCheck = () => {
         setIsConnected(true);
         setError(null);
       } else {
-        setError(response.message);
+        setError(response.message || null);
         setIsConnected(false);
       }
     } catch (err: any) {
