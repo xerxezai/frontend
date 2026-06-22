@@ -35,7 +35,7 @@ export const BlogPostsList = () => {
         }
         setError(null);
       } else {
-        setError(response.message);
+        setError(response.message || null);
       }
     } catch (err: any) {
       setError(err.message);

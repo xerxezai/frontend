@@ -48,7 +48,7 @@ export const BlogPostDetail = () => {
         // Increment view count
         await apiService.get(`/blog/posts/${id}/increment_views/`);
       } else {
-        setError(response.message);
+        setError(response.message || null);
       }
     } catch (err: any) {
       setError(err.message);
