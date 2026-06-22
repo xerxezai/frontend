@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import apiService from '@/services/api';
+import { apiService } from '../services/api'
 
 interface BlogPost {
   id: number;
