@@ -19,8 +19,16 @@ interface BlogDataType {
   content?: string;
   excerpt?: string;
   image?: string;
+  featured_image?: string;
   slug?: string;
   published_date?: string;
+  created_at?: string;
+  author_name?: string;
+  category_name?: string;
+  tag_names?: string[];
+  view_count?: number;
+  read_time?: number;
+  is_published?: boolean;
 }
 
 interface ProjectDataType {

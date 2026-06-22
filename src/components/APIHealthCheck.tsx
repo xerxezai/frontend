@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import apiService from '../services/api'
+import apiService from '../services/api';
 
 interface HealthStatus {
   status: string;
@@ -27,11 +27,11 @@ export const APIHealthCheck = () => {
         setIsConnected(true);
         setError(null);
       } else {
-        setError(response.message ?? null);
+        setError(response.message ?? null);   // fix: ?? null
         setIsConnected(false);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to connect to backend');
+      setError(err.message ?? 'Failed to connect to backend');  // fix: ?? 
       setIsConnected(false);
     } finally {
       setLoading(false);
