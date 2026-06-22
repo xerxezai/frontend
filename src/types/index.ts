@@ -70,3 +70,28 @@ export interface BlogDataType {
   readTime: string;
   date: string;
 }
+// API response types (snake_case from backend)
+export interface BlogPost {
+  id: number;
+  title: string;
+  content?: string;
+  excerpt?: string;
+  author_name?: string;
+  category_name?: string;
+  tag_names?: string[];
+  featured_image?: string;
+  view_count?: number;
+  read_time?: number;
+  is_published?: boolean;
+  created_at?: string;
+  slug?: string;
+}
+
+export interface Comment {
+  id: number;
+  author_name: string;
+  content: string;
+  created_at: string;
+  is_approved: boolean;
+  replies?: Comment[];
+}

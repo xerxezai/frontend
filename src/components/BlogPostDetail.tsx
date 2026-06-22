@@ -1,41 +1,28 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import apiService from '../services/api';
+import type { BlogPost, Comment } from '../types';  // ← imported, no more local interfaces
 
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  author_name: string;
-  category_name: string;
-  featured_image?: string;
-  view_count: number;
-  read_time: number;
-  created_at: string;
-}
-
-export const BlogPostsList = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+export const BlogPostDetail = () => {
+  const { id } = useParams<{ id: string }>();
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetchPosts();
-  }, [page]);
+    if (id) {
+      fetchPost();
+      fetchComments();
+    }
+  }, [id]);
 
-  const fetchPosts = async () => {
-    setLoading(true);
+  const fetchPost = async () => {
     try {
-      const response = await apiService.getBlogPosts({ page });
+      const response = await apiService.getBlogPost(parseInt(id!));
       if (response.success) {
-        // BlogDataType now includes all BlogPost fields as optional,
-        // so this cast is safe — the API provides the actual values at runtime
-        setPosts((response.data ?? []) as unknown as BlogPost[]);
-        if (response.pagination) {
-          setTotalPages(Math.ceil(response.pagination.count / response.pagination.page_size));
-        }
-        setError(null);
+        setPost(response.data as unknown as BlogPost);
+        await apiService.get(`/blog/posts/${id}/increment_views/`);
       } else {
         setError(response.message ?? null);
       }
@@ -46,48 +33,76 @@ export const BlogPostsList = () => {
     }
   };
 
-  if (loading) return <div className="loading">Loading posts...</div>;
+  const fetchComments = async () => {
+    try {
+      const response = await apiService.get('/blog/comments/', { post_id: id });
+      if (response.success) {
+        setComments((response.data ?? []) as unknown as Comment[]);
+      }
+    } catch (err) {
+      console.error('Failed to fetch comments:', err);
+    }
+  };
+
+  if (loading) return <div className="loading">Loading post...</div>;
   if (error) return <div className="error">Error: {error}</div>;
+  if (!post) return <div className="not-found">Post not found</div>;
 
   return (
-    <div className="blog-posts">
-      <h2>Blog Posts</h2>
-      <div className="posts-grid">
-        {posts.map(post => (
-          <article key={post.id} className="post-card">
-            {post.featured_image && (
-              <img src={post.featured_image} alt={post.title} />
-            )}
-            <h3>{post.title}</h3>
-            <p className="excerpt">{post.excerpt}</p>
-            <div className="meta">
-              <span className="author">{post.author_name}</span>
-              <span className="category">{post.category_name}</span>
-              <span className="read-time">{post.read_time} min read</span>
-              <span className="views">{post.view_count} views</span>
-            </div>
-            <small>{new Date(post.created_at).toLocaleDateString()}</small>
-          </article>
-        ))}
+    <article className="blog-post-detail">
+      <header>
+        <h1>{post.title}</h1>
+        <div className="post-meta">
+          <span className="author">{post.author_name}</span>
+          <span className="date">{new Date(post.created_at ?? '').toLocaleDateString()}</span>
+          <span className="read-time">{post.read_time} min read</span>
+          <span className="views">{post.view_count} views</span>
+        </div>
+        <div className="post-tags">
+          {post.tag_names?.map(tag => (
+            <span key={tag} className="tag">{tag}</span>
+          ))}
+        </div>
+      </header>
+
+      {post.featured_image && (
+        <figure>
+          <img src={post.featured_image} alt={post.title} />
+        </figure>
+      )}
+
+      <div className="content">
+        {post.content}
       </div>
 
-      <div className="pagination">
-        <button
-          onClick={() => setPage(p => Math.max(1, p - 1))}
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span>Page {page} of {totalPages}</span>
-        <button
-          onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-          disabled={page === totalPages}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+      <section className="comments">
+        <h2>Comments ({comments.length})</h2>
+        <div className="comments-list">
+          {comments.length > 0 ? (
+            comments.map(comment => (
+              <div key={comment.id} className="comment">
+                <strong>{comment.author_name}</strong>
+                <p>{comment.content}</p>
+                <small>{new Date(comment.created_at).toLocaleDateString()}</small>
+                {comment.replies && comment.replies.length > 0 && (
+                  <div className="replies">
+                    {comment.replies.map(reply => (
+                      <div key={reply.id} className="reply">
+                        <strong>{reply.author_name}</strong>
+                        <p>{reply.content}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>No comments yet.</p>
+          )}
+        </div>
+      </section>
+    </article>
   );
 };
 
-export default BlogPostsList;
+export default BlogPostDetail;
