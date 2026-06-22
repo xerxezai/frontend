@@ -29,7 +29,7 @@ export const BlogPostsList = () => {
     try {
       const response = await apiService.getBlogPosts({ page });
       if (response.success) {
-        setPosts(response.data);
+        setPosts((response.data || []) as BlogPost[]);
         if (response.pagination) {
           setTotalPages(Math.ceil(response.pagination.count / response.pagination.page_size));
         }
@@ -38,7 +38,7 @@ export const BlogPostsList = () => {
         setError(response.message || null);
       }
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || null);
     } finally {
       setLoading(false);
     }

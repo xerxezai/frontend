@@ -44,14 +44,14 @@ export const BlogPostDetail = () => {
     try {
       const response = await apiService.getBlogPost(parseInt(id!));
       if (response.success) {
-        setPost(response.data);
+        setPost(response.data as BlogPost);
         // Increment view count
         await apiService.get(`/blog/posts/${id}/increment_views/`);
       } else {
         setError(response.message || null);
       }
     } catch (err: any) {
-      setError(err.message);
+       setError(err.message || null);
     } finally {
       setLoading(false);
     }
@@ -61,7 +61,7 @@ export const BlogPostDetail = () => {
     try {
       const response = await apiService.get('/blog/comments/', { post_id: id });
       if (response.success) {
-        setComments(response.data);
+        setComments((response.data || []) as Comment[]);
       }
     } catch (err) {
       console.error('Failed to fetch comments:', err);

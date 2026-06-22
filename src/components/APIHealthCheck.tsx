@@ -23,7 +23,7 @@ export const APIHealthCheck = () => {
     try {
       const response = await apiService.healthCheck();
       if (response.success) {
-        setHealth(response.data);
+        setHealth(response.data as HealthStatus);
         setIsConnected(true);
         setError(null);
       } else {
