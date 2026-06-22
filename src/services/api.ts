@@ -72,19 +72,22 @@ class ApiService {
 
   constructor() {
     this.config = {
-      baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1',
+      baseUrl:
+        import.meta.env.VITE_API_BASE_URL ||
+        'https://backend-production-b9f2.up.railway.app/api/v1',
       timeout: parseInt(import.meta.env.VITE_API_TIMEOUT || '30000'),
-      retryAttempts: parseInt(import.meta.env.VITE_API_RETRY_ATTEMPTS || '3'),
+      retryAttempts: parseInt(
+        import.meta.env.VITE_API_RETRY_ATTEMPTS || '3'
+      ),
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
     };
 
     // Load stored auth tokens
     this.loadAuthTokens();
   }
-
   /**
    * Load authentication tokens from localStorage
    */
