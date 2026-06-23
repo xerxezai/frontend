@@ -1,4 +1,4 @@
-export interface PricingFeature {
+﻿export interface PricingFeature {
   text: string;
   isIncluded: boolean;
 }
@@ -96,3 +96,4 @@ export interface Comment {
   is_approved: boolean;
   replies?: Comment[];
 }
+

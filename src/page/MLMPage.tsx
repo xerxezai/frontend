@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CustomLayout from '../components/layout/CustomLayout';
 import BreadcrumbSection from '../components/breadcrumb/BreadcrumbSection';
@@ -53,3 +53,4 @@ const MLMPage = () => {
 };
 
 export default MLMPage;
+

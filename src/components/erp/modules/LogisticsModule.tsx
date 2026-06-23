@@ -1,4 +1,4 @@
-import { useERPList } from '../../../hooks/useERPApi';
+﻿import { useERPList } from '../../../hooks/useERPApi';
 import ERPTable from '../ERPTable';
 
 const LogisticsModule = () => {
@@ -18,3 +18,4 @@ const LogisticsModule = () => {
 };
 
 export default LogisticsModule;
+

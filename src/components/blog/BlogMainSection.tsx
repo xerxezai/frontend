@@ -1,4 +1,4 @@
-import { blogMainPosts } from "../../data";
+﻿import { blogMainPosts } from "../../data";
 import { useState, useMemo, useEffect } from "react";
 import FilterSummary from "./FilterSummary";
 import BlogPostList from "./BlogPostList";
@@ -145,3 +145,4 @@ const BlogMainSection = () => {
 };
 
 export default BlogMainSection;
+

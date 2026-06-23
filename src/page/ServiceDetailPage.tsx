@@ -1,4 +1,4 @@
-import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+﻿import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import ErrorSection from "../components/error/ErrorSection";
 import CustomLayout from "../components/layout/CustomLayout";
 import ServiceDetailSection from "../components/service/ServiceDetailSection";
@@ -24,3 +24,4 @@ const ServiceDetailPage = () => {
 };
 
 export default ServiceDetailPage;
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useMLMAuth } from '../../hooks/useMLM';
 
 interface Props {
@@ -58,3 +58,4 @@ const MLMLogin = ({ onSuccess }: Props) => {
 };
 
 export default MLMLogin;
+

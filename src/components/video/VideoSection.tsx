@@ -1,4 +1,4 @@
-import { useCustomContext } from "../../context/context";
+﻿import { useCustomContext } from "../../context/context";
 
 const VideoSection = () => {
   const { toggleVideoModal } = useCustomContext();
@@ -22,3 +22,4 @@ const VideoSection = () => {
 };
 
 export default VideoSection;
+

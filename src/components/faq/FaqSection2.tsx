@@ -1,4 +1,4 @@
-import { faqData } from "../../data";
+﻿import { faqData } from "../../data";
 import { useState } from "react";
 import Image from "../utils/Image";
 
@@ -101,3 +101,4 @@ const FaqSection2 = ({ variant, reverse }: Props) => {
 };
 
 export default FaqSection2;
+

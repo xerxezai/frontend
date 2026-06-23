@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import MarqueeSection from "../marquee/MarqueeSection";
 import ContactSection2 from "../contact/ContactSection2";
 import PricingTabpane2 from "./PricingTabpane2";
@@ -18,27 +18,34 @@ const PricingSection2 = () => {
             that fits your scale. <br /> All plans include dedicated support and SLA-backed delivery.
           </p>
         </div>
-        <div className="d-flex justify-content-center mt-3 mt-md-0 fade-in">
-          <div className="pricing-two__tab">
-            <nav>
-              <div className="nav nav-tabs">
-                {/* Monthly Tab Button */}
-                <button
-                  className={`nav-link ${isMonthly ? "active" : ""}`}
-                  onClick={() => setIsMonthly(true)}
-                >
-                  Monthly
-                </button>
-                {/* Yearly Tab Button */}
-                <button
-                  className={`nav-link ${!isMonthly ? "active" : ""}`}
-                  onClick={() => setIsMonthly(false)}
-                >
-                  Yearly
-                </button>
-              </div>
-            </nav>
+        <div className="d-flex align-items-center justify-content-center gap-3 mt-3 mt-md-0 fade-in">
+          <span
+            onClick={() => setIsMonthly(true)}
+            style={{ fontSize: 18, fontWeight: isMonthly ? 600 : 400, cursor: 'pointer', color: '#fff' }}
+          >Monthly</span>
+          <div
+            onClick={() => setIsMonthly(m => !m)}
+            role="switch"
+            aria-checked={!isMonthly}
+            style={{
+              width: 75, height: 32, borderRadius: 20,
+              background: '#fff', position: 'relative',
+              cursor: 'pointer', flexShrink: 0,
+              border: '1px solid #fff', transition: 'background 0.2s',
+            }}
+          >
+            <div style={{
+              width: 24, height: 24, borderRadius: '50%',
+              background: '#ff792e', position: 'absolute',
+              top: 3,
+              left: isMonthly ? 4 : 47,
+              transition: 'left 0.25s cubic-bezier(.4,0,.2,1)',
+            }} />
           </div>
+          <span
+            onClick={() => setIsMonthly(false)}
+            style={{ fontSize: 18, fontWeight: !isMonthly ? 600 : 400, cursor: 'pointer', color: '#fff' }}
+          >Yearly</span>
         </div>
         <div className="pricing__tab-content fade-in">
           <div className="tab-content">
@@ -60,3 +67,4 @@ const PricingSection2 = () => {
 };
 
 export default PricingSection2;
+

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
 const BackToTopBtn = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -31,3 +31,4 @@ const BackToTopBtn = () => {
 };
 
 export default BackToTopBtn;
+

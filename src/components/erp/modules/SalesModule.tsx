@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useERPList } from '../../../hooks/useERPApi';
 import ERPTable from '../ERPTable';
 
@@ -43,3 +43,4 @@ const SalesModule = () => {
 };
 
 export default SalesModule;
+

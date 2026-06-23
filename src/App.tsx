@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+﻿import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BackToTopBtn from "./components/utils/BackToTopBtn";
 import ScrollToTop from "./components/utils/ScrollToTop";
 import AnimationWrapper from "./components/utils/AnimationWrapper";
@@ -60,3 +60,4 @@ function App() {
 }
 
 export default App;
+

@@ -1,4 +1,4 @@
-import ServiceSidebar from "./ServiceSidebar";
+﻿import ServiceSidebar from "./ServiceSidebar";
 import type { ServiceDataType } from "../../types";
 import ServiceDetailKeyFacts from "./ServiceDetailKeyFacts";
 import ServiceCoreAdvantage from "../core-advantage/ServiceCoreAdvantage";
@@ -50,3 +50,4 @@ const ServiceDetailSection = ({ serviceInfo }: Props) => {
 };
 
 export default ServiceDetailSection;
+

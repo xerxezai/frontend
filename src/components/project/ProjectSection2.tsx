@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { homeTwoProjectData } from "../../data";
 import Image from "../utils/Image";
 
@@ -48,3 +48,4 @@ const ProjectSection2 = () => {
 };
 
 export default ProjectSection2;
+

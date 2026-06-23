@@ -1,4 +1,4 @@
-import { counterData } from "../../data";
+﻿import { counterData } from "../../data";
 import CountUp from "../utils/CountUp";
 
 const CounterSection2 = () => {
@@ -36,3 +36,4 @@ const CounterSection2 = () => {
 };
 
 export default CounterSection2;
+

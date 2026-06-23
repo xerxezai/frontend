@@ -1,4 +1,4 @@
-import GaspAnimations from "./GaspAnimations";
+﻿import GaspAnimations from "./GaspAnimations";
 import AosInit from "./AosInit";
 
 const AnimationWrapper = () => {
@@ -11,3 +11,4 @@ const AnimationWrapper = () => {
 };
 
 export default AnimationWrapper;
+

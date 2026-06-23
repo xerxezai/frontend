@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import ErrorBoundary from "./ErrorBoundary";
 
 interface SectionErrorBoundaryProps {
@@ -15,7 +15,7 @@ const SectionErrorBoundary: React.FC<SectionErrorBoundaryProps> = ({
       <div className="section-error-wrapper">
         <div className="section-error-card">
           {/* Section Error Icon */}
-          <div className="section-error-icon">⚠️</div>
+          <div className="section-error-icon">âš ï¸</div>
 
           {/* Status Badge */}
           <div className="section-status-badge">Section Error</div>
@@ -52,3 +52,4 @@ const SectionErrorBoundary: React.FC<SectionErrorBoundaryProps> = ({
 );
 
 export default SectionErrorBoundary;
+

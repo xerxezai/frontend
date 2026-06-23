@@ -1,4 +1,4 @@
-interface TagsWidgetProps {
+﻿interface TagsWidgetProps {
   allTags: string[];
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
@@ -61,3 +61,4 @@ const TagsWidget = ({
 };
 
 export default TagsWidget;
+

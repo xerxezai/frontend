@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+﻿import { useParams } from "react-router-dom";
 import BlogDetailSection from "../components/blog/BlogDetailSection";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import ErrorSection from "../components/error/ErrorSection";
@@ -23,3 +23,4 @@ const BlogDetailPage = () => {
 };
 
 export default BlogDetailPage;
+

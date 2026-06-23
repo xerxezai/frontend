@@ -1,4 +1,4 @@
-import { useCustomContext } from "../../context/context";
+﻿import { useCustomContext } from "../../context/context";
 import Image from "../utils/Image";
 
 const CoreAdvantageSection2 = () => {
@@ -92,3 +92,4 @@ const CoreAdvantageSection2 = () => {
 };
 
 export default CoreAdvantageSection2;
+

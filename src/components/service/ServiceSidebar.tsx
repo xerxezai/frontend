@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import RecentServices from "./RecentServices";
 import ServiceContactWidget from "./ServiceContactWidget";
 import Image from "../utils/Image";
@@ -19,7 +19,7 @@ const ServiceSidebar = () => {
           <h3 className="char-animation">Start Your Project?</h3>
           <p className="fade-in">
             Ready to transform your enterprise with AI, DevSecOps, or cloud solutions?
-            Let's talk — we respond within 24 hours.
+            Let's talk â€” we respond within 24 hours.
           </p>
           <Link to="/contact" className="theme-btn fade-in">
             Contact Us
@@ -32,3 +32,4 @@ const ServiceSidebar = () => {
 };
 
 export default ServiceSidebar;
+

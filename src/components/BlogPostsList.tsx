@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import apiService from '../services/api';
-import type { BlogPost } from '../types';  // ← imported, no more local interface
+import type { BlogPost } from '../types';  // â† imported, no more local interface
 
 export const BlogPostsList = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);

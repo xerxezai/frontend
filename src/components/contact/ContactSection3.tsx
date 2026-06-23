@@ -1,4 +1,4 @@
-const ContactSection3 = () => {
+﻿const ContactSection3 = () => {
   return (
     <section className="contact-inner-section section-padding fix">
       <div className="container">
@@ -15,7 +15,7 @@ const ContactSection3 = () => {
                       </div>
                       <div className="content">
                         <h5>Our Email</h5>
-                        <p>hello@xerxez.com</p>
+                        <p>xerxez.in@gmail.com</p>
                       </div>
                     </li>
                     <li>
@@ -24,7 +24,7 @@ const ContactSection3 = () => {
                       </div>
                       <div className="content">
                         <h5>Our Location</h5>
-                        <p>Global — Remote-first</p>
+                        <p>Global â€” Remote-first</p>
                       </div>
                     </li>
                     <li>
@@ -52,7 +52,7 @@ const ContactSection3 = () => {
                       </div>
                       <div className="content">
                         <h5>Sales Enquiries</h5>
-                        <p>hello@xerxez.com</p>
+                        <p>xerxez.in@gmail.com</p>
                       </div>
                     </li>
                     <li>
@@ -61,7 +61,7 @@ const ContactSection3 = () => {
                       </div>
                       <div className="content">
                         <h5>Partnerships</h5>
-                        <p>hello@xerxez.com</p>
+                        <p>xerxez.in@gmail.com</p>
                       </div>
                     </li>
                     <li>
@@ -88,7 +88,7 @@ const ContactSection3 = () => {
                       </div>
                       <div className="content">
                         <h5>Support Email</h5>
-                        <p>hello@xerxez.com</p>
+                        <p>xerxez.in@gmail.com</p>
                       </div>
                     </li>
                     <li>
@@ -119,3 +119,4 @@ const ContactSection3 = () => {
 };
 
 export default ContactSection3;
+

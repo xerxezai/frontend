@@ -1,4 +1,4 @@
-import { aboutCompanyData } from "../../data";
+﻿import { aboutCompanyData } from "../../data";
 import React from "react";
 
 const AboutCompanySection2 = () => {
@@ -64,3 +64,4 @@ const AboutCompanySection2 = () => {
 };
 
 export default AboutCompanySection2;
+

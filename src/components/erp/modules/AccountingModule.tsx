@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useERPList } from '../../../hooks/useERPApi';
 import ERPTable from '../ERPTable';
 
@@ -14,7 +14,7 @@ const AccountingModule = () => {
     { key: 'name', label: 'Name' },
     { key: 'type', label: 'Type' },
     { key: 'parent_name', label: 'Parent' },
-    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? '✅' : '❌' },
+    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? 'âœ…' : 'âŒ' },
   ];
 
   const entryCols = [
@@ -22,8 +22,8 @@ const AccountingModule = () => {
     { key: 'date', label: 'Date' },
     { key: 'description', label: 'Description' },
     { key: 'reference', label: 'Reference' },
-    { key: 'posted', label: 'Posted', render: (r: any) => r.posted ? '✅' : '⏳' },
-    { key: 'is_balanced', label: 'Balanced', render: (r: any) => r.is_balanced ? '✅' : '❌' },
+    { key: 'posted', label: 'Posted', render: (r: any) => r.posted ? 'âœ…' : 'â³' },
+    { key: 'is_balanced', label: 'Balanced', render: (r: any) => r.is_balanced ? 'âœ…' : 'âŒ' },
   ];
 
   return (
@@ -43,3 +43,4 @@ const AccountingModule = () => {
 };
 
 export default AccountingModule;
+

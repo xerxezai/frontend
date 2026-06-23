@@ -1,4 +1,4 @@
-interface FilterSummaryProps {
+﻿interface FilterSummaryProps {
   searchTerm: string;
   selectedCategory: string;
   selectedTags: string[];
@@ -55,3 +55,4 @@ const FilterSummary = ({
 };
 
 export default FilterSummary;
+

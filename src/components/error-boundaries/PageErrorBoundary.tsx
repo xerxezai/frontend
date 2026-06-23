@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
 
@@ -16,7 +16,7 @@ const PageErrorBoundary: React.FC<PageErrorBoundaryProps> = ({ children }) => {
           <div className="d-flex align-items-center justify-content-center min-vh-100 p-4">
             <div className="page-error-card p-5 text-center">
               {/* Page Error Icon */}
-              <div className="page-error-icon">💥</div>
+              <div className="page-error-icon">ðŸ’¥</div>
 
               {/* Status Badge */}
               <div className="status-badge">PAGE ERROR</div>
@@ -100,3 +100,4 @@ const PageErrorBoundary: React.FC<PageErrorBoundaryProps> = ({ children }) => {
 };
 
 export default PageErrorBoundary;
+

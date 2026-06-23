@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+﻿import { useState, useCallback } from 'react';
 import apiService from '../services/api';
 
 const TOKEN_KEY = 'auth_tokens';
@@ -41,3 +41,4 @@ export function useERPAuth() {
 
   return { token, loading, error, login, logout, isAuthenticated: !!token };
 }
+

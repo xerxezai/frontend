@@ -1,4 +1,4 @@
-import { brandData } from "../../data";
+﻿import { brandData } from "../../data";
 import Image from "../utils/Image";
 interface Props {
   variant?: string;
@@ -63,3 +63,4 @@ const BrandSection = ({ variant }: Props) => {
 };
 
 export default BrandSection;
+

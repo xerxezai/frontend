@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+﻿import React, { useState, useMemo } from "react";
 import type { MenuItem } from "../../types";
 import { menuData } from "../../data";
 import { useCustomContext } from "../../context/context";
@@ -142,3 +142,4 @@ const MobileMenu = () => {
 };
 
 export default MobileMenu;
+

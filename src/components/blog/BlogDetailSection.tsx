@@ -1,4 +1,4 @@
-import { blogMainPosts } from "../../data";
+﻿import { blogMainPosts } from "../../data";
 import type { BlogDataType } from "../../types";
 import { useState, useMemo, useEffect } from "react";
 import BlogDetailsArea from "./BlogDetailsArea";
@@ -155,3 +155,4 @@ const BlogDetailSection = ({ blogInfo }: Props) => {
 };
 
 export default BlogDetailSection;
+

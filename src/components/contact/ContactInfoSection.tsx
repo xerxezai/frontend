@@ -1,4 +1,4 @@
-const ContactInfoSection = () => {
+﻿const ContactInfoSection = () => {
   return (
     <div className="contact-info-inner">
       <div className="container">
@@ -51,8 +51,8 @@ const ContactInfoSection = () => {
             <div className="content">
               <h3>Mail Us</h3>
               <p>
-                <a href="mailto:hello@xerxez.com" className="link">
-                  hello@xerxez.com
+                <a href="mailto:xerxez.in@gmail.com" className="link">
+                  xerxez.in@gmail.com
                 </a>
               </p>
             </div>
@@ -64,3 +64,4 @@ const ContactInfoSection = () => {
 };
 
 export default ContactInfoSection;
+

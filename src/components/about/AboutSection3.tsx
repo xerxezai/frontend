@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const AboutSection3 = () => {
@@ -28,7 +28,7 @@ const AboutSection3 = () => {
                 </div>
 
                 <p className="about-text-3">
-                  XERXEZ is your trusted technology partner — delivering AI-powered ERP,
+                  XERXEZ is your trusted technology partner â€” delivering AI-powered ERP,
                   DevSecOps pipelines, cloud infrastructure, and enterprise software
                   with end-to-end ownership.
                 </p>
@@ -45,7 +45,7 @@ const AboutSection3 = () => {
                   </li>
                   <li>
                     <i className="flaticon-check"></i>
-                    Security by design — DevSecOps embedded from day one
+                    Security by design â€” DevSecOps embedded from day one
                   </li>
                   <li>
                     <i className="flaticon-check"></i>
@@ -81,3 +81,4 @@ const AboutSection3 = () => {
 };
 
 export default AboutSection3;
+

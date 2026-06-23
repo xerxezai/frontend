@@ -1,4 +1,4 @@
-import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+﻿import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import CustomLayout from "../components/layout/CustomLayout";
 import ProjectMainSection from "../components/project/ProjectMainSection";
 
@@ -12,3 +12,4 @@ const ProjectPage = () => {
 };
 
 export default ProjectPage;
+

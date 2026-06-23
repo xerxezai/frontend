@@ -1,4 +1,4 @@
-import { testimonialData } from "../../data";
+﻿import { testimonialData } from "../../data";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "../utils/Image";
@@ -60,7 +60,7 @@ const TestimonySection4 = () => {
             <SwiperSlide key={testimonial.id}>
               <div className="testimonial-box-card-items">
                 <div className="star">{renderStars(testimonial.stars)}</div>
-                <h3>“{testimonial.quoteText}”</h3>
+                <h3>â€œ{testimonial.quoteText}â€</h3>
                 <div className="client-info mt-5">
                   <div className="client-image">
                     <Image
@@ -85,3 +85,4 @@ const TestimonySection4 = () => {
 };
 
 export default TestimonySection4;
+

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 
 interface Props {
   variant?: boolean;
@@ -9,7 +9,7 @@ const FooterBottomSection = ({ variant }: Props) => {
       <div className="container">
         <div className="footer-wrapper d-flex align-items-center justify-content-between">
           <p>
-            © {new Date().getFullYear()} XERXEZ. All Rights Reserved.
+            Â© {new Date().getFullYear()} XERXEZ. All Rights Reserved.
           </p>
 
           <ul className="footer-menu">
@@ -30,3 +30,4 @@ const FooterBottomSection = ({ variant }: Props) => {
 };
 
 export default FooterBottomSection;
+

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 
 const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
 
@@ -72,3 +72,4 @@ export function useERPDashboard() {
 
   return { data, loading, error };
 }
+

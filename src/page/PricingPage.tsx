@@ -1,4 +1,4 @@
-import BrandSection2 from "../components/brand/BrandSection2";
+﻿import BrandSection2 from "../components/brand/BrandSection2";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import WorkingProcessSection2 from "../components/process/WorkingProcessSection2";
 import CustomLayout from "../components/layout/CustomLayout";
@@ -16,3 +16,4 @@ const PricingPage = () => {
 };
 
 export default PricingPage;
+

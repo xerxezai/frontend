@@ -1,4 +1,4 @@
-interface Props {
+﻿interface Props {
   variant?: boolean;
 }
 const marqueeTexts = ["BOOSTING", "DIGITAL", "MARKETING", "SEO", "ANALYTICS"];
@@ -28,3 +28,4 @@ const MarqueeSection = ({ variant }: Props) => {
 };
 
 export default MarqueeSection;
+

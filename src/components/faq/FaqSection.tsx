@@ -1,4 +1,4 @@
-import FaqAccordion from "./FaqAccordion";
+﻿import FaqAccordion from "./FaqAccordion";
 
 interface Props {
   variant?: boolean;
@@ -24,3 +24,4 @@ const FaqSection = ({ variant }: Props) => {
 };
 
 export default FaqSection;
+

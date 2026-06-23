@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import CountUp from "../utils/CountUp";
 import Image from "../utils/Image";
 
@@ -19,7 +19,7 @@ const AboutSection6 = () => {
 
                 <p className="about-text">
                   XERXEZ is an AI-first technology company helping enterprises build smarter,
-                  more secure, and more scalable systems — from intelligent ERP platforms to
+                  more secure, and more scalable systems â€” from intelligent ERP platforms to
                   production MLOps infrastructure and cloud-native applications.
                 </p>
 
@@ -57,7 +57,7 @@ const AboutSection6 = () => {
                     </div>
                     <div className="content">
                       <p>Mail Us</p>
-                      <h5>hello@xerxez.com</h5>
+                      <h5>xerxez.in@gmail.com</h5>
                     </div>
                   </div>
                 </div>
@@ -95,3 +95,4 @@ const AboutSection6 = () => {
 };
 
 export default AboutSection6;
+

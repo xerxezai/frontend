@@ -1,4 +1,4 @@
-const WorkingProcessSection = () => {
+﻿const WorkingProcessSection = () => {
   return (
     <section className="working-process-section-2 section-padding fix">
       <div className="container">
@@ -10,7 +10,7 @@ const WorkingProcessSection = () => {
             </h2>
           </div>
           <p className="text-white fade-in">
-            XERXEZ follows a structured, outcome-driven delivery process — from discovery
+            XERXEZ follows a structured, outcome-driven delivery process â€” from discovery
             to deployment and beyond.
           </p>
         </div>
@@ -88,3 +88,4 @@ const WorkingProcessSection = () => {
 };
 
 export default WorkingProcessSection;
+

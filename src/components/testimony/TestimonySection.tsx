@@ -1,4 +1,4 @@
-import { testimonialData } from "../../data";
+﻿import { testimonialData } from "../../data";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "../utils/Image";
@@ -84,3 +84,4 @@ const TestimonySection = () => {
 };
 
 export default TestimonySection;
+

@@ -1,4 +1,4 @@
-import AboutCompanySection from "../components/about/AboutCompanySection";
+﻿import AboutCompanySection from "../components/about/AboutCompanySection";
 import AboutSection2 from "../components/about/AboutSection2";
 import BlogSection2 from "../components/blog/BlogSection2";
 import BrandSection2 from "../components/brand/BrandSection2";
@@ -44,3 +44,4 @@ const HomePage2 = () => {
 };
 
 export default HomePage2;
+

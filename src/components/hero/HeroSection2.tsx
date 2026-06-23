@@ -1,4 +1,4 @@
-import CountUp from "../utils/CountUp";
+﻿import CountUp from "../utils/CountUp";
 import { useCustomContext } from "../../context/context";
 import { Link } from "react-router-dom";
 
@@ -72,3 +72,4 @@ const HeroSection2 = () => {
 };
 
 export default HeroSection2;
+

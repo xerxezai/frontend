@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { homeFourProjectData } from "../../data";
 import Image from "../utils/Image";
 
@@ -63,3 +63,4 @@ const ProjectSection4 = ({ variant }: Props) => {
 };
 
 export default ProjectSection4;
+

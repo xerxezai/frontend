@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 interface Props {
   variant?: boolean;
@@ -83,7 +83,7 @@ const CoreAdvantageSection = ({ variant }: Props) => {
                     </div>
                     <div className="content">
                       <p>Mail Us</p>
-                      <h5>hello@xerxez.com</h5>
+                      <h5>xerxez.in@gmail.com</h5>
                     </div>
                   </div>
                 </div>
@@ -107,3 +107,4 @@ const CoreAdvantageSection = ({ variant }: Props) => {
 };
 
 export default CoreAdvantageSection;
+

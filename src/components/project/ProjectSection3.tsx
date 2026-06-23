@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { projectsData } from "../../data";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -80,3 +80,4 @@ const ProjectSection3 = () => {
 };
 
 export default ProjectSection3;
+

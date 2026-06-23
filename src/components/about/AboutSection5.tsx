@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const AboutSection5 = () => {
@@ -36,7 +36,7 @@ const AboutSection5 = () => {
 
                 <p className="about-text text-white mt-3">
                   Start working with a technology partner that provides everything you
-                  need — from AI-powered ERP and DevSecOps pipelines to cloud infrastructure
+                  need â€” from AI-powered ERP and DevSecOps pipelines to cloud infrastructure
                   and executive AI training.
                 </p>
 
@@ -100,3 +100,4 @@ const AboutSection5 = () => {
 };
 
 export default AboutSection5;
+

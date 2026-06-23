@@ -1,4 +1,4 @@
-/**
+﻿/**
  * API Service Layer
  * Centralized API communication with backend using soft coding approach
  * Handles authentication, error management, and request configuration

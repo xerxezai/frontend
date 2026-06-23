@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import FooterBottomSection from "./FooterBottomSection";
 import Image from "../utils/Image";
 import NewsletterForm from "../forms/NewsletterForm";
@@ -125,7 +125,7 @@ const FooterSection2 = ({ variant }: Props) => {
                     <div className="content">
                       <h5>Mail Us</h5>
                       <p>
-                        <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
+                        <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
                       </p>
                     </div>
                   </li>
@@ -137,10 +137,10 @@ const FooterSection2 = ({ variant }: Props) => {
                       <h5>Mail Us</h5>
                       <p>
                         <a
-                          href="mailto:hello@xerxez.com"
+                          href="mailto:xerxez.in@gmail.com"
                           className="text-white"
                         >
-                          hello@xerxez.com
+                          xerxez.in@gmail.com
                         </a>
                       </p>
                     </div>
@@ -186,3 +186,4 @@ const FooterSection2 = ({ variant }: Props) => {
 };
 
 export default FooterSection2;
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useERPList } from '../../../hooks/useERPApi';
 import ERPTable from '../ERPTable';
 
@@ -24,7 +24,7 @@ const PurchasesModule = () => {
     { key: 'email', label: 'Email' },
     { key: 'phone', label: 'Phone' },
     { key: 'contact_person', label: 'Contact' },
-    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? '✅' : '❌' },
+    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? 'âœ…' : 'âŒ' },
   ];
 
   return (
@@ -44,3 +44,4 @@ const PurchasesModule = () => {
 };
 
 export default PurchasesModule;
+

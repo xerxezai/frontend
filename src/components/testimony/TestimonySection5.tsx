@@ -1,4 +1,4 @@
-import { testimonialData } from "../../data";
+﻿import { testimonialData } from "../../data";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "../utils/Image";
@@ -88,7 +88,7 @@ const TestimonySection5 = () => {
                       />
                     </div>
                     <div className="testimonial-content">
-                      <h4>“{testimonial.quoteText}”</h4>
+                      <h4>â€œ{testimonial.quoteText}â€</h4>
                       <div className="clinet-info">
                         <h3>{testimonial.clientName}</h3>
                         <p>{testimonial.clientTitle}</p>
@@ -106,3 +106,4 @@ const TestimonySection5 = () => {
 };
 
 export default TestimonySection5;
+

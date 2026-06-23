@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { teamData } from "../../data";
 import { useState, useMemo } from "react";
 import Image from "../utils/Image";
@@ -116,3 +116,4 @@ const TeamMainSection = () => {
 };
 
 export default TeamMainSection;
+
