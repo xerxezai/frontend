@@ -1982,9 +1982,9 @@ p {
 }
 
 .hero-1 {
-  padding: 150px 0 100px;
-  padding-bottom: 90px;
+  padding: 110px 0 70px;
   position: relative;
+  overflow: hidden;
 }
 .hero-1 .hero-content {
   position: relative;
@@ -2063,13 +2063,13 @@ p {
 
 .hero-2 {
   background-color: #fffcf2;
-  padding: 0 0 0;
+  padding: 90px 0 70px;
   position: relative;
   overflow: hidden;
 }
 
 .hero-2 .hero-content {
-  padding-top: 60px;
+  padding-top: 20px;
 }
 
 .hero-2 .hero-content .hero-text {
@@ -2137,7 +2137,7 @@ p {
 }
 .hero-2 .hero-image {
   position: relative;
-  margin-right: -50%;
+  margin-right: 0;
 }
 
 .hero-2 .hero-image img {
@@ -2166,11 +2166,12 @@ p {
 }
 
 .hero-3 {
-  padding: 300px 0 300px;
+  padding: 150px 0 150px;
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: bottom center;
+  background-position: center center;
   position: relative;
+  overflow: hidden;
   margin-bottom: 75px;
 }
 
@@ -2295,9 +2296,10 @@ p {
 }
 
 .hero-4 {
-  padding: 190px 0 120px;
+  padding: 120px 0 80px;
   position: relative;
   z-index: 9;
+  overflow: hidden;
 }
 
 .hero-4 .shape-1 {
@@ -8283,6 +8285,9 @@ h3.service-header-5 {
 }
 .hero-section.hero-1 {
   background-image: url(/assets/img/hero/hero-1-bg.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 .hero-section.hero-3 {
   background-image: url(/assets/img/hero/hero-bg-3.png);

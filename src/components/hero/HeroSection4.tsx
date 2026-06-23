@@ -49,11 +49,11 @@ const HeroSection4 = () => {
           <div className="col-lg-6">
             <div className="hero-image float-bob-x">
               <img
-                src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=721&h=727&fit=crop"
+                src="/assets/img/hero/hero-4-photo.jpg"
                 alt="XERXEZ enterprise AI"
                 width={721}
                 height={727}
-                style={{ borderRadius: 16, objectFit: 'cover' }}
+                style={{ borderRadius: 16, objectFit: 'cover', width: '100%', maxHeight: 520 }}
               />
             </div>
           </div>

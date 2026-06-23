@@ -50,12 +50,12 @@ const HeroSection2 = () => {
           <div className="col-lg-6">
             <div className="hero-image">
               <img
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=954&h=1041&fit=crop"
+                src="/assets/img/hero/hero-2-photo.jpg"
                 alt="XERXEZ enterprise team"
                 className="img-custom-anim-right"
                 width={954}
                 height={1041}
-                style={{ borderRadius: 16, objectFit: 'cover' }}
+                style={{ borderRadius: 16, objectFit: 'cover', width: '100%', maxHeight: 580 }}
               />
               <button
                 className="video-btn ripple video-popup"
