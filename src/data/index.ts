@@ -848,6 +848,34 @@ const services = [
     width: 87,
     height: 84,
   },
+  {
+    id: 8,
+    iconClass: "flaticon-online-service",
+    detailImg: "/assets/img/service/service-details-08.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-8.png",
+    title: "Mobile\nApplication",
+    description:
+      "Cross-platform and native mobile applications for iOS and Android — built for performance, security, and seamless enterprise integration.",
+    detailBody:
+      "XERXEZ builds mobile applications that work as the front line of your enterprise operations. Whether you need a customer-facing iOS and Android app, an internal field-service tool, or a data-collection platform for remote teams, we design and engineer it from the ground up with enterprise-grade security, offline capability, and deep backend integration. We work in React Native for maximum code reuse and in Swift/Kotlin for platform-specific performance — choosing the right stack for your use case rather than a one-size-fits-all approach. Every app we ship goes through rigorous QA, accessibility review, and App Store / Play Store deployment support.",
+    slug: "mobile-application",
+    width: 87,
+    height: 84,
+  },
+  {
+    id: 9,
+    iconClass: "flaticon-market-analysis",
+    detailImg: "/assets/img/service/service-details-09.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-1.png",
+    title: "Web & Mobile\nHosting",
+    description:
+      "Managed hosting for web and mobile backends — high-availability infrastructure, global CDN, auto-scaling, and 24/7 monitoring included.",
+    detailBody:
+      "XERXEZ Web & Mobile Hosting removes the operational burden of running your digital products in production. We provision and manage fully redundant hosting environments on AWS, Azure, or GCP — with load balancing, auto-scaling, DDoS protection, SSL management, and daily backups as standard. Our global CDN integration ensures fast load times for users worldwide, while our real-time monitoring and alerting stack catches issues before they impact your customers. For mobile backends we deploy and manage API gateways, push notification services, and database clusters optimised for mobile traffic patterns. All hosting plans include 24/7 on-call support and a 99.9% uptime SLA.",
+    slug: "web-mobile-hosting",
+    width: 87,
+    height: 84,
+  },
 ];
 
 const homeOneServices = [
