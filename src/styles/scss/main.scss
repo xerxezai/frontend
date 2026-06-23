@@ -1351,6 +1351,37 @@ p {
 .header-1 .header-right .theme-btn:hover {
   color: $white;
 }
+/* header-1 on dark hero (non-sticky state) */
+.header-section.header-1:not(.sticky) {
+  background: rgba(5, 3, 30, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.header-section.header-1:not(.sticky) .header-main .main-menu ul li a {
+  color: rgba(255, 255, 255, 0.9);
+}
+.header-section.header-1:not(.sticky) .header-main .main-menu ul li a:hover {
+  color: $theme-color-2 !important;
+}
+.header-section.header-1:not(.sticky) .header-main .main-menu ul li:hover > a {
+  color: $theme-color-2;
+}
+.header-section.header-1:not(.sticky) .header-main .sidebar__toggle {
+  color: #fff;
+}
+.header-section.header-1:not(.sticky) .header-right .link-btn a {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+.header-section.header-1:not(.sticky) .header-right .theme-btn {
+  background-color: $theme-color;
+  border-color: $theme-color;
+  color: $white;
+}
+.header-section.header-1:not(.sticky) .header-right .theme-btn i {
+  background-color: $white;
+  color: $theme-color;
+}
+
 .header-1.header-4 .header-main .main-menu ul li a {
   color: $white;
 }
