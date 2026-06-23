@@ -2,14 +2,11 @@ import React, { useMemo } from "react";
 import { menuData } from "../../data";
 import type { MenuItem } from "../../types";
 import { Link } from "react-router-dom";
-import Image from "../utils/Image";
 
 const MainMenuSection = React.memo(() => {
-  // Memoize the entire menu structure to prevent re-computation
   const memoizedMenuItems = useMemo(() => {
     return menuData.map((menuItem: MenuItem) => (
       <React.Fragment key={`menu-${menuItem.title}-${menuItem.link}`}>
-        {/* Main menu item */}
         <li
           className={`${menuItem.hasDropdown ? "has-dropdown" : ""} ${
             menuItem.isHomemenu ? "menu-thumb" : ""
@@ -20,9 +17,7 @@ const MainMenuSection = React.memo(() => {
             {menuItem.hasDropdown && <i className="fas fa-chevron-down"></i>}
           </Link>
           {menuItem.hasDropdown && menuItem.submenu && (
-            <ul
-              className={`submenu ${menuItem.isHomemenu ? "has-homemenu" : ""}`}
-            >
+            <ul className={`submenu ${menuItem.isHomemenu ? "has-homemenu" : ""}`}>
               {menuItem.isHomemenu ? (
                 <li>
                   <div className="homemenu-items">
@@ -33,11 +28,12 @@ const MainMenuSection = React.memo(() => {
                           className="col homemenu"
                         >
                           <div className="homemenu-thumb">
-                            <Image
+                            <img                          
                               src={subMenuItem.img || ""}
                               alt="img"
                               width={217}
                               height={271}
+                              style={{ objectFit: 'cover' }}
                             />
                             <div className="demo-button">
                               <Link to={subMenuItem.link} className="theme-btn">
@@ -72,9 +68,7 @@ const MainMenuSection = React.memo(() => {
                     {subMenuItem.hasDropdown && subMenuItem.submenu && (
                       <ul className="submenu">
                         {subMenuItem.submenu.map((nestedSubItem: MenuItem) => (
-                          <li
-                            key={`nested-${nestedSubItem.title}-${nestedSubItem.link}`}
-                          >
+                          <li key={`nested-${nestedSubItem.title}-${nestedSubItem.link}`}>
                             <Link to={nestedSubItem.link}>
                               {nestedSubItem.title}
                             </Link>
@@ -89,18 +83,13 @@ const MainMenuSection = React.memo(() => {
           )}
         </li>
 
-        {/* Special mobile-only home menu */}
         {menuItem.title === "Home" && (
           <li className="has-dropdown active d-xl-none">
-            <Link to="/" className="border-none">
-              Home
-            </Link>
+            <Link to="/" className="border-none">Home</Link>
             {menuItem.submenu && (
               <ul className="submenu">
                 {menuItem.submenu.map((subMenuItem: MenuItem) => (
-                  <li
-                    key={`mobile-home-${subMenuItem.title}-${subMenuItem.link}`}
-                  >
+                  <li key={`mobile-home-${subMenuItem.title}-${subMenuItem.link}`}>
                     <Link to={subMenuItem.link}>{subMenuItem.title}</Link>
                   </li>
                 ))}
@@ -110,7 +99,7 @@ const MainMenuSection = React.memo(() => {
         )}
       </React.Fragment>
     ));
-  }, [menuData]); // Only re-compute if menuData changes
+  }, [menuData]);
 
   return (
     <div className="main-menu">
