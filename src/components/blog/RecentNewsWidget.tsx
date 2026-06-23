@@ -6,7 +6,9 @@ interface RecentNewsWidgetProps {
 }
 
 const RecentNewsWidget = ({ recentPosts }: RecentNewsWidgetProps) => {
-  const basePath = import.meta.env.VITE_APP_BASE_PATH;
+  const basePath = import.meta.env.VITE_APP_BASE_PATH ?? "";
+  const resolveImg = (img: string) =>
+    img.startsWith("/") || img.startsWith("http") ? img : `${basePath}${img}`;
 
   return (
     <div className="single-sidebar-widget">
@@ -20,7 +22,7 @@ const RecentNewsWidget = ({ recentPosts }: RecentNewsWidgetProps) => {
               className="thumb bg-cover"
               style={
                 {
-                  "--post-thumb-url": `url('${basePath}${post.image}')`,
+                  "--post-thumb-url": `url('${resolveImg(post.image)}')`,
                 } as React.CSSProperties
               }
             />

@@ -1,44 +1,43 @@
 import { Link } from "react-router-dom";
-import Image from "../utils/Image";
 
 const HeroSection4 = () => {
   return (
     <section className="hero-section-4 hero-4 fix">
       <div className="hero-bg">
-        <Image
-          src="assets/img/hero/hero-bg-4.png"
+        <img
+          src="/assets/img/hero/hero-bg-4.png"
           alt="img"
           width={1832}
           height={1037}
         />
       </div>
       <div className="shape-1">
-        <Image
-          src="assets/img/hero/shape-1.png"
+        <img
+          src="/assets/img/hero/shape-1.png"
           alt="img"
           width={189}
           height={311}
         />
       </div>
       <div className="shape-2">
-        <Image
-          src="assets/img/hero/shape-2.png"
+        <img
+          src="/assets/img/hero/shape-2.png"
           alt="img"
           width={86}
           height={104}
         />
       </div>
       <div className="shape-3">
-        <Image
-          src="assets/img/hero/shape-3.png"
+        <img
+          src="/assets/img/hero/shape-3.png"
           alt="img"
           width={91}
           height={113}
         />
       </div>
       <div className="shape-4">
-        <Image
-          src="assets/img/hero/shape-4.png"
+        <img
+          src="/assets/img/hero/shape-4.png"
           alt="img"
           width={100}
           height={100}
@@ -68,11 +67,12 @@ const HeroSection4 = () => {
           </div>
           <div className="col-lg-6">
             <div className="hero-image float-bob-x">
-              <Image
-                src="assets/img/hero/hero-4.png"
-                alt="img"
+              <img
+                src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=721&h=727&fit=crop"
+                alt="hero"
                 width={721}
                 height={727}
+                style={{ borderRadius: 16, objectFit: 'cover' }}
               />
             </div>
           </div>

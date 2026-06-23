@@ -4033,6 +4033,19 @@ p {
 .service-section-solve {
   position: relative;
 }
+.service-section-solve::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 30, 0.72);
+  z-index: 0;
+  pointer-events: none;
+}
+.service-section-solve .container,
+.service-section-solve .section-title {
+  position: relative;
+  z-index: 1;
+}
 .service-section-solve .right-shape-2 {
   position: absolute;
   right: 0;
@@ -6105,6 +6118,21 @@ p {
   z-index: -1;
 }
 
+.brand-section.has-bg {
+  position: relative;
+}
+.brand-section.has-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 30, 0.72);
+  z-index: 0;
+  pointer-events: none;
+}
+.brand-section.has-bg .container {
+  position: relative;
+  z-index: 1;
+}
 .brand-section .section-title {
   margin-bottom: 30px;
 }

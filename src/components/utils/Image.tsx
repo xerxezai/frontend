@@ -11,11 +11,12 @@ interface Props {
 
 const Image = forwardRef<HTMLImageElement, Props>(
   ({ src, alt, width, height, className = "", ...rest }, ref) => {
-    const basePath = import.meta.env.VITE_APP_BASE_PATH;
+    const basePath = import.meta.env.VITE_APP_BASE_PATH ?? "";
+    const resolvedSrc = src.startsWith("/") || src.startsWith("http") ? src : `${basePath}${src}`;
     return (
       <img
         ref={ref}
-        src={`${basePath}${src}`}
+        src={resolvedSrc}
         alt={alt}
         className={className}
         width={width}

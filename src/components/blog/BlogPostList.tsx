@@ -32,7 +32,9 @@ const BlogPostList = ({
     );
   }
 
-  const basePath = import.meta.env.VITE_APP_BASE_PATH;
+  const basePath = import.meta.env.VITE_APP_BASE_PATH ?? "";
+  const resolveImg = (img: string) =>
+    img.startsWith("/") || img.startsWith("http") ? img : `${basePath}${img}`;
 
   return (
     <div className="blog-posts">
@@ -50,7 +52,7 @@ const BlogPostList = ({
             className="post-featured-thumb"
             style={
               {
-                "--post-image-url": `url('${basePath}${post.image}')`,
+                "--post-image-url": `url('${resolveImg(post.image)}')`,
               } as React.CSSProperties
             }
           />
