@@ -37,11 +37,14 @@ const HRModule = () => {
 
   return (
     <div>
-      <div className="erp-tabs">
+      <ul className="nav nav-pills mb-3 flex-wrap gap-1">
         {tabs.map(t => (
-          <button key={t} className={`erp-tab${tab === t ? ' active' : ''}`} onClick={() => setTab(t)}>{t}</button>
+          <li key={t} className="nav-item">
+            <button className={`nav-link${tab === t ? ' active' : ''}`} onClick={() => setTab(t)}
+              style={tab === t ? { background: '#6c57d2', border: 'none' } : { border: 'none', color: '#555' }}>{t}</button>
+          </li>
         ))}
-      </div>
+      </ul>
       {tab === 'Employees' && <ERPTable title="Employees" columns={empCols} {...employees} onDelete={employees.remove} />}
       {tab === 'Departments' && <ERPTable title="Departments" columns={deptCols} {...departments} onDelete={departments.remove} />}
       {tab === 'Leave Requests' && <ERPTable title="Leave Requests" columns={leaveCols} {...leaves} onDelete={leaves.remove} />}

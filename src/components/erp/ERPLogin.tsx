@@ -15,25 +15,47 @@ const ERPLogin = ({ onSuccess }: Props) => {
   };
 
   return (
-    <div className="erp-login-page">
-      <div className="erp-login-card">
-        <div className="erp-login-logo">
+    <div className="min-vh-100 d-flex align-items-center justify-content-center"
+      style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+      <div className="bg-white rounded-4 p-4 p-md-5 shadow" style={{ width: '100%', maxWidth: 420 }}>
+        <div className="text-center mb-4">
           <img src="/assets/img/logo/black-logo.svg" alt="Xerxez" height={40} />
         </div>
-        <h2>ERP Portal</h2>
-        <p>Sign in to manage your business</p>
+        <h4 className="fw-bold text-center mb-1" style={{ color: '#1a1a2e' }}>ERP Portal</h4>
+        <p className="text-center text-muted mb-4" style={{ fontSize: 14 }}>Sign in to manage your business</p>
         <form onSubmit={handleSubmit}>
-          {error && <div className="erp-alert erp-alert-error">{error}</div>}
-          <div className="erp-field">
-            <label>Username</label>
-            <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Enter username" required />
+          {error && <div className="alert alert-danger py-2" style={{ fontSize: 14 }}>{error}</div>}
+          <div className="mb-3">
+            <label className="form-label fw-semibold" style={{ fontSize: 13, color: '#555' }}>Username</label>
+            <input
+              type="text"
+              className="form-control"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              placeholder="Enter username"
+              required
+              style={{ borderColor: '#e2e8f0', color: '#1a1a2e' }}
+            />
           </div>
-          <div className="erp-field">
-            <label>Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" required />
+          <div className="mb-4">
+            <label className="form-label fw-semibold" style={{ fontSize: 13, color: '#555' }}>Password</label>
+            <input
+              type="password"
+              className="form-control"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Enter password"
+              required
+              style={{ borderColor: '#e2e8f0', color: '#1a1a2e' }}
+            />
           </div>
-          <button type="submit" className="erp-btn erp-btn-primary w-100" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button
+            type="submit"
+            className="btn w-100 fw-semibold"
+            disabled={loading}
+            style={{ background: '#6c57d2', color: '#fff', padding: '10px', borderRadius: 8 }}
+          >
+            {loading ? <><span className="spinner-border spinner-border-sm me-2" role="status"></span>Signing in...</> : 'Sign In'}
           </button>
         </form>
       </div>
