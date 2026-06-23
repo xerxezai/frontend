@@ -6,7 +6,7 @@ interface RecentNewsWidgetProps {
 }
 
 const RecentNewsWidget = ({ recentPosts }: RecentNewsWidgetProps) => {
-  const basePath = import.meta.env.VITE_APP_BASE_PATH ?? "";
+  const basePath = import.meta.env.VITE_APP_BASE_PATH || "/";
   const resolveImg = (img: string) =>
     img.startsWith("/") || img.startsWith("http") ? img : `${basePath}${img}`;
 

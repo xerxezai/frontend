@@ -14,9 +14,9 @@ const CtaSection6 = ({ variant }: Props) => {
       <div className="container">
         <div className={`cta-call-wrapper ${variant ? "style-padding" : ""}`}>
           <div className="section-title text-center mb-0">
-            <span className="text-white fade-in">No time to wait ? Call us </span>
+            <span className="text-white fade-in">Ready to modernise your enterprise?</span>
             <h2 className="text-white char-animation">
-              Let’s Collaboration With <br /> Our SEO Expert
+              Let's Build Something <br /> Extraordinary Together
             </h2>
           </div>
           <div className="cta-button fade-in">

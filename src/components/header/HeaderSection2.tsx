@@ -72,7 +72,7 @@ const HeaderSection2 = ({ variant }: Props) => {
                   <MainMenuSection />
                 </div>
                 <div className="link-btn">
-                  Support: <a href="tel:88812345678">(888) 1234-5678</a>
+                  hello@xerxez.com
                 </div>
                 <Link to="/contact" className="theme-btn">
                   Get Started

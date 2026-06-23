@@ -57,7 +57,7 @@ const HeaderSection = ({ variant }: Props) => {
               </div>
               {!variant && (
                 <div className="link-btn">
-                  Support: <a href="tel:88812345678">(888) 1234-5678</a>
+                  hello@xerxez.com
                 </div>
               )}
               {variant ? (
