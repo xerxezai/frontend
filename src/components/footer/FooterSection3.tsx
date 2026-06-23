@@ -31,12 +31,12 @@ const FooterSection3 = () => {
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <Link to="/" style={{ display: 'inline-block', background: '#fff', borderRadius: 8, padding: '4px 8px' }}>
+                  <Link to="/" >
                     <Image
                       src="assets/img/logo/logo.png"
                       alt="Xerxez Solutions"
-                      width={160}
-                      height={36}
+                      width={192}
+                      height={42}
                     />
                   </Link>
                 </div>
@@ -183,6 +183,7 @@ const FooterSection3 = () => {
 };
 
 export default FooterSection3;
+
 
 
 

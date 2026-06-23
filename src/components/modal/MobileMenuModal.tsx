@@ -16,12 +16,12 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
             <div className="offcanvas__content">
               <div className="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
-                  <Link to="/" style={{ display: 'inline-block', background: '#fff', borderRadius: 8, padding: '4px 8px' }}>
+                  <Link to="/" >
                     <Image
                       src="assets/img/logo/logo.png"
                       alt="Xerxez Solutions"
-                      width={160}
-                      height={36}
+                      width={192}
+                      height={42}
                     />
                   </Link>
                 </div>
@@ -82,6 +82,7 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
 };
 
 export default MobileMenuModal;
+
 
 
 

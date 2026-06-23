@@ -15,12 +15,12 @@ const FooterSection2 = ({ variant }: Props) => {
             variant ? "style-margin" : ""
           }`}
         >
-          <Link to="/" className="footer-logo" style={{ display: 'inline-block', background: '#fff', borderRadius: 8, padding: '4px 8px' }}>
+          <Link to="/" className="footer-logo" >
             <Image
               src="assets/img/logo/logo.png"
               alt="Xerxez Solutions"
-              width={160}
-              height={36}
+              width={192}
+              height={42}
             />
           </Link>
           <div className="footer-newsletter-right">
@@ -186,6 +186,7 @@ const FooterSection2 = ({ variant }: Props) => {
 };
 
 export default FooterSection2;
+
 
 
 
