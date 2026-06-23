@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 interface Props {
   title: string;
 }
@@ -26,3 +26,4 @@ const BreadcrumbSection = ({ title }: Props) => {
 };
 
 export default BreadcrumbSection;
+

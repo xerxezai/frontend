@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { homeOneProjectData } from "../../data";
 import React, { useState } from "react";
 import Image from "../utils/Image";
@@ -59,3 +59,4 @@ const ProjectSection: React.FC = () => {
 };
 
 export default ProjectSection;
+

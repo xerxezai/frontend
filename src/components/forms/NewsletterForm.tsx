@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+﻿import { useState, useRef, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import clsx from "clsx";
 
@@ -208,3 +208,4 @@ const NewsletterForm = ({ style }: Props) => {
 };
 
 export default NewsletterForm;
+

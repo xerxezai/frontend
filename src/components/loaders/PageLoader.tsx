@@ -1,4 +1,4 @@
-const PageLoader = () => {
+﻿const PageLoader = () => {
   return (
     <div id="preloader" className="preloader">
       <div className="animation-preloader">
@@ -32,3 +32,4 @@ const PageLoader = () => {
 };
 
 export default PageLoader;
+

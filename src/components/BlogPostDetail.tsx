@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import apiService from '../services/api';
-import type { BlogPost, Comment } from '../types';  // ← imported, no more local interfaces
+import type { BlogPost, Comment } from '../types';  // â† imported, no more local interfaces
 
 export const BlogPostDetail = () => {
   const { id } = useParams<{ id: string }>();

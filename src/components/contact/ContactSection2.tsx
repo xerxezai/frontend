@@ -1,4 +1,4 @@
-import ContactFormSection from "../forms/ContactFormSection";
+﻿import ContactFormSection from "../forms/ContactFormSection";
 import Image from "../utils/Image";
 
 const ContactSection2 = () => {
@@ -28,3 +28,4 @@ const ContactSection2 = () => {
 };
 
 export default ContactSection2;
+

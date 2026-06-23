@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const CtaSection4 = () => {
@@ -28,7 +28,7 @@ const CtaSection4 = () => {
 
                 <p className="text">
                   XERXEZ delivers AI-powered ERP, DevSecOps pipelines, and cloud infrastructure
-                  that transform how enterprises operate — from day one to scale.
+                  that transform how enterprises operate â€” from day one to scale.
                 </p>
                 
                 <Link to="/contact" className="theme-btn">
@@ -45,3 +45,4 @@ const CtaSection4 = () => {
 };
 
 export default CtaSection4;
+

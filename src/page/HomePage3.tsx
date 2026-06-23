@@ -1,4 +1,4 @@
-import AboutCompanySection2 from "../components/about/AboutCompanySection2";
+﻿import AboutCompanySection2 from "../components/about/AboutCompanySection2";
 import AboutSection3 from "../components/about/AboutSection3";
 import AboutSection4 from "../components/about/AboutSection4";
 import BlogSection3 from "../components/blog/BlogSection3";
@@ -44,3 +44,4 @@ const HomePage3 = () => {
 };
 
 export default HomePage3;
+

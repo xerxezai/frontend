@@ -1,4 +1,4 @@
-import MobileMenu from "../header/MobileMenu";
+﻿import MobileMenu from "../header/MobileMenu";
 import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
@@ -55,11 +55,11 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                 <ul className="contact-list">
                   <li>
                     <span>Headquarters:</span>
-                    Global — Remote-first
+                    Global â€” Remote-first
                   </li>
                   <li>
                     <span>Email:</span>
-                    <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
+                    <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
                   </li>
                 </ul>
               </div>
@@ -82,3 +82,4 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
 };
 
 export default MobileMenuModal;
+

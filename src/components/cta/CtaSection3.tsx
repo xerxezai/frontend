@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const CtaSection3 = () => {
@@ -18,7 +18,7 @@ const CtaSection3 = () => {
 
                 <p className="text-white">
                   Whether you need an AI-powered ERP, a DevSecOps pipeline, cloud infrastructure,
-                  or a full digital transformation roadmap — XERXEZ delivers end-to-end.
+                  or a full digital transformation roadmap â€” XERXEZ delivers end-to-end.
                 </p>
                 <div className="cta-card fade-in">
                   <Link to="/contact" className="theme-btn">
@@ -31,7 +31,7 @@ const CtaSection3 = () => {
                     </div>
                     <div className="content">
                       <p className="text-white">Mail Us</p>
-                      <h5 className="text-white">hello@xerxez.com</h5>
+                      <h5 className="text-white">xerxez.in@gmail.com</h5>
                     </div>
                   </div>
                 </div>
@@ -55,3 +55,4 @@ const CtaSection3 = () => {
 };
 
 export default CtaSection3;
+

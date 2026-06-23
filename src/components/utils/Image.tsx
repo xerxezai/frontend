@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+﻿import { forwardRef } from "react";
 
 interface Props {
   src: string;
@@ -29,3 +29,4 @@ const Image = forwardRef<HTMLImageElement, Props>(
 );
 
 export default Image;
+

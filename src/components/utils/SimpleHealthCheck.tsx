@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Simple Health Check Component
  * Lightweight health monitoring without complex dependencies
  * Uses soft-coded configuration for maximum compatibility
@@ -146,10 +146,10 @@ const SimpleHealthCheck: React.FC<SimpleHealthCheckProps> = ({
 
   const getStatusIcon = (status: string): string => {
     switch (status) {
-      case 'healthy': return '✅';
-      case 'degraded': return '⚠️';
-      case 'unhealthy': return '❌';
-      default: return '❓';
+      case 'healthy': return 'âœ…';
+      case 'degraded': return 'âš ï¸';
+      case 'unhealthy': return 'âŒ';
+      default: return 'â“';
     }
   };
 
@@ -159,7 +159,7 @@ const SimpleHealthCheck: React.FC<SimpleHealthCheckProps> = ({
         <span className="text-sm font-medium">Status:</span>
         <span className="text-sm font-semibold">
           {getStatusIcon(healthStatus.overall)} {healthStatus.overall.toUpperCase()}
-          {loading && ' 🔄'}
+          {loading && ' ðŸ”„'}
         </span>
       </div>
     );

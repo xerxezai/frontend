@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const AboutCompanySection = () => {
@@ -84,3 +84,4 @@ const AboutCompanySection = () => {
 };
 
 export default AboutCompanySection;
+

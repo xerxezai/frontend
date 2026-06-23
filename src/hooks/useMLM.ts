@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import apiService from '../services/api';
 
 export interface MLMProfile {
@@ -168,3 +168,4 @@ export function useMLMAuth() {
 
   return { token, user, loading, error, login, logout, isAuthenticated: !!token };
 }
+

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useCustomContext } from "../../context/context";
 import MainMenuSection from "./MainMenuSection";
 import { Link } from "react-router-dom";
@@ -35,7 +35,7 @@ const HeaderSection2 = ({ variant }: Props) => {
               <li className="top-divider">|</li>
               <li>
                 <i className="fas fa-envelope"></i>
-                <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
+                <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
               </li>
               <li>
                 <i className="fas fa-globe"></i>
@@ -79,7 +79,7 @@ const HeaderSection2 = ({ variant }: Props) => {
                 </div>
                 <div className="link-btn d-none d-xl-flex align-items-center gap-2">
                   <i className="fas fa-envelope" style={{color: "var(--theme-color, #6c57d2)"}}></i>
-                  <a href="mailto:hello@xerxez.com" style={{color: "#333", fontWeight: 500}}>hello@xerxez.com</a>
+                  <a href="mailto:xerxez.in@gmail.com" style={{color: "#333", fontWeight: 500}}>xerxez.in@gmail.com</a>
                 </div>
                 <Link to="/contact" className="theme-btn">
                   Get Started
@@ -104,3 +104,4 @@ const HeaderSection2 = ({ variant }: Props) => {
 };
 
 export default HeaderSection2;
+

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+﻿import { useParams } from "react-router-dom";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import ErrorSection from "../components/error/ErrorSection";
 import CustomLayout from "../components/layout/CustomLayout";
@@ -30,3 +30,4 @@ const ProjectDetailPage = () => {
 };
 
 export default ProjectDetailPage;
+

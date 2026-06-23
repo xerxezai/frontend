@@ -1,4 +1,4 @@
-import { testimonialData } from "../../data";
+﻿import { testimonialData } from "../../data";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "../utils/Image";
@@ -42,7 +42,7 @@ const TestimonySection2 = () => {
                         <i className="fas fa-star" key={i}></i>
                       ))}
                     </div>
-                    <h4 className="text-white">“{testimonial.quoteText}”</h4>
+                    <h4 className="text-white">â€œ{testimonial.quoteText}â€</h4>
                     <div className="client-info">
                       <div className="client-image">
                         <Image
@@ -80,3 +80,4 @@ const TestimonySection2 = () => {
 };
 
 export default TestimonySection2;
+

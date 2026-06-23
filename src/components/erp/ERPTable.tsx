@@ -1,4 +1,4 @@
-interface Column { key: string; label: string; render?: (row: any) => React.ReactNode; }
+﻿interface Column { key: string; label: string; render?: (row: any) => React.ReactNode; }
 
 interface Props {
   title: string;
@@ -54,7 +54,7 @@ const ERPTable = ({ title, columns, data, loading, error, onAdd, onDelete }: Pro
                 <tr key={row.id ?? i}>
                   {columns.map(c => (
                     <td key={c.key} style={{ padding: '12px 16px', verticalAlign: 'middle', color: '#333' }}>
-                      {c.render ? c.render(row) : (row[c.key] ?? '—')}
+                      {c.render ? c.render(row) : (row[c.key] ?? 'â€”')}
                     </td>
                   ))}
                   {onDelete && (
@@ -80,3 +80,4 @@ const ERPTable = ({ title, columns, data, loading, error, onAdd, onDelete }: Pro
 };
 
 export default ERPTable;
+

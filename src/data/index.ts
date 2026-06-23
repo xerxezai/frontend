@@ -1,4 +1,4 @@
-const aboutCompanyData = [
+﻿const aboutCompanyData = [
   {
     id: 1,
     iconClass: "flaticon-video-marketing-1",
@@ -14,7 +14,7 @@ const aboutCompanyData = [
     iconStyleClass: "style-2",
     title: "Secure Cloud\nArchitecture",
     description:
-      "Our DevSecOps approach embeds security at every layer — from infrastructure to deployment — so you ship faster without compromising safety.",
+      "Our DevSecOps approach embeds security at every layer â€” from infrastructure to deployment â€” so you ship faster without compromising safety.",
     extraClass: "",
   },
   {
@@ -92,7 +92,7 @@ const blogMainPosts = [
     author: "XERXEZ Team",
     image: "assets/img/news/post-2.jpg",
     content:
-      "Generic software forces you to adapt your processes to the tool. Custom development does the opposite — and the long-term competitive advantage is substantial.",
+      "Generic software forces you to adapt your processes to the tool. Custom development does the opposite â€” and the long-term competitive advantage is substantial.",
     category: "Software Development",
     tags: ["Software", "Development", "Enterprise"],
     comments: 9,
@@ -106,7 +106,7 @@ const blogMainPosts = [
     author: "XERXEZ Team",
     image: "assets/img/news/post-3.jpg",
     content:
-      "Technology alone does not drive transformation — people do. Explore how structured AI training programs accelerate adoption and maximize returns on your technology investments.",
+      "Technology alone does not drive transformation â€” people do. Explore how structured AI training programs accelerate adoption and maximize returns on your technology investments.",
     category: "AI Training",
     tags: ["AI", "Training", "Workforce"],
     comments: 11,
@@ -344,13 +344,13 @@ const faqData = [
     id: 1,
     question: "1. What makes XERXEZ's AI-Powered ERP different from traditional ERP systems?",
     answer:
-      "XERXEZ's ERP is built AI-native — not AI-bolted-on. It uses machine learning to automate forecasting, detect anomalies, and surface actionable insights in real time, integrating with your existing cloud infrastructure and workflows.",
+      "XERXEZ's ERP is built AI-native â€” not AI-bolted-on. It uses machine learning to automate forecasting, detect anomalies, and surface actionable insights in real time, integrating with your existing cloud infrastructure and workflows.",
   },
   {
     id: 2,
     question: "2. How does your DevSecOps approach differ from standard DevOps?",
     answer:
-      "We embed security controls, compliance checks, and threat modeling directly into the CI/CD pipeline — not as an afterthought. This means every code commit, container image, and infrastructure change is automatically scanned and validated before reaching production.",
+      "We embed security controls, compliance checks, and threat modeling directly into the CI/CD pipeline â€” not as an afterthought. This means every code commit, container image, and infrastructure change is automatically scanned and validated before reaching production.",
   },
   {
     id: 3,
@@ -362,13 +362,13 @@ const faqData = [
     id: 4,
     question: "4. How long does a typical Software Development engagement take?",
     answer:
-      "Scope determines timeline. A focused MVP typically takes 8–12 weeks. Enterprise-grade platforms with integrations and compliance requirements range from 4–12 months. We use agile sprints with clear milestones so you have visibility at every stage.",
+      "Scope determines timeline. A focused MVP typically takes 8â€“12 weeks. Enterprise-grade platforms with integrations and compliance requirements range from 4â€“12 months. We use agile sprints with clear milestones so you have visibility at every stage.",
   },
   {
     id: 5,
     question: "5. What does your AI Training program cover?",
     answer:
-      "Our AI Training programs are tailored to your team's role — from executive AI literacy workshops to hands-on MLOps bootcamps for engineers. We cover LLMs, prompt engineering, model evaluation, responsible AI, and production deployment.",
+      "Our AI Training programs are tailored to your team's role â€” from executive AI literacy workshops to hands-on MLOps bootcamps for engineers. We cover LLMs, prompt engineering, model evaluation, responsible AI, and production deployment.",
   },
 ];
 
@@ -762,7 +762,7 @@ const services = [
     description:
       "Intelligent enterprise resource planning with AI-driven forecasting, automated workflows, and real-time analytics across all business units.",
     detailBody:
-      "XERXEZ AI Powered ERP replaces rigid legacy systems with an adaptive, intelligence-first platform. It continuously learns from your operational data to predict demand, flag anomalies, automate procurement, and surface actionable insights — across finance, HR, supply chain, and production in a single unified system. Our ERP modules are cloud-native, API-first, and built to integrate with your existing tools, letting you modernise incrementally without a big-bang migration.",
+      "XERXEZ AI Powered ERP replaces rigid legacy systems with an adaptive, intelligence-first platform. It continuously learns from your operational data to predict demand, flag anomalies, automate procurement, and surface actionable insights â€” across finance, HR, supply chain, and production in a single unified system. Our ERP modules are cloud-native, API-first, and built to integrate with your existing tools, letting you modernise incrementally without a big-bang migration.",
     slug: "ai-powered-erp",
     width: 87,
     height: 84,
@@ -776,7 +776,7 @@ const services = [
     description:
       "Security-first CI/CD pipelines and production ML infrastructure that let teams ship faster without compromising compliance or reliability.",
     detailBody:
-      "XERXEZ DevSecOps practice embeds security controls directly into your CI/CD pipeline — automated SAST, DAST, dependency scanning, and policy-as-code run on every commit, so vulnerabilities are caught before they reach production. Our MLOps layer adds model versioning, experiment tracking, drift detection, and automated retraining to your machine learning workflows. The result is faster release cycles, lower breach risk, and ML models that stay accurate and compliant in production.",
+      "XERXEZ DevSecOps practice embeds security controls directly into your CI/CD pipeline â€” automated SAST, DAST, dependency scanning, and policy-as-code run on every commit, so vulnerabilities are caught before they reach production. Our MLOps layer adds model versioning, experiment tracking, drift detection, and automated retraining to your machine learning workflows. The result is faster release cycles, lower breach risk, and ML models that stay accurate and compliant in production.",
     slug: "devsecops-mlops-solutions",
     width: 85,
     height: 88,
@@ -790,7 +790,7 @@ const services = [
     description:
       "Multi-cloud architecture, cost-optimized storage tiers, and hybrid cloud integration designed for data-intensive enterprise workloads.",
     detailBody:
-      "XERXEZ designs and manages cloud infrastructure across AWS, Azure, and GCP — architected for resilience, cost efficiency, and compliance from day one. We implement intelligent storage tiering that automatically moves data between hot, warm, and cold tiers based on access patterns, cutting storage costs without sacrificing performance. Our hybrid-cloud blueprints let you keep sensitive workloads on-premises while bursting compute to the cloud, giving you the best of both worlds.",
+      "XERXEZ designs and manages cloud infrastructure across AWS, Azure, and GCP â€” architected for resilience, cost efficiency, and compliance from day one. We implement intelligent storage tiering that automatically moves data between hot, warm, and cold tiers based on access patterns, cutting storage costs without sacrificing performance. Our hybrid-cloud blueprints let you keep sensitive workloads on-premises while bursting compute to the cloud, giving you the best of both worlds.",
     slug: "cloud-service-storage",
     width: 87,
     height: 84,
@@ -802,9 +802,9 @@ const services = [
     iconBgImg: "/assets/img/service/icon-bg-4.png",
     title: "Software\nDevelopment",
     description:
-      "Custom web, mobile, and enterprise applications built with modern architectures — scalable, secure, and delivered on time.",
+      "Custom web, mobile, and enterprise applications built with modern architectures â€” scalable, secure, and delivered on time.",
     detailBody:
-      "XERXEZ builds custom software that solves real business problems — from internal enterprise platforms to customer-facing SaaS products. Our engineering teams work in tight agile sprints with continuous deployment, automated testing, and full observability baked in from the start. We specialise in API-first backends, React and mobile frontends, and microservices architectures that scale horizontally. Every line of code is reviewed for security, performance, and maintainability — delivered with full IP transfer and transparent documentation.",
+      "XERXEZ builds custom software that solves real business problems â€” from internal enterprise platforms to customer-facing SaaS products. Our engineering teams work in tight agile sprints with continuous deployment, automated testing, and full observability baked in from the start. We specialise in API-first backends, React and mobile frontends, and microservices architectures that scale horizontally. Every line of code is reviewed for security, performance, and maintainability â€” delivered with full IP transfer and transparent documentation.",
     slug: "software-development",
     width: 85,
     height: 88,
@@ -830,7 +830,7 @@ const services = [
     iconBgImg: "/assets/img/service/icon-bg-6.png",
     title: "AI\nTraining",
     description:
-      "Hands-on AI and MLOps training programs for engineering teams and executive stakeholders — from AI literacy to LLM deployment.",
+      "Hands-on AI and MLOps training programs for engineering teams and executive stakeholders â€” from AI literacy to LLM deployment.",
     detailBody:
       "XERXEZ AI Training programmes are designed to close the skills gap between your ambitions and your team's current capabilities. We offer structured learning paths from AI literacy for business leaders, through applied machine learning for data scientists, to advanced LLM fine-tuning and MLOps certification for engineers. All programmes combine live instructor-led sessions with hands-on labs on your own data and cloud environment, so learning transfers directly to production work rather than staying theoretical.",
     slug: "ai-training",
@@ -846,7 +846,7 @@ const services = [
     description:
       "Quantum-ready architecture assessments, algorithm development, and hybrid quantum-classical solutions to prepare your enterprise for the next era of computing.",
     detailBody:
-      "XERXEZ Quantum Computing practice bridges today's classical infrastructure with tomorrow's quantum advantage. We start with a quantum readiness assessment — identifying which of your computational problems (optimisation, simulation, cryptography, ML) will benefit most from quantum acceleration. Our engineers then design hybrid quantum-classical pipelines using leading platforms such as IBM Quantum, Amazon Braket, and Azure Quantum, so you can begin capturing quantum speedups on real workloads without waiting for fault-tolerant hardware. We also future-proof your security posture with post-quantum cryptography migrations to protect sensitive data against quantum-enabled attacks before they arrive.",
+      "XERXEZ Quantum Computing practice bridges today's classical infrastructure with tomorrow's quantum advantage. We start with a quantum readiness assessment â€” identifying which of your computational problems (optimisation, simulation, cryptography, ML) will benefit most from quantum acceleration. Our engineers then design hybrid quantum-classical pipelines using leading platforms such as IBM Quantum, Amazon Braket, and Azure Quantum, so you can begin capturing quantum speedups on real workloads without waiting for fault-tolerant hardware. We also future-proof your security posture with post-quantum cryptography migrations to protect sensitive data against quantum-enabled attacks before they arrive.",
     slug: "quantum-computing",
     width: 87,
     height: 84,
@@ -858,9 +858,9 @@ const services = [
     iconBgImg: "/assets/img/service/icon-bg-8.png",
     title: "Mobile\nApplication",
     description:
-      "Cross-platform and native mobile applications for iOS and Android — built for performance, security, and seamless enterprise integration.",
+      "Cross-platform and native mobile applications for iOS and Android â€” built for performance, security, and seamless enterprise integration.",
     detailBody:
-      "XERXEZ builds mobile applications that work as the front line of your enterprise operations. Whether you need a customer-facing iOS and Android app, an internal field-service tool, or a data-collection platform for remote teams, we design and engineer it from the ground up with enterprise-grade security, offline capability, and deep backend integration. We work in React Native for maximum code reuse and in Swift/Kotlin for platform-specific performance — choosing the right stack for your use case rather than a one-size-fits-all approach. Every app we ship goes through rigorous QA, accessibility review, and App Store / Play Store deployment support.",
+      "XERXEZ builds mobile applications that work as the front line of your enterprise operations. Whether you need a customer-facing iOS and Android app, an internal field-service tool, or a data-collection platform for remote teams, we design and engineer it from the ground up with enterprise-grade security, offline capability, and deep backend integration. We work in React Native for maximum code reuse and in Swift/Kotlin for platform-specific performance â€” choosing the right stack for your use case rather than a one-size-fits-all approach. Every app we ship goes through rigorous QA, accessibility review, and App Store / Play Store deployment support.",
     slug: "mobile-application",
     width: 87,
     height: 84,
@@ -872,9 +872,9 @@ const services = [
     iconBgImg: "/assets/img/service/icon-bg-1.png",
     title: "Web & Mobile\nHosting",
     description:
-      "Managed hosting for web and mobile backends — high-availability infrastructure, global CDN, auto-scaling, and 24/7 monitoring included.",
+      "Managed hosting for web and mobile backends â€” high-availability infrastructure, global CDN, auto-scaling, and 24/7 monitoring included.",
     detailBody:
-      "XERXEZ Web & Mobile Hosting removes the operational burden of running your digital products in production. We provision and manage fully redundant hosting environments on AWS, Azure, or GCP — with load balancing, auto-scaling, DDoS protection, SSL management, and daily backups as standard. Our global CDN integration ensures fast load times for users worldwide, while our real-time monitoring and alerting stack catches issues before they impact your customers. For mobile backends we deploy and manage API gateways, push notification services, and database clusters optimised for mobile traffic patterns. All hosting plans include 24/7 on-call support and a 99.9% uptime SLA.",
+      "XERXEZ Web & Mobile Hosting removes the operational burden of running your digital products in production. We provision and manage fully redundant hosting environments on AWS, Azure, or GCP â€” with load balancing, auto-scaling, DDoS protection, SSL management, and daily backups as standard. Our global CDN integration ensures fast load times for users worldwide, while our real-time monitoring and alerting stack catches issues before they impact your customers. For mobile backends we deploy and manage API gateways, push notification services, and database clusters optimised for mobile traffic patterns. All hosting plans include 24/7 on-call support and a 99.9% uptime SLA.",
     slug: "web-mobile-hosting",
     width: 87,
     height: 84,
@@ -933,7 +933,7 @@ const serviceKeyFacts = [
     id: 1,
     icon: "far fa-check-circle",
     title: "AI-Native Architecture",
-    desc: "Every solution we build is designed AI-first — with machine learning, automation, and intelligent analytics as core pillars, not add-ons.",
+    desc: "Every solution we build is designed AI-first â€” with machine learning, automation, and intelligent analytics as core pillars, not add-ons.",
   },
   {
     id: 2,
@@ -945,7 +945,7 @@ const serviceKeyFacts = [
     id: 3,
     icon: "far fa-check-circle",
     title: "Cloud-Agnostic Delivery",
-    desc: "We architect for AWS, Azure, and GCP equally — giving you flexibility, preventing lock-in, and optimizing costs across providers.",
+    desc: "We architect for AWS, Azure, and GCP equally â€” giving you flexibility, preventing lock-in, and optimizing costs across providers.",
   },
   {
     id: 4,
@@ -1110,7 +1110,7 @@ const workSteps = [
     number: "02",
     title: "Design & Architect",
     description:
-      "Our architects design scalable, secure solutions tailored to your requirements — cloud, AI, ERP, or full-stack, with a clear delivery roadmap.",
+      "Our architects design scalable, secure solutions tailored to your requirements â€” cloud, AI, ERP, or full-stack, with a clear delivery roadmap.",
   },
   {
     number: "03",
@@ -1147,7 +1147,7 @@ const workingProcessData = [
     iconClass: "flaticon-keyword",
     iconStyleClass: "style-4",
     title: "Optimise",
-    description: "Monitor, fine-tune, and continuously improve — performance, cost, security, and AI model accuracy.",
+    description: "Monitor, fine-tune, and continuously improve â€” performance, cost, security, and AI model accuracy.",
   },
 ];
 
@@ -1171,3 +1171,4 @@ export {
   workingProcessData,
   workSteps,
 };
+

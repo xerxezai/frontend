@@ -1,4 +1,4 @@
-import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+﻿import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import ContactSection from "../components/contact/ContactSection";
 import FaqSection from "../components/faq/FaqSection";
 import CustomLayout from "../components/layout/CustomLayout";
@@ -14,3 +14,4 @@ const FaqPage = () => {
 };
 
 export default FaqPage;
+

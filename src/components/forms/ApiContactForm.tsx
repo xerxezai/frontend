@@ -1,4 +1,4 @@
-/**
+﻿/**
  * API-Integrated Contact Form Component
  * Submits contact form data to backend using soft-coded configuration
  */

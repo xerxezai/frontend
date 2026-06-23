@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+﻿import { useRef, useEffect, useState } from "react";
 
 interface Props {
   value: number;
@@ -85,3 +85,4 @@ const CountUp = ({
 };
 
 export default CountUp;
+

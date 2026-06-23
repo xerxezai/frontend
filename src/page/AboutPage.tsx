@@ -1,4 +1,4 @@
-import AboutSection2 from "../components/about/AboutSection2";
+﻿import AboutSection2 from "../components/about/AboutSection2";
 import AboutSection6 from "../components/about/AboutSection6";
 import BlogSection2 from "../components/blog/BlogSection2";
 import BrandSection from "../components/brand/BrandSection";
@@ -25,3 +25,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+

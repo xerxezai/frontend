@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const ProjectDetailSidebar = () => {
@@ -49,7 +49,7 @@ const ProjectDetailSidebar = () => {
             </div>
             <div className="content">
               <h5>Mail Us</h5>
-              <p>hello@xerxez.com</p>
+              <p>xerxez.in@gmail.com</p>
             </div>
           </li>
           <li>
@@ -58,7 +58,7 @@ const ProjectDetailSidebar = () => {
             </div>
             <div className="content">
               <h5>Headquarters</h5>
-              <p>Global — Remote-first</p>
+              <p>Global â€” Remote-first</p>
             </div>
           </li>
         </ul>
@@ -87,3 +87,4 @@ const ProjectDetailSidebar = () => {
 };
 
 export default ProjectDetailSidebar;
+

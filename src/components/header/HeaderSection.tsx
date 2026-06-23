@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import MainMenuSection from "./MainMenuSection";
 import { useCustomContext } from "../../context/context";
 import { Link } from "react-router-dom";
@@ -58,7 +58,7 @@ const HeaderSection = ({ variant }: Props) => {
               {!variant && (
                 <div className="link-btn d-none d-xl-flex align-items-center gap-2">
                   <i className="fas fa-envelope" style={{color: "var(--theme-color, #6c57d2)"}}></i>
-                  <a href="mailto:hello@xerxez.com" style={{color: "#333", fontWeight: 500}}>hello@xerxez.com</a>
+                  <a href="mailto:xerxez.in@gmail.com" style={{color: "#333", fontWeight: 500}}>xerxez.in@gmail.com</a>
                 </div>
               )}
               {variant ? (
@@ -93,3 +93,4 @@ const HeaderSection = ({ variant }: Props) => {
 };
 
 export default HeaderSection;
+

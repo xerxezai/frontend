@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const ErrorSection = () => {
@@ -32,3 +32,4 @@ const ErrorSection = () => {
 };
 
 export default ErrorSection;
+

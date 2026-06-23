@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { projectsData } from "../../data";
 import React, { useState, useMemo } from "react";
 import Image from "../utils/Image";
@@ -124,3 +124,4 @@ const ProjectMainSection: React.FC = () => {
 };
 
 export default ProjectMainSection;
+

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useSafeServices } from "../../hooks/useSafeApi";
 import { useState, useEffect } from "react";
 
@@ -79,7 +79,7 @@ const ServiceSection = () => {
           </p>
           {error && (
             <div className="mt-2 text-sm text-yellow-600">
-              ⚠️ Using cached data - API unavailable
+              âš ï¸ Using cached data - API unavailable
             </div>
           )}
         </div>
@@ -119,3 +119,4 @@ const ServiceSection = () => {
 };
 
 export default ServiceSection;
+

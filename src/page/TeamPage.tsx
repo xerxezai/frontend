@@ -1,4 +1,4 @@
-import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+﻿import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import CustomLayout from "../components/layout/CustomLayout";
 import TeamMainSection from "../components/team/TeamMainSection";
 
@@ -12,3 +12,4 @@ const TeamPage = () => {
 };
 
 export default TeamPage;
+

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 interface Props {
@@ -51,3 +51,4 @@ const CtaSection6 = ({ variant }: Props) => {
 };
 
 export default CtaSection6;
+

@@ -1,4 +1,4 @@
-// src/custom.d.ts or src/types/swiper-declarations.d.ts
+﻿// src/custom.d.ts or src/types/swiper-declarations.d.ts
 
 // Declarations for Swiper's bare module CSS imports
 declare module "swiper/css";
@@ -20,3 +20,4 @@ declare module "*.css" {
 //   const value: string;
 //   export default value;
 // }
+

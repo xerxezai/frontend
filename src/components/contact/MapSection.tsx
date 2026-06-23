@@ -1,4 +1,4 @@
-const MapSection = () => {
+﻿const MapSection = () => {
   return (
     <div className="map-section-contact">
       <div className="google-map">
@@ -12,3 +12,4 @@ const MapSection = () => {
 };
 
 export default MapSection;
+

@@ -1,4 +1,4 @@
-import AboutSection from "../components/about/AboutSection";
+﻿import AboutSection from "../components/about/AboutSection";
 import BlogSection from "../components/blog/BlogSection";
 import BrandSection from "../components/brand/BrandSection";
 import ContactSection from "../components/contact/ContactSection";
@@ -45,3 +45,4 @@ const HomePage1 = () => {
 };
 
 export default HomePage1;
+

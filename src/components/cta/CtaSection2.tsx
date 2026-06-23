@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
 const CtaSection2 = () => {
@@ -45,7 +45,7 @@ const CtaSection2 = () => {
                     </div>
                     <div className="content">
                       <p>Mail Us</p>
-                      <h5>hello@xerxez.com</h5>
+                      <h5>xerxez.in@gmail.com</h5>
                     </div>
                   </div>
                 </div>
@@ -59,3 +59,4 @@ const CtaSection2 = () => {
 };
 
 export default CtaSection2;
+

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import NewsletterForm from "../forms/NewsletterForm";
 import FooterBottomSection from "./FooterBottomSection";
 import Image from "../utils/Image";
@@ -104,8 +104,8 @@ const FooterSection = () => {
                     <div className="content">
                       <h5>Mail Us</h5>
                       <p>
-                        <a href="mailto:hello@xerxez.com" className="text-white">
-                          hello@xerxez.com
+                        <a href="mailto:xerxez.in@gmail.com" className="text-white">
+                          xerxez.in@gmail.com
                         </a>
                       </p>
                     </div>
@@ -125,7 +125,7 @@ const FooterSection = () => {
                     </div>
                     <div className="content">
                       <h5>Headquarters</h5>
-                      <p className="text-white">Global — Remote-first</p>
+                      <p className="text-white">Global â€” Remote-first</p>
                     </div>
                   </li>
                 </ul>
@@ -145,7 +145,7 @@ const FooterSection = () => {
                 </div>
                 <div className="footer-content">
                   <p>
-                    Stay updated on AI trends, cloud insights, and XERXEZ product releases —
+                    Stay updated on AI trends, cloud insights, and XERXEZ product releases â€”
                     straight to your inbox.
                   </p>
                   <NewsletterForm />
@@ -161,3 +161,4 @@ const FooterSection = () => {
 };
 
 export default FooterSection;
+

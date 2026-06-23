@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import type { TeamDataType } from "../../types";
 import Image from "../utils/Image";
 
@@ -60,8 +60,8 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                       <div className="content">
                         <span>Our Email</span>
                         <h3>
-                          <a href="mailto:hello@xerxez.com">
-                            hello@xerxez.com
+                          <a href="mailto:xerxez.in@gmail.com">
+                            xerxez.in@gmail.com
                           </a>
                         </h3>
                       </div>
@@ -82,7 +82,7 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                       <div className="content">
                         <span>Our Contact</span>
                         <h3>
-                          <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
+                          <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
                         </h3>
                       </div>
                     </li>
@@ -107,7 +107,7 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                 and manufacturing.
               </p>
               <p>
-                Every member of the XERXEZ team is committed to client success — from initial
+                Every member of the XERXEZ team is committed to client success â€” from initial
                 architecture design through to production deployment and ongoing support.
                 We work as an extension of your team, sharing knowledge, transferring skills,
                 and ensuring every solution we build is maintainable, secure, and aligned with
@@ -121,3 +121,4 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
 };
 
 export default TeamDetailSection;
+

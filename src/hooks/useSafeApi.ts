@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Safe API Hooks
  * Wrapper hooks that gracefully handle missing dependencies
  * Uses soft coding for maximum resilience

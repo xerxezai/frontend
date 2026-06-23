@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { teamData } from "../../data";
 import Image from "../utils/Image";
 
@@ -61,3 +61,4 @@ const TeamSection2 = () => {
 };
 
 export default TeamSection2;
+

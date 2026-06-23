@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import type { BlogDataType } from "../../types";
 
 interface BlogPostsListProps {
@@ -126,3 +126,4 @@ const BlogPostList = ({
 };
 
 export default BlogPostList;
+

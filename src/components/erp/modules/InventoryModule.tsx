@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useERPList } from '../../../hooks/useERPApi';
 import ERPTable from '../ERPTable';
 
@@ -17,14 +17,14 @@ const InventoryModule = () => {
     { key: 'unit', label: 'Unit' },
     { key: 'cost_price', label: 'Cost', render: (r: any) => `$${parseFloat(r.cost_price).toFixed(2)}` },
     { key: 'sale_price', label: 'Price', render: (r: any) => `$${parseFloat(r.sale_price).toFixed(2)}` },
-    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? '✅' : '❌' },
+    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? 'âœ…' : 'âŒ' },
   ];
 
   const warehouseCols = [
     { key: 'code', label: 'Code' },
     { key: 'name', label: 'Name' },
     { key: 'location', label: 'Location' },
-    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? '✅' : '❌' },
+    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? 'âœ…' : 'âŒ' },
   ];
 
   const movementCols = [
@@ -54,3 +54,4 @@ const InventoryModule = () => {
 };
 
 export default InventoryModule;
+

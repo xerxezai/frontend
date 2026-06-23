@@ -1,4 +1,4 @@
-import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+﻿import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import ErrorSection from "../components/error/ErrorSection";
 import CustomLayout from "../components/layout/CustomLayout";
 
@@ -12,3 +12,4 @@ const NotFoundPage = () => {
 };
 
 export default NotFoundPage;
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useERPList } from '../../../hooks/useERPApi';
 import ERPTable from '../ERPTable';
 
@@ -16,7 +16,7 @@ const CRMModule = () => {
     { key: 'company', label: 'Company' },
     { key: 'email', label: 'Email' },
     { key: 'phone', label: 'Phone' },
-    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? '✅' : '❌' },
+    { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? 'âœ…' : 'âŒ' },
   ];
 
   const leadCols = [
@@ -53,3 +53,4 @@ const CRMModule = () => {
 };
 
 export default CRMModule;
+

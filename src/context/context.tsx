@@ -1,4 +1,4 @@
-import React, {
+﻿import React, {
   createContext,
   useContext,
   useState,
@@ -52,3 +52,4 @@ export const useCustomContext = () => {
   }
   return context;
 };
+

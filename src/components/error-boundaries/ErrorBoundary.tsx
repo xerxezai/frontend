@@ -1,4 +1,4 @@
-import type { ErrorInfo, ReactNode } from "react";
+﻿import type { ErrorInfo, ReactNode } from "react";
 import React from "react";
 
 interface ErrorBoundaryProps {
@@ -201,3 +201,4 @@ class ErrorBoundary extends React.Component<
 }
 
 export default ErrorBoundary;
+

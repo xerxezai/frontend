@@ -1,4 +1,4 @@
-import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+﻿import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import ContactSection2 from "../components/contact/ContactSection2";
 import ContactSection3 from "../components/contact/ContactSection3";
 import MapSection from "../components/contact/MapSection";
@@ -16,3 +16,4 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
+

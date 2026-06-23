@@ -1,4 +1,4 @@
-import { brandData } from "../../data";
+﻿import { brandData } from "../../data";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "../utils/Image";
@@ -58,3 +58,4 @@ const BrandSection2 = ({ variant }: Props) => {
 };
 
 export default BrandSection2;
+

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import type { BlogDataType } from "../../types";
 
 interface RecentNewsWidgetProps {
@@ -43,3 +43,4 @@ const RecentNewsWidget = ({ recentPosts }: RecentNewsWidgetProps) => {
 };
 
 export default RecentNewsWidget;
+

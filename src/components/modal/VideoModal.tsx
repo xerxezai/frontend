@@ -1,4 +1,4 @@
-interface VideoModalProps {
+﻿interface VideoModalProps {
   isOpen: boolean;
   toggle: () => void;
 }
@@ -29,3 +29,4 @@ const VideoModal = ({ isOpen, toggle }: VideoModalProps) => {
 };
 
 export default VideoModal;
+

@@ -1,4 +1,4 @@
-import Image from "../utils/Image";
+﻿import Image from "../utils/Image";
 interface Props {
   variant?: boolean;
 }
@@ -45,7 +45,7 @@ const AboutSection2 = ({ variant }: Props) => {
                 </div>
 
                 <p className="about-text">
-                  XERXEZ is your trusted technology partner — delivering AI-powered ERP,
+                  XERXEZ is your trusted technology partner â€” delivering AI-powered ERP,
                   MLOps pipelines, cloud infrastructure, and enterprise software with
                   end-to-end ownership.
                 </p>
@@ -64,7 +64,7 @@ const AboutSection2 = ({ variant }: Props) => {
                   <div className="content">
                     <h3>AI-Native Architecture</h3>
                     <p>
-                      We embed AI at every layer of your stack — from intelligent ERP modules
+                      We embed AI at every layer of your stack â€” from intelligent ERP modules
                       to fully automated ML pipelines.
                     </p>
                   </div>
@@ -85,7 +85,7 @@ const AboutSection2 = ({ variant }: Props) => {
                   <div className="content">
                     <h3>Security by Design</h3>
                     <p>
-                      DevSecOps principles baked into every delivery — zero-trust, compliance-ready,
+                      DevSecOps principles baked into every delivery â€” zero-trust, compliance-ready,
                       and production-hardened.
                     </p>
                   </div>
@@ -162,3 +162,4 @@ const AboutSection2 = ({ variant }: Props) => {
 };
 
 export default AboutSection2;
+

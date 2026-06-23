@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import HeaderSection2 from "../header/HeaderSection2";
 import CtaSection6 from "../cta/CtaSection6";
 import ContactInfoSection from "../contact/ContactInfoSection";
@@ -38,3 +38,4 @@ const CustomLayout = ({ children }: Props) => {
 };
 
 export default CustomLayout;
+

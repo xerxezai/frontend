@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import React, { useMemo } from "react";
 import { pricingPlans } from "../../data";
 
@@ -49,3 +49,4 @@ const PricingTabpane: React.FC<PricingTabpaneProps> = ({ monthly }) => {
 };
 
 export default PricingTabpane;
+

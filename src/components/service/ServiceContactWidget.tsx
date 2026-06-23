@@ -1,4 +1,4 @@
-const ServiceContactWidget = () => {
+﻿const ServiceContactWidget = () => {
   return (
     <div className="sidebar-widget">
       <div className="sideber-title fade-in">
@@ -13,8 +13,8 @@ const ServiceContactWidget = () => {
           <div className="content">
             <h5>Mail Us</h5>
             <p>
-              <a href="mailto:hello@xerxez.com" className="link">
-                hello@xerxez.com
+              <a href="mailto:xerxez.in@gmail.com" className="link">
+                xerxez.in@gmail.com
               </a>
             </p>
           </div>
@@ -34,7 +34,7 @@ const ServiceContactWidget = () => {
           </div>
           <div className="content">
             <h5>Headquarters</h5>
-            <p>Global — Remote-first</p>
+            <p>Global â€” Remote-first</p>
           </div>
         </li>
       </ul>
@@ -43,3 +43,4 @@ const ServiceContactWidget = () => {
 };
 
 export default ServiceContactWidget;
+

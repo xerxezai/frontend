@@ -1,4 +1,4 @@
-interface SearchWidgetProps {
+﻿interface SearchWidgetProps {
   searchTerm: string;
   onSearchChange: (term: string) => void;
 }
@@ -27,3 +27,4 @@ const SearchWidget = ({ searchTerm, onSearchChange }: SearchWidgetProps) => {
 };
 
 export default SearchWidget;
+

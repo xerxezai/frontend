@@ -1,4 +1,4 @@
-import { workingProcessData } from "../../data";
+﻿import { workingProcessData } from "../../data";
 
 const WorkingProcessSection2 = () => {
   return (
@@ -43,3 +43,4 @@ const WorkingProcessSection2 = () => {
 };
 
 export default WorkingProcessSection2;
+

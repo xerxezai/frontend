@@ -1,4 +1,4 @@
-interface CategoriesWidgetProps {
+﻿interface CategoriesWidgetProps {
   categories: { [key: string]: number };
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
@@ -59,3 +59,4 @@ const CategoriesWidget = ({
 };
 
 export default CategoriesWidget;
+

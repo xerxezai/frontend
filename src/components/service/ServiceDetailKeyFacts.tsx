@@ -1,4 +1,4 @@
-import { serviceKeyFacts } from "../../data";
+﻿import { serviceKeyFacts } from "../../data";
 
 const ServiceDetailKeyFacts = () => {
   return (
@@ -28,3 +28,4 @@ const ServiceDetailKeyFacts = () => {
 };
 
 export default ServiceDetailKeyFacts;
+

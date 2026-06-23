@@ -1,4 +1,4 @@
-import { faqData } from "../../data";
+﻿import { faqData } from "../../data";
 import { useState } from "react";
 
 const FaqAccordion = () => {
@@ -50,3 +50,4 @@ const FaqAccordion = () => {
 };
 
 export default FaqAccordion;
+

@@ -1,4 +1,4 @@
-import type { ProjectDataType } from "../../types";
+﻿import type { ProjectDataType } from "../../types";
 import ProjectDetailSidebar from "./ProjectDetailSidebar";
 import { projectsData } from "../../data";
 import { useNavigate } from "react-router-dom";
@@ -129,3 +129,4 @@ const ProjectDetailSection = ({ projectInfo, currentIndex }: Props) => {
 };
 
 export default ProjectDetailSection;
+

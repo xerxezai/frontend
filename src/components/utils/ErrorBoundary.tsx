@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Error Boundary Component with Soft-Coded Configuration
  * Provides graceful error handling for React components
  */
@@ -91,7 +91,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
           }}
         >
           <h2 style={{ marginTop: 0, color: '#c53030' }}>
-            ⚠️ Something went wrong
+            âš ï¸ Something went wrong
           </h2>
           
           <p>
@@ -112,7 +112,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                 marginRight: '10px'
               }}
             >
-              🔄 Try Again
+              ðŸ”„ Try Again
             </button>
             
             <button 
@@ -126,14 +126,14 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                 cursor: 'pointer'
               }}
             >
-              🔃 Reload Page
+              ðŸ”ƒ Reload Page
             </button>
           </div>
           
           {this.props.showDetails && import.meta.env.DEV && this.state.error && (
             <details style={{ marginTop: '15px' }}>
               <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>
-                🔍 Technical Details
+                ðŸ” Technical Details
               </summary>
               <div style={{
                 marginTop: '10px',

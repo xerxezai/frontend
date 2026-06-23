@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import FooterBottomSection from "./FooterBottomSection";
 import Image from "../utils/Image";
 
@@ -147,8 +147,8 @@ const FooterSection3 = () => {
                     <div className="content">
                       <h5>Mail Us</h5>
                       <p>
-                        <a href="mailto:hello@xerxez.com" className="text-white">
-                          hello@xerxez.com
+                        <a href="mailto:xerxez.in@gmail.com" className="text-white">
+                          xerxez.in@gmail.com
                         </a>
                       </p>
                     </div>
@@ -183,3 +183,4 @@ const FooterSection3 = () => {
 };
 
 export default FooterSection3;
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Health Check Route Component
  * Provides a dedicated health check endpoint page
  */

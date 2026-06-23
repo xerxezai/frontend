@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Health Check Component
  * Monitors frontend and backend API health status
  * Provides real-time health monitoring with soft-coded configuration
@@ -127,10 +127,10 @@ const HealthCheck: React.FC<HealthCheckProps> = ({
   // Get status icon with proper type annotation
   const getStatusIcon = React.useCallback((status: string): string => {
     switch (status) {
-      case 'healthy': return '✅';
-      case 'degraded': return '⚠️';
-      case 'unhealthy': return '❌';
-      default: return '❓';
+      case 'healthy': return 'âœ…';
+      case 'degraded': return 'âš ï¸';
+      case 'unhealthy': return 'âŒ';
+      default: return 'â“';
     }
   }, []);
 
@@ -182,7 +182,7 @@ const HealthCheck: React.FC<HealthCheckProps> = ({
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-md font-medium text-gray-900">Backend API</h4>
             <span className={`text-sm font-semibold ${getStatusColor(healthStatus.backend.status)}`}>
-              {loading ? '🔄' : getStatusIcon(healthStatus.backend.status)} 
+              {loading ? 'ðŸ”„' : getStatusIcon(healthStatus.backend.status)} 
               {loading ? 'CHECKING' : healthStatus.backend.status.toUpperCase()}
             </span>
           </div>

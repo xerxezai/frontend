@@ -1,4 +1,4 @@
-import type { BlogDataType } from "../../types";
+﻿import type { BlogDataType } from "../../types";
 import SearchWidget from "./SearchWidget";
 import RecentNewsWidget from "./RecentNewsWidget";
 import CategoriesWidget from "./CategoriesWidget";
@@ -51,3 +51,4 @@ const BlogSidebar = ({
   );
 };
 export default BlogSidebar;
+

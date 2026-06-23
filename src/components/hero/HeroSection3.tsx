@@ -1,4 +1,4 @@
-import { useCustomContext } from "../../context/context";
+﻿import { useCustomContext } from "../../context/context";
 import SeoFormSection from "../forms/SeoFormSection";
 
 const HeroSection3 = () => {
@@ -52,7 +52,7 @@ const HeroSection3 = () => {
                 AI, Cloud &amp; DevSecOps <br /> Solutions for Enterprises
               </h1>
               <p>
-                Over 10 years delivering intelligent enterprise systems — ERP, MLOps pipelines,
+                Over 10 years delivering intelligent enterprise systems â€” ERP, MLOps pipelines,
                 cloud infrastructure, and secure software at scale.
               </p>
               <SeoFormSection variant />
@@ -65,3 +65,4 @@ const HeroSection3 = () => {
 };
 
 export default HeroSection3;
+

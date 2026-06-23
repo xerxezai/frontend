@@ -1,4 +1,4 @@
-import { counterData } from "../../data";
+﻿import { counterData } from "../../data";
 import CountUp from "../utils/CountUp";
 
 interface Props {
@@ -45,3 +45,4 @@ const CounterSection = ({ variant }: Props) => {
 };
 
 export default CounterSection;
+

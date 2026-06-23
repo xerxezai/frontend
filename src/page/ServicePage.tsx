@@ -1,4 +1,4 @@
-import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+﻿import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import CoreAdvantageSection from "../components/core-advantage/CoreAdvantageSection";
 import CounterSection from "../components/counter/CounterSection";
 import FaqSection2 from "../components/faq/FaqSection2";
@@ -22,3 +22,4 @@ const ServicePage = () => {
 };
 
 export default ServicePage;
+
