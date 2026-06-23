@@ -24,6 +24,7 @@ import NotFoundPage from "./page/NotFoundPage";
 import DocsPage from "./page/DocsPage";
 import HealthPage from "./page/HealthPage";
 import MLMPage from "./page/MLMPage";
+import ERPPage from "./page/ERPPage";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           <Route path="/documentation" element={<DocsPage />} />
           <Route path="/health" element={<HealthPage />} />
           <Route path="/mlm" element={<MLMPage />} />
+          <Route path="/erp/*" element={<ERPPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <AnimationWrapper />
