@@ -34,16 +34,16 @@ const HeaderSection = ({ variant }: Props) => {
           <div className="header-main">
             <div className="header-left">
               <Link to="/" className="header-logo1">
-                {variant ? (
+                {isSticky && !variant ? (
                   <Image
-                    src="assets/img/logo/white-logo.svg"
+                    src="assets/img/logo/black-logo.svg"
                     alt="Xerxez Solutions"
                     width={192}
                     height={42}
                   />
                 ) : (
                   <Image
-                    src="assets/img/logo/black-logo.svg"
+                    src="assets/img/logo/white-logo.svg"
                     alt="Xerxez Solutions"
                     width={192}
                     height={42}
