@@ -834,6 +834,20 @@ const services = [
     width: 87,
     height: 85,
   },
+  {
+    id: 7,
+    iconClass: "flaticon-research",
+    detailImg: "/assets/img/service/service-details-07.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-7.png",
+    title: "Quantum\nComputing",
+    description:
+      "Quantum-ready architecture assessments, algorithm development, and hybrid quantum-classical solutions to prepare your enterprise for the next era of computing.",
+    detailBody:
+      "XERXEZ Quantum Computing practice bridges today's classical infrastructure with tomorrow's quantum advantage. We start with a quantum readiness assessment — identifying which of your computational problems (optimisation, simulation, cryptography, ML) will benefit most from quantum acceleration. Our engineers then design hybrid quantum-classical pipelines using leading platforms such as IBM Quantum, Amazon Braket, and Azure Quantum, so you can begin capturing quantum speedups on real workloads without waiting for fault-tolerant hardware. We also future-proof your security posture with post-quantum cryptography migrations to protect sensitive data against quantum-enabled attacks before they arrive.",
+    slug: "quantum-computing",
+    width: 87,
+    height: 84,
+  },
 ];
 
 const homeOneServices = [
