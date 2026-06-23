@@ -13,6 +13,10 @@ const HeroSection = () => {
         <div className="row g-4 align-items-center">
           <div className="col-lg-6">
             <div className="hero-content">
+              <span className="hero-sub-tag">
+                <i className="fas fa-bolt"></i>
+                Enterprise AI &amp; Cloud Solutions
+              </span>
               <h1 className="char-animation">
                 AI-Powered ERP, MLOps &amp; Cloud for Modern Enterprises
               </h1>
