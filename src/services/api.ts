@@ -136,11 +136,10 @@ class ApiService {
    */
   private getAuthHeaders(): Record<string, string> {
     const headers: Record<string, string> = { ...this.config.headers };
-    
+    // Django REST Framework TokenAuthentication expects "Token <key>" not "Bearer"
     if (this.authTokens.access) {
-      headers.Authorization = `Bearer ${this.authTokens.access}`;
+      headers.Authorization = `Token ${this.authTokens.access}`;
     }
-    
     return headers;
   }
 
@@ -398,6 +397,44 @@ class ApiService {
     phone?: string;
   }): Promise<ApiResponse<any> | ApiError> {
     return this.post('/contact/', data);
+  }
+
+  // ============= MLM METHODS =============
+
+  async getMLMProfile(): Promise<ApiResponse<any> | ApiError> {
+    return this.get('/mlm/profile/');
+  }
+
+  async joinMLM(referrerCode?: string): Promise<ApiResponse<any> | ApiError> {
+    return this.post('/mlm/profile/', referrerCode ? { referrer_code: referrerCode } : {});
+  }
+
+  async getMLMDashboard(): Promise<ApiResponse<any> | ApiError> {
+    return this.get('/mlm/dashboard/');
+  }
+
+  async getMLMEarnings(): Promise<ApiResponse<any> | ApiError> {
+    return this.get('/mlm/earnings/');
+  }
+
+  async getMLMCommissions(): Promise<ApiResponse<any> | ApiError> {
+    return this.get('/mlm/commissions/');
+  }
+
+  async getMLMTree(depth: number = 3): Promise<ApiResponse<any> | ApiError> {
+    return this.get('/mlm/tree/', { depth });
+  }
+
+  async createMLMTransaction(data: {
+    amount: string;
+    description?: string;
+    status?: string;
+  }): Promise<ApiResponse<any> | ApiError> {
+    return this.post('/mlm/transactions/', { ...data, status: data.status || 'completed' });
+  }
+
+  async getMLMCommissionStructures(): Promise<ApiResponse<any> | ApiError> {
+    return this.get('/mlm/commission-structure/');
   }
 
   // ============= SYSTEM METHODS =============

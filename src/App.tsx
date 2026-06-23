@@ -23,6 +23,7 @@ import TeamDetailPage from "./page/TeamDetailPage";
 import NotFoundPage from "./page/NotFoundPage";
 import DocsPage from "./page/DocsPage";
 import HealthPage from "./page/HealthPage";
+import MLMPage from "./page/MLMPage";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="/team/:slug" element={<TeamDetailPage />} />
           <Route path="/documentation" element={<DocsPage />} />
           <Route path="/health" element={<HealthPage />} />
+          <Route path="/mlm" element={<MLMPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <AnimationWrapper />
