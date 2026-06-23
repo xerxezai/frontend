@@ -39,8 +39,8 @@ const ProjectDetailSidebar = () => {
               <i className="fas fa-phone-alt"></i>
             </div>
             <div className="content">
-              <h5>Call Us</h5>
-              <p>+286 985 2156</p>
+              <h5>Website</h5>
+              <p>xerxez.com</p>
             </div>
           </li>
           <li>
@@ -49,7 +49,7 @@ const ProjectDetailSidebar = () => {
             </div>
             <div className="content">
               <h5>Mail Us</h5>
-              <p>info@example.com</p>
+              <p>hello@xerxez.com</p>
             </div>
           </li>
           <li>
@@ -57,8 +57,8 @@ const ProjectDetailSidebar = () => {
               <i className="fas fa-map-marker-alt"></i>
             </div>
             <div className="content">
-              <h5>Office Address</h5>
-              <p>125 Berlin, Germany</p>
+              <h5>Headquarters</h5>
+              <p>Global — Remote-first</p>
             </div>
           </li>
         </ul>

@@ -25,7 +25,7 @@ const BrandSection = ({ variant }: Props) => {
               variant === "style-3" ? "text-color" : ""
             } char-animation`}
           >
-            SEOZ is used by over <span>9K+</span> companies across the world
+            XERXEZ is trusted by over <span>85+</span> enterprises worldwide
           </p>
         </div>
 

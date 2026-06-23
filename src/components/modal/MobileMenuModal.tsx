@@ -33,37 +33,33 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
               </div>
               <h3 className="offcanvas-title">Hello There!</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur <br /> adipiscing elit,{" "}
+                AI-powered ERP, DevSecOps, Cloud &amp; <br /> Software solutions for enterprises.
               </p>
               <MobileMenu />
               <div className="social-icon d-flex align-items-center">
-                <a href="#">
-                  <i className="fab fa-facebook-f"></i>
+                <a href="https://linkedin.com/company/xerxez" target="_blank" rel="noreferrer">
+                  <i className="fab fa-linkedin-in"></i>
                 </a>
-                <a href="#">
+                <a href="https://twitter.com/xerxez" target="_blank" rel="noreferrer">
                   <i className="fab fa-twitter"></i>
                 </a>
-                <a href="#">
-                  <i className="fab fa-youtube"></i>
+                <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
+                  <i className="fab fa-github"></i>
                 </a>
-                <a href="#">
-                  <i className="fab fa-linkedin-in"></i>
+                <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer">
+                  <i className="fab fa-instagram"></i>
                 </a>
               </div>
               <div className="offcanvas__contact">
                 <h3>Information</h3>
                 <ul className="contact-list">
                   <li>
-                    <span>Address:</span>
-                    Graaf Floriss 22A CH NY
-                  </li>
-                  <li>
-                    <span>Call Us:</span>
-                    <a href="tel:+00012345688">+000 123 456 88</a>
+                    <span>Headquarters:</span>
+                    Global — Remote-first
                   </li>
                   <li>
                     <span>Email:</span>
-                    <a href="mailto:helloseoz@gmial.com">helloseoz@gmial.com</a>
+                    <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
                   </li>
                 </ul>
               </div>

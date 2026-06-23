@@ -17,12 +17,11 @@ const PricingSection = ({ variant }: Props) => {
         <div className="section-title text-center">
           <span className="fade-in">Our Pricing Plan</span>
           <h2 className="char-animation">
-            Choice Best & Reliable Pricing Plan
+            Flexible Pricing for Every Enterprise Need
           </h2>
           <p className="mt-3">
-            Welcome to SEOZ your trusted partner for comprehensive SEO and
-            digital marketing solutions. With <br /> our proven expertise and
-            innovative strategies the digital landscape.
+            Whether you are a growing startup or a global enterprise, XERXEZ has a plan
+            that fits your scale. <br /> All plans include dedicated support and SLA-backed delivery.
           </p>
           <div className="d-flex justify-content-center mt-3 mt-md-0">
             <div className="pricing-two__tab">

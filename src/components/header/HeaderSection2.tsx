@@ -29,28 +29,24 @@ const HeaderSection2 = ({ variant }: Props) => {
           <div className={`header-top-wrapper ${variant ? "style-2" : ""}`}>
             <ul className="top-list">
               <li>
-                End of Year Sale: Save up to <b>55%</b> on Tasks
-              </li>
-              <li>
-                <i className="fas fa-phone-alt"></i>
-                <a href="tel:+00479394888">+00 (47) 939 4888</a>
+                AI-Powered ERP, DevSecOps &amp; Cloud Solutions for Enterprises
               </li>
               <li>
                 <i className="fas fa-envelope"></i>
-                <a href="mailto:helloseoz@gmial.com">helloseoz@gmial.com</a>
+                <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
               </li>
             </ul>
             <div className="social-icon">
-              <a href="#">
-                <i className="fab fa-facebook-f"></i>
+              <a href="https://linkedin.com/company/xerxez" target="_blank" rel="noreferrer">
+                <i className="fab fa-linkedin-in"></i>
               </a>
-              <a href="#">
+              <a href="https://twitter.com/xerxez" target="_blank" rel="noreferrer">
                 <i className="fab fa-twitter"></i>
               </a>
-              <a href="#">
-                <i className="fab fa-dribbble"></i>
+              <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
+                <i className="fab fa-github"></i>
               </a>
-              <a href="#">
+              <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer">
                 <i className="fab fa-instagram"></i>
               </a>
             </div>

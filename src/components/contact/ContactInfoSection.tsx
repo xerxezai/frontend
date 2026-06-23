@@ -31,28 +31,28 @@ const ContactInfoSection = () => {
               <i className="fas fa-phone-alt"></i>
             </div>
             <div className="content">
-              <h3>Call Us</h3>
+              <h3>Website</h3>
               <p>
-                <a href="tel:+00479394888">+00 (47) 939 4888</a>
+                <a href="https://xerxez.com">xerxez.com</a>
               </p>
             </div>
           </div>
           <div
             className="icon-items"
             data-aos="fade-up"
-            data-aos-delay="600" // stagger delay for each card
-            data-aos-duration="1000" // smooth animation duration
-            data-aos-easing="ease-out-cubic" // smooth easing
+            data-aos-delay="600"
+            data-aos-duration="1000"
+            data-aos-easing="ease-out-cubic"
             data-aos-once="true"
           >
             <div className="icon">
               <i className="fas fa-envelope"></i>
             </div>
             <div className="content">
-              <h3>Call Us</h3>
+              <h3>Mail Us</h3>
               <p>
-                <a href="mailto:info@example.com" className="link">
-                  info@example.com
+                <a href="mailto:hello@xerxez.com" className="link">
+                  hello@xerxez.com
                 </a>
               </p>
             </div>

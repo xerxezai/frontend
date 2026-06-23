@@ -3,20 +3,9 @@ const ServiceContactWidget = () => {
     <div className="sidebar-widget">
       <div className="sideber-title fade-in">
         <h4 className="char-animation">Need Any Help</h4>
-        <p className="mt-2 fade-in">Need Any Help, Call Us 24/7 For Support</p>
+        <p className="mt-2 fade-in">Need Any Help? Contact Us 24/7 For Support</p>
       </div>
       <ul className="contact-info fade-in">
-        <li>
-          <div className="icon">
-            <i className="fas fa-phone-alt"></i>
-          </div>
-          <div className="content">
-            <h5>Call Us</h5>
-            <p>
-              <a href="tel:+2869852156">+286 985 2156</a>
-            </p>
-          </div>
-        </li>
         <li>
           <div className="icon">
             <i className="fas fa-envelope"></i>
@@ -24,10 +13,19 @@ const ServiceContactWidget = () => {
           <div className="content">
             <h5>Mail Us</h5>
             <p>
-              <a href="mailto:info@example.com" className="link">
-                info@example.com
+              <a href="mailto:hello@xerxez.com" className="link">
+                hello@xerxez.com
               </a>
             </p>
+          </div>
+        </li>
+        <li>
+          <div className="icon">
+            <i className="fas fa-globe"></i>
+          </div>
+          <div className="content">
+            <h5>Website</h5>
+            <p>xerxez.com</p>
           </div>
         </li>
         <li>
@@ -35,8 +33,8 @@ const ServiceContactWidget = () => {
             <i className="fas fa-map-marker-alt"></i>
           </div>
           <div className="content">
-            <h5>Office Address</h5>
-            <p>125 Berlin, Germany</p>
+            <h5>Headquarters</h5>
+            <p>Global — Remote-first</p>
           </div>
         </li>
       </ul>

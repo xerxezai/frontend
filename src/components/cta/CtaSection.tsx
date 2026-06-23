@@ -15,15 +15,15 @@ const CtaSection = () => {
             />
           </div>
           <div className="section-title text-center mb-0">
-            <span className="fade-in">Your SEO Score</span>
+            <span className="fade-in">Free Tech Assessment</span>
             <h2 className="text-white char-animation">
-              {"SEO Score of Your Site"}
+              Request a Digital Transformation Audit
             </h2>
 
             <p className="mt-3 text-white">
-              Welcome to SEOZ your trusted partner for comprehensive SEO and
-              digital <br />
-              marketing solutions. With our proven expertise.
+              Enter your website and email — our experts will analyse your current stack
+              and <br />
+              identify opportunities for AI, cloud, and DevSecOps modernisation.
             </p>
           </div>
 

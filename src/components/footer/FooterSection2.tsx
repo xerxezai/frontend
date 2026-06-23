@@ -123,9 +123,9 @@ const FooterSection2 = ({ variant }: Props) => {
                       <i className="fas fa-phone-alt"></i>
                     </div>
                     <div className="content">
-                      <h5>Call Us</h5>
+                      <h5>Mail Us</h5>
                       <p>
-                        <a href="tel:+00479394888">+00 (47) 939 4888</a>
+                        <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
                       </p>
                     </div>
                   </li>
@@ -137,10 +137,10 @@ const FooterSection2 = ({ variant }: Props) => {
                       <h5>Mail Us</h5>
                       <p>
                         <a
-                          href="mailto:helloseoz@gmial.com"
+                          href="mailto:hello@xerxez.com"
                           className="text-white"
                         >
-                          helloseoz@gmial.com
+                          hello@xerxez.com
                         </a>
                       </p>
                     </div>

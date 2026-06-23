@@ -61,8 +61,8 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                       <div className="content">
                         <span>Our Email</span>
                         <h3>
-                          <a href="mailto:helloseoz@gmial.com">
-                            helloseoz@gmial.com
+                          <a href="mailto:hello@xerxez.com">
+                            hello@xerxez.com
                           </a>
                         </h3>
                       </div>

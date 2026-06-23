@@ -131,10 +131,10 @@ const FooterSection4 = () => {
                       <h5>Mail Us</h5>
                       <p>
                         <a
-                          href="mailto:helloseoz@gmial.com"
+                          href="mailto:hello@xerxez.com"
                           className="text-white"
                         >
-                          helloseoz@gmial.com
+                          hello@xerxez.com
                         </a>
                       </p>
                     </div>

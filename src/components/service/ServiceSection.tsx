@@ -31,7 +31,7 @@ const ServiceSection = () => {
       <section className="service-section fix section-padding">
         <div className="container">
           <div className="section-title text-center">
-            <span className="fade-in">Welcome to SEOZ</span>
+            <span className="fade-in">What We Do</span>
             <h2 className="char-animation">
               Generating New <br />
               Customers Via Online Mode
@@ -68,15 +68,14 @@ const ServiceSection = () => {
     <section className="service-section fix section-padding">
       <div className="container">
         <div className="section-title text-center">
-          <span className="fade-in">Welcome to SEOZ</span>
+          <span className="fade-in">What We Do</span>
           <h2 className="char-animation">
-            Generating New <br />
-            Customers Via Online Mode
+            Enterprise Solutions <br />
+            Powered by AI &amp; Cloud
           </h2>
           <p className="mt-3">
-            Welcome to SEOZ your trusted partner for comprehensive SEO and
-            digital marketing solutions. With <br /> our proven expertise and
-            innovative strategies the digital landscape.
+            XERXEZ delivers AI-powered ERP, DevSecOps pipelines, cloud infrastructure,
+            and custom software that help enterprises <br /> scale securely and intelligently.
           </p>
           {error && (
             <div className="mt-2 text-sm text-yellow-600">

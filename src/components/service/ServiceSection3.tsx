@@ -81,8 +81,8 @@ const ServiceSection3 = ({ mainSection }: Props) => {
         <div className="section-title text-center">
           <span className="fade-in">Our Services</span>
           <h2 className="char-animation">
-            Our Services Can Solve any
-            <br /> Marketing Problem
+            End-to-End Solutions for
+            <br /> Every Enterprise Challenge
           </h2>
         </div>
         <div className={`row ${mainSection ? "g-5" : ""}`}>

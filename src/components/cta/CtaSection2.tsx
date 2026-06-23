@@ -11,7 +11,7 @@ const CtaSection2 = () => {
               <div className="cta-support-img">
                 <Image
                   src="assets/img/cta/cta-left.png"
-                  alt="img"
+                  alt="XERXEZ enterprise support"
                   width={586}
                   height={485}
                 />
@@ -22,12 +22,12 @@ const CtaSection2 = () => {
                 <div className="section-title text-start">
                   <span className="text-white fade-in">24/7 Support</span>
                   <h2 className="text-white char-animation">
-                    24/7 Customer Support Services from Our SEOZ
+                    Enterprise-Grade Support from XERXEZ
                   </h2>
                 </div>
                 <p className="cta-support-text">
-                  Welcome to SEOZ your trusted partner for comprehensive SEO and
-                  digital marketing solutions with our proven expertise
+                  Our dedicated engineering teams provide round-the-clock support for
+                  production systems, cloud infrastructure, and mission-critical AI workloads.
                 </p>
                 <div className="cta-support-box fade-in">
                   <Link to="/contact" className="theme-btn">
@@ -45,7 +45,7 @@ const CtaSection2 = () => {
                     </div>
                     <div className="content">
                       <p>Mail Us</p>
-                      <h5>(704) 555-0127</h5>
+                      <h5>hello@xerxez.com</h5>
                     </div>
                   </div>
                 </div>

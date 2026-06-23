@@ -17,9 +17,8 @@ const ErrorSection = () => {
           <div className="content">
             <h2 className="char-animation">404 Page Not Found</h2>
             <p>
-              Welcome to SEOZ your trusted partner for comprehensive SEO and
-              digital marketing solutions. With our proven expertise and
-              innovative strategies the digital landscape.
+              Sorry, the page you are looking for does not exist. Head back to
+              the homepage to explore XERXEZ's AI, cloud, and DevSecOps solutions.
             </p>
             <Link to="/" className="theme-btn">
               Go To Homepage

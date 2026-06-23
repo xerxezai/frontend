@@ -13,16 +13,16 @@ const FooterSection = () => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="200" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="200"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
                   <Link to="/">
                     <Image
                       src="assets/img/footer/Logo.png"
-                      alt="img"
+                      alt="XERXEZ"
                       width={135}
                       height={47}
                     />
@@ -30,20 +30,20 @@ const FooterSection = () => {
                 </div>
                 <div className="footer-content">
                   <p>
-                    The time it will take for your website's search engine
-                    rankings to begin improving.
+                    XERXEZ delivers AI-powered ERP, cloud infrastructure, and DevSecOps
+                    solutions that transform how enterprises operate at scale.
                   </p>
                   <div className="social-icon">
-                    <a href="#">
-                      <i className="fab fa-facebook-f"></i>
+                    <a href="https://linkedin.com/company/xerxez" target="_blank" rel="noreferrer">
+                      <i className="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="#">
+                    <a href="https://twitter.com/xerxez" target="_blank" rel="noreferrer">
                       <i className="fab fa-twitter"></i>
                     </a>
-                    <a href="#">
-                      <i className="fab fa-dribbble"></i>
+                    <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
+                      <i className="fab fa-github"></i>
                     </a>
-                    <a href="#">
+                    <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer">
                       <i className="fab fa-instagram"></i>
                     </a>
                   </div>
@@ -54,9 +54,9 @@ const FooterSection = () => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="400" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="400"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
@@ -64,19 +64,22 @@ const FooterSection = () => {
                 </div>
                 <ul className="list-area">
                   <li>
-                    <Link to="/service">SEO for Small Business</Link>
+                    <Link to="/service/ai-powered-erp">AI Powered ERP</Link>
                   </li>
                   <li>
-                    <Link to="/service">SEO for Local Services</Link>
+                    <Link to="/service/devsecops-mlops-solutions">DevSecOps / MLOps</Link>
                   </li>
                   <li>
-                    <Link to="/service">Enterprise SEO</Link>
+                    <Link to="/service/cloud-service-storage">Cloud Service &amp; Storage</Link>
                   </li>
                   <li>
-                    <Link to="/service">National SEO</Link>
+                    <Link to="/service/software-development">Software Development</Link>
                   </li>
                   <li>
-                    <Link to="/service">SEO Optimization</Link>
+                    <Link to="/service/software-consulting">Software Consulting</Link>
+                  </li>
+                  <li>
+                    <Link to="/service/ai-training">AI Training</Link>
                   </li>
                 </ul>
               </div>
@@ -85,9 +88,9 @@ const FooterSection = () => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="600" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="600"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
@@ -96,29 +99,24 @@ const FooterSection = () => {
                 <ul className="footer-contect">
                   <li>
                     <div className="icon">
-                      <i className="fas fa-phone-alt"></i>
-                    </div>
-                    <div className="content">
-                      <h5>Call Us</h5>
-                      <p>
-                        <a href="tel:+00479394888">+00 (47) 939 4888</a>
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
                       <i className="fas fa-envelope"></i>
                     </div>
                     <div className="content">
                       <h5>Mail Us</h5>
                       <p>
-                        <a
-                          href="mailto:helloseoz@gmial.com"
-                          className="text-white"
-                        >
-                          helloseoz@gmial.com
+                        <a href="mailto:hello@xerxez.com" className="text-white">
+                          hello@xerxez.com
                         </a>
                       </p>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="icon">
+                      <i className="fas fa-globe"></i>
+                    </div>
+                    <div className="content">
+                      <h5>Website</h5>
+                      <p className="text-white">xerxez.com</p>
                     </div>
                   </li>
                   <li>
@@ -126,8 +124,8 @@ const FooterSection = () => {
                       <i className="fas fa-map-marker-alt"></i>
                     </div>
                     <div className="content">
-                      <h5>New York, USA</h5>
-                      <p className="text-white">27 Division 10002 Main road</p>
+                      <h5>Headquarters</h5>
+                      <p className="text-white">Global — Remote-first</p>
                     </div>
                   </li>
                 </ul>
@@ -137,9 +135,9 @@ const FooterSection = () => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="800" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="800"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
@@ -147,8 +145,8 @@ const FooterSection = () => {
                 </div>
                 <div className="footer-content">
                   <p>
-                    Effective SEO strategies not only elevate a website's
-                    visibility but also drive
+                    Stay updated on AI trends, cloud insights, and XERXEZ product releases —
+                    straight to your inbox.
                   </p>
                   <NewsletterForm />
                 </div>

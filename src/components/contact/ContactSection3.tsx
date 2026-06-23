@@ -6,7 +6,7 @@ const ContactSection3 = () => {
             <div className="col-lg-4">
                 <div className="contact-box-items">
                   <div className="contact-title">
-                    <h3 className="">USA Office</h3>
+                    <h3 className="">Global Headquarters</h3>
                   </div>
                   <ul className="contact-info">
                     <li>
@@ -15,7 +15,7 @@ const ContactSection3 = () => {
                       </div>
                       <div className="content">
                         <h5>Our Email</h5>
-                        <p>helloseoz@gmail.com</p>
+                        <p>hello@xerxez.com</p>
                       </div>
                     </li>
                     <li>
@@ -24,16 +24,16 @@ const ContactSection3 = () => {
                       </div>
                       <div className="content">
                         <h5>Our Location</h5>
-                        <p>27 Division St, NY 10002, USA</p>
+                        <p>Global — Remote-first</p>
                       </div>
                     </li>
                     <li>
                       <div className="icon">
-                        <i className="fas fa-phone-alt"></i>
+                        <i className="fas fa-globe"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Contact</h5>
-                        <p>+1 800 123 456 789</p>
+                        <h5>Website</h5>
+                        <p>xerxez.com</p>
                       </div>
                     </li>
                   </ul>
@@ -43,7 +43,7 @@ const ContactSection3 = () => {
             <div className="col-lg-4">
                 <div className="contact-box-items">
                   <div className="contact-title">
-                    <h3>Australia Office</h3>
+                    <h3>Enterprise Sales</h3>
                   </div>
                   <ul className="contact-info">
                     <li>
@@ -51,26 +51,26 @@ const ContactSection3 = () => {
                         <i className="fas fa-comment-alt-dots"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Email</h5>
-                        <p>helloseoz@gmail.com</p>
+                        <h5>Sales Enquiries</h5>
+                        <p>hello@xerxez.com</p>
                       </div>
                     </li>
                     <li>
                       <div className="icon">
-                        <i className="fas fa-map-marker-alt"></i>
+                        <i className="fas fa-handshake"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Location</h5>
-                        <p>27 Division St, NY 10002, USA</p>
+                        <h5>Partnerships</h5>
+                        <p>hello@xerxez.com</p>
                       </div>
                     </li>
                     <li>
                       <div className="icon">
-                        <i className="fas fa-phone-alt"></i>
+                        <i className="fas fa-calendar-check"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Contact</h5>
-                        <p>+1 800 123 456 789</p>
+                        <h5>Book a Demo</h5>
+                        <p>Available on request</p>
                       </div>
                     </li>
                   </ul>
@@ -79,7 +79,7 @@ const ContactSection3 = () => {
             <div className="col-lg-4">
                 <div className="contact-box-items">
                   <div className="contact-title">
-                    <h3>London Office</h3>
+                    <h3>Technical Support</h3>
                   </div>
                   <ul className="contact-info">
                     <li>
@@ -87,26 +87,26 @@ const ContactSection3 = () => {
                         <i className="fas fa-comment-alt-dots"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Email</h5>
-                        <p>helloseoz@gmail.com</p>
+                        <h5>Support Email</h5>
+                        <p>hello@xerxez.com</p>
                       </div>
                     </li>
                     <li>
                       <div className="icon">
-                        <i className="fas fa-map-marker-alt"></i>
+                        <i className="fas fa-clock"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Location</h5>
-                        <p>27 Division St, NY 10002, USA</p>
+                        <h5>Support Hours</h5>
+                        <p>24/7 for enterprise clients</p>
                       </div>
                     </li>
                     <li>
                       <div className="icon">
-                        <i className="fas fa-phone-alt"></i>
+                        <i className="fas fa-shield-alt"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Contact</h5>
-                        <p>+1 800 123 456 789</p>
+                        <h5>SLA</h5>
+                        <p>99.9% uptime guaranteed</p>
                       </div>
                     </li>
                   </ul>
