@@ -17,7 +17,7 @@ const FooterSection2 = ({ variant }: Props) => {
         >
           <Link to="/" className="footer-logo" >
             <Image
-              src="assets/img/logo/logo.png"
+              src="assets/img/logo/white-logo.svg"
               alt="Xerxez Solutions"
               width={192}
               height={42}
@@ -186,6 +186,7 @@ const FooterSection2 = ({ variant }: Props) => {
 };
 
 export default FooterSection2;
+
 
 
 

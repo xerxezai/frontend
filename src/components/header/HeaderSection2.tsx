@@ -66,10 +66,10 @@ const HeaderSection2 = ({ variant }: Props) => {
               <div className="header-left">
                 <Link to="/" className="header-logo1">
                   <Image
-                    src="assets/img/logo/logo.png"
+                    src={isSticky ? "assets/img/logo/logo.png" : "assets/img/logo/white-logo.svg"}
                     alt="Xerxez Solutions"
-                    width={192}
-                    height={42}
+                    width={150}
+                    height={36}
                   />
                 </Link>
               </div>
