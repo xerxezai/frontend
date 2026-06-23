@@ -34,10 +34,10 @@ const FooterSection3 = () => {
                 <div className="widget-head">
                   <Link to="/">
                     <Image
-                      src="assets/img/footer/Logo.png"
-                      alt="img"
-                      width={135}
-                      height={47}
+                      src="assets/img/logo/white-logo.svg"
+                      alt="Xerxez Solutions"
+                      width={192}
+                      height={42}
                     />
                   </Link>
                 </div>
