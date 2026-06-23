@@ -66,7 +66,7 @@ const HeaderSection2 = ({ variant }: Props) => {
               <div className="header-left">
                 <Link to="/" className="header-logo1">
                   <Image
-                    src="assets/img/logo/black-logo.svg"
+                    src="assets/img/logo/logo.png"
                     alt="Xerxez Solutions"
                     width={192}
                     height={42}
@@ -104,4 +104,5 @@ const HeaderSection2 = ({ variant }: Props) => {
 };
 
 export default HeaderSection2;
+
 

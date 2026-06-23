@@ -19,7 +19,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
       style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
       <div className="bg-white rounded-4 p-4 p-md-5 shadow" style={{ width: '100%', maxWidth: 420 }}>
         <div className="text-center mb-4">
-          <img src="/assets/img/logo/black-logo.svg" alt="Xerxez" height={40} />
+          <img src="/assets/img/logo/logo.png" alt="Xerxez" height={40} />
         </div>
         <h4 className="fw-bold text-center mb-1" style={{ color: '#1a1a2e' }}>ERP Portal</h4>
         <p className="text-center text-muted mb-4" style={{ fontSize: 14 }}>Sign in to manage your business</p>
@@ -64,4 +64,5 @@ const ERPLogin = ({ onSuccess }: Props) => {
 };
 
 export default ERPLogin;
+
 
