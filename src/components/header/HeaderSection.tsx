@@ -38,15 +38,15 @@ const HeaderSection = ({ variant }: Props) => {
                   <Image
                     src="assets/img/logo/logo.png"
                     alt="Xerxez Solutions"
-                    width={192}
-                    height={42}
+                    width={150}
+                    height={36}
                   />
                 ) : (
                   <Image
-                    src="assets/img/logo/logo.png"
+                    src="assets/img/logo/white-logo.svg"
                     alt="Xerxez Solutions"
-                    width={192}
-                    height={42}
+                    width={150}
+                    height={36}
                   />
                 )}
               </Link>

@@ -18,7 +18,7 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                 <div className="offcanvas__logo">
                   <Link to="/" >
                     <Image
-                      src="assets/img/logo/logo.png"
+                      src="assets/img/logo/white-logo.svg"
                       alt="Xerxez Solutions"
                       width={192}
                       height={42}
@@ -82,6 +82,7 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
 };
 
 export default MobileMenuModal;
+
 
 
 
