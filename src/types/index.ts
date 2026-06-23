@@ -42,6 +42,7 @@ export interface ServiceDataType {
   iconBgImg: string;
   title: string;
   description: string;
+  detailBody?: string;
   slug: string;
 }
 

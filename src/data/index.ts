@@ -654,7 +654,7 @@ const projectsData = [
   {
     id: 1,
     image: "assets/img/project/project-1.jpg",
-    detailImg: "assets/img/project/project-details-01.jpg",
+    detailImg: "/assets/img/project/project-details-01.jpg",
     category: "AI & ERP",
     title: "AI-Powered ERP Platform",
     slug: "ai-erp-platform",
@@ -662,7 +662,7 @@ const projectsData = [
   {
     id: 2,
     image: "assets/img/project/project-2.jpg",
-    detailImg: "assets/img/project/project-details-012.jpg",
+    detailImg: "/assets/img/project/project-details-012.jpg",
     category: "MLOPS",
     title: "MLOps Pipeline Automation",
     slug: "mlops-pipeline",
@@ -670,7 +670,7 @@ const projectsData = [
   {
     id: 3,
     image: "assets/img/project/project-3.jpg",
-    detailImg: "assets/img/project/project-details-013.jpg",
+    detailImg: "/assets/img/project/project-details-013.jpg",
     category: "DEVSECOPS",
     title: "Zero-Trust Cloud Infrastructure",
     slug: "cloud-infrastructure",
@@ -678,7 +678,7 @@ const projectsData = [
   {
     id: 4,
     image: "assets/img/project/project-4.jpg",
-    detailImg: "assets/img/project/project-details-014.jpg",
+    detailImg: "/assets/img/project/project-details-014.jpg",
     category: "SOFTWARE",
     title: "Enterprise SaaS Platform",
     slug: "enterprise-saas",
@@ -686,7 +686,7 @@ const projectsData = [
   {
     id: 5,
     image: "assets/img/project/project-5.jpg",
-    detailImg: "assets/img/project/project-details-01.jpg",
+    detailImg: "/assets/img/project/project-details-01.jpg",
     category: "AI TRAINING",
     title: "Corporate AI Upskilling Program",
     slug: "ai-training-program",
@@ -694,7 +694,7 @@ const projectsData = [
   {
     id: 6,
     image: "assets/img/project/project-6.jpg",
-    detailImg: "assets/img/project/project-details-012.jpg",
+    detailImg: "/assets/img/project/project-details-012.jpg",
     category: "CONSULTING",
     title: "Digital Transformation Roadmap",
     slug: "digital-transformation",
@@ -702,7 +702,7 @@ const projectsData = [
   {
     id: 7,
     image: "assets/img/project/project-7.jpg",
-    detailImg: "assets/img/project/project-details-013.jpg",
+    detailImg: "/assets/img/project/project-details-013.jpg",
     category: "AI & ERP",
     title: "Supply Chain AI Optimization",
     slug: "supply-chain-ai",
@@ -710,7 +710,7 @@ const projectsData = [
   {
     id: 8,
     image: "assets/img/project/project-8.jpg",
-    detailImg: "assets/img/project/project-details-014.jpg",
+    detailImg: "/assets/img/project/project-details-014.jpg",
     category: "DEVSECOPS",
     title: "Kubernetes Security Hardening",
     slug: "kubernetes-security",
@@ -718,7 +718,7 @@ const projectsData = [
   {
     id: 9,
     image: "assets/img/project/project-9.jpg",
-    detailImg: "assets/img/project/project-details-01.jpg",
+    detailImg: "/assets/img/project/project-details-01.jpg",
     category: "MLOPS",
     title: "Real-Time Fraud Detection System",
     slug: "fraud-detection-mlops",
@@ -726,7 +726,7 @@ const projectsData = [
   {
     id: 10,
     image: "assets/img/project/project-10.jpg",
-    detailImg: "assets/img/project/project-details-012.jpg",
+    detailImg: "/assets/img/project/project-details-012.jpg",
     category: "CLOUD",
     title: "Multi-Cloud FinOps Platform",
     slug: "multi-cloud-finops",
@@ -734,7 +734,7 @@ const projectsData = [
   {
     id: 11,
     image: "assets/img/project/project-11.jpg",
-    detailImg: "assets/img/project/project-details-013.jpg",
+    detailImg: "/assets/img/project/project-details-013.jpg",
     category: "SOFTWARE",
     title: "IoT Data Management Platform",
     slug: "iot-data-platform",
@@ -742,7 +742,7 @@ const projectsData = [
   {
     id: 12,
     image: "assets/img/project/project-12.jpg",
-    detailImg: "assets/img/project/project-details-014.jpg",
+    detailImg: "/assets/img/project/project-details-014.jpg",
     category: "AI TRAINING",
     title: "LLM Engineering Bootcamp",
     slug: "llm-engineering-bootcamp",
@@ -753,11 +753,13 @@ const services = [
   {
     id: 1,
     iconClass: "flaticon-seo",
-    detailImg: "assets/img/service/service-details-01.jpg",
-    iconBgImg: "assets/img/service/icon-bg-1.png",
+    detailImg: "/assets/img/service/service-details-01.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-1.png",
     title: "AI Powered\nERP",
     description:
       "Intelligent enterprise resource planning with AI-driven forecasting, automated workflows, and real-time analytics across all business units.",
+    detailBody:
+      "XERXEZ AI Powered ERP replaces rigid legacy systems with an adaptive, intelligence-first platform. It continuously learns from your operational data to predict demand, flag anomalies, automate procurement, and surface actionable insights — across finance, HR, supply chain, and production in a single unified system. Our ERP modules are cloud-native, API-first, and built to integrate with your existing tools, letting you modernise incrementally without a big-bang migration.",
     slug: "ai-powered-erp",
     width: 87,
     height: 84,
@@ -765,11 +767,13 @@ const services = [
   {
     id: 2,
     iconClass: "flaticon-performance",
-    detailImg: "assets/img/service/service-details-02.jpg",
-    iconBgImg: "assets/img/service/icon-bg-2.png",
+    detailImg: "/assets/img/service/service-details-02.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-2.png",
     title: "DevSecOps /\nMLOps Solutions",
     description:
       "Security-first CI/CD pipelines and production ML infrastructure that let teams ship faster without compromising compliance or reliability.",
+    detailBody:
+      "XERXEZ DevSecOps practice embeds security controls directly into your CI/CD pipeline — automated SAST, DAST, dependency scanning, and policy-as-code run on every commit, so vulnerabilities are caught before they reach production. Our MLOps layer adds model versioning, experiment tracking, drift detection, and automated retraining to your machine learning workflows. The result is faster release cycles, lower breach risk, and ML models that stay accurate and compliant in production.",
     slug: "devsecops-mlops-solutions",
     width: 85,
     height: 88,
@@ -777,11 +781,13 @@ const services = [
   {
     id: 3,
     iconClass: "flaticon-custom",
-    detailImg: "assets/img/service/service-details-03.jpg",
-    iconBgImg: "assets/img/service/icon-bg-3.png",
+    detailImg: "/assets/img/service/service-details-03.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-3.png",
     title: "Cloud Service\nand Storage",
     description:
       "Multi-cloud architecture, cost-optimized storage tiers, and hybrid cloud integration designed for data-intensive enterprise workloads.",
+    detailBody:
+      "XERXEZ designs and manages cloud infrastructure across AWS, Azure, and GCP — architected for resilience, cost efficiency, and compliance from day one. We implement intelligent storage tiering that automatically moves data between hot, warm, and cold tiers based on access patterns, cutting storage costs without sacrificing performance. Our hybrid-cloud blueprints let you keep sensitive workloads on-premises while bursting compute to the cloud, giving you the best of both worlds.",
     slug: "cloud-service-storage",
     width: 87,
     height: 84,
@@ -789,11 +795,13 @@ const services = [
   {
     id: 4,
     iconClass: "flaticon-email-marketing",
-    detailImg: "assets/img/service/service-details-04.jpg",
-    iconBgImg: "assets/img/service/icon-bg-4.png",
+    detailImg: "/assets/img/service/service-details-04.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-4.png",
     title: "Software\nDevelopment",
     description:
       "Custom web, mobile, and enterprise applications built with modern architectures — scalable, secure, and delivered on time.",
+    detailBody:
+      "XERXEZ builds custom software that solves real business problems — from internal enterprise platforms to customer-facing SaaS products. Our engineering teams work in tight agile sprints with continuous deployment, automated testing, and full observability baked in from the start. We specialise in API-first backends, React and mobile frontends, and microservices architectures that scale horizontally. Every line of code is reviewed for security, performance, and maintainability — delivered with full IP transfer and transparent documentation.",
     slug: "software-development",
     width: 85,
     height: 88,
@@ -801,11 +809,13 @@ const services = [
   {
     id: 5,
     iconClass: "flaticon-presentation",
-    detailImg: "assets/img/service/service-details-01.jpg",
-    iconBgImg: "assets/img/service/icon-bg-5.png",
+    detailImg: "/assets/img/service/service-details-01.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-5.png",
     title: "Software\nConsulting",
     description:
       "Strategic technology consulting, architecture reviews, and digital transformation roadmaps tailored to your business objectives.",
+    detailBody:
+      "XERXEZ consulting engagements start with a deep-dive into your existing technology landscape, business goals, and competitive pressures. We deliver actionable architecture recommendations, vendor-neutral technology selection, and detailed transformation roadmaps that your teams can execute confidently. Whether you need a one-week architecture review or a multi-month embedded CTO engagement, our consultants bring hands-on experience from delivering complex enterprise systems across healthcare, fintech, logistics, and manufacturing.",
     slug: "software-consulting",
     width: 85,
     height: 87,
@@ -813,11 +823,13 @@ const services = [
   {
     id: 6,
     iconClass: "flaticon-keyword",
-    detailImg: "assets/img/service/service-details-02.jpg",
-    iconBgImg: "assets/img/service/icon-bg-6.png",
+    detailImg: "/assets/img/service/service-details-02.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-6.png",
     title: "AI\nTraining",
     description:
       "Hands-on AI and MLOps training programs for engineering teams and executive stakeholders — from AI literacy to LLM deployment.",
+    detailBody:
+      "XERXEZ AI Training programmes are designed to close the skills gap between your ambitions and your team's current capabilities. We offer structured learning paths from AI literacy for business leaders, through applied machine learning for data scientists, to advanced LLM fine-tuning and MLOps certification for engineers. All programmes combine live instructor-led sessions with hands-on labs on your own data and cloud environment, so learning transfers directly to production work rather than staying theoretical.",
     slug: "ai-training",
     width: 87,
     height: 85,

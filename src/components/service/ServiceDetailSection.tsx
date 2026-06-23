@@ -28,14 +28,9 @@ const ServiceDetailSection = ({ serviceInfo }: Props) => {
                   {serviceInfo.title}
                 </h2>
                 <p className="mt-2">{serviceInfo.description}</p>
-                <p className="mt-3">
-                  Transportation Information Modeling (BIM) is revolutionizing
-                  how construction projects are designed, managed, and executed.
-                  BIM allows for the creation of detailed digital building
-                  construction marketing representations of buildings,
-                  facilitating better planning, collaboration, and
-                  decision-making.
-                </p>
+                {serviceInfo.detailBody && (
+                  <p className="mt-3">{serviceInfo.detailBody}</p>
+                )}
                 <ServiceDetailKeyFacts />
                 <ServiceCoreAdvantage />
                 <h4 className="how-title char-animation">
