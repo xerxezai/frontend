@@ -1,28 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 70" fill="none">
-  <!-- Icon group scaled to 64px tall -->
-  <g transform="translate(3,3) scale(0.305)">
-    <!-- Left hand -->
-    <path d="M100,185 C95,185 75,188 55,178 C35,168 20,148 22,122 C24,98 42,80 64,72 C78,67 93,70 102,80 L100,185 Z" fill="#2ECC71"/>
-    <path d="M100,185 C95,185 82,183 72,175 C62,167 56,155 58,140 C60,125 70,110 85,100 C92,95 99,93 104,95 L100,185 Z" fill="#27AE60"/>
-    <!-- Right hand -->
-    <path d="M100,185 C105,185 125,188 145,178 C165,168 180,148 178,122 C176,98 158,80 136,72 C122,67 107,70 98,80 L100,185 Z" fill="#2ECC71"/>
-    <path d="M100,185 C105,185 118,183 128,175 C138,167 144,155 142,140 C140,125 130,110 115,100 C108,95 101,93 96,95 L100,185 Z" fill="#27AE60"/>
-    <!-- Bottom V -->
-    <path d="M88,182 L100,198 L112,182 Z" fill="#1E8449"/>
-    <!-- Golden figure body -->
-    <path d="M100,172 C68,158 55,130 68,108 C76,95 88,89 100,91 C112,89 124,95 132,108 C145,130 132,158 100,172 Z" fill="#F5A623"/>
-    <!-- Head -->
-    <circle cx="100" cy="74" r="21" fill="#F5A623"/>
-    <!-- Graduation cap board -->
-    <rect x="76" y="53" width="48" height="9" rx="1.5" fill="#FFFFFF"/>
-    <!-- Cap crown -->
-    <path d="M88,53 L100,40 L112,53 Z" fill="#FFFFFF"/>
-    <!-- Tassel -->
-    <line x1="124" y1="57" x2="134" y2="68" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="134" cy="72" r="4" fill="#FFFFFF"/>
-  </g>
-  <!-- Xerxez white text -->
-  <text x="76" y="32" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="26" fill="#FFFFFF" letter-spacing="0.5">Xerxez</text>
-  <!-- Solutions white subtext -->
-  <text x="76" y="54" font-family="'Arial','Helvetica Neue',Arial,sans-serif" font-weight="400" font-size="14" fill="rgba(255,255,255,0.80)" letter-spacing="2">SOLUTIONS</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 70">
+
+  <!-- === LEFT GREEN HAND / WING === -->
+  <path d="M30,62 C25,66 14,68 4,62 C1,56 0,44 2,32 C4,22 12,14 22,12 C26,11 29,12 30,14 L30,62 Z"
+        fill="#2ECC71"/>
+
+  <!-- === RIGHT GREEN HAND / WING === -->
+  <path d="M30,62 C35,66 46,68 56,62 C59,56 60,44 58,32 C56,22 48,14 38,12 C34,11 31,12 30,14 L30,62 Z"
+        fill="#2ECC71"/>
+
+  <!-- === BOTTOM V POINT === -->
+  <polygon points="24,61 30,70 36,61" fill="#1E8449"/>
+
+  <!-- === GOLDEN FIGURE BODY === -->
+  <path d="M30,62 C16,52 12,36 18,24 C22,16 26,14 30,14 C34,14 38,16 42,24 C48,36 44,52 30,62 Z"
+        fill="#F5B82E"/>
+
+  <!-- === HEAD CIRCLE === -->
+  <circle cx="30" cy="22" r="10" fill="#F5B82E"/>
+
+  <!-- === GRADUATION CAP BOARD === -->
+  <rect x="16" y="11" width="28" height="5" rx="1" fill="#FFFFFF"/>
+
+  <!-- === CAP CROWN === -->
+  <polygon points="22,11 30,4 38,11" fill="#FFFFFF"/>
+
+  <!-- === TASSEL === -->
+  <line x1="44" y1="13" x2="50" y2="20" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="50" cy="23" r="2.5" fill="#FFFFFF"/>
+
+  <!-- === COMPANY NAME TEXT (white) === -->
+  <text x="68" y="37"
+        font-family="Arial Black, Arial, sans-serif"
+        font-weight="900"
+        font-size="28"
+        fill="#FFFFFF">Xerxez</text>
+
+  <text x="68" y="56"
+        font-family="Arial, sans-serif"
+        font-weight="600"
+        font-size="13"
+        fill="rgba(255,255,255,0.85)"
+        letter-spacing="3">SOLUTIONS</text>
+
 </svg>

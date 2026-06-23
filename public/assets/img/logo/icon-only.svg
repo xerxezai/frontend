@@ -1,57 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 210" fill="none">
-  <!-- Left hand / wing -->
-  <path d="M100,185
-    C 95,185 75,188 55,178
-    C 35,168 20,148 22,122
-    C 24,98 42,80 64,72
-    C 78,67 93,70 102,80
-    L 100,185 Z"
-    fill="#1B6B3A"/>
-  <!-- Left hand inner shadow for depth -->
-  <path d="M100,185
-    C 95,185 82,183 72,175
-    C 62,167 56,155 58,140
-    C 60,125 70,110 85,100
-    C 92,95 99,93 104,95
-    L 100,185 Z"
-    fill="#155A30"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 72">
 
-  <!-- Right hand / wing (mirror) -->
-  <path d="M100,185
-    C 105,185 125,188 145,178
-    C 165,168 180,148 178,122
-    C 176,98 158,80 136,72
-    C 122,67 107,70 98,80
-    L 100,185 Z"
-    fill="#1B6B3A"/>
-  <!-- Right hand inner shadow -->
-  <path d="M100,185
-    C 105,185 118,183 128,175
-    C 138,167 144,155 142,140
-    C 140,125 130,110 115,100
-    C 108,95 101,93 96,95
-    L 100,185 Z"
-    fill="#155A30"/>
+  <!-- LEFT GREEN HAND -->
+  <path d="M30,62 C25,66 14,68 4,62 C1,56 0,44 2,32 C4,22 12,14 22,12 C26,11 29,12 30,14 L30,62 Z"
+        fill="#1B6B3A"/>
 
-  <!-- Bottom V point / book spine where hands meet -->
-  <path d="M88,182 L100,198 L112,182 Z" fill="#0F4A26"/>
+  <!-- RIGHT GREEN HAND -->
+  <path d="M30,62 C35,66 46,68 56,62 C59,56 60,44 58,32 C56,22 48,14 38,12 C34,11 31,12 30,14 L30,62 Z"
+        fill="#1B6B3A"/>
 
-  <!-- Golden body / figure (tulip person shape) -->
-  <path d="M100,172
-    C 68,158 55,130 68,108
-    C 76,95 88,89 100,91
-    C 112,89 124,95 132,108
-    C 145,130 132,158 100,172 Z"
-    fill="#F5A623"/>
+  <!-- BOTTOM V -->
+  <polygon points="24,61 30,72 36,61" fill="#0F4A26"/>
 
-  <!-- Head circle -->
-  <circle cx="100" cy="74" r="21" fill="#F5A623"/>
+  <!-- GOLDEN BODY -->
+  <path d="M30,62 C16,52 12,36 18,24 C22,16 26,14 30,14 C34,14 38,16 42,24 C48,36 44,52 30,62 Z"
+        fill="#F5B82E"/>
 
-  <!-- Graduation cap board -->
-  <rect x="76" y="53" width="48" height="9" rx="1.5" fill="#1A1A1A"/>
-  <!-- Cap crown -->
-  <path d="M88,53 L100,40 L112,53 Z" fill="#1A1A1A"/>
-  <!-- Tassel cord -->
-  <line x1="124" y1="57" x2="134" y2="68" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="134" cy="72" r="4" fill="#1A1A1A"/>
+  <!-- HEAD -->
+  <circle cx="30" cy="22" r="10" fill="#F5B82E"/>
+
+  <!-- CAP BOARD -->
+  <rect x="16" y="11" width="28" height="5" rx="1" fill="#1A1A1A"/>
+
+  <!-- CAP CROWN -->
+  <polygon points="22,11 30,4 38,11" fill="#1A1A1A"/>
+
+  <!-- TASSEL -->
+  <line x1="44" y1="13" x2="50" y2="20" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="50" cy="23" r="2.5" fill="#1A1A1A"/>
+
 </svg>
