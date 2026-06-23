@@ -809,7 +809,7 @@ const services = [
   {
     id: 5,
     iconClass: "flaticon-presentation",
-    detailImg: "/assets/img/service/service-details-01.jpg",
+    detailImg: "/assets/img/service/service-details-05.jpg",
     iconBgImg: "/assets/img/service/icon-bg-5.png",
     title: "Software\nConsulting",
     description:
@@ -823,7 +823,7 @@ const services = [
   {
     id: 6,
     iconClass: "flaticon-keyword",
-    detailImg: "/assets/img/service/service-details-02.jpg",
+    detailImg: "/assets/img/service/service-details-06.jpg",
     iconBgImg: "/assets/img/service/icon-bg-6.png",
     title: "AI\nTraining",
     description:
