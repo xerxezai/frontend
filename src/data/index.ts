@@ -547,6 +547,9 @@ const menuData = [
       { title: "Software Development", link: "/service/software-development", hasDropdown: false },
       { title: "Software Consulting", link: "/service/software-consulting", hasDropdown: false },
       { title: "AI Training", link: "/service/ai-training", hasDropdown: false },
+      { title: "Quantum Computing", link: "/service/quantum-computing", hasDropdown: false },
+      { title: "Mobile Application", link: "/service/mobile-application", hasDropdown: false },
+      { title: "Web & Mobile Hosting", link: "/service/web-mobile-hosting", hasDropdown: false },
     ],
   },
   {
