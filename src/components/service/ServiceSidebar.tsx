@@ -18,8 +18,8 @@ const ServiceSidebar = () => {
         <div className="content">
           <h3 className="char-animation">Start Your Project?</h3>
           <p className="fade-in">
-            Mauris ut enim sit amet lacus ornare ullamcorper. Praesent placerat
-            neque eu.
+            Ready to transform your enterprise with AI, DevSecOps, or cloud solutions?
+            Let's talk — we respond within 24 hours.
           </p>
           <Link to="/contact" className="theme-btn fade-in">
             Contact Us
