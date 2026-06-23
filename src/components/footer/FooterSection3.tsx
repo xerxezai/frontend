@@ -8,11 +8,10 @@ const FooterSection3 = () => {
       <div className="container">
         <div className="request-demo-wrapper">
           <div className="content">
-            <h3 className="char-animation">Let's Make Something Great!</h3>
+            <h3 className="char-animation">Let's Build Something Great Together!</h3>
             <p>
-              The time it will take for your website's search engine rankings to
-              begin improving depends on several of its characteristics prior to
-              optimization.
+              Ready to transform your enterprise with AI-powered ERP, DevSecOps pipelines,
+              and cloud infrastructure? Let's talk.
             </p>
           </div>
           <Link to="/contact" className="theme-btn">
@@ -43,20 +42,20 @@ const FooterSection3 = () => {
                 </div>
                 <div className="footer-content">
                   <p>
-                    The time it will take for your website's search engine
-                    rankings to begin improving.
+                    XERXEZ delivers AI-powered ERP, cloud infrastructure, and DevSecOps
+                    solutions that transform how enterprises operate at scale.
                   </p>
                   <div className="social-icon">
-                    <a href="#">
-                      <i className="fab fa-facebook-f"></i>
+                    <a href="https://linkedin.com/company/xerxez" target="_blank" rel="noreferrer">
+                      <i className="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="#">
+                    <a href="https://twitter.com/xerxez" target="_blank" rel="noreferrer">
                       <i className="fab fa-twitter"></i>
                     </a>
-                    <a href="#">
-                      <i className="fab fa-dribbble"></i>
+                    <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
+                      <i className="fab fa-github"></i>
                     </a>
-                    <a href="#">
+                    <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer">
                       <i className="fab fa-instagram"></i>
                     </a>
                   </div>
@@ -77,19 +76,22 @@ const FooterSection3 = () => {
                 </div>
                 <ul className="list-area">
                   <li>
-                    <Link to="/service">SEO for Small Business</Link>
+                    <Link to="/service/ai-powered-erp">AI Powered ERP</Link>
                   </li>
                   <li>
-                    <Link to="/service">SEO for Local Services</Link>
+                    <Link to="/service/devsecops-mlops-solutions">DevSecOps / MLOps</Link>
                   </li>
                   <li>
-                    <Link to="/service">Enterprise SEO</Link>
+                    <Link to="/service/cloud-service-storage">Cloud Service &amp; Storage</Link>
                   </li>
                   <li>
-                    <Link to="/service">National SEO</Link>
+                    <Link to="/service/software-development">Software Development</Link>
                   </li>
                   <li>
-                    <Link to="/service">SEO Optimization</Link>
+                    <Link to="/service/quantum-computing">Quantum Computing</Link>
+                  </li>
+                  <li>
+                    <Link to="/service/mobile-application">Mobile Application</Link>
                   </li>
                 </ul>
               </div>
@@ -98,29 +100,29 @@ const FooterSection3 = () => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="600" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="600"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <h3>Resources</h3>
+                  <h3>Company</h3>
                 </div>
                 <ul className="list-area">
                   <li>
-                    <Link to="/contact">Help Center</Link>
+                    <Link to="/about">About Us</Link>
                   </li>
                   <li>
-                    <Link to="/service">Keyword Generator</Link>
+                    <Link to="/service">All Services</Link>
                   </li>
                   <li>
-                    <Link to="/blog">News & Events</Link>
+                    <Link to="/blog">Insights &amp; News</Link>
+                  </li>
+                  <li>
+                    <Link to="/contact">Contact Us</Link>
                   </li>
                   <li>
                     <Link to="/contact">Privacy Policy</Link>
-                  </li>
-                  <li>
-                    <Link to="/contact">Clients Feedback</Link>
                   </li>
                 </ul>
               </div>
@@ -140,26 +142,12 @@ const FooterSection3 = () => {
                 <ul className="footer-contect">
                   <li>
                     <div className="icon">
-                      <i className="fas fa-phone-alt"></i>
-                    </div>
-                    <div className="content">
-                      <h5>Call Us</h5>
-                      <p>
-                        <a href="tel:+00479394888">+00 (47) 939 4888</a>
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
                       <i className="fas fa-envelope"></i>
                     </div>
                     <div className="content">
                       <h5>Mail Us</h5>
                       <p>
-                        <a
-                          href="mailto:hello@xerxez.com"
-                          className="text-white"
-                        >
+                        <a href="mailto:hello@xerxez.com" className="text-white">
                           hello@xerxez.com
                         </a>
                       </p>
@@ -167,11 +155,20 @@ const FooterSection3 = () => {
                   </li>
                   <li>
                     <div className="icon">
+                      <i className="fas fa-globe"></i>
+                    </div>
+                    <div className="content">
+                      <h5>Website</h5>
+                      <p className="text-white">xerxez.com</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="icon">
                       <i className="fas fa-map-marker-alt"></i>
                     </div>
                     <div className="content">
-                      <h5>New York, USA</h5>
-                      <p className="text-white">27 Division 10002 Main road</p>
+                      <h5>Headquarters</h5>
+                      <p className="text-white">Global &mdash; Remote-first</p>
                     </div>
                   </li>
                 </ul>

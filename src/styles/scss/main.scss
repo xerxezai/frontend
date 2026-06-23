@@ -2012,6 +2012,21 @@ p {
   z-index: 99;
 }
 
+.hero-1 .hero-content .hero-sub-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(108, 87, 210, 0.18);
+  border: 1px solid rgba(108, 87, 210, 0.45);
+  color: #a78bfa;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 22px;
+}
 .hero-1 .hero-content h1 {
   margin-bottom: 15px;
 }
@@ -8309,6 +8324,40 @@ h3.service-header-5 {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+}
+.hero-section.hero-1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, rgba(10,3,46,0.88) 45%, rgba(10,3,46,0.45) 100%);
+  z-index: 1;
+}
+.hero-section.hero-1 .container {
+  position: relative;
+  z-index: 2;
+}
+.hero-section.hero-1 .left-shape,
+.hero-section.hero-1 .plane-shape {
+  z-index: 0;
+  opacity: 0.15;
+}
+.hero-1 .hero-content h1 {
+  color: #ffffff;
+}
+.hero-1 .hero-content p {
+  color: rgba(255,255,255,0.82);
+}
+.hero-1 .hero-content .hero-btn .theme-btn.style-2 {
+  border-color: rgba(255,255,255,0.5);
+  color: #ffffff;
+}
+.hero-1 .hero-content .hero-btn .theme-btn.style-2 i {
+  background-color: rgba(255,255,255,0.2);
+  color: #ffffff;
+}
+.hero-1 .hero-content .hero-btn .theme-btn.style-2::after,
+.hero-1 .hero-content .hero-btn .theme-btn.style-2::before {
+  background-color: rgba(255,255,255,0.15);
 }
 .hero-section.hero-3 {
   background-image: url(/assets/img/hero/hero-bg-3.png);
