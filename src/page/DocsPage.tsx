@@ -12,8 +12,8 @@ interface DocsPageProps {
 }
 
 const DocsPage: React.FC<DocsPageProps> = ({ 
-  title = "SEOZ Documentation",
-  description = "Complete documentation for SEOZ React Template"
+  title = "XERXEZ Documentation",
+  description = "Technical documentation for XERXEZ platform"
 }) => {
   // Dynamically load documentation content
   const documentationUrl = "/docs/index.html";

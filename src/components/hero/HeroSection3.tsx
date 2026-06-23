@@ -47,13 +47,13 @@ const HeroSection3 = () => {
         <div className="row justify-content-center">
           <div className="col-xl-9">
             <div className="hero-content">
-              <span>Welcome to</span>
+              <span>Welcome to XERXEZ</span>
               <h1 className="char-animation whitespace-pre-line">
-                Top SEO and Digital <br /> Marketing Agency
+                AI, Cloud &amp; DevSecOps <br /> Solutions for Enterprises
               </h1>
               <p>
-                Over 10 years SEOZ helping companies reach their financial and
-                branding goals for your company.
+                Over 10 years delivering intelligent enterprise systems — ERP, MLOps pipelines,
+                cloud infrastructure, and secure software at scale.
               </p>
               <SeoFormSection variant />
             </div>

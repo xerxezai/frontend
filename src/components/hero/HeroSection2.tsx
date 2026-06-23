@@ -18,10 +18,10 @@ const HeroSection2 = () => {
         <div className="row g-4 align-items-center">
           <div className="col-lg-6">
             <div className="hero-content">
-              <h1 className="char-animation">We're Experts in Optimizing for Your Site!</h1>
+              <h1 className="char-animation">Enterprise AI, Cloud &amp; DevSecOps Experts</h1>
               <p className="hero-text">
-                Over 10 years SEOZ helping companies reach their financial and
-                branding goals for your company.
+                Over 10 years delivering AI-powered ERP, MLOps pipelines, and cloud
+                infrastructure for enterprises across 15+ industries.
               </p>
 
               <div className="hero-btn fade-in">
@@ -37,12 +37,12 @@ const HeroSection2 = () => {
 
               <div className="hero-counter-item fade-in">
                 <div className="counter-box">
-                  <CountUp value={23} suffix="+" />
-                  <p>Year Experience</p>
+                  <CountUp value={10} suffix="+" />
+                  <p>Years Experience</p>
                 </div>
                 <div className="counter-box">
-                  <CountUp value={498} suffix="+" />
-                  <p>Project Completed</p>
+                  <CountUp value={120} suffix="+" />
+                  <p>Projects Delivered</p>
                 </div>
               </div>
             </div>
@@ -51,7 +51,7 @@ const HeroSection2 = () => {
             <div className="hero-image">
               <img
                 src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=954&h=1041&fit=crop"
-                alt="hero"
+                alt="XERXEZ enterprise team"
                 className="img-custom-anim-right"
                 width={954}
                 height={1041}

@@ -11,7 +11,7 @@ const AboutSection3 = () => {
               <div className="about-left-image img-custom-anim-left">
                 <Image
                   src="assets/img/about/about-3-left-img.png"
-                  alt="img"
+                  alt="XERXEZ team"
                   width={306}
                   height={539}
                   className="fade-in"
@@ -21,15 +21,16 @@ const AboutSection3 = () => {
             <div className="col-xl-6 col-lg-6">
               <div className="about-content-3">
                 <div className="section-title mb-0">
-                  <span className="fade-in">Welcome to SEOZ</span>
+                  <span className="fade-in">About XERXEZ</span>
                   <h2 className="char-animation">
-                    Generating New <br /> Customers via Online Mode
+                    Enterprise Technology <br /> That Drives Real Results
                   </h2>
                 </div>
 
                 <p className="about-text-3">
-                  Welcome to SEOZ your trusted partner for comprehensive SEO and
-                  digital marketing solutions. With our proven expertise.
+                  XERXEZ is your trusted technology partner — delivering AI-powered ERP,
+                  DevSecOps pipelines, cloud infrastructure, and enterprise software
+                  with end-to-end ownership.
                 </p>
                 <div className="about-btn">
                   <Link to="/contact" className="theme-btn">
@@ -40,15 +41,15 @@ const AboutSection3 = () => {
                 <ul className="list-items">
                   <li>
                     <i className="flaticon-check"></i>
-                    Competitive online business, the higher the position
+                    AI-native architecture across every solution we build
                   </li>
                   <li>
                     <i className="flaticon-check"></i>
-                    Identify converted customers who reached your business
+                    Security by design — DevSecOps embedded from day one
                   </li>
                   <li>
                     <i className="flaticon-check"></i>
-                    Analyze your chances against your competitors
+                    Cloud-agnostic delivery on AWS, Azure, and GCP
                   </li>
                 </ul>
               </div>
@@ -62,7 +63,6 @@ const AboutSection3 = () => {
                   width={306}
                   height={467}
                 />
-
                 <div className="about-right-image-2">
                   <Image
                     src="assets/img/about/about-3-right-img-circle.png"

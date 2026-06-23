@@ -19,7 +19,7 @@ const AboutSection5 = () => {
               <div className="about-images appear_left fade-in">
                 <Image
                   src="assets/img/about/home-4-about-img.png"
-                  alt="img"
+                  alt="XERXEZ AI platform"
                   width={926}
                   height={660}
                 />
@@ -28,37 +28,37 @@ const AboutSection5 = () => {
             <div className="col-xl-6">
               <div className="about-contents">
                 <div className="section-title mb-0">
-                  <span className="fade-in">Welcome to SEOZ</span>
+                  <span className="fade-in">About XERXEZ</span>
                   <h2 className="text-white char-animation">
-                    Generating New <br /> Customers via Online Mode
+                    AI &amp; Cloud Solutions <br /> Built for Enterprise Scale
                   </h2>
                 </div>
 
                 <p className="about-text text-white mt-3">
-                  Start working with an company that can provide everything you
-                  need to <br /> generate awareness, drive traffic, connect
-                  with.
+                  Start working with a technology partner that provides everything you
+                  need — from AI-powered ERP and DevSecOps pipelines to cloud infrastructure
+                  and executive AI training.
                 </p>
 
                 <div className="list-box">
                   <ul>
                     <li>
                       <i className="flaticon-check"></i>
-                      SEO Audit & Analysis
+                      AI-Powered ERP &amp; Analytics
                     </li>
                     <li>
                       <i className="flaticon-check"></i>
-                      Monthly Reports
+                      Cloud Architecture &amp; Migration
                     </li>
                   </ul>
                   <ul>
                     <li>
                       <i className="flaticon-check"></i>
-                      Google Analytics Installation
+                      DevSecOps &amp; MLOps Pipelines
                     </li>
                     <li>
                       <i className="flaticon-check"></i>
-                      24/7 Customer Service
+                      24/7 Enterprise Support
                     </li>
                   </ul>
                 </div>
@@ -66,8 +66,8 @@ const AboutSection5 = () => {
                 <div className="progress-wrap">
                   <div className="pro-items">
                     <div className="pro-head">
-                      <h6 className="title">SEO Analysis</h6>
-                      <span className="point">80%</span>
+                      <h6 className="title">AI &amp; ML Delivery</h6>
+                      <span className="point">92%</span>
                     </div>
                     <div className="progress">
                       <div className="progress-value"></div>
@@ -75,8 +75,8 @@ const AboutSection5 = () => {
                   </div>
                   <div className="pro-items">
                     <div className="pro-head">
-                      <h6 className="title">Engaging Content</h6>
-                      <span className="point">90%</span>
+                      <h6 className="title">Client Satisfaction</h6>
+                      <span className="point">98%</span>
                     </div>
                     <div className="progress">
                       <div className="progress-value style-two"></div>

@@ -5,15 +5,14 @@ const CtaSection5 = () => {
     <section className="cta-section-4 section-padding fix bg-cover">
       <div className="container">
         <div className="section-title mb-0 text-center">
-          <span className="text-white fade-in">Baseline SEO Report</span>
+          <span className="text-white fade-in">Free Assessment</span>
           <h2 className="text-white char-animation">
-            SEOZ Offers First 15 Days Free Trial!
+            XERXEZ Offers a Free 15-Day Tech Assessment!
           </h2>
           <p className="text-white mt-4">
-            Our SEO services include 4 basic SEO service packages for websites
-            and Advanced SEO Plus service packages to meet the <br />{" "}
-            advertising needs and budgets of almost any business operating in
-            any industry.
+            Our enterprise technology assessment covers your current stack, architecture gaps,
+            security posture, and AI readiness — delivered as an actionable roadmap with
+            no commitment required for the first 15 days.
           </p>
         </div>
 
@@ -22,8 +21,8 @@ const CtaSection5 = () => {
             Get Started
             <i className="far fa-arrow-right"></i>
           </Link>
-          <Link to="/contact" className="theme-btn style-bg">
-            Explore More
+          <Link to="/service" className="theme-btn style-bg">
+            Explore Services
             <i className="far fa-arrow-right"></i>
           </Link>
         </div>

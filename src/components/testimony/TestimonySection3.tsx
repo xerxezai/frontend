@@ -23,8 +23,8 @@ const TestimonySection3 = () => {
             </h2>
           </div>
           <p>
-            Welcome to SEOZ your trusted partner for comprehensive SEO and
-            <br /> digital marketing solutions with our proven expertise
+            Hear directly from enterprise clients who've transformed their operations
+            <br /> with XERXEZ AI, cloud, and DevSecOps solutions.
           </p>
         </div>
         <Swiper

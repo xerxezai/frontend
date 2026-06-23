@@ -36,10 +36,9 @@ const BlogComments = () => {
             </div>
             <div className="comment-text">
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna. Ut enim ad
-                minim veniam, quis nostrud laboris nisi ut aliquip ex ea commodo
-                consequat.
+                XERXEZ completely transformed how we manage our enterprise workflows.
+                The AI-powered ERP integration was seamless and the team's support
+                throughout the rollout was exceptional.
               </p>
             </div>
           </div>
@@ -73,10 +72,9 @@ const BlogComments = () => {
             </div>
             <div className="comment-text">
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco nisi ut
-                aliquip ex ea commodo consequat.
+                The DevSecOps pipeline XERXEZ built for us reduced our deployment
+                time from days to hours while dramatically improving our security
+                posture. Highly recommend their cloud consulting team.
               </p>
             </div>
           </div>
@@ -102,9 +100,9 @@ const BlogComments = () => {
                 </div>
                 <div className="comment-text">
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam..
+                    Completely agree — their MLOps expertise is second to none.
+                    We've been running XERXEZ-built pipelines in production for
+                    six months now with zero downtime.
                   </p>
                 </div>
               </div>

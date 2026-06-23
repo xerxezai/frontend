@@ -6,6 +6,6 @@
  */
 
 export const BRAND_NAME   = import.meta.env.VITE_BRAND_NAME   || 'XERXEZ';
-export const BRAND_TAGLINE = import.meta.env.VITE_BRAND_TAGLINE || 'your trusted partner for comprehensive SEO and digital marketing solutions with our proven expertise';
+export const BRAND_TAGLINE = import.meta.env.VITE_BRAND_TAGLINE || 'AI-Powered ERP, DevSecOps & Cloud Solutions for Modern Enterprises';
 export const BRAND_EMAIL  = import.meta.env.VITE_BRAND_EMAIL  || 'hello@xerxez.com';
 export const BRAND_SITE   = import.meta.env.VITE_BRAND_SITE   || 'https://xerxez.com';

@@ -10,16 +10,15 @@ const CtaSection3 = () => {
             <div className="col-xl-6 col-lg-6">
               <div className="cta-content">
                 <div className="section-title text-lg-start">
-                  <span className="text-white fade-in">Cta Contact</span>
+                  <span className="text-white fade-in">Start Your Journey</span>
                   <h2 className="text-white char-animation">
-                    Ready to Take Your SEO to The Next Level
+                    Ready to Transform Your Enterprise with AI &amp; Cloud?
                   </h2>
                 </div>
 
                 <p className="text-white">
-                  The time it will take for your website's search engine
-                  rankings to begin improving depends on several of its
-                  characteristics prior to optimization.
+                  Whether you need an AI-powered ERP, a DevSecOps pipeline, cloud infrastructure,
+                  or a full digital transformation roadmap — XERXEZ delivers end-to-end.
                 </p>
                 <div className="cta-card fade-in">
                   <Link to="/contact" className="theme-btn">
@@ -28,11 +27,11 @@ const CtaSection3 = () => {
                   </Link>
                   <div className="phone-box">
                     <div className="icon">
-                      <i className="far fa-phone-alt"></i>
+                      <i className="far fa-envelope"></i>
                     </div>
                     <div className="content">
                       <p className="text-white">Mail Us</p>
-                      <h5 className="text-white">(704) 555-0127</h5>
+                      <h5 className="text-white">hello@xerxez.com</h5>
                     </div>
                   </div>
                 </div>

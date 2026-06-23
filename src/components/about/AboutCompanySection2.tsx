@@ -8,12 +8,12 @@ const AboutCompanySection2 = () => {
         <div className="section-title text-center">
           <span className="fade-in">About Our Company</span>
           <h2 className="text-white char-animation">
-            More than 3000+ <br /> Projects in 120+ Countries
+            120+ Enterprise Projects <br /> Across 15+ Industries
           </h2>
           <p className="text-white">
-            Welcome to SEOZ your trusted partner for comprehensive SEO and{" "}
+            XERXEZ delivers AI-powered ERP, DevSecOps pipelines, and cloud solutions{" "}
             <br />
-            digital marketing solutions with our proven expertise
+            trusted by enterprises worldwide.
           </p>
         </div>
         <div className="about-feature-wrapper-3">

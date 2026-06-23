@@ -64,22 +64,21 @@ const AboutSection4 = () => {
                 <div className="section-title">
                   <span className="fade-in">About Our Company</span>
                   <h2 className="char-animation">
-                    Proven Results, And Exceptional Your Services
+                    Proven Results, Enterprise-Grade Delivery
                   </h2>
                 </div>
 
                 <p className="about-text">
-                  Walleye poolfish sand goby butterfly ray stream catfish
-                  jewfish spanish. Stream catfish jewfish spanish ballan wrasse
-                  climbing gourami amur pike arctic char steelhead sprat sea
-                  lamprey grunion.
+                  XERXEZ is an AI-first technology company helping enterprises modernise with
+                  intelligent ERP systems, DevSecOps pipelines, cloud infrastructure, and
+                  hands-on AI training programmes.
                 </p>
 
                 <div className="progress-wrap">
                   <div className="pro-items">
                     <div className="pro-head">
-                      <h6 className="title">SEO Analysis</h6>
-                      <span className="point">80%</span>
+                      <h6 className="title">AI & Cloud Expertise</h6>
+                      <span className="point">92%</span>
                     </div>
                     <div className="progress">
                       <div className="progress-value"></div>
@@ -87,8 +86,8 @@ const AboutSection4 = () => {
                   </div>
                   <div className="pro-items">
                     <div className="pro-head">
-                      <h6 className="title">Engaging Content</h6>
-                      <span className="point">90%</span>
+                      <h6 className="title">DevSecOps & MLOps</h6>
+                      <span className="point">98%</span>
                     </div>
                     <div className="progress">
                       <div className="progress-value style-two"></div>

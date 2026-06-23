@@ -28,10 +28,9 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                   {teamInfo.name}
                 </h2>
                   <p>
-                    Lorem ipsum odor amet, consectetuer adipiscing elit. Porttitor
-                    a consequat hendrerit est, tortor finibus ridiculus cras.
-                    Phasellus aliquet litora commodo aptent; potenti suspendisse
-                    eu taciti condimentum.
+                    A dedicated member of the XERXEZ team, bringing deep expertise
+                    in enterprise AI, cloud infrastructure, and DevSecOps to help
+                    clients modernise their technology stacks and accelerate growth.
                   </p>
                   <div className="progress-wrap">
                     <div className="pro-items">
@@ -83,7 +82,7 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                       <div className="content">
                         <span>Our Contact</span>
                         <h3>
-                          <a href="tel:+1800123456789">+1 800 123 456 789</a>
+                          <a href="mailto:hello@xerxez.com">hello@xerxez.com</a>
                         </h3>
                       </div>
                     </li>
@@ -101,22 +100,18 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
           <div className="team-about">
               <h3 className="char-animation">About Me</h3>
               <p className="mb-4">
-                In today’s digital age, having a mobile-optimized website is no
-                longer optional—it’s essential for the success of your business.
-                With over half of global web traffic coming from mobile devices,
-                consumers expect fast, seamless, and user-friendly experiences
-                when browsing on their smartphones or tablets.
+                At XERXEZ, we believe the best enterprise technology is built by people who
+                deeply understand both business challenges and modern engineering practices.
+                Our team members bring years of hands-on experience delivering AI, cloud, and
+                DevSecOps solutions across industries including finance, healthcare, logistics,
+                and manufacturing.
               </p>
               <p>
-                A mobile-optimized website ensures that your site is responsive
-                and adapts to any screen size, providing easy navigation, readable
-                content, and fast loading times. This not only improves user
-                experience but also boosts your site’s search engine rankings, as
-                search engines like Google prioritize mobile-friendly websites in
-                their results. Furthermore, a mobile-optimized site enhances brand
-                credibility, builds customer trust, and increases the likelihood
-                of conversions, as users are more likely to engage with a site
-                that functions smoothly on their devices.
+                Every member of the XERXEZ team is committed to client success — from initial
+                architecture design through to production deployment and ongoing support.
+                We work as an extension of your team, sharing knowledge, transferring skills,
+                and ensuring every solution we build is maintainable, secure, and aligned with
+                your long-term business goals.
               </p>
           </div>
         </div>

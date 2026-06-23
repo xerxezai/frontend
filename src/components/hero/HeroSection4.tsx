@@ -12,56 +12,37 @@ const HeroSection4 = () => {
         />
       </div>
       <div className="shape-1">
-        <img
-          src="/assets/img/hero/shape-1.png"
-          alt="img"
-          width={189}
-          height={311}
-        />
+        <img src="/assets/img/hero/shape-1.png" alt="img" width={189} height={311} />
       </div>
       <div className="shape-2">
-        <img
-          src="/assets/img/hero/shape-2.png"
-          alt="img"
-          width={86}
-          height={104}
-        />
+        <img src="/assets/img/hero/shape-2.png" alt="img" width={86} height={104} />
       </div>
       <div className="shape-3">
-        <img
-          src="/assets/img/hero/shape-3.png"
-          alt="img"
-          width={91}
-          height={113}
-        />
+        <img src="/assets/img/hero/shape-3.png" alt="img" width={91} height={113} />
       </div>
       <div className="shape-4">
-        <img
-          src="/assets/img/hero/shape-4.png"
-          alt="img"
-          width={100}
-          height={100}
-        />
+        <img src="/assets/img/hero/shape-4.png" alt="img" width={100} height={100} />
       </div>
       <div className="container">
         <div className="row g-4">
           <div className="col-lg-6">
             <div className="hero-content">
               <h1 className="char-animation">
-                Advanced AI SEO Services Dominate Search Results
+                AI-First Enterprise Technology That Scales Securely
               </h1>
               <p>
-                Over 10 years SEOZ helping companies reach their financial and
-                branding goals for your company.
+                Over 10 years helping enterprises modernise with AI-powered ERP,
+                DevSecOps pipelines, and cloud infrastructure built for production.
               </p>
               <div className="hero-button fade-in">
-                <Link to="/faq" className="theme-btn">
+                <Link to="/contact" className="theme-btn">
                   Get Started
                   <i className="far fa-arrow-right"></i>
                 </Link>
-                <div className="link-btn">
-                  Call Us: <a href="tel:88812345678">(888) 1234-5678</a>
-                </div>
+                <Link to="/service" className="theme-btn style-2">
+                  Our Services
+                  <i className="far fa-arrow-right"></i>
+                </Link>
               </div>
             </div>
           </div>
@@ -69,7 +50,7 @@ const HeroSection4 = () => {
             <div className="hero-image float-bob-x">
               <img
                 src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=721&h=727&fit=crop"
-                alt="hero"
+                alt="XERXEZ enterprise AI"
                 width={721}
                 height={727}
                 style={{ borderRadius: 16, objectFit: 'cover' }}

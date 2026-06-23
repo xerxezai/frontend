@@ -9,7 +9,7 @@ const ServiceSection2 = () => {
         <div className="section-title text-center">
           <span className="fade-in">Our Services</span>
           <h2 className="text-white char-animation">
-            Our Services Can Solve any <br /> Marketing Problem
+            Enterprise Solutions for <br /> Every Business Challenge
           </h2>
         </div>
 
@@ -34,13 +34,13 @@ const ServiceSection2 = () => {
                 </div>
                 <div className="service-content">
                   <h3>
-                    <Link to="/service/advanced-data-analytics">
+                    <Link to={`/service/${service.slug}`}>
                       {service.title}
                     </Link>
                   </h3>
                   <p>{service.description}</p>
                   <Link
-                    to="/service/advanced-data-analytics"
+                    to={`/service/${service.slug}`}
                     className="link-btn"
                   >
                     More Details

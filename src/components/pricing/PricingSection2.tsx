@@ -14,9 +14,8 @@ const PricingSection2 = () => {
             Choice Best & Reliable Pricing Plan
           </h2>
           <p className="text-white mt-3">
-            Welcome to SEOZ your trusted partner for comprehensive SEO and
-            digital marketing solutions. With <br /> our proven expertise and
-            innovative strategies the digital landscape.
+            Whether you are a growing startup or a global enterprise, XERXEZ has a plan
+            that fits your scale. <br /> All plans include dedicated support and SLA-backed delivery.
           </p>
         </div>
         <div className="d-flex justify-content-center mt-3 mt-md-0 fade-in">

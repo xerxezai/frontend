@@ -22,14 +22,13 @@ const CtaSection4 = () => {
                 <div className="section-title mb-0">
                   <span className="text-white fade-in">Our Value</span>
                   <h2 className="text-white char-animation">
-                    The #1 SEO services Company in USA
+                    The Enterprise AI &amp; Cloud Partner You've Been Looking For
                   </h2>
                 </div>
 
                 <p className="text">
-                  Walleye poolfish sand goby butterfly ray stream catfish
-                  jewfish spanish. Stream catfish jewfish spanish ballan wrasse
-                  climbing gourami.
+                  XERXEZ delivers AI-powered ERP, DevSecOps pipelines, and cloud infrastructure
+                  that transform how enterprises operate — from day one to scale.
                 </p>
                 
                 <Link to="/contact" className="theme-btn">

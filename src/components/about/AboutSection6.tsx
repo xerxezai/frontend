@@ -13,52 +13,37 @@ const AboutSection6 = () => {
                 <div className="section-title mb-0">
                   <span className="fade-in">About Our Company</span>
                   <h2 className="char-animation">
-                    Proven Results, And Exceptional Your Services
+                    Proven Results, Enterprise-Grade Delivery
                   </h2>
                 </div>
 
                 <p className="about-text">
-                  Walleye poolfish sand goby butterfly ray stream catfish
-                  jewfish spanish. Stream catfish jewfish spanish ballan wrasse
-                  climbing gourami amu.
+                  XERXEZ is an AI-first technology company helping enterprises build smarter,
+                  more secure, and more scalable systems — from intelligent ERP platforms to
+                  production MLOps infrastructure and cloud-native applications.
                 </p>
 
                 <div className="about-list">
                   <ul>
                     <li>
                       <i className="flaticon-check"></i>
-                      SEO Audit & Analysis
+                      AI-Powered ERP &amp; Analytics
                     </li>
                     <li>
                       <i className="flaticon-check"></i>
-                      Location based market
+                      DevSecOps &amp; MLOps Pipelines
                     </li>
                   </ul>
                   <ul>
                     <li>
                       <i className="flaticon-check"></i>
-                      Monthly Reports
+                      Cloud Architecture &amp; Migration
                     </li>
                     <li>
                       <i className="flaticon-check"></i>
-                      24/7 Customer Service
+                      24/7 Enterprise Support
                     </li>
                   </ul>
-                </div>
-
-                <div className="client-info">
-                  <Image
-                    src="assets/img/hero/client-info.png"
-                    alt="img"
-                    width={165}
-                    height={61}
-                  />
-                  <Image
-                    src="assets/img/hero/client-info-letter.png"
-                    alt="img"
-                    width={181}
-                    height={61}
-                  />
                 </div>
 
                 <div className="choose-us-card">
@@ -68,11 +53,11 @@ const AboutSection6 = () => {
                   </Link>
                   <div className="phone-box">
                     <div className="icon">
-                      <i className="far fa-phone-alt"></i>
+                      <i className="far fa-envelope"></i>
                     </div>
                     <div className="content">
                       <p>Mail Us</p>
-                      <h5>(704) 555-0127</h5>
+                      <h5>hello@xerxez.com</h5>
                     </div>
                   </div>
                 </div>
@@ -82,14 +67,14 @@ const AboutSection6 = () => {
               <div className="about-image">
                 <Image
                   src="assets/img/about/about-05.png"
-                  alt="img"
+                  alt="XERXEZ Enterprise Solutions"
                   width={636}
                   height={600}
                   className="fade-in"
                 />
 
                 <div className="content">
-                  <CountUp value={26} suffix="+" duration={1500} />
+                  <CountUp value={10} suffix="+" duration={1500} />
                   <p>Years Experience</p>
                   <div className="star">
                     <Image

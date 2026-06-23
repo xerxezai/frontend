@@ -18,12 +18,12 @@ const ServiceSection5 = () => {
           <div className="section-title">
             <span className="fade-in">Our Services</span>
             <h2 className="text-white char-animation">
-              Our Services Can Solve any <br /> Marketing Problem
+              Enterprise Solutions for <br /> Every Business Challenge
             </h2>
           </div>
           <p className="text-white">
-            Welcome to SEOZ your trusted partner for comprehensive SEO <br />{" "}
-            and digital marketing solutions. With our proven expertise.
+            XERXEZ delivers AI-powered ERP, DevSecOps pipelines, and cloud infrastructure <br />
+            that help enterprises scale securely and intelligently.
           </p>
         </div>
 
@@ -48,13 +48,13 @@ const ServiceSection5 = () => {
                 </div>
                 <div className="service-content">
                   <h3 className="service-header-5">
-                    <Link to="/service/advanced-data-analytics">
+                    <Link to={`/service/${service.slug}`}>
                       {service.title}
                     </Link>
                   </h3>
                   <p className="text-white">{service.description}</p>
                   <Link
-                    to="/service/advanced-data-analytics"
+                    to={`/service/${service.slug}`}
                     className="link-btn"
                   >
                     More Details

@@ -34,10 +34,10 @@ const AboutCompanySection = () => {
                   height={728}
                 />
 
-                <div className="box-items">
+                <div className=”box-items”>
                   <p>
-                    “Our SEO and Digital Marketing agency offers a range of
-                    pricing plans tailored”
+                    “XERXEZ delivers AI, cloud &amp; DevSecOps solutions
+                    built for enterprise scale”
                   </p>
                 </div>
               </div>
@@ -47,28 +47,27 @@ const AboutCompanySection = () => {
                 <div className="section-title mb-0 text-start">
                   <span className="fade-in">About Our Company</span>
                   <h1 className="text-white char-animation">
-                    Proven Results, And Exceptional Your Services
+                    Proven Results, Enterprise-Grade Delivery
                   </h1>
                 </div>
 
                 <p className="about-text mt-2">
-                  Walleye poolfish sand goby butterfly ray stream catfish
-                  jewfish spanish. Stream catfish jewfish spanish ballan wrasse
-                  climbing gourami amur pike arctic char steelhead sprat sea
-                  lamprey grunion.
+                  XERXEZ is an AI-first technology company helping enterprises build smarter,
+                  more secure, and more scalable systems — from intelligent ERP platforms to
+                  production MLOps infrastructure and cloud-native applications.
                 </p>
                 <p>
-                  Stream catfish jewfish spanish ballan wrasse climbing gourami
-                  amur pike arctic char steelhead sprat sea lamprey grunion.
+                  We combine deep AI expertise with battle-tested DevSecOps practices to
+                  deliver enterprise solutions that scale securely, reliably, and on time.
                 </p>
                 <ul className="list-items">
                   <li>
                     <i className="flaticon-check"></i>
-                    Competitive online business, the higher the position
+                    AI-Powered ERP & Intelligent Analytics
                   </li>
                   <li>
                     <i className="flaticon-check"></i>
-                    Identify converted customers who reached your business
+                    DevSecOps Pipelines & Cloud Migration
                   </li>
                 </ul>
                 <Link to="/about" className="theme-btn mt-5">

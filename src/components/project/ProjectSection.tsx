@@ -15,7 +15,7 @@ const ProjectSection: React.FC = () => {
         <div className="section-title text-center">
           <span className="fade-in">Our Case Study</span>
           <h2 className="char-animation">
-            View Our Handpicked Digital <br /> Marketing Case Study
+            Real-World Enterprise <br /> Projects We've Delivered
           </h2>
         </div>
 
