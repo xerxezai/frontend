@@ -18,9 +18,9 @@ const FooterSection2 = ({ variant }: Props) => {
           <Link to="/" className="footer-logo">
             <Image
               src="assets/img/logo/white-logo.svg"
-              alt="img"
-              width={142}
-              height={55}
+              alt="Xerxez Solutions"
+              width={192}
+              height={42}
             />
           </Link>
           <div className="footer-newsletter-right">

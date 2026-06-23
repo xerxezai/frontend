@@ -19,9 +19,9 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                   <Link to="/">
                     <Image
                       src="assets/img/logo/black-logo.svg"
-                      alt="logo-img"
-                      width={150}
-                      height={52}
+                      alt="Xerxez Solutions"
+                      width={192}
+                      height={42}
                     />
                   </Link>
                 </div>
