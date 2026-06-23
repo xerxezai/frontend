@@ -1492,6 +1492,10 @@ p {
   z-index: 9999;
   width: 100%;
 }
+.header-section-2 .header-top-section {
+  background: #1a1a2e;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
 .header-section-2 .container {
   max-width: 1555px;
 }
@@ -1508,7 +1512,7 @@ p {
   padding: 0 40px;
 }
 .header-section-2 .header-top-wrapper {
-  padding: 12px 0;
+  padding: 9px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1517,42 +1521,59 @@ p {
 .header-section-2 .header-top-wrapper .top-list {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
+  flex-wrap: wrap;
 }
-.header-section-2 .header-top-wrapper .top-list li b {
-  color: $theme-color-2;
+.header-section-2 .header-top-wrapper .top-list li {
+  color: rgba(255,255,255,0.82);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.header-section-2 .header-top-wrapper .top-list li.top-tagline {
+  color: rgba(255,255,255,0.95);
+  font-weight: 500;
+}
+.header-section-2 .header-top-wrapper .top-list li.top-divider {
+  color: rgba(255,255,255,0.25);
+  font-size: 16px;
 }
 .header-section-2 .header-top-wrapper .top-list li i {
   color: $theme-color;
-  margin-right: 5px;
+  font-size: 12px;
+}
+.header-section-2 .header-top-wrapper .top-list li a {
+  color: rgba(255,255,255,0.82);
+  transition: color 0.2s;
+}
+.header-section-2 .header-top-wrapper .top-list li a:hover {
+  color: $theme-color;
 }
 .header-section-2 .header-top-wrapper .social-icon {
   display: flex;
   align-items: center;
-  gap: 20px;
-  font-size: 20px;
+  gap: 16px;
+  font-size: 14px;
 }
 .header-section-2 .header-top-wrapper .social-icon a {
-  color: $white;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.2s;
 }
 .header-section-2 .header-top-wrapper .social-icon a:hover {
   color: $theme-color;
 }
 .header-section-2 .header-top-wrapper.style-2 .top-list li {
-  color: $white;
-}
-.header-section-2 .header-top-wrapper.style-2 .top-list li b {
-  color: $theme-color-2;
-}
-.header-section-2 .header-top-wrapper.style-2 .top-list li i {
-  color: $theme-color;
-  margin-right: 5px;
+  color: rgba(255,255,255,0.82);
 }
 .header-section-2 .header-top-wrapper.style-2 .top-list li a {
-  color: $white;
+  color: rgba(255,255,255,0.82);
+}
+.header-section-2 .header-top-wrapper.style-2 .top-list li a:hover {
+  color: $theme-color-2;
 }
 .header-section-2 .header-top-wrapper.style-2 .social-icon a {
-  color: $white;
+  color: rgba(255,255,255,0.65);
 }
 .header-section-2 .header-top-wrapper.style-2 .social-icon a:hover {
   color: $theme-color-2;
