@@ -846,6 +846,7 @@ const homeOneServices = [
     description:
       "Intelligent ERP systems that automate operations, forecast demand, and surface real-time insights across every business unit.",
     cardClass: "border-radius-style",
+    slug: "ai-powered-erp",
   },
   {
     id: 2,
@@ -856,6 +857,7 @@ const homeOneServices = [
     description:
       "Security-embedded CI/CD pipelines and production ML infrastructure for teams that need to ship fast and stay compliant.",
     cardClass: "bg-1",
+    slug: "devsecops-mlops-solutions",
   },
   {
     id: 3,
@@ -866,6 +868,7 @@ const homeOneServices = [
     description:
       "Multi-cloud architecture and cost-optimized storage solutions built for high-throughput, data-intensive enterprise workloads.",
     cardClass: "bg-2",
+    slug: "cloud-service-storage",
   },
   {
     id: 4,
@@ -876,6 +879,7 @@ const homeOneServices = [
     description:
       "Custom enterprise applications and strategic technology consulting to accelerate your digital transformation.",
     cardClass: "bg-3",
+    slug: "software-development",
   },
 ];
 

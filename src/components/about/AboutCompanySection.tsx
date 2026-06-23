@@ -34,10 +34,10 @@ const AboutCompanySection = () => {
                   height={728}
                 />
 
-                <div className=”box-items”>
+                <div className="box-items">
                   <p>
-                    “XERXEZ delivers AI, cloud &amp; DevSecOps solutions
-                    built for enterprise scale”
+                    XERXEZ delivers AI, cloud &amp; DevSecOps solutions
+                    built for enterprise scale
                   </p>
                 </div>
               </div>
@@ -53,7 +53,7 @@ const AboutCompanySection = () => {
 
                 <p className="about-text mt-2">
                   XERXEZ is an AI-first technology company helping enterprises build smarter,
-                  more secure, and more scalable systems — from intelligent ERP platforms to
+                  more secure, and more scalable systems from intelligent ERP platforms to
                   production MLOps infrastructure and cloud-native applications.
                 </p>
                 <p>
@@ -63,11 +63,11 @@ const AboutCompanySection = () => {
                 <ul className="list-items">
                   <li>
                     <i className="flaticon-check"></i>
-                    AI-Powered ERP & Intelligent Analytics
+                    AI-Powered ERP &amp; Intelligent Analytics
                   </li>
                   <li>
                     <i className="flaticon-check"></i>
-                    DevSecOps Pipelines & Cloud Migration
+                    DevSecOps Pipelines &amp; Cloud Migration
                   </li>
                 </ul>
                 <Link to="/about" className="theme-btn mt-5">
