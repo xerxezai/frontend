@@ -1,15 +1,15 @@
 {
-  "name": "seoz-frontend",
+  "name": "xerxez-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Unified frontend containing SEOZ React app and documentation",
+  "description": "XERXEZ - AI-Powered ERP & Enterprise Solutions frontend",
   "keywords": [
     "react",
     "typescript",
     "vite",
-    "documentation",
-    "seoz"
+    "erp",
+    "xerxez"
   ],
   "scripts": {
     "dev": "vite",
