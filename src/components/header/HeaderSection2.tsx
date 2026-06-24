@@ -79,7 +79,7 @@ const HeaderSection2 = ({ variant }: Props) => {
                 </div>
                 <div className="link-btn d-none d-xl-flex align-items-center gap-2">
                   <i className="fas fa-envelope" style={{color: "var(--theme-color, #6c57d2)"}}></i>
-                  <a href="mailto:xerxez.in@gmail.com" style={{color: "#333", fontWeight: 500}}>xerxez.in@gmail.com</a>
+                  <a href="mailto:xerxez.in@gmail.com" style={{color: "#333", fontWeight: 500, textTransform: "none" as const}}>xerxez.in@gmail.com</a>
                 </div>
                 <Link to="/contact" className="theme-btn">
                   Get Started
