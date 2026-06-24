@@ -1,11 +1,9 @@
-﻿import AboutCompanySection2 from "../components/about/AboutCompanySection2";
+import AboutCompanySection2 from "../components/about/AboutCompanySection2";
 import AboutSection3 from "../components/about/AboutSection3";
 import AboutSection4 from "../components/about/AboutSection4";
-import BlogSection3 from "../components/blog/BlogSection3";
 import BrandSection2 from "../components/brand/BrandSection2";
 import WorkingProcessSection2 from "../components/process/WorkingProcessSection2";
 import CtaSection4 from "../components/cta/CtaSection4";
-import FaqSection2 from "../components/faq/FaqSection2";
 import FooterSection2 from "../components/footer/FooterSection2";
 import HeaderSection2 from "../components/header/HeaderSection2";
 import HeroSection3 from "../components/hero/HeroSection3";
@@ -34,8 +32,6 @@ const HomePage3 = () => {
       <MarqueeSection />
       <TestimonySection3 />
       <CtaSection4 />
-      <FaqSection2 />
-      <BlogSection3 />
       <FooterSection2 />
       <VideoModal isOpen={isVideoModalOpen} toggle={toggleVideoModal} />
       <MobileMenuModal isOpen={isMenuOpen} toggle={toggleMobileMenu} />
@@ -44,4 +40,3 @@ const HomePage3 = () => {
 };
 
 export default HomePage3;
-

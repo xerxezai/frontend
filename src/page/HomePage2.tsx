@@ -1,6 +1,5 @@
-﻿import AboutCompanySection from "../components/about/AboutCompanySection";
+import AboutCompanySection from "../components/about/AboutCompanySection";
 import AboutSection2 from "../components/about/AboutSection2";
-import BlogSection2 from "../components/blog/BlogSection2";
 import BrandSection2 from "../components/brand/BrandSection2";
 import CoreAdvantageSection2 from "../components/core-advantage/CoreAdvantageSection2";
 import CounterSection2 from "../components/counter/CounterSection2";
@@ -34,7 +33,6 @@ const HomePage2 = () => {
         <TeamSection />
         <CoreAdvantageSection2 />
         <CounterSection2 />
-        <BlogSection2 />
         <CtaSection3 />
         <FooterSection2 />
         <VideoModal isOpen={isVideoModalOpen} toggle={toggleVideoModal} />
@@ -44,4 +42,3 @@ const HomePage2 = () => {
 };
 
 export default HomePage2;
-

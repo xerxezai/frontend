@@ -1,7 +1,5 @@
 ﻿import { Link } from "react-router-dom";
 import FooterBottomSection from "./FooterBottomSection";
-import Image from "../utils/Image";
-import NewsletterForm from "../forms/NewsletterForm";
 
 interface Props {
   variant?: boolean;
@@ -10,33 +8,6 @@ const FooterSection2 = ({ variant }: Props) => {
   return (
     <section className="footer-section fix bg-cover">
       <div className="container">
-        <div
-          className={`footer-newsletter-wrapper-2 ${
-            variant ? "style-margin" : ""
-          }`}
-        >
-          <Link to="/" className="footer-logo">
-            <Image
-              src="assets/img/logo/white-logo.svg"
-              alt="Xerxez Solutions"
-              width={192}
-              height={42}
-            />
-          </Link>
-          <div className="footer-newsletter-right">
-            <div className="icon-items">
-              <div className="icon">
-                <i className="far fa-bell-exclamation"></i>
-              </div>
-              <div className="content">
-                <h4>Stay Ahead in Enterprise AI</h4>
-                <span>Insights on ERP, DevSecOps & cloud — delivered monthly.</span>
-              </div>
-            </div>
-            <NewsletterForm style="style-2" />
-          </div>
-        </div>
-
         <div className="footer-widget-wrapper style-2">
           <div className="row">
             <div className="col-xl-3 col-lg-4 col-md-6">
