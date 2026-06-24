@@ -72,7 +72,7 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                       </div>
                       <div className="content">
                         <span>Our Location</span>
-                        <h3>27 Division St, New York, NY 10002, USA</h3>
+                        <h3>India &amp; UAE · Remote-first</h3>
                       </div>
                     </li>
                     <li>
