@@ -18,10 +18,11 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                 <div className="offcanvas__logo">
                   <Link to="/" >
                     <Image
-                      src="assets/img/logo/white-logo.svg"
+                      src="assets/img/logo/xerxez_logo.png"
                       alt="Xerxez Solutions"
-                      width={192}
-                      height={42}
+                      width={180}
+                      height={45}
+                      style={{ height: '45px', width: 'auto' }}
                     />
                   </Link>
                 </div>

@@ -108,7 +108,7 @@ const ERPLayout = ({ children }: Props) => {
             >
               <i className="fas fa-bars" style={{ fontSize: 18 }}></i>
             </button>
-            <img src="/assets/img/logo/logo.png" alt="Xerxez" height={30} />
+            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez" height={45} style={{ width: 'auto' }} />
           </div>
           <div className="d-flex align-items-center gap-2 text-muted" style={{ fontSize: 14 }}>
             <i className="fas fa-user-circle" style={{ fontSize: 20, color: '#6c57d2' }}></i>

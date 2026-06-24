@@ -21,10 +21,11 @@ const FooterSection4 = () => {
                 <div className="widget-head">
                   <Link to="/" >
                     <Image
-                      src="assets/img/logo/white-logo.svg"
+                      src="assets/img/logo/xerxez_logo.png"
                       alt="Xerxez Solutions"
-                      width={192}
-                      height={42}
+                      width={160}
+                      height={40}
+                      style={{ height: '40px', width: 'auto' }}
                     />
                   </Link>
                 </div>
