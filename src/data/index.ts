@@ -506,34 +506,7 @@ const menuData = [
   {
     title: "Home",
     link: "/",
-    hasDropdown: true,
-    isHomemenu: true,
-    submenu: [
-      {
-        title: "Home 01",
-        link: "/",
-        hasDropdown: false,
-        img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=240&h=300&fit=crop",
-      },
-      {
-        title: "Home 02",
-        link: "/home-2",
-        hasDropdown: false,
-        img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=240&h=300&fit=crop",
-      },
-      {
-        title: "Home 03",
-        link: "/home-3",
-        hasDropdown: false,
-        img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=240&h=300&fit=crop",
-      },
-      {
-        title: "Home 04",
-        link: "/home-4",
-        hasDropdown: false,
-        img: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=240&h=300&fit=crop",
-      },
-    ],
+    hasDropdown: false,
   },
   {
     title: "Services",
