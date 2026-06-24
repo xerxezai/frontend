@@ -16,17 +16,14 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
             <div className="offcanvas__content">
               <div className="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
-                  <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+                  <Link to="/" >
                     <Image
-                      src="/assets/img/logo/xerxez_logo.png"
+                      src="/assets/img/logo/black-logo.svg"
                       alt="Xerxez Solutions"
-                      width={45}
+                      width={180}
                       height={45}
                       style={{ height: '45px', width: 'auto' }}
                     />
-                    <span style={{ color: '#003566', fontWeight: 700, fontSize: '20px', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
-                      Xerxez Solutions
-                    </span>
                   </Link>
                 </div>
                 <div className="offcanvas__close">

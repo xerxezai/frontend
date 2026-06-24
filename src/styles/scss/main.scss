@@ -11401,23 +11401,8 @@ h3.service-header-5 {
   color: rgba(255,255,255,0.85) !important;
 }
 
-/* ── Logo: icon + text layout ── */
-.header-logo1 {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none !important;
-}
-.header-logo1 img {
-  display: block;
-  flex-shrink: 0;
-}
-.header-logo1 span {
-  color: #fff !important;
-  font-weight: 700;
-  font-size: 20px;
-  white-space: nowrap;
-}
+/* ── Logo ── */
+.header-logo1 img,
 .offcanvas__logo img,
 .widget-head a img {
   display: block;
