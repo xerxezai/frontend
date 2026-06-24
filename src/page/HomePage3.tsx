@@ -6,7 +6,7 @@ import BrandSection2 from "../components/brand/BrandSection2";
 import WorkingProcessSection2 from "../components/process/WorkingProcessSection2";
 import CtaSection4 from "../components/cta/CtaSection4";
 import FaqSection2 from "../components/faq/FaqSection2";
-import FooterSection3 from "../components/footer/FooterSection3";
+import FooterSection2 from "../components/footer/FooterSection2";
 import HeaderSection2 from "../components/header/HeaderSection2";
 import HeroSection3 from "../components/hero/HeroSection3";
 import MarqueeSection from "../components/marquee/MarqueeSection";
@@ -36,7 +36,7 @@ const HomePage3 = () => {
       <CtaSection4 />
       <FaqSection2 />
       <BlogSection3 />
-      <FooterSection3 />
+      <FooterSection2 />
       <VideoModal isOpen={isVideoModalOpen} toggle={toggleVideoModal} />
       <MobileMenuModal isOpen={isMenuOpen} toggle={toggleMobileMenu} />
     </>

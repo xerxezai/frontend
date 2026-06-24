@@ -15,8 +15,8 @@
               <i className="fas fa-map-marker-alt"></i>
             </div>
             <div className="content">
-              <h3>India &amp; UAE</h3>
-              <p>Remote-first · Global delivery</p>
+              <h3>Headquarters</h3>
+              <p>India &amp; UAE — Remote-first, Global delivery</p>
             </div>
           </div>
           <div

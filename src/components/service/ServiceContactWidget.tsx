@@ -34,7 +34,7 @@
           </div>
           <div className="content">
             <h5>Headquarters</h5>
-            <p>Global — Remote-first</p>
+            <p>India &amp; UAE — Remote-first, Global delivery</p>
           </div>
         </li>
       </ul>

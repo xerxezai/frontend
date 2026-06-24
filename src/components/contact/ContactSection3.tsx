@@ -11,11 +11,20 @@
                   <ul className="contact-info">
                     <li>
                       <div className="icon">
+                        <i className="fas fa-phone-alt"></i>
+                      </div>
+                      <div className="content">
+                        <h5>Call Us</h5>
+                        <p><a href="tel:+971567867451">+971 56 786 7451</a></p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="icon">
                         <i className="fas fa-comment-alt-dots"></i>
                       </div>
                       <div className="content">
                         <h5>Our Email</h5>
-                        <p>info@xerxez.com</p>
+                        <p><a href="mailto:info@xerxez.com">info@xerxez.com</a></p>
                       </div>
                     </li>
                     <li>
@@ -23,17 +32,8 @@
                         <i className="fas fa-map-marker-alt"></i>
                       </div>
                       <div className="content">
-                        <h5>Our Location</h5>
-                        <p>Global — Remote-first</p>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="icon">
-                        <i className="fas fa-globe"></i>
-                      </div>
-                      <div className="content">
-                        <h5>Website</h5>
-                        <p>xerxez.com</p>
+                        <h5>Headquarters</h5>
+                        <p>India &amp; UAE — Remote-first, Global delivery</p>
                       </div>
                     </li>
                   </ul>
