@@ -12,8 +12,8 @@ const ContactSection = () => {
                 <div className="section-title mb-0">
                   <span className="fade-in">Contact Us</span>
                   <h2 className="char-animation">
-                    Let Us Take Your Product
-                    <br /> To The Next Level
+                    Start Your Enterprise
+                    <br /> Digital Transformation
                   </h2>
                 </div>
                 <ContactFormSection />
