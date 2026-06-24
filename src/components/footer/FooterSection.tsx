@@ -21,7 +21,7 @@ const FooterSection = () => {
                 <div className="widget-head">
                   <Link to="/" >
                     <Image
-                      src="/assets/img/logo/xerxez_logo.png"
+                      src="/assets/img/logo/white-logo.svg"
                       alt="Xerxez Solutions"
                       width={160}
                       height={40}
