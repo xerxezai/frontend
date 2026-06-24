@@ -33,14 +33,17 @@ const HeaderSection = ({ variant }: Props) => {
         <div className="mega-menu-wrapper">
           <div className="header-main">
             <div className="header-left">
-              <Link to="/" className="header-logo1">
+              <Link to="/" className="header-logo1" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
                 <Image
                   src="/assets/img/logo/xerxez_logo.png"
                   alt="Xerxez Solutions"
-                  width={180}
+                  width={45}
                   height={45}
                   style={{ height: '45px', width: 'auto' }}
                 />
+                <span style={{ color: '#fff', fontWeight: 700, fontSize: '20px', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
+                  Xerxez Solutions
+                </span>
               </Link>
             </div>
             <div className="header-right d-flex justify-content-end align-items-center">
