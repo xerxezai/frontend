@@ -17,7 +17,7 @@ const MainMenuSection = React.memo(() => {
             {menuItem.hasDropdown && <i className="fas fa-chevron-down"></i>}
           </Link>
           {menuItem.hasDropdown && menuItem.submenu && (
-            <ul className={`submenu ${menuItem.isHomemenu ? "has-homemenu" : ""}`}>
+            <ul className={`submenu ${menuItem.isHomemenu ? "has-homemenu" : ""} ${menuItem.title === "Services" ? "submenu--grid" : ""}`}>
               {menuItem.isHomemenu ? (
                 <li>
                   <div className="homemenu-items">
