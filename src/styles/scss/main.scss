@@ -7550,9 +7550,11 @@ p.sticky-label {
   margin-bottom: 16px;
 }
 .footer-widget-wrapper .single-footer-widget .widget-head h3 {
-  font-size: 24px;
+  font-size: 15px;
   font-weight: 700;
   color: $white;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 .footer-widget-wrapper .single-footer-widget .footer-content p {
   color: $white;
@@ -7649,6 +7651,9 @@ p.sticky-label {
 }
 .footer-widget-wrapper .single-footer-widget .footer-contect li .content h5 {
   color: $white;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 1px;
 }
 .footer-widget-wrapper .single-footer-widget .footer-contect li .content p a {
   color: $white;
