@@ -1,14 +1,9 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { homeOneProjectData } from "../../data";
-import React, { useState } from "react";
+import React from "react";
 import Image from "../utils/Image";
 
 const ProjectSection: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(homeOneProjectData.length - 1);
-  const handleMouseEnter = (index: number) => {
-    setActiveIndex(index);
-  };
-
   return (
     <section className="project-section-3 fix section-padding">
       <div className="container">
@@ -19,31 +14,25 @@ const ProjectSection: React.FC = () => {
           </h2>
         </div>
 
-        <div className="project-wrapper project-slide-animation-1">
+        <div className="project-wrapper">
           {homeOneProjectData.map((project, index) => (
             <div
               key={project.id}
               className="project-image-wrapper"
               data-aos="fade-up"
-              data-aos-delay={index * 200}
-              data-aos-duration="1000"
-              data-aos-easing="ease-out-cubic"
+              data-aos-delay={index * 100}
+              data-aos-duration="800"
               data-aos-once="true"
             >
-              <div
-                className={`project-image-items ${
-                  index === activeIndex ? "active" : ""
-                }`}
-                onMouseEnter={() => handleMouseEnter(index)}
-              >
+              <div className="project-image-items">
                 <Image
                   src={project.imageUrl}
-                  alt="img"
+                  alt={project.title}
                   width={436}
-                  height={550}
+                  height={360}
                 />
-
                 <div className="content">
+                  <span className="proj-category">{project.category}</span>
                   <h4>
                     <Link to={project.link}>{project.title}</Link>
                   </h4>
@@ -59,4 +48,3 @@ const ProjectSection: React.FC = () => {
 };
 
 export default ProjectSection;
-

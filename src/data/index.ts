@@ -407,7 +407,7 @@ const homeOneProjectData = [
   },
   {
     id: "project-5",
-    imageUrl: "assets/img/project/17.jpg",
+    imageUrl: "assets/img/project/12.jpg",
     category: "AI Training",
     title: "Corporate AI Upskilling Program",
     description: "Structured AI literacy and hands-on MLOps training for 500+ engineers across multiple business units.",
