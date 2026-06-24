@@ -33,18 +33,6 @@ const HeaderSection2 = ({ variant }: Props) => {
                 AI-Powered ERP, DevSecOps &amp; Cloud Solutions for Enterprises
               </li>
               <li className="top-divider">|</li>
-              <li>
-                <i className="fas fa-phone-alt"></i>
-                <a href="tel:+971567867451">+971 56 786 7451</a>
-              </li>
-              <li>
-                <i className="fas fa-envelope"></i>
-                <a href="mailto:info@xerxez.com">info@xerxez.com</a>
-              </li>
-              <li>
-                <i className="fas fa-globe"></i>
-                <a href="https://xerxez.com" target="_blank" rel="noreferrer">xerxez.com</a>
-              </li>
             </ul>
             <div className="social-icon">
               <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" target="_blank" rel="noreferrer" title="LinkedIn">
