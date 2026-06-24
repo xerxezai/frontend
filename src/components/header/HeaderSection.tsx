@@ -56,9 +56,15 @@ const HeaderSection = ({ variant }: Props) => {
                 <MainMenuSection />
               </div>
               {!variant && (
-                <div className="link-btn d-none d-xl-flex align-items-center gap-2">
-                  <i className="fas fa-envelope" style={{color: "var(--theme-color, #6c57d2)"}}></i>
-                  <a href="mailto:info@xerxez.com" style={{color: "#333", fontWeight: 500, textTransform: "none" as const}}>info@xerxez.com</a>
+                <div className="d-none d-xl-flex align-items-center gap-3">
+                  <a href="tel:+971567867451" style={{color: "#333", fontWeight: 500, display: "flex", alignItems: "center", gap: 6, textDecoration: "none"}}>
+                    <i className="fas fa-phone-alt" style={{color: "var(--theme-color, #6c57d2)"}}></i>
+                    +971 56 786 7451
+                  </a>
+                  <a href="mailto:info@xerxez.com" style={{color: "#333", fontWeight: 500, display: "flex", alignItems: "center", gap: 6, textDecoration: "none"}}>
+                    <i className="fas fa-envelope" style={{color: "var(--theme-color, #6c57d2)"}}></i>
+                    info@xerxez.com
+                  </a>
                 </div>
               )}
               {variant ? (
