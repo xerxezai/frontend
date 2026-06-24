@@ -7540,14 +7540,14 @@ p.sticky-label {
 }
 
 .footer-widget-wrapper {
-  padding: 50px 0 80px;
+  padding: 40px 0 40px;
 }
 
 .footer-widget-wrapper .single-footer-widget {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .footer-widget-wrapper .single-footer-widget .widget-head {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 .footer-widget-wrapper .single-footer-widget .widget-head h3 {
   font-size: 24px;
@@ -7559,9 +7559,9 @@ p.sticky-label {
 }
 .footer-widget-wrapper .single-footer-widget .footer-content .social-icon {
   display: flex;
-  gap: 30px;
+  gap: 16px;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 16px;
 }
 .footer-widget-wrapper .single-footer-widget .footer-content .social-icon a {
   color: $white;
@@ -7613,7 +7613,7 @@ p.sticky-label {
   font-size: 16px;
 }
 .footer-widget-wrapper .single-footer-widget .list-area li:not(:last-child) {
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 .footer-widget-wrapper .single-footer-widget .list-area li a {
   color: $white;
@@ -7656,7 +7656,7 @@ p.sticky-label {
   .single-footer-widget
   .footer-contect
   li:not(:last-child) {
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 .footer-widget-wrapper .single-footer-widget form {
   margin-top: 30px;
