@@ -2051,7 +2051,8 @@ p {
 }
 
 .hero-1 {
-  padding: 60px 0 40px;
+  padding: 50px 0 50px;
+  min-height: auto;
   max-height: 90vh;
   position: relative;
   overflow: hidden;
@@ -2088,7 +2089,7 @@ p {
 }
 
 .hero-1 .hero-content .hero-btn {
-  margin-top: 50px;
+  margin-top: 32px;
   display: flex;
   align-items: center;
   gap: 24px;
