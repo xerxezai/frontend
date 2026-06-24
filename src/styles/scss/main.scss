@@ -1846,13 +1846,32 @@ p {
 
 .breadcrumb-section {
   position: relative;
-  background-image: url(/assets/img/breadcrumb.jpg);
+  background-image: url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.breadcrumb-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+  pointer-events: none;
+}
+.breadcrumb-section .container {
+  position: relative;
+  z-index: 2;
 }
 
 .page-heading {
-  padding: 260px 0 120px;
+  padding: 200px 0 80px;
   position: relative;
   text-align: center;
+}
+
+.breadcrumb-section + .service-section-2 {
+  padding-top: 60px;
 }
 
 .page-heading .breadcrumb-list {
