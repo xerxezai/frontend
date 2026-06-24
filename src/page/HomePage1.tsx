@@ -2,7 +2,6 @@ import AboutSection from "../components/about/AboutSection";
 import BrandSection from "../components/brand/BrandSection";
 import ContactSection from "../components/contact/ContactSection";
 import CoreAdvantageSection from "../components/core-advantage/CoreAdvantageSection";
-import CounterSection from "../components/counter/CounterSection";
 import CtaSection from "../components/cta/CtaSection";
 import CtaSection2 from "../components/cta/CtaSection2";
 import FooterSection2 from "../components/footer/FooterSection2";
@@ -25,7 +24,6 @@ const HomePage1 = () => {
         <ServiceSection2 />
         <BrandSection />
         <CoreAdvantageSection />
-        <CounterSection />
         <CtaSection />
         <ProjectSection />
         <CtaSection2 />
