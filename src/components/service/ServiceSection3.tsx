@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { services } from "../../data";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import Image from "../utils/Image";
 
 const faIcons: Record<string, string> = {
