@@ -129,14 +129,11 @@ const BlogDetailsArea = ({ blogInfo }: Props) => {
             <a href="#">
               <i className="fab fa-facebook-f"></i>
             </a>
-            <a href="#">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="#">
-              <i className="fab fa-instagram"></i>
-            </a>
-            <a href="#">
+            <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" target="_blank" rel="noreferrer">
               <i className="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer">
+              <i className="fab fa-instagram"></i>
             </a>
           </div>
         </div>

@@ -46,13 +46,10 @@ const FooterSection3 = () => {
                     solutions that transform how enterprises operate at scale.
                   </p>
                   <div className="social-icon">
-                    <a href="https://linkedin.com/company/xerxez" target="_blank" rel="noreferrer">
+                    <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" target="_blank" rel="noreferrer">
                       <i className="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="https://twitter.com/xerxez" target="_blank" rel="noreferrer">
-                      <i className="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
+                    <a href="https://github.com/" target="_blank" rel="noreferrer">
                       <i className="fab fa-github"></i>
                     </a>
                     <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer">
