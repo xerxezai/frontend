@@ -2082,6 +2082,8 @@ p {
   margin-bottom: 22px;
 }
 .hero-1 .hero-content h1 {
+  font-size: clamp(32px, 4.5vw, 58px);
+  line-height: 1.12;
   margin-bottom: 15px;
 }
 .hero-1 .hero-content p {
