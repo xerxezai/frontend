@@ -11401,13 +11401,20 @@ h3.service-header-5 {
   color: rgba(255,255,255,0.85) !important;
 }
 
-/* ── Logo image — transparent background, blend removes white box ── */
-.header-logo1 img,
-.offcanvas__logo img,
-.widget-head a img,
-nav img[alt*="Xerxez"],
-img[alt*="Xerxez"] {
+/* ── Logo: dark container + multiply blend removes PNG white box ── */
+.header-logo1 {
+  background: #0f0f2d !important;
+  border-radius: 6px;
+  display: inline-flex !important;
+  align-items: center;
+  padding: 2px 4px;
+}
+.header-logo1 img {
   background: transparent !important;
   mix-blend-mode: multiply;
+}
+.offcanvas__logo img,
+.widget-head a img {
+  background: transparent !important;
 }
 

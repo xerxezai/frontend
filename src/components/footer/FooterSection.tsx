@@ -19,13 +19,13 @@ const FooterSection = () => {
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <Link to="/" >
+                  <Link to="/" style={{ background: '#0f0f2d', display: 'inline-flex', alignItems: 'center', borderRadius: 6, padding: '2px 4px' }}>
                     <Image
                       src="/assets/img/logo/xerxez_logo.png"
                       alt="Xerxez Solutions"
                       width={160}
                       height={40}
-                      style={{ height: '40px', width: 'auto' }}
+                      style={{ height: '40px', width: 'auto', background: 'transparent', mixBlendMode: 'multiply' }}
                     />
                   </Link>
                 </div>

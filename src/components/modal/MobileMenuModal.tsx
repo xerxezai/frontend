@@ -22,7 +22,7 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                       alt="Xerxez Solutions"
                       width={180}
                       height={45}
-                      style={{ height: '45px', width: 'auto', background: 'transparent', mixBlendMode: 'multiply' }}
+                      style={{ height: '45px', width: 'auto' }}
                     />
                   </Link>
                 </div>
