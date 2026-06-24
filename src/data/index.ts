@@ -563,25 +563,6 @@ const menuData = [
     ],
   },
   {
-    title: "Pages",
-    link: "#",
-    hasDropdown: true,
-    submenu: [
-      { title: "About Us", link: "/about", hasDropdown: false },
-      {
-        title: "Team",
-        link: "/team",
-        hasDropdown: true,
-        submenu: [
-          { title: "Our Team", link: "/team", hasDropdown: false },
-          { title: "Team Details", link: "/team/john-smith", hasDropdown: false },
-        ],
-      },
-      { title: "Pricing Plan", link: "/pricing", hasDropdown: false },
-      { title: "FAQ", link: "/faq", hasDropdown: false },
-    ],
-  },
-  {
     title: "AI Training",
     link: "/training",
     hasDropdown: false,

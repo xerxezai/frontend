@@ -12,7 +12,6 @@ import MobileMenuModal from "../components/modal/MobileMenuModal";
 import ProjectSection from "../components/project/ProjectSection";
 import ServiceSection from "../components/service/ServiceSection";
 import ServiceSection2 from "../components/service/ServiceSection2";
-import TestimonySection from "../components/testimony/TestimonySection";
 import { useCustomContext } from "../context/context";
 
 const HomePage1 = () => {
@@ -29,7 +28,6 @@ const HomePage1 = () => {
         <CounterSection />
         <CtaSection />
         <ProjectSection />
-        <TestimonySection />
         <CtaSection2 />
         <ContactSection />
         <FooterSection2 />

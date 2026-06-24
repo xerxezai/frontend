@@ -6,13 +6,13 @@ import CustomLayout from "../components/layout/CustomLayout";
 const C = {
   purple: "#6c57d2",
   purpleDark: "#5242b0",
-  purpleLight: "#f0edff",
-  purpleMid: "#ede9ff",
+  purpleLight: "rgba(108,87,210,0.18)",
+  purpleMid: "rgba(108,87,210,0.15)",
   orange: "#ff792e",
   navy: "#003566",
   navyDark: "#001f3f",
-  textMuted: "#6b7280",
-  border: "#e5e7eb",
+  textMuted: "rgba(255,255,255,0.55)",
+  border: "rgba(108,87,210,0.22)",
   white: "#ffffff",
 };
 
@@ -225,15 +225,15 @@ const Hero = () => (
 
 // ── TWO TRACKS ───────────────────────────────────────────────────────────────
 const TwoTracks = () => (
-  <section style={{ padding: "80px 0", background: "#f8f9fc" }}>
+  <section style={{ padding: "80px 0", background: "#0a0a1a" }}>
     <div className="container">
       <div className="text-center" style={{ marginBottom: 56 }}>
         <div style={{ marginBottom: 12 }}>
-          <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}33` }}>
+          <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}55` }}>
             Two Delivery Models
           </span>
         </div>
-        <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#111827", lineHeight: 1.2 }}>
+        <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#ffffff", lineHeight: 1.2 }}>
           Build New. Or Make Existing
           <span style={{ color: C.purple }}> Intelligent.</span>
         </h2>
@@ -246,12 +246,12 @@ const TwoTracks = () => (
       <div className="row g-4">
         {/* Track A */}
         <div className="col-lg-6">
-          <div style={{ background: C.white, borderRadius: 16, padding: "44px 40px", border: `2px solid ${C.purple}22`, boxShadow: "0 4px 32px rgba(108,87,210,0.10)", height: "100%" }}>
+          <div style={{ background: "#0d0d1f", borderRadius: 16, padding: "44px 40px", border: `2px solid ${C.purple}33`, boxShadow: "0 4px 32px rgba(108,87,210,0.15)", height: "100%" }}>
             <div style={{ width: 52, height: 52, borderRadius: 14, background: C.purpleLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
               <i className="fas fa-code-branch" style={{ color: C.purple, fontSize: 22 }} />
             </div>
-            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, border: `1px solid ${C.purple}33`, marginBottom: 16, letterSpacing: 0.5, textTransform: "uppercase" }}>Track A</span>
-            <h3 style={{ fontWeight: 800, fontSize: 26, color: "#111827", marginBottom: 12 }}>
+            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, border: `1px solid ${C.purple}44`, marginBottom: 16, letterSpacing: 0.5, textTransform: "uppercase" }}>Track A</span>
+            <h3 style={{ fontWeight: 800, fontSize: 26, color: "#ffffff", marginBottom: 12 }}>
               We Build Your AI ERP from Scratch
             </h3>
             <p style={{ color: C.textMuted, fontSize: 15, lineHeight: 1.7, marginBottom: 28 }}>
@@ -267,8 +267,8 @@ const TwoTracks = () => (
               <Check>Multi-currency, multi-language, multi-entity support</Check>
               <Check>White-labelled, fully owned IP transferred to you at delivery</Check>
             </ul>
-            <div style={{ marginTop: 32, padding: "16px 20px", background: "#f5f3ff", borderRadius: 10, borderLeft: `4px solid ${C.purple}` }}>
-              <p style={{ margin: 0, color: "#374151", fontSize: 14, lineHeight: 1.6 }}>
+            <div style={{ marginTop: 32, padding: "16px 20px", background: "rgba(108,87,210,0.12)", borderRadius: 10, borderLeft: `4px solid ${C.purple}` }}>
+              <p style={{ margin: 0, color: "rgba(255,255,255,0.75)", fontSize: 14, lineHeight: 1.6 }}>
                 <strong>Typical timeline:</strong> 4&ndash;6 months for a fully operational
                 system with live AI analytics and role dashboards.
               </p>
@@ -278,12 +278,12 @@ const TwoTracks = () => (
 
         {/* Track B */}
         <div className="col-lg-6">
-          <div style={{ background: C.white, borderRadius: 16, padding: "44px 40px", border: `2px solid ${C.orange}22`, boxShadow: "0 4px 32px rgba(255,121,46,0.10)", height: "100%" }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: "#fff4ee", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+          <div style={{ background: "#0d0d1f", borderRadius: 16, padding: "44px 40px", border: `2px solid ${C.orange}33`, boxShadow: "0 4px 32px rgba(255,121,46,0.12)", height: "100%" }}>
+            <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(255,121,46,0.15)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
               <i className="fas fa-layer-group" style={{ color: C.orange, fontSize: 22 }} />
             </div>
-            <span style={{ display: "inline-block", background: "#fff4ee", color: C.orange, fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, border: `1px solid ${C.orange}33`, marginBottom: 16, letterSpacing: 0.5, textTransform: "uppercase" }}>Track B</span>
-            <h3 style={{ fontWeight: 800, fontSize: 26, color: "#111827", marginBottom: 12 }}>
+            <span style={{ display: "inline-block", background: "rgba(255,121,46,0.15)", color: C.orange, fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, border: `1px solid ${C.orange}44`, marginBottom: 16, letterSpacing: 0.5, textTransform: "uppercase" }}>Track B</span>
+            <h3 style={{ fontWeight: 800, fontSize: 26, color: "#ffffff", marginBottom: 12 }}>
               We Upgrade Your Existing ERP with AI
             </h3>
             <p style={{ color: C.textMuted, fontSize: 15, lineHeight: 1.7, marginBottom: 28 }}>
@@ -299,8 +299,8 @@ const TwoTracks = () => (
               <Check>Compliance-safe: no changes to your existing data schema</Check>
               <Check>Live within 8&ndash;12 weeks alongside your running production system</Check>
             </ul>
-            <div style={{ marginTop: 32, padding: "16px 20px", background: "#fff4ee", borderRadius: 10, borderLeft: `4px solid ${C.orange}` }}>
-              <p style={{ margin: 0, color: "#374151", fontSize: 14, lineHeight: 1.6 }}>
+            <div style={{ marginTop: 32, padding: "16px 20px", background: "rgba(255,121,46,0.1)", borderRadius: 10, borderLeft: `4px solid ${C.orange}` }}>
+              <p style={{ margin: 0, color: "rgba(255,255,255,0.75)", fontSize: 14, lineHeight: 1.6 }}>
                 <strong>No disruption guarantee:</strong> Our AI layer runs via
                 secure middleware &mdash; your ERP keeps running exactly as today.
               </p>
@@ -310,7 +310,7 @@ const TwoTracks = () => (
               <p style={{ color: C.textMuted, fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 0.6, textTransform: "uppercase" }}>Compatible Systems</p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {["SAP", "Oracle", "MS Dynamics", "NetSuite", "Odoo", "Sage"].map((sys) => (
-                  <span key={sys} style={{ background: "#f3f4f6", color: "#374151", fontSize: 13, fontWeight: 600, padding: "5px 14px", borderRadius: 20, border: "1px solid #e5e7eb" }}>
+                  <span key={sys} style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.8)", fontSize: 13, fontWeight: 600, padding: "5px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,0.15)" }}>
                     {sys}
                   </span>
                 ))}
@@ -337,15 +337,15 @@ const ComparisonTable = () => {
   ];
 
   return (
-    <section style={{ padding: "80px 0", background: C.white }}>
+    <section style={{ padding: "80px 0", background: "#0f0f2d" }}>
       <div className="container">
         <div className="text-center" style={{ marginBottom: 48 }}>
           <div style={{ marginBottom: 12 }}>
-            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}33` }}>
+            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}55` }}>
               Side-by-Side Comparison
             </span>
           </div>
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 38px)", color: "#111827", lineHeight: 1.2 }}>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 38px)", color: "#ffffff", lineHeight: 1.2 }}>
             Build from Scratch vs Upgrade Existing ERP
           </h2>
           <p style={{ color: C.textMuted, fontSize: 16, marginTop: 14, maxWidth: 540, marginInline: "auto" }}>
@@ -358,14 +358,14 @@ const ComparisonTable = () => {
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 600 }}>
             <thead>
               <tr>
-                <th style={{ padding: "18px 24px", background: "#f8f9fc", textAlign: "left", fontSize: 13, fontWeight: 700, color: C.textMuted, letterSpacing: 0.5, textTransform: "uppercase", borderBottom: `2px solid ${C.border}`, width: "28%" }}>
+                <th style={{ padding: "18px 24px", background: "#1a1a35", textAlign: "left", fontSize: 13, fontWeight: 700, color: C.textMuted, letterSpacing: 0.5, textTransform: "uppercase", borderBottom: `2px solid ${C.border}`, width: "28%" }}>
                   Feature
                 </th>
-                <th style={{ padding: "18px 24px", background: C.purpleLight, textAlign: "left", fontSize: 14, fontWeight: 800, color: C.purple, borderBottom: `2px solid ${C.purple}33`, width: "36%" }}>
+                <th style={{ padding: "18px 24px", background: C.purpleLight, textAlign: "left", fontSize: 14, fontWeight: 800, color: C.purple, borderBottom: `2px solid ${C.purple}55`, width: "36%" }}>
                   <i className="fas fa-code-branch" style={{ marginRight: 8 }} />
                   Build from Scratch
                 </th>
-                <th style={{ padding: "18px 24px", background: "#fff4ee", textAlign: "left", fontSize: 14, fontWeight: 800, color: C.orange, borderBottom: `2px solid ${C.orange}33`, width: "36%" }}>
+                <th style={{ padding: "18px 24px", background: "rgba(255,121,46,0.12)", textAlign: "left", fontSize: 14, fontWeight: 800, color: C.orange, borderBottom: `2px solid ${C.orange}44`, width: "36%" }}>
                   <i className="fas fa-layer-group" style={{ marginRight: 8 }} />
                   Upgrade Existing ERP
                 </th>
@@ -373,15 +373,15 @@ const ComparisonTable = () => {
             </thead>
             <tbody>
               {rows.map((row, i) => (
-                <tr key={row.feature} style={{ background: i % 2 === 0 ? C.white : "#fafafa" }}>
-                  <td style={{ padding: "16px 24px", fontSize: 14, fontWeight: 700, color: "#374151", borderBottom: `1px solid ${C.border}` }}>
+                <tr key={row.feature} style={{ background: i % 2 === 0 ? "#0d0d1f" : "#111130" }}>
+                  <td style={{ padding: "16px 24px", fontSize: 14, fontWeight: 700, color: "rgba(255,255,255,0.8)", borderBottom: `1px solid ${C.border}` }}>
                     {row.feature}
                   </td>
-                  <td style={{ padding: "16px 24px", fontSize: 14, color: "#374151", borderBottom: `1px solid ${C.border}`, borderLeft: `3px solid ${C.purple}22` }}>
+                  <td style={{ padding: "16px 24px", fontSize: 14, color: "rgba(255,255,255,0.7)", borderBottom: `1px solid ${C.border}`, borderLeft: `3px solid ${C.purple}44` }}>
                     <i className="fas fa-check-circle" style={{ color: C.purple, marginRight: 8, fontSize: 13 }} />
                     {row.build}
                   </td>
-                  <td style={{ padding: "16px 24px", fontSize: 14, color: "#374151", borderBottom: `1px solid ${C.border}`, borderLeft: `3px solid ${C.orange}22` }}>
+                  <td style={{ padding: "16px 24px", fontSize: 14, color: "rgba(255,255,255,0.7)", borderBottom: `1px solid ${C.border}`, borderLeft: `3px solid ${C.orange}44` }}>
                     <i className="fas fa-check-circle" style={{ color: C.orange, marginRight: 8, fontSize: 13 }} />
                     {row.upgrade}
                   </td>
@@ -401,7 +401,7 @@ const ComparisonTable = () => {
           <div className="col-md-6">
             <a
               href="mailto:info@xerxez.com?subject=ERP Upgrade Enquiry"
-              style={{ display: "block", textAlign: "center", background: C.white, color: C.purple, padding: "13px 24px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: `2px solid ${C.purple}`, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}
+              style={{ display: "block", textAlign: "center", background: "transparent", color: C.purple, padding: "13px 24px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: `2px solid ${C.purple}`, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}
             >
               Enquire About an ERP Upgrade
               <i className="far fa-arrow-right" style={{ marginLeft: 10 }} />
@@ -427,15 +427,15 @@ const moduleList = [
 ];
 
 const Modules = () => (
-  <section style={{ padding: "80px 0", background: "#f8f9fc" }}>
+  <section style={{ padding: "80px 0", background: "#0a0a1a" }}>
     <div className="container">
       <div className="text-center" style={{ marginBottom: 52 }}>
         <div style={{ marginBottom: 12 }}>
-          <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}33` }}>
+          <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}55` }}>
             Platform Modules
           </span>
         </div>
-        <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#111827", lineHeight: 1.2 }}>
+        <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#ffffff", lineHeight: 1.2 }}>
           Every Function. One Intelligent Platform.
         </h2>
         <p style={{ color: C.textMuted, fontSize: 17, marginTop: 16, maxWidth: 560, marginInline: "auto" }}>
@@ -447,14 +447,14 @@ const Modules = () => (
         {moduleList.map((mod) => (
           <div key={mod.title} className="col-lg-4 col-md-6">
             <div
-              style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 14, padding: "28px 24px", height: "100%", transition: "border-color 0.2s, box-shadow 0.2s" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = `${C.purple}44`; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(108,87,210,0.12)"; }}
+              style={{ background: "#0d0d1f", border: `1px solid ${C.border}`, borderRadius: 14, padding: "28px 24px", height: "100%", transition: "border-color 0.2s, box-shadow 0.2s" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = `${C.purple}66`; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(108,87,210,0.18)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = C.border; (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}
             >
               <div style={{ width: 48, height: 48, borderRadius: 12, background: C.purpleLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
                 <i className={mod.icon} style={{ color: C.purple, fontSize: 20 }} />
               </div>
-              <h4 style={{ fontWeight: 700, fontSize: 17, color: "#111827", marginBottom: 8 }}>{mod.title}</h4>
+              <h4 style={{ fontWeight: 700, fontSize: 17, color: "#ffffff", marginBottom: 8 }}>{mod.title}</h4>
               <p style={{ color: C.textMuted, fontSize: 14, lineHeight: 1.65, margin: 0 }}>{mod.desc}</p>
             </div>
           </div>
@@ -466,16 +466,16 @@ const Modules = () => (
 
 // ── ROI ──────────────────────────────────────────────────────────────────────
 const ROISection = () => (
-  <section style={{ padding: "80px 0", background: C.white }}>
+  <section style={{ padding: "80px 0", background: "#0f0f2d" }}>
     <div className="container">
       <div className="row align-items-center g-5">
         <div className="col-lg-5">
           <div style={{ marginBottom: 12 }}>
-            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}33` }}>
+            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}55` }}>
               Business Impact
             </span>
           </div>
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#111827", lineHeight: 1.2, marginBottom: 20 }}>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#ffffff", lineHeight: 1.2, marginBottom: 20 }}>
             Measurable ROI from
             <span style={{ color: C.purple }}> Day One</span>
           </h2>
@@ -493,10 +493,10 @@ const ROISection = () => (
             ].map((r) => (
               <div key={r.label}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ color: "#374151", fontSize: 14, fontWeight: 600 }}>{r.label}</span>
+                  <span style={{ color: "rgba(255,255,255,0.75)", fontSize: 14, fontWeight: 600 }}>{r.label}</span>
                   <span style={{ color: r.color, fontSize: 14, fontWeight: 700 }}>{r.pct}%</span>
                 </div>
-                <div style={{ height: 8, background: "#e5e7eb", borderRadius: 6, overflow: "hidden" }}>
+                <div style={{ height: 8, background: "rgba(255,255,255,0.1)", borderRadius: 6, overflow: "hidden" }}>
                   <div style={{ width: `${r.pct}%`, height: "100%", background: r.color, borderRadius: 6 }} />
                 </div>
               </div>
@@ -513,9 +513,9 @@ const ROISection = () => (
               { icon: "fas fa-bell", title: "Proactive Alerts", desc: "The system flags anomalies — expense spikes, stock shortfalls, SLA breaches — before they escalate, with recommended actions." },
             ].map((item) => (
               <div key={item.title} className="col-sm-6">
-                <div style={{ background: "#f8f9fc", border: `1px solid ${C.border}`, borderRadius: 14, padding: "24px 22px", height: "100%" }}>
+                <div style={{ background: "#0d0d1f", border: `1px solid ${C.border}`, borderRadius: 14, padding: "24px 22px", height: "100%" }}>
                   <i className={item.icon} style={{ color: C.purple, fontSize: 24, marginBottom: 16, display: "block" }} />
-                  <h4 style={{ fontWeight: 700, fontSize: 16, color: "#111827", marginBottom: 8 }}>{item.title}</h4>
+                  <h4 style={{ fontWeight: 700, fontSize: 16, color: "#ffffff", marginBottom: 8 }}>{item.title}</h4>
                   <p style={{ color: C.textMuted, fontSize: 13.5, lineHeight: 1.65, margin: 0 }}>{item.desc}</p>
                 </div>
               </div>
@@ -629,15 +629,15 @@ const Process = () => {
   ];
 
   return (
-    <section style={{ padding: "80px 0", background: C.white }}>
+    <section style={{ padding: "80px 0", background: "#0a0a1a" }}>
       <div className="container">
         <div className="text-center" style={{ marginBottom: 52 }}>
           <div style={{ marginBottom: 12 }}>
-            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}33` }}>
+            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}55` }}>
               Implementation
             </span>
           </div>
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#111827", lineHeight: 1.2 }}>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#ffffff", lineHeight: 1.2 }}>
             From Contract to Go-Live in
             <span style={{ color: C.purple }}> Under 6 Months</span>
           </h2>
@@ -648,13 +648,13 @@ const Process = () => {
         <div className="row g-4">
           {steps.map((s) => (
             <div key={s.no} className="col-lg-4 col-md-6">
-              <div style={{ background: "#f8f9fc", border: `1px solid ${C.border}`, borderRadius: 14, padding: "28px 26px", height: "100%", position: "relative" }}>
-                <div style={{ position: "absolute", top: 20, right: 22, color: `${C.purple}18`, fontSize: 52, fontWeight: 900, lineHeight: 1 }}>{s.no}</div>
+              <div style={{ background: "#0d0d1f", border: `1px solid ${C.border}`, borderRadius: 14, padding: "28px 26px", height: "100%", position: "relative" }}>
+                <div style={{ position: "absolute", top: 20, right: 22, color: `${C.purple}20`, fontSize: 52, fontWeight: 900, lineHeight: 1 }}>{s.no}</div>
                 <div style={{ width: 44, height: 44, borderRadius: 12, background: C.purpleLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
                   <span style={{ color: C.purple, fontWeight: 800, fontSize: 15 }}>{s.no}</span>
                 </div>
-                <h4 style={{ fontWeight: 700, fontSize: 17, color: "#111827", marginBottom: 6 }}>{s.title}</h4>
-                <div style={{ display: "inline-block", background: `${C.orange}18`, color: C.orange, fontSize: 12, fontWeight: 700, padding: "3px 12px", borderRadius: 20, marginBottom: 14, border: `1px solid ${C.orange}30` }}>
+                <h4 style={{ fontWeight: 700, fontSize: 17, color: "#ffffff", marginBottom: 6 }}>{s.title}</h4>
+                <div style={{ display: "inline-block", background: `${C.orange}18`, color: C.orange, fontSize: 12, fontWeight: 700, padding: "3px 12px", borderRadius: 20, marginBottom: 14, border: `1px solid ${C.orange}44` }}>
                   {s.dur}
                 </div>
                 <p style={{ color: C.textMuted, fontSize: 14, lineHeight: 1.65, margin: 0 }}>{s.desc}</p>
@@ -680,15 +680,15 @@ const faqs = [
 const FAQSection = () => {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section style={{ padding: "80px 0", background: "#f8f9fc" }}>
+    <section style={{ padding: "80px 0", background: "#0f0f2d" }}>
       <div className="container">
         <div className="text-center" style={{ marginBottom: 48 }}>
           <div style={{ marginBottom: 12 }}>
-            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}33` }}>
+            <span style={{ display: "inline-block", background: C.purpleLight, color: C.purple, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase", border: `1px solid ${C.purple}55` }}>
               FAQ
             </span>
           </div>
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#111827", lineHeight: 1.2 }}>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 3vw, 40px)", color: "#ffffff", lineHeight: 1.2 }}>
             Questions from Enterprise Buyers
           </h2>
         </div>
@@ -697,13 +697,13 @@ const FAQSection = () => {
             {faqs.map((faq, i) => (
               <div
                 key={i}
-                style={{ background: C.white, border: `1px solid ${open === i ? C.purple + "44" : C.border}`, borderRadius: 12, marginBottom: 12, boxShadow: open === i ? "0 2px 16px rgba(108,87,210,0.10)" : "none", overflow: "hidden", transition: "border-color 0.2s" }}
+                style={{ background: "#0d0d1f", border: `1px solid ${open === i ? C.purple + "66" : C.border}`, borderRadius: 12, marginBottom: 12, boxShadow: open === i ? "0 2px 16px rgba(108,87,210,0.18)" : "none", overflow: "hidden", transition: "border-color 0.2s" }}
               >
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
                   style={{ width: "100%", background: "none", border: "none", padding: "20px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", textAlign: "left", gap: 16 }}
                 >
-                  <span style={{ fontWeight: 700, fontSize: 15.5, color: open === i ? C.purple : "#111827" }}>{faq.q}</span>
+                  <span style={{ fontWeight: 700, fontSize: 15.5, color: open === i ? C.purple : "rgba(255,255,255,0.9)" }}>{faq.q}</span>
                   <i className={`fas fa-chevron-${open === i ? "up" : "down"}`} style={{ color: open === i ? C.purple : C.textMuted, fontSize: 13, flexShrink: 0 }} />
                 </button>
                 {open === i && (
