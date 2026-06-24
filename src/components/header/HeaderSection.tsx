@@ -34,21 +34,13 @@ const HeaderSection = ({ variant }: Props) => {
           <div className="header-main">
             <div className="header-left">
               <Link to="/" className="header-logo1">
-                {isSticky && !variant ? (
-                  <Image
-                    src="assets/img/logo/logo.png"
-                    alt="Xerxez Solutions"
-                    width={150}
-                    height={36}
-                  />
-                ) : (
-                  <Image
-                    src="assets/img/logo/white-logo.svg"
-                    alt="Xerxez Solutions"
-                    width={150}
-                    height={36}
-                  />
-                )}
+                <Image
+                  src="assets/img/logo/xerxez_logo.png"
+                  alt="Xerxez Solutions"
+                  width={180}
+                  height={45}
+                  style={{ height: '45px', width: 'auto' }}
+                />
               </Link>
             </div>
             <div className="header-right d-flex justify-content-end align-items-center">
