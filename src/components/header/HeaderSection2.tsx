@@ -53,13 +53,13 @@ const HeaderSection2 = ({ variant }: Props) => {
           <div className="mega-menu-wrapper">
             <div className="header-main" style={{ padding: "5px 0" }}>
               <div className="header-left">
-                <Link to="/" className="header-logo1" style={{ background: '#0f0f2d', display: 'inline-flex', alignItems: 'center', borderRadius: 6, padding: '2px 4px' }}>
+                <Link to="/" className="header-logo1">
                   <Image
                     src="/assets/img/logo/xerxez_logo.png"
                     alt="Xerxez Solutions"
                     width={180}
                     height={45}
-                    style={{ height: '45px', width: 'auto', background: 'transparent', mixBlendMode: 'multiply' }}
+                    style={{ height: '45px', width: 'auto' }}
                   />
                 </Link>
               </div>
