@@ -25,6 +25,7 @@ import DocsPage from "./page/DocsPage";
 import HealthPage from "./page/HealthPage";
 import MLMPage from "./page/MLMPage";
 import ERPPage from "./page/ERPPage";
+import AIERPPage from "./page/AIERPPage";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/project" element={<ProjectPage />} />
           <Route path="/project/:slug" element={<ProjectDetailPage />} />
           <Route path="/service" element={<ServicePage />} />
+          <Route path="/service/ai-powered-erp" element={<AIERPPage />} />
           <Route path="/service/:slug" element={<ServiceDetailPage />} />
           <Route path="/team" element={<TeamPage />} />
           <Route path="/team/:slug" element={<TeamDetailPage />} />
