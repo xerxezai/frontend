@@ -540,17 +540,15 @@ const menuData = [
     link: "/service",
     hasDropdown: true,
     submenu: [
-      { title: "All Services", link: "/service", hasDropdown: false },
-      { title: "Training Platform", link: "/training", hasDropdown: false },
       { title: "AI Powered ERP", link: "/service/ai-powered-erp", hasDropdown: false },
       { title: "DevSecOps / MLOps", link: "/service/devsecops-mlops-solutions", hasDropdown: false },
       { title: "Cloud Service & Storage", link: "/service/cloud-service-storage", hasDropdown: false },
       { title: "Software Development", link: "/service/software-development", hasDropdown: false },
       { title: "Software Consulting", link: "/service/software-consulting", hasDropdown: false },
-      { title: "AI Training", link: "/service/ai-training", hasDropdown: false },
       { title: "Quantum Computing", link: "/service/quantum-computing", hasDropdown: false },
       { title: "Mobile Application", link: "/service/mobile-application", hasDropdown: false },
       { title: "Web & Mobile Hosting", link: "/service/web-mobile-hosting", hasDropdown: false },
+      { title: "All Services", link: "/service", hasDropdown: false },
     ],
   },
   {
