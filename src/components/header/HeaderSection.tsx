@@ -39,7 +39,7 @@ const HeaderSection = ({ variant }: Props) => {
                   alt="Xerxez Solutions"
                   width={180}
                   height={45}
-                  style={{ height: '45px', width: 'auto', background: 'transparent' }}
+                  style={{ height: '45px', width: 'auto', background: 'transparent', mixBlendMode: 'multiply' }}
                 />
               </Link>
             </div>

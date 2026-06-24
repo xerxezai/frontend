@@ -11401,10 +11401,13 @@ h3.service-header-5 {
   color: rgba(255,255,255,0.85) !important;
 }
 
-/* ── Logo image — always transparent background ── */
+/* ── Logo image — transparent background, blend removes white box ── */
 .header-logo1 img,
 .offcanvas__logo img,
-.widget-head a img {
+.widget-head a img,
+nav img[alt*="Xerxez"],
+img[alt*="Xerxez"] {
   background: transparent !important;
+  mix-blend-mode: multiply;
 }
 
