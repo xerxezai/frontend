@@ -36,7 +36,19 @@ export interface ProjectDataType {
   slug: string;
 }
 
+export interface ServiceKeyFact {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
+export interface ServiceFaq {
+  question: string;
+  answer: string;
+}
+
 export interface ServiceDataType {
+  id?: number;
   iconClass: string;
   detailImg: string;
   iconBgImg: string;
@@ -44,6 +56,11 @@ export interface ServiceDataType {
   description: string;
   detailBody?: string;
   slug: string;
+  width?: number;
+  height?: number;
+  highlights?: string[];
+  keyFacts?: ServiceKeyFact[];
+  faqs?: ServiceFaq[];
 }
 
 export interface TeamDataType {
