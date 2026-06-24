@@ -5956,7 +5956,12 @@ p {
 }
 
 .testimonial-box-items {
-  margin-top: 30px;
+  margin-top: 0;
+}
+/* Swiper offsetHeight excludes margins — use padding on the container instead */
+.testimonial-section .testimonial-slider-3 {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 .testimonial-box-items .testimonial-box {
   background-color: $white;
