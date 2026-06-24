@@ -20,7 +20,7 @@ const CtaSection6 = ({ variant }: Props) => {
             <span className="text-white fade-in" style={{ opacity: 0.75, fontSize: 14, letterSpacing: "0.1em", textTransform: "uppercase" }}>
               Ready to modernise your enterprise?
             </span>
-            <h2 className="text-white char-animation" style={{ fontSize: "clamp(28px, 4vw, 46px)", fontWeight: 800, marginTop: 12 }}>
+            <h2 className="text-white char-animation" style={{ fontSize: "2rem", fontWeight: 800, marginTop: 12 }}>
               Ready to Transform Your <br /> Enterprise Operations?
             </h2>
             <p style={{ color: "rgba(255,255,255,0.72)", maxWidth: 580, margin: "16px auto 0", fontSize: 16, lineHeight: 1.7 }}>
