@@ -411,32 +411,9 @@ p {
   font-size: 25px;
 }
 
-.back-to-top {
-  border-radius: 10px;
-  background-color: $theme-color-2;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  color: $white;
-  font-size: 18px;
-  position: fixed;
-  display: inline-block;
-  z-index: 9999;
-  right: 30px;
-  bottom: 30px;
-  transition: all 0.4s ease-in-out;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px);
-}
-.back-to-top:hover {
-  background-color: $header;
-  color: $white;
-}
+.back-to-top,
 .back-to-top.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(0);
+  display: none !important;
 }
 
 .section-title {
@@ -7559,21 +7536,7 @@ p.sticky-label {
 }
 
 .pricing-section-4.style-bg::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  content: "";
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url(/assets/img/contact-bg.jpg);
-  height: 580px;
-  top: initial;
-  bottom: 0;
+  display: none;
 }
 
 .footer-widget-wrapper {
@@ -8322,7 +8285,8 @@ h3.service-header-5 {
   font-size: 0.75rem;
 }
 .about-feature-section-3.section-padding.bg-cover.fix {
-  background-image: url(/assets/img/feature/01.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .about-section-4 .progress-wrap {
   visibility: visible;
@@ -8357,13 +8321,16 @@ h3.service-header-5 {
   transition: all 0.3s ease;
 }
 .brand-section.section-padding.has-bg {
-  background-image: url(/assets/img/service/service-bg.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .contact-section.section-padding.bg-cover.fix {
-  background-image: url(/assets/img/contact/01.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .counter-section-2 .counter-wrapper-2 {
-  background-image: url(/assets/img/counter/01.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .cta-contact-form-section.fix.section-padding {
   background-image: linear-gradient(135deg, #0a031e 0%, #1a0a5c 60%, #6c57d2 100%);
@@ -8375,10 +8342,12 @@ h3.service-header-5 {
   background-image: url(/assets/img/cta/cta-2-bg.png);
 }
 .cta-value-wrapper-3.bg-cover {
-  background-image: url(/assets/img/cta/cta-3-bg.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .cta-section-4.section-padding.fix.bg-cover {
-  background-image: url(/assets/img/cta/cta-4-bg.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .cta-call-section-5 {
   background-image: none;
@@ -8388,7 +8357,8 @@ h3.service-header-5 {
   background-color: #0a031e;
 }
 .footer-section.variant-bg {
-  background-image: url(/assets/img/footer/footer-bg-3.jpg);
+  background: linear-gradient(180deg, #0a031e 0%, #001f3f 60%, #003566 100%);
+  background-image: none;
 }
 .hero-section.hero-1 {
   background-image: url(/assets/img/hero/hero-1-bg.jpg);
@@ -8442,13 +8412,16 @@ h3.service-header-5 {
   background-image: none;
 }
 .testimonial-section-2.section-padding.bg-cover {
-  background-image: url(/assets/img/testimonial/testimonial-2-bg.jpg);
+  background: linear-gradient(160deg, #0a0820 0%, #160d3a 35%, #0d1428 65%, #050a12 100%);
+  background-image: none;
 }
 .video-section-4 .video-wrapper-4 {
-  background-image: url(/assets/img/video/video-img-01.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .service-section-solve.fix.section-padding {
-  background-image: url(/assets/img/service/service-bg.jpg);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 100%);
+  background-image: none;
 }
 .working-process-section-2.section-padding {
   background-image: url(/assets/img/working-process/working-process-bg.png);
