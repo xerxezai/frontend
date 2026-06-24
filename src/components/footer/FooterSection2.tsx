@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FooterBottomSection from "./FooterBottomSection";
 import Image from "../utils/Image";
 import NewsletterForm from "../forms/NewsletterForm";
@@ -15,7 +15,7 @@ const FooterSection2 = ({ variant }: Props) => {
             variant ? "style-margin" : ""
           }`}
         >
-          <Link to="/" className="footer-logo" >
+          <Link to="/" className="footer-logo">
             <Image
               src="assets/img/logo/white-logo.svg"
               alt="Xerxez Solutions"
@@ -29,8 +29,8 @@ const FooterSection2 = ({ variant }: Props) => {
                 <i className="far fa-bell-exclamation"></i>
               </div>
               <div className="content">
-                <h4>Subscribe Newsletter</h4>
-                <span>Effective SEO strategies not only elevate.</span>
+                <h4>Stay Ahead in Enterprise AI</h4>
+                <span>Insights on ERP, DevSecOps & cloud — delivered monthly.</span>
               </div>
             </div>
             <NewsletterForm style="style-2" />
@@ -43,32 +43,32 @@ const FooterSection2 = ({ variant }: Props) => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="200" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="200"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <h3>About Us</h3>
+                  <h3>About XERXEZ</h3>
                 </div>
                 <div className="footer-content">
                   <p>
-                    By optimizing content, leveraging relevant keywords, and
-                    adhering to best practices, businesses can secure prominent
-                    position (SEO)
+                    We build AI-powered enterprise systems — ERP, DevSecOps pipelines,
+                    and cloud infrastructure — that help organisations scale securely
+                    and grow with confidence.
                   </p>
                   <div className="social-icon">
-                    <a href="#">
-                      <i className="fab fa-facebook-f"></i>
+                    <a href="https://linkedin.com/company/xerxez" target="_blank" rel="noreferrer">
+                      <i className="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="#">
+                    <a href="https://twitter.com/xerxezai" target="_blank" rel="noreferrer">
                       <i className="fab fa-twitter"></i>
                     </a>
-                    <a href="#">
-                      <i className="fab fa-dribbble"></i>
+                    <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
+                      <i className="fab fa-github"></i>
                     </a>
-                    <a href="#">
-                      <i className="fab fa-instagram"></i>
+                    <a href="mailto:xerxez.in@gmail.com">
+                      <i className="fas fa-envelope"></i>
                     </a>
                   </div>
                 </div>
@@ -78,9 +78,9 @@ const FooterSection2 = ({ variant }: Props) => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="400" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="400"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
@@ -88,19 +88,19 @@ const FooterSection2 = ({ variant }: Props) => {
                 </div>
                 <ul className="list-area">
                   <li>
-                    <Link to="/service">SEO for Small Business</Link>
+                    <Link to="/service/ai-powered-erp">AI-Powered ERP</Link>
                   </li>
                   <li>
-                    <Link to="/service">SEO for Local Services</Link>
+                    <Link to="/service/dev-sec-ops">DevSecOps Pipelines</Link>
                   </li>
                   <li>
-                    <Link to="/service">Enterprise SEO</Link>
+                    <Link to="/service/cloud-service-and-storage">Cloud Infrastructure</Link>
                   </li>
                   <li>
-                    <Link to="/service">National SEO</Link>
+                    <Link to="/service/software-development">Software Development</Link>
                   </li>
                   <li>
-                    <Link to="/service">SEO Optimization</Link>
+                    <Link to="/service/ai-training">AI Training & Consulting</Link>
                   </li>
                 </ul>
               </div>
@@ -109,21 +109,21 @@ const FooterSection2 = ({ variant }: Props) => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="600" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="600"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <h3>Quick Link</h3>
+                  <h3>Contact Us</h3>
                 </div>
                 <ul className="footer-contect">
                   <li>
                     <div className="icon">
-                      <i className="fas fa-phone-alt"></i>
+                      <i className="fas fa-envelope"></i>
                     </div>
                     <div className="content">
-                      <h5>Mail Us</h5>
+                      <h5>Email</h5>
                       <p>
                         <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
                       </p>
@@ -131,16 +131,13 @@ const FooterSection2 = ({ variant }: Props) => {
                   </li>
                   <li>
                     <div className="icon">
-                      <i className="fas fa-envelope"></i>
+                      <i className="fas fa-globe"></i>
                     </div>
                     <div className="content">
-                      <h5>Mail Us</h5>
+                      <h5>Website</h5>
                       <p>
-                        <a
-                          href="mailto:xerxez.in@gmail.com"
-                          className="text-white"
-                        >
-                          xerxez.in@gmail.com
+                        <a href="https://xerxez.com" className="text-white">
+                          xerxez.com
                         </a>
                       </p>
                     </div>
@@ -161,20 +158,31 @@ const FooterSection2 = ({ variant }: Props) => {
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
-                data-aos-delay="800" // stagger delay for each card
-                data-aos-duration="1000" // smooth animation duration
-                data-aos-easing="ease-out-cubic" // smooth easing
+                data-aos-delay="800"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <h3>View Map</h3>
+                  <h3>Quick Links</h3>
                 </div>
-                <div className="google-map">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6678.7619084840835!2d144.9618311901502!3d-37.81450084255415!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642b4758afc1d%3A0x3119cc820fdfc62e!2sEnvato!5e0!3m2!1sen!2sbd!4v1641984054261!5m2!1sen!2sbd"
-                    loading="lazy"
-                  ></iframe>
-                </div>
+                <ul className="list-area">
+                  <li>
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li>
+                    <Link to="/about">About Us</Link>
+                  </li>
+                  <li>
+                    <Link to="/service">Services</Link>
+                  </li>
+                  <li>
+                    <Link to="/blog">Blog</Link>
+                  </li>
+                  <li>
+                    <Link to="/contact">Contact Us</Link>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -186,9 +194,3 @@ const FooterSection2 = ({ variant }: Props) => {
 };
 
 export default FooterSection2;
-
-
-
-
-
-

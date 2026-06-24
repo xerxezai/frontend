@@ -8343,8 +8343,8 @@ h3.service-header-5 {
   background-image: none;
 }
 .footer-section.fix.bg-cover {
-  background: linear-gradient(180deg, #0a031e 0%, #001f3f 60%, #003566 100%);
-  background-image: none;
+  background-image: linear-gradient(180deg, #0a031e 0%, #001f3f 60%, #003566 100%);
+  background-color: #0a031e;
 }
 .footer-section.variant-bg {
   background-image: url(/assets/img/footer/footer-bg-3.jpg);
