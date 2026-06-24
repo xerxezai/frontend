@@ -1,5 +1,4 @@
-﻿import AboutSection5 from "../components/about/AboutSection5";
-import BlogSection4 from "../components/blog/BlogSection4";
+import AboutSection5 from "../components/about/AboutSection5";
 import BrandSection from "../components/brand/BrandSection";
 import CounterSection from "../components/counter/CounterSection";
 import CtaSection5 from "../components/cta/CtaSection5";
@@ -9,7 +8,6 @@ import HeaderSection from "../components/header/HeaderSection";
 import HeroSection4 from "../components/hero/HeroSection4";
 import MobileMenuModal from "../components/modal/MobileMenuModal";
 import VideoModal from "../components/modal/VideoModal";
-import PricingSection2 from "../components/pricing/PricingSection2";
 import ProjectSection4 from "../components/project/ProjectSection4";
 import ServiceSection5 from "../components/service/ServiceSection5";
 import TeamSection2 from "../components/team/TeamSection2";
@@ -33,8 +31,6 @@ const HomePage4 = () => {
       <CtaSection5 />
       <TestimonySection4 />
       <TeamSection2 />
-      <PricingSection2 />
-      <BlogSection4 />
       <CtaSection6 />
       <FooterSection2 />
       <VideoModal isOpen={isVideoModalOpen} toggle={toggleVideoModal} />
@@ -44,4 +40,3 @@ const HomePage4 = () => {
 };
 
 export default HomePage4;
-
