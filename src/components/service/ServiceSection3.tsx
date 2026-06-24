@@ -3,6 +3,17 @@ import { services } from "../../data";
 import React, { useMemo } from "react";
 import Image from "../utils/Image";
 
+const faIcons: Record<string, string> = {
+  "devsecops-mlops-solutions": "fas fa-shield-alt",
+  "cloud-service-storage":     "fas fa-cloud",
+  "software-development":      "fas fa-code",
+  "software-consulting":       "fas fa-lightbulb",
+  "ai-training":               "fas fa-graduation-cap",
+  "quantum-computing":         "fas fa-atom",
+  "mobile-application":        "fas fa-mobile-alt",
+  "web-mobile-hosting":        "fas fa-server",
+};
+
 interface Props {
   mainSection?: boolean;
 }
@@ -169,7 +180,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
         </div>
 
         {/* ── OTHER SERVICES ── */}
-        <div className={`row ${mainSection ? "g-5" : ""}`}>
+        <div className={`row g-4`}>
           {displayedOthers.map((service, index) => (
             <div
               key={service.id}
@@ -180,30 +191,65 @@ const ServiceSection3 = ({ mainSection }: Props) => {
               data-aos-easing="ease-out-cubic"
               data-aos-once="true"
             >
-              <div className="service-icon-box-items-2">
-                <div className="icon">
-                  <i className={service.iconClass}></i>
-                  <div className="icon-bg">
-                    <Image src={service.iconBgImg} alt="img" width={service.width} height={service.height} />
-                  </div>
+              <div
+                style={{
+                  background: "#0d0b24",
+                  border: "1px solid rgba(108,87,210,0.2)",
+                  borderRadius: 16,
+                  padding: "32px 28px",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "border-color 0.25s, transform 0.25s, box-shadow 0.25s",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.borderColor = "rgba(108,87,210,0.55)";
+                  el.style.transform = "translateY(-4px)";
+                  el.style.boxShadow = "0 12px 36px rgba(108,87,210,0.18)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.borderColor = "rgba(108,87,210,0.2)";
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "none";
+                }}
+              >
+                {/* Icon box */}
+                <div style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 14,
+                  background: "rgba(108,87,210,0.15)",
+                  border: "1px solid rgba(108,87,210,0.35)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 24,
+                  fontSize: 24,
+                  color: "#ff792e",
+                  flexShrink: 0,
+                }}>
+                  <i className={faIcons[service.slug] || "fas fa-cogs"} />
                 </div>
-                <div className="content">
-                  <h3>
-                    <Link to={`/service/${service.slug}`}>
-                      {service.title.split("\n").map((line, i) => (
-                        <React.Fragment key={i}>
-                          {line}
-                          {i < service.title.split("\n").length - 1 && <br />}
-                        </React.Fragment>
-                      ))}
-                    </Link>
-                  </h3>
-                  <p>{service.description}</p>
-                  <Link to={`/service/${service.slug}`} className="link-btn">
-                    More Details
-                    <i className="far fa-arrow-right"></i>
+
+                {/* Title */}
+                <h3 style={{ marginBottom: 10, fontSize: 19, lineHeight: 1.3, color: "#fff" }}>
+                  <Link to={`/service/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
+                    {service.title.replace(/\n/g, " ")}
                   </Link>
-                </div>
+                </h3>
+
+                {/* Description */}
+                <p style={{ color: "rgba(255,255,255,0.62)", fontSize: 14, lineHeight: 1.8, marginBottom: 24, flex: 1 }}>
+                  {service.description}
+                </p>
+
+                {/* More Details link */}
+                <Link to={`/service/${service.slug}`} className="link-btn" style={{ marginTop: "auto", display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  More Details
+                  <i className="far fa-arrow-right" />
+                </Link>
               </div>
             </div>
           ))}
