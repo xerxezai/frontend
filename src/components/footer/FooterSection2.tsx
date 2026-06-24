@@ -1,10 +1,7 @@
 ﻿import { Link } from "react-router-dom";
 import FooterBottomSection from "./FooterBottomSection";
 
-interface Props {
-  variant?: boolean;
-}
-const FooterSection2 = ({ variant }: Props) => {
+const FooterSection2 = () => {
   return (
     <section className="footer-section fix bg-cover">
       <div className="container">

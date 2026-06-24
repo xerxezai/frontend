@@ -28,7 +28,7 @@ const CustomLayout = ({ children }: Props) => {
       </SectionErrorBoundary>
 
       <SectionErrorBoundary sectionName="Footer">
-        <FooterSection2 variant />
+        <FooterSection2 />
       </SectionErrorBoundary>
       <SectionErrorBoundary sectionName="Mobile Menu">
         <MobileMenuModal isOpen={isMenuOpen} toggle={toggleMobileMenu} />
