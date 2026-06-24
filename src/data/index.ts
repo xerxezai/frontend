@@ -582,13 +582,9 @@ const menuData = [
     ],
   },
   {
-    title: "Blog",
-    link: "/blog",
-    hasDropdown: true,
-    submenu: [
-      { title: "Blog", link: "/blog", hasDropdown: false },
-      { title: "Blog Details", link: "/blog/ai-powered-erp-transforms-enterprise-operations", hasDropdown: false },
-    ],
+    title: "AI Training",
+    link: "/training",
+    hasDropdown: false,
   },
   {
     title: "Contact Us",
