@@ -48,12 +48,11 @@ const PurpleBadge = ({ children, outline }: { children: string; outline?: boolea
       display: "inline-block",
       background: outline ? "transparent" : `${C.purple}22`,
       color: outline ? "rgba(255,255,255,0.9)" : C.purple,
-      fontSize: 12,
-      fontWeight: 700,
-      padding: "4px 16px",
+      fontSize: 13,
+      fontWeight: 600,
+      padding: "5px 16px",
       borderRadius: 20,
-      letterSpacing: 0.6,
-      textTransform: "uppercase",
+      letterSpacing: 0.2,
       border: `1px solid ${outline ? "rgba(255,255,255,0.35)" : C.purple + "44"}`,
     }}
   >
@@ -84,7 +83,7 @@ const Hero = () => (
   <section
     style={{
       background: `linear-gradient(135deg, ${C.navyDark} 0%, #0f1c3f 45%, #1a0a5c 100%)`,
-      padding: "80px 0 72px",
+      padding: "148px 0 80px",
       position: "relative",
       overflow: "hidden",
     }}
@@ -109,7 +108,7 @@ const Hero = () => (
         <div className="col-lg-7">
           {/* Badges — all purple-themed */}
           <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
-            <span style={{ background: C.orange, color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 20, letterSpacing: 0.6, textTransform: "uppercase" }}>
+            <span style={{ background: C.orange, color: "#fff", fontSize: 13, fontWeight: 600, padding: "5px 16px", borderRadius: 20, letterSpacing: 0.2 }}>
               Flagship
             </span>
             <PurpleBadge outline>AI Powered</PurpleBadge>

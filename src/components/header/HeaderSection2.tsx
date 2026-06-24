@@ -26,7 +26,7 @@ const HeaderSection2 = ({ variant }: Props) => {
     <header className="header-section-2">
       <div className="header-top-section">
         <div className="container">
-          <div className={`header-top-wrapper ${variant ? "style-2" : ""}`}>
+          <div className={`header-top-wrapper ${variant ? "style-2" : ""}`} style={{ padding: "5px 0" }}>
             <ul className="top-list">
               <li className="top-tagline">
                 <i className="fas fa-rocket"></i>
@@ -62,14 +62,14 @@ const HeaderSection2 = ({ variant }: Props) => {
       <div className={`header-1 ${isSticky ? "sticky" : ""}`}>
         <div className="container">
           <div className="mega-menu-wrapper">
-            <div className="header-main">
+            <div className="header-main" style={{ padding: "5px 0" }}>
               <div className="header-left">
                 <Link to="/" className="header-logo1">
                   <Image
                     src={isSticky ? "assets/img/logo/logo.png" : "assets/img/logo/white-logo.svg"}
                     alt="Xerxez Solutions"
-                    width={150}
-                    height={36}
+                    width={130}
+                    height={30}
                   />
                 </Link>
               </div>
