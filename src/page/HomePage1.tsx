@@ -7,7 +7,7 @@ import CounterSection from "../components/counter/CounterSection";
 import CtaSection from "../components/cta/CtaSection";
 import CtaSection2 from "../components/cta/CtaSection2";
 import FaqSection from "../components/faq/FaqSection";
-import FooterSection from "../components/footer/FooterSection";
+import FooterSection2 from "../components/footer/FooterSection2";
 import HeaderSection from "../components/header/HeaderSection";
 import HeroSection from "../components/hero/HeroSection";
 import MobileMenuModal from "../components/modal/MobileMenuModal";
@@ -38,7 +38,7 @@ const HomePage1 = () => {
         <FaqSection />
         <ContactSection />
         <BlogSection />
-        <FooterSection />
+        <FooterSection2 />
         <MobileMenuModal isOpen={isMenuOpen} toggle={toggleMobileMenu} />
     </>
   );

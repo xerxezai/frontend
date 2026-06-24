@@ -143,7 +143,7 @@ const FooterSection4 = () => {
                     </div>
                     <div className="content">
                       <h5>Headquarters</h5>
-                      <p className="text-white">Global &mdash; Remote-first</p>
+                      <p className="text-white">India &amp; UAE — Remote-first, Global delivery</p>
                     </div>
                   </li>
                 </ul>

@@ -4,7 +4,7 @@ import BrandSection from "../components/brand/BrandSection";
 import CounterSection from "../components/counter/CounterSection";
 import CtaSection5 from "../components/cta/CtaSection5";
 import CtaSection6 from "../components/cta/CtaSection6";
-import FooterSection4 from "../components/footer/FooterSection4";
+import FooterSection2 from "../components/footer/FooterSection2";
 import HeaderSection from "../components/header/HeaderSection";
 import HeroSection4 from "../components/hero/HeroSection4";
 import MobileMenuModal from "../components/modal/MobileMenuModal";
@@ -36,7 +36,7 @@ const HomePage4 = () => {
       <PricingSection2 />
       <BlogSection4 />
       <CtaSection6 />
-      <FooterSection4 />
+      <FooterSection2 />
       <VideoModal isOpen={isVideoModalOpen} toggle={toggleVideoModal} />
       <MobileMenuModal isOpen={isMenuOpen} toggle={toggleMobileMenu} />
     </main>

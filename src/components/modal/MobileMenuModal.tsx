@@ -55,7 +55,7 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                 <ul className="contact-list">
                   <li>
                     <span>Headquarters:</span>
-                    Global — Remote-first
+                    India &amp; UAE — Remote-first, Global delivery
                   </li>
                   <li>
                     <span>Phone:</span>
