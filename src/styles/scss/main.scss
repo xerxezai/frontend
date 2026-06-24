@@ -11252,13 +11252,21 @@ h3.service-header-5 {
    Fixes all white/cream section and card backgrounds site-wide
 ═══════════════════════════════════════════════════════════ */
 
-/* ── Restore white text/headings inside white navbar / offcanvas ── */
-.mega-menu-wrapper h1, .mega-menu-wrapper h2, .mega-menu-wrapper h3,
-.mega-menu-wrapper h4, .mega-menu-wrapper h5, .mega-menu-wrapper h6,
-.mega-menu-wrapper a, .mega-menu-wrapper p, .mega-menu-wrapper span:not(.theme-btn),
+/* ── Navbar pill: dark background, white nav links ── */
+.header-section-2 .header-1 .mega-menu-wrapper {
+  background: #0f0f2d !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3) !important;
+}
 .header-1 .main-menu ul li a,
 .header-1 .main-menu ul li .sub-menu li a {
-  color: #003566;
+  color: rgba(255,255,255,0.85) !important;
+}
+.header-1 .main-menu ul li a:hover {
+  color: #6c57d2 !important;
+}
+.mega-menu-wrapper h1, .mega-menu-wrapper h2, .mega-menu-wrapper h3,
+.mega-menu-wrapper h4, .mega-menu-wrapper h5, .mega-menu-wrapper h6 {
+  color: #fff;
 }
 .offcanvas__info h1, .offcanvas__info h2, .offcanvas__info h3,
 .offcanvas__info h4, .offcanvas__info h5, .offcanvas__info h6,
@@ -11384,21 +11392,12 @@ h3.service-header-5 {
 .preloader, .preloader .loader, .preloader .loader-section,
 .preloader .loader-section .bg { background-color: #0a0a1a !important; }
 
-/* ── Sticky header — dark background, removes white-box effect around logo ── */
+/* ── Sticky header — keep dark to match site theme ── */
 .sticky {
   background-color: #0f0f2d !important;
   box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
 }
-.sticky.header-1 .header-main .main-menu ul li a,
-.sticky .header-1 .header-main .main-menu ul li a {
-  color: rgba(255,255,255,0.85) !important;
-}
-.sticky.header-1 .header-main .main-menu ul li a:hover,
-.sticky .header-1 .header-main .main-menu ul li a:hover {
-  color: #6c57d2 !important;
-}
-.sticky.header-1 .header-main .sidebar__toggle,
-.sticky .header-1 .header-main .sidebar__toggle {
+.sticky .header-main .sidebar__toggle {
   color: rgba(255,255,255,0.85) !important;
 }
 
