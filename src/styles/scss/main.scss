@@ -11384,3 +11384,28 @@ h3.service-header-5 {
 .preloader, .preloader .loader, .preloader .loader-section,
 .preloader .loader-section .bg { background-color: #0a0a1a !important; }
 
+/* ── Sticky header — dark background, removes white-box effect around logo ── */
+.sticky {
+  background-color: #0f0f2d !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
+}
+.sticky.header-1 .header-main .main-menu ul li a,
+.sticky .header-1 .header-main .main-menu ul li a {
+  color: rgba(255,255,255,0.85) !important;
+}
+.sticky.header-1 .header-main .main-menu ul li a:hover,
+.sticky .header-1 .header-main .main-menu ul li a:hover {
+  color: #6c57d2 !important;
+}
+.sticky.header-1 .header-main .sidebar__toggle,
+.sticky .header-1 .header-main .sidebar__toggle {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+/* ── Logo image — always transparent background ── */
+.header-logo1 img,
+.offcanvas__logo img,
+.widget-head a img {
+  background: transparent !important;
+}
+
