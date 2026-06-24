@@ -54,7 +54,7 @@ const ERPTable = ({ title, columns, data, loading, error, onAdd, onDelete }: Pro
                 <tr key={row.id ?? i}>
                   {columns.map(c => (
                     <td key={c.key} style={{ padding: '12px 16px', verticalAlign: 'middle', color: '#333' }}>
-                      {c.render ? c.render(row) : (row[c.key] ?? 'â€”')}
+                      {c.render ? c.render(row) : (row[c.key] ?? '—')}
                     </td>
                   ))}
                   {onDelete && (

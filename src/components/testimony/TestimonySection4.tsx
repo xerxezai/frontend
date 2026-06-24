@@ -60,7 +60,7 @@ const TestimonySection4 = () => {
             <SwiperSlide key={testimonial.id}>
               <div className="testimonial-box-card-items">
                 <div className="star">{renderStars(testimonial.stars)}</div>
-                <h3>â€œ{testimonial.quoteText}â€</h3>
+                <h3>“{testimonial.quoteText}”</h3>
                 <div className="client-info mt-5">
                   <div className="client-image">
                     <Image

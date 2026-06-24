@@ -18,7 +18,7 @@ const CtaSection3 = () => {
 
                 <p className="text-white">
                   Whether you need an AI-powered ERP, a DevSecOps pipeline, cloud infrastructure,
-                  or a full digital transformation roadmap â€” XERXEZ delivers end-to-end.
+                  or a full digital transformation roadmap — XERXEZ delivers end-to-end.
                 </p>
                 <div className="cta-card fade-in">
                   <Link to="/contact" className="theme-btn">

@@ -19,7 +19,7 @@ const AboutSection6 = () => {
 
                 <p className="about-text">
                   XERXEZ is an AI-first technology company helping enterprises build smarter,
-                  more secure, and more scalable systems â€” from intelligent ERP platforms to
+                  more secure, and more scalable systems — from intelligent ERP platforms to
                   production MLOps infrastructure and cloud-native applications.
                 </p>
 

@@ -58,7 +58,7 @@ const ProjectDetailSidebar = () => {
             </div>
             <div className="content">
               <h5>Headquarters</h5>
-              <p>Global â€” Remote-first</p>
+              <p>Global — Remote-first</p>
             </div>
           </li>
         </ul>

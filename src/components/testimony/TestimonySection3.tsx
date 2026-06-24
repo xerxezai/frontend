@@ -79,7 +79,7 @@ const TestimonySection3 = () => {
                       height={30}
                     />
                   </div>
-                  <p>â€œ{testimonial.quoteText}â€</p>
+                  <p>“{testimonial.quoteText}”</p>
                 </div>
               </div>
             </SwiperSlide>

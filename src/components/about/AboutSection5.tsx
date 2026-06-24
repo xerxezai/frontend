@@ -36,7 +36,7 @@ const AboutSection5 = () => {
 
                 <p className="about-text text-white mt-3">
                   Start working with a technology partner that provides everything you
-                  need â€” from AI-powered ERP and DevSecOps pipelines to cloud infrastructure
+                  need — from AI-powered ERP and DevSecOps pipelines to cloud infrastructure
                   and executive AI training.
                 </p>
 

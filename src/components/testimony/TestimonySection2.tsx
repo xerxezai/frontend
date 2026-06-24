@@ -42,7 +42,7 @@ const TestimonySection2 = () => {
                         <i className="fas fa-star" key={i}></i>
                       ))}
                     </div>
-                    <h4 className="text-white">â€œ{testimonial.quoteText}â€</h4>
+                    <h4 className="text-white">“{testimonial.quoteText}”</h4>
                     <div className="client-info">
                       <div className="client-image">
                         <Image

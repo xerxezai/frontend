@@ -31,13 +31,13 @@ const BlogDetailsArea = ({ blogInfo }: Props) => {
           <p>{blogInfo.content}</p>
           <p>
             With worldwide annual spend on digital advertising surpassing $325
-            billion, itâ€™s no surprise that different approaches to online
+            billion, it—s no surprise that different approaches to online
             marketing are becoming available. One of these new approaches is
             performance marketing or digital performance marketing. Keep reading
             to learn all about performance marketing, from how it works to how
             it compares to digital marketing. Plus, get insight into the
             benefits and risks of performance marketing and how it can affect
-            your companyâ€™s long-term success and profitability.
+            your company—s long-term success and profitability.
           </p>
           <Image
             src={blogInfo.image}
@@ -64,14 +64,14 @@ const BlogDetailsArea = ({ blogInfo }: Props) => {
           </blockquote>
           <p>
             With worldwide annual spend on digital advertising surpassing $325
-            billion, itâ€™s no surprise that different approaches to online
+            billion, it—s no surprise that different approaches to online
             marketing are becoming available. One of these new approaches is
             performance marketing or digital performance marketing. Keep reading
             to learn all about performance marketing
           </p>
           <ul className="checked-list mb-4">
             <li>Cooking is love made visible</li>
-            <li>Weâ€™re an open book</li>
+            <li>We—re an open book</li>
             <li>100% goes to the field</li>
             <li>Received the highest grades</li>
           </ul>
@@ -80,13 +80,13 @@ const BlogDetailsArea = ({ blogInfo }: Props) => {
           </h4>
           <p>
             With worldwide annual spend on digital advertising surpassing $325
-            billion, itâ€™s no surprise that different approaches to online
+            billion, it—s no surprise that different approaches to online
             marketing are becoming available. One of these new approaches is
             performance marketing or digital performance marketing. Keep reading
             to learn all about performance marketing, from how it works to how
             it compares to digital marketing. Plus, get insight into the
             benefits and risks of performance marketing and how it can affect
-            your companyâ€™s long-term success and profitability.
+            your company—s long-term success and profitability.
           </p>
           <Image
             className="alignleft fade-in"
@@ -97,14 +97,14 @@ const BlogDetailsArea = ({ blogInfo }: Props) => {
           />
           <p>
             With worldwide annual spend on digital advertising surpassing $325
-            billion, itâ€™s no surprise that different approaches to online
+            billion, it—s no surprise that different approaches to online
             marketing are becoming available. One of these new approaches is
             performance marketing or digital performance marketing. Keep reading
             to learn all about performance marketing
           </p>
           <p>
             With worldwide annual spend on digital advertising surpassing $325
-            billion, itâ€™s no surprise that different approaches to online
+            billion, it—s no surprise that different approaches to online
             marketing are becoming available. One of these new approaches is
             performance marketing or digital performance marketing. Keep reading
             to learn all about performance marketing

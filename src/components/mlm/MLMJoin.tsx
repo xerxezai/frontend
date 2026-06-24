@@ -36,15 +36,15 @@ const MLMJoin = ({ onSuccess }: Props) => {
         <div className="mlm-benefits">
           <div className="mlm-benefit-item">
             <i className="fas fa-check-circle"></i>
-            <span>Level 1 â€” 10% commission on direct referrals</span>
+            <span>Level 1 — 10% commission on direct referrals</span>
           </div>
           <div className="mlm-benefit-item">
             <i className="fas fa-check-circle"></i>
-            <span>Level 2 â€” 5% commission on 2nd level referrals</span>
+            <span>Level 2 — 5% commission on 2nd level referrals</span>
           </div>
           <div className="mlm-benefit-item">
             <i className="fas fa-check-circle"></i>
-            <span>Level 3 â€” 2% commission on 3rd level referrals</span>
+            <span>Level 3 — 2% commission on 3rd level referrals</span>
           </div>
           <div className="mlm-benefit-item">
             <i className="fas fa-check-circle"></i>

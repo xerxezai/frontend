@@ -107,7 +107,7 @@ const TeamDetailSection = ({ teamInfo }: Props) => {
                 and manufacturing.
               </p>
               <p>
-                Every member of the XERXEZ team is committed to client success â€” from initial
+                Every member of the XERXEZ team is committed to client success — from initial
                 architecture design through to production deployment and ongoing support.
                 We work as an extension of your team, sharing knowledge, transferring skills,
                 and ensuring every solution we build is maintainable, secure, and aligned with

@@ -2,7 +2,7 @@
  * Brand Configuration
  * Single source of truth for all brand-related strings.
  * Values are driven by environment variables (soft-coded).
- * To rebrand, update .env â€” no component changes needed.
+ * To rebrand, update .env — no component changes needed.
  */
 
 export const BRAND_NAME   = import.meta.env.VITE_BRAND_NAME   || 'XERXEZ';

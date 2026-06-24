@@ -21,7 +21,7 @@ const CtaSection = () => {
             </h2>
 
             <p className="mt-3 text-white">
-              Enter your website and email â€” our experts will analyse your current stack
+              Enter your website and email — our experts will analyse your current stack
               and <br />
               identify opportunities for AI, cloud, and DevSecOps modernisation.
             </p>

@@ -125,7 +125,7 @@ const FooterSection = () => {
                     </div>
                     <div className="content">
                       <h5>Headquarters</h5>
-                      <p className="text-white">Global â€” Remote-first</p>
+                      <p className="text-white">Global — Remote-first</p>
                     </div>
                   </li>
                 </ul>
@@ -145,7 +145,7 @@ const FooterSection = () => {
                 </div>
                 <div className="footer-content">
                   <p>
-                    Stay updated on AI trends, cloud insights, and XERXEZ product releases â€”
+                    Stay updated on AI trends, cloud insights, and XERXEZ product releases —
                     straight to your inbox.
                   </p>
                   <NewsletterForm />

@@ -127,7 +127,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                     }}
                   >
                     Purpose-built or layered onto your existing SAP, Oracle, or Microsoft
-                    Dynamics -- XERXEZ delivers intelligent ERP that learns, adapts, and
+                    Dynamics — XERXEZ delivers intelligent ERP that learns, adapts, and
                     scales with your enterprise operations.
                   </p>
 

@@ -27,7 +27,7 @@ const AboutSection = () => {
                 </div>
 
                 <p className="about-text">
-                  XERXEZ is a technology partner for enterprises building the future â€” delivering
+                  XERXEZ is a technology partner for enterprises building the future — delivering
                   AI-powered ERP systems, MLOps pipelines, cloud infrastructure, and secure
                   software with end-to-end ownership.
                 </p>

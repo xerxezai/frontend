@@ -13,7 +13,7 @@ const StatCard = ({ label, value, icon, color }: { label: string; value: any; ic
         <i className={`${icon} text-white`} style={{ fontSize: 16 }}></i>
       </div>
       <div className="min-w-0">
-        <div className="fw-bold" style={{ fontSize: 18, color: '#1a1a2e', lineHeight: 1.2 }}>{value ?? 'â€”'}</div>
+        <div className="fw-bold" style={{ fontSize: 18, color: '#1a1a2e', lineHeight: 1.2 }}>{value ?? '—'}</div>
         <div className="text-muted" style={{ fontSize: 11 }}>{label}</div>
       </div>
     </div>

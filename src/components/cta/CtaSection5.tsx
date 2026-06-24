@@ -11,7 +11,7 @@ const CtaSection5 = () => {
           </h2>
           <p className="text-white mt-4">
             Our enterprise technology assessment covers your current stack, architecture gaps,
-            security posture, and AI readiness â€” delivered as an actionable roadmap with
+            security posture, and AI readiness — delivered as an actionable roadmap with
             no commitment required for the first 15 days.
           </p>
         </div>

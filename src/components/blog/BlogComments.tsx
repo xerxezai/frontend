@@ -100,7 +100,7 @@ const BlogComments = () => {
                 </div>
                 <div className="comment-text">
                   <p>
-                    Completely agree â€” their MLOps expertise is second to none.
+                    Completely agree — their MLOps expertise is second to none.
                     We've been running XERXEZ-built pipelines in production for
                     six months now with zero downtime.
                   </p>

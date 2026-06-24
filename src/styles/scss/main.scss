@@ -8325,10 +8325,12 @@ h3.service-header-5 {
   background-image: url(/assets/img/counter/01.jpg);
 }
 .cta-contact-form-section.fix.section-padding {
-  background-image: url(/assets/img/cta/contact-bg.jpg);
+  background: linear-gradient(135deg, #0a031e 0%, #1a0a5c 60%, #6c57d2 100%);
+  background-image: none;
 }
 .cta-support-wrapper.zoom-effect-style {
-  background-image: url(/assets/img/cta/cta-support-bg.jpg);
+  background: linear-gradient(135deg, #001f3f 0%, #0a031e 50%, #1a0a5c 100%);
+  background-image: none;
 }
 .cta-section-2.section-padding {
   background-image: url(/assets/img/cta/cta-2-bg.png);
@@ -8392,7 +8394,8 @@ h3.service-header-5 {
   background-image: url(/assets/img/hero/hero-bg-3.png);
 }
 .pricing-section.has-bg {
-  background-image: url(/assets/img/pricing-bg.jpg);
+  background: #f8f9ff;
+  background-image: none;
 }
 .testimonial-section.fix.section-padding {
   background-image: url(/assets/img/testimonial/testimonial-1-bg.jpg);

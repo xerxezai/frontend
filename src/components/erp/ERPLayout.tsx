@@ -96,7 +96,7 @@ const ERPLayout = ({ children }: Props) => {
         </button>
       </aside>
 
-      {/* Main content area â€” offset by sidebar width on large screens */}
+      {/* Main content area — offset by sidebar width on large screens */}
       <div className="erp-main d-flex flex-column" style={{ minHeight: '100vh' }}>
 
         {/* Topbar */}

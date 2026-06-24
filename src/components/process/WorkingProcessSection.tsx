@@ -10,7 +10,7 @@
             </h2>
           </div>
           <p className="text-white fade-in">
-            XERXEZ follows a structured, outcome-driven delivery process â€” from discovery
+            XERXEZ follows a structured, outcome-driven delivery process — from discovery
             to deployment and beyond.
           </p>
         </div>
