@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
 
@@ -149,7 +149,7 @@ const Hero = () => (
               <i className="far fa-arrow-right" />
             </Link>
             <a
-              href="mailto:xerxez.in@gmail.com?subject=Enterprise ERP Enquiry"
+              href="mailto:info@xerxez.com?subject=Enterprise ERP Enquiry"
               style={{
                 background: "transparent",
                 color: C.white,
@@ -400,7 +400,7 @@ const ComparisonTable = () => {
           </div>
           <div className="col-md-6">
             <a
-              href="mailto:xerxez.in@gmail.com?subject=ERP Upgrade Enquiry"
+              href="mailto:info@xerxez.com?subject=ERP Upgrade Enquiry"
               style={{ display: "block", textAlign: "center", background: C.white, color: C.purple, padding: "13px 24px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: `2px solid ${C.purple}`, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}
             >
               Enquire About an ERP Upgrade
@@ -748,7 +748,7 @@ const CTASection = () => (
                 <i className="far fa-arrow-right" />
               </Link>
               <a
-                href="mailto:xerxez.in@gmail.com?subject=Enterprise ERP Sales Enquiry"
+                href="mailto:info@xerxez.com?subject=Enterprise ERP Sales Enquiry"
                 style={{ display: "block", textAlign: "center", background: "rgba(255,255,255,0.14)", color: C.white, padding: "14px 24px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "1px solid rgba(255,255,255,0.30)", textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}
               >
                 <i className="fas fa-envelope" style={{ marginRight: 10 }} />

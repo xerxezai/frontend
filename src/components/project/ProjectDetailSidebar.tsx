@@ -49,7 +49,7 @@ const ProjectDetailSidebar = () => {
             </div>
             <div className="content">
               <h5>Mail Us</h5>
-              <p>xerxez.in@gmail.com</p>
+              <p>info@xerxez.com</p>
             </div>
           </li>
           <li>

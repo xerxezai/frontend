@@ -83,7 +83,7 @@ const CoreAdvantageSection = ({ variant }: Props) => {
                     </div>
                     <div className="content">
                       <p>Mail Us</p>
-                      <h5>xerxez.in@gmail.com</h5>
+                      <h5>info@xerxez.com</h5>
                     </div>
                   </div>
                 </div>

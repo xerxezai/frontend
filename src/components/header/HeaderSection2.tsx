@@ -34,8 +34,12 @@ const HeaderSection2 = ({ variant }: Props) => {
               </li>
               <li className="top-divider">|</li>
               <li>
+                <i className="fas fa-phone-alt"></i>
+                <a href="tel:+971567867451">+971 56 786 7451</a>
+              </li>
+              <li>
                 <i className="fas fa-envelope"></i>
-                <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
+                <a href="mailto:info@xerxez.com">info@xerxez.com</a>
               </li>
               <li>
                 <i className="fas fa-globe"></i>
@@ -79,7 +83,7 @@ const HeaderSection2 = ({ variant }: Props) => {
                 </div>
                 <div className="link-btn d-none d-xl-flex align-items-center gap-2">
                   <i className="fas fa-envelope" style={{color: "var(--theme-color, #6c57d2)"}}></i>
-                  <a href="mailto:xerxez.in@gmail.com" style={{color: "#333", fontWeight: 500, textTransform: "none" as const}}>xerxez.in@gmail.com</a>
+                  <a href="mailto:info@xerxez.com" style={{color: "#333", fontWeight: 500, textTransform: "none" as const}}>info@xerxez.com</a>
                 </div>
                 <Link to="/contact" className="theme-btn">
                   Get Started

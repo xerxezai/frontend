@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import FooterBottomSection from "./FooterBottomSection";
 import Image from "../utils/Image";
 import NewsletterForm from "../forms/NewsletterForm";
@@ -67,7 +67,7 @@ const FooterSection2 = ({ variant }: Props) => {
                     <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
                       <i className="fab fa-github"></i>
                     </a>
-                    <a href="mailto:xerxez.in@gmail.com">
+                    <a href="mailto:info@xerxez.com">
                       <i className="fas fa-envelope"></i>
                     </a>
                   </div>
@@ -120,12 +120,23 @@ const FooterSection2 = ({ variant }: Props) => {
                 <ul className="footer-contect">
                   <li>
                     <div className="icon">
+                      <i className="fas fa-phone-alt"></i>
+                    </div>
+                    <div className="content">
+                      <h5>Phone</h5>
+                      <p>
+                        <a href="tel:+971567867451" className="text-white">+971 56 786 7451</a>
+                      </p>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="icon">
                       <i className="fas fa-envelope"></i>
                     </div>
                     <div className="content">
                       <h5>Email</h5>
                       <p>
-                        <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
+                        <a href="mailto:info@xerxez.com">info@xerxez.com</a>
                       </p>
                     </div>
                   </li>

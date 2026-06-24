@@ -58,8 +58,12 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                     Global — Remote-first
                   </li>
                   <li>
+                    <span>Phone:</span>
+                    <a href="tel:+971567867451">+971 56 786 7451</a>
+                  </li>
+                  <li>
                     <span>Email:</span>
-                    <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
+                    <a href="mailto:info@xerxez.com">info@xerxez.com</a>
                   </li>
                 </ul>
               </div>

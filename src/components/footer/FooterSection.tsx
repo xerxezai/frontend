@@ -104,8 +104,8 @@ const FooterSection = () => {
                     <div className="content">
                       <h5>Mail Us</h5>
                       <p>
-                        <a href="mailto:xerxez.in@gmail.com" className="text-white">
-                          xerxez.in@gmail.com
+                        <a href="mailto:info@xerxez.com" className="text-white">
+                          info@xerxez.com
                         </a>
                       </p>
                     </div>
