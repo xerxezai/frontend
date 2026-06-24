@@ -129,8 +129,8 @@ body {
   font-size: 16px;
   font-weight: normal;
   line-height: 30px;
-  color: $text;
-  background-color: $white;
+  color: rgba(255,255,255,0.72);
+  background-color: #0a0a1a;
   padding: 0;
   margin: 0;
   overflow-x: hidden;
@@ -167,7 +167,7 @@ h6 {
   font-family: "Outfit", sans-serif;
   margin: 0px;
   padding: 0;
-  color: $header;
+  color: #ffffff;
   transition: all 0.4s ease-in-out;
   font-weight: 400;
 }
@@ -211,7 +211,7 @@ a {
   text-decoration: none;
   outline: none !important;
   cursor: pointer;
-  color: $header;
+  color: rgba(255,255,255,0.85);
   transition: all 0.4s ease-in-out;
 }
 
@@ -11240,4 +11240,141 @@ h3.service-header-5 {
 }
 .mb-40 { margin-bottom: 40px; }
 .mb-50 { margin-bottom: 50px; }
+
+/* ═══════════════════════════════════════════════════════════
+   XERXEZ DARK THEME — Global overrides (applied last)
+   Fixes all white/cream section and card backgrounds site-wide
+═══════════════════════════════════════════════════════════ */
+
+/* ── Restore white text/headings inside white navbar / offcanvas ── */
+.mega-menu-wrapper h1, .mega-menu-wrapper h2, .mega-menu-wrapper h3,
+.mega-menu-wrapper h4, .mega-menu-wrapper h5, .mega-menu-wrapper h6,
+.mega-menu-wrapper a, .mega-menu-wrapper p, .mega-menu-wrapper span:not(.theme-btn),
+.header-1 .main-menu ul li a,
+.header-1 .main-menu ul li .sub-menu li a {
+  color: #003566;
+}
+.offcanvas__info h1, .offcanvas__info h2, .offcanvas__info h3,
+.offcanvas__info h4, .offcanvas__info h5, .offcanvas__info h6,
+.offcanvas__info p, .offcanvas__info li, .offcanvas__info a:not(.theme-btn),
+.offcanvas__info .offcanvas__contact-info,
+.offcanvas__info .contact-list li, .offcanvas__info .contact-list li span {
+  color: #003566 !important;
+}
+.offcanvas__info {
+  background: #fff !important;
+}
+
+/* ── Breadcrumb section — keep heading white on dark bg ── */
+.breadcrumb-section h1, .breadcrumb-section h2 { color: #fff; }
+
+/* ── Section backgrounds — remove all cream/warm/yellow ── */
+.about-section-2 { background-color: #0f0f2d !important; }
+.hero-2 { background-color: #0a0a1a !important; }
+.hero-3 { background-color: #0a0a1a !important; }
+
+/* ── Card items: service cards (cream/yellow/red variants) ── */
+.service-card-items,
+.service-card-items.bg-1,
+.service-card-items.bg-2,
+.service-card-items.bg-3 {
+  background: #0d0d1f !important;
+  border: 1px solid rgba(108,87,210,0.18) !important;
+}
+
+/* ── Pricing boxes ── */
+.pricing-box-items {
+  background: #0d0d1f !important;
+  border-color: rgba(108,87,210,0.2) !important;
+}
+.pricing-box-items .pricing-header h3,
+.pricing-box-items .pricing-header h2,
+.pricing-box-items .pricing-header h5,
+.pricing-box-items .pricing-list li { color: rgba(255,255,255,0.8); }
+
+/* ── Working process step boxes ── */
+.working-process-section-2 .icon-box-items-2 {
+  background: #0d0d1f !important;
+  border-color: rgba(108,87,210,0.18) !important;
+}
+.working-process-section-2 .icon-box-items-2 .title h4,
+.working-process-section-2 .icon-box-items-2 p { color: rgba(255,255,255,0.8); }
+
+/* ── About icon boxes and feature boxes ── */
+.about-feature-box-3 { background: #0d0d1f !important; }
+.about-wrapper-5 .about-content .about-list ul li { background-color: #0d0d1f !important; }
+.about-wrapper-2 .about-content .icon-box { background: #0d0d1f !important; }
+
+/* ── Team cards ── */
+.team-card-items, .team-items, .team-box-items { background: #0d0d1f !important; }
+.team-card-items h3, .team-card-items h4, .team-card-items p,
+.team-items h3, .team-items h4, .team-items p { color: rgba(255,255,255,0.8); }
+
+/* ── Blog / post cards ── */
+.blog-card-items, .blog-items, .blog-box-items { background: #0d0d1f !important; }
+.blog-card-items h3, .blog-card-items h4, .blog-card-items p,
+.blog-items h3, .blog-items h4, .blog-items p { color: rgba(255,255,255,0.8); }
+
+/* ── Project / portfolio cards ── */
+.project-card-items, .project-box-items, .project-items { background: #0d0d1f !important; }
+
+/* ── FAQ / Accordion ── */
+.faq-items .accordion-item {
+  background: #0d0d1f !important;
+  border-color: rgba(108,87,210,0.18) !important;
+}
+.faq-items .accordion-item .accordion-button {
+  background: #0d0d1f !important;
+  color: #fff !important;
+}
+.faq-items .accordion-item .accordion-button::after { filter: invert(1) brightness(2); }
+.faq-items .accordion-item .accordion-collapse .accordion-body,
+.faq-items.style-2 .accordion-item .accordion-body {
+  background: #0d0d1f !important;
+  color: rgba(255,255,255,0.7) !important;
+}
+
+/* ── Contact form fields ── */
+.contact-form .form-group input,
+.contact-form .form-group textarea,
+.contact-form .form-group select,
+.form-group input, .form-group textarea, .form-group select {
+  background: #0d0d1f !important;
+  border-color: rgba(108,87,210,0.25) !important;
+  color: #fff !important;
+}
+.form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+/* ── Choose-us / Core advantage section icon boxes ── */
+.choose-us-wrapper .choose-us-content .icon-box-items .icon-box .icon {
+  background: rgba(108,87,210,0.15) !important;
+}
+.choose-us-wrapper .choose-us-content .choose-us-card {
+  background: #0d0d1f !important;
+}
+
+/* ── Counter / stats section ── */
+.counter-section { background-color: #0f0f2d !important; }
+.counter-wrapper .counter-box-items h2,
+.counter-wrapper .counter-box-items h3,
+.counter-wrapper .counter-box-items p { color: rgba(255,255,255,0.85); }
+
+/* ── Brand section ── */
+.brand-section:not(.has-bg) { background: #0a0a1a !important; }
+
+/* ── Service detail / inner pages: section backgrounds ── */
+.service-detail-section, .service-detail-wrapper,
+.service-feature-section, .service-solve-section { background: #0a0a1a !important; }
+.service-card-items .icon i, .service-card-items h4, .service-card-items p { color: rgba(255,255,255,0.85) !important; }
+
+/* ── About page list items / content boxes ── */
+.about-list ul li, .about-content p { color: rgba(255,255,255,0.72); }
+
+/* ── Sidebar widgets ── */
+.widget-item, .widget-box, .sidebar-widget { background: #0d0d1f !important; }
+.widget-item h3, .widget-item h4, .sidebar-widget h3, .sidebar-widget h4 { color: #fff; }
+
+/* ── Preloader: keep white ── */
+.preloader, .preloader .loader, .preloader .loader-section,
+.preloader .loader-section .bg { background-color: #0a0a1a !important; }
 
