@@ -7610,22 +7610,23 @@ p.sticky-label {
 }
 .footer-widget-wrapper .single-footer-widget .list-area li {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
+  line-height: 1.4;
 }
 .footer-widget-wrapper .single-footer-widget .list-area li:not(:last-child) {
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 .footer-widget-wrapper .single-footer-widget .list-area li a {
   color: $white;
   position: relative;
-  padding-left: 20px;
+  padding-left: 16px;
 }
 .footer-widget-wrapper .single-footer-widget .list-area li a::before {
   position: absolute;
-  top: 8px;
+  top: 6px;
   left: 0;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   content: "";
   border-radius: 50%;
   background-color: $white;
@@ -7639,11 +7640,11 @@ p.sticky-label {
 }
 .footer-widget-wrapper .single-footer-widget .footer-contect li {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   align-items: center;
 }
 .footer-widget-wrapper .single-footer-widget .footer-contect li i {
-  font-size: 26px;
+  font-size: 18px;
   color: $theme-color-2;
 }
 .footer-widget-wrapper .single-footer-widget .footer-contect li .content h5 {
@@ -7656,7 +7657,7 @@ p.sticky-label {
   .single-footer-widget
   .footer-contect
   li:not(:last-child) {
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 .footer-widget-wrapper .single-footer-widget form {
   margin-top: 30px;
