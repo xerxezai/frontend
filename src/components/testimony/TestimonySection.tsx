@@ -59,19 +59,19 @@ const TestimonySection = () => {
                     />
                   </div>
                   <p>{item.quoteText}</p>
-                </div>
-                <div className="client-info">
-                  <div className="client-img">
-                    <Image
-                      src={item.clientImageUrl}
-                      alt="img"
-                      width={53}
-                      height={53}
-                    />
-                  </div>
-                  <div className="client-content">
-                    <h3>{item.clientName}</h3>
-                    <p>{item.clientTitle}</p>
+                  <div className="client-info" style={{ marginTop: 24 }}>
+                    <div className="client-img">
+                      <Image
+                        src={item.clientImageUrl}
+                        alt="img"
+                        width={53}
+                        height={53}
+                      />
+                    </div>
+                    <div className="client-content">
+                      <h3>{item.clientName}</h3>
+                      <p>{item.clientTitle}</p>
+                    </div>
                   </div>
                 </div>
               </div>
