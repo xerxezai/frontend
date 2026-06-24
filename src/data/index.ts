@@ -1,4 +1,4 @@
-﻿const aboutCompanyData = [
+const aboutCompanyData = [
   {
     id: 1,
     iconClass: "flaticon-video-marketing-1",
@@ -14,7 +14,7 @@
     iconStyleClass: "style-2",
     title: "Secure Cloud\nArchitecture",
     description:
-      "Our DevSecOps approach embeds security at every layer â€” from infrastructure to deployment â€” so you ship faster without compromising safety.",
+      "Our DevSecOps approach embeds security at every layer -- from infrastructure to deployment -- so you ship faster without compromising safety.",
     extraClass: "",
   },
   {
@@ -92,7 +92,7 @@ const blogMainPosts = [
     author: "XERXEZ Team",
     image: "assets/img/news/post-2.jpg",
     content:
-      "Generic software forces you to adapt your processes to the tool. Custom development does the opposite â€” and the long-term competitive advantage is substantial.",
+      "Generic software forces you to adapt your processes to the tool. Custom development does the opposite -- and the long-term competitive advantage is substantial.",
     category: "Software Development",
     tags: ["Software", "Development", "Enterprise"],
     comments: 9,
@@ -106,7 +106,7 @@ const blogMainPosts = [
     author: "XERXEZ Team",
     image: "assets/img/news/post-3.jpg",
     content:
-      "Technology alone does not drive transformation â€” people do. Explore how structured AI training programs accelerate adoption and maximize returns on your technology investments.",
+      "Technology alone does not drive transformation -- people do. Explore how structured AI training programs accelerate adoption and maximize returns on your technology investments.",
     category: "AI Training",
     tags: ["AI", "Training", "Workforce"],
     comments: 11,
@@ -344,13 +344,13 @@ const faqData = [
     id: 1,
     question: "1. What makes XERXEZ's AI-Powered ERP different from traditional ERP systems?",
     answer:
-      "XERXEZ's ERP is built AI-native â€” not AI-bolted-on. It uses machine learning to automate forecasting, detect anomalies, and surface actionable insights in real time, integrating with your existing cloud infrastructure and workflows.",
+      "XERXEZ's ERP is built AI-native -- not AI-bolted-on. It uses machine learning to automate forecasting, detect anomalies, and surface actionable insights in real time, integrating with your existing cloud infrastructure and workflows.",
   },
   {
     id: 2,
     question: "2. How does your DevSecOps approach differ from standard DevOps?",
     answer:
-      "We embed security controls, compliance checks, and threat modeling directly into the CI/CD pipeline â€” not as an afterthought. This means every code commit, container image, and infrastructure change is automatically scanned and validated before reaching production.",
+      "We embed security controls, compliance checks, and threat modeling directly into the CI/CD pipeline -- not as an afterthought. This means every code commit, container image, and infrastructure change is automatically scanned and validated before reaching production.",
   },
   {
     id: 3,
@@ -362,13 +362,13 @@ const faqData = [
     id: 4,
     question: "4. How long does a typical Software Development engagement take?",
     answer:
-      "Scope determines timeline. A focused MVP typically takes 8â€“12 weeks. Enterprise-grade platforms with integrations and compliance requirements range from 4â€“12 months. We use agile sprints with clear milestones so you have visibility at every stage.",
+      "Scope determines timeline. A focused MVP typically takes 8-12 weeks. Enterprise-grade platforms with integrations and compliance requirements range from 4-12 months. We use agile sprints with clear milestones so you have visibility at every stage.",
   },
   {
     id: 5,
     question: "5. What does your AI Training program cover?",
     answer:
-      "Our AI Training programs are tailored to your team's role â€” from executive AI literacy workshops to hands-on MLOps bootcamps for engineers. We cover LLMs, prompt engineering, model evaluation, responsible AI, and production deployment.",
+      "Our AI Training programs are tailored to your team's role -- from executive AI literacy workshops to hands-on MLOps bootcamps for engineers. We cover LLMs, prompt engineering, model evaluation, responsible AI, and production deployment.",
   },
 ];
 
@@ -759,13 +759,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-01.jpg",
     iconBgImg: "/assets/img/service/icon-bg-1.png",
     title: "AI Powered\nERP",
-    description:
-      "Intelligent enterprise resource planning with AI-driven forecasting, automated workflows, and real-time analytics across all business units.",
-    detailBody:
-      "XERXEZ AI Powered ERP replaces rigid legacy systems with an adaptive, intelligence-first platform. It continuously learns from your operational data to predict demand, flag anomalies, automate procurement, and surface actionable insights â€” across finance, HR, supply chain, and production in a single unified system. Our ERP modules are cloud-native, API-first, and built to integrate with your existing tools, letting you modernise incrementally without a big-bang migration.",
+    description: "Intelligent enterprise resource planning with AI-driven forecasting, automated workflows, and real-time analytics across all business units.",
+    detailBody: "XERXEZ AI Powered ERP replaces rigid legacy systems with an adaptive, intelligence-first platform. It continuously learns from your operational data to predict demand, flag anomalies, automate procurement, and surface actionable insights -- across finance, HR, supply chain, and production in a single unified system. Our ERP modules are cloud-native, API-first, and built to integrate with your existing tools, letting you modernise incrementally without a big-bang migration.",
     slug: "ai-powered-erp",
-    width: 87,
-    height: 84,
+    width: 87, height: 84,
+    highlights: ["AI demand forecasting", "Automated procurement", "Real-time dashboards", "Multi-module integration", "Cloud-native & API-first", "Legacy system migration support"],
+    keyFacts: [
+      { icon: "far fa-brain", title: "AI Demand Forecasting", desc: "Predict inventory, staffing, and cash-flow requirements weeks in advance using machine learning trained on your own operational data." },
+      { icon: "far fa-cogs", title: "Automated Workflows", desc: "Replace manual approvals, data entry, and reconciliation with intelligent automation that runs 24/7 without human intervention." },
+      { icon: "far fa-chart-line", title: "Real-Time Analytics", desc: "Live dashboards and anomaly alerts give leadership instant visibility into every business unit -- from warehouse stock to monthly P&L." },
+      { icon: "far fa-plug", title: "API-First Integration", desc: "Connect your ERP to any third-party tool -- CRM, e-commerce, logistics, banking -- through a secure, documented REST API layer." },
+    ],
+    faqs: [
+      { question: "How long does an ERP implementation take?", answer: "A typical XERXEZ ERP rollout takes 8-16 weeks depending on scope. We use a phased approach -- core modules first, then extensions -- so you see value in weeks, not years." },
+      { question: "Can it integrate with our existing tools?", answer: "Yes. Our API-first architecture connects to Salesforce, SAP, QuickBooks, Shopify, and hundreds of other platforms out of the box, with custom connectors available for proprietary systems." },
+      { question: "Is the ERP cloud-based or on-premise?", answer: "We offer cloud-native (AWS, Azure, GCP), hybrid, and on-premise deployments. Most clients choose cloud for scalability, but we support all models including air-gapped installations for regulated industries." },
+      { question: "How does the AI forecasting work?", answer: "Our ML models are trained on your historical transaction data. They continuously learn from new patterns and automatically retrain monthly, improving accuracy over time without manual tuning." },
+      { question: "What support is included post-launch?", answer: "All ERP deployments include 90 days of hypercare support, SLA-backed response times, and access to our customer success team. Ongoing managed support packages are available." },
+    ],
   },
   {
     id: 2,
@@ -773,13 +784,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-02.jpg",
     iconBgImg: "/assets/img/service/icon-bg-2.png",
     title: "DevSecOps /\nMLOps Solutions",
-    description:
-      "Security-first CI/CD pipelines and production ML infrastructure that let teams ship faster without compromising compliance or reliability.",
-    detailBody:
-      "XERXEZ DevSecOps practice embeds security controls directly into your CI/CD pipeline â€” automated SAST, DAST, dependency scanning, and policy-as-code run on every commit, so vulnerabilities are caught before they reach production. Our MLOps layer adds model versioning, experiment tracking, drift detection, and automated retraining to your machine learning workflows. The result is faster release cycles, lower breach risk, and ML models that stay accurate and compliant in production.",
+    description: "Security-first CI/CD pipelines and production ML infrastructure that let teams ship faster without compromising compliance or reliability.",
+    detailBody: "XERXEZ DevSecOps practice embeds security controls directly into your CI/CD pipeline -- automated SAST, DAST, dependency scanning, and policy-as-code run on every commit, so vulnerabilities are caught before they reach production. Our MLOps layer adds model versioning, experiment tracking, drift detection, and automated retraining to your machine learning workflows. The result is faster release cycles, lower breach risk, and ML models that stay accurate and compliant in production.",
     slug: "devsecops-mlops-solutions",
-    width: 85,
-    height: 88,
+    width: 85, height: 88,
+    highlights: ["Automated SAST/DAST scanning", "Policy-as-code enforcement", "ML model versioning & registry", "Drift detection & auto-retraining", "Compliance reporting (SOC2, ISO27001)", "Zero-downtime deployments"],
+    keyFacts: [
+      { icon: "far fa-shield-alt", title: "Security at Every Commit", desc: "SAST, DAST, and dependency vulnerability scanning run automatically on every pull request, blocking insecure code before it merges." },
+      { icon: "far fa-rocket", title: "Faster Release Cycles", desc: "Automated testing, infrastructure-as-code, and blue-green deployments eliminate release bottlenecks and cut deployment time by up to 80%." },
+      { icon: "far fa-flask", title: "MLOps Model Lifecycle", desc: "Experiment tracking, model registry, canary deployments, and drift detection keep your ML models accurate and auditable in production." },
+      { icon: "far fa-clipboard-check", title: "Compliance Automation", desc: "Automated evidence collection, audit trails, and policy-as-code controls make SOC 2, ISO 27001, and GDPR compliance continuous -- not periodic." },
+    ],
+    faqs: [
+      { question: "What CI/CD tools do you support?", answer: "We work with GitHub Actions, GitLab CI, Jenkins, CircleCI, Azure DevOps, and ArgoCD. We can optimise your existing stack or recommend the best fit for your team size and cloud provider." },
+      { question: "How do you handle ML model drift?", answer: "We set statistical drift thresholds on your model's input distributions and output accuracy. When drift is detected, automated retraining pipelines trigger and the new model is promoted through staging before reaching production." },
+      { question: "Can you help us achieve SOC 2 compliance?", answer: "Yes. Our DevSecOps practice includes automated evidence collection, access control auditing, and continuous monitoring dashboards specifically designed to satisfy SOC 2 Type II requirements." },
+      { question: "Do we need to rebuild our existing pipelines?", answer: "Usually not. We assess your current pipelines and add security controls incrementally -- you keep what works and we fill the gaps without disrupting ongoing releases." },
+      { question: "What's the difference between DevSecOps and MLOps?", answer: "DevSecOps focuses on securing your software delivery pipeline. MLOps extends those principles to machine learning -- versioning datasets and models, tracking experiments, and automating the retraining and deployment of ML models." },
+    ],
   },
   {
     id: 3,
@@ -787,13 +809,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-03.jpg",
     iconBgImg: "/assets/img/service/icon-bg-3.png",
     title: "Cloud Service\nand Storage",
-    description:
-      "Multi-cloud architecture, cost-optimized storage tiers, and hybrid cloud integration designed for data-intensive enterprise workloads.",
-    detailBody:
-      "XERXEZ designs and manages cloud infrastructure across AWS, Azure, and GCP â€” architected for resilience, cost efficiency, and compliance from day one. We implement intelligent storage tiering that automatically moves data between hot, warm, and cold tiers based on access patterns, cutting storage costs without sacrificing performance. Our hybrid-cloud blueprints let you keep sensitive workloads on-premises while bursting compute to the cloud, giving you the best of both worlds.",
+    description: "Multi-cloud architecture, cost-optimized storage tiers, and hybrid cloud integration designed for data-intensive enterprise workloads.",
+    detailBody: "XERXEZ designs and manages cloud infrastructure across AWS, Azure, and GCP -- architected for resilience, cost efficiency, and compliance from day one. We implement intelligent storage tiering that automatically moves data between hot, warm, and cold tiers based on access patterns, cutting storage costs without sacrificing performance. Our hybrid-cloud blueprints let you keep sensitive workloads on-premises while bursting compute to the cloud, giving you the best of both worlds.",
     slug: "cloud-service-storage",
-    width: 87,
-    height: 84,
+    width: 87, height: 84,
+    highlights: ["AWS, Azure & GCP multi-cloud", "Intelligent storage tiering", "Hybrid cloud architecture", "FinOps cost optimisation", "Disaster recovery & failover", "99.99% uptime SLA"],
+    keyFacts: [
+      { icon: "far fa-cloud", title: "Multi-Cloud Flexibility", desc: "We architect across AWS, Azure, and GCP so you're never locked into one provider -- and we actively optimise workload placement for cost and performance." },
+      { icon: "far fa-layer-group", title: "Intelligent Storage Tiering", desc: "Automated policies move data between hot, warm, and cold storage tiers based on access frequency -- reducing storage costs by 40-70% without performance impact." },
+      { icon: "far fa-shield-alt", title: "Built-in Resilience", desc: "Multi-region active-active architectures, automated failover, and daily encrypted backups ensure your data and applications survive any single point of failure." },
+      { icon: "far fa-dollar-sign", title: "FinOps Cost Control", desc: "Real-time cost dashboards, reserved instance planning, and rightsizing recommendations keep your cloud spend predictable and continuously optimised." },
+    ],
+    faqs: [
+      { question: "Which cloud providers do you work with?", answer: "We are certified on AWS, Microsoft Azure, and Google Cloud Platform. We design multi-cloud and hybrid architectures that span all three, or optimise for a single provider if that's your preference." },
+      { question: "How much can we save on storage costs?", answer: "Most clients reduce storage costs by 40-70% within 90 days through intelligent tiering, deduplication, and lifecycle policies. We provide a free cloud cost assessment to estimate your specific savings." },
+      { question: "Can you migrate our on-premise data centre to the cloud?", answer: "Yes. We handle the full migration lifecycle -- discovery, dependency mapping, wave planning, migration execution, and post-migration optimisation -- with zero data loss and minimal downtime." },
+      { question: "What uptime SLA do you offer?", answer: "Our managed cloud environments carry a 99.99% uptime SLA for production workloads, backed by multi-region redundancy and 24/7 incident response." },
+      { question: "How do you handle data sovereignty and compliance?", answer: "We configure data residency controls, encryption at rest and in transit, and audit logging to meet GDPR, HIPAA, PCI-DSS, and regional data sovereignty requirements." },
+    ],
   },
   {
     id: 4,
@@ -801,13 +834,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-04.jpg",
     iconBgImg: "/assets/img/service/icon-bg-4.png",
     title: "Software\nDevelopment",
-    description:
-      "Custom web, mobile, and enterprise applications built with modern architectures â€” scalable, secure, and delivered on time.",
-    detailBody:
-      "XERXEZ builds custom software that solves real business problems â€” from internal enterprise platforms to customer-facing SaaS products. Our engineering teams work in tight agile sprints with continuous deployment, automated testing, and full observability baked in from the start. We specialise in API-first backends, React and mobile frontends, and microservices architectures that scale horizontally. Every line of code is reviewed for security, performance, and maintainability â€” delivered with full IP transfer and transparent documentation.",
+    description: "Custom web, mobile, and enterprise applications built with modern architectures -- scalable, secure, and delivered on time.",
+    detailBody: "XERXEZ builds custom software that solves real business problems -- from internal enterprise platforms to customer-facing SaaS products. Our engineering teams work in tight agile sprints with continuous deployment, automated testing, and full observability baked in from the start. We specialise in API-first backends, React and mobile frontends, and microservices architectures that scale horizontally. Every line of code is reviewed for security, performance, and maintainability -- delivered with full IP transfer and transparent documentation.",
     slug: "software-development",
-    width: 85,
-    height: 88,
+    width: 85, height: 88,
+    highlights: ["Agile sprint delivery", "API-first backend architecture", "React & mobile frontends", "Microservices & event-driven design", "Automated testing (unit/integration/E2E)", "Full IP transfer & documentation"],
+    keyFacts: [
+      { icon: "far fa-code", title: "Agile Delivery", desc: "Two-week sprints with working software every cycle. You see progress, give feedback, and adjust scope without blowing the budget or timeline." },
+      { icon: "far fa-server", title: "Scalable Architecture", desc: "We build on microservices and event-driven patterns so your application scales horizontally to millions of users without an expensive rebuild." },
+      { icon: "far fa-vial", title: "Automated Quality Gates", desc: "Unit, integration, and end-to-end tests run on every commit. Coverage thresholds and performance benchmarks block regressions before they reach production." },
+      { icon: "far fa-lock", title: "Security-First Code", desc: "OWASP Top 10 controls, dependency auditing, and penetration testing are standard -- not optional extras -- on every project we deliver." },
+    ],
+    faqs: [
+      { question: "What technologies do you develop with?", answer: "Our primary stack is React / Next.js for frontends, Python (Django/FastAPI) and Node.js for backends, PostgreSQL and MongoDB for databases, and Docker/Kubernetes for deployment. We adapt to your existing stack when needed." },
+      { question: "How do you handle project requirements?", answer: "We start with a discovery workshop to map user journeys, define acceptance criteria, and prioritise features by business value. This becomes the product backlog that drives every sprint." },
+      { question: "Do you offer fixed-price or time-and-materials contracts?", answer: "Both. Fixed-price suits well-defined projects; time-and-materials works better for evolving products. We recommend the model that best protects your budget given the project's clarity of requirements." },
+      { question: "Who owns the code after delivery?", answer: "You do. Full IP transfer, source code, documentation, and deployment runbooks are handed over at project completion. No lock-in, no ongoing licensing fees." },
+      { question: "Can you take over an existing codebase?", answer: "Yes. We conduct a technical audit first to identify debt, security issues, and scalability constraints, then create a remediation plan before adding new features." },
+    ],
   },
   {
     id: 5,
@@ -815,13 +859,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-05.jpg",
     iconBgImg: "/assets/img/service/icon-bg-5.png",
     title: "Software\nConsulting",
-    description:
-      "Strategic technology consulting, architecture reviews, and digital transformation roadmaps tailored to your business objectives.",
-    detailBody:
-      "XERXEZ consulting engagements start with a deep-dive into your existing technology landscape, business goals, and competitive pressures. We deliver actionable architecture recommendations, vendor-neutral technology selection, and detailed transformation roadmaps that your teams can execute confidently. Whether you need a one-week architecture review or a multi-month embedded CTO engagement, our consultants bring hands-on experience from delivering complex enterprise systems across healthcare, fintech, logistics, and manufacturing.",
+    description: "Strategic technology consulting, architecture reviews, and digital transformation roadmaps tailored to your business objectives.",
+    detailBody: "XERXEZ consulting engagements start with a deep-dive into your existing technology landscape, business goals, and competitive pressures. We deliver actionable architecture recommendations, vendor-neutral technology selection, and detailed transformation roadmaps that your teams can execute confidently. Whether you need a one-week architecture review or a multi-month embedded CTO engagement, our consultants bring hands-on experience from delivering complex enterprise systems across healthcare, fintech, logistics, and manufacturing.",
     slug: "software-consulting",
-    width: 85,
-    height: 87,
+    width: 85, height: 87,
+    highlights: ["Architecture & code reviews", "Vendor-neutral technology selection", "Digital transformation roadmaps", "Embedded CTO & fractional leadership", "Team structure & process optimisation", "Due diligence for M&A tech assessments"],
+    keyFacts: [
+      { icon: "far fa-map", title: "Transformation Roadmaps", desc: "We translate business goals into a sequenced technology roadmap with clear milestones, investment requirements, and measurable outcomes for each phase." },
+      { icon: "far fa-balance-scale", title: "Vendor-Neutral Advice", desc: "We have no vendor partnerships or referral arrangements -- our recommendations are driven entirely by what's right for your use case and budget." },
+      { icon: "far fa-user-tie", title: "Embedded CTO Service", desc: "For companies without a technical co-founder or CTO, we provide a fractional technical leader who attends board meetings, hires engineers, and owns the technology strategy." },
+      { icon: "far fa-search", title: "Architecture Reviews", desc: "Our senior architects audit your current system for scalability bottlenecks, security gaps, technical debt, and single points of failure -- delivering a prioritised remediation plan." },
+    ],
+    faqs: [
+      { question: "What does a consulting engagement look like?", answer: "Typically it starts with a 2-day discovery workshop, followed by a written findings report and roadmap. Larger engagements include weekly check-ins, architecture decision records, and executive briefings." },
+      { question: "Do you offer fractional CTO services?", answer: "Yes. Our fractional CTO service provides a senior technology leader for 1-3 days per week -- attending board meetings, driving the hiring plan, setting engineering standards, and owning the technical strategy." },
+      { question: "How do you handle confidentiality?", answer: "All consulting engagements are covered by an NDA before any discussions begin. Client data and proprietary information is never shared or used for other engagements." },
+      { question: "Can you review our technology for an M&A transaction?", answer: "Yes. We conduct technical due diligence for acquirers and sellers -- assessing code quality, architecture, team capability, and IP ownership risks within tight deal timelines." },
+      { question: "What industries do your consultants have experience in?", answer: "Our consultants have delivered projects across healthcare, fintech, logistics, manufacturing, retail, and professional services -- bringing cross-industry pattern recognition to every engagement." },
+    ],
   },
   {
     id: 6,
@@ -829,13 +884,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-06.jpg",
     iconBgImg: "/assets/img/service/icon-bg-6.png",
     title: "AI\nTraining",
-    description:
-      "Hands-on AI and MLOps training programs for engineering teams and executive stakeholders â€” from AI literacy to LLM deployment.",
-    detailBody:
-      "XERXEZ AI Training programmes are designed to close the skills gap between your ambitions and your team's current capabilities. We offer structured learning paths from AI literacy for business leaders, through applied machine learning for data scientists, to advanced LLM fine-tuning and MLOps certification for engineers. All programmes combine live instructor-led sessions with hands-on labs on your own data and cloud environment, so learning transfers directly to production work rather than staying theoretical.",
+    description: "Hands-on AI and MLOps training programs for engineering teams and executive stakeholders -- from AI literacy to LLM deployment.",
+    detailBody: "XERXEZ AI Training programmes are designed to close the skills gap between your ambitions and your team's current capabilities. We offer structured learning paths from AI literacy for business leaders, through applied machine learning for data scientists, to advanced LLM fine-tuning and MLOps certification for engineers. All programmes combine live instructor-led sessions with hands-on labs on your own data and cloud environment, so learning transfers directly to production work rather than staying theoretical.",
     slug: "ai-training",
-    width: 87,
-    height: 85,
+    width: 87, height: 85,
+    highlights: ["AI literacy for executives", "Applied ML for data scientists", "LLM fine-tuning & RAG workshops", "MLOps certification path", "Hands-on labs on your own data", "Custom curriculum for your tech stack"],
+    keyFacts: [
+      { icon: "far fa-graduation-cap", title: "Structured Learning Paths", desc: "From executive AI literacy to advanced LLM engineering -- our curriculum ladders from awareness to production capability in a logical, measurable progression." },
+      { icon: "far fa-laptop-code", title: "Hands-On Labs", desc: "Every session includes practical labs on real datasets in your cloud environment. Participants leave with working code and deployable models, not just slides." },
+      { icon: "far fa-certificate", title: "MLOps Certification", desc: "Engineers who complete our MLOps track receive a XERXEZ certification covering model lifecycle management, drift monitoring, and production deployment patterns." },
+      { icon: "far fa-users", title: "Custom Curriculum", desc: "We tailor content to your industry, tech stack, and team's current skill level -- whether you're starting from zero or upskilling an experienced data science team." },
+    ],
+    faqs: [
+      { question: "Who are the training programmes designed for?", answer: "We offer separate tracks for business stakeholders (AI strategy and literacy), data scientists (applied ML and model building), and engineers (MLOps, LLM deployment, and production AI systems)." },
+      { question: "Are the labs on our own data?", answer: "Yes. We work with sanitised versions of your real data where possible, so the learning is immediately relevant to your actual business problems rather than generic toy datasets." },
+      { question: "How long do the programmes run?", answer: "Programmes range from a 1-day executive AI workshop to a 12-week MLOps certification track. We design the schedule around your team's capacity and delivery deadlines." },
+      { question: "Can you train remote or distributed teams?", answer: "Absolutely. All programmes are available in-person, live virtual, or a hybrid blend. We provide recorded sessions and lab environments so participants in different time zones can engage flexibly." },
+      { question: "Do you offer ongoing support after training?", answer: "Yes. Training graduates get access to a private Slack community, monthly Q&A calls with XERXEZ engineers, and discounted follow-on workshops for 12 months after programme completion." },
+    ],
   },
   {
     id: 7,
@@ -843,13 +909,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-07.jpg",
     iconBgImg: "/assets/img/service/icon-bg-7.png",
     title: "Quantum\nComputing",
-    description:
-      "Quantum-ready architecture assessments, algorithm development, and hybrid quantum-classical solutions to prepare your enterprise for the next era of computing.",
-    detailBody:
-      "XERXEZ Quantum Computing practice bridges today's classical infrastructure with tomorrow's quantum advantage. We start with a quantum readiness assessment â€” identifying which of your computational problems (optimisation, simulation, cryptography, ML) will benefit most from quantum acceleration. Our engineers then design hybrid quantum-classical pipelines using leading platforms such as IBM Quantum, Amazon Braket, and Azure Quantum, so you can begin capturing quantum speedups on real workloads without waiting for fault-tolerant hardware. We also future-proof your security posture with post-quantum cryptography migrations to protect sensitive data against quantum-enabled attacks before they arrive.",
+    description: "Quantum-ready architecture assessments, algorithm development, and hybrid quantum-classical solutions for the next era of computing.",
+    detailBody: "XERXEZ Quantum Computing practice bridges today's classical infrastructure with tomorrow's quantum advantage. We start with a quantum readiness assessment -- identifying which of your computational problems (optimisation, simulation, cryptography, ML) will benefit most from quantum acceleration. Our engineers then design hybrid quantum-classical pipelines using IBM Quantum, Amazon Braket, and Azure Quantum, so you can capture quantum speedups on real workloads without waiting for fault-tolerant hardware.",
     slug: "quantum-computing",
-    width: 87,
-    height: 84,
+    width: 87, height: 84,
+    highlights: ["Quantum readiness assessment", "Hybrid quantum-classical pipelines", "IBM Quantum, Braket, Azure Quantum", "Post-quantum cryptography migration", "Quantum optimisation algorithms", "Research partnerships & POCs"],
+    keyFacts: [
+      { icon: "far fa-atom", title: "Quantum Readiness Assessment", desc: "We map your computational workloads -- optimisation, simulation, cryptography, ML -- and identify which problems will achieve the greatest speedup from quantum acceleration." },
+      { icon: "far fa-project-diagram", title: "Hybrid Pipelines", desc: "Today's quantum hardware works best as an accelerator alongside classical compute. We design pipelines that intelligently offload suitable tasks to quantum processors as hardware matures." },
+      { icon: "far fa-lock", title: "Post-Quantum Cryptography", desc: "We migrate your encryption infrastructure to NIST-approved post-quantum algorithms before quantum computers make current standards obsolete -- protecting your data for decades ahead." },
+      { icon: "far fa-flask", title: "Algorithm Development", desc: "Our quantum engineers develop and benchmark custom quantum algorithms for your specific optimisation, simulation, or machine learning problems on real quantum hardware." },
+    ],
+    faqs: [
+      { question: "Is quantum computing practical for businesses today?", answer: "For specific problem types -- combinatorial optimisation, molecular simulation, financial modelling -- quantum advantage is achievable today on NISQ hardware. For others, preparing now ensures you capture the advantage as hardware scales." },
+      { question: "Which quantum platforms do you use?", answer: "We work with IBM Quantum (Qiskit), Amazon Braket, Azure Quantum, and IonQ. Platform selection depends on your problem type, qubit requirements, and error rate tolerance." },
+      { question: "What is post-quantum cryptography and do I need it?", answer: "Post-quantum cryptography uses algorithms that resist attacks from quantum computers. Any organisation storing sensitive data that must remain confidential for 10+ years should begin migrating now -- quantum-capable hardware will arrive within that window." },
+      { question: "How do we start with quantum computing?", answer: "We recommend starting with a 2-week quantum readiness assessment. We analyse your computational workloads, identify the highest-value quantum use cases, and deliver a prioritised roadmap with expected timelines and ROI estimates." },
+      { question: "Do we need quantum expertise in-house?", answer: "Not initially. XERXEZ provides all quantum engineering expertise for early POCs and pilots. We include knowledge transfer and can upskill your team as quantum use cases mature into production." },
+    ],
   },
   {
     id: 8,
@@ -857,13 +934,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-08.jpg",
     iconBgImg: "/assets/img/service/icon-bg-8.png",
     title: "Mobile\nApplication",
-    description:
-      "Cross-platform and native mobile applications for iOS and Android â€” built for performance, security, and seamless enterprise integration.",
-    detailBody:
-      "XERXEZ builds mobile applications that work as the front line of your enterprise operations. Whether you need a customer-facing iOS and Android app, an internal field-service tool, or a data-collection platform for remote teams, we design and engineer it from the ground up with enterprise-grade security, offline capability, and deep backend integration. We work in React Native for maximum code reuse and in Swift/Kotlin for platform-specific performance â€” choosing the right stack for your use case rather than a one-size-fits-all approach. Every app we ship goes through rigorous QA, accessibility review, and App Store / Play Store deployment support.",
+    description: "Cross-platform and native mobile applications for iOS and Android -- built for performance, security, and seamless enterprise integration.",
+    detailBody: "XERXEZ builds mobile applications that work as the front line of your enterprise operations. Whether you need a customer-facing iOS and Android app, an internal field-service tool, or a data-collection platform for remote teams, we design and engineer it from the ground up with enterprise-grade security, offline capability, and deep backend integration. We work in React Native for maximum code reuse and Swift/Kotlin for platform-specific performance.",
     slug: "mobile-application",
-    width: 87,
-    height: 84,
+    width: 87, height: 84,
+    highlights: ["React Native cross-platform", "Swift (iOS) & Kotlin (Android) native", "Offline-first architecture", "Push notifications & deep linking", "App Store & Play Store submission", "MDM & enterprise device management"],
+    keyFacts: [
+      { icon: "far fa-mobile-alt", title: "Cross-Platform Efficiency", desc: "React Native delivers native-quality performance on both iOS and Android from a single codebase -- cutting development time by up to 50% without sacrificing user experience." },
+      { icon: "far fa-wifi-slash", title: "Offline-First Architecture", desc: "Our apps work without internet connectivity. Data syncs automatically when connection is restored, making them reliable for field teams in remote or low-connectivity environments." },
+      { icon: "far fa-bell", title: "Push & In-App Notifications", desc: "Personalised push notifications, deep linking, and in-app messaging keep users engaged and drive the actions that matter -- purchases, approvals, alerts." },
+      { icon: "far fa-shield-alt", title: "Enterprise Security", desc: "Biometric authentication, certificate pinning, data encryption at rest, and MDM compatibility meet the security requirements of regulated industries including healthcare and finance." },
+    ],
+    faqs: [
+      { question: "Should we build native or cross-platform?", answer: "For most enterprise use cases, React Native delivers an excellent user experience at significantly lower cost. We recommend native (Swift/Kotlin) only when you need platform-specific hardware access or maximum GPU performance." },
+      { question: "Do you handle App Store and Play Store submissions?", answer: "Yes. We manage the full submission process -- app signing, metadata, screenshots, compliance review, and release scheduling -- for both Apple App Store and Google Play Store." },
+      { question: "Can the app work offline?", answer: "Yes. We design offline-first architectures with local SQLite or Realm databases. Changes sync to the backend automatically when connectivity is restored, with conflict resolution logic built in." },
+      { question: "How do you handle mobile app security?", answer: "We implement OWASP Mobile Top 10 controls as standard -- certificate pinning, secure local storage, biometric authentication, jailbreak/root detection, and code obfuscation." },
+      { question: "Can you integrate with our existing backend systems?", answer: "Absolutely. Our mobile apps connect to any REST or GraphQL API, and we build the necessary API gateway and authentication layer if your backend doesn't currently expose a mobile-friendly interface." },
+    ],
   },
   {
     id: 9,
@@ -871,13 +959,24 @@ const services = [
     detailImg: "/assets/img/service/service-details-09.jpg",
     iconBgImg: "/assets/img/service/icon-bg-1.png",
     title: "Web & Mobile\nHosting",
-    description:
-      "Managed hosting for web and mobile backends â€” high-availability infrastructure, global CDN, auto-scaling, and 24/7 monitoring included.",
-    detailBody:
-      "XERXEZ Web & Mobile Hosting removes the operational burden of running your digital products in production. We provision and manage fully redundant hosting environments on AWS, Azure, or GCP â€” with load balancing, auto-scaling, DDoS protection, SSL management, and daily backups as standard. Our global CDN integration ensures fast load times for users worldwide, while our real-time monitoring and alerting stack catches issues before they impact your customers. For mobile backends we deploy and manage API gateways, push notification services, and database clusters optimised for mobile traffic patterns. All hosting plans include 24/7 on-call support and a 99.9% uptime SLA.",
+    description: "Managed hosting for web and mobile backends -- high-availability infrastructure, global CDN, auto-scaling, and 24/7 monitoring included.",
+    detailBody: "XERXEZ Web & Mobile Hosting removes the operational burden of running your digital products in production. We provision and manage fully redundant hosting environments on AWS, Azure, or GCP -- with load balancing, auto-scaling, DDoS protection, SSL management, and daily backups as standard. Our global CDN integration ensures fast load times for users worldwide, while our real-time monitoring and alerting stack catches issues before they impact your customers.",
     slug: "web-mobile-hosting",
-    width: 87,
-    height: 84,
+    width: 87, height: 84,
+    highlights: ["AWS, Azure, GCP managed hosting", "Global CDN integration", "Auto-scaling & load balancing", "DDoS protection & WAF", "24/7 monitoring & alerting", "99.9% uptime SLA with daily backups"],
+    keyFacts: [
+      { icon: "far fa-globe", title: "Global CDN Delivery", desc: "Static assets and dynamic content are served from edge nodes closest to each user -- delivering sub-second load times for audiences worldwide without infrastructure overhead." },
+      { icon: "far fa-expand-arrows-alt", title: "Auto-Scaling", desc: "Traffic spikes are handled automatically. Our infrastructure scales out during peak demand and scales in during quiet periods -- so you pay for what you use, not peak capacity 24/7." },
+      { icon: "far fa-eye", title: "24/7 Monitoring", desc: "Real-time alerting, synthetic monitoring, and on-call escalation mean issues are detected and resolved -- often before your users notice anything is wrong." },
+      { icon: "far fa-database", title: "Managed Backups", desc: "Automated daily backups with point-in-time recovery ensure your data is always recoverable. We test restores regularly so you can trust the backup when you need it." },
+    ],
+    faqs: [
+      { question: "What hosting environments do you manage?", answer: "We manage web application hosting, API backends, database clusters, static sites, and mobile backend-as-a-service environments across AWS, Azure, and GCP." },
+      { question: "What is included in the 99.9% uptime SLA?", answer: "The SLA covers availability of your application layer. It's backed by multi-AZ deployments, automated health checks, and failover -- with financial credits if we fall below the threshold." },
+      { question: "Do you provide DDoS protection?", answer: "Yes. All managed hosting plans include network-level DDoS mitigation and a Web Application Firewall (WAF) with OWASP ruleset to protect against application-layer attacks." },
+      { question: "Can you migrate our existing hosting to your platform?", answer: "Yes. We handle the full migration -- DNS cutover planning, zero-downtime deployment, data migration, and post-cutover monitoring -- typically completed over a single maintenance window." },
+      { question: "How does pricing work for hosting?", answer: "We offer monthly retainer pricing based on your resource requirements. This includes infrastructure costs, management fees, and support. We provide cost estimates before any commitment." },
+    ],
   },
 ];
 
@@ -933,7 +1032,7 @@ const serviceKeyFacts = [
     id: 1,
     icon: "far fa-check-circle",
     title: "AI-Native Architecture",
-    desc: "Every solution we build is designed AI-first â€” with machine learning, automation, and intelligent analytics as core pillars, not add-ons.",
+    desc: "Every solution we build is designed AI-first -- with machine learning, automation, and intelligent analytics as core pillars, not add-ons.",
   },
   {
     id: 2,
@@ -945,7 +1044,7 @@ const serviceKeyFacts = [
     id: 3,
     icon: "far fa-check-circle",
     title: "Cloud-Agnostic Delivery",
-    desc: "We architect for AWS, Azure, and GCP equally â€” giving you flexibility, preventing lock-in, and optimizing costs across providers.",
+    desc: "We architect for AWS, Azure, and GCP equally -- giving you flexibility, preventing lock-in, and optimizing costs across providers.",
   },
   {
     id: 4,
@@ -1110,7 +1209,7 @@ const workSteps = [
     number: "02",
     title: "Design & Architect",
     description:
-      "Our architects design scalable, secure solutions tailored to your requirements â€” cloud, AI, ERP, or full-stack, with a clear delivery roadmap.",
+      "Our architects design scalable, secure solutions tailored to your requirements -- cloud, AI, ERP, or full-stack, with a clear delivery roadmap.",
   },
   {
     number: "03",
@@ -1147,7 +1246,7 @@ const workingProcessData = [
     iconClass: "flaticon-keyword",
     iconStyleClass: "style-4",
     title: "Optimise",
-    description: "Monitor, fine-tune, and continuously improve â€” performance, cost, security, and AI model accuracy.",
+    description: "Monitor, fine-tune, and continuously improve -- performance, cost, security, and AI model accuracy.",
   },
 ];
 
