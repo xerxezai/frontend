@@ -10,10 +10,11 @@ const CtaSection2 = () => {
             <div className="col-lg-6">
               <div className="cta-support-img">
                 <Image
-                  src="assets/img/cta/cta-left.png"
+                  src="assets/img/about/about-company-image.jpg"
                   alt="XERXEZ enterprise support"
                   width={586}
                   height={485}
+                  style={{ borderRadius: 16, objectFit: "cover" }}
                 />
               </div>
             </div>

@@ -1064,7 +1064,7 @@ const testimonialData = [
     clientImageUrl: "assets/img/testimonial/client-info-01.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "William Smith",
-    clientTitle: "CTO, Manufacturing Enterprise",
+    clientTitle: "IT Director, Healthcare Group",
   },
   {
     id: 2,
@@ -1075,7 +1075,7 @@ const testimonialData = [
     clientImageUrl: "assets/img/testimonial/client-info-02.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "Jane Doe",
-    clientTitle: "VP Engineering, FinTech Scale-up",
+    clientTitle: "Operations Head, Logistics Company",
   },
   {
     id: 3,
@@ -1086,7 +1086,7 @@ const testimonialData = [
     clientImageUrl: "assets/img/testimonial/client-info-03.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "Alex Johnson",
-    clientTitle: "Head of Data Science, Retail Group",
+    clientTitle: "Data Science Director, Retail Enterprise",
   },
   {
     id: 4,
@@ -1096,8 +1096,8 @@ const testimonialData = [
       '"XERXEZ\'s cloud migration reduced our infrastructure costs by 40% while improving performance. Their multi-cloud strategy gave us resilience we didn\'t think possible."',
     clientImageUrl: "assets/img/testimonial/client-info-01.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
-    clientName: "Sarah Connor",
-    clientTitle: "CIO, Logistics Corporation",
+    clientName: "Sarah Mitchell",
+    clientTitle: "CIO, Financial Services Group",
   },
   {
     id: 5,
@@ -1108,7 +1108,7 @@ const testimonialData = [
     clientImageUrl: "assets/img/testimonial/client-info-02.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "David Lee",
-    clientTitle: "Chief People Officer, Tech Firm",
+    clientTitle: "Head of Digital Transformation, Manufacturing Group",
   },
   {
     id: 6,
@@ -1119,7 +1119,7 @@ const testimonialData = [
     clientImageUrl: "assets/img/testimonial/client-info-03.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "Emily White",
-    clientTitle: "CEO, Healthcare SaaS",
+    clientTitle: "CTO, Financial Services Firm",
   },
 ];
 

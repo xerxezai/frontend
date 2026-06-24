@@ -10,7 +10,7 @@ const TestimonySection = () => {
         <div className="section-title">
           <span className="fade-in">Our Testimonial</span>
           <h2 className="char-animation">
-            What Client Say About Us
+            What Clients Say About Us
           </h2>
         </div>
         <Swiper
@@ -51,12 +51,6 @@ const TestimonySection = () => {
                         <i key={i} className="fas fa-star"></i>
                       ))}
                     </div>
-                    <Image
-                      src={item.quoteImageUrl}
-                      alt="img"
-                      width={74}
-                      height={30}
-                    />
                   </div>
                   <p>{item.quoteText}</p>
                   <div className="client-info" style={{ marginTop: 24 }}>
