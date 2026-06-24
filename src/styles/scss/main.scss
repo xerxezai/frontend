@@ -2051,11 +2051,15 @@ p {
 }
 
 .hero-1 {
-  padding: 50px 0 50px;
-  min-height: auto;
-  max-height: 90vh;
+  min-height: 100vh;
+  padding: 80px 0;
+  display: flex;
+  align-items: center;
   position: relative;
   overflow: hidden;
+}
+.hero-1 > .container {
+  width: 100%;
 }
 .hero-1 .hero-content {
   position: relative;
