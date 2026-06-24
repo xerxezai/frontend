@@ -13,7 +13,7 @@ const TestimonySection2 = () => {
               <div className="section-title text-start mb-0">
                 <span className="fade-in">Our Testimonial</span>
                 <h2 className="text-white char-animation">
-                  What Client Say About Us
+                  What Clients Say About Us
                 </h2>
               </div>
               <Swiper
@@ -56,14 +56,6 @@ const TestimonySection2 = () => {
                         <h3 className="text-white">{testimonial.clientName}</h3>
                         <p className="text-white">{testimonial.clientTitle}</p>
                       </div>
-                    </div>
-                    <div className="google-logo">
-                      <Image
-                        src={testimonial.quoteImageUrl}
-                        alt="Google Logo"
-                        width={74}
-                        height={26}
-                      />
                     </div>
                   </SwiperSlide>
                 ))}
