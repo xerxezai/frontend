@@ -35,7 +35,7 @@ const HeaderSection = ({ variant }: Props) => {
             <div className="header-left">
               <Link to="/" className="header-logo1">
                 <Image
-                  src="assets/img/logo/xerxez_logo.png"
+                  src="/assets/img/logo/xerxez_logo.png"
                   alt="Xerxez Solutions"
                   width={180}
                   height={45}

@@ -33,7 +33,7 @@ const FooterSection3 = () => {
                 <div className="widget-head">
                   <Link to="/" >
                     <Image
-                      src="assets/img/logo/xerxez_logo.png"
+                      src="/assets/img/logo/xerxez_logo.png"
                       alt="Xerxez Solutions"
                       width={160}
                       height={40}
