@@ -150,7 +150,7 @@ const FooterSection2 = () => {
                     <Link to="/service">Services</Link>
                   </li>
                   <li>
-                    <Link to="/service/ai-training">Training</Link>
+                    <Link to="/training">Training</Link>
                   </li>
                   <li>
                     <Link to="/contact">Contact Us</Link>

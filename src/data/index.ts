@@ -541,6 +541,7 @@ const menuData = [
     hasDropdown: true,
     submenu: [
       { title: "All Services", link: "/service", hasDropdown: false },
+      { title: "Training Platform", link: "/training", hasDropdown: false },
       { title: "AI Powered ERP", link: "/service/ai-powered-erp", hasDropdown: false },
       { title: "DevSecOps / MLOps", link: "/service/devsecops-mlops-solutions", hasDropdown: false },
       { title: "Cloud Service & Storage", link: "/service/cloud-service-storage", hasDropdown: false },

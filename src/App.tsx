@@ -25,6 +25,7 @@ import HealthPage from "./page/HealthPage";
 import MLMPage from "./page/MLMPage";
 import ERPPage from "./page/ERPPage";
 import AIERPPage from "./page/AIERPPage";
+import TrainingPage from "./page/TrainingPage";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/health" element={<HealthPage />} />
           <Route path="/mlm" element={<MLMPage />} />
           <Route path="/erp/*" element={<ERPPage />} />
+          <Route path="/training" element={<TrainingPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <AnimationWrapper />
