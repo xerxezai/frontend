@@ -1,15 +1,6 @@
 import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
 
-const categories = [
-  { icon: "fas fa-brain", name: "AI & Machine Learning", courses: 8 },
-  { icon: "fas fa-shield-alt", name: "DevSecOps & CI/CD", courses: 6 },
-  { icon: "fas fa-cloud", name: "Cloud Computing (AWS/Azure/GCP)", courses: 7 },
-  { icon: "fas fa-cogs", name: "ERP Systems & Implementation", courses: 5 },
-  { icon: "fas fa-atom", name: "Quantum Computing", courses: 4 },
-  { icon: "fas fa-lock", name: "Cybersecurity & Compliance", courses: 6 },
-];
-
 const courses = [
   {
     icon: "fas fa-brain",
@@ -65,101 +56,150 @@ const TrainingPage = () => {
       <section className="lms-hero fix">
         <div className="lms-hero__bg" />
         <div className="container position-relative" style={{ zIndex: 2 }}>
-          <div className="lms-hero__inner">
-            <span className="lms-badge" data-aos="fade-up" data-aos-duration="800" data-aos-once="true">
-              <i className="fas fa-graduation-cap me-2"></i>Online Learning Platform
-            </span>
-            <h1
-              className="lms-hero__title char-animation"
-              data-aos="fade-up"
-              data-aos-delay="100"
-              data-aos-duration="900"
-              data-aos-once="true"
-            >
-              Master Enterprise AI<br />& Cloud Technologies
-            </h1>
-            <p
-              className="lms-hero__sub fade-in"
-              data-aos="fade-up"
-              data-aos-delay="200"
-              data-aos-duration="900"
-              data-aos-once="true"
-            >
-              Industry-led training programs designed for working professionals, IT teams,
-              and enterprises. Learn AI, DevSecOps, Cloud, ERP and more.
-            </p>
-            <div
-              className="lms-hero__btns"
-              data-aos="fade-up"
-              data-aos-delay="300"
-              data-aos-duration="900"
-              data-aos-once="true"
-            >
-              <a href="#courses" className="theme-btn">
-                Browse Courses <i className="far fa-arrow-right"></i>
-              </a>
-              <Link to="/contact" className="theme-btn style-2">
-                Enterprise Training <i className="far fa-arrow-right"></i>
-              </Link>
+          <div className="row align-items-center">
+            {/* Left: text */}
+            <div className="col-lg-6">
+              <div className="lms-hero__inner">
+                <span className="lms-badge" data-aos="fade-up" data-aos-duration="800" data-aos-once="true">
+                  <i className="fas fa-graduation-cap me-2"></i>Online Learning Platform
+                </span>
+                <h1
+                  className="lms-hero__title char-animation"
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                  data-aos-duration="900"
+                  data-aos-once="true"
+                >
+                  Master Enterprise AI<br />& Cloud Technologies
+                </h1>
+                <p
+                  className="lms-hero__sub"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                  data-aos-duration="900"
+                  data-aos-once="true"
+                >
+                  Industry-led training programs designed for working professionals, IT teams,
+                  and enterprises. Learn AI, DevSecOps, Cloud, ERP and more.
+                </p>
+                <div
+                  className="lms-hero__btns"
+                  data-aos="fade-up"
+                  data-aos-delay="300"
+                  data-aos-duration="900"
+                  data-aos-once="true"
+                >
+                  <a href="#courses" className="theme-btn">
+                    Browse Courses <i className="far fa-arrow-right"></i>
+                  </a>
+                  <Link to="/contact" className="theme-btn style-2">
+                    Enterprise Training <i className="far fa-arrow-right"></i>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: visual */}
+            <div className="col-lg-6 d-none d-lg-flex justify-content-center">
+              <div
+                className="lms-hero__visual"
+                data-aos="fade-left"
+                data-aos-delay="200"
+                data-aos-duration="1000"
+                data-aos-once="true"
+              >
+                <div className="lms-vis-orb lms-vis-orb--1" />
+                <div className="lms-vis-orb lms-vis-orb--2" />
+                <div className="lms-vis-card">
+                  <div className="lms-vis-card__glow" />
+
+                  {/* Top badge */}
+                  <div className="lms-vis-pill">
+                    <i className="fas fa-graduation-cap"></i>
+                    <span>XERXEZ Training Platform</span>
+                  </div>
+
+                  {/* Stats row */}
+                  <div className="lms-vis-stats">
+                    <div className="lms-vis-stat">
+                      <span className="lms-vis-stat__num">2</span>
+                      <span className="lms-vis-stat__label">Courses</span>
+                    </div>
+                    <div className="lms-vis-stat">
+                      <span className="lms-vis-stat__num">110h</span>
+                      <span className="lms-vis-stat__label">Content</span>
+                    </div>
+                    <div className="lms-vis-stat">
+                      <span className="lms-vis-stat__num">100%</span>
+                      <span className="lms-vis-stat__label">Practical</span>
+                    </div>
+                  </div>
+
+                  {/* Course progress rows */}
+                  <div className="lms-vis-courses">
+                    <div className="lms-vis-course">
+                      <div className="lms-vis-course__head">
+                        <div className="lms-vis-course__icon" style={{ background: "rgba(255,121,46,0.15)", color: "#ff792e" }}>
+                          <i className="fas fa-brain"></i>
+                        </div>
+                        <div>
+                          <p className="lms-vis-course__name">Full Stack AI Development</p>
+                          <p className="lms-vis-course__meta">Intermediate · 60 Hours</p>
+                        </div>
+                        <span className="lms-vis-course__badge" style={{ background: "#ff792e" }}>Bestseller</span>
+                      </div>
+                      <div className="lms-vis-bar">
+                        <div className="lms-vis-bar__fill" style={{ width: "72%", background: "linear-gradient(90deg,#6c57d2,#a890ff)" }} />
+                      </div>
+                    </div>
+
+                    <div className="lms-vis-course">
+                      <div className="lms-vis-course__head">
+                        <div className="lms-vis-course__icon" style={{ background: "rgba(230,55,87,0.15)", color: "#e63757" }}>
+                          <i className="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                          <p className="lms-vis-course__name">MLOps - ML Operations</p>
+                          <p className="lms-vis-course__meta">Advanced · 50 Hours</p>
+                        </div>
+                        <span className="lms-vis-course__badge" style={{ background: "#6c57d2" }}>New</span>
+                      </div>
+                      <div className="lms-vis-bar">
+                        <div className="lms-vis-bar__fill" style={{ width: "55%", background: "linear-gradient(90deg,#e63757,#ff6b8a)" }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom tag */}
+                  <div className="lms-vis-pill lms-vis-pill--orange mt-3">
+                    <i className="fas fa-certificate"></i>
+                    <span>Certificate of Completion Included</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Course Categories ──────────────────────────────── */}
-      <section className="section-padding lms-categories">
-        <div className="container">
-          <div className="section-title text-center mb-50">
-            <span className="fade-in">Learning Paths</span>
-            <h2 className="char-animation">Explore Our Training Programs</h2>
-          </div>
-          <div className="row g-4">
-            {categories.map((cat, i) => (
-              <div key={i} className="col-xl-4 col-lg-4 col-md-6"
-                data-aos="fade-up"
-                data-aos-delay={`${i * 80}`}
-                data-aos-duration="800"
-                data-aos-once="true"
-              >
-                <div className="lms-cat-card">
-                  <div className="lms-cat-card__icon">
-                    <i className={cat.icon}></i>
-                  </div>
-                  <div className="lms-cat-card__body">
-                    <h4>{cat.name}</h4>
-                    <p>{cat.courses} Courses</p>
-                  </div>
-                  <Link to="/contact" className="lms-cat-card__link">
-                    View Courses <i className="fas fa-arrow-right ms-1"></i>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Featured Courses ───────────────────────────────── */}
-      <section id="courses" className="section-padding lms-courses">
+      <section id="courses" className="lms-section lms-courses">
         <div className="container">
-          <div className="section-title text-center mb-50">
+          <div className="section-title text-center mb-40">
             <span className="fade-in">What We Offer</span>
             <h2 className="char-animation">Featured Courses</h2>
           </div>
-          <div className="row g-4">
+          <div className="row g-4 justify-content-center">
             {courses.map((course, i) => (
-              <div key={i} className="col-xl-4 col-lg-6 col-md-6"
+              <div key={i} className="col-xl-5 col-lg-6 col-md-10"
                 data-aos="fade-up"
-                data-aos-delay={`${i * 80}`}
+                data-aos-delay={`${i * 100}`}
                 data-aos-duration="800"
                 data-aos-once="true"
               >
                 <div className="lms-course-card">
                   {course.badge && (
-                    <span
-                      className="lms-course-card__badge"
-                      style={{ background: course.badgeBg! }}
-                    >
+                    <span className="lms-course-card__badge" style={{ background: course.badgeBg! }}>
                       {course.badge}
                     </span>
                   )}
@@ -169,10 +209,7 @@ const TrainingPage = () => {
                   <div className="lms-course-card__body">
                     <div className="lms-course-card__meta">
                       <span className="lms-course-card__cat">{course.category}</span>
-                      <span
-                        className="lms-course-card__level"
-                        style={{ color: course.levelColor }}
-                      >
+                      <span className="lms-course-card__level" style={{ color: course.levelColor }}>
                         {course.level}
                       </span>
                     </div>
@@ -199,9 +236,9 @@ const TrainingPage = () => {
       </section>
 
       {/* ── Why Choose ─────────────────────────────────────── */}
-      <section className="section-padding lms-why">
+      <section className="lms-section lms-why">
         <div className="container">
-          <div className="section-title text-center mb-50">
+          <div className="section-title text-center mb-40">
             <span className="fade-in">Our Advantage</span>
             <h2 className="char-animation">Why Choose XERXEZ Training</h2>
           </div>
@@ -227,7 +264,7 @@ const TrainingPage = () => {
       </section>
 
       {/* ── Enterprise CTA ─────────────────────────────────── */}
-      <section className="section-padding lms-enterprise-cta fix">
+      <section className="lms-section lms-enterprise-cta fix">
         <div className="container position-relative" style={{ zIndex: 2 }}>
           <div className="lms-enterprise-cta__inner text-center"
             data-aos="fade-up"
