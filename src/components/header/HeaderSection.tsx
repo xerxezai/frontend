@@ -55,12 +55,6 @@ const HeaderSection = ({ variant }: Props) => {
               <div className="mean__menu-wrapper d-none d-xl-block">
                 <MainMenuSection />
               </div>
-              {!variant && (
-                <div className="link-btn d-none d-xl-flex align-items-center gap-2">
-                  <i className="fas fa-envelope" style={{color: "var(--theme-color, #6c57d2)"}}></i>
-                  <a href="mailto:info@xerxez.com" style={{color: "#333", fontWeight: 500, textTransform: "none" as const}}>info@xerxez.com</a>
-                </div>
-              )}
               {variant ? (
                 <div className="header-button">
                   <Link to="/contact" className="theme-btn">
