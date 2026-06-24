@@ -46,11 +46,10 @@ const HeroSection = () => {
 
           <div className="col-lg-6 smooth-fade-in fade-in">
             <div style={{
-              background: "rgba(108,87,210,0.10)",
-              border: "1px solid rgba(108,87,210,0.28)",
+              background: "rgba(13,11,36,0.92)",
+              border: "1px solid rgba(108,87,210,0.35)",
               borderRadius: 20,
               padding: "36px 32px",
-              backdropFilter: "blur(12px)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
                 <i className="fas fa-brain" style={{ color: "#6c57d2", fontSize: 18 }} />
