@@ -15,8 +15,8 @@
               <i className="fas fa-map-marker-alt"></i>
             </div>
             <div className="content">
-              <h3>New York, USA</h3>
-              <p>27 Division 10002 Main road</p>
+              <h3>India &amp; UAE</h3>
+              <p>Remote-first · Global delivery</p>
             </div>
           </div>
           <div

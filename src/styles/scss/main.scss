@@ -5842,7 +5842,7 @@ p {
   position: relative;
 }
 .cta-call-wrapper.style-padding {
-  margin-bottom: 0;
+  margin-bottom: 120px;
 }
 
 .cta-call-wrapper .cta-button {
@@ -8343,7 +8343,8 @@ h3.service-header-5 {
   background-image: none;
 }
 .footer-section.fix.bg-cover {
-  background-image: url(/assets/img/footer/footer-bg-2.jpg);
+  background: linear-gradient(180deg, #0a031e 0%, #001f3f 60%, #003566 100%);
+  background-image: none;
 }
 .footer-section.variant-bg {
   background-image: url(/assets/img/footer/footer-bg-3.jpg);

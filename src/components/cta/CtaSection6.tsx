@@ -29,7 +29,7 @@ const CtaSection6 = ({ variant }: Props) => {
             </p>
           </div>
           <div className="cta-button fade-in" style={{ marginTop: 36 }}>
-            <Link to="/contact" className="theme-btn" style={{ borderRadius: 55, background: "#ff792e" }}>
+            <Link to="/contact" className="theme-btn" style={{ borderRadius: 55, background: "#6c57d2" }}>
               Request a Demo
               <i className="far fa-arrow-right"></i>
             </Link>

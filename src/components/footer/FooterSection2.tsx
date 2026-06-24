@@ -150,8 +150,8 @@ const FooterSection2 = ({ variant }: Props) => {
                       <i className="fas fa-map-marker-alt"></i>
                     </div>
                     <div className="content">
-                      <h5>New York, USA</h5>
-                      <p className="text-white">27 Division 10002 Main road</p>
+                      <h5>India &amp; UAE</h5>
+                      <p className="text-white">Remote-first · Global delivery</p>
                     </div>
                   </li>
                 </ul>
