@@ -1033,16 +1033,18 @@ p {
   top: 100%;
   inset-inline-start: 0;
   min-width: 250px;
-  background: $white;
+  background: rgba(15, 15, 45, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   z-index: 99999;
   visibility: hidden;
   opacity: 0;
   transform-origin: top center;
-  color: $header;
-  box-shadow: 0px 0px 40px 0px rgba(11, 13, 17, 0.08);
+  color: $white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   transform: translateY(10px);
   transition: all 0.4s ease-in-out;
-  padding: 30px 30px;
+  padding: 20px 24px;
 }
 .header-main .main-menu ul li .submenu li {
   display: block;
@@ -1056,21 +1058,22 @@ p {
 .header-main .main-menu ul li .submenu li a {
   position: relative;
   z-index: 11;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  color: $header;
+  color: rgba(255, 255, 255, 0.85);
   padding: 0 0;
   padding-bottom: 0;
   padding-top: 0;
-  text-transform: u;
+  text-transform: none;
   font-family: "Inter", sans-serif;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: color 0.2s;
 }
 .header-main .main-menu ul li .submenu li a:hover {
-  color: $white !important;
+  color: #7c3aed !important;
 }
 .header-main .main-menu ul li .submenu li:last-child a {
   border: none;
@@ -1082,7 +1085,7 @@ p {
   opacity: 0;
 }
 .header-main .main-menu ul li .submenu li:hover > a {
-  color: $theme-color-2 !important;
+  color: #7c3aed !important;
 }
 .header-main .main-menu ul li .submenu li:hover > a::after {
   color: $theme-color-2;
@@ -1391,16 +1394,18 @@ p {
   top: 100%;
   inset-inline-start: 0;
   min-width: 250px;
-  background: $white;
+  background: rgba(15, 15, 45, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   z-index: 99999;
   visibility: hidden;
   opacity: 0;
   transform-origin: top center;
-  color: $header;
-  box-shadow: 0px 0px 40px 0px rgba(11, 13, 17, 0.08);
+  color: $white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   transform: translateY(10px);
   transition: all 0.4s ease-in-out;
-  padding: 30px 30px;
+  padding: 20px 24px;
 }
 .header-1.header-4 .header-main .main-menu ul li .submenu li {
   display: block;
@@ -1414,21 +1419,22 @@ p {
 .header-1.header-4 .header-main .main-menu ul li .submenu li a {
   position: relative;
   z-index: 11;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  color: $header;
+  color: rgba(255, 255, 255, 0.85);
   padding: 0 0;
   padding-bottom: 0;
   padding-top: 0;
-  text-transform: u;
+  text-transform: none;
   font-family: "Inter", sans-serif;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: color 0.2s;
 }
 .header-1.header-4 .header-main .main-menu ul li .submenu li a:hover {
-  color: $white !important;
+  color: #7c3aed !important;
 }
 .header-1.header-4 .header-main .main-menu ul li .submenu li:last-child a {
   border: none;
@@ -1440,7 +1446,7 @@ p {
   opacity: 0;
 }
 .header-1.header-4 .header-main .main-menu ul li .submenu li:hover > a {
-  color: $theme-color-2 !important;
+  color: #7c3aed !important;
 }
 .header-1.header-4 .header-main .main-menu ul li .submenu li:hover > a::after {
   color: $theme-color-2;
@@ -1652,16 +1658,18 @@ p {
   color: $theme-color-2 !important;
 }
 .sticky.header-4 .header-main .main-menu ul li .submenu {
-  background: $white;
+  background: rgba(15, 15, 45, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
 }
 .sticky.header-4 .header-main .main-menu ul li .submenu li a {
-  color: $header;
+  color: rgba(255, 255, 255, 0.85);
 }
 .sticky.header-4 .header-main .main-menu ul li .submenu li a:hover {
-  color: $white !important;
+  color: #7c3aed !important;
 }
 .sticky.header-4 .header-main .main-menu ul li .submenu li:hover > a {
-  color: $theme-color-2 !important;
+  color: #7c3aed !important;
 }
 .sticky.header-4 .header-main .main-menu ul li .submenu li:hover > a::after {
   color: $theme-color-2;
