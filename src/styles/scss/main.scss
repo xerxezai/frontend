@@ -10829,11 +10829,22 @@ h3.service-header-5 {
 /* Hero */
 .lms-hero {
   position: relative;
-  min-height: 540px;
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 120px 0 80px;
+  padding: 180px 0 120px;
   overflow: hidden;
+}
+@media (max-width: 991px) {
+  .lms-hero {
+    min-height: 0;
+    padding: 150px 0 80px;
+  }
+}
+@media (max-width: 575px) {
+  .lms-hero {
+    padding: 130px 0 70px;
+  }
 }
 .lms-hero__bg {
   position: absolute;
@@ -10876,7 +10887,12 @@ h3.service-header-5 {
   color: #fff;
   line-height: 1.12;
   margin-bottom: 20px;
-  @media (max-width: 768px) { font-size: 36px; }
+}
+@media (max-width: 768px) {
+  .lms-hero__title { font-size: 36px; }
+}
+@media (max-width: 480px) {
+  .lms-hero__title { font-size: 30px; }
 }
 .lms-hero__sub {
   font-size: 17px;
