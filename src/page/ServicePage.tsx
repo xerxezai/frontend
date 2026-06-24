@@ -16,7 +16,7 @@ const ServicePage = () => {
         <CounterSection variant="style-3" />
         <PricingSection />
         <TestimonySection6 />
-        <FaqSection2 variant reverse />
+        <FaqSection2 variant reverse noPaddingBottom />
     </CustomLayout>
   );
 };
