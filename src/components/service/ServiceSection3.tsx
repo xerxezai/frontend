@@ -8,7 +8,7 @@ const faIcons: Record<string, string> = {
   "cloud-service-storage":     "fas fa-cloud",
   "software-development":      "fas fa-code",
   "software-consulting":       "fas fa-lightbulb",
-  "ai-training":               "fas fa-graduation-cap",
+  "ai-training-consulting":    "fas fa-chalkboard-teacher",
   "quantum-computing":         "fas fa-atom",
   "mobile-application":        "fas fa-mobile-alt",
   "web-mobile-hosting":        "fas fa-server",

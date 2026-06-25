@@ -1,29 +1,59 @@
 import { Link } from "react-router-dom";
 
-const cards = [
+const SERVICES = [
   {
     icon: "fas fa-brain",
-    title: "AI Powered ERP",
-    desc: "Intelligent ERP systems that automate operations, forecast demand, and surface real-time insights across every business unit.",
+    title: "AI-Powered ERP",
     slug: "ai-powered-erp",
+    desc: "Intelligent ERP systems that automate operations, forecast demand, and surface real-time insights across every business unit.",
   },
   {
     icon: "fas fa-shield-alt",
-    title: "DevSecOps / MLOps Solutions",
-    desc: "Security-embedded CI/CD pipelines and production ML infrastructure for teams that need to ship fast and stay compliant.",
+    title: "DevSecOps Pipelines",
     slug: "devsecops-mlops-solutions",
+    desc: "Security-embedded CI/CD pipelines and production ML infrastructure for teams that need to ship fast and stay compliant.",
   },
   {
     icon: "fas fa-cloud",
     title: "Cloud Infrastructure",
-    desc: "Multi-cloud architecture and cost-optimized storage solutions built for high-throughput, data-intensive enterprise workloads.",
     slug: "cloud-service-storage",
+    desc: "Multi-cloud architecture and cost-optimized storage solutions built for high-throughput, data-intensive enterprise workloads.",
   },
   {
     icon: "fas fa-code",
-    title: "Software Development & Consulting",
-    desc: "Custom enterprise applications and strategic technology consulting to accelerate your digital transformation.",
+    title: "Software Development",
     slug: "software-development",
+    desc: "Custom enterprise applications and strategic technology consulting to accelerate your digital transformation.",
+  },
+  {
+    icon: "fas fa-chalkboard-teacher",
+    title: "AI Training & Consulting",
+    slug: "ai-training-consulting",
+    desc: "Corporate AI training programs to upskill teams on LLMs, MLOps, and AI-native workflows.",
+  },
+  {
+    icon: "fas fa-atom",
+    title: "Quantum Computing",
+    slug: "quantum-computing",
+    desc: "Harness quantum algorithms for complex optimization, cryptography, and next-gen enterprise computing challenges.",
+  },
+  {
+    icon: "fas fa-mobile-alt",
+    title: "Mobile Application",
+    slug: "mobile-application",
+    desc: "Native and cross-platform mobile apps built for performance, security, and seamless enterprise user experience.",
+  },
+  {
+    icon: "fas fa-server",
+    title: "Web & Mobile Hosting",
+    slug: "web-mobile-hosting",
+    desc: "Scalable, secure hosting infrastructure with 99.9% uptime SLA across AWS, Azure, and GCP.",
+  },
+  {
+    icon: "fas fa-comments",
+    title: "Software Consulting",
+    slug: "software-consulting",
+    desc: "Strategic technology advisory to align your software architecture with business goals and future growth.",
   },
 ];
 
@@ -38,12 +68,12 @@ const ServiceSection2 = () => (
       </div>
 
       <div className="row g-4">
-        {cards.map((card, index) => (
+        {SERVICES.map((card, index) => (
           <div
             key={card.slug}
-            className="col-xl-3 col-lg-4 col-md-6"
+            className="col-xl-4 col-lg-4 col-md-6"
             data-aos="fade-up"
-            data-aos-delay={index * 150}
+            data-aos-delay={index * 60}
             data-aos-duration="900"
             data-aos-easing="ease-out-cubic"
             data-aos-once="true"
