@@ -12015,7 +12015,7 @@ body {
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  padding: 80px 0 !important;
+  padding: 104px 0 80px !important;
 }
 
 /* Remove any dark bg image that leaked from template */
@@ -12046,7 +12046,7 @@ body {
 /* ── Logo PNG — no white box ── */
 .header-logo1 img,
 .offcanvas__logo img {
-  height: 45px !important;
+  height: 68px !important;
   width: auto !important;
   background: transparent !important;
   border: none !important;
@@ -12064,4 +12064,12 @@ body {
 .about-wrapper .theme-btn i {
   margin-left: 12px !important;
   flex-shrink: 0;
+}
+
+/* ── Hero: tally card lower on desktop only ── */
+.hero-card-col {
+  padding-top: 72px;
+}
+@media (max-width: 991px) {
+  .hero-card-col { padding-top: 0 !important; }
 }
