@@ -67,7 +67,7 @@ const HeroSection = () => (
         </div>
 
         {/* RIGHT — 3D dark performance card */}
-        <div className="col-lg-6 d-flex justify-content-center justify-content-lg-end">
+        <div className="col-lg-6 d-flex justify-content-center justify-content-lg-end hero-card-col">
           <div
             className="tally-card"
             style={{ width: "100%", maxWidth: 420 }}  /* was 460 — slightly tighter */
