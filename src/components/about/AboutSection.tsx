@@ -8,7 +8,7 @@ const AboutSection = () => {
         <div className="about-wrapper">
           <div className="row g-4 align-items-center">
             <div className="col-lg-6">
-              <div className="about-img fix appear_left fade-in">
+              <div className="about-img fix" data-aos="fade-right" data-aos-duration="900" data-aos-easing="ease-out-cubic" data-aos-once="true">
                 <Image
                   src="assets/img/about/Frame.png"
                   alt="About XERXEZ"
@@ -37,7 +37,7 @@ const AboutSection = () => {
                     <i className="flaticon-pie-chart"></i>
                   </div>
                   <div className="content">
-                    <h3>AI-Native Engineering</h3>
+                    <h3 style={{ color: "#1A1A1A" }}>AI-Native Engineering</h3>
                     <p>
                       From intelligent ERP modules to automated ML workflows, we embed AI at
                       every layer of your enterprise stack.
