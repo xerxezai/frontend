@@ -12,9 +12,7 @@ const BreadcrumbSection = ({ title }: Props) => {
                 <li>
                   <Link to="/">Home</Link>
                 </li>
-                <li>
-                  <i className="fal fa-long-arrow-right"></i>
-                </li>
+                <li aria-hidden="true" style={{ color: "rgba(255,255,255,0.3)", fontSize: 14, lineHeight: 1 }}>›</li>
                 <li>{title}</li>
               </ul>
               <h2 className="char-animation">{title}</h2>

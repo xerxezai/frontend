@@ -1,16 +1,21 @@
 ﻿import React, { useMemo } from "react";
 import { menuData } from "../../data";
 import type { MenuItem } from "../../types";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const MainMenuSection = React.memo(() => {
+  const { pathname } = useLocation();
+
+  const isActive = (link: string) =>
+    link === "/" ? pathname === "/" : pathname === link || pathname.startsWith(link + "/");
+
   const memoizedMenuItems = useMemo(() => {
     return menuData.map((menuItem: MenuItem) => (
       <React.Fragment key={`menu-${menuItem.title}-${menuItem.link}`}>
         <li
           className={`${menuItem.hasDropdown ? "has-dropdown" : ""} ${
             menuItem.isHomemenu ? "menu-thumb" : ""
-          }`}
+          } ${isActive(menuItem.link) ? "nav-active" : ""}`}
         >
           <Link to={menuItem.link}>
             {menuItem.title}
@@ -99,7 +104,7 @@ const MainMenuSection = React.memo(() => {
         )}
       </React.Fragment>
     ));
-  }, [menuData]);
+  }, [menuData, pathname]);
 
   return (
     <div className="main-menu">

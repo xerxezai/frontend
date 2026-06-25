@@ -12170,3 +12170,32 @@ body {
 @media (max-width: 991px) {
   .contact-info-panel { position: static !important; }
 }
+
+/* ── Inner-page banner fixes ── */
+
+/* 1. Reduce banner height: 60px padding top/bottom */
+.breadcrumb-section .page-heading {
+  padding: 60px 0 !important;
+}
+@media (max-width: 767px) {
+  .breadcrumb-section .page-heading { padding: 48px 0 !important; }
+}
+
+/* 2. Active nav link: purple highlight */
+.header-main .main-menu ul li.nav-active > a {
+  color: #6c57d2 !important;
+}
+.header-main .main-menu ul li.nav-active > a i {
+  color: #6c57d2 !important;
+}
+
+/* 3. Inner-page logo: 40px (HeaderSection2 only, homepage unaffected) */
+.header-section-2 .header-logo1 img {
+  height: 40px !important;
+}
+
+/* 4. Breadcrumb separator: clean › character */
+.breadcrumb-list li[aria-hidden="true"] {
+  font-size: 16px !important;
+  color: rgba(255,255,255,0.35) !important;
+}
