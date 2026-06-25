@@ -43,7 +43,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
   );
 
   return (
-    <section className="service-section-2 section-padding fix">
+    <section className="service-section-2 section-padding fix" style={{ background: "#F2EFE9" }}>
       {!mainSection && (
         <>
           <div className="left-shape">
@@ -56,11 +56,19 @@ const ServiceSection3 = ({ mainSection }: Props) => {
       )}
 
       <div className="container position-relative z-1">
-        <div className="section-title text-center">
-          <span className="fade-in">Our Services</span>
-          <h2 className="char-animation">
-            End-to-End Solutions for
-            <br /> Every Enterprise Challenge
+        <div className="section-title text-center" style={{ marginBottom: 48 }}>
+          <div style={{
+            fontSize: 11, fontWeight: 600, letterSpacing: "0.18em",
+            textTransform: "uppercase", color: "#6c57d2",
+            fontFamily: "'DM Sans', sans-serif", marginBottom: 12,
+          }}>Our Services</div>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif", fontWeight: 900,
+            fontSize: "clamp(28px, 4vw, 52px)", color: "#1A1A1A",
+            letterSpacing: "-0.02em", lineHeight: 1.1,
+          }}>
+            End-to-End Solutions for<br />
+            <span style={{ fontStyle: "italic", color: "#6c57d2" }}>Every Enterprise Challenge</span>
           </h2>
         </div>
 
@@ -193,60 +201,67 @@ const ServiceSection3 = ({ mainSection }: Props) => {
             >
               <div
                 style={{
-                  background: "#0d0b24",
-                  border: "1px solid rgba(108,87,210,0.2)",
+                  background: "#ffffff",
+                  border: "1px solid #DDDAD4",
                   borderRadius: 16,
                   padding: "32px 28px",
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  transition: "border-color 0.25s, transform 0.25s, box-shadow 0.25s",
+                  transition: "border-color 0.25s, transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "rgba(108,87,210,0.55)";
-                  el.style.transform = "translateY(-4px)";
-                  el.style.boxShadow = "0 12px 36px rgba(108,87,210,0.18)";
+                  el.style.borderColor = "#6c57d2";
+                  el.style.transform = "translateY(-6px)";
+                  el.style.boxShadow = "0 16px 40px rgba(108,87,210,0.13)";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "rgba(108,87,210,0.2)";
+                  el.style.borderColor = "#DDDAD4";
                   el.style.transform = "translateY(0)";
                   el.style.boxShadow = "none";
                 }}
               >
                 {/* Icon box */}
                 <div style={{
-                  width: 60,
-                  height: 60,
+                  width: 56,
+                  height: 56,
                   borderRadius: 14,
-                  background: "rgba(108,87,210,0.15)",
-                  border: "1px solid rgba(108,87,210,0.35)",
+                  background: "rgba(108,87,210,0.08)",
+                  border: "1px solid rgba(108,87,210,0.15)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom: 24,
-                  fontSize: 24,
-                  color: "#ff792e",
+                  marginBottom: 22,
+                  fontSize: 22,
+                  color: "#6c57d2",
                   flexShrink: 0,
                 }}>
                   <i className={faIcons[service.slug] || "fas fa-cogs"} />
                 </div>
 
                 {/* Title */}
-                <h3 style={{ marginBottom: 10, fontSize: 19, lineHeight: 1.3, color: "#fff" }}>
+                <h3 style={{ marginBottom: 10, fontSize: 18, lineHeight: 1.3, fontWeight: 700, color: "#1A1A1A", fontFamily: "'DM Sans', sans-serif" }}>
                   <Link to={`/service/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
-                    {service.title.replace(/\n/g, " ")}
+                    {service.title}
                   </Link>
                 </h3>
 
                 {/* Description */}
-                <p style={{ color: "rgba(255,255,255,0.62)", fontSize: 14, lineHeight: 1.8, marginBottom: 24, flex: 1 }}>
+                <p style={{ color: "#4A4A4A", fontSize: 14, lineHeight: 1.75, marginBottom: 24, flex: 1, fontFamily: "'DM Sans', sans-serif" }}>
                   {service.description}
                 </p>
 
                 {/* More Details link */}
-                <Link to={`/service/${service.slug}`} className="link-btn" style={{ marginTop: "auto", display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <Link
+                  to={`/service/${service.slug}`}
+                  style={{
+                    marginTop: "auto", display: "inline-flex", alignItems: "center",
+                    gap: 6, color: "#6c57d2", fontWeight: 600, fontSize: 13,
+                    textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
+                  }}
+                >
                   More Details
                   <i className="far fa-arrow-right" />
                 </Link>
