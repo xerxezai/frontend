@@ -56,7 +56,7 @@ const FooterSection2 = () => {
                   <li><Link to="/service/devsecops-mlops-solutions">DevSecOps Pipelines</Link></li>
                   <li><Link to="/service/cloud-service-storage">Cloud Infrastructure</Link></li>
                   <li><Link to="/service/software-development">Software Development</Link></li>
-                  <li><Link to="/service/ai-training">AI Training &amp; Consulting</Link></li>
+                  <li><Link to="/service/ai-training-consulting">AI Training &amp; Consulting</Link></li>
                   <li><Link to="/service/quantum-computing">Quantum Computing</Link></li>
                   <li><Link to="/service/mobile-application">Mobile Application</Link></li>
                   <li><Link to="/service/web-mobile-hosting">Web &amp; Mobile Hosting</Link></li>

@@ -73,24 +73,15 @@ const FooterSection3 = () => {
                   <h3>Our Services</h3>
                 </div>
                 <ul className="list-area">
-                  <li>
-                    <Link to="/service/ai-powered-erp">AI Powered ERP</Link>
-                  </li>
-                  <li>
-                    <Link to="/service/devsecops-mlops-solutions">DevSecOps / MLOps</Link>
-                  </li>
-                  <li>
-                    <Link to="/service/cloud-service-storage">Cloud Service &amp; Storage</Link>
-                  </li>
-                  <li>
-                    <Link to="/service/software-development">Software Development</Link>
-                  </li>
-                  <li>
-                    <Link to="/service/quantum-computing">Quantum Computing</Link>
-                  </li>
-                  <li>
-                    <Link to="/service/mobile-application">Mobile Application</Link>
-                  </li>
+                  <li><Link to="/service/ai-powered-erp">AI-Powered ERP</Link></li>
+                  <li><Link to="/service/devsecops-mlops-solutions">DevSecOps Pipelines</Link></li>
+                  <li><Link to="/service/cloud-service-storage">Cloud Infrastructure</Link></li>
+                  <li><Link to="/service/software-development">Software Development</Link></li>
+                  <li><Link to="/service/ai-training-consulting">AI Training &amp; Consulting</Link></li>
+                  <li><Link to="/service/quantum-computing">Quantum Computing</Link></li>
+                  <li><Link to="/service/mobile-application">Mobile Application</Link></li>
+                  <li><Link to="/service/web-mobile-hosting">Web &amp; Mobile Hosting</Link></li>
+                  <li><Link to="/service/software-consulting">Software Consulting</Link></li>
                 </ul>
               </div>
             </div>
