@@ -11,9 +11,9 @@ type BentoStat  = { kind: "stat";   value: string; label: string; icon: string }
 type BentoStack = { kind: "stack" };
 
 const bento: (BentoStat | BentoStack)[] = [
-  { kind: "stat",  value: "120+",   label: "Projects Delivered", icon: "fas fa-check-circle" },
-  { kind: "stat",  value: "99.9%",  label: "Platform Uptime",    icon: "fas fa-shield-alt"  },
-  { kind: "stat",  value: "<6 mo",  label: "Time to Go-Live",    icon: "fas fa-rocket"       },
+  { kind: "stat",  value: "120+",   label: "Projects Delivered",  icon: "fas fa-folder-open" },
+  { kind: "stat",  value: "85+",    label: "Enterprise Clients",  icon: "fas fa-building"    },
+  { kind: "stat",  value: "10+",    label: "Years of Experience", icon: "fas fa-calendar-check" },
   { kind: "stack" },
 ];
 
@@ -26,13 +26,13 @@ const HeroSection = () => {
       className="hero-section hero-1 bg-cover"
       speed={0.35}
       revealRadius={420}
-      baseOpacity={0.05}
-      revealOpacity={0.40}
-      gridColor="rgba(108,87,210,0.75)"
+      baseOpacity={0.03}
+      revealOpacity={0.28}
+      gridColor="rgba(108,87,210,0.65)"
       blobColors={{
-        topRight:   "rgba(108,87,210,0.10)",
-        center:     "rgba(255,121,46,0.08)",
-        bottomLeft: "rgba(108,87,210,0.07)",
+        topRight:   "rgba(108,87,210,0.06)",
+        center:     "rgba(255,121,46,0.04)",
+        bottomLeft: "rgba(108,87,210,0.04)",
       }}
     >
       <div className="container">
