@@ -3,7 +3,7 @@ import Image from "../utils/Image";
 
 const ContactSection = () => {
   return (
-    <section className="contact-section section-padding bg-cover fix">
+    <section className="contact-section section-padding bg-cover fix" style={{ background: "#FFFFFF" }}>
       <div className="container">
         <div className="contect-wrapper">
           <div className="row">

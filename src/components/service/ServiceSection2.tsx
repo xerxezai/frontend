@@ -58,7 +58,7 @@ const SERVICES = [
 ];
 
 const ServiceSection2 = () => (
-  <section style={{ background: "#EAE7E0", padding: "100px 0" }}>
+  <section style={{ background: "#F0EEE9", padding: "100px 0" }}>
     <div className="container">
       <div className="section-title text-center" style={{ marginBottom: 48 }}>
         <span className="fade-in">Our Services</span>

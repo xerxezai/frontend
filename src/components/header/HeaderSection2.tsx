@@ -67,12 +67,6 @@ const HeaderSection2 = ({ variant }: Props) => {
                 <div className="mean__menu-wrapper d-none d-xl-block">
                   <MainMenuSection />
                 </div>
-                <Link to="/contact" className="pill-btn">
-                  Get Started
-                  <span className="btn-arrow">
-                    <i className="far fa-arrow-right"></i>
-                  </span>
-                </Link>
                 <div className="header__hamburger d-xl-none my-auto">
                   <div
                     className="sidebar__toggle"
