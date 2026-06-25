@@ -58,8 +58,8 @@ const HeaderSection2 = ({ variant }: Props) => {
                     src="/assets/img/logo/xerxez_logo.png"
                     alt="Xerxez Solutions"
                     width={180}
-                    height={40}
-                    style={{ height: '40px', width: 'auto', background: 'transparent', display: 'block' }}
+                    height={60}
+                    style={{ height: '60px', width: 'auto', background: 'transparent', display: 'block', border: 'none', boxShadow: 'none' }}
                   />
                 </Link>
               </div>

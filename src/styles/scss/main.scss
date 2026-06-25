@@ -12043,29 +12043,11 @@ body {
   }
 }
 
-/* ── Logo PNG — no white box, responsive sizing ── */
-.header-logo1 img {
-  height: 55px !important;
-  width: auto !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  display: block !important;
-}
-.offcanvas__logo img {
-  height: 55px !important;
-  width: auto !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  display: block !important;
-}
+/* ── Logo PNG — strictly 60px, no border/shadow ── */
+.header-logo1 img,
+.offcanvas__logo img,
 .widget-head a img {
-  height: 55px !important;
+  height: 60px !important;
   width: auto !important;
   background: transparent !important;
   border: none !important;
@@ -12073,14 +12055,6 @@ body {
   border-radius: 0 !important;
   padding: 0 !important;
   display: block !important;
-}
-@media (max-width: 1199px) {
-  .header-logo1 img { height: 48px !important; }
-  .offcanvas__logo img { height: 48px !important; }
-}
-@media (max-width: 575px) {
-  .header-logo1 img { height: 40px !important; }
-  .offcanvas__logo img { height: 40px !important; }
 }
 
 /* ── About section: theme-btn arrow flush ── */
@@ -12223,7 +12197,4 @@ body {
   color: #6c57d2 !important;
 }
 
-/* 3. Inner-page logo: 40px (HeaderSection2 only, homepage unaffected) */
-.header-section-2 .header-logo1 img {
-  height: 40px !important;
-}
+/* 3. Logo: 60px on all pages (inner + homepage) */
