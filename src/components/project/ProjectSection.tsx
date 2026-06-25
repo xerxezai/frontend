@@ -5,7 +5,7 @@ import Image from "../utils/Image";
 
 const ProjectSection: React.FC = () => {
   return (
-    <section className="project-section-3 fix section-padding">
+    <section className="project-section-3 fix section-padding" style={{ background: "#F8F7F4" }}>
       <div className="container">
         <div className="section-title text-center">
           <span className="fade-in">Our Case Study</span>
