@@ -70,7 +70,7 @@ const SectionProgressDots = ({ sections }: Props) => {
             key={id}
             style={{ display: "flex", alignItems: "center", gap: 8 }}
           >
-            {(isHov || isActive) && (
+            {isHov && (
               <span style={{
                 background: "rgba(108,87,210,0.92)",
                 color: "#fff",
