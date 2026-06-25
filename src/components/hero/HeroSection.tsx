@@ -20,9 +20,15 @@ const HeroSection = () => {
       as="section"
       className="hero-section hero-1 bg-cover"
       speed={0.35}
-      revealRadius={400}
-      baseOpacity={0.07}
-      revealOpacity={0.55}
+      revealRadius={420}
+      baseOpacity={0.05}
+      revealOpacity={0.40}
+      gridColor="rgba(108,87,210,0.75)"
+      blobColors={{
+        topRight:   "rgba(108,87,210,0.10)",
+        center:     "rgba(255,121,46,0.08)",
+        bottomLeft: "rgba(108,87,210,0.07)",
+      }}
     >
       <div className="container">
         <div className="row g-4 align-items-center">
@@ -57,17 +63,16 @@ const HeroSection = () => {
           {/* ── Right: performance card ───────────────────── */}
           <div className="col-lg-6 smooth-fade-in fade-in">
             <div style={{
-              background: "rgba(13,11,36,0.88)",
-              border: "1px solid rgba(108,87,210,0.35)",
+              background: "#ffffff",
+              border: "1px solid #E5E5E5",
               borderRadius: 20,
               padding: "36px 32px",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
+              boxShadow: "0px 8px 40px rgba(108,87,210,0.10)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
                 <i className="fas fa-brain" style={{ color: "#6c57d2", fontSize: 18 }} />
                 <span style={{
-                  color: "rgba(255,255,255,0.55)",
+                  color: "#9E9E9E",
                   fontSize: 12,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
@@ -80,25 +85,25 @@ const HeroSection = () => {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginBottom: 28 }}>
                 {stats.map(({ value, label, icon }) => (
                   <div key={label} style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(108,87,210,0.35)",
+                    background: "#F5F5F7",
+                    border: "1px solid #E5E5E5",
                     borderRadius: 14,
                     padding: "22px 12px",
                     textAlign: "center",
                   }}>
                     <i className={icon} style={{ color: "#6c57d2", fontSize: 22, marginBottom: 10, display: "block" }} />
-                    <div style={{ color: "#fff", fontSize: 26, fontWeight: 800, lineHeight: 1 }}>{value}</div>
-                    <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, marginTop: 6, lineHeight: 1.3 }}>{label}</div>
+                    <div style={{ color: "#0A0A0A", fontSize: 26, fontWeight: 800, lineHeight: 1 }}>{value}</div>
+                    <div style={{ color: "#6B6B6B", fontSize: 11, marginTop: 6, lineHeight: 1.3 }}>{label}</div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", marginBottom: 22 }} />
+              <div style={{ borderTop: "1px solid #E5E5E5", marginBottom: 22 }} />
 
               {features.map((feat) => (
                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
                   <i className="fas fa-check-circle" style={{ color: "#6c57d2", fontSize: 14, flexShrink: 0 }} />
-                  <span style={{ color: "rgba(255,255,255,0.78)", fontSize: 14 }}>{feat}</span>
+                  <span style={{ color: "#4B4B4B", fontSize: 14 }}>{feat}</span>
                 </div>
               ))}
             </div>

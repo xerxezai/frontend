@@ -3,13 +3,13 @@ $body: #fff;
 $black: #000;
 $white: #fff;
 $theme-color: #6c57d2;
-$theme-color-2: #ff792e;
-$header: #003566;
-$text: #656565;
-$border: #e6efff;
+$theme-color-2: #6c57d2;      // unified with brand purple (was orange #ff792e)
+$header: #0A0A0A;             // near-black (was dark navy #003566)
+$text: #4B4B4B;               // slightly darker for readability on white
+$border: #E5E5E5;             // neutral gray border (was #e6efff)
 $ratting: #f8bc26;
-$bg: #fff9ed;
-$bg-2: #6c57d21a;
+$bg: #F5F5F7;                 // light gray for alternating sections (was #fff9ed)
+$bg-2: #F0EEFF;               // very light purple tint (was #6c57d21a)
 $box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.06);
 
 // Breakpoints

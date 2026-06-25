@@ -7,11 +7,11 @@ import {
   type MotionValue,
 } from "framer-motion";
 
-// XERXEZ brand tokens (matches main.scss dark theme)
-const PURPLE       = "rgba(108,87,210,0.22)";
-const ORANGE       = "rgba(255,121,46,0.18)";
-const BLUE         = "rgba(59,130,246,0.16)";
-const GRID_COLOR   = "rgba(255,255,255,1)";
+// Default brand tokens — can be overridden via props for dark/light modes
+const DEFAULT_GRID_COLOR  = "rgba(108,87,210,0.85)";
+const DEFAULT_BLOB_TR     = "rgba(108,87,210,0.12)";  // top-right
+const DEFAULT_BLOB_CENTER = "rgba(255,121,46,0.10)";  // center-right
+const DEFAULT_BLOB_BL     = "rgba(108,87,210,0.08)";  // bottom-left
 
 interface InfiniteGridBackgroundProps {
   children?: React.ReactNode;
@@ -27,6 +27,10 @@ interface InfiniteGridBackgroundProps {
   baseOpacity?: number;
   /** Opacity of the mouse-revealed bright grid layer. Default 0.50 */
   revealOpacity?: number;
+  /** Color of the grid lines (default purple for light bg) */
+  gridColor?: string;
+  /** Blob colors for ambient glows */
+  blobColors?: { topRight?: string; center?: string; bottomLeft?: string };
 }
 
 /**
@@ -49,7 +53,12 @@ export const InfiniteGridBackground: React.FC<InfiniteGridBackgroundProps> = ({
   revealRadius = 380,
   baseOpacity = 0.06,
   revealOpacity = 0.50,
+  gridColor = DEFAULT_GRID_COLOR,
+  blobColors = {},
 }) => {
+  const blobTR = blobColors.topRight   ?? DEFAULT_BLOB_TR;
+  const blobCT = blobColors.center     ?? DEFAULT_BLOB_CENTER;
+  const blobBL = blobColors.bottomLeft ?? DEFAULT_BLOB_BL;
   const containerRef = useRef<HTMLElement>(null);
 
   // Mouse tracking
@@ -98,7 +107,7 @@ export const InfiniteGridBackground: React.FC<InfiniteGridBackgroundProps> = ({
           pointerEvents: "none",
         }}
       >
-        <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} color={GRID_COLOR} />
+        <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} color={gridColor} />
       </div>
 
       {/* ── Layer 2: cursor-revealed bright grid ──────────── */}
@@ -114,7 +123,7 @@ export const InfiniteGridBackground: React.FC<InfiniteGridBackgroundProps> = ({
           pointerEvents: "none",
         }}
       >
-        <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} color={GRID_COLOR} />
+        <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} color={gridColor} />
       </motion.div>
 
       {/* ── Layer 3: ambient glow blobs ───────────────────── */}
@@ -122,31 +131,28 @@ export const InfiniteGridBackground: React.FC<InfiniteGridBackgroundProps> = ({
         aria-hidden="true"
         style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }}
       >
-        {/* Orange — top right */}
         <div style={{
           position: "absolute",
           right: "-8%", top: "-22%",
           width: "44%", height: "44%",
           borderRadius: "50%",
-          background: ORANGE,
+          background: blobTR,
           filter: "blur(120px)",
         }} />
-        {/* Purple — top right (tighter) */}
         <div style={{
           position: "absolute",
           right: "14%", top: "-8%",
           width: "20%", height: "20%",
           borderRadius: "50%",
-          background: PURPLE,
+          background: blobCT,
           filter: "blur(90px)",
         }} />
-        {/* Blue — bottom left */}
         <div style={{
           position: "absolute",
           left: "-6%", bottom: "-18%",
           width: "38%", height: "38%",
           borderRadius: "50%",
-          background: BLUE,
+          background: blobBL,
           filter: "blur(120px)",
         }} />
       </div>
