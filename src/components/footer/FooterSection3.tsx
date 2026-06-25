@@ -4,7 +4,10 @@ import FooterBottomSection from "./FooterBottomSection";
 
 const FooterSection3 = () => {
   return (
-    <section className="footer-section fix bg-cover variant-bg">
+    <section
+      className="footer-section fix bg-cover variant-bg"
+      style={{ background: "linear-gradient(135deg, #0F0F1A 0%, #1A0F2E 100%)" }}
+    >
       <div className="container">
         <div className="request-demo-wrapper">
           <div className="content">
@@ -35,9 +38,9 @@ const FooterSection3 = () => {
                 <div className="widget-head">
                   <Link to="/">
                     <img
-                      src="/assets/img/logo/xerxez_logo.png"
+                      src="/assets/img/logo/white-logo.svg"
                       alt="Xerxez Solutions"
-                      style={{ height: "60px", width: "auto", marginBottom: "16px", display: "block", background: "transparent", border: "none", boxShadow: "none" }}
+                      style={{ height: "45px", width: "auto", marginBottom: "12px", display: "block" }}
                     />
                   </Link>
                   <h3>About XERXEZ</h3>
@@ -62,7 +65,7 @@ const FooterSection3 = () => {
               </div>
             </div>
 
-            {/* Col 2 — Our Services (7) */}
+            {/* Col 2 — Our Services */}
             <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-5">
               <div
                 className="single-footer-widget"
@@ -87,7 +90,7 @@ const FooterSection3 = () => {
               </div>
             </div>
 
-            {/* Col 3 — Quick Links */}
+            {/* Col 3 — Contact Us */}
             <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-5">
               <div
                 className="single-footer-widget"
@@ -98,32 +101,9 @@ const FooterSection3 = () => {
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <h3>Quick Links</h3>
-                </div>
-                <ul className="list-area">
-                  <li><Link to="/">Home</Link></li>
-                  <li><Link to="/about">About Us</Link></li>
-                  <li><Link to="/service">Services</Link></li>
-                  <li><Link to="/training">Training</Link></li>
-                  <li><Link to="/contact">Contact Us</Link></li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Col 4 — Contact Us */}
-            <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-2">
-              <div
-                className="single-footer-widget"
-                data-aos="fade-up"
-                data-aos-delay="800"
-                data-aos-duration="1000"
-                data-aos-easing="ease-out-cubic"
-                data-aos-once="true"
-              >
-                <div className="widget-head">
                   <h3>Contact Us</h3>
                 </div>
-                <ul className="footer-contect" style={{ listStyle: "none", padding: 0, margin: 0, textAlign: "left" }}>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                     <Phone size={16} color="#6B3FA0" style={{ flexShrink: 0 }} />
                     <a href="tel:+971567867451" style={{ color: "#aaa", textDecoration: "none", fontSize: 14 }}>+971 56 786 7451</a>
@@ -140,6 +120,29 @@ const FooterSection3 = () => {
                     <MapPin size={16} color="#6B3FA0" style={{ flexShrink: 0, marginTop: 2 }} />
                     <span style={{ color: "#aaa", fontSize: 14, lineHeight: 1.5 }}>India &amp; UAE — Remote-first, Global delivery</span>
                   </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Col 4 — Quick Links */}
+            <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-2">
+              <div
+                className="single-footer-widget"
+                data-aos="fade-up"
+                data-aos-delay="800"
+                data-aos-duration="1000"
+                data-aos-easing="ease-out-cubic"
+                data-aos-once="true"
+              >
+                <div className="widget-head">
+                  <h3>Quick Links</h3>
+                </div>
+                <ul className="list-area">
+                  <li><Link to="/">Home</Link></li>
+                  <li><Link to="/about">About Us</Link></li>
+                  <li><Link to="/service">Services</Link></li>
+                  <li><Link to="/training">Training</Link></li>
+                  <li><Link to="/contact">Contact Us</Link></li>
                 </ul>
               </div>
             </div>
