@@ -12150,3 +12150,23 @@ body {
     padding-left: 0;
   }
 }
+
+/* ── Contact page redesign ── */
+@keyframes greenPulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.22); }
+  50%      { box-shadow: 0 0 0 7px rgba(74,222,128,0.06); }
+}
+/* pill-btn full-width variant (submit button) */
+.pill-btn[style*="width: 100%"] {
+  border-radius: 100px !important;
+}
+/* Form inputs — native reset so template doesn't override */
+.contact-form-pro input,
+.contact-form-pro select,
+.contact-form-pro textarea {
+  box-sizing: border-box;
+}
+/* Responsive: stack columns on mobile */
+@media (max-width: 991px) {
+  .contact-info-panel { position: static !important; }
+}
