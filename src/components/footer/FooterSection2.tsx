@@ -1,4 +1,5 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Phone, Mail, Globe, MapPin } from "lucide-react";
 import FooterBottomSection from "./FooterBottomSection";
 
 const FooterSection2 = () => {
@@ -7,6 +8,8 @@ const FooterSection2 = () => {
       <div className="container">
         <div className="footer-widget-wrapper style-2">
           <div className="row">
+
+            {/* Col 1 — About */}
             <div className="col-xl-3 col-lg-4 col-md-6">
               <div
                 className="single-footer-widget"
@@ -17,6 +20,13 @@ const FooterSection2 = () => {
                 data-aos-once="true"
               >
                 <div className="widget-head">
+                  <Link to="/">
+                    <img
+                      src="/assets/img/logo/white-logo.svg"
+                      alt="Xerxez"
+                      style={{ height: "40px", width: "auto", marginBottom: "16px", display: "block" }}
+                    />
+                  </Link>
                   <h3>About XERXEZ</h3>
                 </div>
                 <div className="footer-content">
@@ -39,6 +49,8 @@ const FooterSection2 = () => {
                 </div>
               </div>
             </div>
+
+            {/* Col 2 — Our Services (7 items) */}
             <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-5">
               <div
                 className="single-footer-widget"
@@ -59,11 +71,11 @@ const FooterSection2 = () => {
                   <li><Link to="/service/ai-training-consulting">AI Training &amp; Consulting</Link></li>
                   <li><Link to="/service/quantum-computing">Quantum Computing</Link></li>
                   <li><Link to="/service/mobile-application">Mobile Application</Link></li>
-                  <li><Link to="/service/web-mobile-hosting">Web &amp; Mobile Hosting</Link></li>
-                  <li><Link to="/service/software-consulting">Software Consulting</Link></li>
                 </ul>
               </div>
             </div>
+
+            {/* Col 3 — Quick Links (swapped from col 4) */}
             <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-2">
               <div
                 className="single-footer-widget"
@@ -74,56 +86,19 @@ const FooterSection2 = () => {
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <h3>Contact Us</h3>
+                  <h3>Quick Links</h3>
                 </div>
-                <ul className="footer-contect">
-                  <li>
-                    <div className="icon">
-                      <i className="fas fa-phone-alt"></i>
-                    </div>
-                    <div className="content">
-                      <h5>Phone</h5>
-                      <p>
-                        <a href="tel:+971567867451" className="text-white">+971 56 786 7451</a>
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <i className="fas fa-envelope"></i>
-                    </div>
-                    <div className="content">
-                      <h5>Email</h5>
-                      <p>
-                        <a href="mailto:info@xerxez.com">info@xerxez.com</a>
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <i className="fas fa-globe"></i>
-                    </div>
-                    <div className="content">
-                      <h5>Website</h5>
-                      <p>
-                        <a href="https://xerxez.com" className="text-white">
-                          xerxez.com
-                        </a>
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <i className="fas fa-map-marker-alt"></i>
-                    </div>
-                    <div className="content">
-                      <h5>Headquarters</h5>
-                      <p className="text-white">India &amp; UAE — Remote-first, Global delivery</p>
-                    </div>
-                  </li>
+                <ul className="list-area">
+                  <li><Link to="/">Home</Link></li>
+                  <li><Link to="/about">About Us</Link></li>
+                  <li><Link to="/service">Services</Link></li>
+                  <li><Link to="/training">Training</Link></li>
+                  <li><Link to="/contact">Contact Us</Link></li>
                 </ul>
               </div>
             </div>
+
+            {/* Col 4 — Contact Us (swapped from col 3) */}
             <div className="col-xl-3 col-lg-4 col-md-6">
               <div
                 className="single-footer-widget"
@@ -134,27 +109,29 @@ const FooterSection2 = () => {
                 data-aos-once="true"
               >
                 <div className="widget-head">
-                  <h3>Quick Links</h3>
+                  <h3>Contact Us</h3>
                 </div>
-                <ul className="list-area">
-                  <li>
-                    <Link to="/">Home</Link>
+                <ul className="footer-contect" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    <Phone size={16} color="#6B3FA0" style={{ flexShrink: 0 }} />
+                    <a href="tel:+971567867451" style={{ color: "#aaa", textDecoration: "none", fontSize: 14 }}>+971 56 786 7451</a>
                   </li>
-                  <li>
-                    <Link to="/about">About Us</Link>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    <Mail size={16} color="#6B3FA0" style={{ flexShrink: 0 }} />
+                    <a href="mailto:info@xerxez.com" style={{ color: "#aaa", textDecoration: "none", fontSize: 14 }}>info@xerxez.com</a>
                   </li>
-                  <li>
-                    <Link to="/service">Services</Link>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    <Globe size={16} color="#6B3FA0" style={{ flexShrink: 0 }} />
+                    <a href="https://xerxez.com" style={{ color: "#aaa", textDecoration: "none", fontSize: 14 }}>xerxez.com</a>
                   </li>
-                  <li>
-                    <Link to="/training">Training</Link>
-                  </li>
-                  <li>
-                    <Link to="/contact">Contact Us</Link>
+                  <li style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <MapPin size={16} color="#6B3FA0" style={{ flexShrink: 0, marginTop: 2 }} />
+                    <span style={{ color: "#aaa", fontSize: 14, lineHeight: 1.5 }}>India &amp; UAE — Remote-first, Global delivery</span>
                   </li>
                 </ul>
               </div>
             </div>
+
           </div>
         </div>
       </div>
