@@ -12015,7 +12015,7 @@ body {
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  padding: 104px 0 80px !important;
+  padding: 112px 0 80px !important;
 }
 
 /* Remove any dark bg image that leaked from template */
@@ -12043,16 +12043,34 @@ body {
   }
 }
 
-/* ── Logo PNG — no white box ── */
-.header-logo1 img,
-.offcanvas__logo img {
-  height: 68px !important;
+/* ── Logo PNG — no white box, responsive sizing ── */
+.header-logo1 img {
+  height: 80px !important;
   width: auto !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
   padding: 0 !important;
+  display: block !important;
+}
+.offcanvas__logo img {
+  height: 56px !important;
+  width: auto !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+/* Tablet: 768px–1199px */
+@media (max-width: 1199px) {
+  .header-logo1 img { height: 68px !important; }
+}
+/* Mobile: <576px */
+@media (max-width: 575px) {
+  .header-logo1 img { height: 52px !important; }
 }
 
 /* ── About section: theme-btn arrow flush ── */
