@@ -4,16 +4,19 @@ import BrandSection from "../components/brand/BrandSection";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import CustomLayout from "../components/layout/CustomLayout";
 import ProjectSection4 from "../components/project/ProjectSection4";
-const AboutPage = () => {
-  return (
-    <CustomLayout>
-        <BreadcrumbSection title="About Company" />
-        <AboutSection2 variant />
-        <ProjectSection4 variant />
-        <AboutSection6 />
-        <BrandSection variant="style-3" />
-    </CustomLayout>
-  );
-};
+import TeamStatsBento from "../components/team/TeamStatsBento";
+import CoreValuesSection from "../components/values/CoreValuesSection";
+
+const AboutPage = () => (
+  <CustomLayout>
+    <BreadcrumbSection title="About Company" />
+    <TeamStatsBento />
+    <AboutSection2 variant />
+    <CoreValuesSection />
+    <ProjectSection4 variant />
+    <AboutSection6 />
+    <BrandSection variant="style-3" />
+  </CustomLayout>
+);
 
 export default AboutPage;

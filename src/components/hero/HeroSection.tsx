@@ -7,12 +7,17 @@ const stats = [
   { value: "<6 mo", label: "Time to Deploy",     icon: "fas fa-rocket"     },
 ];
 
-const features = [
-  "AI-native ERP — built for enterprise scale",
-  "ISO 27001 & SOC 2 Type II compliant",
-  "Multi-cloud: AWS · Azure · GCP",
-  "24/7 dedicated support teams",
+type BentoStat  = { kind: "stat";   value: string; label: string; icon: string };
+type BentoStack = { kind: "stack" };
+
+const bento: (BentoStat | BentoStack)[] = [
+  { kind: "stat",  value: "120+",   label: "Projects Delivered", icon: "fas fa-check-circle" },
+  { kind: "stat",  value: "99.9%",  label: "Platform Uptime",    icon: "fas fa-shield-alt"  },
+  { kind: "stat",  value: "<6 mo",  label: "Time to Go-Live",    icon: "fas fa-rocket"       },
+  { kind: "stack" },
 ];
+
+const techStack = ["AWS", "Azure", "GCP", "K8s", "TF"];
 
 const HeroSection = () => {
   return (
@@ -98,14 +103,51 @@ const HeroSection = () => {
                 ))}
               </div>
 
-              <div style={{ borderTop: "1px solid #E5E5E5", marginBottom: 22 }} />
+              <div style={{ borderTop: "1px solid #E5E5E5", marginBottom: 20 }} />
 
-              {features.map((feat) => (
-                <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                  <i className="fas fa-check-circle" style={{ color: "#6c57d2", fontSize: 14, flexShrink: 0 }} />
-                  <span style={{ color: "#4B4B4B", fontSize: 14 }}>{feat}</span>
-                </div>
-              ))}
+              {/* 2×2 bento grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                {bento.map((cell, i) =>
+                  cell.kind === "stack" ? (
+                    <div key={i} style={{
+                      background: "#F0EEFF",
+                      border: "1px solid rgba(108,87,210,0.15)",
+                      borderRadius: 12,
+                      padding: "16px 14px",
+                      display: "flex", flexDirection: "column", gap: 8,
+                    }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: "#6c57d2", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                        Cloud Stack
+                      </div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                        {techStack.map((t) => (
+                          <span key={t} style={{
+                            background: "#fff", border: "1px solid #E5E5E5",
+                            borderRadius: 6, padding: "2px 8px",
+                            fontSize: 11, fontWeight: 700, color: "#4B4B4B",
+                          }}>
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div key={i} style={{
+                      background: "#F5F5F7",
+                      border: "1px solid #E5E5E5",
+                      borderRadius: 12,
+                      padding: "16px 14px",
+                      display: "flex", flexDirection: "column", gap: 4,
+                    }}>
+                      <i className={(cell as BentoStat).icon} style={{ color: "#6c57d2", fontSize: 16 }} />
+                      <div style={{ color: "#0A0A0A", fontSize: 22, fontWeight: 800, lineHeight: 1 }}>
+                        {(cell as BentoStat).value}
+                      </div>
+                      <div style={{ color: "#6B6B6B", fontSize: 11 }}>{(cell as BentoStat).label}</div>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
           </div>
 
