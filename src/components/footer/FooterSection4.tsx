@@ -22,9 +22,9 @@ const FooterSection4 = () => {
                 <div className="widget-head">
                   <Link to="/">
                     <img
-                      src="/assets/img/logo/white-logo.svg"
-                      alt="Xerxez"
-                      style={{ height: "40px", width: "auto", marginBottom: "16px", display: "block" }}
+                      src="/assets/img/logo/xerxez_logo.png"
+                      alt="Xerxez Solutions"
+                      style={{ height: "60px", width: "auto", marginBottom: "16px", display: "block", background: "transparent", border: "none", boxShadow: "none" }}
                     />
                   </Link>
                   <h3>About XERXEZ</h3>
@@ -110,7 +110,7 @@ const FooterSection4 = () => {
                 <div className="widget-head">
                   <h3>Contact Us</h3>
                 </div>
-                <ul className="footer-contect" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                <ul className="footer-contect" style={{ listStyle: "none", padding: 0, margin: 0, textAlign: "left" }}>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                     <Phone size={16} color="#6B3FA0" style={{ flexShrink: 0 }} />
                     <a href="tel:+971567867451" style={{ color: "#aaa", textDecoration: "none", fontSize: 14 }}>+971 56 786 7451</a>
