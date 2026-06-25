@@ -12091,3 +12091,52 @@ body {
 @media (max-width: 991px) {
   .hero-card-col { padding-top: 0 !important; }
 }
+
+/* ══════════════════════════════════════
+   LAYOUT FIX: About section — no overlap, no clipping
+   ══════════════════════════════════════ */
+
+/* 1. Remove overflow:hidden from the about section so the button never clips */
+.about-section.fix {
+  overflow: visible !important;
+}
+
+/* 2. Constrain the image strictly inside its column — never bleed right */
+.about-wrapper .about-img {
+  overflow: hidden !important;
+  width: 100%;
+  display: block;
+}
+.about-wrapper .about-img img {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  max-width: 100%;
+}
+
+/* 3. Kill the 45px left margin that was pushing the button off-screen */
+.about-wrapper .about-content {
+  margin-left: 0 !important;
+  padding-left: 24px;
+}
+
+/* 4. Ensure the button never exceeds its container */
+.about-wrapper .about-content .theme-btn {
+  display: inline-flex !important;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+/* 5. Global: no section-level overflow:hidden clips buttons */
+.about-section,
+.service-section,
+.hero-section {
+  overflow: visible !important;
+}
+
+/* Responsive: collapse padding on mobile */
+@media (max-width: 991px) {
+  .about-wrapper .about-content {
+    padding-left: 0;
+  }
+}
