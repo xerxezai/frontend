@@ -35,11 +35,11 @@ const HeaderSection = ({ variant }: Props) => {
             <div className="header-left">
               <Link to="/" className="header-logo1">
                 <Image
-                  src="/assets/img/logo/black-logo.svg"
+                  src="/assets/img/logo/xerxez_logo.png"
                   alt="Xerxez Solutions"
                   width={180}
                   height={45}
-                  style={{ height: '45px', width: 'auto' }}
+                  style={{ height: '45px', width: 'auto', background: 'transparent', display: 'block' }}
                 />
               </Link>
             </div>
@@ -49,15 +49,19 @@ const HeaderSection = ({ variant }: Props) => {
               </div>
               {variant ? (
                 <div className="header-button">
-                  <Link to="/contact" className="theme-btn">
+                  <Link to="/contact" className="pill-btn">
                     Get Started
-                    <i className="far fa-arrow-right"></i>
+                    <span className="btn-arrow">
+                      <i className="far fa-arrow-right"></i>
+                    </span>
                   </Link>
                 </div>
               ) : (
-                <Link to="/contact" className="theme-btn">
+                <Link to="/contact" className="pill-btn">
                   Get Started
-                  <i className="far fa-arrow-right"></i>
+                  <span className="btn-arrow">
+                    <i className="far fa-arrow-right"></i>
+                  </span>
                 </Link>
               )}
 

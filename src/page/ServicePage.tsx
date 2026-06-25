@@ -1,5 +1,4 @@
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
-import ComparisonSection from "../components/comparison/ComparisonSection";
 import CoreAdvantageSection from "../components/core-advantage/CoreAdvantageSection";
 import CounterSection from "../components/counter/CounterSection";
 import CustomLayout from "../components/layout/CustomLayout";
@@ -12,7 +11,6 @@ const ServicePage = () => (
     <ServiceSection3 mainSection />
     <ProcessTimeline />
     <CoreAdvantageSection variant />
-    <ComparisonSection />
     <CounterSection variant="style-3" />
   </CustomLayout>
 );

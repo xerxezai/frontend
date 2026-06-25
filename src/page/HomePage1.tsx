@@ -1,6 +1,5 @@
 import AboutSection from "../components/about/AboutSection";
 import BrandSection from "../components/brand/BrandSection";
-import ComparisonSection from "../components/comparison/ComparisonSection";
 import ContactSection from "../components/contact/ContactSection";
 import CoreAdvantageSection from "../components/core-advantage/CoreAdvantageSection";
 import CtaSection from "../components/cta/CtaSection";
@@ -35,7 +34,6 @@ const HomePage1 = () => {
       <div id="sec-hero"><HeroSection /></div>
       <div id="sec-services">
         <ServiceSection />
-        <ComparisonSection />
       </div>
       <div id="sec-about">
         <AboutSection />

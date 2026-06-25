@@ -1,0 +1,877 @@
+/* ================================================================
+   XERXEZ DESIGN SYSTEM  ·  v1.0
+   ================================================================
+   Source of truth derived from the Hero section as design reference.
+   All components, pages, and utilities must consume these tokens.
+
+   Sections
+   ─────────────────────────────────────────────────────────────────
+   1.  CSS Custom Properties (Design Tokens)
+   2.  Typography Scale
+   3.  Color Utilities
+   4.  Button Variants
+   5.  Card Variants
+   6.  Icon Container Variants
+   7.  Badge / Tag Variants
+   8.  Section Spacing
+   9.  Container & Grid System
+   10. Dividers
+   11. Hover Animations
+   12. Scroll / AOS Overrides
+   13. Focus Accessibility
+   14. Reduced-Motion Safety Net
+   ================================================================ */
+
+
+/* ─── 1. CSS CUSTOM PROPERTIES ─────────────────────────────────── */
+
+:root {
+
+  /* Colour ──────────────────────────────────────────────────── */
+
+  /* Brand */
+  --xz-purple:        #6c57d2;
+  --xz-purple-light:  rgba(108, 87, 210, 0.10);
+  --xz-purple-mid:    rgba(108, 87, 210, 0.18);
+  --xz-purple-glow:   rgba(108, 87, 210, 0.30);
+  --xz-purple-dark:   #5242b0;
+
+  /* Surface */
+  --xz-cream:         #F2EFE9;   /* page bg  */
+  --xz-cream-deep:    #EAE7E0;   /* section alt */
+  --xz-cream-border:  #DDDAD4;   /* all borders */
+  --xz-white:         #ffffff;
+
+  /* Dark surfaces (cards, footer, breadcrumbs) */
+  --xz-dark:          #1C1C1E;
+  --xz-dark-2:        #1A1A1A;
+  --xz-dark-3:        #111111;
+
+  /* Text */
+  --xz-ink:           #1A1A1A;   /* headings */
+  --xz-muted:         #4A4A4A;   /* body      */
+  --xz-subtle:        #9A9A9A;   /* labels    */
+  --xz-placeholder:   #BDBDBD;
+
+  /* Rating / status */
+  --xz-gold:          #f8bc26;
+  --xz-green:         #22c55e;
+  --xz-red:           #ef4444;
+
+  /* Typography ──────────────────────────────────────────────── */
+  --xz-font-display:  'Playfair Display', Georgia, serif;
+  --xz-font-sans:     'DM Sans', system-ui, sans-serif;
+
+  /* Type scale (8-pt modular, base 16) */
+  --xz-text-2xs:      10px;
+  --xz-text-xs:       11px;
+  --xz-text-sm:       13px;
+  --xz-text-base:     15px;
+  --xz-text-md:       16px;
+  --xz-text-lg:       18px;
+  --xz-text-xl:       20px;
+  --xz-text-2xl:      24px;
+  --xz-text-3xl:      32px;
+  --xz-text-4xl:      clamp(28px, 3.5vw, 44px);
+  --xz-text-hero:     clamp(40px, 6vw,   88px);
+
+  /* Line heights */
+  --xz-leading-tight:  1.0;
+  --xz-leading-snug:   1.25;
+  --xz-leading-normal: 1.5;
+  --xz-leading-body:   1.75;
+
+  /* Letter spacing */
+  --xz-track-wide:    0.08em;
+  --xz-track-wider:   0.12em;
+  --xz-track-widest:  0.18em;
+
+  /* Spacing (8-pt grid) ─────────────────────────────────────── */
+  --xz-sp-1:   8px;
+  --xz-sp-2:  16px;
+  --xz-sp-3:  24px;
+  --xz-sp-4:  32px;
+  --xz-sp-5:  40px;
+  --xz-sp-6:  48px;
+  --xz-sp-7:  56px;
+  --xz-sp-8:  64px;
+  --xz-sp-10: 80px;
+  --xz-sp-12: 96px;
+  --xz-sp-15: 120px;
+
+  /* Section vertical rhythm */
+  --xz-section-sm:     64px;
+  --xz-section-md:    100px;
+  --xz-section-lg:    120px;
+
+  /* Border radius ───────────────────────────────────────────── */
+  --xz-r-sm:    6px;
+  --xz-r-md:    12px;
+  --xz-r-lg:    16px;
+  --xz-r-xl:    20px;
+  --xz-r-card:  18px;
+  --xz-r-pill:  100px;
+
+  /* Shadows ─────────────────────────────────────────────────── */
+  --xz-shadow-xs:     0 1px 4px  rgba(0,0,0,0.06);
+  --xz-shadow-sm:     0 4px 16px rgba(0,0,0,0.06);
+  --xz-shadow-md:     0 8px 32px rgba(0,0,0,0.08);
+  --xz-shadow-lg:     0 16px 48px rgba(0,0,0,0.10);
+  --xz-shadow-xl:     0 24px 72px rgba(0,0,0,0.14);
+  --xz-shadow-card:   0px 4px 25px rgba(0,0,0,0.06);
+  --xz-shadow-purple: 0 8px 24px  rgba(108,87,210,0.25);
+  --xz-shadow-dark:  -20px 20px 60px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.12);
+
+  /* Transitions ─────────────────────────────────────────────── */
+  --xz-ease:          cubic-bezier(0.23, 1, 0.32, 1);
+  --xz-ease-in:       cubic-bezier(0.4,  0, 1,    1);
+  --xz-ease-out:      cubic-bezier(0,    0, 0.2,  1);
+  --xz-dur-fast:      150ms;
+  --xz-dur-base:      250ms;
+  --xz-dur-slow:      400ms;
+  --xz-dur-reveal:    600ms;
+
+  /* Z-index scale ───────────────────────────────────────────── */
+  --xz-z-base:    1;
+  --xz-z-card:   10;
+  --xz-z-sticky: 20;
+  --xz-z-modal:  50;
+  --xz-z-nav:    9999;
+
+  /* Container widths ────────────────────────────────────────── */
+  --xz-container:      1320px;
+  --xz-container-wide: 1440px;
+  --xz-container-sm:    840px;
+  --xz-container-xs:    640px;
+}
+
+
+/* ─── 2. TYPOGRAPHY SCALE ──────────────────────────────────────── */
+
+.xz-eyebrow {
+  font-family: var(--xz-font-sans);
+  font-size: var(--xz-text-xs);
+  font-weight: 600;
+  letter-spacing: var(--xz-track-widest);
+  text-transform: uppercase;
+  color: var(--xz-purple);
+  margin-bottom: var(--xz-sp-1);
+}
+
+.xz-headline {
+  font-family: var(--xz-font-display);
+  font-weight: 900;
+  font-size: var(--xz-text-hero);
+  line-height: var(--xz-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--xz-ink);
+  margin-bottom: var(--xz-sp-3);
+}
+
+.xz-headline--dark {
+  color: var(--xz-white);
+}
+
+.xz-headline--accent span,
+.xz-headline span.accent {
+  font-style: italic;
+  color: var(--xz-purple);
+}
+
+.xz-section-title {
+  font-family: var(--xz-font-display);
+  font-weight: 900;
+  font-size: var(--xz-text-4xl);
+  line-height: var(--xz-leading-snug);
+  letter-spacing: -0.02em;
+  color: var(--xz-ink);
+  margin-bottom: var(--xz-sp-2);
+}
+
+.xz-section-title--dark {
+  color: var(--xz-white);
+}
+
+.xz-section-title span.accent {
+  font-style: italic;
+  color: var(--xz-purple);
+}
+
+.xz-body {
+  font-family: var(--xz-font-sans);
+  font-size: var(--xz-text-md);
+  line-height: var(--xz-leading-body);
+  color: var(--xz-muted);
+  max-width: 60ch;
+}
+
+.xz-body--dark {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.xz-label {
+  font-family: var(--xz-font-sans);
+  font-size: var(--xz-text-sm);
+  font-weight: 500;
+  color: var(--xz-muted);
+}
+
+.xz-micro {
+  font-family: var(--xz-font-sans);
+  font-size: var(--xz-text-2xs);
+  font-weight: 500;
+  letter-spacing: var(--xz-track-wider);
+  text-transform: uppercase;
+  color: var(--xz-subtle);
+}
+
+
+/* ─── 3. COLOR UTILITIES ───────────────────────────────────────── */
+
+.xz-bg-cream      { background-color: var(--xz-cream) !important; }
+.xz-bg-cream-deep { background-color: var(--xz-cream-deep) !important; }
+.xz-bg-dark       { background-color: var(--xz-dark-2) !important; }
+.xz-bg-card-dark  { background-color: var(--xz-dark) !important; }
+.xz-bg-purple     { background-color: var(--xz-purple) !important; }
+.xz-bg-white      { background-color: var(--xz-white) !important; }
+
+.xz-text-ink      { color: var(--xz-ink) !important; }
+.xz-text-muted    { color: var(--xz-muted) !important; }
+.xz-text-purple   { color: var(--xz-purple) !important; }
+.xz-text-white    { color: var(--xz-white) !important; }
+.xz-text-subtle   { color: var(--xz-subtle) !important; }
+
+.xz-border        { border: 1px solid var(--xz-cream-border) !important; }
+.xz-border-purple { border: 1px solid rgba(108,87,210,0.3) !important; }
+
+
+/* ─── 4. BUTTON VARIANTS ───────────────────────────────────────── */
+
+/* Base — all buttons inherit this reset */
+.xz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--xz-sp-1);
+  font-family: var(--xz-font-sans);
+  font-size: var(--xz-text-base);
+  font-weight: 600;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  text-decoration: none !important;
+  border-radius: var(--xz-r-pill);
+  padding: 13px 24px;
+  transition:
+    transform   var(--xz-dur-base) var(--xz-ease),
+    box-shadow  var(--xz-dur-base) var(--xz-ease),
+    background  var(--xz-dur-base) ease,
+    color       var(--xz-dur-fast) ease;
+  will-change: transform;
+}
+
+.xz-btn:focus-visible {
+  outline: 2px solid var(--xz-purple);
+  outline-offset: 3px;
+}
+
+/* Primary — black pill with cream arrow circle (from Hero) */
+.xz-btn--primary {
+  background: var(--xz-dark-2);
+  color: var(--xz-cream) !important;
+}
+.xz-btn--primary:hover {
+  background: #333333;
+  color: var(--xz-cream) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+.xz-btn--primary .xz-btn__arrow {
+  background: var(--xz-cream);
+  color: var(--xz-dark-2);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+/* Purple — filled purple */
+.xz-btn--purple {
+  background: var(--xz-purple);
+  color: var(--xz-white) !important;
+}
+.xz-btn--purple:hover {
+  background: var(--xz-purple-dark);
+  color: var(--xz-white) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--xz-shadow-purple);
+}
+
+/* Ghost — transparent, dark text, underline arrow */
+.xz-btn--ghost {
+  background: transparent;
+  color: var(--xz-ink) !important;
+  padding: 13px 0;
+}
+.xz-btn--ghost:hover {
+  color: var(--xz-purple) !important;
+  gap: 14px;
+}
+
+/* Ghost light — for dark section backgrounds */
+.xz-btn--ghost-light {
+  background: transparent;
+  color: rgba(255,255,255,0.75) !important;
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 13px 24px;
+}
+.xz-btn--ghost-light:hover {
+  color: var(--xz-white) !important;
+  border-color: rgba(255,255,255,0.6);
+  transform: translateY(-2px);
+}
+
+/* Icon-only */
+.xz-btn--icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--xz-r-pill);
+}
+
+
+/* ─── 5. CARD VARIANTS ─────────────────────────────────────────── */
+
+/* Light card — used across cream sections */
+.xz-card {
+  background: var(--xz-white);
+  border: 1px solid var(--xz-cream-border);
+  border-radius: var(--xz-r-card);
+  padding: var(--xz-sp-4) var(--xz-sp-3);
+  box-shadow: var(--xz-shadow-card);
+  transition:
+    border-color  var(--xz-dur-base) ease,
+    box-shadow    var(--xz-dur-base) ease,
+    transform     var(--xz-dur-slow) var(--xz-ease);
+  will-change: transform;
+}
+
+.xz-card:hover {
+  border-color: rgba(108,87,210,0.35);
+  box-shadow: 0 20px 48px rgba(108,87,210,0.12);
+  transform: translateY(-6px);
+}
+
+/* Dark card — used on dark-bg sections */
+.xz-card--dark {
+  background: var(--xz-dark);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--xz-r-card);
+  padding: var(--xz-sp-4) var(--xz-sp-3);
+  box-shadow: var(--xz-shadow-dark);
+  transition:
+    border-color  var(--xz-dur-base) ease,
+    box-shadow    var(--xz-dur-base) ease,
+    transform     var(--xz-dur-slow) var(--xz-ease);
+  will-change: transform;
+}
+
+.xz-card--dark:hover {
+  border-color: rgba(108,87,210,0.4);
+  box-shadow: 0 24px 60px rgba(108,87,210,0.18), var(--xz-shadow-dark);
+  transform: translateY(-6px);
+}
+
+/* Feature card — editorial 3-D lift (from service cards) */
+.xz-card--feature {
+  background: var(--xz-white);
+  border: 1px solid var(--xz-cream-border);
+  border-radius: var(--xz-r-lg);
+  padding: var(--xz-sp-4) var(--xz-sp-3);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition:
+    border-color  var(--xz-dur-base) ease,
+    box-shadow    var(--xz-dur-base) ease,
+    transform     var(--xz-dur-slow) var(--xz-ease);
+  will-change: transform;
+  cursor: default;
+}
+
+.xz-card--feature:hover {
+  border-color: var(--xz-purple);
+  transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-8px);
+  box-shadow: 0 24px 60px rgba(108,87,210,0.13);
+}
+
+/* Glass card — for purple / dark gradient sections */
+.xz-card--glass {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--xz-r-card);
+  padding: var(--xz-sp-3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    border-color  var(--xz-dur-base) ease,
+    box-shadow    var(--xz-dur-base) ease,
+    transform     var(--xz-dur-slow) var(--xz-ease);
+}
+
+.xz-card--glass:hover {
+  border-color: rgba(255,255,255,0.30);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+  transform: translateY(-4px);
+}
+
+/* Tally / metrics card — 3D perspective (from Hero) */
+.xz-card--tally {
+  background: var(--xz-dark);
+  border-radius: var(--xz-r-card);
+  padding: 28px 32px;
+  transform: perspective(1200px) rotateY(-8deg) rotateX(3deg);
+  box-shadow: var(--xz-shadow-dark);
+  transition:
+    transform   500ms var(--xz-ease),
+    box-shadow  500ms ease;
+  will-change: transform;
+}
+
+.xz-card--tally:hover {
+  transform: perspective(1200px) rotateY(-2deg) rotateX(1deg) translateZ(12px);
+  box-shadow: -32px 32px 90px rgba(0,0,0,0.28), 0 8px 32px rgba(108,87,210,0.18);
+}
+
+@media (max-width: 991px) {
+  .xz-card--tally,
+  .tally-card {
+    transform: none !important;
+    box-shadow: var(--xz-shadow-lg) !important;
+  }
+}
+
+
+/* ─── 6. ICON CONTAINER VARIANTS ───────────────────────────────── */
+
+/* Base */
+.xz-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Sizes */
+.xz-icon--sm { width: 36px; height: 36px; border-radius: var(--xz-r-md); font-size: 14px; }
+.xz-icon--md { width: 48px; height: 48px; border-radius: var(--xz-r-md); font-size: 20px; }
+.xz-icon--lg { width: 56px; height: 56px; border-radius: 14px; font-size: 22px; }
+.xz-icon--xl { width: 64px; height: 64px; border-radius: 16px; font-size: 26px; }
+
+/* Colour schemes */
+.xz-icon--purple {
+  background: var(--xz-purple-light);
+  border: 1px solid rgba(108,87,210,0.15);
+  color: var(--xz-purple);
+}
+
+.xz-icon--purple-solid {
+  background: var(--xz-purple);
+  color: var(--xz-white);
+}
+
+.xz-icon--dark {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.75);
+}
+
+.xz-icon--cream {
+  background: var(--xz-cream-deep);
+  border: 1px solid var(--xz-cream-border);
+  color: var(--xz-ink);
+}
+
+
+/* ─── 7. BADGE / TAG VARIANTS ──────────────────────────────────── */
+
+.xz-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--xz-font-sans);
+  font-size: var(--xz-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--xz-r-pill);
+  padding: 5px 14px;
+  line-height: 1;
+}
+
+.xz-badge--purple {
+  background: var(--xz-purple-light);
+  border: 1px solid rgba(108,87,210,0.2);
+  color: var(--xz-purple);
+}
+
+.xz-badge--dark {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.6);
+}
+
+.xz-badge--cream {
+  background: var(--xz-cream-deep);
+  border: 1px solid var(--xz-cream-border);
+  color: var(--xz-muted);
+}
+
+.xz-badge--green {
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.2);
+  color: var(--xz-green);
+}
+
+/* Pulse dot (from Hero live indicator) */
+.xz-live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--xz-font-sans);
+  font-size: var(--xz-text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--xz-track-wider);
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+.xz-live-dot::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--xz-purple);
+  box-shadow: 0 0 0 3px var(--xz-purple-glow);
+  animation: xzPulse 2s ease infinite;
+  flex-shrink: 0;
+}
+
+@keyframes xzPulse {
+  0%, 100% { box-shadow: 0 0 0 3px var(--xz-purple-glow); }
+  50%       { box-shadow: 0 0 0 7px rgba(108,87,210,0.08); }
+}
+
+
+/* ─── 8. SECTION SPACING ───────────────────────────────────────── */
+
+.xz-section {
+  padding: var(--xz-section-md) 0;
+}
+
+.xz-section--sm {
+  padding: var(--xz-section-sm) 0;
+}
+
+.xz-section--lg {
+  padding: var(--xz-section-lg) 0;
+}
+
+/* Cream sections */
+.xz-section--cream {
+  background: var(--xz-cream);
+  padding: var(--xz-section-md) 0;
+}
+
+.xz-section--cream-deep {
+  background: var(--xz-cream-deep);
+  padding: var(--xz-section-md) 0;
+}
+
+/* Dark sections */
+.xz-section--dark {
+  background: var(--xz-dark-2);
+  padding: var(--xz-section-md) 0;
+}
+
+/* Purple gradient sections */
+.xz-section--purple {
+  background: linear-gradient(135deg, #5a47c0, var(--xz-purple), #8b73ff);
+  padding: var(--xz-section-md) 0;
+}
+
+/* Section header block */
+.xz-section-header {
+  margin-bottom: var(--xz-sp-8);
+  text-align: center;
+}
+
+.xz-section-header--left {
+  text-align: left;
+}
+
+.xz-section-header .xz-eyebrow {
+  margin-bottom: var(--xz-sp-1);
+}
+
+
+/* ─── 9. CONTAINER & GRID SYSTEM ───────────────────────────────── */
+
+/* Canonical container — matches Bootstrap .container at 1320px */
+.xz-container {
+  width: 100%;
+  max-width: var(--xz-container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.xz-container--wide {
+  max-width: var(--xz-container-wide);
+}
+
+.xz-container--sm {
+  max-width: var(--xz-container-sm);
+}
+
+.xz-container--xs {
+  max-width: var(--xz-container-xs);
+}
+
+/* 12-col grid shorthand (complements Bootstrap .row .col-*) */
+.xz-grid {
+  display: grid;
+  gap: var(--xz-sp-3);
+}
+
+.xz-grid--2  { grid-template-columns: repeat(2, 1fr); }
+.xz-grid--3  { grid-template-columns: repeat(3, 1fr); }
+.xz-grid--4  { grid-template-columns: repeat(4, 1fr); }
+.xz-grid--auto-sm { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.xz-grid--auto-md { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.xz-grid--auto-lg { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }
+
+@media (max-width: 991px) {
+  .xz-grid--4  { grid-template-columns: repeat(2, 1fr); }
+  .xz-grid--3  { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 575px) {
+  .xz-grid--4,
+  .xz-grid--3,
+  .xz-grid--2  { grid-template-columns: 1fr; }
+}
+
+/* Flex row shorthand */
+.xz-flex        { display: flex; align-items: center; }
+.xz-flex--gap-1 { gap: var(--xz-sp-1); }
+.xz-flex--gap-2 { gap: var(--xz-sp-2); }
+.xz-flex--gap-3 { gap: var(--xz-sp-3); }
+.xz-flex--wrap  { flex-wrap: wrap; }
+.xz-flex--col   { flex-direction: column; }
+.xz-flex--center { justify-content: center; }
+.xz-flex--between { justify-content: space-between; }
+
+
+/* ─── 10. DIVIDERS ─────────────────────────────────────────────── */
+
+/* Cream-to-dark gradient divider (from Footer top) */
+.xz-divider--purple {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--xz-purple), transparent);
+  border: none;
+  margin: 0;
+}
+
+.xz-divider--cream {
+  height: 1px;
+  background: var(--xz-cream-border);
+  border: none;
+  margin: var(--xz-sp-5) 0;
+}
+
+.xz-divider--dark {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  border: none;
+  margin: var(--xz-sp-4) 0;
+}
+
+
+/* ─── 11. HOVER ANIMATIONS ─────────────────────────────────────── */
+
+/* Lift — card rises, shadow deepens */
+.xz-hover-lift {
+  transition: transform var(--xz-dur-slow) var(--xz-ease),
+              box-shadow var(--xz-dur-slow) ease;
+  will-change: transform;
+}
+.xz-hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--xz-shadow-lg);
+}
+
+/* Lift + purple glow */
+.xz-hover-glow {
+  transition: transform var(--xz-dur-slow) var(--xz-ease),
+              box-shadow var(--xz-dur-slow) ease,
+              border-color var(--xz-dur-base) ease;
+  will-change: transform;
+}
+.xz-hover-glow:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(108,87,210,0.18);
+  border-color: rgba(108,87,210,0.4) !important;
+}
+
+/* 3D tilt (service cards) */
+.xz-hover-3d {
+  transition: transform var(--xz-dur-slow) var(--xz-ease),
+              box-shadow var(--xz-dur-slow) ease,
+              border-color var(--xz-dur-base) ease;
+  will-change: transform;
+}
+.xz-hover-3d:hover {
+  transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-8px);
+  box-shadow: 0 24px 60px rgba(108,87,210,0.13);
+  border-color: var(--xz-purple) !important;
+}
+
+/* Arrow nudge (inline CTA links) */
+.xz-hover-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap var(--xz-dur-base) ease,
+              color var(--xz-dur-fast) ease;
+  cursor: pointer;
+}
+.xz-hover-arrow:hover {
+  gap: 12px;
+  color: var(--xz-purple) !important;
+}
+
+/* Scale icon on parent hover */
+.xz-card:hover .xz-icon--purple,
+.xz-card--feature:hover .xz-icon--purple {
+  background: var(--xz-purple-mid);
+  transform: scale(1.08);
+  transition: transform var(--xz-dur-base) var(--xz-ease),
+              background var(--xz-dur-base) ease;
+}
+
+/* Underline reveal */
+.xz-hover-underline {
+  position: relative;
+  text-decoration: none !important;
+}
+.xz-hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--xz-purple);
+  transition: width var(--xz-dur-base) ease;
+}
+.xz-hover-underline:hover::after {
+  width: 100%;
+}
+
+
+/* ─── 12. SCROLL / AOS OVERRIDES ───────────────────────────────── */
+
+/*
+  AOS data attributes are already on components (data-aos="fade-up" etc.).
+  These overrides tune timing to match XERXEZ's 600ms editorial rhythm.
+*/
+[data-aos] {
+  transition-timing-function: var(--xz-ease) !important;
+}
+
+[data-aos="fade-up"] {
+  transform: translateY(32px);
+  opacity: 0;
+}
+
+[data-aos="fade-up"].aos-animate {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+[data-aos="fade-right"] {
+  transform: translateX(-32px);
+  opacity: 0;
+}
+
+[data-aos="fade-right"].aos-animate {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+[data-aos="fade-left"] {
+  transform: translateX(32px);
+  opacity: 0;
+}
+
+[data-aos="fade-left"].aos-animate {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Staggered children (add .xz-stagger to parent) */
+.xz-stagger > * {
+  transition-delay: calc(var(--xz-dur-fast) * var(--stagger-index, 0));
+}
+.xz-stagger > *:nth-child(1)  { --stagger-index: 0; }
+.xz-stagger > *:nth-child(2)  { --stagger-index: 1; }
+.xz-stagger > *:nth-child(3)  { --stagger-index: 2; }
+.xz-stagger > *:nth-child(4)  { --stagger-index: 3; }
+.xz-stagger > *:nth-child(5)  { --stagger-index: 4; }
+.xz-stagger > *:nth-child(6)  { --stagger-index: 5; }
+
+
+/* ─── 13. FOCUS ACCESSIBILITY ──────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--xz-purple);
+  outline-offset: 3px;
+  border-radius: var(--xz-r-sm);
+}
+
+/* Remove outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+/* ─── 14. REDUCED-MOTION SAFETY NET ────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .xz-card--tally,
+  .tally-card {
+    transform: none !important;
+  }
+
+  .xz-hover-lift:hover,
+  .xz-hover-glow:hover,
+  .xz-hover-3d:hover,
+  .xz-card:hover,
+  .xz-card--dark:hover,
+  .xz-card--feature:hover {
+    transform: none !important;
+  }
+}

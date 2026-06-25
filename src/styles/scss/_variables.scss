@@ -1,26 +1,26 @@
 // Variables
-$body: #fff;
-$black: #000;
-$white: #fff;
-$theme-color: #6c57d2;
-$theme-color-2: #6c57d2;      // unified with brand purple (was orange #ff792e)
-$header: #0A0A0A;             // near-black (was dark navy #003566)
-$text: #4B4B4B;               // slightly darker for readability on white
-$border: #E5E5E5;             // neutral gray border (was #e6efff)
-$ratting: #f8bc26;
-$bg: #F5F5F7;                 // light gray for alternating sections (was #fff9ed)
-$bg-2: #F0EEFF;               // very light purple tint (was #6c57d21a)
-$box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.06);
+$body:          #F2EFE9;
+$black:         #1A1A1A;
+$white:         #fff;
+$theme-color:   #6c57d2;
+$theme-color-2: #6c57d2;
+$header:        #1A1A1A;
+$text:          #4A4A4A;
+$border:        #DDDAD4;
+$ratting:       #f8bc26;
+$bg:            #EAE7E0;
+$bg-2:          #F2EFE9;
+$box-shadow:    0px 4px 25px rgba(0, 0, 0, 0.06);
 
 // Breakpoints
-$breakpoint-xxl: 1899px;
-$breakpoint-xl: 1600px;
-$breakpoint-lg: 1399px;
-$breakpoint-md: 1199px;
-$breakpoint-sm: 991px;
-$breakpoint-xs: 767px;
-$breakpoint-xxs: 585px;
+$breakpoint-xxl:       1899px;
+$breakpoint-xl:        1600px;
+$breakpoint-lg:        1399px;
+$breakpoint-md:        1199px;
+$breakpoint-sm:        991px;
+$breakpoint-xs:        767px;
+$breakpoint-xxs:       585px;
 $breakpoint-mobile-lg: 575px;
-$breakpoint-mobile: 470px;
+$breakpoint-mobile:    470px;
 $breakpoint-mobile-sm: 450px;
 $breakpoint-mobile-xs: 414px;

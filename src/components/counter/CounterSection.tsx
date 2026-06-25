@@ -50,7 +50,7 @@ const CounterSection = ({ variant }: Props) => {
 
   if (showBars) {
     return (
-      <section className="fix section-padding" style={{ background: "#F5F5F7" }}>
+      <section className="fix section-padding" style={{ background: "#EAE7E0" }}>
         <div className="container">
           <div className="section-title text-center mb-50">
             <span className="fade-in">By the Numbers</span>
