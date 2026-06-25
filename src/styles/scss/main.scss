@@ -12198,3 +12198,32 @@ body {
 }
 
 /* 3. Logo: 60px on all pages (inner + homepage) */
+
+/* ── Footer: Deep Navy Purple Theme ── */
+.footer-section {
+  background: linear-gradient(135deg, #0F0F1A 0%, #1A0F2E 100%) !important;
+  background-image: none !important;
+}
+.footer-section .widget-head h3 {
+  color: #ffffff !important;
+}
+.footer-section .footer-content p,
+.footer-section .single-footer-widget > p {
+  color: #aaaaaa !important;
+}
+.footer-section .list-area li a {
+  color: #aaaaaa !important;
+  text-decoration: none !important;
+}
+.footer-section .list-area li a:hover {
+  color: #ffffff !important;
+}
+.footer-section .social-icon a {
+  color: #aaaaaa !important;
+}
+.footer-section .social-icon a:hover {
+  color: #6B3FA0 !important;
+}
+.footer-section .social-icon a i {
+  color: inherit !important;
+}
