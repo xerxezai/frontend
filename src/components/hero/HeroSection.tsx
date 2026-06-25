@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { InfiniteGridBackground } from "../ui/the-infinite-grid";
 
 const stats = [
   { value: "40%",   label: "Cost Reduction",    icon: "fas fa-chart-line" },
@@ -15,9 +16,18 @@ const features = [
 
 const HeroSection = () => {
   return (
-    <section className="hero-section hero-1 bg-cover">
+    <InfiniteGridBackground
+      as="section"
+      className="hero-section hero-1 bg-cover"
+      speed={0.35}
+      revealRadius={400}
+      baseOpacity={0.07}
+      revealOpacity={0.55}
+    >
       <div className="container">
         <div className="row g-4 align-items-center">
+
+          {/* ── Left: headline + CTA ─────────────────────── */}
           <div className="col-lg-6">
             <div className="hero-content">
               <span className="hero-sub-tag">
@@ -44,12 +54,15 @@ const HeroSection = () => {
             </div>
           </div>
 
+          {/* ── Right: performance card ───────────────────── */}
           <div className="col-lg-6 smooth-fade-in fade-in">
             <div style={{
-              background: "rgba(13,11,36,0.92)",
+              background: "rgba(13,11,36,0.88)",
               border: "1px solid rgba(108,87,210,0.35)",
               borderRadius: 20,
               padding: "36px 32px",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
                 <i className="fas fa-brain" style={{ color: "#6c57d2", fontSize: 18 }} />
@@ -90,9 +103,10 @@ const HeroSection = () => {
               ))}
             </div>
           </div>
+
         </div>
       </div>
-    </section>
+    </InfiniteGridBackground>
   );
 };
 
