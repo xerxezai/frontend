@@ -21,8 +21,8 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                       src="/assets/img/logo/xerxez_logo.png"
                       alt="Xerxez Solutions"
                       width={180}
-                      height={45}
-                      style={{ height: '45px', width: 'auto', background: 'transparent', display: 'block' }}
+                      height={55}
+                      style={{ height: '55px', width: 'auto', background: 'transparent', display: 'block' }}
                     />
                   </Link>
                 </div>

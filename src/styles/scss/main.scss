@@ -12045,7 +12045,7 @@ body {
 
 /* ── Logo PNG — no white box, responsive sizing ── */
 .header-logo1 img {
-  height: 80px !important;
+  height: 55px !important;
   width: auto !important;
   background: transparent !important;
   border: none !important;
@@ -12055,7 +12055,7 @@ body {
   display: block !important;
 }
 .offcanvas__logo img {
-  height: 56px !important;
+  height: 55px !important;
   width: auto !important;
   background: transparent !important;
   border: none !important;
@@ -12064,13 +12064,23 @@ body {
   padding: 0 !important;
   display: block !important;
 }
-/* Tablet: 768px–1199px */
-@media (max-width: 1199px) {
-  .header-logo1 img { height: 68px !important; }
+.widget-head a img {
+  height: 55px !important;
+  width: auto !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  display: block !important;
 }
-/* Mobile: <576px */
+@media (max-width: 1199px) {
+  .header-logo1 img { height: 48px !important; }
+  .offcanvas__logo img { height: 48px !important; }
+}
 @media (max-width: 575px) {
-  .header-logo1 img { height: 52px !important; }
+  .header-logo1 img { height: 40px !important; }
+  .offcanvas__logo img { height: 40px !important; }
 }
 
 /* ── About section: theme-btn arrow flush ── */
