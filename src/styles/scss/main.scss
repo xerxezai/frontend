@@ -12054,3 +12054,14 @@ body {
   border-radius: 0 !important;
   padding: 0 !important;
 }
+
+/* ── About section: theme-btn arrow flush ── */
+.about-wrapper .theme-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 10px 10px 28px;
+}
+.about-wrapper .theme-btn i {
+  margin-left: 12px !important;
+  flex-shrink: 0;
+}
