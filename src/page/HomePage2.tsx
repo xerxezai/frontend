@@ -1,7 +1,5 @@
-import AboutCompanySection from "../components/about/AboutCompanySection";
 import AboutSection2 from "../components/about/AboutSection2";
 import BrandSection2 from "../components/brand/BrandSection2";
-import CoreAdvantageSection2 from "../components/core-advantage/CoreAdvantageSection2";
 import CounterSection2 from "../components/counter/CounterSection2";
 import CtaSection3 from "../components/cta/CtaSection3";
 import FooterSection2 from "../components/footer/FooterSection2";
@@ -26,12 +24,10 @@ const HomePage2 = () => {
         <AboutSection2 />
         <ServiceSection3 />
         <WorkingProcessSection />
-        <AboutCompanySection />
         <ProjectSection2 />
         <TestimonySection2 />
         <BrandSection2 />
         <TeamSection />
-        <CoreAdvantageSection2 />
         <CounterSection2 />
         <CtaSection3 />
         <FooterSection2 />

@@ -1,6 +1,5 @@
 import AboutCompanySection2 from "../components/about/AboutCompanySection2";
 import AboutSection3 from "../components/about/AboutSection3";
-import AboutSection4 from "../components/about/AboutSection4";
 import BrandSection2 from "../components/brand/BrandSection2";
 import WorkingProcessSection2 from "../components/process/WorkingProcessSection2";
 import CtaSection4 from "../components/cta/CtaSection4";
@@ -26,7 +25,6 @@ const HomePage3 = () => {
       <ServiceSection4 />
       <AboutCompanySection2 />
       <BrandSection2 />
-      <AboutSection4 />
       <WorkingProcessSection2 />
       <ProjectSection3 />
       <MarqueeSection />

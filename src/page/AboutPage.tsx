@@ -1,5 +1,4 @@
 import AboutSection2 from "../components/about/AboutSection2";
-import AboutSection6 from "../components/about/AboutSection6";
 import BrandSection from "../components/brand/BrandSection";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import CustomLayout from "../components/layout/CustomLayout";
@@ -14,7 +13,6 @@ const AboutPage = () => (
     <AboutSection2 variant />
     <CoreValuesSection />
     <ProjectSection4 variant />
-    <AboutSection6 />
     <BrandSection variant="style-3" />
   </CustomLayout>
 );
