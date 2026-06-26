@@ -3,7 +3,7 @@ import { Phone, Mail, Globe, MapPin } from "lucide-react";
 
 // ── Cream theme — matches XERXEZ website background ──
 const N = {
-  bg:      "#FDFCFB",
+  bg:      "#F2EFE9",
   heading: "#141413",
   body:    "#6c6a64",
   link:    "#6c6a64",
