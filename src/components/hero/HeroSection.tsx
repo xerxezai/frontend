@@ -1,302 +1,384 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const stats = [
-  { value: "40%",   label: "Cost Reduction" },
-  { value: "99.9%", label: "System Uptime"  },
-  { value: "<6 mo", label: "Time to Deploy" },
+const CYCLE_WORDS = [
+  "AI-Powered ERP",
+  "DevSecOps Pipelines",
+  "Cloud Infrastructure",
+  "AI Training & Consulting",
+  "Quantum Computing",
 ];
 
-const features = [
-  "AI-native ERP — built for enterprise scale",
-  "ISO 27001 & SOC 2 Type II compliant",
-  "Multi-cloud: AWS · Azure · GCP",
-  "24/7 dedicated support teams",
+// Hub center
+const HUB = { x: 250, y: 205, r: 42 };
+
+// Outer module nodes
+const NODES = [
+  { id: "fin",   x: 88,  y: 82,  r: 26, label: "Finance",   color: "#2D5A3D", dot: "#4ade80" },
+  { id: "cloud", x: 388, y: 68,  r: 26, label: "Cloud",     color: "#1B3A5C", dot: "#60a5fa" },
+  { id: "hr",    x: 438, y: 195, r: 23, label: "HR",        color: "#C9883A", dot: "#fbbf24" },
+  { id: "crm",   x: 398, y: 330, r: 23, label: "CRM",       color: "#cc785c", dot: "#f97316" },
+  { id: "ai",    x: 250, y: 392, r: 27, label: "AI/ML",     color: "#4A3D7C", dot: "#a78bfa" },
+  { id: "dev",   x: 102, y: 330, r: 23, label: "DevSecOps", color: "#7C2D44", dot: "#fb7185" },
+  { id: "inv",   x: 58,  y: 195, r: 21, label: "Inventory", color: "#2D7B6B", dot: "#2dd4bf" },
 ];
 
-const SpikeMark = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-    <line x1="7" y1="0" x2="7" y2="14" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
-    <line x1="0" y1="7" x2="14" y2="7" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
-    <line x1="2.05" y1="2.05" x2="11.95" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
-    <line x1="11.95" y1="2.05" x2="2.05" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+const ERPNetwork = () => (
+  <svg
+    viewBox="0 0 500 450"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="xz-network-svg"
+    style={{ width: "100%", maxWidth: 480, overflow: "visible" }}
+    aria-label="XERXEZ ERP module network diagram"
+  >
+    {/* Dashed connection lines hub → outer */}
+    {NODES.map(n => (
+      <line
+        key={`line-${n.id}`}
+        x1={HUB.x} y1={HUB.y}
+        x2={n.x}   y2={n.y}
+        stroke="#dddad4"
+        strokeWidth="1.5"
+        strokeDasharray="5 5"
+      />
+    ))}
+
+    {/* Flowing data dots along each line */}
+    {NODES.map((n, i) => (
+      <circle key={`dot-${n.id}`} cx={0} cy={0} r={3} fill={n.dot}
+        style={{ filter: `drop-shadow(0 0 4px ${n.dot})` }}>
+        <animateMotion
+          dur={`${2.8 + i * 0.35}s`}
+          repeatCount="indefinite"
+          path={`M ${HUB.x},${HUB.y} L ${n.x},${n.y}`}
+        />
+      </circle>
+    ))}
+
+    {/* Outer nodes */}
+    {NODES.map(n => (
+      <g key={n.id}>
+        {/* Pulse ring */}
+        <circle cx={n.x} cy={n.y} r={n.r + 6} fill="none" stroke={n.dot} strokeWidth="1">
+          <animate attributeName="r"
+            values={`${n.r + 3};${n.r + 16};${n.r + 3}`}
+            dur="3.2s" repeatCount="indefinite" />
+          <animate attributeName="opacity"
+            values="0.55;0;0.55"
+            dur="3.2s" repeatCount="indefinite" />
+        </circle>
+
+        {/* Node fill */}
+        <circle cx={n.x} cy={n.y} r={n.r} fill={n.color} opacity="0.1" />
+        {/* Node border */}
+        <circle cx={n.x} cy={n.y} r={n.r} fill="none" stroke={n.color} strokeWidth="1.5" opacity="0.65" />
+        {/* Status indicator dot */}
+        <circle cx={n.x} cy={n.y - n.r + 7} r="3" fill={n.dot}
+          style={{ filter: `drop-shadow(0 0 3px ${n.dot})` }} />
+        {/* Label */}
+        <text x={n.x} y={n.y + 5}
+          textAnchor="middle"
+          fill="#3d3d3a"
+          fontSize="10"
+          fontFamily="Inter, sans-serif"
+          fontWeight="500">
+          {n.label}
+        </text>
+      </g>
+    ))}
+
+    {/* Center hub — XERXEZ */}
+    {/* Outer pulse ring */}
+    <circle cx={HUB.x} cy={HUB.y} r={HUB.r + 10} fill="none" stroke="#cc785c" strokeWidth="1">
+      <animate attributeName="r"
+        values={`${HUB.r + 6};${HUB.r + 22};${HUB.r + 6}`}
+        dur="2.4s" repeatCount="indefinite" />
+      <animate attributeName="opacity"
+        values="0.45;0;0.45"
+        dur="2.4s" repeatCount="indefinite" />
+    </circle>
+    {/* Inner accent ring */}
+    <circle cx={HUB.x} cy={HUB.y} r={HUB.r + 5}
+      fill="none" stroke="#cc785c" strokeWidth="1" opacity="0.2" />
+    {/* Hub body */}
+    <circle cx={HUB.x} cy={HUB.y} r={HUB.r}
+      fill="#efe9de" stroke="#cc785c" strokeWidth="2" />
+    {/* Hub label */}
+    <text x={HUB.x} y={HUB.y - 5}
+      textAnchor="middle"
+      fill="#141413"
+      fontSize="13"
+      fontFamily="Cormorant Garamond, Garamond, serif"
+      fontWeight="600">
+      XERXEZ
+    </text>
+    <text x={HUB.x} y={HUB.y + 12}
+      textAnchor="middle"
+      fill="#6c6a64"
+      fontSize="9"
+      fontFamily="Inter, sans-serif"
+      fontWeight="400">
+      ERP Hub
+    </text>
   </svg>
 );
 
-const HeroSection = () => (
-  <section style={{
-    background: "#faf9f5",
-    padding: "40px 0 80px",
-    minHeight: "calc(100vh - 64px)",
-    display: "flex",
-    alignItems: "flex-start",
-  }}>
-    <div className="container">
-      <div className="row g-5 align-items-center">
+const HeroSection = () => {
+  const [wordIdx, setWordIdx] = useState(0);
+  const [fadeIn, setFadeIn] = useState(true);
 
-        {/* LEFT — editorial headline + CTAs */}
-        <div className="col-lg-6">
-          {/* Eyebrow badge */}
-          <div style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            background: "#efe9de",
-            border: "1px solid #e6dfd8",
-            borderRadius: 9999,
-            padding: "4px 14px",
-            marginBottom: 32,
-          }}>
-            <SpikeMark />
-            <span style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 12,
-              fontWeight: 500,
-              letterSpacing: "1.2px",
-              textTransform: "uppercase",
-              color: "#6c6a64",
-            }}>
-              Enterprise AI Platform · V2.0
-            </span>
-          </div>
+  useEffect(() => {
+    const id = setInterval(() => {
+      setFadeIn(false);
+      setTimeout(() => {
+        setWordIdx(i => (i + 1) % CYCLE_WORDS.length);
+        setFadeIn(true);
+      }, 380);
+    }, 3000);
+    return () => clearInterval(id);
+  }, []);
 
-          {/* Display headline — Cormorant Garamond 400, negative tracking */}
-          <h1 style={{
-            fontFamily: "'Cormorant Garamond', 'Tiempos Headline', Garamond, serif",
-            fontWeight: 400,
-            fontSize: "clamp(48px, 6vw, 72px)",
-            lineHeight: 1.05,
-            letterSpacing: "-0.03em",
-            color: "#141413",
-            marginBottom: 24,
-          }}>
-            Enterprise AI,<br />
-            built for{" "}
-            <em style={{ color: "#cc785c", fontStyle: "italic" }}>scale.</em>
-          </h1>
+  return (
+    <section style={{
+      background: "#faf9f5",
+      padding: "48px 0 72px",
+      minHeight: "calc(100vh - 64px)",
+      display: "flex",
+      alignItems: "flex-start",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Subtle dot-grid texture */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: "radial-gradient(circle, #dddad4 1px, transparent 1px)",
+        backgroundSize: "38px 38px",
+        opacity: 0.38,
+      }} aria-hidden="true" />
 
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: 16,
-            lineHeight: 1.55,
-            color: "#3d3d3a",
-            maxWidth: 520,
-            marginBottom: 40,
-          }}>
-            XERXEZ delivers intelligent ERP, DevSecOps pipelines, and cloud
-            infrastructure that transform how enterprises operate at scale.
-          </p>
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
+        <div className="row g-5 align-items-start">
 
-          {/* CTA row */}
-          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-            <Link to="/contact" style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: "#cc785c",
-              color: "#ffffff",
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 14,
-              fontWeight: 500,
-              lineHeight: 1,
-              padding: "12px 20px",
-              height: 40,
-              borderRadius: 8,
-              textDecoration: "none",
-              transition: "background 150ms ease",
-            }}
-              onMouseOver={e => (e.currentTarget.style.background = "#a9583e")}
-              onMouseOut={e => (e.currentTarget.style.background = "#cc785c")}
-            >
-              Get Started
-            </Link>
-            <Link to="/service" style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              background: "transparent",
-              color: "#141413",
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 14,
-              fontWeight: 500,
-              lineHeight: 1,
-              padding: "12px 20px",
-              height: 40,
-              borderRadius: 8,
-              border: "1px solid #e6dfd8",
-              textDecoration: "none",
-              transition: "border-color 150ms ease",
-            }}
-              onMouseOver={e => (e.currentTarget.style.borderColor = "#cc785c")}
-              onMouseOut={e => (e.currentTarget.style.borderColor = "#e6dfd8")}
-            >
-              See our services
-            </Link>
-          </div>
-        </div>
+          {/* ── LEFT: headline + typing + CTAs ── */}
+          <div className="col-lg-6">
 
-        {/* RIGHT — dark navy product mockup card */}
-        <div className="col-lg-6 d-flex justify-content-center justify-content-lg-end" style={{ paddingTop: 32 }}>
-          <div style={{
-            background: "#181715",
-            borderRadius: 16,
-            padding: 32,
-            width: "100%",
-            maxWidth: 440,
-          }}>
-            {/* Card header */}
+            {/* Animated badge */}
             <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 24,
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "#efe9de", border: "1px solid #e6dfd8",
+              borderRadius: 9999, padding: "5px 14px 5px 10px",
+              marginBottom: 36,
             }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: "#5db872",
+              <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                <span style={{
+                  width: 6, height: 6, borderRadius: "50%", background: "#cc785c", flexShrink: 0,
+                  animation: "xzDot1 2s ease-in-out infinite",
                 }} />
                 <span style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  color: "#a09d96",
-                  letterSpacing: "0.06em",
-                }}>
-                  Live · Current Performance
-                </span>
-              </div>
+                  width: 6, height: 6, borderRadius: "50%", background: "#cc785c", opacity: 0.45, flexShrink: 0,
+                  animation: "xzDot2 2s ease-in-out 0.35s infinite",
+                }} />
+              </span>
               <span style={{
                 fontFamily: "'Inter', sans-serif",
-                fontSize: 10,
-                color: "rgba(255,255,255,0.2)",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
+                fontSize: 11, fontWeight: 500,
+                letterSpacing: "1.1px", textTransform: "uppercase",
+                color: "#6c6a64",
               }}>
-                XERXEZ ERP
+                Enterprise AI Platform · V2.0
               </span>
             </div>
 
-            {/* Big uptime number */}
-            <div style={{ marginBottom: 24 }}>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
-                <span style={{
-                  fontFamily: "'Cormorant Garamond', Garamond, serif",
-                  fontSize: 72,
-                  fontWeight: 400,
-                  color: "#faf9f5",
-                  lineHeight: 1,
-                  letterSpacing: "-0.02em",
-                }}>
-                  99.9
-                </span>
-                <span style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 20,
-                  color: "rgba(250,249,245,0.4)",
-                  paddingTop: 8,
-                }}>
-                  %
-                </span>
-              </div>
-              <div style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 11,
-                color: "#a09d96",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                marginTop: 4,
+            {/* Three-line dramatic headline */}
+            <h1 style={{ marginBottom: 0, lineHeight: 1.0 }}>
+              {/* Line 1 — plain editorial */}
+              <span style={{
+                display: "block",
+                fontFamily: "'Cormorant Garamond', Garamond, serif",
+                fontWeight: 400,
+                fontSize: "clamp(42px, 5vw, 66px)",
+                color: "#141413",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.08,
+                marginBottom: 4,
               }}>
-                System Uptime SLA
-              </div>
-            </div>
+                The Future of
+              </span>
 
-            {/* Mini bar chart */}
+              {/* Line 2 — large italic accent (like RADAI's teal "Engineering AI") */}
+              <span style={{
+                display: "block",
+                fontFamily: "'Cormorant Garamond', Garamond, serif",
+                fontWeight: 700,
+                fontStyle: "italic",
+                fontSize: "clamp(58px, 9vw, 118px)",
+                color: "#cc785c",
+                letterSpacing: "-0.035em",
+                lineHeight: 0.9,
+                marginBottom: 10,
+              }}>
+                Enterprise AI
+              </span>
+
+              {/* Line 3 — muted resolution */}
+              <span style={{
+                display: "block",
+                fontFamily: "'Cormorant Garamond', Garamond, serif",
+                fontWeight: 400,
+                fontSize: "clamp(28px, 3.8vw, 50px)",
+                color: "#3d3d3a",
+                letterSpacing: "-0.015em",
+                lineHeight: 1.12,
+              }}>
+                is here —{" "}
+                <em style={{ color: "#C9883A", fontStyle: "italic" }}>for every enterprise.</em>
+              </span>
+            </h1>
+
+            {/* Typing / cycling line */}
             <div style={{
-              display: "flex",
-              alignItems: "flex-end",
-              gap: 3,
-              height: 40,
-              marginBottom: 24,
+              display: "flex", alignItems: "center", gap: 8,
+              marginTop: 28, marginBottom: 24,
             }}>
-              {[55, 70, 42, 80, 58, 88, 65, 92, 60, 85, 70, 99].map((h, i) => (
-                <div key={i} style={{
-                  flex: 1,
-                  height: `${h}%`,
-                  background: i === 11 ? "#cc785c" : "rgba(250,249,245,0.1)",
-                  borderRadius: 3,
-                }} />
-              ))}
+              <span style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14, fontWeight: 500, color: "#6c6a64",
+                whiteSpace: "nowrap",
+              }}>
+                Delivering:
+              </span>
+              <span style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14, fontWeight: 600, color: "#cc785c",
+                opacity: fadeIn ? 1 : 0,
+                transition: "opacity 0.32s ease",
+                minWidth: 210, display: "inline-block",
+              }}>
+                {CYCLE_WORDS[wordIdx]}
+              </span>
+              {/* Blinking cursor */}
+              <span style={{
+                width: 2, height: 17, background: "#cc785c",
+                display: "inline-block", borderRadius: 1, flexShrink: 0,
+                animation: "xzCursor 1s step-end infinite",
+              }} aria-hidden="true" />
             </div>
 
-            {/* Stats row */}
+            {/* Description */}
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 16, lineHeight: 1.65,
+              color: "#3d3d3a",
+              maxWidth: 500, marginBottom: 40,
+            }}>
+              XERXEZ delivers intelligent ERP, DevSecOps pipelines, and cloud
+              infrastructure that transform how enterprises operate at scale.
+            </p>
+
+            {/* CTAs */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+              <Link to="/contact" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "#cc785c", color: "#ffffff",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14, fontWeight: 500, lineHeight: 1,
+                padding: "13px 24px", borderRadius: 8,
+                textDecoration: "none", cursor: "pointer",
+                transition: "background 150ms ease",
+              }}
+                onMouseOver={e => (e.currentTarget.style.background = "#a9583e")}
+                onMouseOut={e => (e.currentTarget.style.background = "#cc785c")}
+              >
+                Get Started
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                  <path d="M2 6.5h9M8 3l3.5 3.5L8 10"
+                    stroke="currentColor" strokeWidth="1.5"
+                    strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+              <Link to="/service" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "transparent", color: "#141413",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14, fontWeight: 500, lineHeight: 1,
+                padding: "13px 24px", borderRadius: 8,
+                border: "1px solid #dddad4",
+                textDecoration: "none", cursor: "pointer",
+                transition: "border-color 150ms ease, background 150ms ease",
+              }}
+                onMouseOver={e => {
+                  e.currentTarget.style.borderColor = "#cc785c";
+                  e.currentTarget.style.background = "rgba(204,120,92,0.05)";
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.borderColor = "#dddad4";
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                Explore Services
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                  <path d="M2 6.5h9M8 3l3.5 3.5L8 10"
+                    stroke="currentColor" strokeWidth="1.5"
+                    strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Scroll indicator */}
             <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 12,
-              borderTop: "1px solid rgba(250,249,245,0.08)",
-              paddingTop: 20,
-              marginBottom: 20,
+              display: "flex", alignItems: "center", gap: 10,
+              marginTop: 56, opacity: 0.45,
             }}>
-              {stats.map(({ value, label }) => (
-                <div key={label}>
-                  <div style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: 22,
-                    fontWeight: 400,
-                    color: "#faf9f5",
-                    lineHeight: 1,
-                    letterSpacing: "-0.01em",
-                  }}>
-                    {value}
-                  </div>
-                  <div style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: 10,
-                    color: "#a09d96",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    marginTop: 4,
-                  }}>
-                    {label}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Feature bullets */}
-            <div style={{ borderTop: "1px solid rgba(250,249,245,0.08)", paddingTop: 16 }}>
-              {features.map((feat) => (
-                <div key={feat} style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  marginBottom: 8,
-                }}>
-                  <div style={{
-                    width: 4,
-                    height: 4,
-                    borderRadius: "50%",
-                    background: "#cc785c",
-                    flexShrink: 0,
-                  }} />
-                  <span style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: 12,
-                    color: "#a09d96",
-                  }}>
-                    {feat}
-                  </span>
-                </div>
-              ))}
+              <div style={{
+                width: 1, height: 36, background: "#141413",
+                animation: "xzScrollLine 2s ease-in-out infinite",
+              }} />
+              <span style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 9, fontWeight: 600,
+                letterSpacing: "0.2em", textTransform: "uppercase",
+                color: "#141413",
+              }}>
+                SCROLL
+              </span>
             </div>
           </div>
-        </div>
 
+          {/* ── RIGHT: ERP Network ── */}
+          <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center"
+            style={{ paddingTop: 16 }}>
+            <ERPNetwork />
+          </div>
+
+        </div>
       </div>
-    </div>
-  </section>
-);
+
+      {/* Keyframe definitions */}
+      <style>{`
+        @keyframes xzDot1 {
+          0%, 100% { opacity: 0.9; transform: scale(1); }
+          50%       { opacity: 0.25; transform: scale(0.75); }
+        }
+        @keyframes xzDot2 {
+          0%, 100% { opacity: 0.45; transform: scale(1); }
+          50%       { opacity: 0.1; transform: scale(0.75); }
+        }
+        @keyframes xzCursor {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0; }
+        }
+        @keyframes xzScrollLine {
+          0%, 100% { transform: scaleY(1);   transform-origin: top; }
+          50%       { transform: scaleY(0.3); transform-origin: top; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .xz-network-svg animate,
+          .xz-network-svg animateMotion { display: none; }
+        }
+      `}</style>
+    </section>
+  );
+};
 
 export default HeroSection;
