@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
-import Image from "../utils/Image";
 
 // ── Navy theme tokens (matches FooterSection + FooterBottomSection) ──
 const N = {
@@ -44,17 +43,15 @@ const FooterSection2 = () => {
   return (
     <footer style={{ background: N.bg }}>
       <div className="container">
-        <div className="row gx-5" style={{ padding: "64px 0 48px" }}>
+        <div className="row gx-5" style={{ padding: "48px 0 36px" }}>
 
           {/* Col 1 — Wordmark + About */}
           <div className="col-lg-3 col-md-6 col-12 mb-5 mb-lg-0">
             <Link to="/" style={{ display: "block", textDecoration: "none", marginBottom: 16 }}>
-              <Image
-                src="/assets/img/logo/xerxez_logo.png"
+              <img
+                src="/assets/img/logo/white-logo.svg"
                 alt="Xerxez Solutions"
-                width={180}
-                height={52}
-                style={{ height: 85, width: "auto", display: "block", filter: "brightness(0) invert(1)" }}
+                style={{ height: 42, width: "auto", display: "block" }}
               />
             </Link>
             <p style={{
@@ -106,9 +103,9 @@ const FooterSection2 = () => {
             </ul>
           </div>
 
-          {/* Col 3 — Company */}
+          {/* Col 3 — Link us */}
           <div className="col-lg-3 col-md-6 col-12 mb-5 mb-lg-0">
-            <h4 style={headingStyle}>Company</h4>
+            <h4 style={headingStyle}>Link us</h4>
             <ul style={{ padding: 0, margin: 0, listStyle: "none" }}>
               {[
                 { to: "/",         label: "Home" },
