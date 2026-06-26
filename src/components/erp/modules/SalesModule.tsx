@@ -32,7 +32,7 @@ const SalesModule = () => {
         {tabs.map(t => (
           <li key={t} className="nav-item">
             <button className={`nav-link${tab === t ? ' active' : ''}`} onClick={() => setTab(t)}
-              style={tab === t ? { background: '#6c57d2', border: 'none' } : { border: 'none', color: '#555' }}>{t}</button>
+              style={tab === t ? { background: '#C9883A', border: 'none' } : { border: 'none', color: '#555' }}>{t}</button>
           </li>
         ))}
       </ul>
@@ -43,4 +43,5 @@ const SalesModule = () => {
 };
 
 export default SalesModule;
+
 

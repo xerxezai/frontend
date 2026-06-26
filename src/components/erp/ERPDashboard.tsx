@@ -1,7 +1,7 @@
 ﻿import { useERPDashboard } from '../../hooks/useERPApi';
 
 const COLORS: Record<string, string> = {
-  blue: '#3b82f6', green: '#10b981', purple: '#6c57d2',
+  blue: '#3b82f6', green: '#10b981', purple: '#C9883A',
   orange: '#f59e0b', red: '#ef4444', teal: '#14b8a6',
 };
 
@@ -9,7 +9,7 @@ const StatCard = ({ label, value, icon, color }: { label: string; value: any; ic
   <div className="col-6 col-sm-4 col-md-3 col-xl-2">
     <div className="bg-white rounded-3 p-3 d-flex align-items-center gap-3 h-100 shadow-sm">
       <div className="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
-        style={{ width: 44, height: 44, background: COLORS[color] || '#6c57d2' }}>
+        style={{ width: 44, height: 44, background: COLORS[color] || '#C9883A' }}>
         <i className={`${icon} text-white`} style={{ fontSize: 16 }}></i>
       </div>
       <div className="min-w-0">
@@ -69,4 +69,5 @@ const ERPDashboard = () => {
 };
 
 export default ERPDashboard;
+
 

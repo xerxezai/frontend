@@ -1,45 +1,45 @@
-const values = [
+﻿const values = [
   {
     icon: "fas fa-lightbulb",
     title: "Innovation First",
     description:
       "We adopt the most effective emerging technologies — AI, cloud-native architectures, and MLOps — before they become industry standard.",
-    accent: "#6c57d2",
+    accent: "#C9883A",
   },
   {
     icon: "fas fa-shield-alt",
     title: "Security by Design",
     description:
       "Compliance and security are not bolt-ons. We embed ISO 27001, SOC 2, and zero-trust principles into every layer from day one.",
-    accent: "#6c57d2",
+    accent: "#C9883A",
   },
   {
     icon: "fas fa-handshake",
     title: "Client Partnership",
     description:
       "We measure success in outcomes, not deliverables. Long-term retainer relationships with 90%+ renewal rates reflect our commitment.",
-    accent: "#6c57d2",
+    accent: "#C9883A",
   },
   {
     icon: "fas fa-code",
     title: "Engineering Excellence",
     description:
       "Clean code, high test coverage, and rigorous code review are non-negotiable. We build systems that are maintainable for years.",
-    accent: "#6c57d2",
+    accent: "#C9883A",
   },
   {
     icon: "fas fa-graduation-cap",
     title: "Continuous Learning",
     description:
       "Our engineers spend 20% of their time on R&D, certifications, and open-source contribution — because stale teams build stale software.",
-    accent: "#6c57d2",
+    accent: "#C9883A",
   },
   {
     icon: "fas fa-chart-line",
     title: "Impact Over Activity",
     description:
       "We track ROI, not hours. Every engagement starts with a measurable success metric — and we don't stop until we hit it.",
-    accent: "#6c57d2",
+    accent: "#C9883A",
   },
 ];
 
@@ -73,7 +73,7 @@ const CoreValuesSection = () => (
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLDivElement;
-              el.style.boxShadow = "0 8px 32px rgba(108,87,210,0.12)";
+              el.style.boxShadow = "0 8px 32px rgba(201,136,58,0.12)";
               el.style.transform = "translateY(-4px)";
             }}
             onMouseLeave={(e) => {
@@ -83,7 +83,7 @@ const CoreValuesSection = () => (
             }}>
               <div style={{
                 width: 52, height: 52, borderRadius: 14,
-                background: "rgba(108,87,210,0.10)",
+                background: "rgba(201,136,58,0.10)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 marginBottom: 18,
               }}>
@@ -104,3 +104,4 @@ const CoreValuesSection = () => (
 );
 
 export default CoreValuesSection;
+

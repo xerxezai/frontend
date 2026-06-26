@@ -1,10 +1,10 @@
-const bento = [
-  { value: "50+",   label: "Engineers",           icon: "fas fa-users",           bg: "#6c57d2",   color: "#fff", span: 1 },
-  { value: "12",    label: "Countries Served",    icon: "fas fa-globe",           bg: "#F0EEFF",  color: "#6c57d2", span: 1 },
+﻿const bento = [
+  { value: "50+",   label: "Engineers",           icon: "fas fa-users",           bg: "#C9883A",   color: "#fff", span: 1 },
+  { value: "12",    label: "Countries Served",    icon: "fas fa-globe",           bg: "#FFF8EE",  color: "#C9883A", span: 1 },
   { value: "120+",  label: "Projects Delivered",  icon: "fas fa-check-circle",    bg: "#F5F5F7",  color: "#0A0A0A", span: 1 },
-  { value: "10+",   label: "Years Experience",    icon: "fas fa-calendar-check",  bg: "#F0EEFF",  color: "#6c57d2", span: 1 },
+  { value: "10+",   label: "Years Experience",    icon: "fas fa-calendar-check",  bg: "#FFF8EE",  color: "#C9883A", span: 1 },
   { value: "98%",   label: "Client Satisfaction", icon: "fas fa-heart",           bg: "#F5F5F7",  color: "#0A0A0A", span: 1 },
-  { value: "0",     label: "Security Incidents",  icon: "fas fa-shield-alt",      bg: "#6c57d2",  color: "#fff", span: 1 },
+  { value: "0",     label: "Security Incidents",  icon: "fas fa-shield-alt",      bg: "#C9883A",  color: "#fff", span: 1 },
 ];
 
 const TeamStatsBento = () => (
@@ -44,7 +44,7 @@ const TeamStatsBento = () => (
           >
             <i
               className={item.icon}
-              style={{ fontSize: 28, color: item.color, opacity: item.bg === "#6c57d2" ? 0.85 : 1 }}
+              style={{ fontSize: 28, color: item.color, opacity: item.bg === "#C9883A" ? 0.85 : 1 }}
             />
             <div style={{
               fontSize: 38, fontWeight: 900, lineHeight: 1,
@@ -55,7 +55,7 @@ const TeamStatsBento = () => (
             <div style={{
               fontSize: 13, fontWeight: 600, textTransform: "uppercase",
               letterSpacing: "0.08em",
-              color: item.bg === "#6c57d2" ? "rgba(255,255,255,0.80)" : "#6B6B6B",
+              color: item.bg === "#C9883A" ? "rgba(255,255,255,0.80)" : "#6B6B6B",
               textAlign: "center",
             }}>
               {item.label}
@@ -74,3 +74,4 @@ const TeamStatsBento = () => (
 );
 
 export default TeamStatsBento;
+

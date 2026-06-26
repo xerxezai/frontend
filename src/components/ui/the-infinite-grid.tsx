@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+﻿import React, { useRef } from "react";
 import {
   motion,
   useMotionValue,
@@ -8,10 +8,10 @@ import {
 } from "framer-motion";
 
 // Default brand tokens — can be overridden via props for dark/light modes
-const DEFAULT_GRID_COLOR  = "rgba(108,87,210,0.85)";
-const DEFAULT_BLOB_TR     = "rgba(108,87,210,0.12)";  // top-right
+const DEFAULT_GRID_COLOR  = "rgba(201,136,58,0.85)";
+const DEFAULT_BLOB_TR     = "rgba(201,136,58,0.12)";  // top-right
 const DEFAULT_BLOB_CENTER = "rgba(255,121,46,0.10)";  // center-right
-const DEFAULT_BLOB_BL     = "rgba(108,87,210,0.08)";  // bottom-left
+const DEFAULT_BLOB_BL     = "rgba(201,136,58,0.08)";  // bottom-left
 
 interface InfiniteGridBackgroundProps {
   children?: React.ReactNode;
@@ -195,3 +195,4 @@ const GridPattern: React.FC<GridPatternProps> = ({ offsetX, offsetY, color = "cu
     <rect width="100%" height="100%" fill="url(#xerxez-grid-pattern)" />
   </svg>
 );
+

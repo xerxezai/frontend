@@ -25,7 +25,7 @@ const ERPTable = ({ title, columns, data, loading, error, onAdd, onDelete }: Pro
         <h5 className="fw-bold mb-0" style={{ color: '#1a1a2e' }}>{title}</h5>
         {onAdd && (
           <button className="btn btn-sm btn-primary d-flex align-items-center gap-2" onClick={onAdd}
-            style={{ background: '#6c57d2', borderColor: '#6c57d2' }}>
+            style={{ background: '#C9883A', borderColor: '#C9883A' }}>
             <i className="fas fa-plus"></i> Add New
           </button>
         )}
@@ -80,4 +80,5 @@ const ERPTable = ({ title, columns, data, loading, error, onAdd, onDelete }: Pro
 };
 
 export default ERPTable;
+
 

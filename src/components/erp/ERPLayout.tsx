@@ -111,7 +111,7 @@ const ERPLayout = ({ children }: Props) => {
             <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez" style={{ height: '60px', width: 'auto', background: 'transparent', display: 'block', border: 'none', boxShadow: 'none' }} />
           </div>
           <div className="d-flex align-items-center gap-2 text-muted" style={{ fontSize: 14 }}>
-            <i className="fas fa-user-circle" style={{ fontSize: 20, color: '#6c57d2' }}></i>
+            <i className="fas fa-user-circle" style={{ fontSize: 20, color: '#C9883A' }}></i>
             <span className="d-none d-sm-inline">Admin</span>
           </div>
         </header>
@@ -127,5 +127,6 @@ const ERPLayout = ({ children }: Props) => {
 };
 
 export default ERPLayout;
+
 
 

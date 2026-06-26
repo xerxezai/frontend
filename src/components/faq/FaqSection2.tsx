@@ -1,4 +1,4 @@
-import { faqData } from "../../data";
+﻿import { faqData } from "../../data";
 import { useState } from "react";
 
 interface Props {
@@ -90,7 +90,7 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
               {variant ? (
                 <div
                   style={{
-                    background: "linear-gradient(135deg, #0a031e 0%, #1a0a5c 80%, #6c57d2 100%)",
+                    background: "linear-gradient(135deg, #0F2741 0%, #163557 80%, #1A3F6A 100%)",
                     borderRadius: 20,
                     padding: "40px 36px",
                     color: "#fff",
@@ -102,11 +102,11 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
                   data-aos-once="true"
                 >
                   {/* Decorative background circles */}
-                  <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, borderRadius: "50%", background: "rgba(108,87,210,0.18)", pointerEvents: "none" }} />
+                  <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, borderRadius: "50%", background: "rgba(201,136,58,0.18)", pointerEvents: "none" }} />
                   <div style={{ position: "absolute", bottom: -40, left: -40, width: 140, height: 140, borderRadius: "50%", background: "rgba(255,121,46,0.1)", pointerEvents: "none" }} />
 
                   <div style={{ position: "relative", zIndex: 1 }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#a78bfa", marginBottom: 8, display: "block" }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#E5B460", marginBottom: 8, display: "block" }}>
                       Enterprise Credentials
                     </span>
                     <h3 style={{ fontSize: 22, fontWeight: 700, color: "#fff", marginBottom: 28, lineHeight: 1.3 }}>
@@ -117,7 +117,7 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
                       {enterpriseStats.map((stat) => (
                         <div key={stat.label} style={{ background: "rgba(255,255,255,0.07)", borderRadius: 12, padding: "18px 16px", border: "1px solid rgba(255,255,255,0.1)" }}>
-                          <i className={stat.icon} style={{ color: "#a78bfa", fontSize: 18, marginBottom: 10, display: "block" }} />
+                          <i className={stat.icon} style={{ color: "#E5B460", fontSize: 18, marginBottom: 10, display: "block" }} />
                           <div style={{ fontSize: 26, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{stat.value}</div>
                           <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginTop: 4 }}>{stat.label}</div>
                         </div>
@@ -132,7 +132,7 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 12px" }}>
                         {capabilities.map((cap) => (
                           <div key={cap} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "rgba(255,255,255,0.82)" }}>
-                            <i className="fas fa-check-circle" style={{ color: "#6c57d2", marginTop: 2, flexShrink: 0 }} />
+                            <i className="fas fa-check-circle" style={{ color: "#C9883A", marginTop: 2, flexShrink: 0 }} />
                             {cap}
                           </div>
                         ))}
@@ -166,3 +166,4 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
 };
 
 export default FaqSection2;
+

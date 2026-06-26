@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
 
 const courses = [
@@ -7,11 +7,11 @@ const courses = [
     title: "Full Stack AI Development",
     category: "AI & ML",
     level: "Intermediate",
-    levelColor: "#6c57d2",
+    levelColor: "#C9883A",
     duration: "60 Hours",
     lessons: "48 Lessons",
     badge: "Bestseller",
-    badgeBg: "#6c57d2",
+    badgeBg: "#C9883A",
   },
   {
     icon: "fas fa-shield-alt",
@@ -22,7 +22,7 @@ const courses = [
     duration: "50 Hours",
     lessons: "40 Lessons",
     badge: "New",
-    badgeBg: "#6c57d2",
+    badgeBg: "#C9883A",
   },
 ];
 
@@ -139,17 +139,17 @@ const TrainingPage = () => {
                   <div className="lms-vis-courses">
                     <div className="lms-vis-course">
                       <div className="lms-vis-course__head">
-                        <div className="lms-vis-course__icon" style={{ background: "rgba(108,87,210,0.10)", color: "#6c57d2" }}>
+                        <div className="lms-vis-course__icon" style={{ background: "rgba(201,136,58,0.10)", color: "#C9883A" }}>
                           <i className="fas fa-brain"></i>
                         </div>
                         <div>
                           <p className="lms-vis-course__name">Full Stack AI Development</p>
                           <p className="lms-vis-course__meta">Intermediate · 60 Hours</p>
                         </div>
-                        <span className="lms-vis-course__badge" style={{ background: "#6c57d2" }}>Bestseller</span>
+                        <span className="lms-vis-course__badge" style={{ background: "#C9883A" }}>Bestseller</span>
                       </div>
                       <div className="lms-vis-bar">
-                        <div className="lms-vis-bar__fill" style={{ width: "72%", background: "linear-gradient(90deg,#6c57d2,#a890ff)" }} />
+                        <div className="lms-vis-bar__fill" style={{ width: "72%", background: "linear-gradient(90deg,#C9883A,#E5B460)" }} />
                       </div>
                     </div>
 
@@ -162,7 +162,7 @@ const TrainingPage = () => {
                           <p className="lms-vis-course__name">MLOps - ML Operations</p>
                           <p className="lms-vis-course__meta">Advanced · 50 Hours</p>
                         </div>
-                        <span className="lms-vis-course__badge" style={{ background: "#6c57d2" }}>New</span>
+                        <span className="lms-vis-course__badge" style={{ background: "#C9883A" }}>New</span>
                       </div>
                       <div className="lms-vis-bar">
                         <div className="lms-vis-bar__fill" style={{ width: "55%", background: "linear-gradient(90deg,#e63757,#ff6b8a)" }} />
@@ -295,3 +295,4 @@ const TrainingPage = () => {
 };
 
 export default TrainingPage;
+

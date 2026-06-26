@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { counterData } from "../../data";
 import CountUp from "../utils/CountUp";
 
@@ -31,13 +31,13 @@ const AnimatedBar = ({ target, delay }: { target: number; delay: number }) => {
       marginTop: 10,
       height: 4,
       borderRadius: 4,
-      background: "rgba(108,87,210,0.15)",
+      background: "rgba(201,136,58,0.15)",
       overflow: "hidden",
     }}>
       <div style={{
         height: "100%",
         borderRadius: 4,
-        background: "linear-gradient(90deg, #6c57d2, #8b73ff)",
+        background: "linear-gradient(90deg, #C9883A, #E5B460)",
         width: `${width}%`,
         transition: "width 1.2s cubic-bezier(0.25, 1, 0.5, 1)",
       }} />
@@ -72,13 +72,13 @@ const CounterSection = ({ variant }: Props) => {
                 }}>
                   <div style={{
                     width: 46, height: 46, borderRadius: 12,
-                    background: "#F0EEFF",
+                    background: "#FFF8EE",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     marginBottom: 14,
                   }}>
-                    <i className={item.iconClass} style={{ color: "#6c57d2", fontSize: 20 }} />
+                    <i className={item.iconClass} style={{ color: "#C9883A", fontSize: 20 }} />
                   </div>
-                  <div style={{ fontSize: 36, fontWeight: 900, color: "#6c57d2", lineHeight: 1 }}>
+                  <div style={{ fontSize: 36, fontWeight: 900, color: "#C9883A", lineHeight: 1 }}>
                     <CountUp value={item.variantTargetValue} suffix={item.variantSuffix} />
                   </div>
                   <div style={{ fontSize: 13, color: "#4B4B4B", marginTop: 6, fontWeight: 500 }}>
@@ -136,3 +136,4 @@ const CounterSection = ({ variant }: Props) => {
 };
 
 export default CounterSection;
+

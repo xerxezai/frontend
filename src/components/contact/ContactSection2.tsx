@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+﻿import { useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
 const SERVICES = [
@@ -78,8 +78,8 @@ const ContactSection2 = () => {
 
   const fieldCss = (name: string): React.CSSProperties => ({
     ...baseCss,
-    borderColor: focused === name ? "#6c57d2" : "#DDDAD4",
-    boxShadow:   focused === name ? "0 0 0 3px rgba(108,87,210,0.10)" : "none",
+    borderColor: focused === name ? "#C9883A" : "#DDDAD4",
+    boxShadow:   focused === name ? "0 0 0 3px rgba(201,136,58,0.10)" : "none",
   });
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
@@ -118,9 +118,9 @@ const ContactSection2 = () => {
               display: "flex", alignItems: "center", gap: 10, marginBottom: 10,
               fontFamily: "'DM Sans', sans-serif", fontSize: 11,
               fontWeight: 600, letterSpacing: "0.18em",
-              textTransform: "uppercase", color: "#6c57d2",
+              textTransform: "uppercase", color: "#C9883A",
             }}>
-              <span style={{ display: "inline-block", width: 24, height: 1.5, background: "#6c57d2" }} />
+              <span style={{ display: "inline-block", width: 24, height: 1.5, background: "#C9883A" }} />
               Contact Us
             </div>
 
@@ -266,7 +266,7 @@ const ContactSection2 = () => {
                 {/* purple glow */}
                 <div style={{
                   position: "absolute", width: 240, height: 240, borderRadius: "50%",
-                  background: "rgba(108,87,210,0.18)", filter: "blur(64px)",
+                  background: "rgba(201,136,58,0.18)", filter: "blur(64px)",
                   bottom: -70, right: -50, pointerEvents: "none",
                 }} />
 
@@ -299,7 +299,7 @@ const ContactSection2 = () => {
                         color: "#ffffff", lineHeight: 1,
                       }}>120</span>
                       <span style={{
-                        fontSize: 26, fontWeight: 800, color: "#6c57d2",
+                        fontSize: 26, fontWeight: 800, color: "#C9883A",
                         paddingTop: 6, fontFamily: "'DM Sans', sans-serif",
                       }}>+</span>
                     </div>
@@ -320,8 +320,8 @@ const ContactSection2 = () => {
                   }}>
                     {METRICS.map(({ val, label }) => (
                       <div key={val} style={{
-                        background: "rgba(108,87,210,0.1)",
-                        border: "1px solid rgba(108,87,210,0.2)",
+                        background: "rgba(201,136,58,0.1)",
+                        border: "1px solid rgba(201,136,58,0.2)",
                         borderRadius: 12, padding: "14px 10px", textAlign: "center",
                       }}>
                         <div style={{
@@ -350,7 +350,7 @@ const ContactSection2 = () => {
                       }}>
                         <div style={{
                           width: 36, height: 36, borderRadius: "50%",
-                          background: "#6c57d2", flexShrink: 0,
+                          background: "#C9883A", flexShrink: 0,
                           display: "flex", alignItems: "center", justifyContent: "center",
                         }}>
                           <i className={icon} style={{ color: "#fff", fontSize: 13 }} />
@@ -381,8 +381,8 @@ const ContactSection2 = () => {
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                     {["ISO 27001", "SOC 2", "24h Response", "15+ Countries"].map(tag => (
                       <span key={tag} style={{
-                        background: "rgba(108,87,210,0.12)",
-                        border: "1px solid rgba(108,87,210,0.22)",
+                        background: "rgba(201,136,58,0.12)",
+                        border: "1px solid rgba(201,136,58,0.22)",
                         borderRadius: 100, padding: "4px 12px",
                         fontSize: 10, color: "rgba(255,255,255,0.5)",
                         fontFamily: "'DM Sans', sans-serif",
@@ -402,3 +402,4 @@ const ContactSection2 = () => {
 };
 
 export default ContactSection2;
+

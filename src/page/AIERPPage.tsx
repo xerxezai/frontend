@@ -4,15 +4,15 @@ import CustomLayout from "../components/layout/CustomLayout";
 
 // ── colour tokens ────────────────────────────────────────────────────────────
 const C = {
-  purple: "#6c57d2",
+  purple: "#C9883A",
   purpleDark: "#5242b0",
-  purpleLight: "rgba(108,87,210,0.18)",
-  purpleMid: "rgba(108,87,210,0.15)",
+  purpleLight: "rgba(201,136,58,0.18)",
+  purpleMid: "rgba(201,136,58,0.15)",
   orange: "#ff792e",
   navy: "#003566",
   navyDark: "#001f3f",
   textMuted: "rgba(255,255,255,0.55)",
-  border: "rgba(108,87,210,0.22)",
+  border: "rgba(201,136,58,0.22)",
   white: "#ffffff",
 };
 
@@ -82,13 +82,13 @@ const Check = ({ children }: { children: React.ReactNode }) => (
 const Hero = () => (
   <section
     style={{
-      background: `linear-gradient(135deg, ${C.navyDark} 0%, #0f1c3f 45%, #1a0a5c 100%)`,
+      background: `linear-gradient(135deg, ${C.navyDark} 0%, #0f1c3f 45%, #163557 100%)`,
       padding: "148px 0 80px",
       position: "relative",
       overflow: "hidden",
     }}
   >
-    <span style={{ position: "absolute", top: -120, right: -120, width: 480, height: 480, borderRadius: "50%", background: "rgba(108,87,210,0.12)", pointerEvents: "none" }} />
+    <span style={{ position: "absolute", top: -120, right: -120, width: 480, height: 480, borderRadius: "50%", background: "rgba(201,136,58,0.12)", pointerEvents: "none" }} />
     <span style={{ position: "absolute", bottom: -80, left: "25%", width: 300, height: 300, borderRadius: "50%", background: "rgba(255,121,46,0.07)", pointerEvents: "none" }} />
 
     <div className="container" style={{ position: "relative", zIndex: 1 }}>
@@ -126,7 +126,7 @@ const Hero = () => (
           >
             Intelligent ERP for
             <br />
-            <span style={{ color: "#a78bfa" }}>Enterprise Operations</span>
+            <span style={{ color: "#E5B460" }}>Enterprise Operations</span>
           </h1>
 
           <p
@@ -246,7 +246,7 @@ const TwoTracks = () => (
       <div className="row g-4">
         {/* Track A */}
         <div className="col-lg-6">
-          <div style={{ background: "#0d0d1f", borderRadius: 16, padding: "44px 40px", border: `2px solid ${C.purple}33`, boxShadow: "0 4px 32px rgba(108,87,210,0.15)", height: "100%" }}>
+          <div style={{ background: "#0d0d1f", borderRadius: 16, padding: "44px 40px", border: `2px solid ${C.purple}33`, boxShadow: "0 4px 32px rgba(201,136,58,0.15)", height: "100%" }}>
             <div style={{ width: 52, height: 52, borderRadius: 14, background: C.purpleLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
               <i className="fas fa-code-branch" style={{ color: C.purple, fontSize: 22 }} />
             </div>
@@ -267,7 +267,7 @@ const TwoTracks = () => (
               <Check>Multi-currency, multi-language, multi-entity support</Check>
               <Check>White-labelled, fully owned IP transferred to you at delivery</Check>
             </ul>
-            <div style={{ marginTop: 32, padding: "16px 20px", background: "rgba(108,87,210,0.12)", borderRadius: 10, borderLeft: `4px solid ${C.purple}` }}>
+            <div style={{ marginTop: 32, padding: "16px 20px", background: "rgba(201,136,58,0.12)", borderRadius: 10, borderLeft: `4px solid ${C.purple}` }}>
               <p style={{ margin: 0, color: "rgba(255,255,255,0.75)", fontSize: 14, lineHeight: 1.6 }}>
                 <strong>Typical timeline:</strong> 4&ndash;6 months for a fully operational
                 system with live AI analytics and role dashboards.
@@ -448,7 +448,7 @@ const Modules = () => (
           <div key={mod.title} className="col-lg-4 col-md-6">
             <div
               style={{ background: "#0d0d1f", border: `1px solid ${C.border}`, borderRadius: 14, padding: "28px 24px", height: "100%", transition: "border-color 0.2s, box-shadow 0.2s" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = `${C.purple}66`; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(108,87,210,0.18)"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = `${C.purple}66`; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(201,136,58,0.18)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = C.border; (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}
             >
               <div style={{ width: 48, height: 48, borderRadius: 12, background: C.purpleLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
@@ -572,7 +572,7 @@ const ClientLogos = () => {
                   textAlign: "center",
                 }}
               >
-                <i className={s.icon} style={{ color: "#a78bfa", fontSize: 26, marginBottom: 10, display: "block" }} />
+                <i className={s.icon} style={{ color: "#E5B460", fontSize: 26, marginBottom: 10, display: "block" }} />
                 <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, fontWeight: 600, margin: 0, lineHeight: 1.4 }}>
                   {s.label}
                 </p>
@@ -697,7 +697,7 @@ const FAQSection = () => {
             {faqs.map((faq, i) => (
               <div
                 key={i}
-                style={{ background: "#0d0d1f", border: `1px solid ${open === i ? C.purple + "66" : C.border}`, borderRadius: 12, marginBottom: 12, boxShadow: open === i ? "0 2px 16px rgba(108,87,210,0.18)" : "none", overflow: "hidden", transition: "border-color 0.2s" }}
+                style={{ background: "#0d0d1f", border: `1px solid ${open === i ? C.purple + "66" : C.border}`, borderRadius: 12, marginBottom: 12, boxShadow: open === i ? "0 2px 16px rgba(201,136,58,0.18)" : "none", overflow: "hidden", transition: "border-color 0.2s" }}
               >
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
@@ -784,3 +784,4 @@ const AIERPPage = () => {
 };
 
 export default AIERPPage;
+

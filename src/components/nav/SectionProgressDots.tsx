@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 
 interface Section {
   id: string;
@@ -72,14 +72,14 @@ const SectionProgressDots = ({ sections }: Props) => {
           >
             {isHov && (
               <span style={{
-                background: "rgba(108,87,210,0.92)",
+                background: "rgba(201,136,58,0.92)",
                 color: "#fff",
                 fontSize: 11,
                 fontWeight: 600,
                 padding: "3px 10px",
                 borderRadius: 6,
                 whiteSpace: "nowrap",
-                boxShadow: "0 2px 8px rgba(108,87,210,0.25)",
+                boxShadow: "0 2px 8px rgba(201,136,58,0.25)",
                 transition: "opacity 0.2s",
               }}>
                 {label}
@@ -97,11 +97,11 @@ const SectionProgressDots = ({ sections }: Props) => {
                 height: isActive ? 12 : 8,
                 borderRadius: "50%",
                 border: "none",
-                background: isActive ? "#6c57d2" : "rgba(108,87,210,0.30)",
+                background: isActive ? "#C9883A" : "rgba(201,136,58,0.30)",
                 cursor: "pointer",
                 padding: 0,
                 transition: "all 0.25s ease",
-                boxShadow: isActive ? "0 0 0 3px rgba(108,87,210,0.20)" : "none",
+                boxShadow: isActive ? "0 0 0 3px rgba(201,136,58,0.20)" : "none",
                 flexShrink: 0,
               }}
             />
@@ -113,3 +113,4 @@ const SectionProgressDots = ({ sections }: Props) => {
 };
 
 export default SectionProgressDots;
+

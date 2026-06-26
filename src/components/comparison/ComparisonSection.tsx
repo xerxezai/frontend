@@ -1,4 +1,4 @@
-const features = [
+﻿const features = [
   "AI-Native ERP Capabilities",
   "ISO 27001 + SOC 2 Type II",
   "Multi-Cloud (AWS · Azure · GCP)",
@@ -25,9 +25,9 @@ const MarkIcon = ({ mark }: { mark: Mark }) => {
     <span style={{
       display: "inline-flex", alignItems: "center", justifyContent: "center",
       width: 28, height: 28, borderRadius: "50%",
-      background: "rgba(108,87,210,0.12)",
+      background: "rgba(201,136,58,0.12)",
     }}>
-      <i className="fas fa-check" style={{ color: "#6c57d2", fontSize: 12 }} />
+      <i className="fas fa-check" style={{ color: "#C9883A", fontSize: 12 }} />
     </span>
   );
   if (mark === "no") return (
@@ -81,7 +81,7 @@ const ComparisonSection = () => {
                       width: "22%",
                       padding: "20px 16px",
                       textAlign: "center",
-                      background: col.highlight ? "#6c57d2" : "#ffffff",
+                      background: col.highlight ? "#C9883A" : "#ffffff",
                       color: col.highlight ? "#ffffff" : "#0A0A0A",
                       fontWeight: 700,
                       fontSize: 15,
@@ -126,7 +126,7 @@ const ComparisonSection = () => {
                         borderBottom: "1px solid " + (cols[ci].highlight ? "rgba(255,255,255,0.15)" : "#E5E5E5"),
                         borderRight: ci === 2 ? "1px solid " + (cols[ci].highlight ? "transparent" : "#E5E5E5") : "none",
                         background: cols[ci].highlight
-                          ? "rgba(108,87,210,0.06)"
+                          ? "rgba(201,136,58,0.06)"
                           : "transparent",
                       }}
                     >
@@ -146,7 +146,7 @@ const ComparisonSection = () => {
                     key={ci}
                     style={{
                       padding: "0",
-                      background: col.highlight ? "#6c57d2" : "#ffffff",
+                      background: col.highlight ? "#C9883A" : "#ffffff",
                       borderRadius: col.highlight ? "0 0 12px 12px" : "0 0 8px 8px",
                       height: 8,
                       border: col.highlight ? "none" : "1px solid #E5E5E5",
@@ -176,3 +176,4 @@ const ComparisonSection = () => {
 };
 
 export default ComparisonSection;
+
