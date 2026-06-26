@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
 
-// ── Warm ink theme — matches XERXEZ cream/terracotta palette ──
+// ── Cream theme — matches navbar background #faf9f5 ──
 const N = {
-  bg:      "#1C1916",
-  heading: "#FDFCFB",
-  body:    "#9B9690",
-  link:    "#9B9690",
-  linkHov: "#EDE8DF",
+  bg:      "#faf9f5",
+  heading: "#141413",
+  body:    "#6c6a64",
+  link:    "#6c6a64",
+  linkHov: "#cc785c",
   icon:    "#C9883A",
-  divider: "#2E2B27",
-  copy:    "#6c6a64",
+  divider: "#e6dfd8",
+  copy:    "#9B9690",
 };
 
 
