@@ -11887,8 +11887,7 @@ body {
   background: #111111 !important; border-top: none !important; position: relative;
 }
 .footer-section::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #6c57d2 50%, transparent 100%);
+  content: none;
 }
 .footer-section .widget-head h3 {
   font-family: 'DM Sans', sans-serif !important; font-size: 11px !important;
