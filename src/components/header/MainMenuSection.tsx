@@ -64,7 +64,12 @@ const MainMenuSection = React.memo(() => {
                     key={`submenu-${subMenuItem.title}-${subMenuItem.link}`}
                     className={subMenuItem.hasDropdown ? "has-dropdown" : ""}
                   >
-                    <Link to={subMenuItem.link}>
+                    <Link
+                      to={subMenuItem.link}
+                      style={{ color: "#1A1A1A" }}
+                      onMouseEnter={e => (e.currentTarget.style.color = "#C9883A")}
+                      onMouseLeave={e => (e.currentTarget.style.color = "#1A1A1A")}
+                    >
                       {subMenuItem.title}
                       {subMenuItem.hasDropdown && (
                         <i className="fas fa-angle-right"></i>
@@ -74,7 +79,12 @@ const MainMenuSection = React.memo(() => {
                       <ul className="submenu">
                         {subMenuItem.submenu.map((nestedSubItem: MenuItem) => (
                           <li key={`nested-${nestedSubItem.title}-${nestedSubItem.link}`}>
-                            <Link to={nestedSubItem.link}>
+                            <Link
+                              to={nestedSubItem.link}
+                              style={{ color: "#1A1A1A" }}
+                              onMouseEnter={e => (e.currentTarget.style.color = "#C9883A")}
+                              onMouseLeave={e => (e.currentTarget.style.color = "#1A1A1A")}
+                            >
                               {nestedSubItem.title}
                             </Link>
                           </li>
