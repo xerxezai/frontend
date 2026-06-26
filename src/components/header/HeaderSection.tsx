@@ -65,7 +65,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
           </Link>
 
           {/* Desktop nav */}
-          <div className="d-none d-xl-block">
+          <div className="header-main d-none d-xl-block" style={{ padding: 0, flex: "none" }}>
             <MainMenuSection />
           </div>
 
