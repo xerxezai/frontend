@@ -11660,7 +11660,7 @@ body {
 
 /* ── Breadcrumb — dark editorial ── */
 .breadcrumb-section {
-  background: #1A1A1A !important;
+  background: #141413 !important;
   min-height: 240px !important;
   display: flex !important;
   align-items: center !important;
@@ -12146,10 +12146,10 @@ body {
 
 /* ── Inner-page banner fixes ── */
 
-/* 1. Compact breadcrumb-only banner: 80px total, 20px padding */
+/* 1. Breadcrumb banner — tall enough to clear absolute header-section-2 (~108px) */
 .breadcrumb-section {
-  min-height: 80px !important;
-  padding: 20px 0 !important;
+  min-height: 220px !important;
+  padding: 120px 0 28px !important;
   display: flex !important;
   align-items: center !important;
 }
