@@ -40,16 +40,34 @@ const hov = {
 
 const FooterSection2 = () => {
   return (
+    <>
+    <style>{`
+      .xz-footer-grid {
+        display: grid;
+        grid-template-columns: 240px 200px 140px 1fr;
+        gap: 80px;
+        align-items: start;
+        padding: 56px 0 40px;
+      }
+      @media (max-width: 991px) {
+        .xz-footer-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+          padding: 48px 0 32px;
+        }
+      }
+      @media (max-width: 575px) {
+        .xz-footer-grid {
+          grid-template-columns: 1fr;
+          gap: 32px;
+          padding: 40px 0 24px;
+        }
+      }
+    `}</style>
     <footer style={{ background: N.bg }}>
       <div className="container">
 
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "240px 200px 140px 1fr",
-          gap: "80px",
-          alignItems: "start",
-          padding: "56px 0 40px",
-        }}>
+        <div className="xz-footer-grid">
 
           {/* Col 1 — Logo + About */}
           <div>
@@ -184,6 +202,7 @@ const FooterSection2 = () => {
 
       </div>
     </footer>
+    </>
   );
 };
 

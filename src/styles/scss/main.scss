@@ -13,6 +13,7 @@ Version: 1.0.0
 
 html {
   scroll-behavior: auto !important; /* Disables smooth scrolling */
+  overflow-x: hidden;
 }
 
 .project-slide-animation-1 .gsap-card {
@@ -12341,5 +12342,28 @@ body {
 .submenu li a:hover,
 .submenu--grid li a:hover {
   color: #cc785c !important;
+}
+
+/* ══════════════════════════════════════════════
+   MOBILE RESPONSIVE FIXES
+══════════════════════════════════════════════ */
+
+/* Prevent images and SVGs from overflowing on mobile */
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent horizontal scroll caused by full-width elements */
+body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 575px) {
+  /* Slightly tighten container padding on very small phones */
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 

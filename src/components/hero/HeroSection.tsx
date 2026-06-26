@@ -238,7 +238,7 @@ const HeroSection = () => {
 
             {/* Typing / cycling line */}
             <div style={{
-              display: "flex", alignItems: "center", gap: 8,
+              display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
               marginTop: 28, marginBottom: 24,
             }}>
               <span style={{
@@ -253,7 +253,7 @@ const HeroSection = () => {
                 fontSize: 14, fontWeight: 600, color: "#cc785c",
                 opacity: fadeIn ? 1 : 0,
                 transition: "opacity 0.32s ease",
-                minWidth: 210, display: "inline-block",
+                minWidth: "min(210px, 55vw)", display: "inline-block",
               }}>
                 {CYCLE_WORDS[wordIdx]}
               </span>
