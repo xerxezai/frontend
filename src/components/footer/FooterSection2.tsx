@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
 
-// ── Cream theme — matches XERXEZ website background ──
 const N = {
   bg:      "#F2EFE9",
   heading: "#141413",
@@ -24,17 +23,18 @@ const linkStyle: React.CSSProperties = {
 
 const headingStyle: React.CSSProperties = {
   fontFamily: "'Inter', sans-serif",
-  fontSize: 14,
-  fontWeight: 500,
+  fontSize: 11,
+  fontWeight: 600,
   color: N.heading,
   marginBottom: 16,
-  letterSpacing: 0,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase" as const,
 };
 
 const hov = {
   onMouseOver: (e: React.MouseEvent<HTMLElement>) =>
     (e.currentTarget.style.color = N.linkHov),
-  onMouseOut:  (e: React.MouseEvent<HTMLElement>) =>
+  onMouseOut: (e: React.MouseEvent<HTMLElement>) =>
     (e.currentTarget.style.color = N.link),
 };
 
@@ -42,39 +42,40 @@ const FooterSection2 = () => {
   return (
     <footer style={{ background: N.bg }}>
       <div className="container">
-        {/* 4-column CSS grid */}
+
         <div style={{
           display: "grid",
-          gridTemplateColumns: "220px 1fr 1fr 1fr",
-          gap: "40px",
+          gridTemplateColumns: "260px 1fr 140px 220px",
+          gap: "48px",
           alignItems: "start",
-          padding: "48px 0 36px",
+          padding: "56px 0 40px",
         }}>
 
-          {/* Col 1 — Wordmark + About */}
+          {/* Col 1 — Logo + About */}
           <div>
-            <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 20 }}>
+            <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 16 }}>
               <img
                 src="/assets/img/logo/xerxez_logo.png"
                 alt="Xerxez Solutions"
-                style={{ height: 93, display: "block" }}
+                style={{ height: 100, width: "auto", display: "block" }}
               />
             </Link>
             <p style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: 14,
-              lineHeight: 1.6,
+              fontSize: 13,
+              lineHeight: 1.7,
               color: N.body,
               marginBottom: 20,
+              maxWidth: 220,
             }}>
               AI-powered enterprise systems — ERP, DevSecOps pipelines,
               and cloud infrastructure that help organisations scale securely.
             </p>
-            <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
               {[
                 { href: "https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/", icon: "fab fa-linkedin-in", label: "LinkedIn" },
-                { href: "https://github.com/",           icon: "fab fa-github",      label: "GitHub" },
-                { href: "mailto:info@xerxez.com",        icon: "fas fa-envelope",   label: "Email" },
+                { href: "https://github.com/", icon: "fab fa-github", label: "GitHub" },
+                { href: "mailto:info@xerxez.com", icon: "fas fa-envelope", label: "Email" },
               ].map(({ href, icon, label }) => (
                 <a key={label} href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
@@ -114,12 +115,12 @@ const FooterSection2 = () => {
             <h4 style={headingStyle}>Link us</h4>
             <ul style={{ padding: 0, margin: 0, listStyle: "none" }}>
               {[
-                { to: "/",        label: "Home" },
-                { to: "/about",   label: "About Us" },
-                { to: "/service", label: "Services" },
-                { to: "/training",label: "Training" },
-                { to: "/blog",    label: "Blog" },
-                { to: "/contact", label: "Contact" },
+                { to: "/",         label: "Home" },
+                { to: "/about",    label: "About Us" },
+                { to: "/service",  label: "Services" },
+                { to: "/training", label: "Training" },
+                { to: "/blog",     label: "Blog" },
+                { to: "/contact",  label: "Contact" },
               ].map(({ to, label }) => (
                 <li key={to} style={{ marginBottom: 10 }}>
                   <Link to={to} style={linkStyle} {...hov}>{label}</Link>
@@ -139,7 +140,7 @@ const FooterSection2 = () => {
                 { icon: <MapPin size={13} style={{ marginTop: 2 }} />, content: <span style={{ ...linkStyle, lineHeight: 1.5 }}>India &amp; UAE — Remote-first, Global delivery</span> },
               ].map(({ icon, content }, i) => (
                 <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 12, color: N.icon }}>
-                  <span style={{ flexShrink: 0, paddingTop: 1 }}>{icon}</span>
+                  <span style={{ flexShrink: 0, paddingTop: 2 }}>{icon}</span>
                   {content}
                 </li>
               ))}
@@ -173,7 +174,7 @@ const FooterSection2 = () => {
                 textDecoration: "none",
               }}
                 onMouseOver={e => (e.currentTarget.style.color = N.body)}
-                onMouseOut={e => (e.currentTarget.style.color = N.copy)}
+                onMouseOut={e  => (e.currentTarget.style.color = N.copy)}
               >
                 {label}
               </Link>
