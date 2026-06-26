@@ -8,14 +8,6 @@ interface Props {
   variant?: boolean;
 }
 
-const SpikeMark = () => (
-  <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-    <line x1="7" y1="0" x2="7" y2="14" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
-    <line x1="0" y1="7" x2="14" y2="7" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
-    <line x1="2.05" y1="2.05" x2="11.95" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
-    <line x1="11.95" y1="2.05" x2="2.05" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
-);
 
 const HeaderSection = ({ variant: _variant }: Props) => {
   const { toggleMobileMenu } = useCustomContext();
@@ -48,19 +40,13 @@ const HeaderSection = ({ variant: _variant }: Props) => {
           height: "100%",
         }}>
           {/* Wordmark */}
-          <Link to="/" style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            textDecoration: "none",
-          }}>
-            <SpikeMark />
+          <Link to="/" style={{ display: "block", textDecoration: "none" }}>
             <Image
               src="/assets/img/logo/xerxez_logo.png"
               alt="Xerxez Solutions"
-              width={130}
-              height={40}
-              style={{ height: 36, width: "auto", display: "block" }}
+              width={160}
+              height={48}
+              style={{ height: 44, width: "auto", display: "block" }}
             />
           </Link>
 
