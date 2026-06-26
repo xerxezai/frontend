@@ -141,7 +141,7 @@ const HeroSection = () => {
 
   return (
     <section style={{
-      background: "#faf9f5",
+      background: "#D9D1C5",
       padding: "24px 0 64px",
       minHeight: "calc(100vh - 70px)",
       display: "flex",
