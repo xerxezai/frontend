@@ -67,7 +67,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               fontFamily: "'Inter', sans-serif",
               fontSize: 14,
               fontWeight: 500,
-              color: "#6c6a64",
+              color: "#ffffff",
               textDecoration: "none",
               padding: "8px 4px",
             }}>
