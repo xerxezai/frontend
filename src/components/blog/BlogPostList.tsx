@@ -21,7 +21,7 @@ const BlogPostList = ({
       <div className="blog-posts">
         <div className="single-blog-post">
           <div className="post-content text-center">
-            <h3>No posts found</h3>
+            <h3 style={{ color: "#1A1A1A" }}>No posts found</h3>
             <p>Try adjusting your search criteria or filters.</p>
             <button className="btn btn-primary mt-3" onClick={onClearFilters}>
               Clear Filters

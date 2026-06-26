@@ -92,7 +92,7 @@ const TrainingPage = () => {
                   <a href="#courses" className="theme-btn">
                     Browse Courses <i className="far fa-arrow-right"></i>
                   </a>
-                  <Link to="/contact" className="theme-btn style-2">
+                  <Link to="/contact" className="theme-btn" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.35)", color: "#fff" }}>
                     Enterprise Training <i className="far fa-arrow-right"></i>
                   </Link>
                 </div>

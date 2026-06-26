@@ -68,7 +68,7 @@ const Check = ({ children }: { children: React.ReactNode }) => (
       gap: 10,
       marginBottom: 12,
       listStyle: "none",
-      color: "#374151",
+      color: "rgba(255,255,255,0.80)",
       fontSize: 15,
       lineHeight: 1.55,
     }}
@@ -722,7 +722,7 @@ const FAQSection = () => {
 
 // ── CTA ───────────────────────────────────────────────────────────────────────
 const CTASection = () => (
-  <section style={{ padding: "80px 0", background: `linear-gradient(135deg, ${C.purple} 0%, ${C.navy} 100%)` }}>
+  <section style={{ padding: "80px 0", background: `linear-gradient(135deg, ${C.purple} 0%, ${C.purpleDark} 100%)` }}>
     <div className="container">
       <div className="row align-items-center g-5">
         <div className="col-lg-7">

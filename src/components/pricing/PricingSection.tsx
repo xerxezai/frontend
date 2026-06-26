@@ -26,7 +26,7 @@ const PricingSection = ({ variant }: Props) => {
           <div className="d-flex align-items-center justify-content-center gap-3 mt-3 mt-md-0">
             <span
               onClick={() => setIsMonthly(true)}
-              style={{ fontSize: 18, fontWeight: isMonthly ? 600 : 400, cursor: 'pointer', color: isMonthly ? '#6c57d2' : 'inherit' }}
+              style={{ fontSize: 18, fontWeight: isMonthly ? 600 : 400, cursor: 'pointer', color: isMonthly ? '#6c57d2' : '#4A4A4A', fontFamily: "'DM Sans', sans-serif" }}
             >Monthly</span>
             <div
               onClick={() => setIsMonthly(m => !m)}
@@ -49,7 +49,7 @@ const PricingSection = ({ variant }: Props) => {
             </div>
             <span
               onClick={() => setIsMonthly(false)}
-              style={{ fontSize: 18, fontWeight: !isMonthly ? 600 : 400, cursor: 'pointer', color: !isMonthly ? '#6c57d2' : 'inherit' }}
+              style={{ fontSize: 18, fontWeight: !isMonthly ? 600 : 400, cursor: 'pointer', color: !isMonthly ? '#6c57d2' : '#4A4A4A', fontFamily: "'DM Sans', sans-serif" }}
             >Yearly</span>
           </div>
         </div>
