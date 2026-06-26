@@ -48,11 +48,13 @@ const FooterSection2 = () => {
           {/* Col 1 — Wordmark + About */}
           <div className="col-lg-3 col-md-6 col-12 mb-5 mb-lg-0">
             <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 20 }}>
-              <img
-                src="/assets/img/logo/xerxez_logo.png"
-                alt="Xerxez Solutions"
-                style={{ height: 93, display: "block" }}
-              />
+              <div style={{ background: "#ffffff", borderRadius: 10, padding: "6px 14px", display: "inline-flex", alignItems: "center" }}>
+                <img
+                  src="/assets/img/logo/xerxez_logo.png"
+                  alt="Xerxez Solutions"
+                  style={{ height: 93, display: "block" }}
+                />
+              </div>
             </Link>
             <p style={{
               fontFamily: "'Inter', sans-serif",
