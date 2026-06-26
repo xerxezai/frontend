@@ -135,7 +135,7 @@ const HeroSection = () => (
         </div>
 
         {/* RIGHT — dark navy product mockup card */}
-        <div className="col-lg-6 d-flex justify-content-center justify-content-lg-end">
+        <div className="col-lg-6 d-flex justify-content-center justify-content-lg-end" style={{ paddingTop: 32 }}>
           <div style={{
             background: "#181715",
             borderRadius: 16,
