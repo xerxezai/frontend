@@ -142,7 +142,7 @@ const HeroSection = () => {
   return (
     <section style={{
       background: "#faf9f5",
-      padding: "72px 0 72px",
+      padding: "24px 0 64px",
       minHeight: "calc(100vh - 70px)",
       display: "flex",
       alignItems: "flex-start",
