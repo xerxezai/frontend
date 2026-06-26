@@ -51,7 +51,7 @@ const FooterSection2 = () => {
               <img
                 src="/assets/img/logo/xerxez_logo.png"
                 alt="Xerxez Solutions"
-                style={{ height: 85, display: "block" }}
+                style={{ height: 93, display: "block" }}
               />
             </Link>
             <p style={{
