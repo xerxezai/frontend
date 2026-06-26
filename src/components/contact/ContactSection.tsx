@@ -70,12 +70,12 @@ const ContactSection = () => {
   };
 
   return (
-    <section style={{ background: "#FDFCFB", padding: "100px 0" }}>
+    <section style={{ background: "#FDFCFB", padding: "72px 0" }}>
       <div className="container">
-        <div className="row g-5 align-items-stretch">
+        <div className="row g-4 align-items-stretch">
 
           {/* ── LEFT: form ─────────────────────────────────────────────────── */}
-          <div className="col-lg-6" data-aos="fade-right" data-aos-duration="900" data-aos-once="true">
+          <div className="col-lg-7" data-aos="fade-right" data-aos-duration="900" data-aos-once="true">
 
             {/* Section label */}
             <div style={{
@@ -105,7 +105,7 @@ const ContactSection = () => {
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 15, lineHeight: 1.7,
-              color: "#6c6a64", marginBottom: 36, maxWidth: 460,
+              color: "#6c6a64", marginBottom: 24, maxWidth: 460,
             }}>
               Fill out the form and our team will respond within 24 hours.
             </p>
@@ -222,7 +222,7 @@ const ContactSection = () => {
           </div>
 
           {/* ── RIGHT: image + info overlay ───────────────────────────────── */}
-          <div className="col-lg-6 d-none d-lg-flex flex-column" data-aos="fade-left" data-aos-duration="900" data-aos-delay="120" data-aos-once="true">
+          <div className="col-lg-5 d-none d-lg-flex flex-column" data-aos="fade-left" data-aos-duration="900" data-aos-delay="120" data-aos-once="true">
             <div style={{ position: "relative", height: "100%", minHeight: 540 }}>
 
               {/* Main image */}
