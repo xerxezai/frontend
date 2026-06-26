@@ -57,8 +57,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
           </div>
 
           {/* Right cluster */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Link to="/contact" style={{
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginLeft: 60 }}>            <Link to="/contact" style={{
               display: "none",
             }} className="d-none d-xl-inline-block" />
 
@@ -67,7 +66,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               fontFamily: "'Inter', sans-serif",
               fontSize: 14,
               fontWeight: 500,
-              color: "#ffffff",
+              color: "#6c6a64",
               textDecoration: "none",
               padding: "8px 4px",
             }}>
@@ -104,11 +103,11 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               onClick={toggleMobileMenu}
               style={{
                 background: "none",
-                border: "1px solid rgba(255,255,255,0.15)",
+                border: "1px solid #b5a090",
                 borderRadius: 8,
                 padding: "8px 10px",
                 cursor: "pointer",
-                color:  "#ffffff",
+                color: "#141413",
                 lineHeight: 1,
               }}
               aria-label="Open menu"

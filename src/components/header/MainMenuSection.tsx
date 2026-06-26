@@ -25,7 +25,7 @@ const MainMenuSection = () => {
   });
 
   return (
-    <div className="main-menu">
+    <div className="main-menu" style={{ marginLeft: 0 }}>
       <nav id="mobile-menu">
         <ul>
           {menuData.map((menuItem: MenuItem) => (
