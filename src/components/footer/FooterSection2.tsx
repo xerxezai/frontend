@@ -111,7 +111,7 @@ const FooterSection2 = () => {
             </div>
 
             {/* Col 4 — Contact Us (swapped) */}
-            <div style={{ paddingLeft: "24px", borderLeft: "1px solid #E8E6E0" }}>
+            <div>
               <div
                 className="single-footer-widget"
                 data-aos="fade-up"
