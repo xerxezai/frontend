@@ -27,9 +27,9 @@ const HeaderSection = ({ variant: _variant }: Props) => {
       right: 0,
       zIndex: 9999,
       height: 70,
-      background: isSticky ? "rgba(250,249,245,0.96)" : "#faf9f5",
-      borderBottom: "1px solid #e6dfd8",
-      boxShadow: "0 1px 0 rgba(20,20,19,0.04), 0 4px 20px rgba(20,20,19,0.07)",
+      background: isSticky ? "rgba(26,35,58,0.97)" : "linear-gradient(135deg, #1a2340 0%, #1e2d4a 100%)",
+      borderBottom: "1px solid rgba(99,179,160,0.2)",
+      boxShadow: "0 1px 0 rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)",
       backdropFilter: isSticky ? "blur(12px)" : "none",
       transition: "background 250ms ease",
     }}>
@@ -67,7 +67,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               fontFamily: "'Inter', sans-serif",
               fontSize: 14,
               fontWeight: 500,
-              color: "#6c6a64",
+              color: "#cbd5e0",
               textDecoration: "none",
               padding: "8px 4px",
             }}>
@@ -104,11 +104,11 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               onClick={toggleMobileMenu}
               style={{
                 background: "none",
-                border: "1px solid #e6dfd8",
+                border: "1px solid rgba(255,255,255,0.15)",
                 borderRadius: 8,
                 padding: "8px 10px",
                 cursor: "pointer",
-                color: "#141413",
+                color:  "#ffffff",
                 lineHeight: 1,
               }}
               aria-label="Open menu"
