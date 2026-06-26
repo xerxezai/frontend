@@ -1,4 +1,4 @@
-interface Props {
+﻿interface Props {
   variant?: string;
 }
 
@@ -67,8 +67,8 @@ const BrandSection = ({ variant }: Props) => {
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.background = "rgba(108,87,210,0.18)";
-                  el.style.borderColor = "rgba(108,87,210,0.45)";
+                  el.style.background = "rgba(201,136,58,0.18)";
+                  el.style.borderColor = "rgba(201,136,58,0.45)";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
@@ -102,3 +102,4 @@ const BrandSection = ({ variant }: Props) => {
 };
 
 export default BrandSection;
+

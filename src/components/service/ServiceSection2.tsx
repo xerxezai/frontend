@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 
 const SERVICES = [
   {
@@ -91,9 +91,9 @@ const ServiceSection2 = () => (
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLDivElement;
-                el.style.borderColor = "#6c57d2";
+                el.style.borderColor = "#C9883A";
                 el.style.transform = "perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-8px)";
-                el.style.boxShadow = "0 24px 60px rgba(108,87,210,0.13)";
+                el.style.boxShadow = "0 24px 60px rgba(201,136,58,0.13)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLDivElement;
@@ -104,10 +104,10 @@ const ServiceSection2 = () => (
             >
               <div style={{
                 width: 56, height: 56, borderRadius: 14,
-                background: "rgba(108,87,210,0.08)",
-                border: "1px solid rgba(108,87,210,0.15)",
+                background: "rgba(201,136,58,0.08)",
+                border: "1px solid rgba(201,136,58,0.15)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 24, fontSize: 22, color: "#6c57d2", flexShrink: 0,
+                marginBottom: 24, fontSize: 22, color: "#C9883A", flexShrink: 0,
                 transition: "background 0.3s, transform 0.3s",
               }}>
                 <i className={card.icon} />
@@ -127,7 +127,7 @@ const ServiceSection2 = () => (
                 to={`/service/${card.slug}`}
                 style={{
                   marginTop: "auto", display: "inline-flex", alignItems: "center",
-                  gap: 6, color: "#6c57d2", fontWeight: 600, fontSize: 13,
+                  gap: 6, color: "#C9883A", fontWeight: 600, fontSize: 13,
                   textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
                   transition: "gap 0.2s",
                 }}
@@ -144,3 +144,4 @@ const ServiceSection2 = () => (
 );
 
 export default ServiceSection2;
+

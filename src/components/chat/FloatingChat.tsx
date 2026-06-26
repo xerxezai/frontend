@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+﻿import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 interface Message {
@@ -59,7 +59,7 @@ const FloatingChat = () => {
         }}>
           {/* Header */}
           <div style={{
-            background: "#6c57d2", padding: "14px 16px",
+            background: "#C9883A", padding: "14px 16px",
             display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -102,7 +102,7 @@ const FloatingChat = () => {
               }}>
                 <div style={{
                   maxWidth: "82%",
-                  background: m.from === "user" ? "#6c57d2" : "#F5F5F7",
+                  background: m.from === "user" ? "#C9883A" : "#F5F5F7",
                   color: m.from === "user" ? "#fff" : "#0A0A0A",
                   borderRadius: m.from === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
                   padding: "9px 13px", fontSize: 13, lineHeight: 1.5,
@@ -121,9 +121,9 @@ const FloatingChat = () => {
                 key={q}
                 onClick={() => send(q)}
                 style={{
-                  background: "#F0EEFF", border: "1px solid rgba(108,87,210,0.20)",
+                  background: "#FFF8EE", border: "1px solid rgba(201,136,58,0.20)",
                   borderRadius: 20, padding: "4px 10px",
-                  fontSize: 11, color: "#6c57d2", cursor: "pointer", fontWeight: 500,
+                  fontSize: 11, color: "#C9883A", cursor: "pointer", fontWeight: 500,
                 }}
               >
                 {q}
@@ -152,7 +152,7 @@ const FloatingChat = () => {
               onClick={() => send(input)}
               style={{
                 width: 36, height: 36, borderRadius: "50%", border: "none",
-                background: "#6c57d2", color: "#fff", cursor: "pointer",
+                background: "#C9883A", color: "#fff", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 flexShrink: 0,
               }}
@@ -167,7 +167,7 @@ const FloatingChat = () => {
             fontSize: 11, color: "#9E9E9E", textAlign: "center",
           }}>
             For detailed help,{" "}
-            <Link to="/contact" style={{ color: "#6c57d2", textDecoration: "none", fontWeight: 600 }}>
+            <Link to="/contact" style={{ color: "#C9883A", textDecoration: "none", fontWeight: 600 }}>
               contact our team
             </Link>{" "}
             — 24h response.
@@ -182,8 +182,8 @@ const FloatingChat = () => {
         style={{
           position: "fixed", bottom: 24, right: 20, zIndex: 1050,
           width: 54, height: 54, borderRadius: "50%",
-          background: "#6c57d2", border: "none",
-          boxShadow: "0 4px 20px rgba(108,87,210,0.40)",
+          background: "#C9883A", border: "none",
+          boxShadow: "0 4px 20px rgba(201,136,58,0.40)",
           cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
           transition: "transform 0.2s, box-shadow 0.2s",
         }}
@@ -211,3 +211,4 @@ const FloatingChat = () => {
 };
 
 export default FloatingChat;
+

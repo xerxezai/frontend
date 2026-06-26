@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MainMenuSection from "./MainMenuSection";
 import { useCustomContext } from "../../context/context";
 import { Link } from "react-router-dom";
@@ -7,74 +7,127 @@ import Image from "../utils/Image";
 interface Props {
   variant?: boolean;
 }
-const HeaderSection = ({ variant }: Props) => {
+
+const SpikeMark = () => (
+  <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+    <line x1="7" y1="0" x2="7" y2="14" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="0" y1="7" x2="14" y2="7" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="2.05" y1="2.05" x2="11.95" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="11.95" y1="2.05" x2="2.05" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
+const HeaderSection = ({ variant: _variant }: Props) => {
   const { toggleMobileMenu } = useCustomContext();
   const [isSticky, setIsSticky] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scroll = window.scrollY;
-      setIsSticky(scroll >= 250);
-    };
+    const handleScroll = () => setIsSticky(window.scrollY >= 80);
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header
-      className={`header-section header-1 ${variant ? "header-4" : ""} ${
-        isSticky ? "sticky" : ""
-      }`}
-    >
-      <div className="container">
-        <div className="mega-menu-wrapper">
-          <div className="header-main">
-            <div className="header-left">
-              <Link to="/" className="header-logo1">
-                <Image
-                  src="/assets/img/logo/xerxez_logo.png"
-                  alt="Xerxez Solutions"
-                  width={180}
-                  height={60}
-                  style={{ height: '60px', width: 'auto', background: 'transparent', display: 'block', border: 'none', boxShadow: 'none' }}
-                />
-              </Link>
-            </div>
-            <div className="header-right d-flex justify-content-end align-items-center">
-              <div className="mean__menu-wrapper d-none d-xl-block">
-                <MainMenuSection />
-              </div>
-              {variant ? (
-                <div className="header-button">
-                  <Link to="/contact" className="pill-btn">
-                    Get Started
-                    <span className="btn-arrow">
-                      <i className="far fa-arrow-right"></i>
-                    </span>
-                  </Link>
-                </div>
-              ) : (
-                <Link to="/contact" className="pill-btn">
-                  Get Started
-                  <span className="btn-arrow">
-                    <i className="far fa-arrow-right"></i>
-                  </span>
-                </Link>
-              )}
+    <header style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 9999,
+      height: 64,
+      background: isSticky ? "rgba(250,249,245,0.96)" : "#faf9f5",
+      borderBottom: isSticky ? "1px solid #e6dfd8" : "1px solid transparent",
+      backdropFilter: isSticky ? "blur(12px)" : "none",
+      transition: "border-color 250ms ease, background 250ms ease",
+    }}>
+      <div className="container h-100">
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: "100%",
+        }}>
+          {/* Wordmark */}
+          <Link to="/" style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            textDecoration: "none",
+          }}>
+            <SpikeMark />
+            <Image
+              src="/assets/img/logo/xerxez_logo.png"
+              alt="Xerxez Solutions"
+              width={130}
+              height={40}
+              style={{ height: 36, width: "auto", display: "block" }}
+            />
+          </Link>
 
-              <div className="header__hamburger d-xl-none my-auto">
-                <div
-                  className="sidebar__toggle"
-                  role="button"
-                  onClick={toggleMobileMenu}
-                >
-                  <i className="fal fa-bars"></i>
-                </div>
-              </div>
-            </div>
+          {/* Desktop nav */}
+          <div className="d-none d-xl-block">
+            <MainMenuSection />
+          </div>
+
+          {/* Right cluster */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <Link to="/contact" style={{
+              display: "none",
+            }} className="d-none d-xl-inline-block" />
+
+            {/* Sign in — text link */}
+            <Link to="/erp" className="d-none d-xl-inline-flex" style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              fontWeight: 500,
+              color: "#3d3d3a",
+              textDecoration: "none",
+              padding: "8px 4px",
+            }}>
+              Sign in
+            </Link>
+
+            {/* Primary CTA — coral */}
+            <Link to="/contact" style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "#cc785c",
+              color: "#ffffff",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              fontWeight: 500,
+              lineHeight: 1,
+              padding: "10px 18px",
+              height: 40,
+              borderRadius: 8,
+              textDecoration: "none",
+              transition: "background 150ms ease",
+              whiteSpace: "nowrap",
+            }}
+              onMouseOver={e => (e.currentTarget.style.background = "#a9583e")}
+              onMouseOut={e => (e.currentTarget.style.background = "#cc785c")}
+            >
+              Get Started
+            </Link>
+
+            {/* Hamburger — mobile */}
+            <button
+              className="d-xl-none"
+              onClick={toggleMobileMenu}
+              style={{
+                background: "none",
+                border: "1px solid #e6dfd8",
+                borderRadius: 8,
+                padding: "8px 10px",
+                cursor: "pointer",
+                color: "#141413",
+                lineHeight: 1,
+              }}
+              aria-label="Open menu"
+            >
+              <i className="fal fa-bars" style={{ fontSize: 16 }} />
+            </button>
           </div>
         </div>
       </div>
@@ -83,5 +136,3 @@ const HeaderSection = ({ variant }: Props) => {
 };
 
 export default HeaderSection;
-
-

@@ -1,4 +1,4 @@
-import ServiceSidebar from "./ServiceSidebar";
+﻿import ServiceSidebar from "./ServiceSidebar";
 import type { ServiceDataType } from "../../types";
 import ServiceDetailKeyFacts from "./ServiceDetailKeyFacts";
 import ServiceCoreAdvantage from "../core-advantage/ServiceCoreAdvantage";
@@ -42,7 +42,7 @@ const ServiceDetailSection = ({ serviceInfo }: Props) => {
                     {serviceInfo.highlights.map((item, i) => (
                       <div className="col-sm-6" key={i}>
                         <div className="d-flex align-items-center gap-2">
-                          <i className="fas fa-check-circle" style={{ color: "#6c57d2", flexShrink: 0 }}></i>
+                          <i className="fas fa-check-circle" style={{ color: "#C9883A", flexShrink: 0 }}></i>
                           <span>{item}</span>
                         </div>
                       </div>
@@ -88,7 +88,7 @@ const ServiceDetailSection = ({ serviceInfo }: Props) => {
                             className={`accordion-button${openFaq === i ? "" : " collapsed"} fw-semibold`}
                             type="button"
                             onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                            style={{ background: openFaq === i ? "#f5f3ff" : "#fff", color: openFaq === i ? "#6c57d2" : "#222", boxShadow: "none" }}
+                            style={{ background: openFaq === i ? "#FFF8EE" : "#fff", color: openFaq === i ? "#C9883A" : "#222", boxShadow: "none" }}
                           >
                             {faq.question}
                           </button>
@@ -117,3 +117,4 @@ const ServiceDetailSection = ({ serviceInfo }: Props) => {
 };
 
 export default ServiceDetailSection;
+

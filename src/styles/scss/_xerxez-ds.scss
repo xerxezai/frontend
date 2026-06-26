@@ -1,4 +1,4 @@
-/* ================================================================
+﻿/* ================================================================
    XERXEZ DESIGN SYSTEM  ·  v1.0
    ================================================================
    Source of truth derived from the Hero section as design reference.
@@ -29,38 +29,51 @@
 
   /* Colour ──────────────────────────────────────────────────── */
 
-  /* Brand */
-  --xz-purple:        #6c57d2;
-  --xz-purple-light:  rgba(108, 87, 210, 0.10);
-  --xz-purple-mid:    rgba(108, 87, 210, 0.18);
-  --xz-purple-glow:   rgba(108, 87, 210, 0.30);
-  --xz-purple-dark:   #5242b0;
+  /* Brand — coral (Anthropic editorial system) */
+  --xz-coral:         #cc785c;
+  --xz-coral-active:  #a9583e;
+  --xz-coral-light:   rgba(204, 120, 92, 0.10);
+  --xz-coral-mid:     rgba(204, 120, 92, 0.18);
+  --xz-coral-glow:    rgba(204, 120, 92, 0.30);
+  /* legacy alias — keeps old references from breaking */
+  --xz-purple:        #cc785c;
+  --xz-purple-light:  rgba(204, 120, 92, 0.10);
+  --xz-purple-mid:    rgba(204, 120, 92, 0.18);
+  --xz-purple-glow:   rgba(204, 120, 92, 0.30);
+  --xz-purple-dark:   #a9583e;
 
   /* Surface */
-  --xz-cream:         #F2EFE9;   /* page bg  */
-  --xz-cream-deep:    #EAE7E0;   /* section alt */
-  --xz-cream-border:  #DDDAD4;   /* all borders */
+  --xz-cream:         #faf9f5;   /* page canvas — warm tinted cream */
+  --xz-cream-deep:    #efe9de;   /* feature card bg */
+  --xz-cream-strong:  #e8e0d2;   /* selected tabs, emphasized bands */
+  --xz-cream-border:  #e6dfd8;   /* all borders / hairlines */
   --xz-white:         #ffffff;
 
-  /* Dark surfaces (cards, footer, breadcrumbs) */
-  --xz-dark:          #1C1C1E;
-  --xz-dark-2:        #1A1A1A;
-  --xz-dark-3:        #111111;
+  /* Dark surfaces — warm navy (not cool black) */
+  --xz-dark:          #181715;   /* footer, code cards */
+  --xz-dark-2:        #181715;
+  --xz-dark-3:        #252320;   /* elevated inside dark */
+  --xz-dark-soft:     #1f1e1b;   /* code block inside dark card */
 
   /* Text */
-  --xz-ink:           #1A1A1A;   /* headings */
-  --xz-muted:         #4A4A4A;   /* body      */
-  --xz-subtle:        #9A9A9A;   /* labels    */
-  --xz-placeholder:   #BDBDBD;
+  --xz-ink:           #141413;   /* warm-dark ink */
+  --xz-body-strong:   #252523;
+  --xz-muted:         #3d3d3a;   /* body */
+  --xz-muted-mid:     #6c6a64;   /* sub-headings, breadcrumbs */
+  --xz-subtle:        #8e8b82;   /* captions, fine-print */
+  --xz-placeholder:   #a09d96;
+  --xz-on-dark:       #faf9f5;   /* text on dark surfaces */
+  --xz-on-dark-soft:  #a09d96;   /* secondary text on dark */
 
   /* Rating / status */
   --xz-gold:          #f8bc26;
   --xz-green:         #22c55e;
   --xz-red:           #ef4444;
 
-  /* Typography ──────────────────────────────────────────────── */
-  --xz-font-display:  'Playfair Display', Georgia, serif;
-  --xz-font-sans:     'DM Sans', system-ui, sans-serif;
+  /* Typography — Cormorant Garamond display + Inter sans (Claude.com editorial) */
+  --xz-font-display:  'Cormorant Garamond', 'Tiempos Headline', Garamond, 'Times New Roman', serif;
+  --xz-font-sans:     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --xz-font-mono:     'JetBrains Mono', 'Fira Code', monospace;
 
   /* Type scale (8-pt modular, base 16) */
   --xz-text-2xs:      10px;
@@ -119,7 +132,8 @@
   --xz-shadow-lg:     0 16px 48px rgba(0,0,0,0.10);
   --xz-shadow-xl:     0 24px 72px rgba(0,0,0,0.14);
   --xz-shadow-card:   0px 4px 25px rgba(0,0,0,0.06);
-  --xz-shadow-purple: 0 8px 24px  rgba(108,87,210,0.25);
+  --xz-shadow-coral:  0 8px 24px  rgba(204,120,92,0.25);
+  --xz-shadow-purple: 0 8px 24px  rgba(204,120,92,0.25); /* legacy alias */
   --xz-shadow-dark:  -20px 20px 60px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.12);
 
   /* Transitions ─────────────────────────────────────────────── */
@@ -150,51 +164,52 @@
 
 .xz-eyebrow {
   font-family: var(--xz-font-sans);
-  font-size: var(--xz-text-xs);
-  font-weight: 600;
-  letter-spacing: var(--xz-track-widest);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--xz-purple);
+  color: var(--xz-muted-mid);
   margin-bottom: var(--xz-sp-1);
 }
 
+/* Display headlines: Cormorant Garamond 400, negative tracking — the brand voice */
 .xz-headline {
   font-family: var(--xz-font-display);
-  font-weight: 900;
+  font-weight: 400;
   font-size: var(--xz-text-hero);
-  line-height: var(--xz-leading-tight);
+  line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--xz-ink);
   margin-bottom: var(--xz-sp-3);
 }
 
 .xz-headline--dark {
-  color: var(--xz-white);
+  color: var(--xz-on-dark);
 }
 
 .xz-headline--accent span,
 .xz-headline span.accent {
   font-style: italic;
-  color: var(--xz-purple);
+  color: var(--xz-coral);
 }
 
 .xz-section-title {
   font-family: var(--xz-font-display);
-  font-weight: 900;
+  font-weight: 400;
   font-size: var(--xz-text-4xl);
-  line-height: var(--xz-leading-snug);
+  line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--xz-ink);
   margin-bottom: var(--xz-sp-2);
 }
 
 .xz-section-title--dark {
-  color: var(--xz-white);
+  color: var(--xz-on-dark);
 }
 
 .xz-section-title span.accent {
   font-style: italic;
-  color: var(--xz-purple);
+  color: var(--xz-coral);
 }
 
 .xz-body {
@@ -230,19 +245,23 @@
 
 .xz-bg-cream      { background-color: var(--xz-cream) !important; }
 .xz-bg-cream-deep { background-color: var(--xz-cream-deep) !important; }
-.xz-bg-dark       { background-color: var(--xz-dark-2) !important; }
+.xz-bg-dark       { background-color: var(--xz-dark) !important; }
 .xz-bg-card-dark  { background-color: var(--xz-dark) !important; }
-.xz-bg-purple     { background-color: var(--xz-purple) !important; }
+.xz-bg-coral      { background-color: var(--xz-coral) !important; }
+.xz-bg-purple     { background-color: var(--xz-coral) !important; } /* legacy alias */
 .xz-bg-white      { background-color: var(--xz-white) !important; }
 
 .xz-text-ink      { color: var(--xz-ink) !important; }
 .xz-text-muted    { color: var(--xz-muted) !important; }
-.xz-text-purple   { color: var(--xz-purple) !important; }
+.xz-text-coral    { color: var(--xz-coral) !important; }
+.xz-text-purple   { color: var(--xz-coral) !important; } /* legacy alias */
 .xz-text-white    { color: var(--xz-white) !important; }
+.xz-text-on-dark  { color: var(--xz-on-dark) !important; }
 .xz-text-subtle   { color: var(--xz-subtle) !important; }
 
 .xz-border        { border: 1px solid var(--xz-cream-border) !important; }
-.xz-border-purple { border: 1px solid rgba(108,87,210,0.3) !important; }
+.xz-border-coral  { border: 1px solid rgba(204,120,92,0.3) !important; }
+.xz-border-purple { border: 1px solid rgba(204,120,92,0.3) !important; } /* legacy alias */
 
 
 /* ─── 4. BUTTON VARIANTS ───────────────────────────────────────── */
@@ -271,27 +290,30 @@
 }
 
 .xz-btn:focus-visible {
-  outline: 2px solid var(--xz-purple);
+  outline: 2px solid var(--xz-coral);
   outline-offset: 3px;
 }
 
-/* Primary — black pill with cream arrow circle (from Hero) */
+/* Primary — coral CTA (Claude.com signature button) */
 .xz-btn--primary {
-  background: var(--xz-dark-2);
-  color: var(--xz-cream) !important;
+  background: var(--xz-coral);
+  color: #ffffff !important;
+  border-radius: 8px;
+  padding: 12px 20px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 500;
 }
-.xz-btn--primary:hover {
-  background: #333333;
-  color: var(--xz-cream) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+.xz-btn--primary:active {
+  background: var(--xz-coral-active);
+  color: #ffffff !important;
 }
 .xz-btn--primary .xz-btn__arrow {
-  background: var(--xz-cream);
-  color: var(--xz-dark-2);
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -361,8 +383,8 @@
 }
 
 .xz-card:hover {
-  border-color: rgba(108,87,210,0.35);
-  box-shadow: 0 20px 48px rgba(108,87,210,0.12);
+  border-color: rgba(201,136,58,0.35);
+  box-shadow: 0 20px 48px rgba(201,136,58,0.12);
   transform: translateY(-6px);
 }
 
@@ -381,8 +403,8 @@
 }
 
 .xz-card--dark:hover {
-  border-color: rgba(108,87,210,0.4);
-  box-shadow: 0 24px 60px rgba(108,87,210,0.18), var(--xz-shadow-dark);
+  border-color: rgba(201,136,58,0.4);
+  box-shadow: 0 24px 60px rgba(201,136,58,0.18), var(--xz-shadow-dark);
   transform: translateY(-6px);
 }
 
@@ -406,7 +428,7 @@
 .xz-card--feature:hover {
   border-color: var(--xz-purple);
   transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-8px);
-  box-shadow: 0 24px 60px rgba(108,87,210,0.13);
+  box-shadow: 0 24px 60px rgba(201,136,58,0.13);
 }
 
 /* Glass card — for purple / dark gradient sections */
@@ -444,7 +466,7 @@
 
 .xz-card--tally:hover {
   transform: perspective(1200px) rotateY(-2deg) rotateX(1deg) translateZ(12px);
-  box-shadow: -32px 32px 90px rgba(0,0,0,0.28), 0 8px 32px rgba(108,87,210,0.18);
+  box-shadow: -32px 32px 90px rgba(0,0,0,0.28), 0 8px 32px rgba(201,136,58,0.18);
 }
 
 @media (max-width: 991px) {
@@ -475,7 +497,7 @@
 /* Colour schemes */
 .xz-icon--purple {
   background: var(--xz-purple-light);
-  border: 1px solid rgba(108,87,210,0.15);
+  border: 1px solid rgba(201,136,58,0.15);
   color: var(--xz-purple);
 }
 
@@ -515,7 +537,7 @@
 
 .xz-badge--purple {
   background: var(--xz-purple-light);
-  border: 1px solid rgba(108,87,210,0.2);
+  border: 1px solid rgba(201,136,58,0.2);
   color: var(--xz-purple);
 }
 
@@ -563,7 +585,7 @@
 
 @keyframes xzPulse {
   0%, 100% { box-shadow: 0 0 0 3px var(--xz-purple-glow); }
-  50%       { box-shadow: 0 0 0 7px rgba(108,87,210,0.08); }
+  50%       { box-shadow: 0 0 0 7px rgba(201,136,58,0.08); }
 }
 
 
@@ -600,7 +622,7 @@
 
 /* Purple gradient sections */
 .xz-section--purple {
-  background: linear-gradient(135deg, #5a47c0, var(--xz-purple), #8b73ff);
+  background: linear-gradient(135deg, #B47428, var(--xz-purple), #E5B460);
   padding: var(--xz-section-md) 0;
 }
 
@@ -723,8 +745,8 @@
 }
 .xz-hover-glow:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 48px rgba(108,87,210,0.18);
-  border-color: rgba(108,87,210,0.4) !important;
+  box-shadow: 0 20px 48px rgba(201,136,58,0.18);
+  border-color: rgba(201,136,58,0.4) !important;
 }
 
 /* 3D tilt (service cards) */
@@ -736,7 +758,7 @@
 }
 .xz-hover-3d:hover {
   transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-8px);
-  box-shadow: 0 24px 60px rgba(108,87,210,0.13);
+  box-shadow: 0 24px 60px rgba(201,136,58,0.13);
   border-color: var(--xz-purple) !important;
 }
 
@@ -875,3 +897,4 @@
     transform: none !important;
   }
 }
+

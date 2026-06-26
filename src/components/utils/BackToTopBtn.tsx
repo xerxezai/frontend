@@ -28,8 +28,8 @@ const BackToTopBtn = () => {
         height: 46,
         borderRadius: "50%",
         border: "none",
-        background: hovered ? "#5a47c0" : "#6c57d2",
-        boxShadow: "0 4px 16px rgba(108,87,210,0.35)",
+        background: hovered ? "#B47428" : "#C9883A",
+        boxShadow: "0 4px 16px rgba(201,136,58,0.35)",
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
@@ -52,4 +52,5 @@ const BackToTopBtn = () => {
 };
 
 export default BackToTopBtn;
+
 

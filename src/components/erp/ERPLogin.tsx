@@ -53,7 +53,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
             type="submit"
             className="btn w-100 fw-semibold"
             disabled={loading}
-            style={{ background: '#6c57d2', color: '#fff', padding: '10px', borderRadius: 8 }}
+            style={{ background: '#C9883A', color: '#fff', padding: '10px', borderRadius: 8 }}
           >
             {loading ? <><span className="spinner-border spinner-border-sm me-2" role="status"></span>Signing in...</> : 'Sign In'}
           </button>
@@ -64,5 +64,6 @@ const ERPLogin = ({ onSuccess }: Props) => {
 };
 
 export default ERPLogin;
+
 
 

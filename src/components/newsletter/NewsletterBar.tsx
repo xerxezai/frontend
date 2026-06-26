@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { toast } from "react-toastify";
 
 const NewsletterBar = () => {
@@ -22,7 +22,7 @@ const NewsletterBar = () => {
 
   return (
     <section style={{
-      background: "linear-gradient(135deg, #5a47c0 0%, #6c57d2 60%, #8b73ff 100%)",
+      background: "linear-gradient(135deg, #B47428 0%, #C9883A 60%, #E5B460 100%)",
       padding: "56px 0",
     }}>
       <div className="container">
@@ -85,11 +85,11 @@ const NewsletterBar = () => {
                   style={{
                     background: "#fff", border: "none",
                     padding: "16px 24px", cursor: "pointer",
-                    fontWeight: 700, fontSize: 14, color: "#6c57d2",
+                    fontWeight: 700, fontSize: 14, color: "#C9883A",
                     whiteSpace: "nowrap", flexShrink: 0,
                     transition: "background 0.2s",
                   }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#F0EEFF")}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#FFF8EE")}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#fff")}
                 >
                   {loading ? (
@@ -112,3 +112,4 @@ const NewsletterBar = () => {
 };
 
 export default NewsletterBar;
+

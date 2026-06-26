@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 
 interface Props {
   variant?: boolean;
@@ -8,7 +8,7 @@ const CtaSection6 = ({ variant }: Props) => {
     <section
       className={`cta-call-section-5 ${variant ? "" : "fix"} section-padding`}
       style={{
-        background: "linear-gradient(135deg, #003566 0%, #0a031e 50%, #1a0a5c 100%)",
+        background: "linear-gradient(135deg, #003566 0%, #0F2741 50%, #163557 100%)",
       }}
     >
       <div className="container">
@@ -29,7 +29,7 @@ const CtaSection6 = ({ variant }: Props) => {
             </p>
           </div>
           <div className="cta-button fade-in" style={{ marginTop: 36 }}>
-            <Link to="/contact" className="theme-btn" style={{ borderRadius: 55, background: "#6c57d2" }}>
+            <Link to="/contact" className="theme-btn" style={{ borderRadius: 55, background: "#C9883A" }}>
               Request a Demo
               <i className="far fa-arrow-right"></i>
             </Link>
@@ -44,3 +44,4 @@ const CtaSection6 = ({ variant }: Props) => {
 };
 
 export default CtaSection6;
+

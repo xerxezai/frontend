@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
 const PageProgress = () => {
   const [progress, setProgress] = useState(0);
@@ -17,13 +17,13 @@ const PageProgress = () => {
   return (
     <div style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 2000,
-      height: 3, background: "rgba(108,87,210,0.15)",
+      height: 3, background: "rgba(201,136,58,0.15)",
       pointerEvents: "none",
     }}>
       <div style={{
         height: "100%",
         width: `${progress}%`,
-        background: "linear-gradient(90deg, #6c57d2, #8b73ff)",
+        background: "linear-gradient(90deg, #C9883A, #E5B460)",
         transition: "width 0.1s linear",
       }} />
     </div>
@@ -31,3 +31,4 @@ const PageProgress = () => {
 };
 
 export default PageProgress;
+

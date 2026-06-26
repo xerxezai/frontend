@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { services } from "../../data";
 import { useMemo } from "react";
 import Image from "../utils/Image";
@@ -59,7 +59,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
         <div className="section-title text-center" style={{ marginBottom: 48 }}>
           <div style={{
             fontSize: 11, fontWeight: 600, letterSpacing: "0.18em",
-            textTransform: "uppercase", color: "#6c57d2",
+            textTransform: "uppercase", color: "#C9883A",
             fontFamily: "'DM Sans', sans-serif", marginBottom: 12,
           }}>Our Services</div>
           <h2 style={{
@@ -68,7 +68,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
             letterSpacing: "-0.02em", lineHeight: 1.1,
           }}>
             End-to-End Solutions for<br />
-            <span style={{ fontStyle: "italic", color: "#6c57d2" }}>Every Enterprise Challenge</span>
+            <span style={{ fontStyle: "italic", color: "#C9883A" }}>Every Enterprise Challenge</span>
           </h2>
         </div>
 
@@ -78,7 +78,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
             <div
               className="erp-flagship-card"
               style={{
-                background: "linear-gradient(135deg, #3d30b0 0%, #5446c7 55%, #6c57d2 100%)",
+                background: "linear-gradient(135deg, #0F2741 0%, #163557 55%, #1A3F6A 100%)",
                 borderRadius: 16,
                 padding: "48px 52px",
                 display: "flex",
@@ -86,7 +86,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                 justifyContent: "space-between",
                 gap: 32,
                 flexWrap: "wrap",
-                boxShadow: "0 8px 40px rgba(108,87,210,0.28)",
+                boxShadow: "0 8px 40px rgba(201,136,58,0.28)",
                 position: "relative",
                 overflow: "hidden",
               }}
@@ -99,13 +99,13 @@ const ServiceSection3 = ({ mainSection }: Props) => {
               <div style={{ flex: "1 1 400px", zIndex: 1 }}>
                 {/* Badges */}
                 <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
-                  <span style={{ background: "#c4b5fd", color: "#3d30b0", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, textTransform: "uppercase" }}>
+                  <span style={{ background: "#F0CA7A", color: "#8B5520", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, textTransform: "uppercase" }}>
                     New
                   </span>
                   <span style={{ background: "rgba(255,255,255,0.18)", color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, border: "1px solid rgba(255,255,255,0.35)" }}>
                     AI Powered
                   </span>
-                  <span style={{ background: "rgba(255,255,255,0.10)", color: "#d4c8ff", fontSize: 12, fontWeight: 600, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, border: "1px solid rgba(255,255,255,0.18)" }}>
+                  <span style={{ background: "rgba(255,255,255,0.10)", color: "#F0CA7A", fontSize: 12, fontWeight: 600, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, border: "1px solid rgba(255,255,255,0.18)" }}>
                     Flagship Service
                   </span>
                 </div>
@@ -123,7 +123,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                 <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
                   {erpStats.map((stat) => (
                     <div key={stat.val} style={{ textAlign: "left" }}>
-                      <div style={{ color: "#c4b5fd", fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{stat.val}</div>
+                      <div style={{ color: "#F0CA7A", fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{stat.val}</div>
                       <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, marginTop: 4 }}>{stat.label}</div>
                     </div>
                   ))}
@@ -134,7 +134,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                   <Link
                     to="/service/ai-powered-erp"
                     style={{
-                      background: "#ffffff", color: "#5446c7",
+                      background: "#ffffff", color: "#B47428",
                       padding: "13px 32px", borderRadius: 8,
                       fontWeight: 700, fontSize: 15, display: "inline-flex",
                       alignItems: "center", gap: 10, textDecoration: "none",
@@ -177,7 +177,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                     onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.16)")}
                     onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
                   >
-                    <i className={m.icon} style={{ color: "#c4b5fd", width: 18, textAlign: "center" }}></i>
+                    <i className={m.icon} style={{ color: "#F0CA7A", width: 18, textAlign: "center" }}></i>
                     <span style={{ fontSize: 14, fontWeight: 500 }}>{m.label}</span>
                     <i className="fas fa-check-circle" style={{ color: "#4ade80", marginLeft: "auto", fontSize: 13 }}></i>
                   </Link>
@@ -212,9 +212,9 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "#6c57d2";
+                  el.style.borderColor = "#C9883A";
                   el.style.transform = "translateY(-6px)";
-                  el.style.boxShadow = "0 16px 40px rgba(108,87,210,0.13)";
+                  el.style.boxShadow = "0 16px 40px rgba(201,136,58,0.13)";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
@@ -228,14 +228,14 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                   width: 56,
                   height: 56,
                   borderRadius: 14,
-                  background: "rgba(108,87,210,0.08)",
-                  border: "1px solid rgba(108,87,210,0.15)",
+                  background: "rgba(201,136,58,0.08)",
+                  border: "1px solid rgba(201,136,58,0.15)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: 22,
                   fontSize: 22,
-                  color: "#6c57d2",
+                  color: "#C9883A",
                   flexShrink: 0,
                 }}>
                   <i className={faIcons[service.slug] || "fas fa-cogs"} />
@@ -258,7 +258,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                   to={`/service/${service.slug}`}
                   style={{
                     marginTop: "auto", display: "inline-flex", alignItems: "center",
-                    gap: 6, color: "#6c57d2", fontWeight: 600, fontSize: 13,
+                    gap: 6, color: "#C9883A", fontWeight: 600, fontSize: 13,
                     textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
                   }}
                 >
@@ -275,3 +275,4 @@ const ServiceSection3 = ({ mainSection }: Props) => {
 };
 
 export default ServiceSection3;
+

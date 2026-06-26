@@ -26,7 +26,7 @@ const PricingSection = ({ variant }: Props) => {
           <div className="d-flex align-items-center justify-content-center gap-3 mt-3 mt-md-0">
             <span
               onClick={() => setIsMonthly(true)}
-              style={{ fontSize: 18, fontWeight: isMonthly ? 600 : 400, cursor: 'pointer', color: isMonthly ? '#6c57d2' : '#4A4A4A', fontFamily: "'DM Sans', sans-serif" }}
+              style={{ fontSize: 18, fontWeight: isMonthly ? 600 : 400, cursor: 'pointer', color: isMonthly ? '#C9883A' : '#4A4A4A', fontFamily: "'DM Sans', sans-serif" }}
             >Monthly</span>
             <div
               onClick={() => setIsMonthly(m => !m)}
@@ -34,9 +34,9 @@ const PricingSection = ({ variant }: Props) => {
               aria-checked={!isMonthly}
               style={{
                 width: 75, height: 32, borderRadius: 20,
-                background: '#6c57d2', position: 'relative',
+                background: '#C9883A', position: 'relative',
                 cursor: 'pointer', flexShrink: 0,
-                border: '1px solid #6c57d2', transition: 'background 0.2s',
+                border: '1px solid #C9883A', transition: 'background 0.2s',
               }}
             >
               <div style={{
@@ -49,7 +49,7 @@ const PricingSection = ({ variant }: Props) => {
             </div>
             <span
               onClick={() => setIsMonthly(false)}
-              style={{ fontSize: 18, fontWeight: !isMonthly ? 600 : 400, cursor: 'pointer', color: !isMonthly ? '#6c57d2' : '#4A4A4A', fontFamily: "'DM Sans', sans-serif" }}
+              style={{ fontSize: 18, fontWeight: !isMonthly ? 600 : 400, cursor: 'pointer', color: !isMonthly ? '#C9883A' : '#4A4A4A', fontFamily: "'DM Sans', sans-serif" }}
             >Yearly</span>
           </div>
         </div>
@@ -75,4 +75,5 @@ const PricingSection = ({ variant }: Props) => {
 };
 
 export default PricingSection;
+
 

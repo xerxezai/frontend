@@ -1,4 +1,4 @@
-const steps = [
+﻿const steps = [
   {
     number: "01",
     icon: "fas fa-search",
@@ -58,7 +58,7 @@ const ProcessTimeline = () => (
             top: 0,
             bottom: 0,
             width: 2,
-            background: "linear-gradient(180deg, #6c57d2 0%, rgba(108,87,210,0.15) 100%)",
+            background: "linear-gradient(180deg, #C9883A 0%, rgba(201,136,58,0.15) 100%)",
             transform: "translateX(-50%)",
           }}
         />
@@ -83,9 +83,9 @@ const ProcessTimeline = () => (
               <div className="col-lg-2 d-flex justify-content-center">
                 <div style={{
                   width: 52, height: 52, borderRadius: "50%",
-                  background: "#6c57d2",
+                  background: "#C9883A",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 0 0 6px rgba(108,87,210,0.15)",
+                  boxShadow: "0 0 0 6px rgba(201,136,58,0.15)",
                   zIndex: 1, position: "relative", flexShrink: 0,
                 }}>
                   <i className={step.icon} style={{ color: "#fff", fontSize: 18 }} />
@@ -125,7 +125,7 @@ const StepCard = ({
       display: "inline-block",
       fontSize: 11, fontWeight: 800,
       letterSpacing: "0.12em", textTransform: "uppercase",
-      color: "#6c57d2", marginBottom: 8,
+      color: "#C9883A", marginBottom: 8,
     }}>
       Step {step.number}
     </div>
@@ -139,3 +139,4 @@ const StepCard = ({
 );
 
 export default ProcessTimeline;
+
