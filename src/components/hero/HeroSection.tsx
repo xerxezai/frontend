@@ -25,7 +25,7 @@ const NODES = [
 
 const ERPNetwork = () => (
   <svg
-    viewBox="0 0 500 450"
+    viewBox="0 20 500 430"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className="xz-network-svg"
@@ -347,7 +347,7 @@ const HeroSection = () => {
 
           {/* ── RIGHT: ERP Network ── */}
           <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center"
-            style={{ paddingTop: 16 }}>
+            style={{ paddingTop: 0 }}>
             <ERPNetwork />
           </div>
 
