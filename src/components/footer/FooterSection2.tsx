@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
 
-// ── Navy theme tokens (matches FooterSection + FooterBottomSection) ──
+// ── Warm ink theme — matches XERXEZ cream/terracotta palette ──
 const N = {
-  bg:      "#1a2744",
-  heading: "#ffffff",
-  body:    "#8a9bbf",
-  link:    "#8a9bbf",
-  linkHov: "#c8d4e8",
-  icon:    "#6a7fa8",
-  divider: "#243460",
-  copy:    "#5a6b8a",
+  bg:      "#1C1916",
+  heading: "#FDFCFB",
+  body:    "#9B9690",
+  link:    "#9B9690",
+  linkHov: "#EDE8DF",
+  icon:    "#C9883A",
+  divider: "#2E2B27",
+  copy:    "#6c6a64",
 };
 
 
