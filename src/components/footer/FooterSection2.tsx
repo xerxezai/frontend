@@ -45,19 +45,19 @@ const FooterSection2 = () => {
 
         <div style={{
           display: "grid",
-          gridTemplateColumns: "260px 1fr 140px 220px",
-          gap: "48px",
+          gridTemplateColumns: "240px 200px 140px 1fr",
+          gap: "80px",
           alignItems: "start",
           padding: "56px 0 40px",
         }}>
 
           {/* Col 1 — Logo + About */}
           <div>
-            <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 16 }}>
+            <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 4 }}>
               <img
                 src="/assets/img/logo/xerxez_logo.png"
                 alt="Xerxez Solutions"
-                style={{ height: 100, width: "auto", display: "block" }}
+                style={{ height: 90, width: "auto", display: "block" }}
               />
             </Link>
             <p style={{
