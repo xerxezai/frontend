@@ -2,16 +2,39 @@
 import { services } from "../../data";
 import { useMemo } from "react";
 import Image from "../utils/Image";
+import { Warp } from "@paper-design/shaders-react";
 
 const faIcons: Record<string, string> = {
   "devsecops-mlops-solutions": "fas fa-shield-alt",
   "cloud-service-storage":     "fas fa-cloud",
   "software-development":      "fas fa-code",
-  "software-consulting":       "fas fa-lightbulb",
+  "software-consulting":       "fas fa-comments",
   "ai-training-consulting":    "fas fa-chalkboard-teacher",
   "quantum-computing":         "fas fa-atom",
   "mobile-application":        "fas fa-mobile-alt",
   "web-mobile-hosting":        "fas fa-server",
+};
+
+const shaderColors: Record<string, string[]> = {
+  "devsecops-mlops-solutions": ["hsl(215,60%,22%)", "hsl(210,75%,42%)", "hsl(220,65%,28%)", "hsl(200,80%,52%)"],
+  "cloud-service-storage":     ["hsl(185,55%,25%)", "hsl(178,70%,42%)", "hsl(192,60%,30%)", "hsl(170,75%,52%)"],
+  "software-development":      ["hsl(32,70%,32%)",  "hsl(42,80%,52%)",  "hsl(28,65%,38%)",  "hsl(48,85%,62%)"],
+  "software-consulting":       ["hsl(205,58%,22%)", "hsl(198,72%,42%)", "hsl(212,63%,28%)", "hsl(192,80%,52%)"],
+  "ai-training-consulting":    ["hsl(250,55%,25%)", "hsl(262,65%,48%)", "hsl(244,60%,30%)", "hsl(268,72%,58%)"],
+  "quantum-computing":         ["hsl(340,55%,30%)", "hsl(352,68%,52%)", "hsl(334,60%,36%)", "hsl(358,75%,62%)"],
+  "mobile-application":        ["hsl(150,55%,20%)", "hsl(144,68%,40%)", "hsl(156,60%,26%)", "hsl(138,74%,50%)"],
+  "web-mobile-hosting":        ["hsl(20,60%,28%)",  "hsl(28,72%,48%)",  "hsl(14,55%,34%)",  "hsl(35,78%,58%)"],
+};
+
+const shaderShapes: Record<string, "checks" | "stripes" | "edge"> = {
+  "devsecops-mlops-solutions": "stripes",
+  "cloud-service-storage":     "edge",
+  "software-development":      "stripes",
+  "software-consulting":       "edge",
+  "ai-training-consulting":    "edge",
+  "quantum-computing":         "stripes",
+  "mobile-application":        "edge",
+  "web-mobile-hosting":        "stripes",
 };
 
 interface Props {
@@ -199,72 +222,80 @@ const ServiceSection3 = ({ mainSection }: Props) => {
               data-aos-easing="ease-out-cubic"
               data-aos-once="true"
             >
-              <div
-                style={{
-                  background: "#ffffff",
-                  border: "1px solid #DDDAD4",
-                  borderRadius: 16,
-                  padding: "32px 28px",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  transition: "border-color 0.25s, transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "#C9883A";
-                  el.style.transform = "translateY(-6px)";
-                  el.style.boxShadow = "0 16px 40px rgba(201,136,58,0.13)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "#DDDAD4";
-                  el.style.transform = "translateY(0)";
-                  el.style.boxShadow = "none";
-                }}
-              >
-                {/* Icon box */}
-                <div style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 14,
-                  background: "rgba(201,136,58,0.08)",
-                  border: "1px solid rgba(201,136,58,0.15)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 22,
-                  fontSize: 22,
-                  color: "#C9883A",
-                  flexShrink: 0,
-                }}>
-                  <i className={faIcons[service.slug] || "fas fa-cogs"} />
+              {/* Shader card */}
+              <div style={{ position: "relative", height: 300, borderRadius: 18, overflow: "hidden" }}>
+                {/* Warp shader background */}
+                <div style={{ position: "absolute", inset: 0 }}>
+                  <Warp
+                    style={{ width: "100%", height: "100%" }}
+                    proportion={0.38}
+                    softness={0.95}
+                    distortion={0.18}
+                    swirl={0.75}
+                    swirlIterations={10}
+                    shape={shaderShapes[service.slug] ?? "edge"}
+                    shapeScale={0.1}
+                    scale={1}
+                    rotation={0}
+                    speed={0.6}
+                    colors={shaderColors[service.slug] ?? ["hsl(20,60%,28%)", "hsl(35,72%,48%)", "hsl(14,55%,34%)", "hsl(42,80%,58%)"]}
+                  />
                 </div>
 
-                {/* Title */}
-                <h3 style={{ marginBottom: 10, fontSize: 18, lineHeight: 1.3, fontWeight: 700, color: "#1A1A1A", fontFamily: "'DM Sans', sans-serif" }}>
-                  <Link to={`/service/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
-                    {service.title}
+                {/* Dark overlay + content */}
+                <div style={{
+                  position: "relative", zIndex: 1, height: "100%",
+                  display: "flex", flexDirection: "column",
+                  padding: "26px 26px 22px",
+                  background: "rgba(12,8,4,0.72)",
+                  border: "1px solid rgba(255,255,255,0.10)",
+                }}>
+                  {/* Icon */}
+                  <div style={{
+                    width: 50, height: 50, borderRadius: 13,
+                    background: "rgba(255,255,255,0.12)",
+                    border: "1px solid rgba(255,255,255,0.18)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    marginBottom: 18, fontSize: 19, color: "#ffffff", flexShrink: 0,
+                  }}>
+                    <i className={faIcons[service.slug] ?? "fas fa-cogs"} />
+                  </div>
+
+                  {/* Title */}
+                  <h3 style={{
+                    marginBottom: 10, fontSize: 16, lineHeight: 1.3,
+                    fontWeight: 700, color: "#ffffff",
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}>
+                    <Link to={`/service/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
+                      {service.title}
+                    </Link>
+                  </h3>
+
+                  {/* Description */}
+                  <p style={{
+                    color: "rgba(255,255,255,0.72)",
+                    fontSize: 13, lineHeight: 1.7,
+                    marginBottom: 18, flex: 1,
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}>
+                    {service.description}
+                  </p>
+
+                  {/* More Details */}
+                  <Link
+                    to={`/service/${service.slug}`}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 12,
+                      textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
+                      letterSpacing: "0.04em", textTransform: "uppercase",
+                    }}
+                  >
+                    More Details
+                    <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
                   </Link>
-                </h3>
-
-                {/* Description */}
-                <p style={{ color: "#4A4A4A", fontSize: 14, lineHeight: 1.75, marginBottom: 24, flex: 1, fontFamily: "'DM Sans', sans-serif" }}>
-                  {service.description}
-                </p>
-
-                {/* More Details link */}
-                <Link
-                  to={`/service/${service.slug}`}
-                  style={{
-                    marginTop: "auto", display: "inline-flex", alignItems: "center",
-                    gap: 6, color: "#C9883A", fontWeight: 600, fontSize: 13,
-                    textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
-                  }}
-                >
-                  More Details
-                  <i className="far fa-arrow-right" />
-                </Link>
+                </div>
               </div>
             </div>
           ))}
