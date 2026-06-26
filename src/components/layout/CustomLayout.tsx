@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import HeaderSection2 from "../header/HeaderSection2";
-import CtaSection6 from "../cta/CtaSection6";
 import FooterSection2 from "../footer/FooterSection2";
 import SectionErrorBoundary from "../error-boundaries/SectionErrorBoundary";
 import MobileMenuModal from "../modal/MobileMenuModal";
@@ -17,10 +16,6 @@ const CustomLayout = ({ children }: Props) => {
       </SectionErrorBoundary>
 
       {children}
-
-      <SectionErrorBoundary sectionName="CTA">
-        <CtaSection6 variant />
-      </SectionErrorBoundary>
 
       <SectionErrorBoundary sectionName="Footer">
         <FooterSection2 />
