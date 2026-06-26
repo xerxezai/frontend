@@ -16,8 +16,8 @@ const FooterSection2 = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1.5fr 1fr max-content 1fr",
-              gap: "40px",
+              gridTemplateColumns: "minmax(auto, 260px) 1fr max-content 1fr",
+              gap: "32px",
             }}
           >
 
