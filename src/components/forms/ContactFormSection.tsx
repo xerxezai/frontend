@@ -1,6 +1,5 @@
 ﻿import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
-import clsx from "clsx";
 
 interface Props {
   variant?: boolean;
@@ -304,25 +303,33 @@ const ContactFormSection = ({ variant }: Props) => {
             <div className={variant ? "contact-button text-center" : ""}>
               <button
                 type="submit"
-                className={clsx("theme-btn", {
-                  "is-pending": isSubmitting,
-                })}
                 aria-label="Send contact message"
                 disabled={isSubmitting}
+                style={{
+                  width: variant ? "auto" : "100%",
+                  minWidth: 180,
+                  height: 52,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10,
+                  background: "#cc785c",
+                  color: "#ffffff",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  borderRadius: 100,
+                  border: "none",
+                  cursor: isSubmitting ? "default" : "pointer",
+                  opacity: isSubmitting ? 0.75 : 1,
+                  transition: "background 180ms ease",
+                  padding: "0 28px",
+                }}
               >
                 {isSubmitting ? (
-                  <>
-                    Sending{" "}
-                    <i
-                      className="fas fa-spinner fa-spin"
-                      aria-hidden="true"
-                    ></i>
-                  </>
+                  <><i className="fas fa-spinner fa-spin" aria-hidden="true" style={{ fontSize: 14 }} /> Sending…</>
                 ) : (
-                  <>
-                    {variant ? "Send Your Message" : "Contact Us"}
-                    <i className="far fa-arrow-right" aria-hidden="true"></i>
-                  </>
+                  <><i className="far fa-paper-plane" aria-hidden="true" style={{ fontSize: 14 }} /> {variant ? "Send Your Message" : "Contact Us"}</>
                 )}
               </button>
             </div>
