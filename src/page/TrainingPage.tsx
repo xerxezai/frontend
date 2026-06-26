@@ -7,11 +7,11 @@ const courses = [
     title: "Full Stack AI Development",
     category: "AI & ML",
     level: "Intermediate",
-    levelColor: "#ff792e",
+    levelColor: "#6c57d2",
     duration: "60 Hours",
     lessons: "48 Lessons",
     badge: "Bestseller",
-    badgeBg: "#ff792e",
+    badgeBg: "#6c57d2",
   },
   {
     icon: "fas fa-shield-alt",
@@ -139,14 +139,14 @@ const TrainingPage = () => {
                   <div className="lms-vis-courses">
                     <div className="lms-vis-course">
                       <div className="lms-vis-course__head">
-                        <div className="lms-vis-course__icon" style={{ background: "rgba(255,121,46,0.15)", color: "#ff792e" }}>
+                        <div className="lms-vis-course__icon" style={{ background: "rgba(108,87,210,0.10)", color: "#6c57d2" }}>
                           <i className="fas fa-brain"></i>
                         </div>
                         <div>
                           <p className="lms-vis-course__name">Full Stack AI Development</p>
                           <p className="lms-vis-course__meta">Intermediate · 60 Hours</p>
                         </div>
-                        <span className="lms-vis-course__badge" style={{ background: "#ff792e" }}>Bestseller</span>
+                        <span className="lms-vis-course__badge" style={{ background: "#6c57d2" }}>Bestseller</span>
                       </div>
                       <div className="lms-vis-bar">
                         <div className="lms-vis-bar__fill" style={{ width: "72%", background: "linear-gradient(90deg,#6c57d2,#a890ff)" }} />
@@ -171,7 +171,7 @@ const TrainingPage = () => {
                   </div>
 
                   {/* Bottom tag */}
-                  <div className="lms-vis-pill lms-vis-pill--orange mt-3">
+                  <div className="lms-vis-pill mt-3">
                     <i className="fas fa-certificate"></i>
                     <span>Certificate of Completion Included</span>
                   </div>
