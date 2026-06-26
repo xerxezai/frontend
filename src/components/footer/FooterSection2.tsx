@@ -8,7 +8,7 @@ const FooterSection2 = () => {
       className="footer-section fix bg-cover"
       style={{ background: "#F8F7F4" }}
     >
-      <div className="container" style={{ paddingRight: "40px" }}>
+      <div className="container">
         <div
           className="footer-widget-wrapper style-2"
           style={{ paddingTop: "60px" }}
@@ -16,8 +16,10 @@ const FooterSection2 = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr 1fr",
-              gap: "32px",
+              gridTemplateColumns: "260px max-content max-content 1fr",
+              gap: "40px",
+              maxWidth: "1080px",
+              margin: "0 auto",
             }}
           >
 
