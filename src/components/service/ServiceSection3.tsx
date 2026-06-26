@@ -78,7 +78,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
             <div
               className="erp-flagship-card"
               style={{
-                background: "linear-gradient(135deg, #003566 0%, #1a0a5c 60%, #6c57d2 100%)",
+                background: "linear-gradient(135deg, #3d30b0 0%, #5446c7 55%, #6c57d2 100%)",
                 borderRadius: 16,
                 padding: "48px 52px",
                 display: "flex",
@@ -99,7 +99,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
               <div style={{ flex: "1 1 400px", zIndex: 1 }}>
                 {/* Badges */}
                 <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
-                  <span style={{ background: "#ff792e", color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, textTransform: "uppercase" }}>
+                  <span style={{ background: "#c4b5fd", color: "#3d30b0", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, textTransform: "uppercase" }}>
                     New
                   </span>
                   <span style={{ background: "rgba(255,255,255,0.18)", color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, border: "1px solid rgba(255,255,255,0.35)" }}>
@@ -123,7 +123,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                 <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
                   {erpStats.map((stat) => (
                     <div key={stat.val} style={{ textAlign: "left" }}>
-                      <div style={{ color: "#ff792e", fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{stat.val}</div>
+                      <div style={{ color: "#c4b5fd", fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{stat.val}</div>
                       <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, marginTop: 4 }}>{stat.label}</div>
                     </div>
                   ))}
@@ -134,7 +134,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                   <Link
                     to="/service/ai-powered-erp"
                     style={{
-                      background: "#6c57d2", color: "#fff",
+                      background: "#ffffff", color: "#5446c7",
                       padding: "13px 32px", borderRadius: 8,
                       fontWeight: 700, fontSize: 15, display: "inline-flex",
                       alignItems: "center", gap: 10, textDecoration: "none",
@@ -177,7 +177,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                     onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.16)")}
                     onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
                   >
-                    <i className={m.icon} style={{ color: "#ff792e", width: 18, textAlign: "center" }}></i>
+                    <i className={m.icon} style={{ color: "#c4b5fd", width: 18, textAlign: "center" }}></i>
                     <span style={{ fontSize: 14, fontWeight: 500 }}>{m.label}</span>
                     <i className="fas fa-check-circle" style={{ color: "#4ade80", marginLeft: "auto", fontSize: 13 }}></i>
                   </Link>
