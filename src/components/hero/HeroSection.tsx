@@ -13,111 +13,199 @@ const features = [
   "24/7 dedicated support teams",
 ];
 
+const SpikeMark = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+    <line x1="7" y1="0" x2="7" y2="14" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="0" y1="7" x2="14" y2="7" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="2.05" y1="2.05" x2="11.95" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="11.95" y1="2.05" x2="2.05" y2="11.95" stroke="#141413" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
 const HeroSection = () => (
-  <section
-    className="hero-section hero-1"
-    style={{ background: "#F2EFE9" }}
-  >
+  <section style={{
+    background: "#faf9f5",
+    padding: "40px 0 80px",
+    minHeight: "calc(100vh - 64px)",
+    display: "flex",
+    alignItems: "flex-start",
+  }}>
     <div className="container">
-      {/*
-        Row: no extra paddingTop/paddingBottom — the parent .hero-1 CSS already
-        provides padding:80px 0 and display:flex + align-items:center which
-        vertically centers this row in 100vh. Adding paddingTop:100 here was
-        double-stacking with the section padding, creating the large gap.
-      */}
       <div className="row g-5 align-items-center">
 
-        {/* LEFT — headline, description, CTAs */}
+        {/* LEFT — editorial headline + CTAs */}
         <div className="col-lg-6">
-          <div className="version-tag">
-            Enterprise AI Platform · V2.0
-            <span style={{ color: "#DDDAD4", margin: "0 4px" }}>·</span>
-            ISO 27001 Certified
+          {/* Eyebrow badge */}
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            background: "#efe9de",
+            border: "1px solid #e6dfd8",
+            borderRadius: 9999,
+            padding: "4px 14px",
+            marginBottom: 32,
+          }}>
+            <SpikeMark />
+            <span style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 12,
+              fontWeight: 500,
+              letterSpacing: "1.2px",
+              textTransform: "uppercase",
+              color: "#6c6a64",
+            }}>
+              Enterprise AI Platform · V2.0
+            </span>
           </div>
 
-          <h1 className="editorial-headline">
+          {/* Display headline — Cormorant Garamond 400, negative tracking */}
+          <h1 style={{
+            fontFamily: "'Cormorant Garamond', 'Tiempos Headline', Garamond, serif",
+            fontWeight: 400,
+            fontSize: "clamp(48px, 6vw, 72px)",
+            lineHeight: 1.05,
+            letterSpacing: "-0.03em",
+            color: "#141413",
+            marginBottom: 24,
+          }}>
             Enterprise AI,<br />
             built for{" "}
-            <span className="headline-accent">scale.</span>
+            <em style={{ color: "#cc785c", fontStyle: "italic" }}>scale.</em>
           </h1>
 
           <p style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Inter', sans-serif",
             fontSize: 16,
-            lineHeight: 1.75,
-            color: "#4A4A4A",
-            maxWidth: 520,     /* was 440 — widened for readability */
-            marginBottom: 32,
+            lineHeight: 1.55,
+            color: "#3d3d3a",
+            maxWidth: 520,
+            marginBottom: 40,
           }}>
             XERXEZ delivers intelligent ERP, DevSecOps pipelines, and cloud
             infrastructure that transform how enterprises operate at scale.
           </p>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
-            <Link to="/contact" className="pill-btn">
+          {/* CTA row */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <Link to="/contact" style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              background: "#cc785c",
+              color: "#ffffff",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              fontWeight: 500,
+              lineHeight: 1,
+              padding: "12px 20px",
+              height: 40,
+              borderRadius: 8,
+              textDecoration: "none",
+              transition: "background 150ms ease",
+            }}
+              onMouseOver={e => (e.currentTarget.style.background = "#a9583e")}
+              onMouseOut={e => (e.currentTarget.style.background = "#cc785c")}
+            >
               Get Started
-              <span className="btn-arrow">
-                <i className="far fa-arrow-right"></i>
-              </span>
             </Link>
-            <Link to="/service" className="pill-btn-ghost">
-              See our services →
+            <Link to="/service" style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "transparent",
+              color: "#141413",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              fontWeight: 500,
+              lineHeight: 1,
+              padding: "12px 20px",
+              height: 40,
+              borderRadius: 8,
+              border: "1px solid #e6dfd8",
+              textDecoration: "none",
+              transition: "border-color 150ms ease",
+            }}
+              onMouseOver={e => (e.currentTarget.style.borderColor = "#cc785c")}
+              onMouseOut={e => (e.currentTarget.style.borderColor = "#e6dfd8")}
+            >
+              See our services
             </Link>
           </div>
         </div>
 
-        {/* RIGHT — 3D dark performance card */}
-        <div className="col-lg-6 d-flex justify-content-center justify-content-lg-end hero-card-col">
-          <div
-            className="tally-card"
-            style={{ width: "100%", maxWidth: 420 }}  /* was 460 — slightly tighter */
-          >
-            {/* Header row */}
+        {/* RIGHT — dark navy product mockup card */}
+        <div className="col-lg-6 d-flex justify-content-center justify-content-lg-end">
+          <div style={{
+            background: "#181715",
+            borderRadius: 16,
+            padding: 32,
+            width: "100%",
+            maxWidth: 440,
+          }}>
+            {/* Card header */}
             <div style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: 20,
+              marginBottom: 24,
             }}>
-              <span className="live-dot">Live · Current Performance</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: "#5db872",
+                }} />
+                <span style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: "#a09d96",
+                  letterSpacing: "0.06em",
+                }}>
+                  Live · Current Performance
+                </span>
+              </div>
               <span style={{
+                fontFamily: "'Inter', sans-serif",
                 fontSize: 10,
                 color: "rgba(255,255,255,0.2)",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                fontFamily: "'DM Sans', sans-serif",
               }}>
                 XERXEZ ERP
               </span>
             </div>
 
-            {/* Big number */}
-            <div style={{ marginBottom: 20 }}>
+            {/* Big uptime number */}
+            <div style={{ marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
                 <span style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: 72,     /* was 80 — scales better at narrower maxWidth */
-                  fontWeight: 900,
-                  color: "#ffffff",
+                  fontFamily: "'Cormorant Garamond', Garamond, serif",
+                  fontSize: 72,
+                  fontWeight: 400,
+                  color: "#faf9f5",
                   lineHeight: 1,
+                  letterSpacing: "-0.02em",
                 }}>
                   99.9
                 </span>
                 <span style={{
+                  fontFamily: "'Inter', sans-serif",
                   fontSize: 20,
-                  color: "rgba(255,255,255,0.4)",
+                  color: "rgba(250,249,245,0.4)",
                   paddingTop: 8,
-                  fontFamily: "'DM Sans', sans-serif",
                 }}>
                   %
                 </span>
               </div>
               <div style={{
+                fontFamily: "'Inter', sans-serif",
                 fontSize: 11,
-                color: "rgba(255,255,255,0.35)",
+                color: "#a09d96",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                fontFamily: "'DM Sans', sans-serif",
                 marginTop: 4,
               }}>
                 System Uptime SLA
@@ -130,13 +218,13 @@ const HeroSection = () => (
               alignItems: "flex-end",
               gap: 3,
               height: 40,
-              marginBottom: 20,
+              marginBottom: 24,
             }}>
               {[55, 70, 42, 80, 58, 88, 65, 92, 60, 85, 70, 99].map((h, i) => (
                 <div key={i} style={{
                   flex: 1,
                   height: `${h}%`,
-                  background: i === 11 ? "#6c57d2" : "rgba(255,255,255,0.12)",
+                  background: i === 11 ? "#cc785c" : "rgba(250,249,245,0.1)",
                   borderRadius: 3,
                 }} />
               ))}
@@ -147,28 +235,29 @@ const HeroSection = () => (
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: 12,
-              borderTop: "1px solid rgba(255,255,255,0.08)",
-              paddingTop: 16,
-              marginBottom: 16,
+              borderTop: "1px solid rgba(250,249,245,0.08)",
+              paddingTop: 20,
+              marginBottom: 20,
             }}>
               {stats.map(({ value, label }) => (
                 <div key={label}>
                   <div style={{
-                    fontSize: 18,
-                    fontWeight: 700,
-                    color: "#ffffff",
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: 22,
+                    fontWeight: 400,
+                    color: "#faf9f5",
                     lineHeight: 1,
+                    letterSpacing: "-0.01em",
                   }}>
                     {value}
                   </div>
                   <div style={{
+                    fontFamily: "'Inter', sans-serif",
                     fontSize: 10,
-                    color: "rgba(255,255,255,0.35)",
+                    color: "#a09d96",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
                     marginTop: 4,
-                    fontFamily: "'DM Sans', sans-serif",
                   }}>
                     {label}
                   </div>
@@ -177,7 +266,7 @@ const HeroSection = () => (
             </div>
 
             {/* Feature bullets */}
-            <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 14 }}>
+            <div style={{ borderTop: "1px solid rgba(250,249,245,0.08)", paddingTop: 16 }}>
               {features.map((feat) => (
                 <div key={feat} style={{
                   display: "flex",
@@ -186,16 +275,16 @@ const HeroSection = () => (
                   marginBottom: 8,
                 }}>
                   <div style={{
-                    width: 5,
-                    height: 5,
+                    width: 4,
+                    height: 4,
                     borderRadius: "50%",
-                    background: "#6c57d2",
+                    background: "#cc785c",
                     flexShrink: 0,
                   }} />
                   <span style={{
+                    fontFamily: "'Inter', sans-serif",
                     fontSize: 12,
-                    color: "rgba(255,255,255,0.5)",
-                    fontFamily: "'DM Sans', sans-serif",
+                    color: "#a09d96",
                   }}>
                     {feat}
                   </span>
