@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
 
-// ── Warm ink theme — matches XERXEZ cream/terracotta palette ──
+// ── Cream theme — matches XERXEZ website background ──
 const N = {
-  bg:      "#1C1916",
-  heading: "#FDFCFB",
-  body:    "#9B9690",
-  link:    "#9B9690",
-  linkHov: "#EDE8DF",
+  bg:      "#F2EFE9",
+  heading: "#141413",
+  body:    "#6c6a64",
+  link:    "#6c6a64",
+  linkHov: "#cc785c",
   icon:    "#C9883A",
-  divider: "#2E2B27",
-  copy:    "#6c6a64",
+  divider: "#e6dfd8",
+  copy:    "#9B9690",
 };
 
 
@@ -48,13 +48,11 @@ const FooterSection2 = () => {
           {/* Col 1 — Wordmark + About */}
           <div className="col-lg-3 col-md-6 col-12 mb-5 mb-lg-0">
             <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 20 }}>
-              <div style={{ background: "#ffffff", borderRadius: 10, padding: "6px 14px", display: "inline-flex", alignItems: "center" }}>
-                <img
-                  src="/assets/img/logo/xerxez_logo.png"
-                  alt="Xerxez Solutions"
-                  style={{ height: 93, display: "block" }}
-                />
-              </div>
+              <img
+                src="/assets/img/logo/xerxez_logo.png"
+                alt="Xerxez Solutions"
+                style={{ height: 93, display: "block" }}
+              />
             </Link>
             <p style={{
               fontFamily: "'Inter', sans-serif",
