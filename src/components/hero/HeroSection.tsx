@@ -280,7 +280,8 @@ const HeroSection = () => {
             <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
               <Link to="/contact" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
-                background: "#cc785c", color: "#ffffff",
+                background: "#cc785c",
+                color: "#ffffff",
                 fontFamily: "'Inter', sans-serif",
                 fontSize: 14, fontWeight: 500, lineHeight: 1,
                 padding: "13px 24px", borderRadius: 8,
