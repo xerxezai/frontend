@@ -26,7 +26,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
       left: 0,
       right: 0,
       zIndex: 9999,
-      height: 64,
+      height: 70,
       background: isSticky ? "rgba(250,249,245,0.96)" : "#faf9f5",
       borderBottom: isSticky ? "1px solid #e6dfd8" : "1px solid transparent",
       backdropFilter: isSticky ? "blur(12px)" : "none",
@@ -44,9 +44,9 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             <Image
               src="/assets/img/logo/xerxez_logo.png"
               alt="Xerxez Solutions"
-              width={180}
-              height={50}
-              style={{ height: 50, width: "auto", display: "block" }}
+              width={220}
+              height={80}
+              style={{ height: 80, width: "auto", display: "block" }}
             />
           </Link>
 
