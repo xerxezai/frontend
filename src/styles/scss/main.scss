@@ -11438,10 +11438,14 @@ h3.service-header-5 {
   border: 1px solid #E5E5E5 !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.10) !important;
 }
-.submenu--grid li a, .header-1 .main-menu ul li .submenu li a {
+.submenu--grid li a,
+.submenu--grid li a:visited,
+.header-1 .main-menu ul li .submenu li a,
+.header-1 .main-menu ul li .submenu li a:visited {
   color: #0A0A0A !important;
 }
-.submenu--grid li a:hover, .header-1 .main-menu ul li .submenu li a:hover {
+.submenu--grid li a:hover,
+.header-1 .main-menu ul li .submenu li a:hover {
   color: #C9883A !important;
 }
 
@@ -11649,12 +11653,31 @@ body {
   border-radius: 12px !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.08) !important;
 }
-.submenu li a, .mega-menu li a {
+.submenu li a, .mega-menu li a,
+.submenu li a:visited, .mega-menu li a:visited {
   color: #1A1A1A !important;
   font-size: 13px !important;
   font-family: 'DM Sans', sans-serif !important;
 }
 .submenu li a:hover, .mega-menu li a:hover { color: #C9883A !important; }
+
+/* ── Services grid: even row alignment ── */
+.submenu--grid {
+  grid-auto-flow: row !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-rows: none !important;
+  align-items: start !important;
+  row-gap: 4px !important;
+}
+.submenu--grid li {
+  padding: 6px 0 !important;
+}
+/* remove last-child purple/bold special styling */
+.submenu--grid li:last-child a,
+.submenu--grid li:last-child a:visited {
+  color: #1A1A1A !important;
+  font-weight: 500 !important;
+}
 
 /* ── Hero Section ── */
 .hero-section.hero-1 {
