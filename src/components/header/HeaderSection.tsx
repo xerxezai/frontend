@@ -27,7 +27,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
       right: 0,
       zIndex: 9999,
       height: 70,
-      background: isSticky ? "rgba(26,35,58,0.97)" : "linear-gradient(135deg, #1a2340 0%, #1e2d4a 100%)",
+      background: isSticky ? "rgba(235,225,210,0.97)" : "#ebe1d2",
       borderBottom: "1px solid rgba(99,179,160,0.2)",
       boxShadow: "0 1px 0 rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)",
       backdropFilter: isSticky ? "blur(12px)" : "none",
