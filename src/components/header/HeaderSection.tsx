@@ -28,9 +28,10 @@ const HeaderSection = ({ variant: _variant }: Props) => {
       zIndex: 9999,
       height: 70,
       background: isSticky ? "rgba(250,249,245,0.96)" : "#faf9f5",
-      borderBottom: isSticky ? "1px solid #e6dfd8" : "1px solid transparent",
+      borderBottom: "1px solid #e6dfd8",
+      boxShadow: "0 1px 0 rgba(20,20,19,0.04), 0 4px 20px rgba(20,20,19,0.07)",
       backdropFilter: isSticky ? "blur(12px)" : "none",
-      transition: "border-color 250ms ease, background 250ms ease",
+      transition: "background 250ms ease",
     }}>
       <div className="container h-100">
         <div style={{
@@ -66,7 +67,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               fontFamily: "'Inter', sans-serif",
               fontSize: 14,
               fontWeight: 500,
-              color: "#3d3d3a",
+              color: "#6c6a64",
               textDecoration: "none",
               padding: "8px 4px",
             }}>
