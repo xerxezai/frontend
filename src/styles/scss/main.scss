@@ -12204,8 +12204,12 @@ body {
 }
 .footer-section .widget-head h3 {
   color: #1a1a1a !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
   margin-top: 0 !important;
+  margin-bottom: 16px !important;
 }
 .footer-section .footer-content p,
 .footer-section .single-footer-widget > p {
@@ -12222,6 +12226,16 @@ body {
 }
 .footer-section .social-icon a {
   color: #444444 !important;
+  background: transparent !important;
+  border: none !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  font-size: 17px !important;
+  padding: 0 !important;
+  margin-right: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
 .footer-section .social-icon a:hover {
   color: #6B3FA0 !important;
@@ -12239,4 +12253,65 @@ body {
 }
 .footer-bottom .footer-menu li a:hover {
   color: #6B3FA0 !important;
+}
+
+/* ── Xerxez Footer: Proper Grid Layout ── */
+.footer-section .xerxez-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 48px;
+  padding: 48px 0 36px;
+  align-items: start;
+}
+.footer-section .xerxez-footer-grid .single-footer-widget {
+  margin-top: 0 !important;
+}
+.footer-section .xerxez-footer-grid .list-area li {
+  margin-bottom: 8px !important;
+  line-height: 1.5 !important;
+}
+/* Contact list items */
+.footer-contact-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.footer-contact-list li {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
+  font-size: 13px !important;
+  color: #555555 !important;
+}
+.footer-contact-list li a,
+.footer-contact-list li span {
+  color: #555555 !important;
+  text-decoration: none !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+.footer-contact-list li a:hover {
+  color: #6B3FA0 !important;
+}
+/* Tablet: 2 columns */
+@media (max-width: 991px) {
+  .footer-section .xerxez-footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 36px !important;
+    padding: 40px 0 28px !important;
+  }
+}
+/* Mobile: 1 column */
+@media (max-width: 575px) {
+  .footer-section .xerxez-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    padding: 32px 0 20px !important;
+  }
+  .footer-bottom .footer-wrapper {
+    flex-direction: column !important;
+    gap: 8px !important;
+    text-align: center !important;
+  }
 }
