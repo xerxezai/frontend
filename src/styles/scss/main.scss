@@ -152,12 +152,12 @@ button {
 }
 
 input:focus {
-  color: $white;
+  color: $text;
   outline: none;
 }
 
 input {
-  color: $white;
+  color: $text;
 }
 
 h1,
@@ -213,7 +213,7 @@ a {
   text-decoration: none;
   outline: none !important;
   cursor: pointer;
-  color: rgba(255,255,255,0.85);
+  color: $theme-color;
   transition: all 0.4s ease-in-out;
 }
 
@@ -241,7 +241,7 @@ p {
   animation: spinner 1s infinite linear;
   border-radius: 50%;
   border: 3px solid rgba(0, 0, 0, 0.2);
-  border-top-color: #af49e5;
+  border-top-color: #6c57d2;
   height: 9em;
   margin: 0 auto 3.5em auto;
   width: 9em;
@@ -254,7 +254,7 @@ p {
 }
 
 .preloader .animation-preloader .txt-loading .letters-loading {
-  color: #af49e5;
+  color: #6c57d2;
   position: relative;
 }
 .preloader
@@ -1938,6 +1938,7 @@ p {
   font-size: 48px;
   font-weight: 600;
   margin-bottom: 15px;
+  color: #1A1A1A;
 }
 .error-items .content .theme-btn {
   border: 1px solid transparent;
@@ -8332,7 +8333,7 @@ h3.service-header-5 {
   font-size: 0.75rem;
 }
 .about-feature-section-3.section-padding.bg-cover.fix {
-  background: $bg;
+  background: #1C1C1E;
   background-image: none;
 }
 .about-section-4 .progress-wrap {
@@ -11308,6 +11309,8 @@ h3.service-header-5 {
 .service-card-items .icon i,
 .service-card-items h4,
 .service-card-items p { color: #0A0A0A !important; }
+.service-card-items.style-2 .service-content h3 a,
+.service-card-items.style-2 .service-content h3 { color: #1A1A1A !important; }
 
 /* ── Pricing boxes ── */
 .pricing-box-items {
@@ -11727,6 +11730,9 @@ body {
   line-height: 1.1 !important;
   color: #1A1A1A !important;
 }
+.body-bg-4 .section-title h2 { color: #ffffff !important; }
+.body-bg-4 .section-title span { color: #a78bfa !important; }
+.body-bg-4 .section-title p { color: rgba(255,255,255,0.65) !important; }
 .section-title p {
   font-family: 'DM Sans', sans-serif !important;
   color: #4A4A4A !important;
@@ -11888,7 +11894,7 @@ body {
   font-family: 'DM Sans', sans-serif !important; font-size: 11px !important;
   font-weight: 600 !important; letter-spacing: 0.14em !important;
   text-transform: uppercase !important; color: rgba(255,255,255,0.3) !important;
-  margin-bottom: 18px !important;
+  margin-top: 0 !important; margin-bottom: 16px !important;
 }
 .footer-section .footer-content p {
   font-family: 'DM Sans', sans-serif !important; font-size: 13px !important;
@@ -12199,31 +12205,45 @@ body {
 
 /* 3. Logo: 60px on all pages (inner + homepage) */
 
-/* ── Footer: Deep Navy Purple Theme ── */
+/* ── Footer: Cream Light Theme ── */
 .footer-section {
-  background: linear-gradient(135deg, #0F0F1A 0%, #1A0F2E 100%) !important;
+  background: #F8F7F4 !important;
   background-image: none !important;
 }
 .footer-section .widget-head h3 {
-  color: #ffffff !important;
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+  margin-top: 0 !important;
 }
 .footer-section .footer-content p,
 .footer-section .single-footer-widget > p {
-  color: #aaaaaa !important;
+  color: #555555 !important;
 }
-.footer-section .list-area li a {
-  color: #aaaaaa !important;
+.footer-section .list-area li a,
+.footer-section .list-area li a:visited {
+  color: #555555 !important;
   text-decoration: none !important;
 }
 .footer-section .list-area li a:hover {
-  color: #ffffff !important;
+  color: #6B3FA0 !important;
 }
 .footer-section .social-icon a {
-  color: #aaaaaa !important;
+  color: #444444 !important;
 }
 .footer-section .social-icon a:hover {
   color: #6B3FA0 !important;
 }
 .footer-section .social-icon a i {
   color: inherit !important;
+}
+/* Bottom bar matches footer */
+.footer-bottom {
+  background: #F8F7F4 !important;
+  border-top: 1px solid #E8E6E0 !important;
+}
+.footer-bottom p, .footer-bottom .footer-menu li a {
+  color: #888888 !important;
+}
+.footer-bottom .footer-menu li a:hover {
+  color: #6B3FA0 !important;
 }

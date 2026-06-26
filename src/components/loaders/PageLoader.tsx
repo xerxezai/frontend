@@ -4,9 +4,11 @@
       <div className="animation-preloader">
         <div className="spinner"></div>
         <div className="txt-loading">
-          <span className="letters-loading">S</span>
+          <span className="letters-loading">X</span>
           <span className="letters-loading">E</span>
-          <span className="letters-loading">O</span>
+          <span className="letters-loading">R</span>
+          <span className="letters-loading">X</span>
+          <span className="letters-loading">E</span>
           <span className="letters-loading">Z</span>
         </div>
         <p className="text-center">Loading</p>
