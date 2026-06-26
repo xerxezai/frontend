@@ -13,7 +13,6 @@ const N = {
   copy:    "#9B9690",
 };
 
-
 const linkStyle: React.CSSProperties = {
   fontFamily: "'Inter', sans-serif",
   fontSize: 14,
@@ -43,10 +42,17 @@ const FooterSection2 = () => {
   return (
     <footer style={{ background: N.bg }}>
       <div className="container">
-        <div className="row gx-5" style={{ padding: "48px 0 36px" }}>
+        {/* 4-column CSS grid */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "220px 1fr 1fr 1fr",
+          gap: "40px",
+          alignItems: "start",
+          padding: "48px 0 36px",
+        }}>
 
           {/* Col 1 — Wordmark + About */}
-          <div className="col-lg-3 col-md-6 col-12 mb-5 mb-lg-0">
+          <div>
             <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 20 }}>
               <img
                 src="/assets/img/logo/xerxez_logo.png"
@@ -84,7 +90,7 @@ const FooterSection2 = () => {
           </div>
 
           {/* Col 2 — Services */}
-          <div className="col-lg-3 col-md-6 col-12 mb-5 mb-lg-0">
+          <div>
             <h4 style={headingStyle}>Services</h4>
             <ul style={{ padding: 0, margin: 0, listStyle: "none" }}>
               {[
@@ -104,16 +110,16 @@ const FooterSection2 = () => {
           </div>
 
           {/* Col 3 — Link us */}
-          <div className="col-lg-3 col-md-6 col-12 mb-5 mb-lg-0">
+          <div>
             <h4 style={headingStyle}>Link us</h4>
             <ul style={{ padding: 0, margin: 0, listStyle: "none" }}>
               {[
-                { to: "/",         label: "Home" },
-                { to: "/about",     label: "About Us" },
-                { to: "/service",   label: "Services" },
-                { to: "/training",  label: "Training" },
-                { to: "/blog",      label: "Blog" },
-                { to: "/contact",   label: "Contact" },
+                { to: "/",        label: "Home" },
+                { to: "/about",   label: "About Us" },
+                { to: "/service", label: "Services" },
+                { to: "/training",label: "Training" },
+                { to: "/blog",    label: "Blog" },
+                { to: "/contact", label: "Contact" },
               ].map(({ to, label }) => (
                 <li key={to} style={{ marginBottom: 10 }}>
                   <Link to={to} style={linkStyle} {...hov}>{label}</Link>
@@ -123,12 +129,12 @@ const FooterSection2 = () => {
           </div>
 
           {/* Col 4 — Contact */}
-          <div className="col-lg-3 col-md-6 col-12">
+          <div>
             <h4 style={headingStyle}>Contact</h4>
             <ul style={{ padding: 0, margin: 0, listStyle: "none" }}>
               {[
-                { icon: <Phone size={13} />,  content: <a href="tel:+971567867451"          style={linkStyle} {...hov}>+971 56 786 7451</a> },
-                { icon: <Mail size={13} />,  content: <a href="mailto:info@xerxez.com"      style={linkStyle} {...hov}>info@xerxez.com</a> },
+                { icon: <Phone size={13} />, content: <a href="tel:+971567867451" style={linkStyle} {...hov}>+971 56 786 7451</a> },
+                { icon: <Mail size={13} />,  content: <a href="mailto:info@xerxez.com" style={linkStyle} {...hov}>info@xerxez.com</a> },
                 { icon: <Globe size={13} />, content: <a href="https://xerxez.com" target="_blank" rel="noreferrer" style={linkStyle} {...hov}>xerxez.com</a> },
                 { icon: <MapPin size={13} style={{ marginTop: 2 }} />, content: <span style={{ ...linkStyle, lineHeight: 1.5 }}>India &amp; UAE — Remote-first, Global delivery</span> },
               ].map(({ icon, content }, i) => (

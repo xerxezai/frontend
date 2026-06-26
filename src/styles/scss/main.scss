@@ -11442,11 +11442,11 @@ h3.service-header-5 {
 .submenu--grid li a:visited,
 .header-1 .main-menu ul li .submenu li a,
 .header-1 .main-menu ul li .submenu li a:visited {
-  color: #0A0A0A !important;
+  color: #141413 !important;
 }
 .submenu--grid li a:hover,
 .header-1 .main-menu ul li .submenu li a:hover {
-  color: #C9883A !important;
+  color: #cc785c !important;
 }
 
 /* ── Logo display ── */
@@ -11659,27 +11659,30 @@ body {
   font-size: 13px !important;
   font-family: 'DM Sans', sans-serif !important;
 }
-.submenu li a:hover, .mega-menu li a:hover { color: #C9883A !important; }
+.submenu li a:hover, .mega-menu li a:hover { color: #cc785c !important; }
 
-/* ── Services grid: even row alignment ── */
+/* ── Services grid: 3-column layout with padding ── */
 .header-main .main-menu ul li .submenu.submenu--grid {
+  padding: 24px 28px !important;
+  display: grid !important;
   grid-auto-flow: row !important;
   grid-template-columns: repeat(3, 1fr) !important;
-  grid-template-rows: auto auto auto !important;
-  row-gap: 0 !important;
+  grid-template-rows: auto !important;
+  gap: 16px 24px !important;
+  row-gap: 16px !important;
   column-gap: 24px !important;
 }
 .header-main .main-menu ul li .submenu.submenu--grid li {
-  padding: 10px 0 !important;
+  padding: 0 !important;
   margin: 0 !important;
 }
 .header-main .main-menu ul li .submenu.submenu--grid li:not(:last-child) {
-  padding-bottom: 10px !important;
+  padding-bottom: 0 !important;
 }
-/* remove last-child purple/bold special styling */
+/* remove last-child special styling */
 .header-main .main-menu ul li .submenu.submenu--grid li:last-child a,
 .header-main .main-menu ul li .submenu.submenu--grid li:last-child a:visited {
-  color: #1A1A1A !important;
+  color: #141413 !important;
   font-weight: 500 !important;
 }
 
@@ -12332,11 +12335,11 @@ body {
 .submenu--grid a:visited,
 .submenu--grid li a:link,
 .submenu--grid li a:visited {
-  color: #1A1A1A !important;
+  color: #141413 !important;
   text-decoration: none !important;
 }
 .submenu li a:hover,
 .submenu--grid li a:hover {
-  color: #C9883A !important;
+  color: #cc785c !important;
 }
 
