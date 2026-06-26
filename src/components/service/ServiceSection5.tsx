@@ -17,11 +17,11 @@ const ServiceSection5 = () => {
         <div className="section-title-area text-center text-lg-start">
           <div className="section-title">
             <span className="fade-in">Our Services</span>
-            <h2 className="text-white char-animation">
+            <h2 className="char-animation">
               Enterprise Solutions for <br /> Every Business Challenge
             </h2>
           </div>
-          <p className="text-white">
+          <p style={{ color: "#555555" }}>
             XERXEZ delivers AI-powered ERP, DevSecOps pipelines, and cloud infrastructure <br />
             that help enterprises scale securely and intelligently.
           </p>
