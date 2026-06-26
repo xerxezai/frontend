@@ -1,7 +1,6 @@
-import { NavbarHero } from "./hero-with-video";
+import { NavbarHero } from "../components/ui/hero-with-video";
 
-// Usage example — rendered at /landing via LandingPage.tsx
-const DemoOne = () => (
+const LandingPage = () => (
   <NavbarHero
     brandName="XERXEZ"
     heroTitle="Innovation Meets Simplicity"
@@ -12,4 +11,4 @@ const DemoOne = () => (
   />
 );
 
-export { DemoOne };
+export default LandingPage;
