@@ -347,7 +347,7 @@ const HeroSection = () => {
 
           {/* ── RIGHT: ERP Network ── */}
           <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center"
-            style={{ paddingTop: 60 }}>
+            style={{ paddingTop: 120 }}>
             <ERPNetwork />
           </div>
 
