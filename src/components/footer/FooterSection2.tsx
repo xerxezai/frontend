@@ -54,7 +54,7 @@ const FooterSection2 = () => {
                 alt="Xerxez Solutions"
                 width={180}
                 height={52}
-                style={{ height: 75, width: "auto", display: "block", filter: "brightness(0) invert(1)" }}
+                style={{ height: 85, width: "auto", display: "block", filter: "brightness(0) invert(1)" }}
               />
             </Link>
             <p style={{

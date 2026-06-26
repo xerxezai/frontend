@@ -11618,10 +11618,32 @@ body {
   font-weight: 500 !important;
   color: #1A1A1A !important;
   letter-spacing: 0.01em !important;
+  padding: 10px 0 !important;
 }
 .main-menu nav ul li > a:hover,
-.main-menu nav ul li.active > a {
+.main-menu nav ul li.active > a,
+.main-menu nav ul li.nav-active > a {
   color: #C9883A !important;
+}
+/* Vertically centre the nav block inside the fixed header */
+.header-main {
+  display: flex !important;
+  align-items: center !important;
+}
+.header-main .main-menu nav {
+  display: flex;
+  align-items: center;
+}
+.header-main .main-menu ul {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.header-main .main-menu ul li {
+  display: flex !important;
+  align-items: center !important;
 }
 .submenu, .mega-menu {
   background: #ffffff !important;
