@@ -22,7 +22,7 @@ const HomePage1 = () => {
     <>
       <HeaderSection />
 
-      <div id="sec-hero" style={{ paddingTop: 64 }}><HeroSection /></div>
+      <div id="sec-hero" style={{ paddingTop: 70 }}><HeroSection /></div>
       <div id="sec-about">
         <ServiceSection2 />
         <BrandSection />
