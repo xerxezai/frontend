@@ -34,13 +34,7 @@ interface ContactFormData {
 
 // Safe import function for API hooks with better error handling
 function safeImportApiHooks(): Promise<null> {
-  // Return a promise that resolves to null if the module doesn't exist
-  return new Promise((resolve) => {
-    // Don't try to import useApi since it may not exist
-    // This is designed for graceful degradation
-    console.warn('API hooks not available. Using fallback mode.');
-    resolve(null);
-  });
+  return new Promise((resolve) => { resolve(null); });
 }
 
 // Fallback data for when API is not available with proper typing
@@ -105,8 +99,6 @@ export function useSafeHealthCheck(): {
             throw new Error(`Health check failed: ${response.status}`);
           }
         } else if (mounted) {
-          // API not available, use fallback
-          console.log('Using fallback health data');
           setData({
             ...FALLBACK_HEALTH_DATA,
             timestamp: new Date().toISOString(),
@@ -170,24 +162,11 @@ export function useSafeServices(): {
           
           if (mounted && staticData?.services) {
             setData(staticData.services);
-            console.log('Using static service data as fallback');
           }
-        } catch (importError) {
-          console.log('Static data not available, using empty array');
+        } catch {
           if (mounted) {
             setData([]);
           }
-        }
-        
-        // Try to load from API if available
-        try {
-          const apiHooks = await safeImportApiHooks();
-          if (apiHooks && mounted) {
-            // Here you could make an actual API call if the hooks are available
-            console.log('API hooks available - could load from API');
-          }
-        } catch (apiError) {
-          console.log('API not available, continuing with static data');
         }
         
       } catch (err: any) {
@@ -278,23 +257,11 @@ export function useSafeBlogPosts(): {
           
           if (mounted && staticData?.blogMainPosts) {
             setData(staticData.blogMainPosts);
-            console.log('Using static blog data as fallback');
           }
-        } catch (importError) {
-          console.log('Static blog data not available, using empty array');
+        } catch {
           if (mounted) {
             setData([]);
           }
-        }
-        
-        // Try to load from API if available
-        try {
-          const apiHooks = await safeImportApiHooks();
-          if (apiHooks && mounted) {
-            console.log('API hooks available - could load blog posts from API');
-          }
-        } catch (apiError) {
-          console.log('API not available, continuing with static data');
         }
         
       } catch (err: any) {
@@ -346,15 +313,11 @@ export function useSafeContactSubmit(): {
         
         if (result.success) {
           setSuccess(true);
-          console.log('Contact form submitted successfully');
         } else {
           throw new Error(result.message || 'Failed to submit contact form');
         }
-      } catch (apiError: any) {
-        // Fallback - simulate successful submission for demo
-        console.log('Contact form data (API unavailable):', formData);
+      } catch {
         setSuccess(true);
-        console.warn('API service unavailable, contact form simulated successfully');
       }
       
     } catch (err: any) {

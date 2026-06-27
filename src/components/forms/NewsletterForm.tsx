@@ -63,9 +63,6 @@ const NewsletterForm = ({ style }: Props) => {
       // Simulate API request with a delay
       setIsSubmitting(true);
       setTimeout(() => {
-        // Log the submitted email directly
-        console.log("Submitted Email Address:", email);
-
         setIsSubmitting(false);
         setAlert({ type: "success", message: "You have been subscribed!" });
         toast.success("Subscribed successfully!", {

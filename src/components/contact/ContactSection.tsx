@@ -233,6 +233,9 @@ const ContactSection = () => {
                 src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=900&q=80"
                 alt="Enterprise team collaboration"
                 className="xz-parallax-img"
+                loading="lazy"
+                width="900"
+                height="600"
                 style={{
                   width: "100%",
                   height: "100%",

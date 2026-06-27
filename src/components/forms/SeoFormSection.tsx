@@ -135,12 +135,6 @@ const SeoFormSection = ({ variant }: Props) => {
       // Simulate API request with a delay
       setIsSubmitting(true);
       setTimeout(() => {
-        // Log the submitted data properly
-        console.log(
-          "Submitted SEO Form Data:",
-          JSON.stringify(trimmedData, null, 2)
-        );
-
         setIsSubmitting(false);
         setAlert({
           type: "success",

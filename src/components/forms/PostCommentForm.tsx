@@ -147,12 +147,6 @@ const PostCommentForm = () => {
       // Simulate API request with a delay
       setIsSubmitting(true);
       setTimeout(() => {
-        // Properly log the submitted data as JSON
-        console.log(
-          "Submitted Comment Form Data:",
-          JSON.stringify(trimmedData, null, 2)
-        );
-
         setIsSubmitting(false);
         setAlert({
           type: "success",
