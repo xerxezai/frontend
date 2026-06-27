@@ -64,13 +64,14 @@ const CounterSection = ({ variant }: Props) => {
                 data-aos="fade-up"
                 data-aos-delay={i * 100}
               >
-                <div style={{
-                  background: "#fff",
-                  border: "1px solid #E5E5E5",
+                <div className="xz-counter-card xz-border-glow" style={{
+                  background: "linear-gradient(160deg, #ffffff 0%, #faf7f2 100%)",
+                  border: "1px solid rgba(210,200,185,0.55)",
                   borderRadius: 16,
                   padding: "28px 24px",
+                  boxShadow: "0 4px 0 rgba(160,140,110,0.22), 0 6px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
                 }}>
-                  <div style={{
+                  <div className="xz-counter-icon" style={{
                     width: 46, height: 46, borderRadius: 12,
                     background: "#FFF8EE",
                     display: "flex", alignItems: "center", justifyContent: "center",

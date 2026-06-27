@@ -70,7 +70,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section style={{ background: "#FDFCFB", padding: "72px 0" }}>
+    <section className="xz-contact-section" style={{ padding: "72px 0" }}>
       <div className="container">
         <div className="row g-4 align-items-stretch">
 
@@ -110,13 +110,14 @@ const ContactSection = () => {
               Fill out the form and our team will respond within 24 hours.
             </p>
 
-            {/* Form card */}
+            {/* Form card — 3D raised */}
             <div style={{
-              background: "#ffffff",
-              border: "1px solid #E8E3DA",
+              background: "linear-gradient(160deg, #ffffff 0%, #faf7f2 100%)",
+              border: "1px solid rgba(210,200,185,0.55)",
+              borderTop: "1px solid rgba(255,255,255,0.95)",
               borderRadius: 20,
               padding: "36px",
-              boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+              boxShadow: "0 6px 0 rgba(160,140,110,0.28), 0 12px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
             }}>
               <form onSubmit={handleSubmit} noValidate>
                 <div className="row g-3">
@@ -185,6 +186,7 @@ const ContactSection = () => {
                     <button
                       type="submit"
                       disabled={sending || sent}
+                      className={sending || sent ? "" : "xz-scale-btn"}
                       style={{
                         width: "100%",
                         height: 52,
@@ -200,8 +202,9 @@ const ContactSection = () => {
                         borderRadius: 100,
                         border: "none",
                         cursor: sending || sent ? "default" : "pointer",
-                        transition: "background 180ms ease",
+                        transition: "background 180ms ease, transform 0.22s ease, box-shadow 0.22s ease",
                         letterSpacing: "0.01em",
+                        boxShadow: "0 4px 0 rgba(150,80,40,0.45), 0 6px 18px rgba(204,120,92,0.25)",
                       }}
                       onMouseEnter={() => setSubmitHovered(true)}
                       onMouseLeave={() => setSubmitHovered(false)}
@@ -229,6 +232,7 @@ const ContactSection = () => {
               <img
                 src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=900&q=80"
                 alt="Enterprise team collaboration"
+                className="xz-parallax-img"
                 style={{
                   width: "100%",
                   height: "100%",

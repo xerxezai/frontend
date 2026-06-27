@@ -47,9 +47,7 @@ const GsapAnimations = () => {
         document
           .querySelectorAll<HTMLElement>(".fade-in")
           .forEach((element) => {
-            // Make sure element starts hidden
             gsap.set(element, { opacity: 0, y: 80 });
-
             gsap.to(element, {
               opacity: 1,
               y: 0,
@@ -62,6 +60,66 @@ const GsapAnimations = () => {
               },
             });
           });
+
+        // --- PARALLAX IMAGE SCALE (elements with .xz-parallax-img) ---
+        document
+          .querySelectorAll<HTMLElement>(".xz-parallax-img")
+          .forEach((element) => {
+            gsap.fromTo(element,
+              { scale: 0.94, opacity: 0 },
+              {
+                scale: 1, opacity: 1,
+                duration: 1.1,
+                ease: "power2.out",
+                scrollTrigger: {
+                  trigger: element,
+                  start: "top 88%",
+                  once: true,
+                },
+              }
+            );
+          });
+
+        // --- SECTION HEADINGS fade up (h2, h3 inside .section-title) ---
+        document
+          .querySelectorAll<HTMLElement>(".section-title h2:not(.char-animation)")
+          .forEach((element) => {
+            gsap.fromTo(element,
+              { opacity: 0, y: 28 },
+              {
+                opacity: 1, y: 0,
+                duration: 0.85,
+                ease: "power2.out",
+                scrollTrigger: {
+                  trigger: element,
+                  start: "top 88%",
+                  once: true,
+                },
+              }
+            );
+          });
+
+        // --- STAGGER GRID CARDS (children of .xz-stagger-grid) ---
+        document
+          .querySelectorAll<HTMLElement>(".xz-stagger-grid")
+          .forEach((parent) => {
+            const children = Array.from(parent.children) as HTMLElement[];
+            gsap.fromTo(children,
+              { opacity: 0, y: 32 },
+              {
+                opacity: 1, y: 0,
+                duration: 0.65,
+                ease: "power2.out",
+                stagger: 0.08,
+                scrollTrigger: {
+                  trigger: parent,
+                  start: "top 85%",
+                  once: true,
+                },
+              }
+            );
+          });
+
       } catch (error) {
         console.error("GSAP animation error:", error);
       }
