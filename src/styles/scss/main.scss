@@ -1557,10 +1557,14 @@ p {
 }
 .header-section-2 .header-1 .mega-menu-wrapper {
   border-radius: 9px;
-  background: #F2EFE9;
-  box-shadow: 0 2px 16px rgba(10, 3, 46, 0.06);
+  background: linear-gradient(180deg, #faf7f3 0%, #e8e2d8 100%);
+  box-shadow:
+    0 5px 0 rgba(155, 132, 108, 0.50),
+    0 8px 28px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
   padding: 0 40px;
-  border: 1px solid rgba(181,160,144,0.18);
+  border: 1px solid rgba(181, 160, 144, 0.35);
+  transform: translateZ(0);
 }
 .header-section-2 .header-top-wrapper {
   padding: 9px 0;
