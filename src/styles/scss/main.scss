@@ -1549,14 +1549,18 @@ p {
 .header-section-2 .header-1 {
   position: static;
 }
+.header-section-2 .header-1.sticky {
+  background-color: #F2EFE9;
+}
 .header-section-2 .header-1 .container {
   max-width: 1555px;
 }
 .header-section-2 .header-1 .mega-menu-wrapper {
   border-radius: 9px;
-  background: $white;
-  box-shadow: 10px 8px 34px 16px rgba(10, 3, 46, 0.04);
+  background: #F2EFE9;
+  box-shadow: 0 2px 16px rgba(10, 3, 46, 0.06);
   padding: 0 40px;
+  border: 1px solid rgba(181,160,144,0.18);
 }
 .header-section-2 .header-top-wrapper {
   padding: 9px 0;
