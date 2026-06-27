@@ -164,10 +164,21 @@ const NeuralCanvas = () => {
       raf = requestAnimationFrame(draw);
     };
 
+    // Pause RAF when tab is not visible, resume when visible again
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+      } else {
+        raf = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
     draw();
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 

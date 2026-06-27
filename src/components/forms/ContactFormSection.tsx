@@ -175,12 +175,6 @@ const ContactFormSection = ({ variant }: Props) => {
       // Simulate API request with a delay
       setIsSubmitting(true);
       setTimeout(() => {
-        // Fixed: Properly log the submitted data as JSON
-        console.log(
-          "Submitted Contact Form Data:",
-          JSON.stringify(trimmedData, null, 2)
-        );
-
         setIsSubmitting(false);
         setAlert({
           type: "success",
