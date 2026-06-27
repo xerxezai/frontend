@@ -2,9 +2,6 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 // ─── Module-level constants ───────────────────────────────────────────────────
-const TICKER =
-  "●  SYSTEM ONLINE  ▸  AI Models Active: 247  ▸  Uptime: 99.9%  ▸  Deployments Today: 12  ▸  Enterprise Clients: 120+  ▸  Global Nodes: 8  ▸  Latency < 8ms  ▸  Security Score: A+  ▸  ";
-
 const CYCLE_WORDS = [
   "AI-Powered ERP",
   "DevSecOps Pipelines",
@@ -25,7 +22,7 @@ const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
   delay: `${(i * 0.65) % 7}s`,
   color:
     i % 3 === 0
-      ? "rgba(107,63,160,0.45)"
+      ? "rgba(201,136,58,0.45)"
       : i % 3 === 1
       ? "rgba(201,136,58,0.32)"
       : "rgba(220,215,210,0.4)",
@@ -150,7 +147,7 @@ const NeuralCanvas = () => {
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(107,63,160,${(1 - d / MAX_DIST) * 0.11})`;
+            ctx.strokeStyle = `rgba(201,136,58,${(1 - d / MAX_DIST) * 0.11})`;
             ctx.lineWidth = 0.7;
             ctx.stroke();
           }
@@ -160,7 +157,7 @@ const NeuralCanvas = () => {
       for (const n of nodes) {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(107,63,160,0.16)";
+        ctx.fillStyle = "rgba(201,136,58,0.16)";
         ctx.fill();
       }
 
@@ -301,7 +298,7 @@ const HeroSection = () => {
       ringRef.current.style.height = "50px";
       ringRef.current.style.marginLeft = "-9px";
       ringRef.current.style.marginTop = "-9px";
-      ringRef.current.style.borderColor = "rgba(107,63,160,0.7)";
+      ringRef.current.style.borderColor = "rgba(201,136,58,0.7)";
     };
     const contract = () => {
       if (!ringRef.current) return;
@@ -309,7 +306,7 @@ const HeroSection = () => {
       ringRef.current.style.height = "32px";
       ringRef.current.style.marginLeft = "0px";
       ringRef.current.style.marginTop = "0px";
-      ringRef.current.style.borderColor = "rgba(107,63,160,0.45)";
+      ringRef.current.style.borderColor = "rgba(201,136,58,0.45)";
     };
 
     const els = document.querySelectorAll("a, button");
@@ -391,15 +388,15 @@ const HeroSection = () => {
           <div ref={dotRef} aria-hidden="true" style={{
             position: "fixed", top: 0, left: 0,
             width: 8, height: 8, borderRadius: "50%",
-            background: "#6B3FA0",
-            boxShadow: "0 0 10px rgba(107,63,160,0.85)",
+            background: "#C9883A",
+            boxShadow: "0 0 10px rgba(201,136,58,0.85)",
             pointerEvents: "none", zIndex: 99999,
             willChange: "transform",
           }} />
           <div ref={ringRef} aria-hidden="true" style={{
             position: "fixed", top: 0, left: 0,
             width: 32, height: 32, borderRadius: "50%",
-            border: "1.5px solid rgba(107,63,160,0.45)",
+            border: "1.5px solid rgba(201,136,58,0.45)",
             pointerEvents: "none", zIndex: 99998,
             transition: "width 0.22s ease, height 0.22s ease, margin 0.22s ease, border-color 0.22s ease",
             willChange: "transform",
@@ -438,31 +435,7 @@ const HeroSection = () => {
           }} />
         ))}
 
-        {/* Live ticker bar */}
-        <div aria-hidden="true" style={{
-          position: "absolute", top: 0, left: 0, right: 0,
-          height: 28,
-          background: "rgba(20,20,19,0.055)",
-          borderBottom: "1px solid rgba(107,63,160,0.10)",
-          overflow: "hidden", zIndex: 3,
-          display: "flex", alignItems: "center",
-        }}>
-          <div style={{
-            display: "inline-block",
-            whiteSpace: "nowrap",
-            animation: prefersReduced ? "none" : "xzTickerScroll 32s linear infinite",
-            fontFamily: "'Courier New', Courier, monospace",
-            fontSize: 9.5,
-            color: "#4A3D7C",
-            letterSpacing: "0.055em",
-            fontWeight: 500,
-            opacity: 0.85,
-          }}>
-            {TICKER}{TICKER}
-          </div>
-        </div>
-
-        <div className="container" style={{ position: "relative", zIndex: 1, paddingTop: 28 }}>
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
           <div className="row g-5 align-items-start">
 
             {/* ── LEFT ── */}
@@ -519,13 +492,13 @@ const HeroSection = () => {
                   fontFamily: "'Cormorant Garamond', Garamond, serif",
                   fontWeight: 700, fontStyle: "italic",
                   fontSize: "clamp(58px, 9vw, 118px)",
-                  color: glitching ? "#5C2FA0" : "#cc785c",
+                  color: glitching ? "#a9583e" : "#cc785c",
                   letterSpacing: "-0.035em",
                   lineHeight: 0.9, marginBottom: 10,
                   minHeight: "1em",
                   transition: "color 0.08s",
                   textShadow: glitching
-                    ? "0 0 24px rgba(107,63,160,0.5), 3px 0 0 rgba(255,0,0,0.25), -3px 0 0 rgba(0,255,255,0.25)"
+                    ? "0 0 24px rgba(201,136,58,0.55), 3px 0 0 rgba(204,120,92,0.35), -3px 0 0 rgba(201,136,58,0.3)"
                     : "none",
                 }}>
                   {headingText}
@@ -698,10 +671,10 @@ const HeroSection = () => {
                   background: "linear-gradient(140deg, rgba(255,255,255,0.7) 0%, rgba(237,232,223,0.55) 100%)",
                   backdropFilter: "blur(10px)",
                   WebkitBackdropFilter: "blur(10px)",
-                  border: "1px solid rgba(107,63,160,0.22)",
+                  border: "1px solid rgba(201,136,58,0.22)",
                   borderRadius: 24,
                   padding: "32px 20px 20px",
-                  boxShadow: "0 8px 48px rgba(107,63,160,0.10), 0 2px 0 rgba(255,255,255,0.9) inset",
+                  boxShadow: "0 8px 48px rgba(201,136,58,0.10), 0 2px 0 rgba(255,255,255,0.9) inset",
                   transition: "transform 0.12s ease-out",
                   transformStyle: "preserve-3d",
                   animation: prefersReduced ? "none" : "xzHoloBorder 3.5s ease-in-out infinite",
@@ -750,14 +723,14 @@ const HeroSection = () => {
                     { label: "Clients", value: "120+" },
                   ].map(s => (
                     <div key={s.label} style={{
-                      background: "rgba(107,63,160,0.07)",
-                      border: "1px solid rgba(107,63,160,0.14)",
+                      background: "rgba(201,136,58,0.07)",
+                      border: "1px solid rgba(201,136,58,0.14)",
                       borderRadius: 8, padding: "6px 14px",
                       textAlign: "center",
                     }}>
                       <div style={{
                         fontFamily: "'Inter', sans-serif",
-                        fontSize: 15, fontWeight: 700, color: "#4A3D7C",
+                        fontSize: 15, fontWeight: 700, color: "#7A4A1E",
                         lineHeight: 1,
                       }}>
                         {s.value}
@@ -797,10 +770,6 @@ const HeroSection = () => {
             0%, 100% { transform: translateY(0); }
             50%       { transform: translateY(7px); }
           }
-          @keyframes xzTickerScroll {
-            0%   { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
           @keyframes xzRiseUp {
             0%   { transform: translateY(0);       opacity: 0; }
             8%   { opacity: 0.9; }
@@ -812,8 +781,8 @@ const HeroSection = () => {
             100% { transform: translate(-50%,-50%) scale(45); opacity: 0; }
           }
           @keyframes xzHoloBorder {
-            0%, 100% { box-shadow: 0 8px 48px rgba(107,63,160,0.10), 0 2px 0 rgba(255,255,255,0.9) inset; }
-            50%       { box-shadow: 0 8px 48px rgba(107,63,160,0.22), 0 0 0 1.5px rgba(107,63,160,0.28), 0 2px 0 rgba(255,255,255,0.9) inset; }
+            0%, 100% { box-shadow: 0 8px 48px rgba(201,136,58,0.10), 0 2px 0 rgba(255,255,255,0.9) inset; }
+            50%       { box-shadow: 0 8px 48px rgba(201,136,58,0.22), 0 0 0 1.5px rgba(201,136,58,0.28), 0 2px 0 rgba(255,255,255,0.9) inset; }
           }
           @media (prefers-reduced-motion: reduce) {
             .xz-network-svg animate,
