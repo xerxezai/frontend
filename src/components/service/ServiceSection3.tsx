@@ -143,31 +143,48 @@ const ServiceSection3 = ({ mainSection }: Props) => {
               </div>
             </div>
 
-            {/* Search box */}
+            {/* Search box — 3D raised */}
             <div style={{ flex: "0 1 320px", alignSelf: "center" }}>
+              {/* outer shell gives the 3D lift */}
               <div style={{
-                display: "flex", alignItems: "center", gap: 10,
-                background: "#ffffff", border: "1.5px solid rgba(30,30,30,0.14)",
-                borderRadius: 12, padding: "13px 18px",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                borderRadius: 16,
+                padding: 3,
+                background: "linear-gradient(145deg, #ffffff 0%, #d6cfc7 100%)",
+                boxShadow: "0 8px 0 rgba(160,140,124,0.55), 0 12px 28px rgba(0,0,0,0.14)",
               }}>
-                <i className="fas fa-search" style={{ color: "#9B9B9B", fontSize: 14, flexShrink: 0 }}></i>
-                <input
-                  type="text"
-                  placeholder="Search services..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  style={{
-                    border: "none", outline: "none", background: "transparent",
-                    fontSize: 14, color: "#1A1A1A", width: "100%",
-                    fontFamily: "'DM Sans', sans-serif",
-                  }}
-                />
-                {search && (
-                  <button onClick={() => setSearch("")} style={{ border: "none", background: "none", cursor: "pointer", color: "#9B9B9B", padding: 0, fontSize: 13 }}>
-                    <i className="fas fa-times"></i>
-                  </button>
-                )}
+                {/* inner face */}
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  background: "linear-gradient(160deg, #fefcfa 0%, #f5f1ec 100%)",
+                  borderRadius: 13, padding: "13px 18px",
+                  boxShadow: "inset 0 1px 3px rgba(255,255,255,0.9), inset 0 -1px 2px rgba(0,0,0,0.04)",
+                  border: "1px solid rgba(210,200,190,0.6)",
+                }}>
+                  <div style={{
+                    width: 30, height: 30, borderRadius: 8, flexShrink: 0,
+                    background: "linear-gradient(135deg, #C9883A 0%, #e8a84e 100%)",
+                    boxShadow: "0 3px 0 rgba(150,95,30,0.5), 0 4px 10px rgba(201,136,58,0.35)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <i className="fas fa-search" style={{ color: "#fff", fontSize: 12 }}></i>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search services..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={{
+                      border: "none", outline: "none", background: "transparent",
+                      fontSize: 14, color: "#1A1A1A", width: "100%",
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}
+                  />
+                  {search && (
+                    <button onClick={() => setSearch("")} style={{ border: "none", background: "none", cursor: "pointer", color: "#9B9B9B", padding: 0, fontSize: 13 }}>
+                      <i className="fas fa-times"></i>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
