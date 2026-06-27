@@ -195,111 +195,191 @@ const ServiceSection3 = ({ mainSection }: Props) => {
         {/* ── FLAGSHIP: AI-Powered ERP ── */}
         <div className="row mb-4" data-aos="fade-up" data-aos-duration="900" data-aos-once="true">
           <div className="col-12">
-            <div
-              className="erp-flagship-card"
-              style={{
-                background: "linear-gradient(135deg, #0F2741 0%, #163557 55%, #1A3F6A 100%)",
-                borderRadius: 16,
-                padding: "48px 52px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 32,
-                flexWrap: "wrap",
-                boxShadow: "0 8px 40px rgba(201,136,58,0.28)",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              {/* decorative circles */}
-              <span style={{ position: "absolute", top: -60, right: -60, width: 220, height: 220, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
-              <span style={{ position: "absolute", bottom: -40, left: "38%", width: 160, height: 160, borderRadius: "50%", background: "rgba(255,255,255,0.03)", pointerEvents: "none" }} />
+            <div style={{
+              background: "linear-gradient(145deg, #081828 0%, #0F2741 35%, #132E50 70%, #0E2240 100%)",
+              borderRadius: 22,
+              padding: "52px 56px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 40,
+              flexWrap: "wrap",
+              position: "relative",
+              overflow: "hidden",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderTop: "1px solid rgba(255,255,255,0.18)",
+              boxShadow: [
+                "inset 0 1px 0 rgba(255,255,255,0.10)",
+                "0 8px 0 rgba(0,0,0,0.40)",
+                "0 20px 60px rgba(0,0,0,0.50)",
+                "0 0 100px rgba(240,202,122,0.07)",
+              ].join(", "),
+            }}>
+              {/* Dot-grid texture */}
+              <div style={{
+                position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+                backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)",
+                backgroundSize: "26px 26px",
+              }} />
+              {/* Ambient amber glow behind stats */}
+              <div style={{
+                position: "absolute", bottom: -120, left: "25%", zIndex: 0,
+                width: 420, height: 420, borderRadius: "50%", pointerEvents: "none",
+                background: "radial-gradient(circle, rgba(240,202,122,0.10) 0%, transparent 68%)",
+              }} />
+              {/* Top-right soft orb */}
+              <div style={{
+                position: "absolute", top: -100, right: -80, zIndex: 0,
+                width: 320, height: 320, borderRadius: "50%", pointerEvents: "none",
+                background: "radial-gradient(circle, rgba(100,160,255,0.06) 0%, transparent 65%)",
+              }} />
 
               {/* Left: text + CTAs */}
-              <div style={{ flex: "1 1 400px", zIndex: 1 }}>
-                {/* Badges */}
-                <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
-                  <span style={{ background: "#F0CA7A", color: "#8B5520", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, textTransform: "uppercase" }}>
-                    New
-                  </span>
-                  <span style={{ background: "rgba(255,255,255,0.18)", color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, border: "1px solid rgba(255,255,255,0.35)" }}>
-                    AI Powered
-                  </span>
-                  <span style={{ background: "rgba(255,255,255,0.10)", color: "#F0CA7A", fontSize: 12, fontWeight: 600, padding: "4px 14px", borderRadius: 20, letterSpacing: 0.5, border: "1px solid rgba(255,255,255,0.18)" }}>
-                    Flagship Service
-                  </span>
+              <div style={{ flex: "1 1 420px", zIndex: 1, position: "relative" }}>
+                {/* 3D Badges */}
+                <div style={{ display: "flex", gap: 8, marginBottom: 26, flexWrap: "wrap" }}>
+                  <span style={{
+                    background: "linear-gradient(135deg, #F0CA7A 0%, #d4a33a 100%)",
+                    color: "#4A2800", fontSize: 10, fontWeight: 800,
+                    padding: "5px 14px", borderRadius: 20, letterSpacing: "0.12em",
+                    textTransform: "uppercase", fontFamily: "'DM Sans', sans-serif",
+                    boxShadow: "0 3px 0 rgba(120,70,0,0.55), 0 5px 12px rgba(240,202,122,0.28)",
+                  }}>New</span>
+                  <span style={{
+                    background: "rgba(255,255,255,0.09)", color: "#fff",
+                    fontSize: 10, fontWeight: 700, padding: "5px 14px", borderRadius: 20,
+                    letterSpacing: "0.10em", textTransform: "uppercase",
+                    border: "1px solid rgba(255,255,255,0.20)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18), 0 2px 6px rgba(0,0,0,0.25)",
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}>AI Powered</span>
+                  <span style={{
+                    background: "rgba(240,202,122,0.10)", color: "#F0CA7A",
+                    fontSize: 10, fontWeight: 700, padding: "5px 14px", borderRadius: 20,
+                    letterSpacing: "0.10em", textTransform: "uppercase",
+                    border: "1px solid rgba(240,202,122,0.30)",
+                    boxShadow: "inset 0 1px 0 rgba(240,202,122,0.15)",
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}>Flagship Service</span>
                 </div>
 
-                <h2 style={{ color: "#fff", fontSize: "clamp(26px, 3.5vw, 38px)", fontWeight: 800, lineHeight: 1.2, marginBottom: 16 }}>
-                  AI-Powered ERP System
+                <h2 style={{
+                  color: "#fff", fontSize: "clamp(28px, 3.8vw, 46px)",
+                  fontWeight: 900, lineHeight: 1.08, marginBottom: 20,
+                  fontFamily: "'DM Sans', sans-serif", letterSpacing: "-0.03em",
+                  textShadow: "0 2px 24px rgba(240,202,122,0.10)",
+                }}>
+                  AI-Powered<br />
+                  <span style={{ color: "#F0CA7A" }}>ERP System</span>
                 </h2>
-                <p style={{ color: "rgba(255,255,255,0.78)", fontSize: 16, lineHeight: 1.7, marginBottom: 28, maxWidth: 560 }}>
+
+                <p style={{
+                  color: "rgba(255,255,255,0.68)", fontSize: 15, lineHeight: 1.78,
+                  marginBottom: 32, maxWidth: 520, fontFamily: "'DM Sans', sans-serif",
+                }}>
                   Purpose-built or layered onto your existing SAP, Oracle, or Microsoft
                   Dynamics — XERXEZ delivers intelligent ERP that learns, adapts, and
                   scales with your enterprise operations.
                 </p>
 
-                {/* Stats */}
-                <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
+                {/* Stats — each a mini 3D glass panel */}
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 36 }}>
                   {erpStats.map((stat) => (
-                    <div key={stat.val} style={{ textAlign: "left" }}>
-                      <div style={{ color: "#F0CA7A", fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{stat.val}</div>
-                      <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, marginTop: 4 }}>{stat.label}</div>
+                    <div key={stat.val} style={{
+                      background: "rgba(255,255,255,0.055)",
+                      border: "1px solid rgba(255,255,255,0.10)",
+                      borderTop: "1px solid rgba(255,255,255,0.20)",
+                      borderRadius: 14, padding: "16px 22px",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 14px rgba(0,0,0,0.22)",
+                      minWidth: 118,
+                    }}>
+                      <div style={{
+                        color: "#F0CA7A", fontSize: 32, fontWeight: 900, lineHeight: 1,
+                        fontFamily: "'DM Sans', sans-serif",
+                        textShadow: "0 0 22px rgba(240,202,122,0.50)",
+                      }}>{stat.val}</div>
+                      <div style={{
+                        color: "rgba(255,255,255,0.50)", fontSize: 11, marginTop: 6,
+                        fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.03em",
+                      }}>{stat.label}</div>
                     </div>
                   ))}
                 </div>
 
-                {/* CTA buttons — each is an independent Link */}
-                <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                  <Link
-                    to="/service/ai-powered-erp"
-                    style={{
-                      background: "#ffffff", color: "#B47428",
-                      padding: "13px 32px", borderRadius: 8,
-                      fontWeight: 700, fontSize: 15, display: "inline-flex",
-                      alignItems: "center", gap: 10, textDecoration: "none",
-                      border: "none", transition: "background 0.2s",
-                    }}
-                  >
+                {/* CTA buttons */}
+                <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+                  <Link to="/service/ai-powered-erp" style={{
+                    background: "linear-gradient(135deg, #F0CA7A 0%, #d4a33a 100%)",
+                    color: "#4A2800", padding: "13px 30px", borderRadius: 10,
+                    fontWeight: 800, fontSize: 14, display: "inline-flex",
+                    alignItems: "center", gap: 10, textDecoration: "none",
+                    fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.01em",
+                    boxShadow: "0 5px 0 rgba(100,60,0,0.55), 0 8px 24px rgba(240,202,122,0.22)",
+                  }}>
                     Explore AI ERP
-                    <i className="far fa-arrow-right" style={{ fontSize: 13 }}></i>
+                    <i className="far fa-arrow-right" style={{ fontSize: 12 }}></i>
                   </Link>
-                  <Link
-                    to="/contact"
-                    style={{
-                      background: "transparent", color: "#fff",
-                      padding: "13px 32px", borderRadius: 8,
-                      fontWeight: 600, fontSize: 15, display: "inline-flex",
-                      alignItems: "center", gap: 10, textDecoration: "none",
-                      border: "1px solid rgba(255,255,255,0.35)", transition: "background 0.2s",
-                    }}
-                  >
+                  <Link to="/contact" style={{
+                    background: "rgba(255,255,255,0.08)", color: "#fff",
+                    padding: "13px 30px", borderRadius: 10,
+                    fontWeight: 600, fontSize: 14, display: "inline-flex",
+                    alignItems: "center", gap: 10, textDecoration: "none",
+                    fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.01em",
+                    border: "1px solid rgba(255,255,255,0.22)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.14), 0 4px 16px rgba(0,0,0,0.22)",
+                  }}>
                     Request a Demo
-                    <i className="far fa-arrow-right" style={{ fontSize: 13 }}></i>
+                    <i className="far fa-arrow-right" style={{ fontSize: 12 }}></i>
                   </Link>
                 </div>
               </div>
 
-              {/* Right: module links — each independently navigable */}
-              <div style={{ flex: "0 1 280px", zIndex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
+              {/* Right: module links — 3D glass rows */}
+              <div style={{ flex: "0 1 300px", zIndex: 1, display: "flex", flexDirection: "column", gap: 9 }}>
                 {erpModules.map((m) => (
                   <Link
                     key={m.label}
                     to={m.to}
                     style={{
-                      background: "rgba(255,255,255,0.09)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      borderRadius: 10, padding: "11px 18px",
+                      background: "rgba(255,255,255,0.06)",
+                      border: "1px solid rgba(255,255,255,0.09)",
+                      borderTop: "1px solid rgba(255,255,255,0.16)",
+                      borderRadius: 12, padding: "12px 16px",
                       display: "flex", alignItems: "center", gap: 12,
                       color: "#fff", textDecoration: "none",
-                      transition: "background 0.18s",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 3px 8px rgba(0,0,0,0.18)",
+                      transition: "background 0.18s, transform 0.18s, box-shadow 0.18s",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.16)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.13)";
+                      e.currentTarget.style.transform = "translateX(4px)";
+                      e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.12), 0 5px 16px rgba(0,0,0,0.26)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                      e.currentTarget.style.transform = "translateX(0)";
+                      e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.07), 0 3px 8px rgba(0,0,0,0.18)";
+                    }}
                   >
-                    <i className={m.icon} style={{ color: "#F0CA7A", width: 18, textAlign: "center" }}></i>
-                    <span style={{ fontSize: 14, fontWeight: 500 }}>{m.label}</span>
-                    <i className="fas fa-check-circle" style={{ color: "#4ade80", marginLeft: "auto", fontSize: 13 }}></i>
+                    {/* Icon in mini amber glass badge */}
+                    <div style={{
+                      width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                      background: "linear-gradient(135deg, rgba(240,202,122,0.20) 0%, rgba(240,202,122,0.07) 100%)",
+                      border: "1px solid rgba(240,202,122,0.28)",
+                      boxShadow: "inset 0 1px 0 rgba(240,202,122,0.18)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                      <i className={m.icon} style={{ color: "#F0CA7A", fontSize: 13 }}></i>
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 600, fontFamily: "'DM Sans', sans-serif", flex: 1 }}>{m.label}</span>
+                    <div style={{
+                      width: 20, height: 20, borderRadius: "50%", flexShrink: 0,
+                      background: "rgba(74,222,128,0.14)",
+                      border: "1px solid rgba(74,222,128,0.35)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                      <i className="fas fa-check" style={{ color: "#4ade80", fontSize: 8 }}></i>
+                    </div>
                   </Link>
                 ))}
               </div>
