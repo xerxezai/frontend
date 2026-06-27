@@ -1,6 +1,6 @@
 ﻿import { Link } from "react-router-dom";
 import { services } from "../../data";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Image from "../utils/Image";
 import { Warp } from "@paper-design/shaders-react";
 
@@ -59,11 +59,26 @@ const erpStats = [
   { val: "99.9%", label: "System uptime SLA" },
 ];
 
+const headerStats = [
+  { val: "8+",   label: "Services" },
+  { val: "50+",  label: "Projects Delivered" },
+  { val: "12+",  label: "AI Capabilities" },
+];
+
 const ServiceSection3 = ({ mainSection }: Props) => {
   const displayedOthers = useMemo(
     () => (mainSection ? otherServices : otherServices.slice(0, 3)),
     [mainSection]
   );
+  const [search, setSearch] = useState("");
+
+  const filteredOthers = useMemo(() => {
+    if (!search.trim()) return displayedOthers;
+    const q = search.toLowerCase();
+    return displayedOthers.filter(
+      (s) => s.title.toLowerCase().includes(q) || s.description?.toLowerCase().includes(q)
+    );
+  }, [displayedOthers, search]);
 
   return (
     <section className="service-section-2 section-padding fix" style={{ background: "#F2EFE9" }}>
@@ -79,20 +94,83 @@ const ServiceSection3 = ({ mainSection }: Props) => {
       )}
 
       <div className="container position-relative z-1">
-        <div className="section-title text-center" style={{ marginBottom: 48 }}>
-          <div style={{
-            fontSize: 11, fontWeight: 600, letterSpacing: "0.18em",
-            textTransform: "uppercase", color: "#C9883A",
-            fontFamily: "'DM Sans', sans-serif", marginBottom: 12,
-          }}>Our Services</div>
-          <h2 style={{
-            fontFamily: "'Playfair Display', serif", fontWeight: 900,
-            fontSize: "clamp(28px, 4vw, 52px)", color: "#1A1A1A",
-            letterSpacing: "-0.02em", lineHeight: 1.1,
-          }}>
-            End-to-End Solutions for<br />
-            <span style={{ fontStyle: "italic", color: "#C9883A" }}>Every Enterprise Challenge</span>
-          </h2>
+        {/* ── Hero-style page header ── */}
+        <div style={{ marginBottom: 56 }} data-aos="fade-up" data-aos-duration="800" data-aos-once="true">
+          {/* Badge */}
+          <div style={{ marginBottom: 22 }}>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              border: "1px solid rgba(30,30,30,0.22)", borderRadius: 999,
+              padding: "6px 18px", fontSize: 11, fontWeight: 700,
+              letterSpacing: "0.16em", textTransform: "uppercase",
+              color: "#1A1A1A", fontFamily: "'DM Sans', sans-serif",
+              background: "rgba(201,136,58,0.08)",
+            }}>
+              <i className="fas fa-sparkles" style={{ color: "#C9883A", fontSize: 10 }}></i>
+              End-to-End Enterprise Solutions
+            </span>
+          </div>
+
+          {/* Title + Search row */}
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
+            <div style={{ flex: "1 1 460px" }}>
+              <h1 style={{
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+                fontSize: "clamp(34px, 5vw, 64px)", lineHeight: 1.08,
+                color: "#1A1A1A", margin: 0, letterSpacing: "-0.03em",
+              }}>
+                Intelligent Services<br />
+                <span style={{ color: "#C9883A" }}>Built for Scale</span>
+              </h1>
+
+              <p style={{
+                marginTop: 20, color: "#4B4B4B", fontSize: 16, lineHeight: 1.75,
+                maxWidth: 580, fontFamily: "'DM Sans', sans-serif",
+              }}>
+                From AI-powered ERP to cloud infrastructure and mobile platforms —
+                XERXEZ delivers enterprise-grade technology that learns, adapts,
+                and grows with your business.
+              </p>
+
+              {/* Stats row */}
+              <div style={{ display: "flex", gap: 36, marginTop: 28, flexWrap: "wrap" }}>
+                {headerStats.map((s) => (
+                  <div key={s.val} style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                    <span style={{ fontSize: 22, fontWeight: 800, color: "#1A1A1A", fontFamily: "'DM Sans', sans-serif" }}>{s.val}</span>
+                    <span style={{ fontSize: 13, color: "#6B6B6B", fontFamily: "'DM Sans', sans-serif" }}>{s.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Search box */}
+            <div style={{ flex: "0 1 320px", alignSelf: "center" }}>
+              <div style={{
+                display: "flex", alignItems: "center", gap: 10,
+                background: "#ffffff", border: "1.5px solid rgba(30,30,30,0.14)",
+                borderRadius: 12, padding: "13px 18px",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+              }}>
+                <i className="fas fa-search" style={{ color: "#9B9B9B", fontSize: 14, flexShrink: 0 }}></i>
+                <input
+                  type="text"
+                  placeholder="Search services..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  style={{
+                    border: "none", outline: "none", background: "transparent",
+                    fontSize: 14, color: "#1A1A1A", width: "100%",
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                />
+                {search && (
+                  <button onClick={() => setSearch("")} style={{ border: "none", background: "none", cursor: "pointer", color: "#9B9B9B", padding: 0, fontSize: 13 }}>
+                    <i className="fas fa-times"></i>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ── FLAGSHIP: AI-Powered ERP ── */}
@@ -212,7 +290,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
 
         {/* ── OTHER SERVICES ── */}
         <div className={`row g-4`}>
-          {displayedOthers.map((service, index) => (
+          {filteredOthers.map((service, index) => (
             <div
               key={service.id}
               className="col-xl-3 col-lg-4 col-md-6"
