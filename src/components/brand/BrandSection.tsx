@@ -53,21 +53,24 @@ const BrandSection = ({ variant }: Props) => (
                 alignItems: "center",
                 gap: 10,
                 padding: "22px 14px",
-                background: "#ffffff",
-                border: "1px solid #E8E3DA",
+                background: "linear-gradient(160deg, #faf7f3 0%, #ede6db 100%)",
+                border: "1px solid rgba(210, 195, 175, 0.55)",
                 borderRadius: 14,
-                transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                boxShadow:
+                  "0 5px 0 rgba(160, 135, 105, 0.42), 0 8px 22px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.88)",
+                transition: "transform 0.18s ease, box-shadow 0.18s ease",
                 cursor: "default",
+                transform: "translateZ(0)",
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLDivElement;
-                el.style.borderColor = "#C9883A";
-                el.style.boxShadow = "0 6px 24px rgba(201,136,58,0.12)";
+                el.style.transform = "translateY(-3px)";
+                el.style.boxShadow = "0 8px 0 rgba(160,135,105,0.42), 0 14px 28px rgba(201,136,58,0.15), inset 0 1px 0 rgba(255,255,255,0.88)";
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLDivElement;
-                el.style.borderColor = "#E8E3DA";
-                el.style.boxShadow = "none";
+                el.style.transform = "translateZ(0)";
+                el.style.boxShadow = "0 5px 0 rgba(160,135,105,0.42), 0 8px 22px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.88)";
               }}
             >
               <i
