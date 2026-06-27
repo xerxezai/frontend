@@ -157,6 +157,23 @@ const HeroSection = () => {
         opacity: 0.38,
       }} aria-hidden="true" />
 
+      {/* ── Floating particles ── */}
+      {[
+        { size: 10, top: "14%",  left: "8%",  dur: "7s",  delay: "0s",   anim: "xzFloat" },
+        { size: 6,  top: "62%",  left: "4%",  dur: "9s",  delay: "1.2s", anim: "xzFloatB" },
+        { size: 14, top: "80%",  left: "15%", dur: "11s", delay: "0.6s", anim: "xzFloatC" },
+        { size: 8,  top: "22%",  left: "90%", dur: "8s",  delay: "2s",   anim: "xzFloat" },
+        { size: 12, top: "55%",  left: "86%", dur: "10s", delay: "0.3s", anim: "xzFloatB" },
+        { size: 5,  top: "88%",  left: "78%", dur: "6.5s",delay: "1.8s", anim: "xzFloatC" },
+        { size: 9,  top: "40%",  left: "96%", dur: "12s", delay: "0.9s", anim: "xzFloat" },
+      ].map((p, i) => (
+        <div key={i} className="xz-particle" style={{
+          width: p.size, height: p.size, top: p.top, left: p.left,
+          background: i % 2 === 0 ? "rgba(204,120,92,0.45)" : "rgba(201,136,58,0.35)",
+          animation: `${p.anim} ${p.dur} ease-in-out ${p.delay} infinite`,
+        }} aria-hidden="true" />
+      ))}
+
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <div className="row g-5 align-items-start">
 
@@ -169,6 +186,8 @@ const HeroSection = () => {
               background: "#efe9de", border: "1px solid #e6dfd8",
               borderRadius: 9999, padding: "5px 14px 5px 10px",
               marginBottom: 36,
+              animation: "xzFadeUp 0.6s ease both",
+              animationDelay: "0.05s",
             }}>
               <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
                 <span style={{
@@ -190,9 +209,8 @@ const HeroSection = () => {
               </span>
             </div>
 
-            {/* Three-line dramatic headline */}
+            {/* Three-line dramatic headline — staggered entrance */}
             <h1 style={{ marginBottom: 0, lineHeight: 1.0 }}>
-              {/* Line 1 — plain editorial */}
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond', Garamond, serif",
@@ -202,11 +220,12 @@ const HeroSection = () => {
                 letterSpacing: "-0.02em",
                 lineHeight: 1.08,
                 marginBottom: 4,
+                animation: "xzFadeUp 0.7s ease both",
+                animationDelay: "0.20s",
               }}>
                 The Future of
               </span>
 
-              {/* Line 2 — large italic accent (like RADAI's teal "Engineering AI") */}
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond', Garamond, serif",
@@ -217,11 +236,12 @@ const HeroSection = () => {
                 letterSpacing: "-0.035em",
                 lineHeight: 0.9,
                 marginBottom: 10,
+                animation: "xzFadeUp 0.7s ease both",
+                animationDelay: "0.42s",
               }}>
                 Enterprise AI
               </span>
 
-              {/* Line 3 — muted resolution */}
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond', Garamond, serif",
@@ -230,6 +250,8 @@ const HeroSection = () => {
                 color: "#3d3d3a",
                 letterSpacing: "-0.015em",
                 lineHeight: 1.12,
+                animation: "xzFadeUp 0.7s ease both",
+                animationDelay: "0.62s",
               }}>
                 is here —{" "}
                 <em style={{ color: "#C9883A", fontStyle: "italic" }}>for every enterprise.</em>
@@ -240,6 +262,8 @@ const HeroSection = () => {
             <div style={{
               display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
               marginTop: 28, marginBottom: 24,
+              animation: "xzFadeIn 0.6s ease both",
+              animationDelay: "0.85s",
             }}>
               <span style={{
                 fontFamily: "'Inter', sans-serif",
@@ -271,14 +295,20 @@ const HeroSection = () => {
               fontSize: 16, lineHeight: 1.65,
               color: "#3d3d3a",
               maxWidth: 500, marginBottom: 40,
+              animation: "xzFadeUp 0.6s ease both",
+              animationDelay: "1.0s",
             }}>
               XERXEZ delivers intelligent ERP, DevSecOps pipelines, and cloud
               infrastructure that transform how enterprises operate at scale.
             </p>
 
             {/* CTAs */}
-            <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-              <Link to="/contact" style={{
+            <div style={{
+              display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap",
+              animation: "xzScaleIn 0.6s ease both",
+              animationDelay: "1.18s",
+            }}>
+              <Link to="/contact" className="xz-scale-btn" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 background: "#cc785c",
                 color: "#ffffff",
@@ -286,7 +316,7 @@ const HeroSection = () => {
                 fontSize: 14, fontWeight: 500, lineHeight: 1,
                 padding: "13px 24px", borderRadius: 8,
                 textDecoration: "none", cursor: "pointer",
-                transition: "background 150ms ease",
+                transition: "background 150ms ease, transform 0.22s ease, box-shadow 0.22s ease",
               }}
                 onMouseOver={e => (e.currentTarget.style.background = "#a9583e")}
                 onMouseOut={e => (e.currentTarget.style.background = "#cc785c")}

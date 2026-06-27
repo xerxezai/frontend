@@ -1,5 +1,45 @@
 import { Link } from "react-router-dom";
+import { useRef } from "react";
 import { Warp } from "@paper-design/shaders-react";
+
+const Tilt3D = ({ children }: { children: React.ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rx = (0.5 - y) * 16;
+    const ry = (x - 0.5) * 16;
+    el.style.transform = `perspective(960px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px) scale(1.01)`;
+    el.style.boxShadow = `0 24px 56px rgba(201,136,58,0.22), 0 0 0 1.5px rgba(201,136,58,0.35)`;
+  };
+
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.transform = "perspective(960px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
+    el.style.boxShadow = "none";
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{
+        transition: "transform 0.14s ease-out, box-shadow 0.14s ease-out",
+        transformStyle: "preserve-3d",
+        borderRadius: 20,
+        willChange: "transform",
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const SERVICES = [
   {
@@ -86,7 +126,7 @@ const ServiceSection2 = () => (
         </h2>
       </div>
 
-      <div className="row g-4">
+      <div className="row g-4 xz-stagger-grid">
         {SERVICES.map((card, index) => (
           <div
             key={card.slug}
@@ -97,6 +137,7 @@ const ServiceSection2 = () => (
             data-aos-easing="ease-out-cubic"
             data-aos-once="true"
           >
+            <Tilt3D>
             {/* Shader card wrapper */}
             <div style={{ position: "relative", height: 300, borderRadius: 20, overflow: "hidden" }}>
 
@@ -176,6 +217,7 @@ const ServiceSection2 = () => (
                 </Link>
               </div>
             </div>
+            </Tilt3D>
           </div>
         ))}
       </div>
