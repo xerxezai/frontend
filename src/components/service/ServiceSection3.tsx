@@ -1,6 +1,6 @@
 ﻿import { Link } from "react-router-dom";
 import { services } from "../../data";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Image from "../utils/Image";
 import { Warp } from "@paper-design/shaders-react";
 
@@ -70,15 +70,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
     () => (mainSection ? otherServices : otherServices.slice(0, 3)),
     [mainSection]
   );
-  const [search, setSearch] = useState("");
 
-  const filteredOthers = useMemo(() => {
-    if (!search.trim()) return displayedOthers;
-    const q = search.toLowerCase();
-    return displayedOthers.filter(
-      (s) => s.title.toLowerCase().includes(q) || s.description?.toLowerCase().includes(q)
-    );
-  }, [displayedOthers, search]);
 
   return (
     <section className="service-section-2 section-padding fix" style={{ background: "#F2EFE9" }}>
@@ -143,48 +135,58 @@ const ServiceSection3 = ({ mainSection }: Props) => {
               </div>
             </div>
 
-            {/* Search box — 3D raised */}
-            <div style={{ flex: "0 1 320px", alignSelf: "center" }}>
-              {/* outer shell gives the 3D lift */}
+            {/* CTA card — 3D raised */}
+            <div style={{ flex: "0 1 300px", alignSelf: "center" }}>
               <div style={{
-                borderRadius: 16,
-                padding: 3,
-                background: "linear-gradient(145deg, #ffffff 0%, #d6cfc7 100%)",
-                boxShadow: "0 8px 0 rgba(160,140,124,0.55), 0 12px 28px rgba(0,0,0,0.14)",
+                borderRadius: 18,
+                background: "linear-gradient(160deg, #faf7f3 0%, #e8e0d4 100%)",
+                border: "1px solid rgba(210,195,175,0.6)",
+                boxShadow: "0 6px 0 rgba(155,130,100,0.45), 0 12px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.9)",
+                padding: "28px 26px",
               }}>
-                {/* inner face */}
+                {/* Icon badge */}
                 <div style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "linear-gradient(160deg, #fefcfa 0%, #f5f1ec 100%)",
-                  borderRadius: 13, padding: "13px 18px",
-                  boxShadow: "inset 0 1px 3px rgba(255,255,255,0.9), inset 0 -1px 2px rgba(0,0,0,0.04)",
-                  border: "1px solid rgba(210,200,190,0.6)",
+                  width: 44, height: 44, borderRadius: 12, marginBottom: 16,
+                  background: "linear-gradient(135deg, #C9883A 0%, #e8a84e 100%)",
+                  boxShadow: "0 4px 0 rgba(150,95,30,0.5), 0 6px 14px rgba(201,136,58,0.30)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
-                  <div style={{
-                    width: 30, height: 30, borderRadius: 8, flexShrink: 0,
-                    background: "linear-gradient(135deg, #C9883A 0%, #e8a84e 100%)",
-                    boxShadow: "0 3px 0 rgba(150,95,30,0.5), 0 4px 10px rgba(201,136,58,0.35)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <i className="fas fa-search" style={{ color: "#fff", fontSize: 12 }}></i>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search services..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    style={{
-                      border: "none", outline: "none", background: "transparent",
-                      fontSize: 14, color: "#1A1A1A", width: "100%",
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}
-                  />
-                  {search && (
-                    <button onClick={() => setSearch("")} style={{ border: "none", background: "none", cursor: "pointer", color: "#9B9B9B", padding: 0, fontSize: 13 }}>
-                      <i className="fas fa-times"></i>
-                    </button>
-                  )}
+                  <i className="fas fa-rocket" style={{ color: "#fff", fontSize: 18 }}></i>
                 </div>
+
+                <p style={{
+                  fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
+                  textTransform: "uppercase", color: "#C9883A",
+                  fontFamily: "'DM Sans', sans-serif", marginBottom: 6,
+                }}>Free Consultation</p>
+
+                <h4 style={{
+                  fontSize: 18, fontWeight: 800, color: "#1A1A1A", lineHeight: 1.25,
+                  fontFamily: "'DM Sans', sans-serif", marginBottom: 10,
+                }}>
+                  Let's Build<br />Something Great
+                </h4>
+
+                <p style={{
+                  fontSize: 13, color: "#6B6B6B", lineHeight: 1.65,
+                  fontFamily: "'DM Sans', sans-serif", marginBottom: 20,
+                }}>
+                  Talk to our experts and get a tailored solution for your enterprise.
+                </p>
+
+                {/* Primary button */}
+                <Link to="/contact" style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  background: "linear-gradient(135deg, #C9883A 0%, #e8a84e 100%)",
+                  color: "#fff", fontWeight: 700, fontSize: 13,
+                  padding: "11px 22px", borderRadius: 10, textDecoration: "none",
+                  fontFamily: "'DM Sans', sans-serif",
+                  boxShadow: "0 4px 0 rgba(150,95,30,0.5), 0 6px 18px rgba(201,136,58,0.30)",
+                  letterSpacing: "0.02em",
+                }}>
+                  Book a Free Demo
+                  <i className="far fa-arrow-right" style={{ fontSize: 11 }}></i>
+                </Link>
               </div>
             </div>
           </div>
@@ -307,7 +309,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
 
         {/* ── OTHER SERVICES ── */}
         <div className={`row g-4`}>
-          {filteredOthers.map((service, index) => (
+          {displayedOthers.map((service, index) => (
             <div
               key={service.id}
               className="col-xl-3 col-lg-4 col-md-6"
