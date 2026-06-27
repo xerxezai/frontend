@@ -11934,7 +11934,7 @@ body {
 
 /* ── Footer ── */
 .footer-section {
-  background: #111111 !important; border-top: none !important; position: relative;
+  background: #F2EFE9 !important; border-top: none !important; position: relative;
 }
 .footer-section::before {
   content: none;
@@ -11942,24 +11942,24 @@ body {
 .footer-section .widget-head h3 {
   font-family: 'DM Sans', sans-serif !important; font-size: 11px !important;
   font-weight: 600 !important; letter-spacing: 0.14em !important;
-  text-transform: uppercase !important; color: rgba(255,255,255,0.3) !important;
+  text-transform: uppercase !important; color: #141413 !important;
   margin-top: 0 !important; margin-bottom: 16px !important;
 }
 .footer-section .footer-content p {
   font-family: 'DM Sans', sans-serif !important; font-size: 13px !important;
-  line-height: 1.75 !important; color: rgba(255,255,255,0.45) !important;
+  line-height: 1.75 !important; color: #6c6a64 !important;
 }
 .footer-section .list-area li a {
   font-family: 'DM Sans', sans-serif !important; font-size: 13px !important;
-  color: rgba(255,255,255,0.45) !important; transition: all 0.2s ease !important;
+  color: #6c6a64 !important; transition: all 0.2s ease !important;
   display: inline-block !important; padding: 4px 0 !important;
 }
-.footer-section .list-area li a:hover { color: #ffffff !important; padding-left: 6px !important; }
+.footer-section .list-area li a:hover { color: #cc785c !important; padding-left: 6px !important; }
 .footer-section .social-icon a {
   width: 38px !important; height: 38px !important; border-radius: 50% !important;
-  background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgba(201,136,58,0.08) !important; border: 1px solid rgba(201,136,58,0.18) !important;
   display: inline-flex !important; align-items: center !important; justify-content: center !important;
-  color: rgba(255,255,255,0.45) !important; transition: all 0.3s ease !important; margin-right: 6px !important;
+  color: #C9883A !important; transition: all 0.3s ease !important; margin-right: 6px !important;
 }
 .footer-section .social-icon a:hover {
   background: #C9883A !important; border-color: #C9883A !important; color: #fff !important;
@@ -11971,19 +11971,19 @@ body {
   justify-content: center !important; flex-shrink: 0 !important;
 }
 .footer-section .footer-contect li .content h5 {
-  color: rgba(255,255,255,0.3) !important; font-size: 10px !important;
+  color: #9B9690 !important; font-size: 10px !important;
   font-family: 'DM Sans', sans-serif !important; letter-spacing: 0.1em !important;
   text-transform: uppercase !important; margin-bottom: 2px !important;
 }
 .footer-section .footer-contect li .content p,
 .footer-section .footer-contect li .content a {
-  color: rgba(255,255,255,0.6) !important; font-size: 13px !important; font-family: 'DM Sans', sans-serif !important;
+  color: #6c6a64 !important; font-size: 13px !important; font-family: 'DM Sans', sans-serif !important;
 }
 .footer-bottom-section {
-  background: #0a0a0a !important; border-top: 1px solid rgba(255,255,255,0.06) !important;
+  background: #F2EFE9 !important; border-top: 1px solid #e6dfd8 !important;
 }
 .footer-bottom-section p, .footer-bottom-section a {
-  color: rgba(255,255,255,0.3) !important; font-size: 12px !important; font-family: 'DM Sans', sans-serif !important;
+  color: #9B9690 !important; font-size: 12px !important; font-family: 'DM Sans', sans-serif !important;
 }
 
 /* ── Brand/Partner logos ── */
@@ -11998,18 +11998,18 @@ body {
 
 /* ══ FOOTER BUG FIXES ══ */
 
-/* 1. Copyright bar — match main footer black */
+/* 1. Copyright bar — match main footer beige */
 .footer-bottom {
-  background: #0a0a0a !important;
-  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  background: #F2EFE9 !important;
+  border-top: 1px solid #e6dfd8 !important;
 }
 .footer-bottom p,
 .footer-bottom .footer-menu li a {
-  color: rgba(255,255,255,0.30) !important;
+  color: #9B9690 !important;
   font-family: 'DM Sans', sans-serif !important;
   font-size: 12px !important;
 }
-.footer-bottom .footer-menu li a:hover { color: rgba(255,255,255,0.65) !important; }
+.footer-bottom .footer-menu li a:hover { color: #cc785c !important; }
 
 /* 2. Remove the white dot bullet overlapping link text */
 .footer-widget-wrapper .single-footer-widget .list-area li a::before {
@@ -12021,7 +12021,7 @@ body {
 
 /* Cover the bg-4 variant of footer-bottom too */
 .footer-bottom.bg-4 {
-  background: #0a0a0a !important;
+  background: #F2EFE9 !important;
 }
 
 /* ══ BACKGROUND AUDIT CORRECTIONS ══ */
@@ -12257,7 +12257,7 @@ body {
 
 /* ── Footer: Cream Light Theme ── */
 .footer-section {
-  background: #F8F7F4 !important;
+  background: #F2EFE9 !important;
   background-image: none !important;
 }
 .footer-section .widget-head h3 {
@@ -12303,8 +12303,8 @@ body {
 }
 /* Bottom bar matches footer */
 .footer-bottom {
-  background: #F8F7F4 !important;
-  border-top: 1px solid #E8E6E0 !important;
+  background: #F2EFE9 !important;
+  border-top: 1px solid #e6dfd8 !important;
 }
 .footer-bottom p, .footer-bottom .footer-menu li a {
   color: #888888 !important;
