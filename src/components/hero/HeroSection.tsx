@@ -212,11 +212,6 @@ const HeroSection = () => {
   const [scrolled, setScrolled] = useState(false);
 
   // Refs
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  const mousePos = useRef({ x: -100, y: -100 });
-  const ringPos = useRef({ x: -100, y: -100 });
-  const cursorRaf = useRef<number>(0);
   const btnRef = useRef<HTMLAnchorElement>(null);
   const holoRef = useRef<HTMLDivElement>(null);
   const holoGlowRef = useRef<HTMLDivElement>(null);
@@ -278,73 +273,6 @@ const HeroSection = () => {
     return () => { clearTimeout(startDelay); clearInterval(glitchInterval); };
   }, [prefersReduced]);
 
-  // ── Custom cursor ──
-  useEffect(() => {
-    if (prefersReduced) return;
-    document.body.style.cursor = "none";
-
-    const onMove = (e: MouseEvent) => {
-      mousePos.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
-      }
-    };
-    window.addEventListener("mousemove", onMove);
-
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-    const animateRing = () => {
-      ringPos.current.x = lerp(ringPos.current.x, mousePos.current.x, 0.1);
-      ringPos.current.y = lerp(ringPos.current.y, mousePos.current.y, 0.1);
-      if (ringRef.current) {
-        ringRef.current.style.transform =
-          `translate(${ringPos.current.x - 16}px, ${ringPos.current.y - 16}px)`;
-      }
-      cursorRaf.current = requestAnimationFrame(animateRing);
-    };
-    cursorRaf.current = requestAnimationFrame(animateRing);
-
-    const expand = () => {
-      if (!ringRef.current) return;
-      ringRef.current.style.width = "50px";
-      ringRef.current.style.height = "50px";
-      ringRef.current.style.marginLeft = "-9px";
-      ringRef.current.style.marginTop = "-9px";
-      ringRef.current.style.borderColor = "rgba(201,136,58,0.7)";
-    };
-    const contract = () => {
-      if (!ringRef.current) return;
-      ringRef.current.style.width = "32px";
-      ringRef.current.style.height = "32px";
-      ringRef.current.style.marginLeft = "0px";
-      ringRef.current.style.marginTop = "0px";
-      ringRef.current.style.borderColor = "rgba(201,136,58,0.45)";
-    };
-
-    const els = document.querySelectorAll("a, button");
-    els.forEach(el => { el.addEventListener("mouseenter", expand); el.addEventListener("mouseleave", contract); });
-
-    return () => {
-      document.body.style.cursor = "";
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(cursorRaf.current);
-      els.forEach(el => { el.removeEventListener("mouseenter", expand); el.removeEventListener("mouseleave", contract); });
-    };
-  }, [prefersReduced]);
-
-  // ── Magnetic button ──
-  const onBtnMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (prefersReduced) return;
-    const el = btnRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const dx = (e.clientX - (rect.left + rect.width / 2)) * 0.28;
-    const dy = (e.clientY - (rect.top + rect.height / 2)) * 0.28;
-    el.style.transform = `translate(${dx}px, ${dy}px)`;
-  };
-  const onBtnLeave = () => {
-    if (btnRef.current) btnRef.current.style.transform = "translate(0,0)";
-  };
-
   // ── Ripple on click ──
   const onBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const el = btnRef.current;
@@ -392,30 +320,7 @@ const HeroSection = () => {
   const headingText = glitching ? glitchText : (prefersReduced ? FULL_TEXT : displayed);
 
   return (
-    <>
-      {/* Custom cursor */}
-      {!prefersReduced && (
-        <>
-          <div ref={dotRef} aria-hidden="true" style={{
-            position: "fixed", top: 0, left: 0,
-            width: 8, height: 8, borderRadius: "50%",
-            background: "#C9883A",
-            boxShadow: "0 0 10px rgba(201,136,58,0.85)",
-            pointerEvents: "none", zIndex: 99999,
-            willChange: "transform",
-          }} />
-          <div ref={ringRef} aria-hidden="true" style={{
-            position: "fixed", top: 0, left: 0,
-            width: 32, height: 32, borderRadius: "50%",
-            border: "1.5px solid rgba(201,136,58,0.45)",
-            pointerEvents: "none", zIndex: 99998,
-            transition: "width 0.22s ease, height 0.22s ease, margin 0.22s ease, border-color 0.22s ease",
-            willChange: "transform",
-          }} />
-        </>
-      )}
-
-      <section style={{
+    <section style={{
         background: "#EDE8DF",
         padding: "24px 0 64px",
         minHeight: "calc(100vh - 70px)",
@@ -592,8 +497,6 @@ const HeroSection = () => {
                 <Link
                   to="/contact"
                   ref={btnRef}
-                  onMouseMove={onBtnMove}
-                  onMouseLeave={onBtnLeave}
                   onClick={onBtnClick}
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
@@ -601,7 +504,7 @@ const HeroSection = () => {
                     fontFamily: "'Inter', sans-serif",
                     fontSize: 14, fontWeight: 500, lineHeight: 1,
                     padding: "13px 24px", borderRadius: 8,
-                    textDecoration: "none", cursor: "none",
+                    textDecoration: "none", cursor: "pointer",
                     position: "relative", overflow: "hidden",
                     transition: "background 150ms ease, transform 0.18s ease",
                     boxShadow: "0 4px 0 rgba(140,60,30,0.38), 0 6px 20px rgba(204,120,92,0.22)",
@@ -624,7 +527,7 @@ const HeroSection = () => {
                   fontSize: 14, fontWeight: 500, lineHeight: 1,
                   padding: "13px 24px", borderRadius: 8,
                   border: "1px solid #dddad4",
-                  textDecoration: "none", cursor: "none",
+                  textDecoration: "none",
                   transition: "border-color 150ms ease, background 150ms ease",
                 }}
                   onMouseOver={e => {
@@ -689,7 +592,6 @@ const HeroSection = () => {
                   transition: "transform 0.12s ease-out",
                   transformStyle: "preserve-3d",
                   animation: prefersReduced ? "none" : "xzHoloBorder 3.5s ease-in-out infinite",
-                  cursor: "none",
                 }}
               >
                 {/* Rainbow shimmer overlay */}
@@ -801,7 +703,6 @@ const HeroSection = () => {
           }
         `}</style>
       </section>
-    </>
   );
 };
 
