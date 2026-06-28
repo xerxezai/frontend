@@ -1026,3 +1026,192 @@
   box-shadow: 0 0 0 3px rgba(201,136,58,0.10), 0 16px 40px rgba(201,136,58,0.14) !important;
 }
 
+
+/* ─── 23. SCROLL-REVEAL UTILITY (.xz-reveal) ────────────────────── */
+/*
+  Add class="xz-reveal" to any element.
+  GsapAnimations picks it up automatically.
+  Direction via data-reveal-dir="up|left|right|scale" (default: up).
+  Delay via data-reveal-delay="0.1" (seconds).
+*/
+.xz-reveal {
+  will-change: transform, opacity;
+}
+
+
+/* ─── 24. GLOBAL LINK MICRO-INTERACTIONS ────────────────────────── */
+
+a:not(.xz-btn):not([class*="btn"]):not(.xz-hover-underline) {
+  transition: color var(--xz-dur-fast) ease;
+}
+
+/* Nav and footer text links */
+.xz-nav-link {
+  position: relative;
+  text-decoration: none;
+  transition: color var(--xz-dur-base) ease;
+}
+.xz-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--xz-coral);
+  border-radius: 2px;
+  transition: width var(--xz-dur-base) cubic-bezier(0.23, 1, 0.32, 1);
+}
+.xz-nav-link:hover::after,
+.xz-nav-link.active::after {
+  width: 100%;
+}
+
+
+/* ─── 25. CURSOR POINTER ON INTERACTIVE ELEMENTS ────────────────── */
+
+button,
+[role="button"],
+.xz-card[onclick],
+.xz-card--dark[onclick],
+.xz-card--feature,
+label[for],
+summary {
+  cursor: pointer;
+}
+
+/* Cards that act as links */
+.xz-card-link {
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+
+/* ─── 26. SECTION EYEBROW ACCENT LINE ───────────────────────────── */
+
+.xz-eyebrow-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--xz-font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--xz-coral);
+  margin-bottom: var(--xz-sp-2);
+}
+.xz-eyebrow-line::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--xz-coral);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+
+/* ─── 27. SECTION TRANSITION STRIP ──────────────────────────────── */
+/*  Thin gradient strip between alternating section backgrounds */
+.xz-section-strip {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--xz-coral) 40%, rgba(201,136,58,0.4) 60%, transparent 100%);
+  opacity: 0.45;
+  border: none;
+  margin: 0;
+}
+
+
+/* ─── 28. IMPROVED IMAGE HOVER (ALL PAGES) ───────────────────────── */
+
+figure.xz-figure,
+.xz-img-wrap {
+  overflow: hidden;
+  border-radius: var(--xz-r-lg);
+}
+figure.xz-figure img,
+.xz-img-wrap img {
+  transition: transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+  display: block;
+  width: 100%;
+}
+figure.xz-figure:hover img,
+.xz-img-wrap:hover img {
+  transform: scale(1.06);
+}
+
+
+/* ─── 29. READING PROGRESS BAR ───────────────────────────────────── */
+
+.xz-progress-bar {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--xz-coral), #C9883A);
+  z-index: 9998;
+  transform-origin: left;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+
+/* ─── 30. TOOLTIP UTILITY ────────────────────────────────────────── */
+
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--xz-ink);
+  color: rgba(255,255,255,0.9);
+  font-family: var(--xz-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 100;
+}
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* ─── 31. SMOOTH SKELETON LOADER ─────────────────────────────────── */
+
+@keyframes xzSkeleton {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.xz-skeleton {
+  background: linear-gradient(90deg, #ede8df 25%, #e4ddd4 50%, #ede8df 75%);
+  background-size: 200% 100%;
+  animation: xzSkeleton 1.6s ease-in-out infinite;
+  border-radius: var(--xz-r-md);
+}
+
+
+/* ─── 32. GLOBAL SECTION FADE-IN ON LOAD ─────────────────────────── */
+
+main > section,
+main > div[class*="section"] {
+  animation: xzFadeIn 0.4s ease both;
+}
+/* Only first-render: subsequent sections reveal via AOS/GSAP */
+main > section ~ section,
+main > div[class*="section"] ~ div[class*="section"] {
+  animation: none;
+}
+
