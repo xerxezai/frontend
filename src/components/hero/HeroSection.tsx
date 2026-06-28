@@ -542,7 +542,7 @@ const HeroSection = () => {
 
             {/* ── RIGHT: Holographic card ── */}
             <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center"
-              style={{ paddingTop: 80 }}>
+              style={{ paddingTop: 30 }}>
               <div
                 ref={holoRef}
                 onMouseMove={onHoloMove}
