@@ -14,14 +14,22 @@ const CYCLE_WORDS = [
 ];
 
 const FULL_TEXT = "Enterprise AI";
-const BAR_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-const BAR_BASE = [62, 78, 55, 85, 70, 92];
-const LINE_Y = [20, 35, 28, 52, 45, 68, 60, 78, 72, 88];
 
-// ─── Live AI Dashboard ────────────────────────────────────────────────────────
-const AIDashboard = ({ prefersReduced }: { prefersReduced: boolean }) => {
-  const [time, setTime] = useState(new Date());
-  const [bars, setBars] = useState(BAR_BASE);
+// ─── Network layout ────────────────────────────────────────────────────────────
+const HUB = { cx: 260, cy: 222, r: 44 };
+
+const NET_NODES = [
+  { id: "fin",   cx: 98,  cy: 82,  r: 24, label: "Finance",   short: "FIN",   color: "#F5A623", glow: "rgba(245,166,35,0.28)"  },
+  { id: "cloud", cx: 402, cy: 68,  r: 24, label: "Cloud",     short: "CLOUD", color: "#6B3FA0", glow: "rgba(107,63,160,0.28)"  },
+  { id: "hr",    cx: 456, cy: 215, r: 22, label: "HR",        short: "HR",    color: "#E8733A", glow: "rgba(232,115,58,0.28)"  },
+  { id: "crm",   cx: 402, cy: 358, r: 22, label: "CRM",       short: "CRM",   color: "#C4842A", glow: "rgba(196,132,42,0.28)"  },
+  { id: "ai",    cx: 260, cy: 408, r: 26, label: "AI/ML",     short: "AI",    color: "#8B5CF6", glow: "rgba(139,92,246,0.28)"  },
+  { id: "dev",   cx: 78,  cy: 330, r: 22, label: "DevSecOps", short: "DEV",   color: "#D46A1A", glow: "rgba(212,106,26,0.28)"  },
+];
+
+// ─── RADAI-Style Network Visualization ────────────────────────────────────────
+const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => {
+  const [time, setTime]     = useState(new Date());
   const [mounted, setMounted] = useState(false);
   const [counts, setCounts] = useState({ uptime: 0, models: 0, clients: 0 });
   const [flashIdx, setFlashIdx] = useState(-1);
@@ -32,14 +40,13 @@ const AIDashboard = ({ prefersReduced }: { prefersReduced: boolean }) => {
   }, []);
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 80);
+    const t = setTimeout(() => setMounted(true), 120);
     return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
     if (prefersReduced) { setCounts({ uptime: 999, models: 247, clients: 120 }); return; }
-    const start = Date.now();
-    const dur = 2000;
+    const start = Date.now(), dur = 2200;
     const id = setInterval(() => {
       const p = Math.min((Date.now() - start) / dur, 1);
       const e = 1 - Math.pow(2, -10 * p);
@@ -52,18 +59,12 @@ const AIDashboard = ({ prefersReduced }: { prefersReduced: boolean }) => {
   useEffect(() => {
     if (prefersReduced) return;
     const id = setInterval(() => {
-      setBars(b => b.map(v => Math.max(38, Math.min(96, v + (Math.random() - 0.5) * 18))));
       setFlashIdx(Math.floor(Math.random() * 3));
-      setTimeout(() => setFlashIdx(-1), 700);
-    }, 3000);
+      setTimeout(() => setFlashIdx(-1), 800);
+    }, 3500);
     return () => clearInterval(id);
   }, [prefersReduced]);
 
-  const W = 260, H = 64;
-  const pts = LINE_Y.map((v, i) => ({ x: (i / (LINE_Y.length - 1)) * W, y: H - (v / 100) * H }));
-  const lineD = pts.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
-  const areaD = `${lineD} L${W},${H} L0,${H}Z`;
-  const last = pts[pts.length - 1];
   const timeStr = time.toLocaleTimeString("en-US", { hour12: false });
 
   const stats = [
@@ -74,122 +75,281 @@ const AIDashboard = ({ prefersReduced }: { prefersReduced: boolean }) => {
 
   return (
     <div style={{
-      position: "relative", width: "100%", maxWidth: 500,
-      background: "linear-gradient(145deg,rgba(14,13,18,0.97) 0%,rgba(20,18,28,0.96) 100%)",
-      backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
-      border: "1px solid rgba(204,120,92,0.22)",
-      borderRadius: 20, padding: "22px 22px 18px",
-      boxShadow: "0 0 0 1px rgba(255,255,255,0.04) inset,0 32px 80px rgba(0,0,0,0.32),0 4px 24px rgba(204,120,92,0.1)",
-      animation: prefersReduced ? "none" : "xzCardIn 0.8s cubic-bezier(0.22,1,0.36,1) both",
-      animationDelay: "0.3s",
+      position: "relative", width: "100%", maxWidth: 520,
+      background: "#1a1208",
+      border: "1px solid rgba(180,140,100,0.15)",
+      borderRadius: 20,
+      padding: "20px 20px 16px",
+      boxShadow: "0 40px 80px rgba(100,60,20,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset",
+      animation: prefersReduced ? "none" : "xzCardSlideRight 0.9s cubic-bezier(0.22,1,0.36,1) both",
+      animationDelay: "0.25s",
     }}>
-      {/* Border glow overlay */}
+      {/* Warm radial glow at top */}
       <div aria-hidden="true" style={{
         position: "absolute", inset: 0, borderRadius: 20, pointerEvents: "none",
-        background: "linear-gradient(135deg,rgba(204,120,92,0.18) 0%,transparent 45%,rgba(201,136,58,0.08) 100%)",
-        animation: prefersReduced ? "none" : "xzBorderGlow 5s ease-in-out infinite",
+        background: "radial-gradient(ellipse 80% 40% at 50% 0%, rgba(204,120,92,0.09) 0%, transparent 70%)",
       }} />
 
-      {/* TOP ROW */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, position: "relative", zIndex: 1 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{
-            width: 7, height: 7, borderRadius: "50%", flexShrink: 0,
-            background: "#4ade80",
-            boxShadow: "0 0 8px #4ade80,0 0 16px rgba(74,222,128,0.45)",
-            animation: prefersReduced ? "none" : "xzLivePulse 1.8s ease-in-out infinite",
-          }} />
-          <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", color: "#4ade80" }}>
-            LIVE SYSTEM
-          </span>
-        </div>
-        <span style={{ fontFamily: "'Courier New',monospace", fontSize: 12, color: "rgba(255,255,255,0.38)", letterSpacing: "0.04em" }}>
-          {timeStr}
+      {/* ── TOP BAR ── */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        marginBottom: 14, position: "relative", zIndex: 1,
+      }}>
+        <span style={{
+          fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 700,
+          letterSpacing: "0.22em", color: "rgba(180,140,100,0.5)", textTransform: "uppercase",
+        }}>
+          AI NETWORK
         </span>
-      </div>
-
-      {/* BAR CHART */}
-      <div style={{ marginBottom: 14, position: "relative", zIndex: 1 }}>
-        <div style={{ fontSize: 8, fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,0.28)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 7 }}>
-          PERFORMANCE INDEX
-        </div>
-        <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 68 }}>
-          {bars.map((h, i) => (
-            <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <div style={{
-                width: "100%", height: `${h}%`,
-                borderRadius: "3px 3px 0 0",
-                background: "linear-gradient(180deg,#cc785c 0%,#C9883A 55%,#7A4A1E 100%)",
-                transform: mounted ? "scaleY(1)" : "scaleY(0)",
-                transformOrigin: "bottom",
-                transition: prefersReduced ? "none" : `transform ${0.55 + i * 0.07}s cubic-bezier(0.34,1.56,0.64,1) ${0.1 + i * 0.07}s, height 0.7s cubic-bezier(0.34,1.56,0.64,1)`,
-                boxShadow: "0 0 10px rgba(204,120,92,0.3)",
-              }} />
-            </div>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 4, marginTop: 3 }}>
-          {BAR_LABELS.map((l, i) => (
-            <div key={i} style={{ flex: 1, textAlign: "center", fontSize: 7, fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,0.25)" }}>{l}</div>
-          ))}
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <span style={{
+              width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
+              background: "#4ade80",
+              boxShadow: "0 0 7px #4ade80, 0 0 14px rgba(74,222,128,0.4)",
+              animation: prefersReduced ? "none" : "xzLivePulse 1.8s ease-in-out infinite",
+            }} />
+            <span style={{
+              fontFamily: "'Courier New',monospace", fontSize: 8, fontWeight: 700,
+              letterSpacing: "0.12em", color: "#4ade80",
+            }}>LIVE</span>
+          </div>
+          <span style={{
+            fontFamily: "'Courier New',monospace", fontSize: 11,
+            color: "#cc785c", letterSpacing: "0.05em",
+          }}>{timeStr}</span>
         </div>
       </div>
 
-      {/* LINE GRAPH */}
-      <div style={{ marginBottom: 16, position: "relative", zIndex: 1 }}>
-        <div style={{ fontSize: 8, fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,0.28)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 5 }}>
-          AI PROCESSING LOAD
-        </div>
-        <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible" }}>
+      {/* ── SVG NETWORK ── */}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <svg
+          viewBox="0 0 520 458"
+          width="100%"
+          style={{ overflow: "visible", display: "block" }}
+          aria-label="XERXEZ AI module network"
+        >
           <defs>
-            <linearGradient id="xzAG" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#cc785c" stopOpacity="0.22" />
-              <stop offset="100%" stopColor="#cc785c" stopOpacity="0" />
-            </linearGradient>
-            <filter id="xzGF" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="2.5" result="b" />
-              <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+            {/* Subtle dot grid */}
+            <pattern id="xzDotGrid" x="0" y="0" width="36" height="36" patternUnits="userSpaceOnUse">
+              <circle cx="0.5" cy="0.5" r="0.5" fill="rgba(180,140,100,0.07)" />
+            </pattern>
+            {/* Hub warm glow */}
+            <filter id="xzHubGlow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="9" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
+            {/* Dot traveling glow */}
+            <filter id="xzTravGlow" x="-150%" y="-150%" width="400%" height="400%">
+              <feGaussianBlur stdDeviation="2.5" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            {/* Hub radial fill */}
+            <radialGradient id="xzHubFill" cx="50%" cy="40%" r="50%">
+              <stop offset="0%"   stopColor="rgba(204,120,92,0.28)" />
+              <stop offset="100%" stopColor="rgba(204,120,92,0.06)" />
+            </radialGradient>
           </defs>
-          <path d={areaD} fill="url(#xzAG)"
-            style={{ opacity: mounted ? 1 : 0, transition: prefersReduced ? "none" : "opacity 1.2s ease 0.9s" }} />
-          <path d={lineD} fill="none" stroke="#cc785c" strokeWidth="1.8"
-            strokeLinecap="round" strokeLinejoin="round"
-            style={{
-              strokeDasharray: 700,
-              strokeDashoffset: mounted && !prefersReduced ? 0 : 700,
-              transition: prefersReduced ? "none" : "stroke-dashoffset 1.6s cubic-bezier(0.4,0,0.2,1) 0.5s",
-            }} />
-          <circle cx={last.x} cy={last.y} r={4} fill="#cc785c" filter="url(#xzGF)"
-            style={{
-              opacity: mounted ? 1 : 0,
-              transition: prefersReduced ? "none" : "opacity 0.4s ease 2s",
-              animation: mounted && !prefersReduced ? "xzEndPulse 2.2s ease-in-out 2.1s infinite" : "none",
-            }} />
+
+          {/* Grid background */}
+          <rect width="520" height="458" fill="url(#xzDotGrid)" />
+
+          {/* Ghost corner watermarks */}
+          <text x="506" y="18"  textAnchor="end"   fill="rgba(180,140,100,0.11)" fontSize="8" fontFamily="'Courier New',monospace" letterSpacing="1.5">CLOUD</text>
+          <text x="506" y="448" textAnchor="end"   fill="rgba(180,140,100,0.11)" fontSize="8" fontFamily="'Courier New',monospace" letterSpacing="1.5">CRM</text>
+          <text x="14"  y="18"  textAnchor="start"  fill="rgba(180,140,100,0.11)" fontSize="8" fontFamily="'Courier New',monospace" letterSpacing="1.5">FIN</text>
+          <text x="14"  y="448" textAnchor="start"  fill="rgba(180,140,100,0.11)" fontSize="8" fontFamily="'Courier New',monospace" letterSpacing="1.5">DEV</text>
+
+          {/* ── CONNECTING LINES ── draw-in via strokeDashoffset */}
+          {NET_NODES.map((n, i) => {
+            const dx = n.cx - HUB.cx, dy = n.cy - HUB.cy;
+            const len = Math.ceil(Math.sqrt(dx * dx + dy * dy));
+            return (
+              <line
+                key={`line-${n.id}`}
+                x1={HUB.cx} y1={HUB.cy} x2={n.cx} y2={n.cy}
+                stroke={n.color}
+                strokeWidth="1"
+                strokeOpacity="0.22"
+                strokeDasharray={len}
+                style={{
+                  strokeDashoffset: mounted && !prefersReduced ? 0 : len,
+                  transition: prefersReduced
+                    ? "none"
+                    : `stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) ${0.35 + i * 0.1}s`,
+                }}
+              />
+            );
+          })}
+
+          {/* ── TRAVELING DOTS ── animateMotion along each line */}
+          {NET_NODES.map((n, i) => (
+            <circle
+              key={`trav-${n.id}`}
+              r="2.8"
+              fill={n.color}
+              filter="url(#xzTravGlow)"
+              opacity={mounted && !prefersReduced ? 0.9 : 0}
+              style={{ transition: `opacity 0.3s ease ${0.9 + i * 0.1}s` }}
+            >
+              {!prefersReduced && (
+                <animateMotion
+                  dur={`${2.6 + i * 0.38}s`}
+                  repeatCount="indefinite"
+                  path={`M ${HUB.cx},${HUB.cy} L ${n.cx},${n.cy}`}
+                />
+              )}
+            </circle>
+          ))}
+
+          {/* ── SATELLITE NODES ── staggered entrance */}
+          {NET_NODES.map((n, i) => (
+            <g
+              key={n.id}
+              style={{
+                opacity: mounted ? 1 : 0,
+                transition: prefersReduced ? "none" : `opacity 0.55s ease ${0.5 + i * 0.1}s`,
+              }}
+            >
+              {/* Outer pulse ring */}
+              <circle cx={n.cx} cy={n.cy} r={n.r + 6} fill="none"
+                stroke={n.color} strokeWidth="0.8">
+                <animate attributeName="r"
+                  values={`${n.r + 3};${n.r + 18};${n.r + 3}`}
+                  dur={`${3.4 + i * 0.28}s`} repeatCount="indefinite" />
+                <animate attributeName="stroke-opacity"
+                  values="0.45;0;0.45" dur={`${3.4 + i * 0.28}s`} repeatCount="indefinite" />
+              </circle>
+              {/* Glow fill halo */}
+              <circle cx={n.cx} cy={n.cy} r={n.r + 3} fill={n.glow} />
+              {/* Outer ring */}
+              <circle cx={n.cx} cy={n.cy} r={n.r + 1}
+                fill="none" stroke={n.color} strokeWidth="0.6" strokeOpacity="0.3" />
+              {/* Main node circle */}
+              <circle cx={n.cx} cy={n.cy} r={n.r}
+                fill="rgba(26,18,8,0.82)"
+                stroke={n.color} strokeWidth="1.4" strokeOpacity="0.8" />
+              {/* Status dot at top */}
+              <circle cx={n.cx} cy={n.cy - n.r + 7} r="2.8"
+                fill={n.color} filter="url(#xzTravGlow)" />
+              {/* Label */}
+              <text
+                x={n.cx} y={n.cy + 5}
+                textAnchor="middle"
+                fill="rgba(255,255,255,0.78)"
+                fontSize="9"
+                fontFamily="'Inter',sans-serif"
+                fontWeight="500"
+              >
+                {n.label}
+              </text>
+            </g>
+          ))}
+
+          {/* ── CENTER HUB (XERXEZ) ── rendered last so it's on top */}
+
+          {/* Large ambient glow halos */}
+          <circle cx={HUB.cx} cy={HUB.cy} r={HUB.r + 36} fill="rgba(204,120,92,0.05)" />
+          <circle cx={HUB.cx} cy={HUB.cy} r={HUB.r + 22} fill="rgba(204,120,92,0.08)" />
+
+          {/* Rotating dashed outer ring */}
+          <circle
+            cx={HUB.cx} cy={HUB.cy} r={HUB.r + 15}
+            fill="none" stroke="#cc785c"
+            strokeWidth="1.3" strokeDasharray="9 7" strokeOpacity="0.55"
+          >
+            {!prefersReduced && (
+              <animateTransform
+                attributeName="transform" type="rotate"
+                from={`0 ${HUB.cx} ${HUB.cy}`}
+                to={`360 ${HUB.cx} ${HUB.cy}`}
+                dur="14s" repeatCount="indefinite"
+              />
+            )}
+          </circle>
+
+          {/* Counter-rotating inner tick ring */}
+          <circle
+            cx={HUB.cx} cy={HUB.cy} r={HUB.r + 8}
+            fill="none" stroke="#cc785c"
+            strokeWidth="0.7" strokeDasharray="3 10" strokeOpacity="0.3"
+          >
+            {!prefersReduced && (
+              <animateTransform
+                attributeName="transform" type="rotate"
+                from={`360 ${HUB.cx} ${HUB.cy}`}
+                to={`0 ${HUB.cx} ${HUB.cy}`}
+                dur="20s" repeatCount="indefinite"
+              />
+            )}
+          </circle>
+
+          {/* Solid inner ring */}
+          <circle cx={HUB.cx} cy={HUB.cy} r={HUB.r + 2}
+            fill="none" stroke="#cc785c" strokeWidth="0.8" strokeOpacity="0.3" />
+
+          {/* Hub main circle */}
+          <circle
+            cx={HUB.cx} cy={HUB.cy} r={HUB.r}
+            fill="url(#xzHubFill)"
+            stroke="#cc785c" strokeWidth="1.8" strokeOpacity="0.92"
+            filter="url(#xzHubGlow)"
+          />
+
+          {/* Hub pulse ring */}
+          <circle cx={HUB.cx} cy={HUB.cy} r={HUB.r + 4} fill="none"
+            stroke="#cc785c" strokeWidth="1.8">
+            <animate attributeName="r"
+              values={`${HUB.r + 2};${HUB.r + 26};${HUB.r + 2}`}
+              dur="3s" repeatCount="indefinite" />
+            <animate attributeName="stroke-opacity"
+              values="0.55;0;0.55" dur="3s" repeatCount="indefinite" />
+          </circle>
+
+          {/* Hub labels */}
+          <text x={HUB.cx} y={HUB.cy - 5}
+            textAnchor="middle"
+            fill="rgba(255,255,255,0.94)"
+            fontSize="13.5"
+            fontFamily="'Cormorant Garamond',Garamond,serif"
+            fontWeight="600"
+          >
+            XERXEZ
+          </text>
+          <text x={HUB.cx} y={HUB.cy + 11}
+            textAnchor="middle"
+            fill="rgba(204,120,92,0.65)"
+            fontSize="7"
+            fontFamily="'Courier New',monospace"
+            fontWeight="500"
+            letterSpacing="2"
+          >
+            AI PLATFORM
+          </text>
         </svg>
       </div>
 
-      {/* STATS ROW */}
+      {/* ── STATS ROW ── */}
       <div style={{
-        display: "flex", gap: 7, position: "relative", zIndex: 1,
-        borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 14,
+        display: "flex", gap: 6, position: "relative", zIndex: 1,
+        borderTop: "1px solid rgba(180,140,100,0.1)", paddingTop: 13, marginTop: 2,
       }}>
         {stats.map((s, i) => (
           <div key={s.label} style={{
             flex: 1, textAlign: "center",
-            background: flashIdx === i ? "rgba(204,120,92,0.13)" : "rgba(255,255,255,0.03)",
-            border: `1px solid ${flashIdx === i ? "rgba(204,120,92,0.32)" : "rgba(255,255,255,0.06)"}`,
+            background: flashIdx === i ? "rgba(204,120,92,0.12)" : "rgba(255,255,255,0.025)",
+            border: `1px solid ${flashIdx === i ? "rgba(204,120,92,0.32)" : "rgba(180,140,100,0.1)"}`,
             borderRadius: 10, padding: "9px 4px",
-            transition: "all 0.3s ease",
+            transition: "all 0.32s ease",
           }}>
             <div style={{
-              fontFamily: "'Inter',sans-serif", fontSize: 17, fontWeight: 700,
-              color: flashIdx === i ? "#cc785c" : "rgba(255,255,255,0.85)",
-              lineHeight: 1, transition: "color 0.3s ease",
+              fontFamily: "'Inter',sans-serif", fontSize: 16, fontWeight: 700,
+              color: flashIdx === i ? "#cc785c" : "rgba(255,255,255,0.83)",
+              lineHeight: 1, transition: "color 0.32s ease",
             }}>{s.val}</div>
             <div style={{
               fontFamily: "'Inter',sans-serif", fontSize: 7,
-              color: "rgba(255,255,255,0.32)", letterSpacing: "0.1em",
+              color: "rgba(180,140,100,0.48)", letterSpacing: "0.1em",
               textTransform: "uppercase", marginTop: 4,
             }}>{s.label}</div>
           </div>
@@ -204,8 +364,8 @@ const HeroSection = () => {
   const [prefersReduced] = useState(() =>
     typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion:reduce)").matches : false
   );
-  const [wordIdx, setWordIdx] = useState(0);
-  const [fadeIn, setFadeIn] = useState(true);
+  const [wordIdx, setWordIdx]   = useState(0);
+  const [fadeIn, setFadeIn]     = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const btnRef = useRef<HTMLAnchorElement>(null);
 
@@ -269,7 +429,7 @@ const HeroSection = () => {
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <div className="row g-5 align-items-start">
 
-          {/* ── LEFT ── */}
+          {/* ── LEFT (unchanged) ── */}
           <div className="col-lg-6">
 
             {/* Badge */}
@@ -291,8 +451,6 @@ const HeroSection = () => {
 
             {/* Heading */}
             <h1 style={{ marginBottom: 0, lineHeight: 1.0 }}>
-
-              {/* "The Future of" — slide from left + blur to sharp */}
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond',Garamond,serif",
@@ -305,7 +463,6 @@ const HeroSection = () => {
                 The Future of
               </span>
 
-              {/* "Enterprise AI" — per-letter stagger + color sweep */}
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond',Garamond,serif",
@@ -322,12 +479,11 @@ const HeroSection = () => {
                     animation: prefersReduced ? "none" : "xzLetterIn 0.55s cubic-bezier(0.22,1,0.36,1) both",
                     animationDelay: `${0.35 + i * 0.045}s`,
                   }}>
-                    {char === " " ? " " : char}
+                    {char === " " ? " " : char}
                   </span>
                 ))}
               </span>
 
-              {/* "is here —" — fade up */}
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond',Garamond,serif",
@@ -382,7 +538,6 @@ const HeroSection = () => {
               animation: prefersReduced ? "none" : "xzFadeUp 0.5s ease both",
               animationDelay: "1.25s",
             }}>
-              {/* Get Started — shimmer */}
               <Link
                 to="/contact"
                 ref={btnRef}
@@ -408,7 +563,6 @@ const HeroSection = () => {
                 </span>
               </Link>
 
-              {/* Explore Services — draw underline on hover */}
               <Link
                 to="/service"
                 style={{
@@ -464,9 +618,9 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* ── RIGHT: Live AI Dashboard ── */}
+          {/* ── RIGHT: RADAI Network ── */}
           <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center" style={{ paddingTop: 30 }}>
-            <AIDashboard prefersReduced={prefersReduced} />
+            <RADAIVisualization prefersReduced={prefersReduced} />
           </div>
 
         </div>
@@ -489,18 +643,13 @@ const HeroSection = () => {
           from{opacity:0;transform:translateY(22px);filter:blur(5px)}
           to{opacity:1;transform:translateY(0);filter:blur(0)}
         }
-        @keyframes xzCardIn {
-          from{opacity:0;transform:translateY(30px)}
-          to{opacity:1;transform:translateY(0)}
+        @keyframes xzCardSlideRight {
+          from{opacity:0;transform:translateX(40px)}
+          to{opacity:1;transform:translateX(0)}
         }
-        @keyframes xzBorderGlow { 0%,100%{opacity:.55} 50%{opacity:1} }
         @keyframes xzLivePulse {
-          0%,100%{box-shadow:0 0 8px #4ade80,0 0 16px rgba(74,222,128,.45)}
-          50%{box-shadow:0 0 3px #4ade80,0 0 6px rgba(74,222,128,.15)}
-        }
-        @keyframes xzEndPulse {
-          0%,100%{transform:scale(1);opacity:1}
-          50%{transform:scale(1.65);opacity:.5}
+          0%,100%{box-shadow:0 0 7px #4ade80,0 0 14px rgba(74,222,128,.45)}
+          50%{box-shadow:0 0 3px #4ade80,0 0 5px rgba(74,222,128,.15)}
         }
         @keyframes xzRayDrift {
           from{transform:rotate(-13deg) translateY(0px)}
