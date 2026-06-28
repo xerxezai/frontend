@@ -20,14 +20,15 @@ const URGENCY = [
 ];
 
 const CARDS = [
-  { emoji: "📧", title: "Email Us",  value: "info@xerxez.com",    href: "mailto:info@xerxez.com", note: "We reply within 24 hours" },
-  { emoji: "📞", title: "Call Us",   value: "+971 56 786 7451",    href: "tel:+971567867451",       note: "Mon–Fri, 9am–6pm GST"    },
-  { emoji: "📍", title: "Visit Us",  value: "India & UAE",         href: undefined,                 note: "Remote-first company"     },
+  { emoji: "📧", title: "Email Us", value: "info@xerxez.com",  href: "mailto:info@xerxez.com", note: "We reply within 24 hours" },
+  { emoji: "📞", title: "Call Us",  value: "+971 56 786 7451", href: "tel:+971567867451",       note: "Mon–Fri, 9am–6pm GST"    },
+  { emoji: "📍", title: "Visit Us", value: "India & UAE",      href: undefined,                 note: "Remote-first company"     },
 ];
 
-const P   = "#6B3FA0";
-const PG  = "linear-gradient(135deg,#6B3FA0 0%,#8B5CF6 100%)";
-const PGL = "rgba(107,63,160,0.12)";
+// Site palette — coral/amber, matching hero CTAs
+const C   = "#cc785c";
+const CG  = "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)";
+const CGL = "rgba(204,120,92,0.12)";
 
 interface F { fullName:string; email:string; phone:string; company:string; service:string; urgency:string; subject:string; message:string; }
 const EMPTY: F = { fullName:"", email:"", phone:"", company:"", service:"", urgency:"", subject:"", message:"" };
@@ -41,7 +42,7 @@ const lbl: React.CSSProperties = {
 const SectionBadge = ({ n, label }: { n: string; label: string }) => (
   <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:24 }}>
     <div style={{
-      width:28, height:28, borderRadius:"50%", background:PG,
+      width:28, height:28, borderRadius:"50%", background:CG,
       display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0,
     }}>
       <span style={{ fontFamily:"'Inter',sans-serif", fontSize:12, fontWeight:700, color:"#fff" }}>{n}</span>
@@ -63,6 +64,24 @@ const ContactSection2 = () => {
 
   useEffect(() => { const t = setTimeout(() => setMount(true), 80); return () => clearTimeout(t); }, []);
 
+  // Remove nav-active highlight on this page only — restored on unmount
+  useEffect(() => {
+    const el = document.createElement("style");
+    el.id = "xzc-nav-reset";
+    el.textContent = `
+      .main-menu ul li.nav-active > a,
+      .header-main .main-menu ul li.nav-active > a {
+        color: #141413 !important;
+      }
+      .main-menu ul li.nav-active > a i,
+      .header-main .main-menu ul li.nav-active > a i {
+        color: #141413 !important;
+      }
+    `;
+    document.head.appendChild(el);
+    return () => { document.getElementById("xzc-nav-reset")?.remove(); };
+  }, []);
+
   const set = useCallback((k: keyof F, v: string) => setForm(p => ({ ...p, [k]: v })), []);
 
   const filled   = TRACKED.filter(k => form[k].trim() !== "").length;
@@ -71,12 +90,12 @@ const ContactSection2 = () => {
 
   const fld = (name: string): React.CSSProperties => ({
     width:"100%", boxSizing:"border-box",
-    border:`1.5px solid ${focused===name ? P : "#E5E5E5"}`,
+    border:`1.5px solid ${focused===name ? C : "#E5E5E5"}`,
     borderRadius:10, padding:"14px 16px",
     fontFamily:"'Inter',sans-serif", fontSize:14, color:"#1A1A1A",
     background:"#ffffff", outline:"none", display:"block",
     transition:"border-color 0.18s,box-shadow 0.18s",
-    boxShadow: focused===name ? `0 0 0 3px ${PGL}` : "none",
+    boxShadow: focused===name ? `0 0 0 3px ${CGL}` : "none",
   });
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
@@ -99,27 +118,29 @@ const ContactSection2 = () => {
   const bl = () => setFoc(null);
 
   return (
-    <section style={{ background:"#F2EFE9", padding:"100px 0 120px" }}>
+    <section style={{ background:"#F2EFE9", padding:"150px 0 120px" }}>
       <div className="container">
 
         {/* ── TOP: badge, heading, subtext, progress ── */}
         <div style={{
-          textAlign:"center", maxWidth:640, margin:"0 auto 56px",
+          textAlign:"center", maxWidth:640, margin:"0 auto 32px",
           opacity: mounted ? 1 : 0,
           transform: mounted ? "translateY(0)" : "translateY(24px)",
           transition:"opacity 0.7s ease,transform 0.7s ease",
         }}>
+          {/* Badge */}
           <div style={{
             display:"inline-flex", alignItems:"center", gap:6,
-            border:`1.5px solid ${P}`, borderRadius:9999,
+            border:`1.5px solid ${C}`, borderRadius:9999,
             padding:"6px 18px", marginBottom:22,
             fontFamily:"'Inter',sans-serif", fontSize:11,
             fontWeight:600, letterSpacing:"0.12em",
-            textTransform:"uppercase", color:P,
+            textTransform:"uppercase", color:C,
           }}>
             💬 Get In Touch
           </div>
 
+          {/* Heading */}
           <h1 style={{
             fontFamily:"'Cormorant Garamond',Garamond,serif",
             fontSize:"clamp(40px,5.5vw,68px)", fontWeight:700,
@@ -143,12 +164,12 @@ const ContactSection2 = () => {
               fontFamily:"'Inter',sans-serif", fontSize:12, color:"#999", marginBottom:8,
             }}>
               <span>Form Completion</span>
-              <span style={{ fontWeight:600, color: progress===100 ? "#22c55e" : P }}>{progress}%</span>
+              <span style={{ fontWeight:600, color: progress===100 ? "#22c55e" : C }}>{progress}%</span>
             </div>
             <div style={{ height:6, background:"#E5E5E5", borderRadius:3, overflow:"hidden" }}>
               <div style={{
                 height:"100%", width:`${progress}%`,
-                background: progress===100 ? "linear-gradient(90deg,#22c55e,#4ade80)" : PG,
+                background: progress===100 ? "linear-gradient(90deg,#22c55e,#4ade80)" : CG,
                 borderRadius:3, transition:"width 0.4s cubic-bezier(0.4,0,0.2,1)",
               }} />
             </div>
@@ -157,45 +178,48 @@ const ContactSection2 = () => {
 
         {/* ── 3 CONTACT CARDS ── */}
         <div className="row g-4" style={{ maxWidth:900, margin:"0 auto 56px" }}>
-          {CARDS.map((c, i) => (
-            <div className="col-12 col-md-4" key={c.title}>
+          {CARDS.map((card, i) => (
+            <div className="col-12 col-md-4" key={card.title}>
               <div
                 onMouseEnter={() => setCardHov(i)}
                 onMouseLeave={() => setCardHov(null)}
                 style={{
                   background:"#ffffff", borderRadius:16, padding:"28px 24px",
-                  borderTop:`4px solid ${P}`, height:"100%",
+                  borderTop:`4px solid ${C}`, height:"100%",
                   boxShadow: cardHov===i
-                    ? "0 16px 48px rgba(107,63,160,0.16),0 4px 16px rgba(107,63,160,0.08)"
+                    ? "0 16px 48px rgba(204,120,92,0.18),0 4px 16px rgba(204,120,92,0.10)"
                     : "0 2px 16px rgba(0,0,0,0.06)",
                   transform: cardHov===i ? "translateY(-5px)" : "translateY(0)",
                   transition:"all 0.28s cubic-bezier(0.22,1,0.36,1)",
-                  cursor: c.href ? "pointer" : "default",
+                  cursor: card.href ? "pointer" : "default",
                 }}
-                onClick={() => c.href && (window.location.href = c.href)}
+                onClick={() => card.href && (window.location.href = card.href)}
               >
+                {/* Icon container — soft orange tint */}
                 <div style={{
                   width:44, height:44, borderRadius:12,
-                  background:"rgba(107,63,160,0.1)",
+                  background:"rgba(196,98,45,0.1)",
                   display:"flex", alignItems:"center", justifyContent:"center",
                   marginBottom:16, fontSize:20,
-                }}>{c.emoji}</div>
+                }}>{card.emoji}</div>
+
                 <div style={{
                   fontFamily:"'Inter',sans-serif", fontSize:11, fontWeight:600,
                   letterSpacing:"0.1em", textTransform:"uppercase", color:"#999", marginBottom:6,
-                }}>{c.title}</div>
-                {c.href ? (
-                  <a href={c.href} onClick={e => e.stopPropagation()} style={{
+                }}>{card.title}</div>
+
+                {card.href ? (
+                  <a href={card.href} onClick={e => e.stopPropagation()} style={{
                     fontFamily:"'Inter',sans-serif", fontSize:15, fontWeight:600,
                     color:"#141413", textDecoration:"none", display:"block", marginBottom:4,
-                  }}>{c.value}</a>
+                  }}>{card.value}</a>
                 ) : (
                   <div style={{
                     fontFamily:"'Inter',sans-serif", fontSize:15,
                     fontWeight:600, color:"#141413", marginBottom:4,
-                  }}>{c.value}</div>
+                  }}>{card.value}</div>
                 )}
-                <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#999" }}>{c.note}</div>
+                <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#999" }}>{card.note}</div>
               </div>
             </div>
           ))}
@@ -348,27 +372,26 @@ const ContactSection2 = () => {
                 {/* SUBMIT */}
                 <div style={{ marginTop:32 }}>
                   <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
-                    {/* Send button */}
                     <button type="submit" disabled={sending}
                       style={{
                         flex:"1 1 200px", height:56,
-                        background: sending ? "rgba(107,63,160,0.55)" : PG,
+                        background: sending ? "rgba(204,120,92,0.55)" : CG,
                         color:"#ffffff",
                         fontFamily:"'Inter',sans-serif", fontSize:15, fontWeight:600,
                         border:"none", borderRadius:12,
                         cursor: sending ? "not-allowed" : "pointer",
                         display:"flex", alignItems:"center", justifyContent:"center", gap:8,
                         transition:"all 0.2s ease",
-                        boxShadow: sending ? "none" : "0 4px 20px rgba(107,63,160,0.28)",
+                        boxShadow: sending ? "none" : "0 4px 20px rgba(204,120,92,0.28)",
                       }}
                       onMouseOver={e => {
                         if (!sending) {
-                          (e.currentTarget).style.boxShadow = "0 8px 28px rgba(107,63,160,0.38)";
+                          (e.currentTarget).style.boxShadow = "0 8px 28px rgba(204,120,92,0.38)";
                           (e.currentTarget).style.transform = "translateY(-1px)";
                         }
                       }}
                       onMouseOut={e => {
-                        (e.currentTarget).style.boxShadow = sending ? "none" : "0 4px 20px rgba(107,63,160,0.28)";
+                        (e.currentTarget).style.boxShadow = sending ? "none" : "0 4px 20px rgba(204,120,92,0.28)";
                         (e.currentTarget).style.transform = "translateY(0)";
                       }}
                     >
@@ -391,7 +414,6 @@ const ContactSection2 = () => {
                       )}
                     </button>
 
-                    {/* Cancel button */}
                     <button type="button" onClick={() => setForm(EMPTY)} disabled={sending}
                       style={{
                         flex:"0 0 auto", height:56, padding:"0 24px",
@@ -414,14 +436,13 @@ const ContactSection2 = () => {
                     </button>
                   </div>
 
-                  {/* Security badge + urgent line */}
                   <div style={{ marginTop:22, textAlign:"center" }}>
                     <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#aaa", marginBottom:6 }}>
                       🔒 Your information is secure and confidential
                     </div>
                     <a href="tel:+971567867451" style={{
                       fontFamily:"'Inter',sans-serif", fontSize:12,
-                      color:P, textDecoration:"none", fontWeight:500,
+                      color:C, textDecoration:"none", fontWeight:500,
                     }}>
                       For urgent matters, call us at +971 56 786 7451
                     </a>
