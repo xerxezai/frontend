@@ -46,7 +46,7 @@ const ERPNetwork = () => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className="xz-network-svg"
-    style={{ width: "100%", maxWidth: 480, overflow: "visible" }}
+    style={{ width: "100%", maxWidth: 540, overflow: "visible" }}
     aria-label="XERXEZ ERP module network diagram"
   >
     {NODES.map(n => (
@@ -542,19 +542,21 @@ const HeroSection = () => {
 
             {/* ── RIGHT: Holographic card ── */}
             <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center"
-              style={{ paddingTop: 30 }}>
+              style={{ paddingTop: 80 }}>
               <div
                 ref={holoRef}
                 onMouseMove={onHoloMove}
                 onMouseLeave={onHoloLeave}
                 style={{
                   position: "relative",
+                  width: "100%",
+                  maxWidth: 560,
                   background: "linear-gradient(140deg, rgba(255,255,255,0.7) 0%, rgba(237,232,223,0.55) 100%)",
                   backdropFilter: "blur(10px)",
                   WebkitBackdropFilter: "blur(10px)",
                   border: "1px solid rgba(201,136,58,0.22)",
                   borderRadius: 24,
-                  padding: "32px 20px 20px",
+                  padding: "36px 28px 28px",
                   boxShadow: "0 8px 48px rgba(201,136,58,0.10), 0 2px 0 rgba(255,255,255,0.9) inset",
                   transition: "transform 0.12s ease-out",
                   transformStyle: "preserve-3d",
