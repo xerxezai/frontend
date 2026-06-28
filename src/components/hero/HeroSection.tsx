@@ -11,7 +11,6 @@ const CYCLE_WORDS = [
 ];
 
 const FULL_TEXT = "Enterprise AI";
-const GLITCH_CHARS = "!#$%@&*ABCDEFXxYyZz01";
 
 // Deterministic upward-rising particles
 const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
@@ -205,8 +204,6 @@ const HeroSection = () => {
 
   // Typewriter state
   const [displayed, setDisplayed] = useState(() => (prefersReduced ? FULL_TEXT : ""));
-  const [glitching, setGlitching] = useState(false);
-  const [glitchText, setGlitchText] = useState(FULL_TEXT);
 
   // Scroll indicator fade
   const [scrolled, setScrolled] = useState(false);
@@ -245,32 +242,6 @@ const HeroSection = () => {
       }, 78);
     }, 420);
     return () => { clearTimeout(startTimeout); clearInterval(typeInterval); };
-  }, [prefersReduced]);
-
-  // ── Glitch ──
-  useEffect(() => {
-    if (prefersReduced) return;
-    let glitchInterval: ReturnType<typeof setInterval>;
-    const startDelay = setTimeout(() => {
-      glitchInterval = setInterval(() => {
-        setGlitching(true);
-        let count = 0;
-        const scramble = setInterval(() => {
-          setGlitchText(
-            FULL_TEXT.split("").map(c =>
-              c === " " ? " " : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]
-            ).join("")
-          );
-          count++;
-          if (count >= 5) {
-            clearInterval(scramble);
-            setGlitchText(FULL_TEXT);
-            setGlitching(false);
-          }
-        }, 55);
-      }, 4200);
-    }, FULL_TEXT.length * 78 + 2000);
-    return () => { clearTimeout(startDelay); clearInterval(glitchInterval); };
   }, [prefersReduced]);
 
   // ── Ripple on click ──
@@ -317,7 +288,7 @@ const HeroSection = () => {
   };
 
   const isTyping = !prefersReduced && displayed.length < FULL_TEXT.length;
-  const headingText = glitching ? glitchText : (prefersReduced ? FULL_TEXT : displayed);
+  const headingText = prefersReduced ? FULL_TEXT : displayed;
 
   return (
     <section style={{
@@ -408,14 +379,10 @@ const HeroSection = () => {
                   fontFamily: "'Cormorant Garamond', Garamond, serif",
                   fontWeight: 700, fontStyle: "italic",
                   fontSize: "clamp(58px, 9vw, 118px)",
-                  color: glitching ? "#a9583e" : "#cc785c",
+                  color: "#cc785c",
                   letterSpacing: "-0.035em",
                   lineHeight: 0.9, marginBottom: 10,
                   minHeight: "1em",
-                  transition: "color 0.08s",
-                  textShadow: glitching
-                    ? "0 0 24px rgba(201,136,58,0.55), 3px 0 0 rgba(204,120,92,0.35), -3px 0 0 rgba(201,136,58,0.3)"
-                    : "none",
                 }}>
                   {headingText}
                   {isTyping && (
