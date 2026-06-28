@@ -1,5 +1,10 @@
-﻿import { Link } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
+
+const C  = "#C9883A";
+const C2 = "#cc785c";
+const CG = "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)";
 
 const courses = [
   {
@@ -10,289 +15,501 @@ const courses = [
     levelColor: "#C9883A",
     duration: "60 Hours",
     lessons: "48 Lessons",
-    badge: "Bestseller",
-    badgeBg: "#C9883A",
+    badge: "BESTSELLER",
+    desc: "Build production-ready AI systems from scratch — LLMs, RAG pipelines, API development, and enterprise deployment patterns.",
+    tags: ["Python", "LangChain", "OpenAI", "FastAPI"],
   },
   {
     icon: "fas fa-shield-alt",
-    title: "MLOps - Machine Learning Operations",
+    title: "MLOps – Machine Learning Operations",
     category: "DevSecOps & AI",
     level: "Advanced",
     levelColor: "#e63757",
     duration: "50 Hours",
     lessons: "40 Lessons",
-    badge: "New",
-    badgeBg: "#C9883A",
+    badge: "NEW",
+    desc: "Automate the full ML lifecycle — from training pipelines to production monitoring with Kubernetes, MLflow, and cloud platforms.",
+    tags: ["Kubernetes", "MLflow", "Docker", "AWS"],
   },
 ];
 
 const features = [
-  {
-    icon: "fas fa-user-tie",
-    title: "Industry Expert Instructors",
-    desc: "Real-world practitioners with 10+ years of enterprise deployment experience.",
-  },
-  {
-    icon: "fas fa-laptop-code",
-    title: "Hands-on Projects",
-    desc: "Build real enterprise systems during the course — not toy examples.",
-  },
-  {
-    icon: "fas fa-certificate",
-    title: "Certificate of Completion",
-    desc: "Industry-recognized certificates issued on successful course completion.",
-  },
-  {
-    icon: "fas fa-users",
-    title: "Enterprise Batch Training",
-    desc: "Custom training programs for your entire team, delivered at your pace.",
-  },
+  { icon: "fas fa-user-tie",    title: "Industry Expert Instructors", desc: "Real-world practitioners with 10+ years of enterprise deployment experience." },
+  { icon: "fas fa-laptop-code", title: "Hands-on Projects",           desc: "Build real enterprise systems during the course — not toy examples." },
+  { icon: "fas fa-certificate", title: "Certificate of Completion",   desc: "Industry-recognized certificates issued on successful course completion." },
+  { icon: "fas fa-users",       title: "Enterprise Batch Training",   desc: "Custom training programs for your entire team, delivered at your pace." },
 ];
 
-const TrainingPage = () => {
-  return (
-    <CustomLayout>
-      {/* ── Hero ──────────────────────────────────────────── */}
-      <section className="lms-hero fix">
-        <div className="lms-hero__bg" />
-        <div className="container position-relative" style={{ zIndex: 2 }}>
-          <div className="row align-items-center">
-            {/* Left: text */}
-            <div className="col-lg-6">
-              <div className="lms-hero__inner">
-                <span className="lms-badge" data-aos="fade-up" data-aos-duration="800" data-aos-once="true">
-                  <i className="fas fa-graduation-cap me-2"></i>Online Learning Platform
+const heroStats = [
+  { val: "500+", label: "Trained" },
+  { val: "12+",  label: "Programs" },
+  { val: "95%",  label: "Satisfaction" },
+];
+
+// ── Badge shared style ────────────────────────────────────────────────────
+const badgeStyle: React.CSSProperties = {
+  display: "inline-flex", alignItems: "center", gap: 8,
+  border: "1px solid rgba(30,30,30,0.22)", borderRadius: 999,
+  padding: "6px 18px", fontSize: 11, fontWeight: 700,
+  letterSpacing: "0.16em", textTransform: "uppercase",
+  color: "#1A1A1A", fontFamily: "'DM Sans', sans-serif",
+  background: "rgba(201,136,58,0.08)",
+};
+
+const sectionHeadStyle: React.CSSProperties = {
+  fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+  fontSize: "clamp(28px, 4vw, 44px)", color: "#1A1A1A",
+  letterSpacing: "-0.02em", margin: 0,
+};
+
+const TrainingPage: React.FC = () => (
+  <CustomLayout>
+
+    {/* ── 1. HERO ───────────────────────────────────────────────────────── */}
+    <section style={{
+      background: "#F2EFE9",
+      padding: "150px 0 90px",
+      position: "relative", overflow: "hidden",
+    }}>
+      {/* Dot-grid texture */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: "radial-gradient(circle,rgba(0,0,0,0.055) 1px,transparent 1px)",
+        backgroundSize: "38px 38px", zIndex: 0,
+      }} />
+
+      <div className="container position-relative" style={{ zIndex: 1 }}>
+        <div style={{
+          display: "flex", alignItems: "flex-start",
+          justifyContent: "space-between", flexWrap: "wrap", gap: 40,
+        }}>
+
+          {/* Left: heading + stats + buttons */}
+          <div style={{ flex: "1 1 460px" }} data-aos="fade-up" data-aos-duration="800" data-aos-once="true">
+            {/* Badge */}
+            <div style={{ marginBottom: 22 }}>
+              <span style={badgeStyle}>✦ AI TRAINING &amp; UPSKILLING</span>
+            </div>
+
+            <h1 style={{
+              fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+              fontSize: "clamp(34px, 5vw, 64px)", lineHeight: 1.08,
+              color: "#1A1A1A", margin: 0, letterSpacing: "-0.03em",
+            }}>
+              Master Enterprise AI<br />
+              <em style={{ color: C2, fontStyle: "italic", fontWeight: 800 }}>
+                &amp; Cloud Technologies
+              </em>
+            </h1>
+
+            <p style={{
+              marginTop: 20, color: "#4B4B4B", fontSize: 16, lineHeight: 1.75,
+              maxWidth: 540, fontFamily: "'DM Sans', sans-serif",
+            }}>
+              Industry-led training for IT teams and enterprises. Learn AI, DevSecOps,
+              Cloud, and ERP — from practitioners who've shipped it in production.
+            </p>
+
+            {/* Stats row */}
+            <div style={{ display: "flex", gap: 36, marginTop: 28, flexWrap: "wrap" }}>
+              {heroStats.map((s) => (
+                <div key={s.val} style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                  <span style={{ fontSize: 24, fontWeight: 800, color: "#1A1A1A", fontFamily: "'DM Sans', sans-serif" }}>
+                    {s.val}
+                  </span>
+                  <span style={{ fontSize: 13, color: "#6B6B6B", fontFamily: "'DM Sans', sans-serif" }}>
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Buttons */}
+            <div style={{ display: "flex", gap: 14, marginTop: 36, flexWrap: "wrap" }}>
+              <a href="#courses" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: CG, color: "#fff", fontWeight: 700, fontSize: 14,
+                padding: "13px 28px", borderRadius: 10, textDecoration: "none",
+                fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.01em",
+                boxShadow: "0 4px 0 rgba(150,95,30,0.5), 0 6px 18px rgba(201,136,58,0.30)",
+              }}>
+                Browse Courses <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
+              </a>
+              <Link to="/contact" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "rgba(26,18,8,0.06)", color: "#1A1A1A", fontWeight: 600, fontSize: 14,
+                padding: "13px 28px", borderRadius: 10, textDecoration: "none",
+                fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.01em",
+                border: "1px solid rgba(26,18,8,0.18)",
+              }}>
+                Enterprise Training <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Right: floating CTA card */}
+          <div
+            style={{ flex: "0 1 300px", alignSelf: "center" }}
+            data-aos="fade-left"
+            data-aos-delay="150"
+            data-aos-duration="900"
+            data-aos-once="true"
+          >
+            <div style={{
+              borderRadius: 18,
+              background: "linear-gradient(160deg, #faf7f3 0%, #e8e0d4 100%)",
+              border: "1px solid rgba(210,195,175,0.6)",
+              boxShadow: "0 6px 0 rgba(155,130,100,0.45), 0 12px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.9)",
+              padding: "28px 26px",
+            }}>
+              {/* Icon badge */}
+              <div style={{
+                width: 44, height: 44, borderRadius: 12, marginBottom: 16,
+                background: CG,
+                boxShadow: "0 4px 0 rgba(150,95,30,0.5), 0 6px 14px rgba(201,136,58,0.30)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <i className="fas fa-graduation-cap" style={{ color: "#fff", fontSize: 18 }} />
+              </div>
+
+              <p style={{
+                fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
+                textTransform: "uppercase", color: C2,
+                fontFamily: "'DM Sans', sans-serif", marginBottom: 6,
+              }}>
+                NEXT COHORT
+              </p>
+
+              <h4 style={{
+                fontSize: 18, fontWeight: 800, color: "#1A1A1A", lineHeight: 1.25,
+                fontFamily: "'DM Sans', sans-serif", marginBottom: 10,
+              }}>
+                Starts July 2026 —<br />Limited Seats
+              </h4>
+
+              <p style={{
+                fontSize: 13, color: "#6B6B6B", lineHeight: 1.65,
+                fontFamily: "'DM Sans', sans-serif", marginBottom: 20,
+              }}>
+                Join the next cohort of enterprise AI practitioners. Hands-on,
+                certification-backed, and built for your career.
+              </p>
+
+              <Link to="/contact" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: CG, color: "#fff", fontWeight: 700, fontSize: 13,
+                padding: "11px 22px", borderRadius: 10, textDecoration: "none",
+                fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.02em",
+                boxShadow: "0 4px 0 rgba(150,95,30,0.5), 0 6px 18px rgba(201,136,58,0.30)",
+              }}>
+                Register Now <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── 2. FEATURED COURSES ───────────────────────────────────────────── */}
+    <section id="courses" style={{ background: "#F2EFE9", padding: "80px 0" }}>
+      <div className="container">
+        {/* Header */}
+        <div style={{ marginBottom: 48 }} data-aos="fade-up" data-aos-duration="800" data-aos-once="true">
+          <div style={{ marginBottom: 14 }}>
+            <span style={badgeStyle}>✦ WHAT WE OFFER</span>
+          </div>
+          <h2 style={sectionHeadStyle}>Featured Courses</h2>
+        </div>
+
+        <div className="row g-4 justify-content-center">
+          {courses.map((course, i) => (
+            <div
+              key={i}
+              className="col-lg-6 col-md-10"
+              data-aos="fade-up"
+              data-aos-delay={String(i * 100)}
+              data-aos-duration="800"
+              data-aos-once="true"
+            >
+              <div
+                style={{
+                  background: "#ffffff",
+                  borderRadius: 16,
+                  border: "1px solid rgba(0,0,0,0.06)",
+                  boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+                  overflow: "hidden",
+                  display: "flex", flexDirection: "column",
+                  height: "100%", position: "relative",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.transform = "translateY(-6px)";
+                  el.style.boxShadow = "0 16px 48px rgba(201,136,58,0.18), 0 4px 16px rgba(0,0,0,0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.transform = "";
+                  el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.06)";
+                }}
+              >
+                {/* Badge */}
+                <span style={{
+                  position: "absolute", top: 16, right: 16,
+                  background: CG, color: "#fff",
+                  fontSize: 10, fontWeight: 700, padding: "4px 10px",
+                  borderRadius: 999, letterSpacing: "0.08em", textTransform: "uppercase",
+                  fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  {course.badge}
                 </span>
-                <h1
-                  className="lms-hero__title char-animation"
-                  data-aos="fade-up"
-                  data-aos-delay="100"
-                  data-aos-duration="900"
-                  data-aos-once="true"
-                >
-                  Master Enterprise AI<br />& Cloud Technologies
-                </h1>
-                <p
-                  className="lms-hero__sub"
-                  data-aos="fade-up"
-                  data-aos-delay="200"
-                  data-aos-duration="900"
-                  data-aos-once="true"
-                >
-                  Industry-led training programs designed for working professionals, IT teams,
-                  and enterprises. Learn AI, DevSecOps, Cloud, ERP and more.
-                </p>
-                <div
-                  className="lms-hero__btns"
-                  data-aos="fade-up"
-                  data-aos-delay="300"
-                  data-aos-duration="900"
-                  data-aos-once="true"
-                >
-                  <a href="#courses" className="theme-btn">
-                    Browse Courses <i className="far fa-arrow-right"></i>
-                  </a>
-                  <Link to="/contact" className="theme-btn" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.35)", color: "#fff" }}>
-                    Enterprise Training <i className="far fa-arrow-right"></i>
+
+                {/* Icon area */}
+                <div style={{
+                  background: "linear-gradient(135deg, rgba(201,136,58,0.10) 0%, rgba(201,136,58,0.04) 100%)",
+                  padding: "32px 24px 24px",
+                  fontSize: 36, color: C,
+                }}>
+                  <i className={course.icon} />
+                </div>
+
+                {/* Body */}
+                <div style={{ padding: "20px 24px 16px", flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                    <span style={{
+                      fontSize: 11, fontWeight: 600, color: C,
+                      background: "rgba(201,136,58,0.08)",
+                      padding: "3px 10px", borderRadius: 6,
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}>
+                      {course.category}
+                    </span>
+                    <span style={{
+                      fontSize: 11, fontWeight: 600,
+                      color: course.levelColor,
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}>
+                      {course.level}
+                    </span>
+                  </div>
+
+                  <h3 style={{
+                    fontSize: 18, fontWeight: 700, color: "#1A1A1A",
+                    lineHeight: 1.3, marginBottom: 10,
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}>
+                    {course.title}
+                  </h3>
+
+                  <p style={{
+                    fontSize: 13, color: "#6B6B6B", lineHeight: 1.65,
+                    marginBottom: 14, fontFamily: "'DM Sans', sans-serif",
+                  }}>
+                    {course.desc}
+                  </p>
+
+                  <p style={{ fontSize: 12, color: "#888", margin: 0, fontFamily: "'DM Sans', sans-serif" }}>
+                    <i className="fas fa-chalkboard-teacher" style={{ marginRight: 6 }} />
+                    XERXEZ Expert Team
+                  </p>
+                </div>
+
+                {/* Footer */}
+                <div style={{
+                  padding: "14px 24px 20px",
+                  borderTop: "1px solid rgba(0,0,0,0.06)",
+                  display: "flex", alignItems: "center",
+                  justifyContent: "space-between", gap: 12, flexWrap: "wrap",
+                }}>
+                  <div style={{
+                    display: "flex", gap: 16,
+                    fontSize: 12, color: "#888888",
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                      <i className="far fa-clock" /> {course.duration}
+                    </span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                      <i className="fas fa-play-circle" /> {course.lessons}
+                    </span>
+                  </div>
+                  <Link to="/contact" style={{
+                    display: "inline-flex", alignItems: "center", gap: 6,
+                    background: CG, color: "#fff",
+                    fontSize: 13, fontWeight: 600,
+                    padding: "8px 18px", borderRadius: 8, textDecoration: "none",
+                    fontFamily: "'DM Sans', sans-serif",
+                    boxShadow: "0 3px 10px rgba(201,136,58,0.28)",
+                  }}>
+                    Enroll Now <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
                   </Link>
                 </div>
               </div>
             </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
-            {/* Right: visual */}
-            <div className="col-lg-6 d-none d-lg-flex justify-content-center">
+    {/* ── 3. WHY XERXEZ TRAINING ───────────────────────────────────────── */}
+    <section style={{ background: "#ffffff", padding: "80px 0" }}>
+      <div className="container">
+        {/* Header */}
+        <div style={{ marginBottom: 48 }} data-aos="fade-up" data-aos-duration="800" data-aos-once="true">
+          <div style={{ marginBottom: 14 }}>
+            <span style={badgeStyle}>✦ OUR ADVANTAGE</span>
+          </div>
+          <h2 style={sectionHeadStyle}>Why XERXEZ Training</h2>
+        </div>
+
+        <div className="row g-4">
+          {features.map((f, i) => (
+            <div
+              key={i}
+              className="col-xl-3 col-lg-6 col-md-6"
+              data-aos="fade-up"
+              data-aos-delay={String(i * 100)}
+              data-aos-duration="800"
+              data-aos-once="true"
+            >
               <div
-                className="lms-hero__visual"
-                data-aos="fade-left"
-                data-aos-delay="200"
-                data-aos-duration="1000"
-                data-aos-once="true"
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid rgba(0,0,0,0.06)",
+                  borderRadius: 16,
+                  padding: "28px 24px",
+                  height: "100%",
+                  transition: "border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.borderColor = C2;
+                  el.style.transform = "translateY(-4px)";
+                  el.style.boxShadow = "0 12px 40px rgba(204,120,92,0.12)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.borderColor = "rgba(0,0,0,0.06)";
+                  el.style.transform = "";
+                  el.style.boxShadow = "";
+                }}
               >
-                <div className="lms-vis-orb lms-vis-orb--1" />
-                <div className="lms-vis-orb lms-vis-orb--2" />
-                <div className="lms-vis-card">
-                  <div className="lms-vis-card__glow" />
-
-                  {/* Top badge */}
-                  <div className="lms-vis-pill">
-                    <i className="fas fa-graduation-cap"></i>
-                    <span>XERXEZ Training Platform</span>
-                  </div>
-
-                  {/* Stats row */}
-                  <div className="lms-vis-stats">
-                    <div className="lms-vis-stat">
-                      <span className="lms-vis-stat__num">2</span>
-                      <span className="lms-vis-stat__label">Courses</span>
-                    </div>
-                    <div className="lms-vis-stat">
-                      <span className="lms-vis-stat__num">110h</span>
-                      <span className="lms-vis-stat__label">Content</span>
-                    </div>
-                    <div className="lms-vis-stat">
-                      <span className="lms-vis-stat__num">100%</span>
-                      <span className="lms-vis-stat__label">Practical</span>
-                    </div>
-                  </div>
-
-                  {/* Course progress rows */}
-                  <div className="lms-vis-courses">
-                    <div className="lms-vis-course">
-                      <div className="lms-vis-course__head">
-                        <div className="lms-vis-course__icon" style={{ background: "rgba(201,136,58,0.10)", color: "#C9883A" }}>
-                          <i className="fas fa-brain"></i>
-                        </div>
-                        <div>
-                          <p className="lms-vis-course__name">Full Stack AI Development</p>
-                          <p className="lms-vis-course__meta">Intermediate · 60 Hours</p>
-                        </div>
-                        <span className="lms-vis-course__badge" style={{ background: "#C9883A" }}>Bestseller</span>
-                      </div>
-                      <div className="lms-vis-bar">
-                        <div className="lms-vis-bar__fill" style={{ width: "72%", background: "linear-gradient(90deg,#C9883A,#E5B460)" }} />
-                      </div>
-                    </div>
-
-                    <div className="lms-vis-course">
-                      <div className="lms-vis-course__head">
-                        <div className="lms-vis-course__icon" style={{ background: "rgba(230,55,87,0.15)", color: "#e63757" }}>
-                          <i className="fas fa-shield-alt"></i>
-                        </div>
-                        <div>
-                          <p className="lms-vis-course__name">MLOps - ML Operations</p>
-                          <p className="lms-vis-course__meta">Advanced · 50 Hours</p>
-                        </div>
-                        <span className="lms-vis-course__badge" style={{ background: "#C9883A" }}>New</span>
-                      </div>
-                      <div className="lms-vis-bar">
-                        <div className="lms-vis-bar__fill" style={{ width: "55%", background: "linear-gradient(90deg,#e63757,#ff6b8a)" }} />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom tag */}
-                  <div className="lms-vis-pill mt-3">
-                    <i className="fas fa-certificate"></i>
-                    <span>Certificate of Completion Included</span>
-                  </div>
+                <div style={{
+                  width: 56, height: 56, borderRadius: 14,
+                  background: "rgba(201,136,58,0.08)",
+                  border: "1px solid rgba(201,136,58,0.15)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 22, color: C,
+                  marginBottom: 18,
+                }}>
+                  <i className={f.icon} />
                 </div>
+                <h4 style={{
+                  fontSize: 16, fontWeight: 700, color: "#1A1A1A",
+                  marginBottom: 8, fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  {f.title}
+                </h4>
+                <p style={{
+                  fontSize: 13, color: "#555555", lineHeight: 1.65,
+                  margin: 0, fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  {f.desc}
+                </p>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* ── Featured Courses ───────────────────────────────── */}
-      <section id="courses" className="lms-section lms-courses">
-        <div className="container">
-          <div className="section-title text-center mb-40">
-            <span className="fade-in">What We Offer</span>
-            <h2 className="char-animation">Featured Courses</h2>
-          </div>
-          <div className="row g-4 justify-content-center">
-            {courses.map((course, i) => (
-              <div key={i} className="col-xl-5 col-lg-6 col-md-10"
-                data-aos="fade-up"
-                data-aos-delay={`${i * 100}`}
-                data-aos-duration="800"
-                data-aos-once="true"
-              >
-                <div className="lms-course-card">
-                  {course.badge && (
-                    <span className="lms-course-card__badge" style={{ background: course.badgeBg! }}>
-                      {course.badge}
-                    </span>
-                  )}
-                  <div className="lms-course-card__icon-wrap">
-                    <i className={course.icon}></i>
-                  </div>
-                  <div className="lms-course-card__body">
-                    <div className="lms-course-card__meta">
-                      <span className="lms-course-card__cat">{course.category}</span>
-                      <span className="lms-course-card__level" style={{ color: course.levelColor }}>
-                        {course.level}
-                      </span>
-                    </div>
-                    <h3 className="lms-course-card__title">{course.title}</h3>
-                    <p className="lms-course-card__instructor">
-                      <i className="fas fa-chalkboard-teacher me-1"></i>
-                      XERXEZ Expert Team
-                    </p>
-                  </div>
-                  <div className="lms-course-card__footer">
-                    <div className="lms-course-card__stats">
-                      <span><i className="far fa-clock me-1"></i>{course.duration}</span>
-                      <span><i className="fas fa-play-circle me-1"></i>{course.lessons}</span>
-                    </div>
-                    <Link to="/contact" className="lms-enroll-btn">
-                      Enroll Now <i className="far fa-arrow-right ms-1"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+    {/* ── 4. ENTERPRISE CTA ────────────────────────────────────────────── */}
+    <section style={{
+      background: "#1a1208",
+      padding: "90px 0",
+      position: "relative", overflow: "hidden",
+    }}>
+      {/* Ambient warm glow */}
+      <div aria-hidden="true" style={{
+        position: "absolute", top: "-50%", left: "50%",
+        transform: "translateX(-50%)",
+        width: 900, height: 700, borderRadius: "50%",
+        pointerEvents: "none",
+        background: "radial-gradient(circle, rgba(201,136,58,0.13) 0%, transparent 65%)",
+      }} />
+      {/* Dot texture */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+      }} />
 
-      {/* ── Why Choose ─────────────────────────────────────── */}
-      <section className="lms-section lms-why">
-        <div className="container">
-          <div className="section-title text-center mb-40">
-            <span className="fade-in">Our Advantage</span>
-            <h2 className="char-animation">Why Choose XERXEZ Training</h2>
-          </div>
-          <div className="row g-4">
-            {features.map((f, i) => (
-              <div key={i} className="col-xl-3 col-lg-6 col-md-6"
-                data-aos="fade-up"
-                data-aos-delay={`${i * 100}`}
-                data-aos-duration="800"
-                data-aos-once="true"
-              >
-                <div className="lms-feature-card">
-                  <div className="lms-feature-card__icon">
-                    <i className={f.icon}></i>
-                  </div>
-                  <h4>{f.title}</h4>
-                  <p>{f.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Enterprise CTA ─────────────────────────────────── */}
-      <section className="lms-section lms-enterprise-cta fix">
-        <div className="container position-relative" style={{ zIndex: 2 }}>
-          <div className="lms-enterprise-cta__inner text-center"
-            data-aos="fade-up"
-            data-aos-duration="900"
-            data-aos-once="true"
-          >
-            <span className="lms-badge lms-badge--light mb-3">
-              <i className="fas fa-building me-2"></i>For Organisations
+      <div className="container position-relative" style={{ zIndex: 1 }}>
+        <div
+          style={{ textAlign: "center", maxWidth: 680, margin: "0 auto" }}
+          data-aos="fade-up"
+          data-aos-duration="900"
+          data-aos-once="true"
+        >
+          {/* Badge */}
+          <div style={{ marginBottom: 24 }}>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "rgba(201,136,58,0.14)",
+              border: "1px solid rgba(201,136,58,0.30)",
+              borderRadius: 999, padding: "6px 18px",
+              fontSize: 11, fontWeight: 700,
+              letterSpacing: "0.16em", textTransform: "uppercase",
+              color: "#E5B460", fontFamily: "'DM Sans', sans-serif",
+            }}>
+              <i className="fas fa-building" style={{ fontSize: 10 }} />
+              For Organisations
             </span>
-            <h2 className="text-white char-animation">Train Your Entire Team</h2>
-            <p className="text-white opacity-75 mt-3 mb-4" style={{ maxWidth: 560, margin: "12px auto 28px" }}>
-              Get custom enterprise training programs for your organisation.
-              We come to you — on-site, virtual, or hybrid delivery.
-            </p>
-            <div className="lms-hero__btns justify-content-center">
-              <Link to="/contact" className="theme-btn">
-                Request Enterprise Training <i className="far fa-arrow-right"></i>
-              </Link>
-              <Link to="/contact" className="theme-btn" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.3)", color: "#fff" }}>
-                Contact Us <i className="far fa-arrow-right"></i>
-              </Link>
-            </div>
+          </div>
+
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+            fontSize: "clamp(28px, 4vw, 48px)", color: "#ffffff",
+            letterSpacing: "-0.03em", marginBottom: 16,
+          }}>
+            Train Your Entire Team
+          </h2>
+
+          <p style={{
+            fontSize: 16, color: "rgba(255,255,255,0.65)", lineHeight: 1.75,
+            fontFamily: "'DM Sans', sans-serif", marginBottom: 36,
+          }}>
+            Get custom enterprise training programs for your organisation.
+            We come to you — on-site, virtual, or hybrid delivery.
+          </p>
+
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
+            <Link to="/contact" style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: CG, color: "#fff", fontWeight: 700, fontSize: 14,
+              padding: "13px 30px", borderRadius: 10, textDecoration: "none",
+              fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.01em",
+              boxShadow: "0 4px 0 rgba(150,95,30,0.5), 0 6px 18px rgba(201,136,58,0.30)",
+            }}>
+              Request Enterprise Training <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
+            </Link>
+            <Link to="/contact" style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "rgba(255,255,255,0.08)", color: "#ffffff",
+              fontWeight: 600, fontSize: 14,
+              padding: "13px 30px", borderRadius: 10, textDecoration: "none",
+              fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.01em",
+              border: "1px solid rgba(255,255,255,0.20)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
+            }}>
+              Contact Us <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
+            </Link>
           </div>
         </div>
-      </section>
-    </CustomLayout>
-  );
-};
+      </div>
+    </section>
+
+  </CustomLayout>
+);
 
 export default TrainingPage;
-
