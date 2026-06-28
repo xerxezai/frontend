@@ -4,7 +4,7 @@ import SeoFormSection from "../forms/SeoFormSection";
 const HeroSection3 = () => {
   const { toggleVideoModal } = useCustomContext();
   return (
-    <section className="hero-section hero-3">
+    <section className="hero-section hero-3" style={{ background: "#F2EFE9" }}>
       <div className="left-shape float-bob-x">
         <img
           src="/assets/img/hero/left-shape-2.png"

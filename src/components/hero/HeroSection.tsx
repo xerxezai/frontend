@@ -119,7 +119,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
     // Float wrapper — gentle ambient bob, paused on hover
     <div ref={floatRef} style={{
       animation: prefersReduced ? "none" : "xzCardFloat 7s ease-in-out 1.5s infinite",
-      width: "100%", maxWidth: 520,
+      width: "100%", maxWidth: 400,
     }}>
       {/* 3D-tiltable card */}
       <div
@@ -188,7 +188,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
         {/* ── SVG NETWORK — most elevated in the 3D stack ── */}
         <div style={{ position: "relative", zIndex: 2, transform: "translateZ(22px)" }}>
           <svg
-            viewBox="0 0 520 458"
+            viewBox="0 0 520 380"
             width="100%"
             style={{ overflow: "visible", display: "block" }}
             aria-label="XERXEZ AI module network"
@@ -409,7 +409,7 @@ const HeroSection = () => {
 
   return (
     <section style={{
-      background: "#EDE8DF",
+      background: "#F2EFE9",
       padding: "24px 0 64px",
       minHeight: "calc(100vh - 70px)",
       display: "flex", alignItems: "flex-start",
