@@ -26,6 +26,10 @@ const MainMenuSection = () => {
 
   return (
     <div className="main-menu" style={{ marginLeft: 0 }}>
+      <style>{`
+        #mobile-menu > ul { gap: 8px !important; }
+        #mobile-menu > ul > li > a { padding-left: 16px !important; padding-right: 16px !important; }
+      `}</style>
       <nav id="mobile-menu">
         <ul>
           {menuData.map((menuItem: MenuItem) => (
