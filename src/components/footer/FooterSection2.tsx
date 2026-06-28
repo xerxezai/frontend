@@ -71,11 +71,11 @@ const FooterSection2 = () => {
 
           {/* Col 1 — Logo + About */}
           <div>
-            <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 4 }}>
+            <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 0 }}>
               <img
                 src="/assets/img/logo/xerxez_logo.png"
                 alt="Xerxez Solutions"
-                style={{ height: 90, width: "auto", display: "block" }}
+                style={{ height: 80, width: "auto", display: "block" }}
               />
             </Link>
             <p style={{

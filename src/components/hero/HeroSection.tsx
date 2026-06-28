@@ -188,7 +188,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
         {/* ── SVG NETWORK — most elevated in the 3D stack ── */}
         <div style={{ position: "relative", zIndex: 2, transform: "translateZ(22px)" }}>
           <svg
-            viewBox="0 0 520 380"
+            viewBox="0 0 520 500"
             width="100%"
             style={{ overflow: "visible", display: "block" }}
             aria-label="XERXEZ AI module network"
@@ -649,7 +649,7 @@ const HeroSection = () => {
           </div>
 
           {/* ── RIGHT: RADAI Network ── */}
-          <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center" style={{ paddingTop: 30 }}>
+          <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center" style={{ paddingTop: 60 }}>
             <RADAIVisualization prefersReduced={prefersReduced} />
           </div>
 

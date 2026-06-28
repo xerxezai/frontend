@@ -4,7 +4,7 @@ import Image from "../utils/Image";
 
 const ServiceSection4 = () => {
   return (
-    <section className="service-section-3 section-padding section-bg">
+    <section className="service-section-3 section-padding section-bg" style={{ background: "#F2EFE9" }}>
       <div className="right-shape">
         <Image
           src="assets/img/service/right-shape.png"

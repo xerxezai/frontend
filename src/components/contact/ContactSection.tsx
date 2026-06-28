@@ -70,7 +70,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="xz-contact-section" style={{ padding: "72px 0" }}>
+    <section className="xz-contact-section" style={{ padding: "72px 0", background: "#ffffff" }}>
       <div className="container">
         <div className="row g-4 align-items-stretch">
 
