@@ -26,13 +26,14 @@ const FooterSection = () => {
       style={{ background: NAV.bg }}
     >
       <div className="container">
-        <div className="footer-widget-wrapper">
+        <div className="footer-widget-wrapper" style={{ padding: "30px 0 10px" }}>
           <div className="row">
 
             {/* Col 1 — About */}
             <div className="col-xl-3 col-lg-4 col-md-6">
               <div
                 className="single-footer-widget"
+                style={{ marginTop: 0 }}
                 data-aos="fade-up" data-aos-delay="200"
                 data-aos-duration="1000" data-aos-once="true"
               >
@@ -41,7 +42,7 @@ const FooterSection = () => {
                     <img
                       src="/assets/img/logo/xerxez_logo.png"
                       alt="Xerxez Solutions"
-                      style={{ height: "45px", width: "auto", marginBottom: "12px", display: "block" }}
+                      style={{ height: "30px", width: "auto", marginBottom: "12px", display: "block" }}
                     />
                   </Link>
                   <h3 style={{ color: NAV.heading, fontWeight: 600 }}>About XERXEZ</h3>
@@ -76,6 +77,7 @@ const FooterSection = () => {
             <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-5">
               <div
                 className="single-footer-widget"
+                style={{ marginTop: 0 }}
                 data-aos="fade-up" data-aos-delay="400"
                 data-aos-duration="1000" data-aos-once="true"
               >
@@ -106,6 +108,7 @@ const FooterSection = () => {
             <div className="col-xl-3 col-lg-4 col-md-6 ps-lg-2">
               <div
                 className="single-footer-widget"
+                style={{ marginTop: 0 }}
                 data-aos="fade-up" data-aos-delay="600"
                 data-aos-duration="1000" data-aos-once="true"
               >
@@ -113,19 +116,19 @@ const FooterSection = () => {
                   <h3 style={{ color: NAV.heading, fontWeight: 600 }}>Contact Us</h3>
                 </div>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                     <Phone size={16} color={NAV.icon} style={{ flexShrink: 0 }} />
                     <a href="tel:+971567867451"
                       style={{ color: NAV.link, textDecoration: "none", fontSize: 14 }}
                       {...linkHover}>+971 56 786 7451</a>
                   </li>
-                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
                     <Mail size={16} color={NAV.icon} style={{ flexShrink: 0 }} />
                     <a href="mailto:info@xerxez.com"
                       style={{ color: NAV.link, textDecoration: "none", fontSize: 14 }}
                       {...linkHover}>info@xerxez.com</a>
                   </li>
-                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
                     <Globe size={16} color={NAV.icon} style={{ flexShrink: 0 }} />
                     <a href="https://xerxez.com"
                       target="_blank" rel="noreferrer"
@@ -146,6 +149,7 @@ const FooterSection = () => {
             <div className="col-xl-3 col-lg-4 col-md-6">
               <div
                 className="single-footer-widget"
+                style={{ marginTop: 0 }}
                 data-aos="fade-up" data-aos-delay="800"
                 data-aos-duration="1000" data-aos-once="true"
               >

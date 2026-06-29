@@ -7586,7 +7586,7 @@ p.sticky-label {
 }
 
 .footer-widget-wrapper {
-  padding: 40px 0 40px;
+  padding: 20px 0 0 !important;
 }
 
 .footer-widget-wrapper .single-footer-widget {
@@ -10131,13 +10131,13 @@ h3.service-header-5 {
 
 @media (max-width: $breakpoint-md) {
   .footer-widget-wrapper {
-    padding: 40px 0 60px;
+    padding: 20px 0 0;
   }
 }
 
 @media (max-width: $breakpoint-sm) {
   .footer-widget-wrapper {
-    padding: 30px 0 50px;
+    padding: 20px 0 0;
   }
 }
 
