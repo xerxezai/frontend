@@ -29,8 +29,10 @@ const HealthPage      = lazy(() => import("./page/HealthPage"));
 const MLMPage         = lazy(() => import("./page/MLMPage"));
 const ERPPage         = lazy(() => import("./page/ERPPage"));
 const AIERPPage       = lazy(() => import("./page/AIERPPage"));
-const TrainingPage    = lazy(() => import("./page/TrainingPage"));
-const LandingPage     = lazy(() => import("./page/LandingPage"));
+const TrainingPage       = lazy(() => import("./page/TrainingPage"));
+const LandingPage        = lazy(() => import("./page/LandingPage"));
+const PrivacyPolicyPage  = lazy(() => import("./page/PrivacyPolicyPage"));
+const TermsPage          = lazy(() => import("./page/TermsPage"));
 
 function App() {
   return (
@@ -62,6 +64,8 @@ function App() {
           <Route path="/erp/*"                   element={<ERPPage />} />
           <Route path="/training"                element={<TrainingPage />} />
           <Route path="/landing"                 element={<LandingPage />} />
+          <Route path="/privacy"                 element={<PrivacyPolicyPage />} />
+          <Route path="/terms"                   element={<TermsPage />} />
           <Route path="*"                        element={<NotFoundPage />} />
         </Routes>
       </Suspense>
