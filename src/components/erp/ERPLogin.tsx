@@ -114,7 +114,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
             position: 'relative', zIndex: 1,
             background: '#FFFFFF',
             borderRadius: 20,
-            padding: '0px 40px',
+            padding: '16px 40px',
             width: '100%',
             maxWidth: 520,
             boxShadow: '0 8px 48px rgba(0,0,0,0.50), 0 2px 8px rgba(0,0,0,0.30)',
@@ -122,11 +122,11 @@ const ERPLogin = ({ onSuccess }: Props) => {
           }}
         >
           {/* Logo */}
-          <div style={{ textAlign: 'center', marginBottom: 0}}>
+          <div style={{ textAlign: 'center', marginBottom: 0, paddingTop: 8}}>
             <img
-              src="/assets/img/logo/black-logo.png"
+              src="/assets/img/logo/xerxez_logo.png"
               alt="XERXEZ"
-              height={10}
+              height={36}
               style={{ display: 'inline-block', width: 'auto' }}
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = '/assets/img/logo/xerxez_logo.png';

@@ -649,7 +649,7 @@ const HeroSection = () => {
           </div>
 
           {/* ── RIGHT: RADAI Network ── */}
-          <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-center" style={{ paddingTop: 60 }}>
+          <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-end" style={{ paddingTop: 60, paddingRight: 40 }}>
             <RADAIVisualization prefersReduced={prefersReduced} />
           </div>
 
