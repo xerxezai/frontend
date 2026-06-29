@@ -527,11 +527,7 @@ const menuData = [
   {
     title: "Portfolio",
     link: "/project",
-    hasDropdown: true,
-    submenu: [
-      { title: "Portfolio", link: "/project", hasDropdown: false },
-      { title: "Portfolio Details", link: "/project/ai-erp-platform", hasDropdown: false },
-    ],
+    hasDropdown: false,
   },
   {
     title: "AI Training",
@@ -544,7 +540,6 @@ const menuData = [
     hasDropdown: false,
   },
 ];
-
 const pricingPlans = [
   {
     id: 1,
