@@ -114,19 +114,19 @@ const ERPLogin = ({ onSuccess }: Props) => {
             position: 'relative', zIndex: 1,
             background: '#FFFFFF',
             borderRadius: 20,
-            padding: '36px 40px',
+            padding: '0px 40px',
             width: '100%',
-            maxWidth: 420,
+            maxWidth: 520,
             boxShadow: '0 8px 48px rgba(0,0,0,0.50), 0 2px 8px rgba(0,0,0,0.30)',
             border: '1px solid rgba(255,255,255,0.08)',
           }}
         >
           {/* Logo */}
-          <div style={{ textAlign: 'center', marginBottom: 8 }}>
+          <div style={{ textAlign: 'center', marginBottom: 0}}>
             <img
-              src="/assets/img/logo/black-logo.svg"
+              src="/assets/img/logo/black-logo.png"
               alt="XERXEZ"
-              height={36}
+              height={10}
               style={{ display: 'inline-block', width: 'auto' }}
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = '/assets/img/logo/xerxez_logo.png';
@@ -137,7 +137,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
           {/* Title */}
           <h1 style={{
             color: '#1A1A1A', fontWeight: 800, fontSize: 22,
-            textAlign: 'center', marginBottom: 4, marginTop: 0,
+            textAlign: 'center', marginBottom: 2, marginTop: 0,
             fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.02em',
           }}>
             ERP Portal
@@ -150,7 +150,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
           </p>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin: '16px 0 18px' }} />
+          <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin: '10px 0 12px' }} />
 
           {/* Auth error banner */}
           {authError && (
@@ -169,7 +169,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
           <form onSubmit={handleSubmit} noValidate>
 
             {/* ── Username ── */}
-            <div style={{ marginBottom: 14 }}>
+            <div style={{ marginBottom: 10 }}>
               <label style={{
                 display: 'block', fontSize: 12.5, fontWeight: 700,
                 color: '#1A1A1A', marginBottom: 6,
@@ -219,7 +219,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
             </div>
 
             {/* ── Password ── */}
-            <div style={{ marginBottom: 14 }}>
+            <div style={{ marginBottom: 10 }}>
               <label style={{
                 display: 'block', fontSize: 12.5, fontWeight: 700,
                 color: '#1A1A1A', marginBottom: 6,
@@ -348,7 +348,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
           </form>
 
           {/* ── Security badges ── */}
-          <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 5,
               color: '#9B9B9B', fontSize: 11.5, fontFamily: "'DM Sans', sans-serif",
@@ -369,7 +369,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
           </div>
 
           {/* ── Divider + Back ── */}
-          <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', margin: '16px 0 14px' }} />
+          <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', margin: '10px 0 8px' }} />
           <div style={{ textAlign: 'center' }}>
             <Link
               to="/"

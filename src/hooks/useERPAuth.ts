@@ -1,17 +1,15 @@
-﻿import { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import apiService from '../services/api';
 
-const TOKEN_KEY = 'auth_tokens';
-
 export function useERPAuth() {
-  const [token, setToken] = useState<string | null>(() => {
-    try {
-      const s = localStorage.getItem(TOKEN_KEY);
-      return s ? JSON.parse(s).access : null;
-    } catch { return null; }
-  });
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem('xerxez_token')
+  );
+  const [role, setRole] = useState<string>(() =>
+    localStorage.getItem('xerxez_role') || ''
+  );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError]     = useState<string | null>(null);
 
   const login = useCallback(async (username: string, password: string) => {
     setLoading(true);
@@ -19,15 +17,20 @@ export function useERPAuth() {
     try {
       const res = await apiService.login({ username, password });
       if (res.success) {
-        setToken(res.data.token);
+        setToken(res.data.access);
+        setRole(res.data.role || 'admin');
         return true;
       } else {
         const e = res as import('../services/api').ApiError;
-        setError(e.details?.non_field_errors?.[0] || e.message || 'Invalid credentials');
+        const detail = e.details?.non_field_errors?.[0]
+          || e.details?.detail
+          || e.message
+          || 'Invalid username or password';
+        setError(detail);
         return false;
       }
     } catch {
-      setError('Network error');
+      setError('Network error — please check your connection');
       return false;
     } finally {
       setLoading(false);
@@ -35,10 +38,14 @@ export function useERPAuth() {
   }, []);
 
   const logout = useCallback(() => {
-    apiService.logout();
+    const refresh = JSON.parse(localStorage.getItem('auth_tokens') || '{}').refresh;
+    apiService.logout();          // clears auth_tokens + xerxez_* keys
+    if (refresh) {
+      apiService.post('/auth/logout/', { refresh }).catch(() => {});
+    }
     setToken(null);
+    setRole('');
   }, []);
 
-  return { token, loading, error, login, logout, isAuthenticated: !!token };
+  return { token, role, loading, error, login, logout, isAuthenticated: !!token };
 }
-

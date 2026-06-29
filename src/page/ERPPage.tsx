@@ -17,10 +17,7 @@ const ERPPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    try {
-      const s = localStorage.getItem('auth_tokens');
-      if (s) setIsAuthenticated(!!JSON.parse(s).access);
-    } catch {}
+    setIsAuthenticated(!!localStorage.getItem('xerxez_token'));
   }, []);
 
   if (!isAuthenticated) {

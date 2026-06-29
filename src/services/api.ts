@@ -129,6 +129,9 @@ class ApiService {
   private clearAuthTokens(): void {
     this.authTokens = {};
     localStorage.removeItem('auth_tokens');
+    localStorage.removeItem('xerxez_token');
+    localStorage.removeItem('xerxez_role');
+    localStorage.removeItem('xerxez_name');
   }
 
   /**
@@ -136,9 +139,8 @@ class ApiService {
    */
   private getAuthHeaders(): Record<string, string> {
     const headers: Record<string, string> = { ...this.config.headers };
-    // Django REST Framework TokenAuthentication expects "Token <key>" not "Bearer"
     if (this.authTokens.access) {
-      headers.Authorization = `Token ${this.authTokens.access}`;
+      headers.Authorization = `Bearer ${this.authTokens.access}`;
     }
     return headers;
   }
@@ -273,15 +275,23 @@ class ApiService {
    * User login
    */
   async login(credentials: { username: string; password: string }): Promise<ApiResponse<{
-    token: string;
-    user: any;
+    access: string;
+    refresh: string;
+    role: string;
+    name: string;
+    username: string;
   }> | ApiError> {
-    const response = await this.post<{ token: string; user: any }>('/auth/login/', credentials);
-    
+    const response = await this.post<{
+      access: string; refresh: string; role: string; name: string; username: string;
+    }>('/auth/login/', credentials);
+
     if (response.success) {
-      this.saveAuthTokens({ access: response.data.token });
+      this.saveAuthTokens({ access: response.data.access, refresh: response.data.refresh });
+      localStorage.setItem('xerxez_token', response.data.access);
+      localStorage.setItem('xerxez_role',  response.data.role  || 'admin');
+      localStorage.setItem('xerxez_name',  response.data.name  || response.data.username || '');
     }
-    
+
     return response;
   }
 
