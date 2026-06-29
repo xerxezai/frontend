@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
+import apiService from "../../services/api";
 
 const SERVICES = [
   "AI-Powered ERP",
@@ -98,7 +99,7 @@ const ContactSection2 = () => {
     boxShadow: focused===name ? `0 0 0 3px ${CGL}` : "none",
   });
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.fullName.trim())  { toast.error("Full name is required."); return; }
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -108,10 +109,30 @@ const ContactSection2 = () => {
       toast.error("Message must be at least 10 characters."); return;
     }
     setSend(true);
-    setTimeout(() => {
-      setSend(false); setSent(true); setForm(EMPTY);
-      setTimeout(() => setSent(false), 6000);
-    }, 1800);
+    try {
+      const res = await apiService.post('/contact/', {
+        full_name: form.fullName,
+        email:     form.email,
+        phone:     form.phone,
+        company:   form.company,
+        service:   form.service,
+        urgency:   form.urgency || 'normal',
+        subject:   form.subject,
+        message:   form.message,
+      });
+      if (res.success) {
+        setSent(true);
+        setForm(EMPTY);
+        setTimeout(() => setSent(false), 6000);
+      } else {
+        const err = res as import('../../services/api').ApiError;
+        toast.error(err.message || 'Failed to send. Please try again.');
+      }
+    } catch {
+      toast.error('Network error — please check your connection.');
+    } finally {
+      setSend(false);
+    }
   }, [form]);
 
   const fo = (name: string) => () => setFoc(name);
@@ -437,8 +458,12 @@ const ContactSection2 = () => {
                   </div>
 
                   <div style={{ marginTop:22, textAlign:"center" }}>
-                    <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#aaa", marginBottom:6 }}>
-                      🔒 Your information is secure and confidential
+                    <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#aaa", marginBottom:6, display:"flex", alignItems:"center", justifyContent:"center", gap:5 }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                      Your information is secure and confidential
                     </div>
                     <a href="tel:+971567867451" style={{
                       fontFamily:"'Inter',sans-serif", fontSize:12,
