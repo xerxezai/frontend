@@ -144,8 +144,8 @@ export function useMLMAuth() {
     try {
       const res = await apiService.login({ username, password });
       if (res.success) {
-        setToken(res.data.token);
-        setUser(res.data.user);
+        setToken(res.data.access);
+        setUser({ username: res.data.username, name: res.data.name, role: res.data.role });
         return true;
       } else {
         const errRes = res as import('../services/api').ApiError;
