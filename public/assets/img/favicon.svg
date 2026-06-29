@@ -1,9 +1,0 @@
-<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background circle -->
-  <circle cx="24" cy="24" r="24" fill="#6C57D2"/>
-  <!-- Bold X lettermark -->
-  <path d="M13 13L24 24M24 24L35 35M24 24L35 13M24 24L13 35"
-        stroke="white" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Orange accent dot top-right -->
-  <circle cx="37" cy="11" r="4" fill="#FF792E"/>
-</svg>
