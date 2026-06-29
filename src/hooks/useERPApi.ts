@@ -2,9 +2,22 @@
 
 const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
 
+function getToken(): string | null {
+  try {
+    const stored = localStorage.getItem('auth_tokens');
+    if (stored) return JSON.parse(stored).access || null;
+  } catch {}
+  return localStorage.getItem('xerxez_token');
+}
+
+function clearAllTokens() {
+  ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
+    localStorage.removeItem(k)
+  );
+}
+
 async function erpFetch(path: string, options: RequestInit = {}) {
-  const stored = localStorage.getItem('auth_tokens');
-  const token = stored ? JSON.parse(stored).access : null;
+  const token = getToken();
   const res = await fetch(`${BASE}/${path}`, {
     ...options,
     headers: {
@@ -14,7 +27,13 @@ async function erpFetch(path: string, options: RequestInit = {}) {
     },
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.detail || JSON.stringify(data));
+  if (!res.ok) {
+    if (res.status === 401) {
+      clearAllTokens();
+      window.location.href = '/erp';
+    }
+    throw new Error(data.detail || JSON.stringify(data));
+  }
   return data;
 }
 
