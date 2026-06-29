@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ERPLogin from '../components/erp/ERPLogin';
 import ERPLayout from '../components/erp/ERPLayout';
@@ -14,11 +14,9 @@ import AccountingModule from '../components/erp/modules/AccountingModule';
 import MLMModule from '../components/erp/modules/MLMModule';
 
 const ERPPage = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    setIsAuthenticated(!!localStorage.getItem('xerxez_token'));
-  }, []);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => !!localStorage.getItem('xerxez_token')
+  );
 
   if (!isAuthenticated) {
     return <ERPLogin onSuccess={() => setIsAuthenticated(true)} />;

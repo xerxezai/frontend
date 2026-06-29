@@ -22,7 +22,9 @@ const ERPLayout = ({ children }: Props) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('auth_tokens');
+    ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
+      localStorage.removeItem(k)
+    );
     navigate('/erp');
   };
 
