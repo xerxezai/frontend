@@ -458,12 +458,8 @@ const ContactSection2 = () => {
                   </div>
 
                   <div style={{ marginTop:22, textAlign:"center" }}>
-                    <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#aaa", marginBottom:6, display:"flex", alignItems:"center", justifyContent:"center", gap:5 }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                      </svg>
-                      Your information is secure and confidential
+                    <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#aaa", marginBottom:6 }}>
+                      🔒 Your information is secure and confidential
                     </div>
                     <a href="tel:+971567867451" style={{
                       fontFamily:"'Inter',sans-serif", fontSize:12,
