@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
+import apiService from "../../services/api";
 
 interface ContactInfo {
   name: string; email: string; phone: string;
@@ -176,7 +177,7 @@ const ContactSection = () => {
   const set = useCallback((k: keyof ContactInfo, v: string) =>
     setForm(p => ({ ...p, [k]: v })), []);
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim()) { toast.error("Please enter your name."); return; }
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -188,12 +189,39 @@ const ContactSection = () => {
       toast.error("Please write a message (min 10 characters)."); return;
     }
     setSending(true);
-    setTimeout(() => {
-      setSending(false); setSent(true);
-      toast.success("Message sent! We'll respond within 24 hours.");
-      setForm(EMPTY);
-      setTimeout(() => setSent(false), 5000);
-    }, 1800);
+    try {
+      const res = await apiService.post('/contact/', {
+        full_name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.subject,
+        message: form.message,
+        company: "",
+        service: "General Inquiry",
+        urgency: "normal",
+      });
+      if (res.success) {
+        setSent(true);
+        setForm(EMPTY);
+        toast.success("Message sent! We'll respond within 24 hours.");
+        setTimeout(() => setSent(false), 5000);
+      } else {
+        const err = res as import('../../services/api').ApiError;
+        let msg = err.message;
+        const details = (err as any).details;
+        if (details && typeof details === 'object' && !Array.isArray(details)) {
+          const firstKey = Object.keys(details)[0];
+          if (firstKey) {
+            const val = details[firstKey];
+            const firstErr = Array.isArray(val) ? val[0] : val;
+            if (typeof firstErr === 'string') msg = firstErr;
+          }
+        }
+        toast.error(msg || 'Failed to send. Please try again.');
+      }
+    } finally {
+      setSending(false);
+    }
   }, [form]);
 
   const fld = (name: string): React.CSSProperties => ({
