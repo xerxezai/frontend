@@ -211,17 +211,20 @@ const ERPLayout = ({ children }: Props) => {
           flexShrink: 0,
         }}>
           {!collapsed ? (
-            <img
-              src="/assets/img/logo/white-logo.svg"
-              alt="XERXEZ"
-              style={{ height: 36, width: 'auto', display: 'block' }}
-            />
+            <span style={{
+              color: '#fff', fontWeight: 800, fontSize: 15,
+              fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em',
+              whiteSpace: 'nowrap',
+            }}>
+              XERXEZ ERP
+            </span>
           ) : (
-            <img
-              src="/assets/img/logo/icon-logo.svg"
-              alt="X"
-              style={{ height: 26, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)', opacity: 0.75 }}
-            />
+            <span style={{
+              color: C.orange, fontWeight: 900, fontSize: 16,
+              fontFamily: "'DM Sans', sans-serif",
+            }}>
+              X
+            </span>
           )}
           <button
             onClick={() => setCollapsed(c => !c)}
@@ -307,7 +310,7 @@ const ERPLayout = ({ children }: Props) => {
             <img
               src="/assets/img/logo/xerxez_logo.png"
               alt="Xerxez"
-              style={{ height: 44, width: 'auto', display: 'block' }}
+              style={{ height: 70, width: 'auto', display: 'block' }}
             />
           </div>
 
