@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {} from "react";
 import MainMenuSection from "./MainMenuSection";
 import { useCustomContext } from "../../context/context";
 import { Link } from "react-router-dom";
@@ -11,13 +11,6 @@ interface Props {
 
 const HeaderSection = ({ variant: _variant }: Props) => {
   const { toggleMobileMenu } = useCustomContext();
-  const [isSticky, setIsSticky] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsSticky(window.scrollY >= 80);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <header style={{
