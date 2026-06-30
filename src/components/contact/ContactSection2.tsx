@@ -132,7 +132,7 @@ const ContactSection2 = () => {
   const [sent, setSent]   = useState(false);
   const [btnHov, setBtnH] = useState(false);
   const [heroVis, setHeroVis] = useState(false);
-  const [cardHovL, setCardHL] = useState(false);
+  const [, setCardHL] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -188,7 +188,19 @@ const ContactSection2 = () => {
         setTimeout(() => setSent(false), 6000);
       } else {
         const err = res as import('../../services/api').ApiError;
-        toast.error(err.message || 'Failed to send. Please try again.');
+        // Extract the first human-readable error from DRF field-error dicts
+        // e.g. {"full_name": ["This field may not be blank."]} → "This field may not be blank."
+        let msg = err.message;
+        const details = (err as any).details;
+        if (details && typeof details === 'object' && !Array.isArray(details)) {
+          const firstKey = Object.keys(details)[0];
+          if (firstKey) {
+            const val = details[firstKey];
+            const firstErr = Array.isArray(val) ? val[0] : val;
+            if (typeof firstErr === 'string') msg = firstErr;
+          }
+        }
+        toast.error(msg || 'Failed to send. Please try again.');
       }
     } catch { toast.error('Network error — please check your connection.'); }
     finally  { setSend(false); }
@@ -363,7 +375,7 @@ const ContactSection2 = () => {
               { raw:15,  suffix:"+", label:"Countries Served",    delay:380 },
               { raw:99,  suffix:"%", label:"Platform Uptime",     delay:460 },
               { raw:5,   suffix:" yrs", label:"In Operation",     delay:540 },
-            ].map((s,i,arr) => (
+            ].map((s,i) => (
               <div key={s.label} style={{
                 borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
               }}>
