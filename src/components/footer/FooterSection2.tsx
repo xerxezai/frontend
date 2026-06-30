@@ -29,7 +29,6 @@ const NAV = [
   { to: "/service",  label: "Services" },
   { to: "/training", label: "Training" },
   { to: "/project",  label: "Projects" },
-  { to: "/blog",     label: "Blog"     },
   { to: "/contact",  label: "Contact"  },
 ];
 
@@ -150,11 +149,14 @@ const FooterSection2 = () => (
           {/* Col 1 — Brand */}
           <div>
             <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 16 }}>
-              <img
-                src="/assets/img/logo/white-logo.svg"
-                alt="XERXEZ Solutions"
-                style={{ height: 44, width: "auto", display: "block" }}
-              />
+              <span style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 26, fontWeight: 700,
+                color: "#ffffff", letterSpacing: "-0.01em",
+              }}>
+                Xerxez{" "}
+                <em style={{ color: OG, fontStyle: "normal" }}>Solutions</em>
+              </span>
             </Link>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -211,7 +213,7 @@ const FooterSection2 = () => (
 
           {/* Col 3 — Company */}
           <div>
-            <h4 style={colHead}>Company</h4>
+            <h4 style={colHead}>Link us</h4>
             <ul style={{ padding: 0, margin: 0, listStyle: "none" }}>
               {NAV.map(({ to, label }) => (
                 <li key={to} style={{ marginBottom: 10 }}>
