@@ -1,17 +1,28 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
+const C = {
+  orange:     "#C9883A",
+  orangeGrad: "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
+  warmDark:   "#1a1208",
+  warmDarker: "#0f0a05",
+  cream:      "#F8F7F4",
+  white:      "#FFFFFF",
+  muted:      "#6B6B6B",
+  border:     "rgba(0,0,0,0.07)",
+};
+
 const NAV = [
-  { to: '/erp/dashboard', icon: 'fas fa-th-large', label: 'Dashboard' },
-  { to: '/erp/crm', icon: 'fas fa-users', label: 'CRM' },
-  { to: '/erp/hr', icon: 'fas fa-user-tie', label: 'HR' },
-  { to: '/erp/inventory', icon: 'fas fa-boxes', label: 'Inventory' },
-  { to: '/erp/sales', icon: 'fas fa-shopping-cart', label: 'Sales' },
+  { to: '/erp/dashboard', icon: 'fas fa-th-large',            label: 'Dashboard' },
+  { to: '/erp/crm',       icon: 'fas fa-users',               label: 'CRM' },
+  { to: '/erp/hr',        icon: 'fas fa-user-tie',            label: 'HR' },
+  { to: '/erp/inventory', icon: 'fas fa-boxes',               label: 'Inventory' },
+  { to: '/erp/sales',     icon: 'fas fa-shopping-cart',       label: 'Sales' },
   { to: '/erp/invoicing', icon: 'fas fa-file-invoice-dollar', label: 'Invoicing' },
-  { to: '/erp/purchases', icon: 'fas fa-truck-loading', label: 'Purchases' },
-  { to: '/erp/logistics', icon: 'fas fa-shipping-fast', label: 'Logistics' },
-  { to: '/erp/accounting', icon: 'fas fa-book', label: 'Accounting' },
-  { to: '/erp/mlm', icon: 'fas fa-sitemap', label: 'MLM' },
+  { to: '/erp/purchases', icon: 'fas fa-truck-loading',       label: 'Purchases' },
+  { to: '/erp/logistics', icon: 'fas fa-shipping-fast',       label: 'Logistics' },
+  { to: '/erp/accounting',icon: 'fas fa-book',                label: 'Accounting' },
+  { to: '/erp/mlm',       icon: 'fas fa-sitemap',             label: 'MLM' },
 ];
 
 interface Props { children: React.ReactNode; }
@@ -19,7 +30,11 @@ interface Props { children: React.ReactNode; }
 const ERPLayout = ({ children }: Props) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchVal, setSearchVal] = useState('');
   const navigate = useNavigate();
+
+  const adminName = localStorage.getItem('xerxez_name') || 'Admin';
+  const initial   = adminName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -28,98 +43,328 @@ const ERPLayout = ({ children }: Props) => {
     navigate('/');
   };
 
-  const sidebarWidth = collapsed ? 64 : 240;
+  const sidebarW = collapsed ? 68 : 240;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f0f2f5' }}>
-      {/* Inject responsive margin so main content clears the fixed sidebar */}
-      <style>{`@media (min-width: 992px) { .erp-main { margin-left: ${sidebarWidth}px !important; transition: margin-left 0.2s; } }`}</style>
+    <div
+      style={{
+        minHeight: '100vh',
+        background: C.cream,
+        '--sidebar-w': `${sidebarW}px`,
+      } as React.CSSProperties}
+    >
+      <style>{`
+        @media (min-width: 992px) {
+          .erp-main {
+            margin-left: var(--sidebar-w) !important;
+            transition: margin-left 0.28s cubic-bezier(0.22,1,0.36,1);
+          }
+        }
 
-      {/* Mobile overlay */}
+        /* ── nav items ── */
+        .erp-nav-item {
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          padding: 9px 13px;
+          margin: 2px 0;
+          border-left: 3px solid transparent;
+          border-radius: 0 10px 10px 0;
+          text-decoration: none;
+          color: rgba(255,255,255,0.50);
+          font-size: 13.5px;
+          font-weight: 500;
+          font-family: 'DM Sans', sans-serif;
+          transition: color 0.22s, background 0.22s, transform 0.22s;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        .erp-nav-item:hover {
+          color: rgba(255,255,255,0.88);
+          background: rgba(201,136,58,0.09);
+          transform: translateX(3px);
+        }
+        .erp-nav-active {
+          color: #C9883A !important;
+          background: rgba(201,136,58,0.13) !important;
+          border-left-color: #C9883A !important;
+          font-weight: 700 !important;
+        }
+
+        /* ── icon badge ── */
+        .erp-icon-badge {
+          width: 28px; height: 28px;
+          border-radius: 8px;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+          font-size: 12px;
+          background: rgba(255,255,255,0.07);
+          transition: background 0.22s, box-shadow 0.22s;
+        }
+        .erp-nav-active .erp-icon-badge {
+          background: linear-gradient(145deg, #e8a84e 0%, #C9883A 100%);
+          box-shadow: 0 3px 0 rgba(150,95,30,0.50), 0 4px 10px rgba(201,136,58,0.28);
+        }
+        .erp-nav-item:hover .erp-icon-badge {
+          background: rgba(201,136,58,0.18);
+        }
+
+        /* ── stagger slide-in ── */
+        .erp-nav-slide {
+          animation: erpNavIn 0.38s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        @keyframes erpNavIn {
+          from { opacity: 0; transform: translateX(-14px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ── search ── */
+        .erp-search {
+          border: 1.5px solid rgba(0,0,0,0.09);
+          border-radius: 9px;
+          padding: 7px 14px 7px 34px;
+          font-size: 13px;
+          font-family: 'DM Sans', sans-serif;
+          background: #F8F7F4;
+          color: #1A1A1A;
+          outline: none;
+          width: 200px;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .erp-search:focus {
+          border-color: #C9883A;
+          box-shadow: 0 0 0 3px rgba(201,136,58,0.12);
+        }
+        .erp-search::placeholder { color: #9B9B9B; }
+
+        /* ── bell ── */
+        .erp-bell {
+          width: 38px; height: 38px;
+          border-radius: 10px;
+          background: #F8F7F4;
+          border: 1.5px solid rgba(0,0,0,0.08);
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; position: relative;
+          transition: background 0.2s, border-color 0.2s;
+        }
+        .erp-bell:hover { background: #F0EDE8; border-color: rgba(201,136,58,0.30); }
+
+        /* ── logout ── */
+        .erp-logout {
+          background: rgba(239,68,68,0.07);
+          border: 1px solid rgba(239,68,68,0.16);
+          border-radius: 10px;
+          padding: 9px 13px;
+          width: 100%;
+          display: flex; align-items: center; gap: 10px;
+          cursor: pointer;
+          color: rgba(248,113,113,0.85);
+          font-size: 13.5px; font-weight: 600;
+          font-family: 'DM Sans', sans-serif;
+          transition: background 0.2s, color 0.2s;
+        }
+        .erp-logout:hover { background: rgba(239,68,68,0.14); color: #f87171; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .erp-nav-slide { animation: none !important; }
+          .erp-nav-item  { transition: none !important; }
+        }
+      `}</style>
+
+      {/* ── mobile overlay ── */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 199 }}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.52)',
+            zIndex: 199,
+            backdropFilter: 'blur(3px)',
+            WebkitBackdropFilter: 'blur(3px)',
+          }}
         />
       )}
 
-      {/* Sidebar */}
-      <aside style={{
-        width: sidebarWidth,
-        background: '#1a1a2e',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'fixed',
-        top: 0, left: 0, bottom: 0,
-        zIndex: 200,
-        transition: 'width 0.2s, transform 0.2s',
-        transform: mobileOpen ? 'translateX(0)' : undefined,
-      }}
-      className={mobileOpen ? 'd-flex' : 'd-none d-lg-flex'}
+      {/* ── sidebar ── */}
+      <aside
+        className={mobileOpen ? 'd-flex' : 'd-none d-lg-flex'}
+        style={{
+          width: sidebarW,
+          background: `linear-gradient(180deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
+          flexDirection: 'column',
+          position: 'fixed',
+          top: 0, left: 0, bottom: 0,
+          zIndex: 200,
+          transition: 'width 0.28s cubic-bezier(0.22,1,0.36,1)',
+          boxShadow: '4px 0 28px rgba(0,0,0,0.22)',
+          overflow: 'hidden',
+        }}
       >
-        {/* Brand */}
-        <div className="d-flex align-items-center justify-content-between px-3 py-3 border-bottom border-secondary">
-          {!collapsed && <span className="text-white fw-bold" style={{ fontSize: 15 }}>XERXEZ ERP</span>}
+        {/* brand */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: collapsed ? 'center' : 'space-between',
+          padding: '18px 12px 14px',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          minHeight: 68,
+          flexShrink: 0,
+        }}>
+          {!collapsed ? (
+            <img
+              src="/assets/img/logo/white-logo.svg"
+              alt="XERXEZ"
+              style={{ height: 36, width: 'auto', display: 'block' }}
+            />
+          ) : (
+            <img
+              src="/assets/img/logo/icon-logo.svg"
+              alt="X"
+              style={{ height: 26, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)', opacity: 0.75 }}
+            />
+          )}
           <button
-            className="btn btn-sm p-0 border-0 ms-auto"
-            style={{ color: 'rgba(255,255,255,0.5)', background: 'none' }}
             onClick={() => setCollapsed(c => !c)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '5px 6px', borderRadius: 6, flexShrink: 0,
+              color: 'rgba(255,255,255,0.28)',
+              transition: 'color 0.2s',
+              marginLeft: collapsed ? 0 : 8,
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.28)')}
           >
-            <i className={`fas fa-${collapsed ? 'chevron-right' : 'chevron-left'}`}></i>
+            <i
+              className={`fas fa-${collapsed ? 'chevron-right' : 'chevron-left'}`}
+              style={{ fontSize: 11 }}
+            ></i>
           </button>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-grow-1 overflow-auto py-2">
-          {NAV.map(item => (
+        {/* nav */}
+        <nav style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', paddingTop: 10, paddingBottom: 10 }}>
+          {NAV.map((item, idx) => (
             <NavLink
               key={item.to}
               to={item.to}
               title={item.label}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
-                `d-flex align-items-center gap-2 px-3 py-2 text-decoration-none erp-nav-item${isActive ? ' erp-nav-active' : ''}`
+                `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`
               }
+              style={{ animationDelay: `${idx * 0.035}s` }}
             >
-              <i className={`${item.icon}`} style={{ width: 18, textAlign: 'center', fontSize: 15 }}></i>
-              {!collapsed && <span style={{ fontSize: 14, fontWeight: 500 }}>{item.label}</span>}
+              <span className="erp-icon-badge">
+                <i className={item.icon} style={{ color: 'inherit', fontSize: 12 }}></i>
+              </span>
+              {!collapsed && <span>{item.label}</span>}
             </NavLink>
           ))}
         </nav>
 
-        {/* Logout */}
-        <button
-          onClick={handleLogout}
-          className="d-flex align-items-center gap-2 px-3 py-3 w-100 border-0 border-top border-secondary"
-          style={{ background: 'none', color: 'rgba(255,87,87,0.8)', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}
-        >
-          <i className="fas fa-sign-out-alt" style={{ width: 18, textAlign: 'center' }}></i>
-          {!collapsed && <span>Logout</span>}
-        </button>
+        {/* logout */}
+        <div style={{ padding: 10, flexShrink: 0, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <button
+            onClick={handleLogout}
+            aria-label="Logout"
+            className="erp-logout"
+            style={{ justifyContent: collapsed ? 'center' : 'flex-start' }}
+          >
+            <i className="fas fa-sign-out-alt" style={{ fontSize: 13, flexShrink: 0 }}></i>
+            {!collapsed && <span>Logout</span>}
+          </button>
+        </div>
       </aside>
 
-      {/* Main content area — offset by sidebar width on large screens */}
+      {/* ── main ── */}
       <div className="erp-main d-flex flex-column" style={{ minHeight: '100vh' }}>
 
-        {/* Topbar */}
-        <header className="bg-white border-bottom px-3 px-md-4 py-2 d-flex align-items-center justify-content-between sticky-top" style={{ zIndex: 100 }}>
-          <div className="d-flex align-items-center gap-3">
+        {/* header */}
+        <header style={{
+          background: C.white,
+          boxShadow: '0 1px 0 rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)',
+          padding: '0 24px',
+          height: 64,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+        }}>
+          {/* left */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <button
-              className="btn btn-sm d-lg-none border-0 p-1"
+              className="d-lg-none"
               onClick={() => setMobileOpen(o => !o)}
+              aria-label="Open menu"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#1A1A1A' }}
             >
               <i className="fas fa-bars" style={{ fontSize: 18 }}></i>
             </button>
-            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez" style={{ height: '60px', width: 'auto', background: 'transparent', display: 'block', border: 'none', boxShadow: 'none' }} />
+            <img
+              src="/assets/img/logo/xerxez_logo.png"
+              alt="Xerxez"
+              style={{ height: 44, width: 'auto', display: 'block' }}
+            />
           </div>
-          <div className="d-flex align-items-center gap-2 text-muted" style={{ fontSize: 14 }}>
-            <i className="fas fa-user-circle" style={{ fontSize: 20, color: '#C9883A' }}></i>
-            <span className="d-none d-sm-inline">Admin</span>
+
+          {/* right */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {/* search */}
+            <div className="d-none d-md-block" style={{ position: 'relative' }}>
+              <i
+                className="fas fa-search"
+                style={{
+                  position: 'absolute', left: 11,
+                  top: '50%', transform: 'translateY(-50%)',
+                  color: C.muted, fontSize: 12, pointerEvents: 'none',
+                }}
+              ></i>
+              <input
+                className="erp-search"
+                type="text"
+                placeholder="Search..."
+                value={searchVal}
+                onChange={e => setSearchVal(e.target.value)}
+                aria-label="Search"
+              />
+            </div>
+
+            {/* bell */}
+            <button className="erp-bell" aria-label="Notifications">
+              <i className="fas fa-bell" style={{ color: '#4B4B4B', fontSize: 14 }}></i>
+              <span style={{
+                position: 'absolute', top: 8, right: 8,
+                width: 7, height: 7, borderRadius: '50%',
+                background: C.orange, border: '1.5px solid #fff',
+                display: 'block',
+              }}></span>
+            </button>
+
+            {/* avatar with orange ring */}
+            <div
+              title={adminName}
+              style={{
+                width: 38, height: 38, borderRadius: '50%',
+                background: C.orangeGrad,
+                boxShadow: `0 0 0 2px ${C.white}, 0 0 0 3.5px ${C.orange}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', flexShrink: 0,
+              }}
+            >
+              <span style={{
+                color: '#fff', fontWeight: 800, fontSize: 14,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>{initial}</span>
+            </div>
           </div>
         </header>
 
-        {/* Page content */}
-        <div className="p-3 p-md-4" style={{ flex: 1 }}>
+        {/* content */}
+        <div style={{ flex: 1, padding: '24px 28px', background: C.cream }}>
           {children}
         </div>
 
@@ -129,6 +374,3 @@ const ERPLayout = ({ children }: Props) => {
 };
 
 export default ERPLayout;
-
-
-
