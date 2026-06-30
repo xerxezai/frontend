@@ -55,7 +55,7 @@ const HeaderSection2 = ({ variant }: Props) => {
               <div className="header-left">
                 <Link to="/" className="header-logo1">
                   <Image
-                    src="/assets/img/logo/xerxez_logo.png"
+                    src="/assets/img/logo/white-logo.svg"
                     alt="Xerxez Solutions"
                     width={180}
                     height={60}
@@ -71,13 +71,13 @@ const HeaderSection2 = ({ variant }: Props) => {
                   fontFamily: "'Inter', sans-serif",
                   fontSize: 14,
                   fontWeight: 500,
-                  color: "#141413",
+                  color: "rgba(255,255,255,0.72)",
                   textDecoration: "none",
                   padding: "8px 16px",
                   transition: "color 150ms ease",
                 }}
-                  onMouseOver={e => (e.currentTarget.style.color = "#cc785c")}
-                  onMouseOut={e => (e.currentTarget.style.color = "#141413")}
+                  onMouseOver={e => (e.currentTarget.style.color = "#C9883A")}
+                  onMouseOut={e => (e.currentTarget.style.color = "rgba(255,255,255,0.72)")}
                 >
                   Sign in
                 </Link>

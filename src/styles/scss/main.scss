@@ -11252,14 +11252,17 @@ h3.service-header-5 {
    Clean white/light minimal theme with purple accent
 ═══════════════════════════════════════════════════════════ */
 
-/* ── Navbar pill: white, dark nav links ── */
+/* ── Navbar pill: dark glass ── */
 .header-section-2 .header-1 .mega-menu-wrapper {
-  background: #ffffff !important;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.07) !important;
+  background: rgba(30,20,10,0.72) !important;
+  backdrop-filter: blur(28px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.6) !important;
+  border-color: rgba(201,136,58,0.22) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45),inset 0 1px 0 rgba(201,136,58,0.12),inset 0 -1px 0 rgba(0,0,0,0.30) !important;
 }
 .header-1 .main-menu ul li a,
 .header-1 .main-menu ul li .sub-menu li a {
-  color: #0A0A0A !important;
+  color: rgba(255,255,255,0.82) !important;
 }
 .header-1 .main-menu ul li a:hover,
 .header-1 .main-menu ul li:hover > a {
@@ -11267,17 +11270,17 @@ h3.service-header-5 {
 }
 .mega-menu-wrapper h1, .mega-menu-wrapper h2, .mega-menu-wrapper h3,
 .mega-menu-wrapper h4, .mega-menu-wrapper h5, .mega-menu-wrapper h6 {
-  color: #0A0A0A;
+  color: rgba(255,255,255,0.92) !important;
 }
 
-/* Header top bar tagline/links on light gray bg */
+/* Header top bar tagline/links on dark bg */
 .header-section-2 .header-top-wrapper .top-list li,
 .header-section-2 .header-top-wrapper .top-list li a,
 .header-section-2 .header-top-wrapper .header-top-right a {
-  color: #4B4B4B !important;
+  color: rgba(255,255,255,0.52) !important;
 }
 .header-section-2 .header-top-wrapper .social-icon a {
-  color: #4B4B4B !important;
+  color: rgba(255,255,255,0.52) !important;
 }
 .header-section-2 .header-top-wrapper .social-icon a:hover { color: #C9883A !important; }
 
@@ -11427,32 +11430,36 @@ h3.service-header-5 {
 .preloader, .preloader .loader, .preloader .loader-section,
 .preloader .loader-section .bg { background-color: #ffffff !important; }
 
-/* ── Sticky header: white + subtle shadow ── */
+/* ── Sticky header: dark glass ── */
 .sticky {
-  background-color: #ffffff !important;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08) !important;
-  border-bottom: 1px solid #E5E5E5 !important;
+  background-color: rgba(20,14,6,0.88) !important;
+  backdrop-filter: blur(20px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.4) !important;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.40),inset 0 -1px 0 rgba(201,136,58,0.12) !important;
+  border-bottom: 1px solid rgba(180,140,100,0.16) !important;
 }
-.sticky .header-main .main-menu ul li a { color: #0A0A0A !important; }
+.sticky .header-main .main-menu ul li a { color: rgba(255,255,255,0.82) !important; }
 .sticky .header-main .main-menu ul li a:hover { color: #C9883A !important; }
-.sticky .header-main .sidebar__toggle { color: #0A0A0A !important; }
+.sticky .header-main .sidebar__toggle { color: rgba(255,255,255,0.82) !important; }
 
-/* ── Submenu dropdown: white bg ── */
+/* ── Submenu dropdown: dark glass ── */
 .header-1 .main-menu ul li .submenu,
 .submenu--grid {
-  background: #ffffff !important;
-  border: 1px solid #E5E5E5 !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.10) !important;
+  background: rgba(22,15,7,0.82) !important;
+  backdrop-filter: blur(24px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.5) !important;
+  border: 1px solid rgba(201,136,58,0.18) !important;
+  box-shadow: 0 20px 56px rgba(0,0,0,0.55),inset 0 1px 0 rgba(201,136,58,0.10) !important;
 }
 .submenu--grid li a,
 .submenu--grid li a:visited,
 .header-1 .main-menu ul li .submenu li a,
 .header-1 .main-menu ul li .submenu li a:visited {
-  color: #141413 !important;
+  color: rgba(255,255,255,0.75) !important;
 }
 .submenu--grid li a:hover,
 .header-1 .main-menu ul li .submenu li a:hover {
-  color: #cc785c !important;
+  color: #C9883A !important;
 }
 
 /* ── Logo display ── */
@@ -11610,25 +11617,25 @@ body {
 
 /* ── Header ── */
 .header-section, .header-section-2 {
-  background: #F2EFE9 !important;
-  border-bottom: 1px solid #DDDAD4 !important;
+  background: #1a1208 !important;
+  border-bottom: 1px solid rgba(180,140,100,0.15) !important;
   box-shadow: none !important;
 }
 .header-1.sticky {
-  background: rgba(242,239,233,0.94) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border-bottom: 1px solid #DDDAD4 !important;
+  background: rgba(20,14,6,0.95) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border-bottom: 1px solid rgba(180,140,100,0.15) !important;
 }
 .header-top-section {
-  background: #EAE7E0 !important;
-  border-bottom: 1px solid #DDDAD4 !important;
+  background: rgba(10,7,3,0.55) !important;
+  border-bottom: 1px solid rgba(180,140,100,0.10) !important;
 }
 .main-menu nav ul li > a {
   font-family: 'DM Sans', sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
-  color: #1A1A1A !important;
+  color: rgba(255,255,255,0.82) !important;
   letter-spacing: 0.01em !important;
   padding: 10px 0 !important;
 }
@@ -11654,18 +11661,20 @@ body {
   padding: 0 !important;
 }
 .submenu, .mega-menu {
-  background: #ffffff !important;
-  border: 1px solid #DDDAD4 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08) !important;
+  background: rgba(22,15,7,0.88) !important;
+  backdrop-filter: blur(28px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.5) !important;
+  border: 1px solid rgba(201,136,58,0.20) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(201,136,58,0.10) !important;
 }
 .submenu li a, .mega-menu li a,
 .submenu li a:visited, .mega-menu li a:visited {
-  color: #1A1A1A !important;
+  color: rgba(255,255,255,0.78) !important;
   font-size: 13px !important;
   font-family: 'DM Sans', sans-serif !important;
 }
-.submenu li a:hover, .mega-menu li a:hover { color: #cc785c !important; }
+.submenu li a:hover, .mega-menu li a:hover { color: #C9883A !important; }
 
 /* ── Services grid: 3-column layout with padding ── */
 .header-main .main-menu ul li .submenu.submenu--grid {
@@ -11688,9 +11697,12 @@ body {
 /* remove last-child special styling */
 .header-main .main-menu ul li .submenu.submenu--grid li:last-child a,
 .header-main .main-menu ul li .submenu.submenu--grid li:last-child a:visited {
-  color: #141413 !important;
+  color: rgba(255,255,255,0.78) !important;
   font-weight: 500 !important;
 }
+/* ── Hamburger icon (non-sticky, mobile) ── */
+.sidebar__toggle, .header-main .sidebar__toggle,
+.header-1 .sidebar__toggle { color: rgba(255,255,255,0.82) !important; }
 
 /* ── Hero Section ── */
 .hero-section.hero-1 {
