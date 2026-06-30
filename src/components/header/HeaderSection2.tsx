@@ -67,6 +67,20 @@ const HeaderSection2 = ({ variant }: Props) => {
                 <div className="mean__menu-wrapper d-none d-xl-block">
                   <MainMenuSection />
                 </div>
+                <Link to="/erp" className="d-none d-xl-inline-flex" style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "#141413",
+                  textDecoration: "none",
+                  padding: "8px 16px",
+                  transition: "color 150ms ease",
+                }}
+                  onMouseOver={e => (e.currentTarget.style.color = "#cc785c")}
+                  onMouseOut={e => (e.currentTarget.style.color = "#141413")}
+                >
+                  Sign in
+                </Link>
                 <div className="header__hamburger d-xl-none my-auto">
                   <div
                     className="sidebar__toggle"
