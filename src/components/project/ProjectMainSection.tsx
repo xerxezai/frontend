@@ -10,6 +10,18 @@ const prefersReduced =
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// ── Filter config ─────────────────────────────────────────────────────────
+type FilterKey = "All" | "ERP" | "MLOps" | "SecOps" | "Cloud";
+
+const FILTERS: { key: FilterKey; label: string; match: string[] }[] = [
+  { key: "All",    label: "All Projects",       match: [] },
+  { key: "ERP",    label: "ERP",                match: ["AI & ERP"] },
+  { key: "MLOps",  label: "MLOps",              match: ["MLOPS"] },
+  { key: "SecOps", label: "SecOps",             match: ["DEVSECOPS"] },
+  { key: "Cloud",  label: "Cloud",              match: ["CLOUD"] },
+];
+
+// ── Project metadata ───────────────────────────────────────────────────────
 const projectMeta: Record<string, { desc: string; tags: string[] }> = {
   "ai-erp-platform":        { desc: "End-to-end AI ERP deployment with automated workflows and real-time business intelligence across all units.", tags: ["Python", "TensorFlow", "SAP", "Azure"] },
   "mlops-pipeline":         { desc: "Scalable MLOps automation pipeline that cut model deployment cycles from weeks to hours.", tags: ["Kubernetes", "MLflow", "Python", "AWS"] },
@@ -80,8 +92,8 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0]; index: number }> = (
     <div
       className="col-xl-4 col-lg-4 col-md-6 col-12"
       data-aos="fade-up"
-      data-aos-delay={String(index * 100)}
-      data-aos-duration="800"
+      data-aos-delay={String(index * 80)}
+      data-aos-duration="700"
       data-aos-easing="ease-out-cubic"
       data-aos-once="true"
     >
@@ -195,16 +207,139 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0]; index: number }> = (
   );
 };
 
+// ── Filter button ──────────────────────────────────────────────────────────
+const FilterBtn: React.FC<{
+  label: string;
+  count: number;
+  active: boolean;
+  onClick: () => void;
+}> = ({ label, count, active, onClick }) => {
+  const [hov, setHov] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 8,
+        padding: "10px 20px",
+        borderRadius: 999,
+        border: active
+          ? "1.5px solid transparent"
+          : `1.5px solid ${hov ? "rgba(201,136,58,0.45)" : "rgba(26,18,8,0.16)"}`,
+        background: active
+          ? CG
+          : hov
+          ? "rgba(201,136,58,0.06)"
+          : "rgba(255,255,255,0.7)",
+        color: active ? "#fff" : hov ? "#C9883A" : "#3A3530",
+        fontFamily: "'DM Sans', sans-serif",
+        fontSize: 13, fontWeight: active ? 700 : 600,
+        cursor: "pointer",
+        letterSpacing: "0.01em",
+        boxShadow: active
+          ? "0 4px 0 rgba(150,95,30,0.40), 0 6px 18px rgba(201,136,58,0.22)"
+          : hov
+          ? "0 2px 8px rgba(0,0,0,0.06)"
+          : "none",
+        transform: active ? "translateY(-1px)" : "translateY(0)",
+        transition: "all 200ms cubic-bezier(0.22,1,0.36,1)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {label}
+      <span style={{
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+        minWidth: 20, height: 20, borderRadius: 999,
+        background: active ? "rgba(255,255,255,0.22)" : "rgba(26,18,8,0.07)",
+        color: active ? "#fff" : "#6B5E50",
+        fontSize: 11, fontWeight: 700,
+        padding: "0 6px",
+        transition: "all 200ms ease",
+      }}>
+        {count}
+      </span>
+    </button>
+  );
+};
+
+// ── Empty state ────────────────────────────────────────────────────────────
+const EmptyFilter: React.FC<{ onReset: () => void }> = ({ onReset }) => (
+  <div
+    style={{
+      gridColumn: "1 / -1",
+      textAlign: "center",
+      padding: "64px 24px",
+    }}
+    data-aos="fade-up"
+    data-aos-once="true"
+  >
+    <div style={{
+      width: 64, height: 64, borderRadius: 18,
+      background: "rgba(201,136,58,0.08)",
+      border: "1px solid rgba(201,136,58,0.15)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      margin: "0 auto 20px",
+    }}>
+      <i className="fas fa-folder-open" style={{ fontSize: 26, color: "#C9883A" }} />
+    </div>
+    <h4 style={{
+      fontSize: 18, fontWeight: 700, color: "#1A1A1A",
+      fontFamily: "'DM Sans', sans-serif", marginBottom: 8,
+    }}>
+      No projects in this category
+    </h4>
+    <p style={{
+      fontSize: 14, color: "#6B6B6B",
+      fontFamily: "'DM Sans', sans-serif", marginBottom: 20,
+    }}>
+      More case studies are on the way.
+    </p>
+    <button
+      onClick={onReset}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 6,
+        background: CG, color: "#fff", fontWeight: 600, fontSize: 13,
+        padding: "10px 20px", borderRadius: 10, border: "none",
+        cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
+        boxShadow: "0 4px 0 rgba(150,95,30,0.4)",
+      }}
+    >
+      Show all projects <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
+    </button>
+  </div>
+);
+
 // ── Page ──────────────────────────────────────────────────────────────────
 const ProjectMainSection: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<FilterKey>("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 9;
+
+  const filteredData = useMemo(() => {
+    const f = FILTERS.find((f) => f.key === activeFilter);
+    if (!f || f.match.length === 0) return projectsData;
+    return projectsData.filter((p) => f.match.includes(p.category));
+  }, [activeFilter]);
 
   const { totalPages, currentItems } = useMemo(() => {
-    const tp    = Math.ceil(projectsData.length / itemsPerPage);
+    const tp    = Math.ceil(filteredData.length / itemsPerPage);
     const start = (currentPage - 1) * itemsPerPage;
-    return { totalPages: tp, currentItems: projectsData.slice(start, start + itemsPerPage) };
-  }, [currentPage]);
+    return { totalPages: tp, currentItems: filteredData.slice(start, start + itemsPerPage) };
+  }, [filteredData, currentPage]);
+
+  const handleFilter = (key: FilterKey) => {
+    setActiveFilter(key);
+    setCurrentPage(1);
+  };
+
+  const countFor = (f: typeof FILTERS[0]) => {
+    if (f.match.length === 0) return projectsData.length;
+    return projectsData.filter((p) => f.match.includes(p.category)).length;
+  };
 
   return (
     <section style={{ background: "#F2EFE9", padding: "150px 0 100px" }}>
@@ -212,7 +347,7 @@ const ProjectMainSection: React.FC = () => {
 
         {/* ── Hero header ── */}
         <div
-          style={{ marginBottom: 64 }}
+          style={{ marginBottom: 56 }}
           data-aos="fade-up"
           data-aos-duration="800"
           data-aos-once="true"
@@ -329,12 +464,49 @@ const ProjectMainSection: React.FC = () => {
           </div>
         </div>
 
-        {/* ── Cards grid ── */}
-        <div className="row g-4">
-          {currentItems.map((item, index) => (
-            <ProjectCard key={item.id} item={item} index={index} />
+        {/* ── Category filters ── */}
+        <div
+          style={{
+            display: "flex", alignItems: "center", flexWrap: "wrap",
+            gap: 10, marginBottom: 40,
+          }}
+          data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="700"
+          data-aos-once="true"
+        >
+          {FILTERS.map((f) => (
+            <FilterBtn
+              key={f.key}
+              label={f.label}
+              count={countFor(f)}
+              active={activeFilter === f.key}
+              onClick={() => handleFilter(f.key)}
+            />
           ))}
+
+          {/* Result count */}
+          <span style={{
+            marginLeft: "auto",
+            fontSize: 13, color: "#8A7D6E",
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 500,
+            whiteSpace: "nowrap",
+          }}>
+            {filteredData.length} project{filteredData.length !== 1 ? "s" : ""}
+          </span>
         </div>
+
+        {/* ── Cards grid ── */}
+        {currentItems.length === 0 ? (
+          <EmptyFilter onReset={() => handleFilter("All")} />
+        ) : (
+          <div className="row g-4">
+            {currentItems.map((item, index) => (
+              <ProjectCard key={item.id} item={item} index={index} />
+            ))}
+          </div>
+        )}
 
         {/* ── Pagination ── */}
         {totalPages > 1 && (
