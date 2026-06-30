@@ -125,21 +125,6 @@ const MainMenuSection = () => {
                   </ul>
                 )}
               </li>
-
-              {menuItem.title === "Home" && (
-                <li className="has-dropdown active d-xl-none">
-                  <Link to="/" className="border-none">Home</Link>
-                  {menuItem.submenu && (
-                    <ul className="submenu">
-                      {menuItem.submenu.map((subMenuItem: MenuItem) => (
-                        <li key={`mobile-home-${subMenuItem.title}-${subMenuItem.link}`}>
-                          <Link to={subMenuItem.link}>{subMenuItem.title}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              )}
             </React.Fragment>
           ))}
         </ul>
