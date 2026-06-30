@@ -25,25 +25,65 @@ const FILTERS: { key: FilterKey; label: string; match: string[] }[] = [
   { key: "Cloud",  label: "Cloud",        match: ["CLOUD"] },
 ];
 
-// ── Project metadata ───────────────────────────────────────────────────────
-const projectMeta: Record<string, { desc: string; tags: string[] }> = {
-  "ai-erp-platform":          { desc: "End-to-end AI ERP deployment with automated workflows and real-time business intelligence across all units.", tags: ["Python", "TensorFlow", "SAP", "Azure"] },
-  "mlops-pipeline":           { desc: "Scalable MLOps automation pipeline that cut model deployment cycles from weeks to hours.", tags: ["Kubernetes", "MLflow", "Python", "AWS"] },
-  "cloud-infrastructure":     { desc: "Zero-trust cloud architecture achieving 99.9% uptime with continuous compliance monitoring.", tags: ["Terraform", "AWS", "K8s", "Vault"] },
-  "enterprise-saas":          { desc: "Multi-tenant SaaS platform serving 500+ enterprise clients at 99.95% availability SLA.", tags: ["React", "Node.js", "PostgreSQL", "GCP"] },
-  "ai-training-program":      { desc: "Upskilled 1,200+ corporate professionals in AI/ML fundamentals and applied LLM engineering.", tags: ["Python", "Jupyter", "LangChain", "OpenAI"] },
-  "digital-transformation":   { desc: "Digital transformation roadmap that reduced operational costs by 38% across a 10,000-person organisation.", tags: ["Agile", "TOGAF", "AWS", "Power BI"] },
-  "supply-chain-ai":          { desc: "AI-driven supply chain optimisation cutting inventory costs by 28% and improving fulfilment speed.", tags: ["PySpark", "Snowflake", "Python", "Azure"] },
-  "kubernetes-security":      { desc: "Hardened Kubernetes clusters across 3 cloud providers, achieving SOC 2 Type II certification.", tags: ["K8s", "Falco", "OPA", "AWS"] },
-  "fraud-detection-mlops":    { desc: "Real-time fraud detection processing 10M+ daily transactions at sub-100ms latency.", tags: ["Kafka", "PyTorch", "Flink", "GCP"] },
-  "multi-cloud-finops":       { desc: "FinOps platform delivering $4M+ in annual cloud savings across AWS, Azure, and GCP.", tags: ["Terraform", "Python", "Grafana", "Azure"] },
-  "iot-data-platform":        { desc: "IoT data management platform ingesting 2B+ events daily with predictive maintenance features.", tags: ["MQTT", "TimescaleDB", "React", "Rust"] },
-  "llm-engineering-bootcamp": { desc: "Intensive LLM engineering programme graduating 300+ engineers into production-ready AI roles.", tags: ["Python", "LangChain", "OpenAI", "Pinecone"] },
+// ── Project metadata with outcome stats ────────────────────────────────────
+const projectMeta: Record<string, { desc: string; tags: string[]; stat: string; statLabel: string }> = {
+  "ai-erp-platform":          { desc: "End-to-end AI ERP deployment with automated workflows and real-time business intelligence.", tags: ["Python", "TensorFlow", "SAP", "Azure"],       stat: "$2M",    statLabel: "First-year savings" },
+  "mlops-pipeline":           { desc: "Scalable MLOps automation pipeline that cut model deployment cycles from weeks to hours.",  tags: ["Kubernetes", "MLflow", "Python", "AWS"],       stat: "95%",    statLabel: "Faster deployments" },
+  "cloud-infrastructure":     { desc: "Zero-trust cloud architecture achieving 99.9% uptime with continuous compliance monitoring.", tags: ["Terraform", "AWS", "K8s", "Vault"],          stat: "99.9%",  statLabel: "Uptime achieved" },
+  "enterprise-saas":          { desc: "Multi-tenant SaaS platform serving 500+ enterprise clients at 99.95% availability SLA.",    tags: ["React", "Node.js", "PostgreSQL", "GCP"],      stat: "500+",   statLabel: "Enterprise clients" },
+  "ai-training-program":      { desc: "Upskilled 1,200+ corporate professionals in AI/ML fundamentals and applied LLM engineering.", tags: ["Python", "Jupyter", "LangChain", "OpenAI"], stat: "1,200+", statLabel: "Engineers trained" },
+  "digital-transformation":   { desc: "Digital transformation roadmap that reduced operational costs by 38% across a 10,000-person org.", tags: ["Agile", "TOGAF", "AWS", "Power BI"],  stat: "38%",    statLabel: "Cost reduction" },
+  "supply-chain-ai":          { desc: "AI-driven supply chain optimisation cutting inventory costs and improving fulfilment speed.",  tags: ["PySpark", "Snowflake", "Python", "Azure"],  stat: "28%",    statLabel: "Inventory savings" },
+  "kubernetes-security":      { desc: "Hardened Kubernetes clusters across 3 cloud providers, achieving SOC 2 Type II certification.", tags: ["K8s", "Falco", "OPA", "AWS"],             stat: "SOC 2",  statLabel: "Type II certified" },
+  "fraud-detection-mlops":    { desc: "Real-time fraud detection processing 10M+ daily transactions at sub-100ms latency.",          tags: ["Kafka", "PyTorch", "Flink", "GCP"],         stat: "10M+",   statLabel: "Daily detections" },
+  "multi-cloud-finops":       { desc: "FinOps platform delivering $4M+ in annual cloud savings across AWS, Azure, and GCP.",        tags: ["Terraform", "Python", "Grafana", "Azure"],  stat: "$4M+",   statLabel: "Annual cloud savings" },
+  "iot-data-platform":        { desc: "IoT data management platform ingesting 2B+ events daily with predictive maintenance.",        tags: ["MQTT", "TimescaleDB", "React", "Rust"],     stat: "2B+",    statLabel: "Events per day" },
+  "llm-engineering-bootcamp": { desc: "Intensive LLM engineering programme graduating 300+ engineers into production-ready AI roles.", tags: ["Python", "LangChain", "OpenAI", "Pinecone"], stat: "300+", statLabel: "Engineers certified" },
 };
 
+// ── Proof cascade data (hero atmosphere) ──────────────────────────────────
+const CASCADE_COL_A = [
+  "$4M+ Annual cloud savings",
+  "99.9% Uptime achieved",
+  "$2M First-year ERP savings",
+  "38% Cost reduction",
+  "10M+ Daily fraud detections",
+  "2B+ Events daily",
+  "SOC 2 Type II certified",
+  "99.97% Model uptime",
+  "500+ Enterprise clients",
+  "$4M+ Annual cloud savings",
+  "99.9% Uptime achieved",
+  "$2M First-year ERP savings",
+  "38% Cost reduction",
+  "10M+ Daily fraud detections",
+  "2B+ Events daily",
+  "SOC 2 Type II certified",
+  "99.97% Model uptime",
+  "500+ Enterprise clients",
+];
+
+const CASCADE_COL_B = [
+  "1,200+ Engineers trained",
+  "95% Faster deployments",
+  "300+ LLM engineers certified",
+  "28% Inventory savings",
+  "50M+ Predictions per day",
+  "99.95% SLA guaranteed",
+  "10,000-person org transformed",
+  "3 cloud providers secured",
+  "1,200+ Engineers trained",
+  "95% Faster deployments",
+  "300+ LLM engineers certified",
+  "28% Inventory savings",
+  "50M+ Predictions per day",
+  "99.95% SLA guaranteed",
+  "10,000-person org transformed",
+  "3 cloud providers secured",
+];
 
 // ── Count-up hook ─────────────────────────────────────────────────────────
-function useCountUp(target: number, duration = 1400, active = false) {
+function useCountUp(target: number, duration = 1600, active = false) {
   const [v, setV] = useState(0);
   const raf = useRef<number>(0);
   useEffect(() => {
@@ -61,83 +101,66 @@ function useCountUp(target: number, duration = 1400, active = false) {
   return v;
 }
 
-// ── 3D Wireframe Cube ─────────────────────────────────────────────────────
-const WireframeCube: React.FC<{ size?: number }> = ({ size = 180 }) => {
-  const h = size / 2;
-  const face = (transform: string): React.CSSProperties => ({
-    position: "absolute", width: size, height: size,
-    border: "1px solid rgba(201,136,58,0.30)",
-    background: "rgba(201,136,58,0.02)",
-    transform,
+// ── Proof cascade (hero bg) ───────────────────────────────────────────────
+const ProofCascade: React.FC = () => {
+  if (prefersReduced) return null;
+  const colStyle = (anim: string, offset: string): React.CSSProperties => ({
+    position: "absolute",
+    top: offset,
+    display: "flex",
+    flexDirection: "column",
+    gap: 32,
+    animation: `${anim} linear infinite`,
+    willChange: "transform",
   });
+  const textStyle: React.CSSProperties = {
+    fontFamily: "'Cormorant Garamond',Garamond,serif",
+    fontSize: "clamp(16px,2.2vw,26px)",
+    fontWeight: 600,
+    color: "rgba(201,136,58,0.09)",
+    whiteSpace: "nowrap",
+    letterSpacing: "0.01em",
+    lineHeight: 1,
+  };
   return (
-    <div style={{ width: size, height: size, position: "relative", transformStyle: "preserve-3d", animation: prefersReduced ? "none" : "xzCubeRotate 28s linear infinite" }}>
-      <div style={face(`translateZ(${h}px)`)} />
-      <div style={face(`rotateY(180deg) translateZ(${h}px)`)} />
-      <div style={face(`rotateY(-90deg) translateZ(${h}px)`)} />
-      <div style={face(`rotateY(90deg) translateZ(${h}px)`)} />
-      <div style={face(`rotateX(90deg) translateZ(${h}px)`)} />
-      <div style={face(`rotateX(-90deg) translateZ(${h}px)`)} />
+    <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+      {/* Column A — left-center, scrolling up */}
+      <div style={{ position: "absolute", left: "8%", top: 0, bottom: 0, overflow: "hidden" }}>
+        <div style={colStyle("xzScrollA 52s", "0")}>
+          {CASCADE_COL_A.map((m, i) => <span key={i} style={textStyle}>{m}</span>)}
+        </div>
+      </div>
+      {/* Column B — right, scrolling up slower */}
+      <div className="xz-cascade-b" style={{ position: "absolute", right: "6%", top: 0, bottom: 0, overflow: "hidden" }}>
+        <div style={colStyle("xzScrollB 72s", "-15%")}>
+          {CASCADE_COL_B.map((m, i) => <span key={i} style={{ ...textStyle, color: "rgba(204,120,92,0.07)" }}>{m}</span>)}
+        </div>
+      </div>
+      {/* Top and bottom vignettes to fade the scroll gracefully */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 140, background: "linear-gradient(to bottom,#1a1208 0%,transparent 100%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 180, background: "linear-gradient(to top,#0f0a05 0%,transparent 100%)", pointerEvents: "none" }} />
+      {/* Warm ambient glow */}
+      <div style={{ position: "absolute", top: "30%", left: "50%", transform: "translateX(-50%)", width: 700, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(201,136,58,0.08) 0%,transparent 65%)", pointerEvents: "none" }} />
+      {/* Dot grid */}
+      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle,rgba(255,255,255,0.022) 1px,transparent 1px)", backgroundSize: "30px 30px", pointerEvents: "none" }} />
     </div>
   );
 };
 
-// ── Hero 3D Background ────────────────────────────────────────────────────
-const HeroBackground: React.FC = () => (
-  <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
-    {/* Ambient orange glow top-left */}
-    <div style={{ position: "absolute", top: "-20%", left: "-10%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.15) 0%,transparent 60%)", animation: prefersReduced ? "none" : "xzOrbDrift1 18s ease-in-out infinite" }} />
-    {/* Ambient coral glow bottom-right */}
-    <div style={{ position: "absolute", bottom: "-15%", right: "-5%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(204,120,92,0.12) 0%,transparent 60%)", animation: prefersReduced ? "none" : "xzOrbDrift2 22s ease-in-out infinite" }} />
-    {/* Dot grid texture */}
-    <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle,rgba(255,255,255,0.03) 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
-    {/* Large rotating cube — desktop only via CSS class */}
-    <div className="xz-cube-scene" style={{ position: "absolute", right: "8%", top: "50%", transform: "translateY(-50%)", width: 200, height: 200, perspective: 700 }}>
-      <WireframeCube size={200} />
-    </div>
-    {/* Small cube top-left */}
-    <div className="xz-cube-scene" style={{ position: "absolute", left: "4%", top: "18%", width: 80, height: 80, perspective: 350 }}>
-      <WireframeCube size={80} />
-    </div>
-    {/* Floating node dots */}
-    {[
-      { left: "22%", top: "25%", size: 6, color: OG, delay: "0s" },
-      { left: "45%", top: "70%", size: 4, color: C, delay: "1.2s" },
-      { left: "68%", top: "20%", size: 5, color: OG, delay: "2.4s" },
-      { left: "80%", top: "60%", size: 3, color: "rgba(255,255,255,0.5)", delay: "0.8s" },
-      { left: "12%", top: "65%", size: 4, color: C, delay: "1.8s" },
-      { left: "55%", top: "40%", size: 3, color: OG, delay: "3s" },
-    ].map((n, i) => (
-      <div key={i} style={{
-        position: "absolute", left: n.left, top: n.top,
-        width: n.size, height: n.size, borderRadius: "50%",
-        background: n.color,
-        boxShadow: `0 0 ${n.size * 3}px ${n.color}`,
-        animation: prefersReduced ? "none" : `xzNodePulse 3s ease-in-out ${n.delay} infinite`,
-      }} />
-    ))}
-    {/* Horizontal scan line */}
-    <div style={{ position: "absolute", left: 0, right: 0, height: 1, background: "linear-gradient(90deg,transparent,rgba(201,136,58,0.12),transparent)", animation: prefersReduced ? "none" : "xzScanLine 8s ease-in-out infinite", top: "50%" }} />
-  </div>
-);
-
 // ── Stat tile ─────────────────────────────────────────────────────────────
 const StatTile: React.FC<{ raw: number; suffix: string; label: string; active: boolean; index: number }> = ({ raw, suffix, label, active, index }) => {
-  const val = useCountUp(raw, 1400, active);
+  const val = useCountUp(raw, 1600, active);
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.5 + index * 0.12 }}
-      style={{
-        textAlign: "center", padding: "18px 28px",
-        borderLeft: index > 0 ? "1px solid rgba(255,255,255,0.10)" : "none",
-      }}
+      transition={{ duration: 0.5, delay: 0.5 + index * 0.14 }}
+      style={{ textAlign: "center", padding: "20px 32px", borderLeft: index > 0 ? "1px solid rgba(255,255,255,0.09)" : "none" }}
     >
-      <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 34, fontWeight: 700, color: OG, lineHeight: 1 }}>
+      <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 36, fontWeight: 700, color: OG, lineHeight: 1 }}>
         {val}{suffix}
       </div>
-      <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.10em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginTop: 6 }}>
+      <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginTop: 7 }}>
         {label}
       </div>
     </motion.div>
@@ -152,46 +175,59 @@ const HeroSection: React.FC = () => {
   useEffect(() => {
     const el = statsRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStatsActive(true); obs.disconnect(); } }, { threshold: 0.4 });
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setStatsActive(true); obs.disconnect(); } },
+      { threshold: 0.4 }
+    );
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
 
-  const statNums: { raw: number; suffix: string; label: string }[] = [
-    { raw: 50, suffix: "+", label: "Projects Delivered" },
-    { raw: 15, suffix: "+", label: "Industries Served" },
-    { raw: 120, suffix: "+", label: "Enterprise Clients" },
+  const statNums = [
+    { raw: 50,  suffix: "+",  label: "Projects Delivered" },
+    { raw: 15,  suffix: "+",  label: "Industries Served"  },
+    { raw: 120, suffix: "+",  label: "Enterprise Clients" },
   ];
 
   return (
-    <section style={{ background: "linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)", padding: "140px 0 100px", position: "relative", overflow: "hidden", minHeight: "62vh", display: "flex", alignItems: "center" }}>
-      <HeroBackground />
+    <section style={{
+      background: "linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)",
+      padding: "140px 0 108px",
+      position: "relative", overflow: "hidden",
+      minHeight: "66vh", display: "flex", alignItems: "center",
+    }}>
+      <ProofCascade />
 
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 680 }}>
-          {/* Eyebrow badge */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: 24 }}>
+        <div style={{ maxWidth: 660 }}>
+
+          {/* Eyebrow */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} style={{ marginBottom: 26 }}>
             <span style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              background: "rgba(201,136,58,0.12)", border: "1px solid rgba(201,136,58,0.28)",
+              display: "inline-flex", alignItems: "center", gap: 9,
+              background: "rgba(201,136,58,0.11)", border: "1px solid rgba(201,136,58,0.26)",
               borderRadius: 999, padding: "6px 18px",
               fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
               color: OG, fontFamily: "'DM Sans',sans-serif",
             }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: OG, display: "inline-block", animation: "xzNodePulse 2s ease-in-out infinite" }} />
-              Portfolio — Our Work
+              <span style={{ width: 5, height: 5, borderRadius: "50%", background: OG, display: "inline-block", animation: prefersReduced ? "none" : "xzDot 2.2s ease-in-out infinite" }} />
+              Portfolio — Proven Outcomes
             </span>
           </motion.div>
 
           {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.1 }}
-            style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,68px)", lineHeight: 1.06, color: "#fff", margin: "0 0 20px", letterSpacing: "-0.03em" }}
+            transition={{ duration: 0.65, delay: 0.08 }}
+            style={{
+              fontFamily: "'DM Sans',sans-serif", fontWeight: 800,
+              fontSize: "clamp(38px,5.5vw,72px)", lineHeight: 1.04,
+              color: "#fff", margin: "0 0 22px", letterSpacing: "-0.03em",
+            }}
           >
             Results That{" "}
-            <em style={{ color: OG, fontStyle: "italic" }}>Speak</em>
+            <em style={{ color: OG, fontStyle: "italic", fontFamily: "'Cormorant Garamond',serif", fontWeight: 700 }}>Speak</em>
             <br />For Themselves
           </motion.h1>
 
@@ -199,33 +235,36 @@ const HeroSection: React.FC = () => {
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.22 }}
-            style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 16, lineHeight: 1.78, color: "rgba(255,255,255,0.52)", marginBottom: 40, maxWidth: 520 }}
+            transition={{ duration: 0.55, delay: 0.20 }}
+            style={{
+              fontFamily: "'DM Sans',sans-serif", fontSize: 16, lineHeight: 1.78,
+              color: "rgba(255,255,255,0.50)", marginBottom: 42, maxWidth: 500,
+            }}
           >
-            From AI-powered ERP to MLOps and DevSecOps — every project here represents a measurable transformation for an enterprise that trusted us to deliver.
+            Every project below is a quantified enterprise transformation — measured in cost savings, uptime, engineers trained, and models shipped.
           </motion.p>
 
           {/* CTA buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.32 }}
-            style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 56 }}
+            transition={{ duration: 0.5, delay: 0.30 }}
+            style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 60 }}
           >
             <a href="#project-grid" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
+              display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer",
               background: CG, color: "#fff", fontWeight: 700, fontSize: 14,
               padding: "13px 28px", borderRadius: 10, textDecoration: "none",
               fontFamily: "'DM Sans',sans-serif",
-              boxShadow: "0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.30)",
+              boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.28)",
             }}>
-              Browse Work <i className="far fa-arrow-down" style={{ fontSize: 12 }} />
+              Explore Work <i className="far fa-arrow-down" style={{ fontSize: 12 }} />
             </a>
             <Link to="/contact" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
+              display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer",
               background: "rgba(255,255,255,0.07)", color: "#fff",
-              fontWeight: 600, fontSize: 14,
-              padding: "13px 28px", borderRadius: 10, textDecoration: "none",
+              fontWeight: 600, fontSize: 14, padding: "13px 28px",
+              borderRadius: 10, textDecoration: "none",
               fontFamily: "'DM Sans',sans-serif",
               border: "1px solid rgba(255,255,255,0.16)",
             }}>
@@ -236,7 +275,8 @@ const HeroSection: React.FC = () => {
           {/* Stats strip */}
           <div ref={statsRef} style={{
             display: "inline-flex", flexWrap: "wrap",
-            background: "rgba(255,255,255,0.04)", backdropFilter: "blur(12px)",
+            background: "rgba(255,255,255,0.04)", backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
             border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16,
           }}>
             {statNums.map((s, i) => (
@@ -250,30 +290,40 @@ const HeroSection: React.FC = () => {
 };
 
 // ── Filter Button ─────────────────────────────────────────────────────────
-const FilterBtn: React.FC<{ label: string; count: number; active: boolean; onClick: () => void }> = ({ label, count, active, onClick }) => {
+const FilterBtn: React.FC<{
+  label: string; count: number; active: boolean; onClick: () => void;
+}> = ({ label, count, active, onClick }) => {
   const [hov, setHov] = useState(false);
   return (
     <button
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
+      aria-pressed={active}
       style={{
         display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px",
         borderRadius: 999, cursor: "pointer", whiteSpace: "nowrap",
-        border: active ? "1.5px solid transparent" : `1.5px solid ${hov ? "rgba(201,136,58,0.45)" : "rgba(26,18,8,0.16)"}`,
-        background: active ? CG : hov ? "rgba(201,136,58,0.06)" : "rgba(255,255,255,0.8)",
+        border: active
+          ? "1.5px solid transparent"
+          : `1.5px solid ${hov ? "rgba(201,136,58,0.50)" : "rgba(26,18,8,0.15)"}`,
+        background: active ? CG : hov ? "rgba(201,136,58,0.06)" : "rgba(255,255,255,0.82)",
         color: active ? "#fff" : hov ? OG : "#3A3530",
-        fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: active ? 700 : 600,
-        boxShadow: active ? "0 4px 0 rgba(150,95,30,0.40),0 6px 18px rgba(201,136,58,0.22)" : hov ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+        fontFamily: "'DM Sans',sans-serif", fontSize: 13,
+        fontWeight: active ? 700 : 600,
+        boxShadow: active
+          ? "0 4px 0 rgba(150,95,30,0.40),0 6px 18px rgba(201,136,58,0.22)"
+          : hov ? "0 2px 10px rgba(0,0,0,0.07)" : "none",
         transform: active ? "translateY(-1px)" : "none",
         transition: "all 200ms cubic-bezier(0.22,1,0.36,1)",
         backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        minHeight: 44, // touch target
       }}
     >
       {label}
       <span style={{
         display: "inline-flex", alignItems: "center", justifyContent: "center",
-        minWidth: 20, height: 20, padding: "0 6px", borderRadius: 999,
+        minWidth: 22, height: 22, padding: "0 6px", borderRadius: 999,
         background: active ? "rgba(255,255,255,0.22)" : "rgba(26,18,8,0.07)",
         color: active ? "#fff" : "#6B5E50", fontSize: 11, fontWeight: 700,
         transition: "all 200ms",
@@ -288,7 +338,11 @@ const FilterBtn: React.FC<{ label: string; count: number; active: boolean; onCli
 const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const imgRef  = useRef<HTMLDivElement>(null);
-  const meta    = projectMeta[item.slug] ?? { desc: "Enterprise-grade solution delivering measurable business outcomes.", tags: ["React", "Python", "AWS"] };
+  const meta    = projectMeta[item.slug] ?? {
+    desc: "Enterprise-grade solution delivering measurable business outcomes.",
+    tags: ["React", "Python", "AWS"],
+    stat: "—", statLabel: "Delivered",
+  };
 
   const onMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (prefersReduced) return;
@@ -297,8 +351,8 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
     const x  = (e.clientX - r.left) / r.width;
     const y  = (e.clientY - r.top)  / r.height;
     el.style.transition = "transform 0.08s linear,box-shadow 0.08s linear";
-    el.style.transform  = `perspective(1000px) rotateX(${(0.5 - y) * 6}deg) rotateY(${(x - 0.5) * 10}deg) translateY(-8px) scale(1.01)`;
-    el.style.boxShadow  = "0 24px 64px rgba(204,120,92,0.22),0 8px 24px rgba(0,0,0,0.10)";
+    el.style.transform  = `perspective(900px) rotateX(${(0.5 - y) * 5}deg) rotateY(${(x - 0.5) * 8}deg) translateY(-7px)`;
+    el.style.boxShadow  = "0 22px 56px rgba(204,120,92,0.18),0 6px 20px rgba(0,0,0,0.09)";
   }, []);
 
   const onLeave = useCallback(() => {
@@ -327,34 +381,42 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       style={{
-        background: "#fff", borderRadius: 18,
-        border: "1px solid rgba(0,0,0,0.06)",
-        boxShadow: "0 2px 16px rgba(0,0,0,0.05)",
-        overflow: "hidden", display: "flex", flexDirection: "column", height: "100%",
-        cursor: "pointer", willChange: "transform", transformStyle: "preserve-3d",
+        background: "#fff",
+        borderRadius: 18,
+        border: "1px solid rgba(0,0,0,0.055)",
+        boxShadow: "0 2px 14px rgba(0,0,0,0.05)",
+        overflow: "hidden",
+        display: "flex", flexDirection: "column", height: "100%",
+        cursor: "pointer", willChange: "transform",
+        transformStyle: "preserve-3d",
       }}
     >
       {/* Image */}
-      <div style={{ position: "relative", height: 218, overflow: "hidden", flexShrink: 0 }}>
+      <div style={{ position: "relative", height: 210, overflow: "hidden", flexShrink: 0 }}>
         <div ref={imgRef} style={{ width: "100%", height: "100%", transition: "transform 0.45s ease" }}>
-          <Image src={item.image} alt={item.title} width={416} height={218}
+          <Image src={item.image} alt={item.title} width={416} height={210}
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         </div>
-        {/* Gradient overlay */}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(15,10,5,0.55) 0%,transparent 50%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(15,10,5,0.60) 0%,transparent 55%)", pointerEvents: "none" }} />
         {/* Category badge */}
         <span style={{
           position: "absolute", top: 14, left: 14,
           background: CG, color: "#fff", fontSize: 10, fontWeight: 700,
-          letterSpacing: "0.11em", textTransform: "uppercase",
+          letterSpacing: "0.10em", textTransform: "uppercase",
           padding: "5px 12px", borderRadius: 999,
           fontFamily: "'DM Sans',sans-serif",
-          boxShadow: "0 2px 10px rgba(204,120,92,0.40)",
-        }}>{item.category}</span>
-        {/* Bottom-left title overlay */}
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 18px 14px" }}>
+          boxShadow: "0 2px 10px rgba(204,120,92,0.38)",
+        }}>
+          {item.category}
+        </span>
+        {/* Title overlay on image */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 18px 16px" }}>
           <Link to={`/project/${item.slug}`} style={{ color: "#fff", textDecoration: "none" }}>
-            <h3 style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 15, margin: 0, lineHeight: 1.3, textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
+            <h3 style={{
+              fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 15,
+              margin: 0, lineHeight: 1.3,
+              textShadow: "0 1px 6px rgba(0,0,0,0.55)",
+            }}>
               {item.title}
             </h3>
           </Link>
@@ -363,6 +425,29 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
 
       {/* Card body */}
       <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
+
+        {/* Outcome stat — the signature element */}
+        <div style={{
+          display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14,
+          paddingBottom: 14, borderBottom: "1px solid rgba(0,0,0,0.06)",
+        }}>
+          <span style={{
+            fontFamily: "'Cormorant Garamond',serif",
+            fontSize: 28, fontWeight: 700, color: OG, lineHeight: 1,
+            letterSpacing: "-0.01em",
+          }}>
+            {meta.stat}
+          </span>
+          <span style={{
+            fontFamily: "'DM Sans',sans-serif",
+            fontSize: 10.5, fontWeight: 700, color: "#8A7D6E",
+            textTransform: "uppercase", letterSpacing: "0.10em", lineHeight: 1.2,
+          }}>
+            {meta.statLabel}
+          </span>
+        </div>
+
+        {/* Description */}
         <p style={{
           fontSize: 13.5, color: "#6B6B6B", lineHeight: 1.68,
           marginBottom: 16, fontFamily: "'DM Sans',sans-serif", flex: 1,
@@ -384,10 +469,15 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
           ))}
         </div>
 
-        {/* CTA link */}
+        {/* CTA */}
         <Link
           to={`/project/${item.slug}`}
-          style={{ display: "inline-flex", alignItems: "center", gap: 6, color: C, fontWeight: 700, fontSize: 12.5, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", transition: "gap 0.2s ease" }}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            color: C, fontWeight: 700, fontSize: 12.5,
+            textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
+            transition: "gap 0.2s ease",
+          }}
           onMouseEnter={e => (e.currentTarget.style.gap = "10px")}
           onMouseLeave={e => (e.currentTarget.style.gap = "6px")}
         >
@@ -400,13 +490,33 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
 
 // ── Empty state ────────────────────────────────────────────────────────────
 const EmptyFilter: React.FC<{ onReset: () => void }> = ({ onReset }) => (
-  <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: "center", padding: "72px 24px" }}>
-    <div style={{ width: 64, height: 64, borderRadius: 18, background: "rgba(201,136,58,0.08)", border: "1px solid rgba(201,136,58,0.15)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-      <i className="fas fa-folder-open" style={{ fontSize: 26, color: OG }} />
+  <motion.div
+    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+    style={{ textAlign: "center", padding: "72px 24px" }}
+  >
+    <div style={{
+      width: 60, height: 60, borderRadius: 16,
+      background: "rgba(201,136,58,0.08)", border: "1px solid rgba(201,136,58,0.15)",
+      display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px",
+    }}>
+      <i className="fas fa-folder-open" style={{ fontSize: 24, color: OG }} />
     </div>
-    <h4 style={{ fontSize: 18, fontWeight: 700, color: "#1A1A1A", fontFamily: "'DM Sans',sans-serif", marginBottom: 8 }}>No projects in this category</h4>
-    <p style={{ fontSize: 14, color: "#6B6B6B", fontFamily: "'DM Sans',sans-serif", marginBottom: 20 }}>More case studies are on the way.</p>
-    <button onClick={onReset} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: CG, color: "#fff", fontWeight: 600, fontSize: 13, padding: "10px 20px", borderRadius: 10, border: "none", cursor: "pointer", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.4)" }}>
+    <h4 style={{ fontSize: 18, fontWeight: 700, color: "#1A1A1A", fontFamily: "'DM Sans',sans-serif", marginBottom: 8 }}>
+      No projects in this category yet
+    </h4>
+    <p style={{ fontSize: 14, color: "#6B6B6B", fontFamily: "'DM Sans',sans-serif", marginBottom: 20 }}>
+      More case studies are on the way.
+    </p>
+    <button
+      onClick={onReset}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer",
+        background: CG, color: "#fff", fontWeight: 600, fontSize: 13,
+        padding: "10px 22px", borderRadius: 10, border: "none",
+        fontFamily: "'DM Sans',sans-serif",
+        boxShadow: "0 4px 0 rgba(150,95,30,0.42)", minHeight: 44,
+      }}
+    >
       Show all projects <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
     </button>
   </motion.div>
@@ -414,29 +524,64 @@ const EmptyFilter: React.FC<{ onReset: () => void }> = ({ onReset }) => (
 
 // ── Bottom CTA ────────────────────────────────────────────────────────────
 const BottomCTA: React.FC = () => (
-  <section style={{ background: "linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)", padding: "80px 0", position: "relative", overflow: "hidden" }}>
-    <div aria-hidden="true" style={{ position: "absolute", top: "-40%", left: "50%", transform: "translateX(-50%)", width: 800, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.12) 0%,transparent 65%)", pointerEvents: "none" }} />
-    <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: "radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+  <section style={{
+    background: "linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)",
+    padding: "90px 0", position: "relative", overflow: "hidden",
+  }}>
+    <div aria-hidden="true" style={{ position: "absolute", top: "-40%", left: "50%", transform: "translateX(-50%)", width: 800, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.11) 0%,transparent 65%)", pointerEvents: "none" }} />
+    <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: "radial-gradient(circle,rgba(255,255,255,0.022) 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
     <div className="container" style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 640, margin: "0 auto" }}>
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }} transition={{ duration: 0.6 }}
+      >
         <div style={{ marginBottom: 22 }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(201,136,58,0.14)", border: "1px solid rgba(201,136,58,0.30)", borderRadius: 999, padding: "6px 18px", fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#E5B460", fontFamily: "'DM Sans',sans-serif" }}>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: "rgba(201,136,58,0.13)", border: "1px solid rgba(201,136,58,0.30)",
+            borderRadius: 999, padding: "6px 18px",
+            fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
+            color: "#E5B460", fontFamily: "'DM Sans',sans-serif",
+          }}>
             <i className="fas fa-file-alt" style={{ fontSize: 10 }} />
             Case Study Available
           </span>
         </div>
-        <h2 style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 800, fontSize: "clamp(26px,4vw,44px)", color: "#fff", letterSpacing: "-0.03em", marginBottom: 14 }}>
+        <h2 style={{
+          fontFamily: "'DM Sans',sans-serif", fontWeight: 800,
+          fontSize: "clamp(26px,4vw,46px)", color: "#fff",
+          letterSpacing: "-0.03em", marginBottom: 16,
+        }}>
           See How We Delivered{" "}
-          <em style={{ color: OG, fontStyle: "italic" }}>$4M in Savings</em>
+          <em style={{ color: OG, fontStyle: "italic", fontFamily: "'Cormorant Garamond',serif", fontWeight: 700 }}>
+            $4M in Savings
+          </em>
         </h2>
-        <p style={{ fontSize: 15.5, color: "rgba(255,255,255,0.55)", lineHeight: 1.75, fontFamily: "'DM Sans',sans-serif", marginBottom: 34 }}>
-          Download our latest enterprise case study. AI-powered cloud transformation from plan to production in 90 days.
+        <p style={{
+          fontSize: 15.5, color: "rgba(255,255,255,0.52)", lineHeight: 1.78,
+          fontFamily: "'DM Sans',sans-serif", marginBottom: 36,
+        }}>
+          Download our latest enterprise case study — cloud transformation, AI in production, from plan to delivery in 90 days.
         </p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
-          <Link to="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: CG, color: "#fff", fontWeight: 700, fontSize: 14, padding: "13px 28px", borderRadius: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.30)" }}>
+          <Link to="/contact" style={{
+            display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer",
+            background: CG, color: "#fff", fontWeight: 700, fontSize: 14,
+            padding: "14px 30px", borderRadius: 10, textDecoration: "none",
+            fontFamily: "'DM Sans',sans-serif",
+            boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.28)",
+            minHeight: 48,
+          }}>
             Get the Case Study <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
           </Link>
-          <Link to="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.07)", color: "#fff", fontWeight: 600, fontSize: 14, padding: "13px 28px", borderRadius: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", border: "1px solid rgba(255,255,255,0.18)" }}>
+          <Link to="/contact" style={{
+            display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer",
+            background: "rgba(255,255,255,0.07)", color: "#fff",
+            fontWeight: 600, fontSize: 14, padding: "14px 30px",
+            borderRadius: 10, textDecoration: "none",
+            fontFamily: "'DM Sans',sans-serif",
+            border: "1px solid rgba(255,255,255,0.18)", minHeight: 48,
+          }}>
             Talk to Us <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
           </Link>
         </div>
@@ -473,36 +618,26 @@ const ProjectMainSection: React.FC = () => {
 
   return (
     <>
-      {/* ── Global keyframe styles ── */}
+      {/* ── Keyframe styles ── */}
       <style>{`
-        @keyframes xzCubeRotate {
-          0%   { transform: rotateX(18deg) rotateY(0deg) rotateZ(0deg); }
-          33%  { transform: rotateX(24deg) rotateY(120deg) rotateZ(4deg); }
-          66%  { transform: rotateX(14deg) rotateY(240deg) rotateZ(-3deg); }
-          100% { transform: rotateX(18deg) rotateY(360deg) rotateZ(0deg); }
+        @keyframes xzScrollA {
+          from { transform: translateY(0); }
+          to   { transform: translateY(-50%); }
         }
-        @keyframes xzOrbDrift1 {
-          0%,100% { transform: translate(0,0) scale(1); }
-          50%     { transform: translate(30px,-40px) scale(1.12); }
+        @keyframes xzScrollB {
+          from { transform: translateY(-15%); }
+          to   { transform: translateY(-65%); }
         }
-        @keyframes xzOrbDrift2 {
-          0%,100% { transform: translate(0,0) scale(1); }
-          50%     { transform: translate(-24px,32px) scale(0.92); }
+        @keyframes xzDot {
+          0%,100% { opacity:0.5; transform:scale(1); }
+          50%      { opacity:1;   transform:scale(1.6); }
         }
-        @keyframes xzNodePulse {
-          0%,100% { opacity:0.4; transform:scale(1); }
-          50%     { opacity:1;   transform:scale(1.5); }
-        }
-        @keyframes xzScanLine {
-          0%,100% { opacity:0; top:20%; }
-          50%     { opacity:1; top:80%; }
-        }
-        /* Hide heavy 3D on mobile for performance */
+        /* Hide cascade column B on small screens to avoid horizontal overflow */
         @media (max-width: 767px) {
-          .xz-cube-scene { display: none !important; }
+          .xz-cascade-b { display: none !important; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .xz-cube-scene * { animation: none !important; }
+          * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
         }
       `}</style>
 
@@ -510,21 +645,35 @@ const ProjectMainSection: React.FC = () => {
       <HeroSection />
 
       {/* ── Filter + Grid ── */}
-      <section id="project-grid" style={{ background: "#F2EFE9", padding: "70px 0 90px" }}>
+      <section id="project-grid" style={{ background: "#F2EFE9", padding: "72px 0 96px" }}>
         <div className="container">
 
-          {/* Filter pills */}
+          {/* Filter row */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 10, marginBottom: 44 }}
+            style={{
+              display: "flex", alignItems: "center",
+              flexWrap: "wrap", gap: 10, marginBottom: 48,
+            }}
           >
             {FILTERS.map(f => (
-              <FilterBtn key={f.key} label={f.label} count={countFor(f)} active={activeFilter === f.key} onClick={() => handleFilter(f.key)} />
+              <FilterBtn
+                key={f.key}
+                label={f.label}
+                count={countFor(f)}
+                active={activeFilter === f.key}
+                onClick={() => handleFilter(f.key)}
+              />
             ))}
-            <span style={{ marginLeft: "auto", fontSize: 13, color: "#8A7D6E", fontFamily: "'DM Sans',sans-serif", fontWeight: 500, whiteSpace: "nowrap" }}>
+            <span style={{
+              marginLeft: "auto",
+              fontSize: 12.5, color: "#8A7D6E",
+              fontFamily: "'DM Sans',sans-serif",
+              fontWeight: 500, whiteSpace: "nowrap",
+            }}>
               {filteredData.length} project{filteredData.length !== 1 ? "s" : ""}
             </span>
           </motion.div>
@@ -546,9 +695,9 @@ const ProjectMainSection: React.FC = () => {
                     <motion.div
                       key={item.id}
                       className="col-xl-4 col-lg-4 col-md-6 col-12"
-                      initial={{ opacity: 0, y: 28 }}
+                      initial={{ opacity: 0, y: 26 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ duration: 0.42, delay: index * 0.055, ease: [0.22, 1, 0.36, 1] }}
                     >
                       <ProjectCard item={item} />
                     </motion.div>
@@ -560,7 +709,11 @@ const ProjectMainSection: React.FC = () => {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="page-nav-wrap mt-5 text-center">
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="page-nav-wrap mt-5 text-center"
+            >
               <ul>
                 <li>
                   <a className={`page-numbers${currentPage === 1 ? " disabled-btn" : ""}`} href="#"
