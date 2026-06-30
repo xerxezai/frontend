@@ -1,6 +1,57 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
+const HOME_CASCADE_A = [
+  "Enterprise AI Platform",
+  "Cloud Architecture",
+  "DevSecOps Pipelines",
+  "AI-Powered ERP",
+  "Intelligent Automation",
+  "Data Analytics",
+  "Cybersecurity",
+  "ML Operations",
+  "Digital Transformation",
+  "Quantum Computing",
+];
+
+const HOME_CASCADE_B = [
+  "Reduced Operational Cost",
+  "Zero-Downtime Deployment",
+  "Accelerated Innovation",
+  "Compliance & Security",
+  "Scalable Infrastructure",
+  "Real-Time Insights",
+  "Future-Proof Systems",
+  "Intelligent Automation",
+  "Enterprise-Grade Security",
+];
+
+const CreamCascade = ({ prefersReduced }: { prefersReduced: boolean }) => {
+  if (prefersReduced) return null;
+  const a = [...HOME_CASCADE_A, ...HOME_CASCADE_A];
+  const b = [...HOME_CASCADE_B, ...HOME_CASCADE_B];
+  const t: React.CSSProperties = {
+    fontFamily: "'Cormorant Garamond',Garamond,serif",
+    fontSize: "clamp(14px,1.8vw,22px)",
+    fontWeight: 600, whiteSpace: "nowrap",
+    letterSpacing: "0.01em", lineHeight: 1,
+  };
+  return (
+    <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+      <div style={{ position: "absolute", left: "2%", top: 0, bottom: 0, overflow: "hidden" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 28, animation: "xzCreamScrollA 58s linear infinite", willChange: "transform" }}>
+          {a.map((m, i) => <span key={i} style={{ ...t, color: "rgba(140,105,60,0.055)" }}>{m}</span>)}
+        </div>
+      </div>
+      <div className="xz-cream-cascade-b" style={{ position: "absolute", right: "1%", top: 0, bottom: 0, overflow: "hidden" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 28, transform: "translateY(-12%)", animation: "xzCreamScrollB 74s linear infinite", willChange: "transform" }}>
+          {b.map((m, i) => <span key={i} style={{ ...t, color: "rgba(140,105,60,0.042)" }}>{m}</span>)}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CYCLE_WORDS = [
   "AI-Powered ERP",
   "DevSecOps Pipelines",
@@ -415,6 +466,8 @@ const HeroSection = () => {
       display: "flex", alignItems: "flex-start",
       position: "relative", overflow: "hidden",
     }}>
+      <CreamCascade prefersReduced={prefersReduced} />
+
       {/* Dot-grid texture */}
       <div aria-hidden="true" style={{
         position: "absolute", inset: 0, pointerEvents: "none",
@@ -796,6 +849,17 @@ const HeroSection = () => {
           background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.22) 50%,transparent 62%);
           transform:translateX(-100%) skewX(-15deg);
           animation:xzShimmer 3.5s ease-in-out 1.5s infinite;
+        }
+        @keyframes xzCreamScrollA {
+          from { transform: translateY(0); }
+          to   { transform: translateY(-50%); }
+        }
+        @keyframes xzCreamScrollB {
+          from { transform: translateY(-12%); }
+          to   { transform: translateY(-62%); }
+        }
+        @media (max-width: 767px) {
+          .xz-cream-cascade-b { display: none !important; }
         }
         @media (prefers-reduced-motion:reduce) {
           *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Warp } from "@paper-design/shaders-react";
 
 const Tilt3D = ({ children }: { children: React.ReactNode }) => {
@@ -116,6 +116,101 @@ const SERVICES = [
   },
 ];
 
+type ServiceItem = typeof SERVICES[number];
+
+const ServiceCard = ({ card }: { card: ServiceItem }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Tilt3D>
+      <div
+        style={{ position: "relative", height: 300, borderRadius: 20, overflow: "hidden" }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <div style={{ position: "absolute", inset: 0 }}>
+          <Warp
+            style={{ width: "100%", height: "100%" }}
+            proportion={0.38}
+            softness={0.95}
+            distortion={0.18}
+            swirl={0.75}
+            swirlIterations={10}
+            shape={card.shape}
+            shapeScale={0.1}
+            scale={1}
+            rotation={0}
+            speed={0.6}
+            colors={card.colors}
+          />
+        </div>
+
+        <div style={{
+          position: "relative", zIndex: 1, height: "100%",
+          display: "flex", flexDirection: "column",
+          padding: "28px 28px 24px",
+          background: hovered ? "rgba(8,5,2,0.78)" : "rgba(12,8,4,0.72)",
+          border: hovered ? "1px solid rgba(201,136,58,0.35)" : "1px solid rgba(255,255,255,0.10)",
+          borderTop: hovered ? "2px solid rgba(201,136,58,0.70)" : "1px solid rgba(255,255,255,0.10)",
+          transition: "background 0.28s ease, border 0.28s ease",
+        }}>
+          {/* Icon */}
+          <div style={{
+            width: 52, height: 52, borderRadius: 14,
+            background: hovered ? "rgba(201,136,58,0.22)" : "rgba(255,255,255,0.12)",
+            border: hovered ? "1px solid rgba(201,136,58,0.45)" : "1px solid rgba(255,255,255,0.18)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            marginBottom: 20, fontSize: 20,
+            color: hovered ? "#E5B460" : "#ffffff",
+            flexShrink: 0,
+            transition: "background 0.25s ease, border 0.25s ease, color 0.25s ease",
+          }}>
+            <i className={card.icon} />
+          </div>
+
+          {/* Title */}
+          <h3 style={{
+            marginBottom: 10, fontSize: 17, lineHeight: 1.3,
+            fontWeight: 700, color: "#ffffff",
+            fontFamily: "'DM Sans', sans-serif",
+          }}>
+            <Link to={`/service/${card.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
+              {card.title}
+            </Link>
+          </h3>
+
+          {/* Description */}
+          <p style={{
+            color: "rgba(255,255,255,0.72)",
+            fontSize: 13, lineHeight: 1.7,
+            marginBottom: 20, flex: 1,
+            fontFamily: "'DM Sans', sans-serif",
+          }}>
+            {card.desc}
+          </p>
+
+          {/* More Details link with arrow slide */}
+          <Link
+            to={`/service/${card.slug}`}
+            style={{
+              display: "inline-flex", alignItems: "center",
+              gap: hovered ? "10px" : "6px",
+              color: hovered ? "#E5B460" : "rgba(255,255,255,0.85)",
+              fontWeight: 600, fontSize: 12,
+              textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
+              letterSpacing: "0.04em", textTransform: "uppercase",
+              transition: "color 0.25s ease, gap 0.25s ease",
+            }}
+          >
+            More Details
+            <i className="far fa-arrow-right" style={{ fontSize: 11, transition: "transform 0.25s ease", transform: hovered ? "translateX(3px)" : "translateX(0)" }} />
+          </Link>
+        </div>
+      </div>
+    </Tilt3D>
+  );
+};
+
 const ServiceSection2 = () => (
   <section style={{ background: "#FDFCFB", padding: "100px 0" }}>
     <div className="container">
@@ -137,87 +232,7 @@ const ServiceSection2 = () => (
             data-aos-easing="ease-out-cubic"
             data-aos-once="true"
           >
-            <Tilt3D>
-            {/* Shader card wrapper */}
-            <div style={{ position: "relative", height: 300, borderRadius: 20, overflow: "hidden" }}>
-
-              {/* Warp shader background */}
-              <div style={{ position: "absolute", inset: 0 }}>
-                <Warp
-                  style={{ width: "100%", height: "100%" }}
-                  proportion={0.38}
-                  softness={0.95}
-                  distortion={0.18}
-                  swirl={0.75}
-                  swirlIterations={10}
-                  shape={card.shape}
-                  shapeScale={0.1}
-                  scale={1}
-                  rotation={0}
-                  speed={0.6}
-                  colors={card.colors}
-                />
-              </div>
-
-              {/* Dark overlay + content */}
-              <div style={{
-                position: "relative",
-                zIndex: 1,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                padding: "28px 28px 24px",
-                background: "rgba(12,8,4,0.72)",
-                border: "1px solid rgba(255,255,255,0.10)",
-              }}>
-                {/* Icon */}
-                <div style={{
-                  width: 52, height: 52, borderRadius: 14,
-                  background: "rgba(255,255,255,0.12)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  marginBottom: 20, fontSize: 20, color: "#ffffff", flexShrink: 0,
-                }}>
-                  <i className={card.icon} />
-                </div>
-
-                {/* Title */}
-                <h3 style={{
-                  marginBottom: 10, fontSize: 17, lineHeight: 1.3,
-                  fontWeight: 700, color: "#ffffff",
-                  fontFamily: "'DM Sans', sans-serif",
-                }}>
-                  <Link to={`/service/${card.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
-                    {card.title}
-                  </Link>
-                </h3>
-
-                {/* Description */}
-                <p style={{
-                  color: "rgba(255,255,255,0.72)",
-                  fontSize: 13, lineHeight: 1.7,
-                  marginBottom: 20, flex: 1,
-                  fontFamily: "'DM Sans', sans-serif",
-                }}>
-                  {card.desc}
-                </p>
-
-                {/* More Details link */}
-                <Link
-                  to={`/service/${card.slug}`}
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                    color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 12,
-                    textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
-                    letterSpacing: "0.04em", textTransform: "uppercase",
-                  }}
-                >
-                  More Details
-                  <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
-                </Link>
-              </div>
-            </div>
-            </Tilt3D>
+            <ServiceCard card={card} />
           </div>
         ))}
       </div>
