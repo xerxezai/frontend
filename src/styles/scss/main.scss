@@ -11695,6 +11695,14 @@ body {
   padding-bottom: 0 !important;
 }
 /* remove last-child special styling */
+.header-main .main-menu ul li .submenu.submenu--grid li a,
+.header-main .main-menu ul li .submenu.submenu--grid li a:visited {
+  color: rgba(255,255,255,0.92) !important;
+}
+.header-main .main-menu ul li .submenu.submenu--grid li a:hover {
+  color: #C9883A !important;
+}
+
 .header-main .main-menu ul li .submenu.submenu--grid li:last-child a,
 .header-main .main-menu ul li .submenu.submenu--grid li:last-child a:visited {
   color: rgba(255,255,255,0.78) !important;
@@ -12339,12 +12347,6 @@ body {
 }
 
 /* ── Kill purple visited links everywhere in nav/submenu (MUST BE LAST) ── */
-.main-menu a:link,
-.main-menu a:visited,
-.main-menu ul a:link,
-.main-menu ul a:visited,
-.main-menu li a:link,
-.main-menu li a:visited,
 .submenu a:link,
 .submenu a:visited,
 .submenu li a:link,
