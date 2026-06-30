@@ -85,49 +85,45 @@ const StatCard = ({
       onMouseLeave={() => setHovered(false)}
       style={{
         background: C.white,
-        borderRadius: 16,
+        borderRadius: 12,
         border: `1px solid ${C.border}`,
-        borderTop: `3px solid ${cat.accent}`,
+        borderTop: `2px solid ${cat.accent}`,
         boxShadow: hovered
-          ? `0 2px 4px rgba(0,0,0,0.06), 0 12px 36px rgba(0,0,0,0.10), 0 28px 64px ${cat.glow}`
-          : shadow.card,
-        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
-        transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1), box-shadow 280ms cubic-bezier(0.22,1,0.36,1)',
-        padding: '22px 20px',
+          ? `0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04)`
+          : '0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04)',
+        transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
+        transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',
+        padding: '18px 16px',
         cursor: 'default',
         animation: `erpFadeUp 0.48s cubic-bezier(0.22,1,0.36,1) ${index * 0.055}s both`,
-        position: 'relative',
-        overflow: 'hidden',
       }}
     >
-      {/* 3D icon badge */}
+      {/* icon badge */}
       <div style={{
-        width: 48, height: 48,
-        borderRadius: 12,
+        width: 36, height: 36,
+        borderRadius: 9,
         background: cat.grad,
-        boxShadow: `0 4px 0 ${cat.deep}, 0 6px 18px ${cat.glow}`,
+        boxShadow: `0 2px 6px ${cat.glow}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginBottom: 14, flexShrink: 0,
-        transform: hovered ? 'rotate(-5deg) scale(1.08)' : 'rotate(0) scale(1)',
-        transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1)',
+        marginBottom: 12, flexShrink: 0,
       }}>
-        <i className={icon} style={{ color: '#fff', fontSize: 18 }}></i>
+        <i className={icon} style={{ color: '#fff', fontSize: 14 }}></i>
       </div>
 
       {/* number */}
       <div style={{
-        fontSize: 30, fontWeight: 800, color: C.dark,
-        lineHeight: 1, marginBottom: 6,
+        fontSize: 24, fontWeight: 700, color: C.dark,
+        lineHeight: 1, marginBottom: 4,
         fontFamily: "'DM Sans', sans-serif",
-        letterSpacing: '-0.02em', wordBreak: 'break-all',
+        letterSpacing: '-0.01em', wordBreak: 'break-all',
       }}>
         {display}
       </div>
 
       {/* label */}
       <div style={{
-        fontSize: 12.5, color: C.muted,
-        fontFamily: "'DM Sans', sans-serif", lineHeight: 1.45,
+        fontSize: 12, color: C.muted,
+        fontFamily: "'DM Sans', sans-serif", lineHeight: 1.4,
       }}>
         {label}
       </div>
@@ -138,16 +134,16 @@ const StatCard = ({
 // ── skeleton card ─────────────────────────────────────────────────────────────
 const SkeletonCard = ({ index }: { index: number }) => (
   <div style={{
-    background: C.white, borderRadius: 16,
+    background: C.white, borderRadius: 12,
     border: `1px solid ${C.border}`,
-    borderTop: '3px solid rgba(0,0,0,0.06)',
-    boxShadow: shadow.card,
-    padding: '22px 20px',
+    borderTop: '2px solid rgba(0,0,0,0.06)',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04)',
+    padding: '18px 16px',
     animation: `erpFadeUp 0.36s ease ${index * 0.04}s both`,
   }}>
-    <div style={{ width: 48, height: 48, borderRadius: 12, background: '#f0ede8', animation: 'erpShimmer 1.5s ease-in-out infinite', marginBottom: 14 }} />
-    <div style={{ height: 28, borderRadius: 6,  background: '#f0ede8', animation: 'erpShimmer 1.5s 0.1s ease-in-out infinite', marginBottom: 8, width: '55%' }} />
-    <div style={{ height: 13, borderRadius: 4,  background: '#f0ede8', animation: 'erpShimmer 1.5s 0.2s ease-in-out infinite', width: '80%' }} />
+    <div style={{ width: 36, height: 36, borderRadius: 9, background: '#f0ede8', animation: 'erpShimmer 1.5s ease-in-out infinite', marginBottom: 12 }} />
+    <div style={{ height: 22, borderRadius: 5, background: '#f0ede8', animation: 'erpShimmer 1.5s 0.1s ease-in-out infinite', marginBottom: 6, width: '50%' }} />
+    <div style={{ height: 12, borderRadius: 4, background: '#f0ede8', animation: 'erpShimmer 1.5s 0.2s ease-in-out infinite', width: '75%' }} />
   </div>
 );
 
