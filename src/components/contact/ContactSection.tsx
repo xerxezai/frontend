@@ -1,22 +1,177 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 
 interface ContactInfo {
-  name: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
+  name: string; email: string; phone: string;
+  subject: string; message: string;
 }
-
 const EMPTY: ContactInfo = { name: "", email: "", phone: "", subject: "", message: "" };
 
+// ── count-up hook ─────────────────────────────────────────────────────────────
+function useCountUp(target: number, duration = 1400, trigger = false) {
+  const [val, setVal] = useState(0);
+  const raf = useRef<number>(0);
+  useEffect(() => {
+    if (!trigger || target <= 0) { setVal(target); return; }
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const e = 1 - Math.pow(1 - t, 3);
+      setVal(Math.round(e * target));
+      if (t < 1) raf.current = requestAnimationFrame(tick);
+    };
+    raf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf.current);
+  }, [target, duration, trigger]);
+  return val;
+}
+
+// ── 3D icon badge ─────────────────────────────────────────────────────────────
+const IconBadge = ({ icon, size = 38 }: { icon: string; size?: number }) => (
+  <div style={{
+    width: size, height: size, borderRadius: Math.round(size * 0.28), flexShrink: 0,
+    background: "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
+    boxShadow: "0 4px 0 rgba(150,95,30,0.52), 0 6px 18px rgba(201,136,58,0.30)",
+    display: "flex", alignItems: "center", justifyContent: "center",
+  }}>
+    <i className={icon} style={{ color: "#fff", fontSize: Math.round(size * 0.37) }} />
+  </div>
+);
+
+// ── input icon badge ──────────────────────────────────────────────────────────
+const InputBadge = ({ icon, focused, hasError }: { icon: string; focused: boolean; hasError?: boolean }) => (
+  <div style={{
+    width: 26, height: 26, borderRadius: 7, flexShrink: 0,
+    background: hasError
+      ? "linear-gradient(145deg,#f87171,#ef4444)"
+      : focused
+      ? "linear-gradient(145deg,#e8a84e,#C9883A)"
+      : "linear-gradient(145deg,#e2ddd8,#ccc8c2)",
+    boxShadow: focused ? "0 3px 0 rgba(150,95,30,0.48)" : "0 2px 0 rgba(0,0,0,0.12)",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    transition: "background 200ms, box-shadow 200ms",
+  }}>
+    <i className={icon} style={{ color: "#fff", fontSize: 10 }} />
+  </div>
+);
+
+// ── info row ──────────────────────────────────────────────────────────────────
+const InfoRow = ({ icon, label, value, href, delay }: {
+  icon: string; label: string; value: string; href?: string; delay: number;
+}) => (
+  <div
+    data-aos="fade-up" data-aos-delay={delay} data-aos-duration="600" data-aos-once="true"
+    style={{ display: "flex", alignItems: "center", gap: 16 }}
+  >
+    <IconBadge icon={icon} size={40} />
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, letterSpacing: "0.13em",
+        textTransform: "uppercase", color: "rgba(255,255,255,0.32)",
+        fontFamily: "'DM Sans',sans-serif", marginBottom: 2,
+      }}>{label}</div>
+      {href ? (
+        <a href={href} style={{
+          color: "rgba(255,255,255,0.85)", fontSize: 14,
+          fontFamily: "'DM Sans',sans-serif", textDecoration: "none",
+          transition: "color 150ms",
+        }}
+          onMouseEnter={e => (e.currentTarget.style.color = "#C9883A")}
+          onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.85)")}
+        >{value}</a>
+      ) : (
+        <span style={{
+          color: "rgba(255,255,255,0.85)", fontSize: 14,
+          fontFamily: "'DM Sans',sans-serif",
+        }}>{value}</span>
+      )}
+    </div>
+  </div>
+);
+
+// ── stat tile with count-up ───────────────────────────────────────────────────
+const StatTile = ({
+  rawVal, suffix, label, color, delay, trigger,
+}: {
+  rawVal: number; suffix: string; label: string;
+  color: string; delay: number; trigger: boolean;
+}) => {
+  const [hov, setHov] = useState(false);
+  const counted = useCountUp(rawVal, 1400, trigger);
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      data-aos="fade-up"
+      data-aos-delay={delay}
+      data-aos-duration="600"
+      data-aos-once="true"
+      style={{
+        flex: 1,
+        background: "rgba(255,255,255,0.05)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+        border: "1px solid rgba(255,255,255,0.07)",
+        borderTop: `2px solid ${color}`,
+        borderRadius: 13, padding: "16px 14px",
+        cursor: "default", textAlign: "center",
+        transform: hov ? "translateY(-6px)" : "translateY(0)",
+        boxShadow: hov
+          ? `0 16px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06)`
+          : "0 2px 10px rgba(0,0,0,0.20)",
+        transition: "transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms ease",
+        animation: `xzCtFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}ms both`,
+      }}
+    >
+      <div style={{
+        fontFamily: "'Cormorant Garamond',serif",
+        fontSize: 24, fontWeight: 700, color, lineHeight: 1,
+      }}>
+        {counted}{suffix}
+      </div>
+      <div style={{
+        fontSize: 10, fontWeight: 600, letterSpacing: "0.09em",
+        textTransform: "uppercase", color: "rgba(255,255,255,0.38)",
+        fontFamily: "'DM Sans',sans-serif", marginTop: 6,
+      }}>{label}</div>
+    </div>
+  );
+};
+
+// ── main ─────────────────────────────────────────────────────────────────────
 const ContactSection = () => {
   const [form, setForm] = useState<ContactInfo>(EMPTY);
   const [focused, setFocused] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [submitHovered, setSubmitHovered] = useState(false);
+  const [btnHov, setBtnHov] = useState(false);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  // 3D card tilt
+  const formCardRef = useRef<HTMLDivElement>(null);
+  const onTiltMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = formCardRef.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
+    const y = ((e.clientY - r.top) / r.height - 0.5) * -6;
+    el.style.transform = `perspective(900px) rotateX(${y}deg) rotateY(${x}deg)`;
+  };
+  const onTiltLeave = () => {
+    const el = formCardRef.current; if (!el) return;
+    el.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
+  };
+
+  // trigger count-up when stats section scrolls into view
+  useEffect(() => {
+    const el = statsRef.current; if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setStatsVisible(true); obs.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const set = useCallback((k: keyof ContactInfo, v: string) =>
     setForm(p => ({ ...p, [k]: v })), []);
@@ -34,307 +189,392 @@ const ContactSection = () => {
     }
     setSending(true);
     setTimeout(() => {
-      setSending(false);
-      setSent(true);
+      setSending(false); setSent(true);
       toast.success("Message sent! We'll respond within 24 hours.");
       setForm(EMPTY);
       setTimeout(() => setSent(false), 5000);
     }, 1800);
   }, [form]);
 
-  // ── Shared input style ──────────────────────────────────────────────────────
-  const fieldStyle = (name: string): React.CSSProperties => ({
-    width: "100%",
-    border: `1.5px solid ${focused === name ? "#C9883A" : "#DDDAD4"}`,
-    borderRadius: 12,
-    padding: "13px 16px",
-    fontFamily: "'DM Sans', sans-serif",
-    fontSize: 14,
-    color: "#1A1A1A",
-    background: "#ffffff",
-    outline: "none",
-    display: "block",
-    transition: "border-color 0.18s, box-shadow 0.18s",
-    boxShadow: focused === name ? "0 0 0 3px rgba(201,136,58,0.10)" : "none",
+  const fld = (name: string): React.CSSProperties => ({
+    width: "100%", boxSizing: "border-box" as const,
+    border: `1.5px solid ${focused === name ? "#C9883A" : "#E4DFD8"}`,
+    borderRadius: 10, padding: "11px 14px 11px 44px",
+    fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, color: "#141413",
+    background: focused === name ? "#FFFDF9" : "#fafaf8",
+    outline: "none", display: "block",
+    transition: "border-color 0.18s, box-shadow 0.18s, background 0.18s",
+    boxShadow: focused === name ? "0 0 0 3px rgba(201,136,58,0.11)" : "none",
   });
 
-  const labelStyle: React.CSSProperties = {
-    display: "block",
-    fontFamily: "'DM Sans', sans-serif",
-    fontSize: 11,
-    fontWeight: 600,
-    color: "#6c6a64",
-    letterSpacing: "0.06em",
-    textTransform: "uppercase",
-    marginBottom: 7,
+  const lbl: React.CSSProperties = {
+    display: "block", fontFamily: "'DM Sans',sans-serif",
+    fontSize: 11, fontWeight: 700, color: "#5a5650",
+    letterSpacing: "0.07em", textTransform: "uppercase" as const, marginBottom: 6,
   };
 
+  const fieldWrap = (name: string, icon: string, children: React.ReactNode) => (
+    <div style={{ position: "relative" }}>
+      <span style={{
+        position: "absolute", left: 10, top: "50%",
+        transform: "translateY(-50%)", pointerEvents: "none", zIndex: 1,
+      }}>
+        <InputBadge icon={icon} focused={focused === name} />
+      </span>
+      {children}
+    </div>
+  );
+
+  const textareaFld = (name: string): React.CSSProperties => ({
+    ...fld(name), padding: "11px 14px 11px 44px", resize: "vertical" as const,
+  });
+
   return (
-    <section className="xz-contact-section" style={{ padding: "72px 0", background: "#ffffff" }}>
-      <div className="container">
-        <div className="row g-4 align-items-stretch">
+    <>
+      <style>{`
+        @keyframes xzCtFadeUp {
+          from { opacity:0; transform:translateY(22px); }
+          to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes xzCtOrb1 {
+          0%,100% { transform:translate(0,0) scale(1); }
+          50%     { transform:translate(-24px,32px) scale(1.08); }
+        }
+        @keyframes xzCtOrb2 {
+          0%,100% { transform:translate(0,0) scale(1); }
+          50%     { transform:translate(28px,-20px) scale(0.94); }
+        }
+        @keyframes xzCtOrb3 {
+          0%,100% { transform:translate(0,0) scale(1); }
+          50%     { transform:translate(-16px,-24px) scale(1.05); }
+        }
+        @keyframes xzCtPulse {
+          0%,100% { box-shadow:0 0 0 0 rgba(74,222,128,0.6); }
+          50%     { box-shadow:0 0 0 6px rgba(74,222,128,0); }
+        }
+        .xz-ct-grid {
+          display:grid;
+          grid-template-columns:420px 1fr;
+          gap:0;
+          align-items:stretch;
+          border-radius:22px;
+          overflow:hidden;
+          box-shadow:0 24px 80px rgba(0,0,0,0.14), 0 4px 0 rgba(160,140,110,0.18);
+        }
+        @media (max-width:1199px) { .xz-ct-grid { grid-template-columns:360px 1fr; } }
+        @media (max-width:991px)  { .xz-ct-grid { grid-template-columns:1fr; } }
+        @media (prefers-reduced-motion:reduce) {
+          .xz-ct-grid * { animation:none!important; transition:none!important; }
+        }
+      `}</style>
 
-          {/* ── LEFT: form ─────────────────────────────────────────────────── */}
-          <div className="col-lg-7" data-aos="fade-right" data-aos-duration="900" data-aos-once="true">
+      <section style={{
+        background: "#F8F7F4", padding: "80px 0 92px",
+        position: "relative", overflow: "hidden",
+      }}>
+        {/* bg dot grid */}
+        <div aria-hidden="true" style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          backgroundImage: "radial-gradient(circle,#d8d3cc 1px,transparent 1px)",
+          backgroundSize: "36px 36px", opacity: 0.28,
+        }} />
 
-            {/* Section label */}
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-              fontWeight: 600, letterSpacing: "0.18em",
-              textTransform: "uppercase", color: "#C9883A", marginBottom: 16,
-            }}>
-              <span style={{ width: 22, height: 1.5, background: "#C9883A", display: "inline-block" }} />
-              Contact Us
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+
+          {/* section header */}
+          <div style={{ textAlign: "center", marginBottom: 52 }}>
+            <div data-aos="fade-up" data-aos-duration="600" data-aos-once="true"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                fontFamily: "'DM Sans',sans-serif", fontSize: 11, fontWeight: 700,
+                letterSpacing: "0.20em", textTransform: "uppercase", color: "#C9883A",
+                marginBottom: 14,
+              }}>
+              <span style={{ width: 24, height: 1.5, background: "#C9883A", display: "inline-block" }} />
+              Get In Touch
+              <span style={{ width: 24, height: 1.5, background: "#C9883A", display: "inline-block" }} />
+            </div>
+            <h2 data-aos="fade-up" data-aos-delay="80" data-aos-duration="700" data-aos-once="true"
+              style={{
+                fontFamily: "'Cormorant Garamond',Garamond,serif",
+                fontWeight: 700, fontSize: "clamp(30px,4vw,52px)",
+                lineHeight: 1.08, letterSpacing: "-0.02em", color: "#141413", margin: 0,
+              }}>
+              Start Your Enterprise{" "}
+              <em style={{ color: "#C9883A", fontStyle: "italic" }}>Digital Transformation</em>
+            </h2>
+          </div>
+
+          {/* two-column grid */}
+          <div className="xz-ct-grid">
+
+            {/* ══ LEFT — dark info panel ══ */}
+            <div
+              data-aos="fade-right" data-aos-duration="800" data-aos-once="true"
+              style={{
+                background: "linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)",
+                padding: "48px 38px",
+                position: "relative", overflow: "hidden",
+                display: "flex", flexDirection: "column", justifyContent: "space-between",
+                minHeight: 580,
+              }}
+            >
+              {/* animated orbs */}
+              <div aria-hidden="true" style={{
+                position: "absolute", top: "-18%", left: "-12%",
+                width: 360, height: 360, borderRadius: "50%",
+                background: "radial-gradient(circle,rgba(201,136,58,0.20) 0%,transparent 65%)",
+                pointerEvents: "none", animation: "xzCtOrb1 20s ease-in-out infinite",
+              }} />
+              <div aria-hidden="true" style={{
+                position: "absolute", bottom: "-15%", right: "-8%",
+                width: 280, height: 280, borderRadius: "50%",
+                background: "radial-gradient(circle,rgba(204,120,92,0.14) 0%,transparent 65%)",
+                pointerEvents: "none", animation: "xzCtOrb2 26s ease-in-out infinite",
+              }} />
+              <div aria-hidden="true" style={{
+                position: "absolute", top: "42%", right: "18%",
+                width: 160, height: 160, borderRadius: "50%",
+                background: "radial-gradient(circle,rgba(201,136,58,0.09) 0%,transparent 65%)",
+                pointerEvents: "none", animation: "xzCtOrb3 16s ease-in-out infinite",
+              }} />
+              {/* dot grid */}
+              <div aria-hidden="true" style={{
+                position: "absolute", inset: 0, pointerEvents: "none",
+                backgroundImage: "radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)",
+                backgroundSize: "26px 26px",
+              }} />
+
+              <div style={{ position: "relative", zIndex: 1 }}>
+                {/* eyebrow */}
+                <div data-aos="fade-up" data-aos-duration="500" data-aos-once="true"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    background: "rgba(201,136,58,0.12)",
+                    border: "1px solid rgba(201,136,58,0.28)",
+                    borderRadius: 100, padding: "5px 14px", marginBottom: 22,
+                  }}>
+                  <span style={{
+                    width: 6, height: 6, borderRadius: "50%",
+                    background: "#C9883A", display: "inline-block",
+                    animation: "xzCtPulse 2s ease-in-out infinite",
+                  }} />
+                  <span style={{
+                    fontFamily: "'DM Sans',sans-serif",
+                    fontSize: 10, fontWeight: 700, color: "#C9883A",
+                    letterSpacing: "0.14em", textTransform: "uppercase",
+                  }}>We're ready to help</span>
+                </div>
+
+                {/* headline */}
+                <h3 data-aos="fade-up" data-aos-delay="60" data-aos-duration="650" data-aos-once="true"
+                  style={{
+                    fontFamily: "'Cormorant Garamond',Garamond,serif",
+                    fontSize: "clamp(26px,2.4vw,38px)", fontWeight: 700,
+                    color: "#fff", lineHeight: 1.12, marginBottom: 14,
+                    letterSpacing: "-0.015em",
+                  }}>
+                  Let's build something<br />
+                  <em style={{ color: "#C9883A", fontStyle: "italic" }}>remarkable together</em>
+                </h3>
+
+                <p data-aos="fade-up" data-aos-delay="100" data-aos-duration="600" data-aos-once="true"
+                  style={{
+                    fontFamily: "'DM Sans',sans-serif", fontSize: 14, lineHeight: 1.72,
+                    color: "rgba(255,255,255,0.48)", marginBottom: 36, maxWidth: 300,
+                  }}>
+                  Tell us about your project and we'll respond within 24 hours with a tailored plan.
+                </p>
+
+                {/* contact rows */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 22, marginBottom: 36 }}>
+                  <InfoRow icon="fas fa-envelope"       label="Email"    value="info@xerxez.com"         href="mailto:info@xerxez.com" delay={120} />
+                  <InfoRow icon="fas fa-phone-alt"      label="Phone"    value="+971 56 786 7451"         href="tel:+971567867451"      delay={160} />
+                  <InfoRow icon="fas fa-map-marker-alt" label="Location" value="India & UAE — Remote-first"                            delay={200} />
+                </div>
+
+                {/* response chip */}
+                <div data-aos="fade-up" data-aos-delay="220" data-aos-duration="500" data-aos-once="true"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    background: "rgba(74,222,128,0.09)",
+                    border: "1px solid rgba(74,222,128,0.20)",
+                    borderRadius: 100, padding: "6px 14px",
+                  }}>
+                  <span style={{
+                    width: 7, height: 7, borderRadius: "50%", background: "#4ade80",
+                    display: "inline-block", flexShrink: 0,
+                    animation: "xzCtPulse 1.8s ease-in-out infinite",
+                  }} />
+                  <span style={{
+                    fontFamily: "'DM Sans',sans-serif", fontSize: 11.5,
+                    fontWeight: 600, color: "rgba(255,255,255,0.65)",
+                  }}>
+                    Responds within{" "}
+                    <strong style={{ color: "#4ade80" }}>24 hours</strong>
+                  </span>
+                </div>
+              </div>
+
+              {/* stat tiles with count-up */}
+              <div ref={statsRef} style={{ display: "flex", gap: 10, position: "relative", zIndex: 1, marginTop: 44 }}>
+                <StatTile rawVal={120} suffix="+"  label="Projects"  color="#C9883A" delay={240} trigger={statsVisible} />
+                <StatTile rawVal={15}  suffix="+"  label="Countries" color="#60a5fa" delay={280} trigger={statsVisible} />
+                <StatTile rawVal={99}  suffix="%"  label="Uptime"    color="#34d399" delay={320} trigger={statsVisible} />
+              </div>
             </div>
 
-            {/* Heading */}
-            <h2 style={{
-              fontFamily: "'Cormorant Garamond', Garamond, serif",
-              fontWeight: 700,
-              fontSize: "clamp(28px, 4vw, 48px)",
-              lineHeight: 1.1,
-              letterSpacing: "-0.02em",
-              color: "#141413",
-              marginBottom: 12,
-            }}>
-              Start Your Enterprise<br />
-              <span style={{ color: "#C9883A", fontStyle: "italic" }}>Digital Transformation</span>
-            </h2>
+            {/* ══ RIGHT — form panel with 3D tilt ══ */}
+            <div
+              data-aos="fade-left" data-aos-duration="800" data-aos-delay="100" data-aos-once="true"
+              ref={formCardRef}
+              onMouseMove={onTiltMove}
+              onMouseLeave={onTiltLeave}
+              style={{
+                background: "#ffffff",
+                borderTop: "3px solid #C9883A",
+                padding: "48px 44px",
+                transformStyle: "preserve-3d",
+                transition: "transform 0.12s linear",
+                willChange: "transform",
+              }}
+            >
+              <h3 style={{
+                fontFamily: "'DM Sans',sans-serif",
+                fontWeight: 800, fontSize: 21, color: "#141413",
+                letterSpacing: "-0.02em", margin: "0 0 5px",
+              }}>
+                Send us a message
+              </h3>
+              <p style={{
+                fontFamily: "'DM Sans',sans-serif",
+                fontSize: 13, color: "#9b9690", margin: "0 0 26px",
+              }}>All fields marked * are required.</p>
 
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 15, lineHeight: 1.7,
-              color: "#6c6a64", marginBottom: 24, maxWidth: 460,
-            }}>
-              Fill out the form and our team will respond within 24 hours.
-            </p>
-
-            {/* Form card — 3D raised */}
-            <div style={{
-              background: "linear-gradient(160deg, #ffffff 0%, #faf7f2 100%)",
-              border: "1px solid rgba(210,200,185,0.55)",
-              borderTop: "1px solid rgba(255,255,255,0.95)",
-              borderRadius: 20,
-              padding: "36px",
-              boxShadow: "0 6px 0 rgba(160,140,110,0.28), 0 12px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
-            }}>
               <form onSubmit={handleSubmit} noValidate>
                 <div className="row g-3">
 
-                  {/* Name + Email */}
-                  <div className="col-md-6">
-                    <label style={labelStyle}>Name *</label>
-                    <input type="text" placeholder="John Smith"
-                      value={form.name}
-                      style={fieldStyle("name")}
-                      disabled={sending}
-                      onChange={e => set("name", e.target.value)}
-                      onFocus={() => setFocused("name")}
-                      onBlur={() => setFocused(null)} />
-                  </div>
-                  <div className="col-md-6">
-                    <label style={labelStyle}>Email Address *</label>
-                    <input type="email" placeholder="john@company.com"
-                      value={form.email}
-                      style={fieldStyle("email")}
-                      disabled={sending}
-                      onChange={e => set("email", e.target.value)}
-                      onFocus={() => setFocused("email")}
-                      onBlur={() => setFocused(null)} />
+                  {/* Name */}
+                  <div className="col-sm-6">
+                    <label style={lbl}>Name *</label>
+                    {fieldWrap("name", "fas fa-user",
+                      <input type="text" placeholder="John Smith"
+                        value={form.name} style={fld("name")} disabled={sending}
+                        onChange={e => set("name", e.target.value)}
+                        onFocus={() => setFocused("name")} onBlur={() => setFocused(null)} />
+                    )}
                   </div>
 
-                  {/* Phone + Subject */}
-                  <div className="col-md-6">
-                    <label style={labelStyle}>Phone Number *</label>
-                    <input type="tel" placeholder="+1 234 567 8900"
-                      value={form.phone}
-                      style={fieldStyle("phone")}
-                      disabled={sending}
-                      onChange={e => set("phone", e.target.value)}
-                      onFocus={() => setFocused("phone")}
-                      onBlur={() => setFocused(null)} />
+                  {/* Email */}
+                  <div className="col-sm-6">
+                    <label style={lbl}>Email Address *</label>
+                    {fieldWrap("email", "fas fa-envelope",
+                      <input type="email" placeholder="john@company.com"
+                        value={form.email} style={fld("email")} disabled={sending}
+                        onChange={e => set("email", e.target.value)}
+                        onFocus={() => setFocused("email")} onBlur={() => setFocused(null)} />
+                    )}
                   </div>
-                  <div className="col-md-6">
-                    <label style={labelStyle}>Subject *</label>
-                    <input type="text" placeholder="Your subject"
-                      value={form.subject}
-                      style={fieldStyle("subject")}
-                      disabled={sending}
-                      onChange={e => set("subject", e.target.value)}
-                      onFocus={() => setFocused("subject")}
-                      onBlur={() => setFocused(null)} />
+
+                  {/* Phone */}
+                  <div className="col-sm-6">
+                    <label style={lbl}>Phone Number *</label>
+                    {fieldWrap("phone", "fas fa-phone-alt",
+                      <input type="tel" placeholder="+1 234 567 8900"
+                        value={form.phone} style={fld("phone")} disabled={sending}
+                        onChange={e => set("phone", e.target.value)}
+                        onFocus={() => setFocused("phone")} onBlur={() => setFocused(null)} />
+                    )}
+                  </div>
+
+                  {/* Subject */}
+                  <div className="col-sm-6">
+                    <label style={lbl}>Subject *</label>
+                    {fieldWrap("subject", "fas fa-tag",
+                      <input type="text" placeholder="How can we help?"
+                        value={form.subject} style={fld("subject")} disabled={sending}
+                        onChange={e => set("subject", e.target.value)}
+                        onFocus={() => setFocused("subject")} onBlur={() => setFocused(null)} />
+                    )}
                   </div>
 
                   {/* Message */}
                   <div className="col-12">
-                    <label style={labelStyle}>Message *</label>
-                    <textarea
-                      rows={4}
-                      placeholder="Tell us about your project and goals…"
-                      value={form.message}
-                      style={{ ...fieldStyle("message"), resize: "vertical" }}
-                      disabled={sending}
-                      onChange={e => set("message", e.target.value)}
-                      onFocus={() => setFocused("message")}
-                      onBlur={() => setFocused(null)}
-                    />
+                    <label style={lbl}>Message *</label>
+                    <div style={{ position: "relative" }}>
+                      <span style={{
+                        position: "absolute", left: 10, top: 12,
+                        pointerEvents: "none", zIndex: 1,
+                      }}>
+                        <InputBadge icon="fas fa-comment-alt" focused={focused === "message"} />
+                      </span>
+                      <textarea rows={5}
+                        placeholder="Tell us about your project, goals, and timeline…"
+                        value={form.message}
+                        style={textareaFld("message")}
+                        disabled={sending}
+                        onChange={e => set("message", e.target.value)}
+                        onFocus={() => setFocused("message")} onBlur={() => setFocused(null)}
+                      />
+                    </div>
                   </div>
 
-                  {/* Submit button — clean inline style, no theme-btn split icon */}
+                  {/* Submit */}
                   <div className="col-12" style={{ marginTop: 4 }}>
-                    <button
-                      type="submit"
-                      disabled={sending || sent}
-                      className={sending || sent ? "" : "xz-scale-btn"}
+                    <button type="submit" disabled={sending || sent}
+                      onMouseEnter={() => setBtnHov(true)}
+                      onMouseLeave={() => setBtnHov(false)}
                       style={{
-                        width: "100%",
-                        height: 52,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 10,
-                        background: sent ? "#4ade80" : submitHovered && !sending ? "#a9583e" : "#cc785c",
-                        color: "#ffffff",
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 15,
-                        fontWeight: 600,
-                        borderRadius: 100,
-                        border: "none",
+                        width: "100%", height: 52,
+                        display: "flex", alignItems: "center",
+                        justifyContent: "center", gap: 10,
+                        background: sent
+                          ? "linear-gradient(145deg,#6ee7b7,#10b981)"
+                          : "linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)",
+                        color: "#fff",
+                        fontFamily: "'DM Sans',sans-serif",
+                        fontSize: 15, fontWeight: 700,
+                        borderRadius: 12, border: "none",
                         cursor: sending || sent ? "default" : "pointer",
-                        transition: "background 180ms ease, transform 0.22s ease, box-shadow 0.22s ease",
                         letterSpacing: "0.01em",
-                        boxShadow: "0 4px 0 rgba(150,80,40,0.45), 0 6px 18px rgba(204,120,92,0.25)",
+                        boxShadow: btnHov && !sending && !sent
+                          ? "0 6px 0 rgba(150,95,30,0.50), 0 10px 28px rgba(201,136,58,0.32)"
+                          : "0 4px 0 rgba(150,95,30,0.46), 0 6px 20px rgba(201,136,58,0.24)",
+                        transform: btnHov && !sending && !sent ? "translateY(-2px)" : "translateY(0)",
+                        transition: "transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms ease, background 200ms ease",
+                        opacity: sending ? 0.88 : 1,
                       }}
-                      onMouseEnter={() => setSubmitHovered(true)}
-                      onMouseLeave={() => setSubmitHovered(false)}
                     >
                       {sending ? (
                         <><i className="fas fa-spinner fa-spin" style={{ fontSize: 14 }} /> Sending…</>
                       ) : sent ? (
-                        <><i className="fas fa-check" style={{ fontSize: 14 }} /> Message Sent!</>
+                        <><i className="fas fa-check-circle" style={{ fontSize: 14 }} /> Message Sent!</>
                       ) : (
                         <><i className="far fa-paper-plane" style={{ fontSize: 14 }} /> Send Message</>
                       )}
                     </button>
                   </div>
 
+                  {/* privacy */}
+                  <div className="col-12">
+                    <p style={{
+                      fontFamily: "'DM Sans',sans-serif",
+                      fontSize: 11.5, color: "#b8b2ab",
+                      textAlign: "center", margin: 0, lineHeight: 1.6,
+                    }}>
+                      <i className="fas fa-lock" style={{ fontSize: 10, marginRight: 5, color: "#C9883A" }} />
+                      Your data is encrypted and never shared with third parties.
+                    </p>
+                  </div>
+
                 </div>
               </form>
             </div>
+
           </div>
-
-          {/* ── RIGHT: image + info overlay ───────────────────────────────── */}
-          <div className="col-lg-5 d-none d-lg-flex flex-column" data-aos="fade-left" data-aos-duration="900" data-aos-delay="120" data-aos-once="true">
-            <div style={{ position: "relative", height: "100%", minHeight: 540 }}>
-
-              {/* Main image */}
-              <img
-                src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=900&q=80"
-                alt="Enterprise team collaboration"
-                className="xz-parallax-img"
-                loading="lazy"
-                width="900"
-                height="600"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: 20,
-                  display: "block",
-                }}
-              />
-
-              {/* Dark gradient overlay at bottom */}
-              <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0,
-                height: "55%",
-                background: "linear-gradient(to top, rgba(12,8,4,0.85) 0%, transparent 100%)",
-                borderRadius: "0 0 20px 20px",
-                pointerEvents: "none",
-              }} />
-
-              {/* Bottom info card */}
-              <div style={{
-                position: "absolute", bottom: 28, left: 28, right: 28,
-                zIndex: 2,
-              }}>
-                {/* Trust badges row */}
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
-                  {["24h Response", "15+ Countries", "120+ Projects"].map(tag => (
-                    <span key={tag} style={{
-                      background: "rgba(201,136,58,0.85)",
-                      borderRadius: 100, padding: "4px 12px",
-                      fontSize: 11, fontWeight: 600,
-                      color: "#ffffff",
-                      fontFamily: "'DM Sans', sans-serif",
-                      letterSpacing: "0.04em",
-                    }}>{tag}</span>
-                  ))}
-                </div>
-
-                {/* Quick contact info */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {[
-                    { icon: "fas fa-envelope", text: "info@xerxez.com", href: "mailto:info@xerxez.com" },
-                    { icon: "fas fa-phone-alt", text: "+971 56 786 7451", href: "tel:+971567867451" },
-                    { icon: "fas fa-map-marker-alt", text: "India & UAE — Remote-first" },
-                  ].map(({ icon, text, href }) => (
-                    <div key={text} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{
-                        width: 30, height: 30, borderRadius: "50%",
-                        background: "rgba(204,120,92,0.90)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        flexShrink: 0,
-                      }}>
-                        <i className={icon} style={{ color: "#fff", fontSize: 11 }} />
-                      </div>
-                      {href ? (
-                        <a href={href} style={{
-                          color: "rgba(255,255,255,0.88)",
-                          fontSize: 13, fontFamily: "'DM Sans', sans-serif",
-                          textDecoration: "none",
-                        }}>{text}</a>
-                      ) : (
-                        <span style={{
-                          color: "rgba(255,255,255,0.88)",
-                          fontSize: 13, fontFamily: "'DM Sans', sans-serif",
-                        }}>{text}</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Top-right metric card */}
-              <div style={{
-                position: "absolute", top: 24, right: 24,
-                background: "rgba(255,255,255,0.95)",
-                backdropFilter: "blur(10px)",
-                borderRadius: 14,
-                padding: "16px 20px",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                textAlign: "center",
-                minWidth: 110,
-              }}>
-                <div style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 36, fontWeight: 700,
-                  color: "#cc785c", lineHeight: 1,
-                }}>120<span style={{ fontSize: 20, color: "#C9883A" }}>+</span></div>
-                <div style={{
-                  fontSize: 10, fontWeight: 600, color: "#6c6a64",
-                  letterSpacing: "0.08em", textTransform: "uppercase",
-                  marginTop: 4, fontFamily: "'DM Sans', sans-serif",
-                }}>Projects Delivered</div>
-              </div>
-
-            </div>
-          </div>
-
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

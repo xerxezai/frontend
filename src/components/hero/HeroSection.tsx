@@ -119,7 +119,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
     // Float wrapper — gentle ambient bob, paused on hover
     <div ref={floatRef} style={{
       animation: prefersReduced ? "none" : "xzCardFloat 7s ease-in-out 1.5s infinite",
-      width: "100%", maxWidth: 400,
+      width: "100%", maxWidth: 390,
     }}>
       {/* 3D-tiltable card */}
       <div
@@ -132,7 +132,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
           background: "#1a1208",
           border: "1px solid rgba(180,140,100,0.15)",
           borderRadius: 20,
-          padding: "20px 20px 16px",
+          padding: "16px 16px 12px",
           boxShadow: "0 40px 80px rgba(100,60,20,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset",
           animation: prefersReduced ? "none" : "xzCardSlideRight 0.9s cubic-bezier(0.22,1,0.36,1) 0.25s both",
           transformStyle: "preserve-3d",
@@ -410,7 +410,7 @@ const HeroSection = () => {
   return (
     <section style={{
       background: "#F2EFE9",
-      padding: "24px 0 64px",
+      padding: "24px 0 72px",
       minHeight: "calc(100vh - 70px)",
       display: "flex", alignItems: "flex-start",
       position: "relative", overflow: "hidden",
@@ -422,26 +422,34 @@ const HeroSection = () => {
         backgroundSize: "38px 38px", opacity: 0.38, zIndex: 0,
       }} />
 
+      {/* Top-right warm wash behind the card */}
+      <div aria-hidden="true" style={{
+        position: "absolute", top: 0, right: 0,
+        width: "52%", height: "100%",
+        background: "radial-gradient(ellipse 80% 70% at 85% 35%, rgba(201,136,58,0.10) 0%, transparent 70%)",
+        pointerEvents: "none", zIndex: 0,
+      }} />
+
       {/* Floating ambient orbs */}
       {!prefersReduced && <>
         <div aria-hidden="true" style={{
-          position: "absolute", width: 440, height: 440, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(204,120,92,0.09) 0%, transparent 70%)",
-          top: "-12%", right: "-6%", filter: "blur(64px)",
+          position: "absolute", width: 520, height: 520, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(204,120,92,0.16) 0%, transparent 70%)",
+          top: "-14%", right: "-8%", filter: "blur(72px)",
           animation: "xzOrb1 22s ease-in-out infinite alternate",
           pointerEvents: "none", zIndex: 0,
         }} />
         <div aria-hidden="true" style={{
-          position: "absolute", width: 320, height: 320, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(201,136,58,0.07) 0%, transparent 70%)",
-          bottom: "2%", left: "1%", filter: "blur(52px)",
+          position: "absolute", width: 360, height: 360, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(201,136,58,0.13) 0%, transparent 70%)",
+          bottom: "2%", left: "1%", filter: "blur(56px)",
           animation: "xzOrb2 28s ease-in-out infinite alternate",
           pointerEvents: "none", zIndex: 0,
         }} />
         <div aria-hidden="true" style={{
-          position: "absolute", width: 230, height: 230, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(204,120,92,0.06) 0%, transparent 70%)",
-          top: "38%", right: "28%", filter: "blur(46px)",
+          position: "absolute", width: 280, height: 280, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(204,120,92,0.10) 0%, transparent 70%)",
+          top: "38%", right: "28%", filter: "blur(50px)",
           animation: "xzOrb3 18s ease-in-out infinite alternate",
           pointerEvents: "none", zIndex: 0,
         }} />
@@ -466,19 +474,49 @@ const HeroSection = () => {
           {/* ── LEFT (unchanged content) ── */}
           <div className="col-lg-6">
 
-            {/* Badge — with periodic border glow */}
+            {/* Badge */}
             <div style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              background: "#efe9de", border: "1px solid #e6dfd8",
-              borderRadius: 9999, padding: "5px 14px 5px 10px", marginBottom: 36,
-              animation: prefersReduced ? "none" : "xzFadeUp 0.5s ease 0.05s both, xzBadgeGlow 4.5s ease-in-out 2.8s infinite",
+              display: "inline-flex", alignItems: "center", gap: 10,
+              background: "#EDE8DF",
+              border: "1.5px solid rgba(180,155,120,0.40)",
+              borderRadius: 9999,
+              padding: "7px 16px 7px 10px",
+              marginBottom: 36,
+              boxShadow: "0 2px 10px rgba(0,0,0,0.07)",
+              animation: prefersReduced ? "none" : "xzFadeUp 0.5s ease 0.05s both",
             }}>
-              <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#cc785c", flexShrink: 0, animation: prefersReduced ? "none" : "xzDot1 2s ease-in-out infinite" }} />
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#cc785c", opacity: 0.45, flexShrink: 0, animation: prefersReduced ? "none" : "xzDot2 2s ease-in-out 0.35s infinite" }} />
+              {/* Live pulse dot */}
+              <span style={{ position: "relative", width: 8, height: 8, flexShrink: 0 }}>
+                <span style={{
+                  position: "absolute", inset: 0, borderRadius: "50%",
+                  background: "#C9883A",
+                  animation: prefersReduced ? "none" : "xzBadgePing 1.8s ease-in-out infinite",
+                }} />
+                <span style={{
+                  position: "absolute", inset: 0, borderRadius: "50%",
+                  background: "#cc785c",
+                }} />
               </span>
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 500, letterSpacing: "1.1px", textTransform: "uppercase", color: "#6c6a64" }}>
-                Enterprise AI Platform · V2.0
+              <span style={{
+                fontFamily: "'Inter',sans-serif",
+                fontSize: 11, fontWeight: 600,
+                letterSpacing: "0.10em",
+                textTransform: "uppercase",
+                color: "#3d3220",
+              }}>
+                Enterprise AI Platform
+              </span>
+              <span style={{
+                fontFamily: "'Inter',sans-serif",
+                fontSize: 10, fontWeight: 700,
+                letterSpacing: "0.06em",
+                color: "#ffffff",
+                background: "#cc785c",
+                borderRadius: 100,
+                padding: "2px 8px",
+                lineHeight: 1.6,
+              }}>
+                V2.0
               </span>
             </div>
 
@@ -487,9 +525,9 @@ const HeroSection = () => {
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond',Garamond,serif",
-                fontWeight: 400, fontSize: "clamp(42px,5vw,66px)",
-                color: "#141413", letterSpacing: "-0.02em",
-                lineHeight: 1.08, marginBottom: 4,
+                fontWeight: 400, fontSize: "clamp(36px,4.2vw,56px)",
+                color: "#5a5650", letterSpacing: "-0.01em",
+                lineHeight: 1.1, marginBottom: 2,
                 animation: prefersReduced ? "none" : "xzSlideBlur 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s both",
               }}>
                 The Future of
@@ -500,10 +538,10 @@ const HeroSection = () => {
                 display: "block",
                 fontFamily: "'Cormorant Garamond',Garamond,serif",
                 fontWeight: 700, fontStyle: "italic",
-                fontSize: "clamp(58px,9vw,118px)",
+                fontSize: "clamp(50px,7.5vw,96px)",
                 color: "#cc785c",
-                letterSpacing: "-0.035em",
-                lineHeight: 0.9, marginBottom: 10,
+                letterSpacing: "-0.03em",
+                lineHeight: 0.92, marginBottom: 8,
                 minHeight: "1em",
                 animation: prefersReduced ? "none" : "xzHeadingGlow 6s ease-in-out 3s infinite",
               }}>
@@ -513,7 +551,7 @@ const HeroSection = () => {
                     animation: prefersReduced ? "none" : "xzLetterIn 0.55s cubic-bezier(0.22,1,0.36,1) both",
                     animationDelay: `${0.35 + i * 0.045}s`,
                   }}>
-                    {char === " " ? " " : char}
+                    {char === " " ? " " : char}
                   </span>
                 ))}
               </span>
@@ -521,12 +559,12 @@ const HeroSection = () => {
               <span style={{
                 display: "block",
                 fontFamily: "'Cormorant Garamond',Garamond,serif",
-                fontWeight: 400, fontSize: "clamp(28px,3.8vw,50px)",
-                color: "#3d3d3a", letterSpacing: "-0.015em", lineHeight: 1.12,
+                fontWeight: 400, fontSize: "clamp(24px,3.2vw,44px)",
+                color: "#141413", letterSpacing: "-0.015em", lineHeight: 1.14,
                 animation: prefersReduced ? "none" : "xzFadeUp 0.65s ease 0.8s both",
               }}>
                 is here —{" "}
-                <em style={{ color: "#C9883A", fontStyle: "italic" }}>for every enterprise.</em>
+                <em style={{ color: "#C9883A", fontStyle: "italic" }}>built for yours.</em>
               </span>
             </h1>
 
@@ -632,10 +670,42 @@ const HeroSection = () => {
               </Link>
             </div>
 
+            {/* Trust metrics */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 0,
+              marginTop: 40, flexWrap: "wrap",
+              animation: prefersReduced ? "none" : "xzFadeUp 0.5s ease 1.4s both",
+            }}>
+              {[
+                { val: "120+",  label: "Enterprise clients" },
+                { val: "15+",   label: "Countries served" },
+                { val: "99.8%", label: "Platform uptime" },
+                { val: "5 yrs", label: "In operation" },
+              ].map((m, i) => (
+                <div key={m.label} style={{
+                  display: "flex", flexDirection: "column", gap: 2,
+                  padding: "0 20px",
+                  borderLeft: i > 0 ? "1px solid rgba(0,0,0,0.10)" : "none",
+                }}>
+                  <span style={{
+                    fontFamily: "'Cormorant Garamond',Garamond,serif",
+                    fontSize: 22, fontWeight: 700, color: "#141413",
+                    lineHeight: 1, letterSpacing: "-0.02em",
+                  }}>{m.val}</span>
+                  <span style={{
+                    fontFamily: "'Inter',sans-serif",
+                    fontSize: 10, fontWeight: 500, color: "#9b9690",
+                    letterSpacing: "0.04em", textTransform: "uppercase",
+                    lineHeight: 1,
+                  }}>{m.label}</span>
+                </div>
+              ))}
+            </div>
+
             {/* Scroll indicator */}
             <div style={{
-              display: "flex", alignItems: "center", gap: 10, marginTop: 52,
-              opacity: scrolled ? 0 : 0.45, transition: "opacity 0.4s ease",
+              display: "flex", alignItems: "center", gap: 10, marginTop: 36,
+              opacity: scrolled ? 0 : 0.38, transition: "opacity 0.4s ease",
               pointerEvents: "none",
             }}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"
@@ -649,7 +719,7 @@ const HeroSection = () => {
           </div>
 
           {/* ── RIGHT: RADAI Network ── */}
-          <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-end" style={{ paddingTop: 60, paddingRight: 40 }}>
+          <div className="col-lg-6 d-none d-lg-flex align-items-start justify-content-end" style={{ paddingTop: 60, paddingRight: 48 }}>
             <RADAIVisualization prefersReduced={prefersReduced} />
           </div>
 
@@ -660,6 +730,7 @@ const HeroSection = () => {
       <style>{`
         @keyframes xzDot1 { 0%,100%{opacity:.9;transform:scale(1)} 50%{opacity:.25;transform:scale(.7)} }
         @keyframes xzDot2 { 0%,100%{opacity:.45} 50%{opacity:.1} }
+        @keyframes xzBadgePing { 0%{transform:scale(1);opacity:0.8} 70%{transform:scale(2.4);opacity:0} 100%{transform:scale(1);opacity:0} }
         @keyframes xzCursor { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes xzBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
         @keyframes xzRipple { 0%{transform:translate(-50%,-50%) scale(0);opacity:1} 100%{transform:translate(-50%,-50%) scale(45);opacity:0} }

@@ -224,8 +224,8 @@ const ERPLogin = ({ onSuccess }: Props) => {
           style={{
             flex: '0 0 56%',
             flexDirection: 'column',
-            justifyContent: 'center',
-            padding: '64px 60px',
+            justifyContent: 'flex-start',
+            padding: '56px 60px 48px',
             position: 'relative',
             overflow: 'hidden',
             background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
@@ -261,27 +261,18 @@ const ERPLogin = ({ onSuccess }: Props) => {
           {/* ── brand content ── */}
           <div style={{ position: 'relative', zIndex: 1 }}>
 
-            {/* Logo */}
-            <div style={{ marginBottom: 28, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0s both' }}>
-              <img
-                src="/assets/img/logo/xerxez_logo.png"
-                alt="XERXEZ"
-                style={{ height: 52, width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.88 }}
-              />
-            </div>
-
             {/* badge */}
             <div style={{ marginBottom: 18, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both' }}>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: C.orangeLight,
-                border: '1px solid rgba(201,136,58,0.28)',
-                color: C.orange, fontSize: 11, fontWeight: 700,
-                padding: '5px 16px', borderRadius: 20,
+                background: '#EDE8DF',
+                border: '1px solid rgba(180,155,120,0.40)',
+                color: '#3d3220', fontSize: 11, fontWeight: 700,
+                padding: '6px 16px', borderRadius: 20,
                 fontFamily: "'DM Sans', sans-serif",
                 letterSpacing: '0.12em', textTransform: 'uppercase',
               }}>
-                <i className="fas fa-bolt" style={{ fontSize: 9 }}></i>
+                <i className="fas fa-bolt" style={{ fontSize: 9, color: C.orange }}></i>
                 Enterprise Operations Platform
               </span>
             </div>
@@ -337,8 +328,11 @@ const ERPLogin = ({ onSuccess }: Props) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            padding: '40px 24px',
+            justifyContent: 'flex-start',
+            paddingTop: 52,
+            paddingBottom: 32,
+            paddingLeft: 28,
+            paddingRight: 28,
             minHeight: '100vh',
           }}
         >
@@ -348,40 +342,33 @@ const ERPLogin = ({ onSuccess }: Props) => {
             style={{
               background: C.white,
               borderRadius: 20,
-              padding: '36px 34px',
+              padding: '24px 28px 20px',
               width: '100%',
-              maxWidth: 430,
+              maxWidth: 460,
               boxShadow: shadow.card,
               border: `1px solid rgba(0,0,0,0.06)`,
               borderTop: `3px solid ${C.orange}`,
             }}
           >
-            {/* logo */}
-            <div style={{ textAlign: 'center', marginBottom: 4 }}>
-              <img
-                src="/assets/img/logo/xerxez_logo.png"
-                alt="XERXEZ"
-                style={{ height: 52, width: 'auto', display: 'inline-block' }}
-              />
+            {/* title */}
+            <div style={{ textAlign: 'center', marginBottom: 14 }}>
+              <h2 style={{
+                color: C.dark, fontWeight: 800, fontSize: 20,
+                margin: '0 0 4px',
+                fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.02em',
+              }}>
+                ERP Portal
+              </h2>
+              <p style={{
+                color: C.muted, fontSize: 12.5,
+                margin: 0,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
+                Sign in to manage your enterprise
+              </p>
             </div>
 
-            {/* title */}
-            <h2 style={{
-              color: C.dark, fontWeight: 800, fontSize: 21,
-              textAlign: 'center', margin: '0 0 4px',
-              fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.02em',
-            }}>
-              ERP Portal
-            </h2>
-            <p style={{
-              color: C.muted, fontSize: 13, textAlign: 'center',
-              margin: '0 0 18px',
-              fontFamily: "'DM Sans', sans-serif",
-            }}>
-              Sign in to manage your enterprise
-            </p>
-
-            <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', marginBottom: 18 }} />
+            <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', marginBottom: 14 }} />
 
             {/* auth error */}
             {authError && (
@@ -400,7 +387,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
             <form onSubmit={handleSubmit} noValidate>
 
               {/* ── Username ── */}
-              <div style={{ marginBottom: 14 }}>
+              <div style={{ marginBottom: 10 }}>
                 <label style={{
                   display: 'block', fontSize: 12.5, fontWeight: 700,
                   color: C.dark, marginBottom: 7,
@@ -448,7 +435,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
               </div>
 
               {/* ── Password ── */}
-              <div style={{ marginBottom: 14 }}>
+              <div style={{ marginBottom: 10 }}>
                 <label style={{
                   display: 'block', fontSize: 12.5, fontWeight: 700,
                   color: C.dark, marginBottom: 7,
@@ -512,7 +499,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
               {/* ── Remember + Forgot ── */}
               <div style={{
                 display: 'flex', alignItems: 'center',
-                justifyContent: 'space-between', marginBottom: 22,
+                justifyContent: 'space-between', marginBottom: 16,
               }}>
                 <label style={{
                   display: 'flex', alignItems: 'center', gap: 7,
@@ -581,8 +568,8 @@ const ERPLogin = ({ onSuccess }: Props) => {
 
             {/* security badges */}
             <div style={{
-              marginTop: 16, display: 'flex', alignItems: 'center',
-              justifyContent: 'center', gap: 16, flexWrap: 'wrap',
+              marginTop: 12, display: 'flex', alignItems: 'center',
+              justifyContent: 'center', gap: 14, flexWrap: 'wrap',
             }}>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -603,7 +590,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
               </div>
             </div>
 
-            <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', margin: '14px 0 10px' }} />
+            <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', margin: '10px 0 8px' }} />
             <div style={{ textAlign: 'center' }}>
               <Link
                 to="/"
