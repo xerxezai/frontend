@@ -151,9 +151,9 @@ const FooterSection2 = () => (
           <div>
             <Link to="/" style={{ display: "inline-block", textDecoration: "none", marginBottom: 16 }}>
               <img
-                src="/assets/img/logo/xerxez_logo.png"
+                src="/assets/img/logo/white-logo.svg"
                 alt="XERXEZ Solutions"
-                style={{ height: 68, width: "auto", display: "block" }}
+                style={{ height: 44, width: "auto", display: "block" }}
               />
             </Link>
             <p style={{
