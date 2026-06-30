@@ -25,7 +25,7 @@ const ERPLayout = ({ children }: Props) => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
       localStorage.removeItem(k)
     );
-    navigate('/erp');
+    navigate('/');
   };
 
   const sidebarWidth = collapsed ? 64 : 240;
