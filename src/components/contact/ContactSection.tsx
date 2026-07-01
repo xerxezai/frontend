@@ -1,7 +1,6 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, memo } from "react";
 import { toast } from "react-toastify";
 import apiService from '../../services/api';
-
 
 interface ContactInfo {
   name: string; email: string; phone: string;
@@ -37,23 +36,6 @@ const IconBadge = ({ icon, size = 38 }: { icon: string; size?: number }) => (
     display: "flex", alignItems: "center", justifyContent: "center",
   }}>
     <i className={icon} style={{ color: "#fff", fontSize: Math.round(size * 0.37) }} />
-  </div>
-);
-
-// ── input icon badge ──────────────────────────────────────────────────────────
-const InputBadge = ({ icon, focused, hasError }: { icon: string; focused: boolean; hasError?: boolean }) => (
-  <div style={{
-    width: 26, height: 26, borderRadius: 7, flexShrink: 0,
-    background: hasError
-      ? "linear-gradient(145deg,#f87171,#ef4444)"
-      : focused
-      ? "linear-gradient(145deg,#e8a84e,#C9883A)"
-      : "linear-gradient(145deg,#e2ddd8,#ccc8c2)",
-    boxShadow: focused ? "0 3px 0 rgba(150,95,30,0.48)" : "0 2px 0 rgba(0,0,0,0.12)",
-    display: "flex", alignItems: "center", justifyContent: "center",
-    transition: "background 200ms, box-shadow 200ms",
-  }}>
-    <i className={icon} style={{ color: "#fff", fontSize: 10 }} />
   </div>
 );
 
@@ -140,45 +122,19 @@ const StatTile = ({
   );
 };
 
-// ── main ─────────────────────────────────────────────────────────────────────
-const ContactSection = () => {
+// ── label style (constant — defined once outside render) ──────────────────────
+const LBL: React.CSSProperties = {
+  display: "block", fontFamily: "'DM Sans',sans-serif",
+  fontSize: 11, fontWeight: 700, color: "#5a5650",
+  letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 6,
+};
+
+// ── form panel (memoized so parent re-renders never touch it) ─────────────────
+const ContactFormPanel = memo(() => {
   const [form, setForm] = useState<ContactInfo>(EMPTY);
-  const [focused, setFocused] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [btnHov, setBtnHov] = useState(false);
-  const [statsVisible, setStatsVisible] = useState(false);
-  const statsRef = useRef<HTMLDivElement>(null);
-
-  // 3D card tilt
-  const formCardRef = useRef<HTMLDivElement>(null);
-  const onTiltMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = formCardRef.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
-    const y = ((e.clientY - r.top) / r.height - 0.5) * -6;
-    el.style.transform = `perspective(900px) rotateX(${y}deg) rotateY(${x}deg)`;
-  };
-  const onTiltLeave = () => {
-    const el = formCardRef.current; if (!el) return;
-    el.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
-  };
-
-  // trigger count-up when stats section scrolls into view
-  useEffect(() => {
-    const el = statsRef.current; if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setStatsVisible(true); obs.disconnect(); } },
-      { threshold: 0.3 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  // Pre-warm Railway on mount using health endpoint — keeps /contact/ clean in network tab
-  useEffect(() => {
-    fetch('https://backend-production-b9f2.up.railway.app/health/').catch(() => {});
-  }, []);
 
   const set = useCallback((k: keyof ContactInfo, v: string) =>
     setForm(p => ({ ...p, [k]: v })), []);
@@ -220,38 +176,182 @@ const ContactSection = () => {
     }
   }, [form]);
 
-  const fld = (name: string): React.CSSProperties => ({
-    width: "100%", boxSizing: "border-box" as const,
-    border: `1.5px solid ${focused === name ? "#C9883A" : "#E4DFD8"}`,
-    borderRadius: 10, padding: "11px 14px 11px 44px",
-    fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, color: "#141413",
-    background: focused === name ? "#FFFDF9" : "#fafaf8",
-    outline: "none", display: "block",
-    transition: "border-color 0.18s, box-shadow 0.18s, background 0.18s",
-    boxShadow: focused === name ? "0 0 0 3px rgba(201,136,58,0.11)" : "none",
-  });
-
-  const lbl: React.CSSProperties = {
-    display: "block", fontFamily: "'DM Sans',sans-serif",
-    fontSize: 11, fontWeight: 700, color: "#5a5650",
-    letterSpacing: "0.07em", textTransform: "uppercase" as const, marginBottom: 6,
-  };
-
-  const fieldWrap = (name: string, icon: string, children: React.ReactNode) => (
-    <div style={{ position: "relative" }}>
-      <span style={{
-        position: "absolute", left: 10, top: "50%",
-        transform: "translateY(-50%)", pointerEvents: "none", zIndex: 1,
+  return (
+    <>
+      <h3 style={{
+        fontFamily: "'DM Sans',sans-serif",
+        fontWeight: 800, fontSize: 21, color: "#141413",
+        letterSpacing: "-0.02em", margin: "0 0 5px",
       }}>
-        <InputBadge icon={icon} focused={focused === name} />
-      </span>
-      {children}
-    </div>
-  );
+        Send us a message
+      </h3>
+      <p style={{
+        fontFamily: "'DM Sans',sans-serif",
+        fontSize: 13, color: "#9b9690", margin: "0 0 26px",
+      }}>All fields marked * are required.</p>
 
-  const textareaFld = (name: string): React.CSSProperties => ({
-    ...fld(name), padding: "11px 14px 11px 44px", resize: "vertical" as const,
-  });
+      <form method="POST" noValidate>
+        <div className="row g-3">
+
+          {/* Name */}
+          <div className="col-sm-6">
+            <label style={LBL}>Name *</label>
+            <div className="xz-ct-wrap">
+              <span className="xz-ct-icon">
+                <span className="xz-ct-badge-box"><i className="fas fa-user" /></span>
+              </span>
+              <input type="text" className="xz-ct-field" placeholder="John Smith"
+                value={form.name} disabled={sending}
+                onChange={e => set("name", e.target.value)} />
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="col-sm-6">
+            <label style={LBL}>Email Address *</label>
+            <div className="xz-ct-wrap">
+              <span className="xz-ct-icon">
+                <span className="xz-ct-badge-box"><i className="fas fa-envelope" /></span>
+              </span>
+              <input type="email" className="xz-ct-field" placeholder="john@company.com"
+                value={form.email} disabled={sending}
+                onChange={e => set("email", e.target.value)} />
+            </div>
+          </div>
+
+          {/* Phone */}
+          <div className="col-sm-6">
+            <label style={LBL}>Phone Number *</label>
+            <div className="xz-ct-wrap">
+              <span className="xz-ct-icon">
+                <span className="xz-ct-badge-box"><i className="fas fa-phone-alt" /></span>
+              </span>
+              <input type="tel" className="xz-ct-field" placeholder="+1 234 567 8900"
+                value={form.phone} disabled={sending}
+                onChange={e => set("phone", e.target.value)} />
+            </div>
+          </div>
+
+          {/* Subject */}
+          <div className="col-sm-6">
+            <label style={LBL}>Subject *</label>
+            <div className="xz-ct-wrap">
+              <span className="xz-ct-icon">
+                <span className="xz-ct-badge-box"><i className="fas fa-tag" /></span>
+              </span>
+              <input type="text" className="xz-ct-field" placeholder="How can we help?"
+                value={form.subject} disabled={sending}
+                onChange={e => set("subject", e.target.value)} />
+            </div>
+          </div>
+
+          {/* Message */}
+          <div className="col-12">
+            <label style={LBL}>Message *</label>
+            <div className="xz-ct-wrap">
+              <span className="xz-ct-icon xz-ct-icon--ta">
+                <span className="xz-ct-badge-box"><i className="fas fa-comment-alt" /></span>
+              </span>
+              <textarea rows={5} className="xz-ct-field xz-ct-field--ta"
+                placeholder="Tell us about your project, goals, and timeline…"
+                value={form.message} disabled={sending}
+                onChange={e => set("message", e.target.value)} />
+            </div>
+          </div>
+
+          {/* Submit */}
+          <div className="col-12" style={{ marginTop: 4 }}>
+            <button type="button" onClick={handleSubmit} disabled={sending || sent}
+              onMouseEnter={() => setBtnHov(true)}
+              onMouseLeave={() => setBtnHov(false)}
+              style={{
+                width: "100%", height: 52,
+                display: "flex", alignItems: "center",
+                justifyContent: "center", gap: 10,
+                background: sent
+                  ? "linear-gradient(145deg,#6ee7b7,#10b981)"
+                  : "linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)",
+                color: "#fff",
+                fontFamily: "'DM Sans',sans-serif",
+                fontSize: 15, fontWeight: 700,
+                borderRadius: 12, border: "none",
+                cursor: sending || sent ? "default" : "pointer",
+                letterSpacing: "0.01em",
+                boxShadow: btnHov && !sending && !sent
+                  ? "0 6px 0 rgba(150,95,30,0.50), 0 10px 28px rgba(201,136,58,0.32)"
+                  : "0 4px 0 rgba(150,95,30,0.46), 0 6px 20px rgba(201,136,58,0.24)",
+                transform: btnHov && !sending && !sent ? "translateY(-2px)" : "translateY(0)",
+                transition: "transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms ease, background 200ms ease",
+                opacity: sending ? 0.88 : 1,
+              }}
+            >
+              {sending ? (
+                <><i className="fas fa-spinner fa-spin" style={{ fontSize: 14 }} /> Sending…</>
+              ) : sent ? (
+                <><i className="fas fa-check-circle" style={{ fontSize: 14 }} /> Message Sent!</>
+              ) : (
+                <><i className="far fa-paper-plane" style={{ fontSize: 14 }} /> Send Message</>
+              )}
+            </button>
+          </div>
+
+          {/* privacy */}
+          <div className="col-12">
+            <p style={{
+              fontFamily: "'DM Sans',sans-serif",
+              fontSize: 11.5, color: "#b8b2ab",
+              textAlign: "center", margin: 0, lineHeight: 1.6,
+            }}>
+              <i className="fas fa-lock" style={{ fontSize: 10, marginRight: 5, color: "#C9883A" }} />
+              Your data is encrypted and never shared with third parties.
+            </p>
+          </div>
+
+        </div>
+      </form>
+    </>
+  );
+});
+
+// ── main ─────────────────────────────────────────────────────────────────────
+const ContactSection = () => {
+  const [statsVisible, setStatsVisible] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const formCardRef = useRef<HTMLDivElement>(null);
+  const tiltRaf = useRef<number>(0);
+
+  // RAF-throttled tilt — prevents synchronous style recalc on every mousemove
+  const onTiltMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    cancelAnimationFrame(tiltRaf.current);
+    const cx = e.clientX, cy = e.clientY;
+    tiltRaf.current = requestAnimationFrame(() => {
+      const el = formCardRef.current; if (!el) return;
+      const r = el.getBoundingClientRect();
+      const x = ((cx - r.left) / r.width - 0.5) * 10;
+      const y = ((cy - r.top) / r.height - 0.5) * -6;
+      el.style.transform = `perspective(900px) rotateX(${y}deg) rotateY(${x}deg)`;
+    });
+  }, []);
+
+  const onTiltLeave = useCallback(() => {
+    cancelAnimationFrame(tiltRaf.current);
+    const el = formCardRef.current; if (!el) return;
+    el.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
+  }, []);
+
+  useEffect(() => {
+    const el = statsRef.current; if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setStatsVisible(true); obs.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    fetch('https://backend-production-b9f2.up.railway.app/health/').catch(() => {});
+  }, []);
 
   return (
     <>
@@ -290,6 +390,40 @@ const ContactSection = () => {
         @media (prefers-reduced-motion:reduce) {
           .xz-ct-grid * { animation:none!important; transition:none!important; }
         }
+        /* ── field styles (CSS :focus replaces focused-state re-renders) ── */
+        .xz-ct-field {
+          width:100%; box-sizing:border-box;
+          border:1.5px solid #E4DFD8; border-radius:10px;
+          padding:11px 14px 11px 44px;
+          font-family:'DM Sans',sans-serif; font-size:13.5px;
+          color:#141413; background:#fafaf8;
+          outline:none; display:block;
+          transition:border-color 0.18s, box-shadow 0.18s, background 0.18s;
+        }
+        .xz-ct-field:focus {
+          border-color:#C9883A;
+          background:#FFFDF9;
+          box-shadow:0 0 0 3px rgba(201,136,58,0.11);
+        }
+        .xz-ct-field--ta { resize:vertical; }
+        .xz-ct-wrap { position:relative; }
+        .xz-ct-icon {
+          position:absolute; left:10px; top:50%;
+          transform:translateY(-50%); pointer-events:none; z-index:1;
+        }
+        .xz-ct-icon--ta { top:12px; transform:none; }
+        .xz-ct-badge-box {
+          width:26px; height:26px; border-radius:7px; flex-shrink:0;
+          background:linear-gradient(145deg,#e2ddd8,#ccc8c2);
+          box-shadow:0 2px 0 rgba(0,0,0,0.12);
+          display:flex; align-items:center; justify-content:center;
+          transition:background 200ms, box-shadow 200ms;
+        }
+        .xz-ct-wrap:focus-within .xz-ct-badge-box {
+          background:linear-gradient(145deg,#e8a84e,#C9883A);
+          box-shadow:0 3px 0 rgba(150,95,30,0.48);
+        }
+        .xz-ct-badge-box i { color:#fff; font-size:10px; }
       `}</style>
 
       <section style={{
@@ -362,7 +496,6 @@ const ContactSection = () => {
                 background: "radial-gradient(circle,rgba(201,136,58,0.09) 0%,transparent 65%)",
                 pointerEvents: "none", animation: "xzCtOrb3 16s ease-in-out infinite",
               }} />
-              {/* dot grid */}
               <div aria-hidden="true" style={{
                 position: "absolute", inset: 0, pointerEvents: "none",
                 backgroundImage: "radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)",
@@ -370,7 +503,6 @@ const ContactSection = () => {
               }} />
 
               <div style={{ position: "relative", zIndex: 1 }}>
-                {/* eyebrow */}
                 <div data-aos="fade-up" data-aos-duration="500" data-aos-once="true"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
@@ -390,7 +522,6 @@ const ContactSection = () => {
                   }}>We're ready to help</span>
                 </div>
 
-                {/* headline */}
                 <h3 data-aos="fade-up" data-aos-delay="60" data-aos-duration="650" data-aos-once="true"
                   style={{
                     fontFamily: "'Cormorant Garamond',Garamond,serif",
@@ -410,14 +541,12 @@ const ContactSection = () => {
                   Tell us about your project and we'll respond within 24 hours with a tailored plan.
                 </p>
 
-                {/* contact rows */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 22, marginBottom: 36 }}>
-                  <InfoRow icon="fas fa-envelope"       label="Email"    value="info@xerxez.com"         href="mailto:info@xerxez.com" delay={120} />
-                  <InfoRow icon="fas fa-phone-alt"      label="Phone"    value="+971 56 786 7451"         href="tel:+971567867451"      delay={160} />
-                  <InfoRow icon="fas fa-map-marker-alt" label="Location" value="India & UAE — Remote-first"                            delay={200} />
+                  <InfoRow icon="fas fa-envelope"       label="Email"    value="info@xerxez.com"          href="mailto:info@xerxez.com" delay={120} />
+                  <InfoRow icon="fas fa-phone-alt"      label="Phone"    value="+971 56 786 7451"          href="tel:+971567867451"      delay={160} />
+                  <InfoRow icon="fas fa-map-marker-alt" label="Location" value="India & UAE — Remote-first"                             delay={200} />
                 </div>
 
-                {/* response chip */}
                 <div data-aos="fade-up" data-aos-delay="220" data-aos-duration="500" data-aos-once="true"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
@@ -440,7 +569,6 @@ const ContactSection = () => {
                 </div>
               </div>
 
-              {/* stat tiles with count-up */}
               <div ref={statsRef} style={{ display: "flex", gap: 10, position: "relative", zIndex: 1, marginTop: 44 }}>
                 <StatTile rawVal={120} suffix="+"  label="Projects"  color="#C9883A" delay={240} trigger={statsVisible} />
                 <StatTile rawVal={15}  suffix="+"  label="Countries" color="#60a5fa" delay={280} trigger={statsVisible} />
@@ -448,7 +576,7 @@ const ContactSection = () => {
               </div>
             </div>
 
-            {/* ══ RIGHT — form panel with 3D tilt ══ */}
+            {/* ══ RIGHT — form panel with RAF-throttled 3D tilt ══ */}
             <div
               data-aos="fade-left" data-aos-duration="800" data-aos-delay="100" data-aos-once="true"
               ref={formCardRef}
@@ -463,136 +591,7 @@ const ContactSection = () => {
                 willChange: "transform",
               }}
             >
-              <h3 style={{
-                fontFamily: "'DM Sans',sans-serif",
-                fontWeight: 800, fontSize: 21, color: "#141413",
-                letterSpacing: "-0.02em", margin: "0 0 5px",
-              }}>
-                Send us a message
-              </h3>
-              <p style={{
-                fontFamily: "'DM Sans',sans-serif",
-                fontSize: 13, color: "#9b9690", margin: "0 0 26px",
-              }}>All fields marked * are required.</p>
-
-              <form method="POST" noValidate>
-                <div className="row g-3">
-
-                  {/* Name */}
-                  <div className="col-sm-6">
-                    <label style={lbl}>Name *</label>
-                    {fieldWrap("name", "fas fa-user",
-                      <input type="text" placeholder="John Smith"
-                        value={form.name} style={fld("name")} disabled={sending}
-                        onChange={e => set("name", e.target.value)}
-                        onFocus={() => setFocused("name")} onBlur={() => setFocused(null)} />
-                    )}
-                  </div>
-
-                  {/* Email */}
-                  <div className="col-sm-6">
-                    <label style={lbl}>Email Address *</label>
-                    {fieldWrap("email", "fas fa-envelope",
-                      <input type="email" placeholder="john@company.com"
-                        value={form.email} style={fld("email")} disabled={sending}
-                        onChange={e => set("email", e.target.value)}
-                        onFocus={() => setFocused("email")} onBlur={() => setFocused(null)} />
-                    )}
-                  </div>
-
-                  {/* Phone */}
-                  <div className="col-sm-6">
-                    <label style={lbl}>Phone Number *</label>
-                    {fieldWrap("phone", "fas fa-phone-alt",
-                      <input type="tel" placeholder="+1 234 567 8900"
-                        value={form.phone} style={fld("phone")} disabled={sending}
-                        onChange={e => set("phone", e.target.value)}
-                        onFocus={() => setFocused("phone")} onBlur={() => setFocused(null)} />
-                    )}
-                  </div>
-
-                  {/* Subject */}
-                  <div className="col-sm-6">
-                    <label style={lbl}>Subject *</label>
-                    {fieldWrap("subject", "fas fa-tag",
-                      <input type="text" placeholder="How can we help?"
-                        value={form.subject} style={fld("subject")} disabled={sending}
-                        onChange={e => set("subject", e.target.value)}
-                        onFocus={() => setFocused("subject")} onBlur={() => setFocused(null)} />
-                    )}
-                  </div>
-
-                  {/* Message */}
-                  <div className="col-12">
-                    <label style={lbl}>Message *</label>
-                    <div style={{ position: "relative" }}>
-                      <span style={{
-                        position: "absolute", left: 10, top: 12,
-                        pointerEvents: "none", zIndex: 1,
-                      }}>
-                        <InputBadge icon="fas fa-comment-alt" focused={focused === "message"} />
-                      </span>
-                      <textarea rows={5}
-                        placeholder="Tell us about your project, goals, and timeline…"
-                        value={form.message}
-                        style={textareaFld("message")}
-                        disabled={sending}
-                        onChange={e => set("message", e.target.value)}
-                        onFocus={() => setFocused("message")} onBlur={() => setFocused(null)}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Submit */}
-                  <div className="col-12" style={{ marginTop: 4 }}>
-                    <button type="button" onClick={handleSubmit} disabled={sending || sent}
-                      onMouseEnter={() => setBtnHov(true)}
-                      onMouseLeave={() => setBtnHov(false)}
-                      style={{
-                        width: "100%", height: 52,
-                        display: "flex", alignItems: "center",
-                        justifyContent: "center", gap: 10,
-                        background: sent
-                          ? "linear-gradient(145deg,#6ee7b7,#10b981)"
-                          : "linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)",
-                        color: "#fff",
-                        fontFamily: "'DM Sans',sans-serif",
-                        fontSize: 15, fontWeight: 700,
-                        borderRadius: 12, border: "none",
-                        cursor: sending || sent ? "default" : "pointer",
-                        letterSpacing: "0.01em",
-                        boxShadow: btnHov && !sending && !sent
-                          ? "0 6px 0 rgba(150,95,30,0.50), 0 10px 28px rgba(201,136,58,0.32)"
-                          : "0 4px 0 rgba(150,95,30,0.46), 0 6px 20px rgba(201,136,58,0.24)",
-                        transform: btnHov && !sending && !sent ? "translateY(-2px)" : "translateY(0)",
-                        transition: "transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms ease, background 200ms ease",
-                        opacity: sending ? 0.88 : 1,
-                      }}
-                    >
-                      {sending ? (
-                        <><i className="fas fa-spinner fa-spin" style={{ fontSize: 14 }} /> Sending…</>
-                      ) : sent ? (
-                        <><i className="fas fa-check-circle" style={{ fontSize: 14 }} /> Message Sent!</>
-                      ) : (
-                        <><i className="far fa-paper-plane" style={{ fontSize: 14 }} /> Send Message</>
-                      )}
-                    </button>
-                  </div>
-
-                  {/* privacy */}
-                  <div className="col-12">
-                    <p style={{
-                      fontFamily: "'DM Sans',sans-serif",
-                      fontSize: 11.5, color: "#b8b2ab",
-                      textAlign: "center", margin: 0, lineHeight: 1.6,
-                    }}>
-                      <i className="fas fa-lock" style={{ fontSize: 10, marginRight: 5, color: "#C9883A" }} />
-                      Your data is encrypted and never shared with third parties.
-                    </p>
-                  </div>
-
-                </div>
-              </form>
+              <ContactFormPanel />
             </div>
 
           </div>
