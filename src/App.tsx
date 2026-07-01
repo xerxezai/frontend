@@ -29,6 +29,14 @@ const HealthPage      = lazy(() => import("./page/HealthPage"));
 const MLMPage         = lazy(() => import("./page/MLMPage"));
 const ERPPage         = lazy(() => import("./page/ERPPage"));
 const AIERPPage       = lazy(() => import("./page/AIERPPage"));
+const DevSecOpsPage   = lazy(() => import("./page/DevSecOpsPage"));
+const CloudPage       = lazy(() => import("./page/CloudPage"));
+const SoftwareDevPage = lazy(() => import("./page/SoftwareDevPage"));
+const AITrainingPage  = lazy(() => import("./page/AITrainingPage"));
+const QuantumPage     = lazy(() => import("./page/QuantumPage"));
+const MobilePage      = lazy(() => import("./page/MobilePage"));
+const HostingPage     = lazy(() => import("./page/HostingPage"));
+const ConsultingPage  = lazy(() => import("./page/ConsultingPage"));
 const TrainingPage       = lazy(() => import("./page/TrainingPage"));
 const LandingPage        = lazy(() => import("./page/LandingPage"));
 const PrivacyPolicyPage  = lazy(() => import("./page/PrivacyPolicyPage"));
@@ -54,8 +62,16 @@ function App() {
           <Route path="/project"                 element={<ProjectPage />} />
           <Route path="/project/:slug"           element={<ProjectDetailPage />} />
           <Route path="/service"                 element={<ServicePage />} />
-          <Route path="/service/ai-powered-erp" element={<AIERPPage />} />
-          <Route path="/service/:slug"           element={<ServiceDetailPage />} />
+          <Route path="/service/ai-powered-erp"             element={<AIERPPage />} />
+          <Route path="/service/devsecops-mlops-solutions" element={<DevSecOpsPage />} />
+          <Route path="/service/cloud-service-storage"     element={<CloudPage />} />
+          <Route path="/service/software-development"      element={<SoftwareDevPage />} />
+          <Route path="/service/ai-training-consulting"    element={<AITrainingPage />} />
+          <Route path="/service/quantum-computing"         element={<QuantumPage />} />
+          <Route path="/service/mobile-application"        element={<MobilePage />} />
+          <Route path="/service/web-mobile-hosting"        element={<HostingPage />} />
+          <Route path="/service/software-consulting"       element={<ConsultingPage />} />
+          <Route path="/service/:slug"                     element={<ServiceDetailPage />} />
           <Route path="/team"                    element={<TeamPage />} />
           <Route path="/team/:slug"              element={<TeamDetailPage />} />
           <Route path="/documentation"           element={<DocsPage />} />
