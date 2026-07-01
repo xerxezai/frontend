@@ -80,7 +80,7 @@ const config: ServicePageConfig = {
   useCases: [
     { icon: "fas fa-route",         label: "Logistics Optimisation",   desc: "Vehicle routing and supply chain scheduling problems that classical solvers approximate — quantum annealing finds near-optimal solutions in seconds, not hours." },
     { icon: "fas fa-chart-pie",     label: "Portfolio Optimisation",   desc: "Multi-asset portfolio construction with constraints that overwhelm classical solvers. QAOA finds portfolio allocations that maximise Sharpe ratio across thousands of assets." },
-    { icon: "fas fa-dna",           title: "Drug Discovery", label: "Drug Discovery",           desc: "Molecular property simulation for pharmaceutical R&D. Quantum simulation predicts molecular interactions at accuracy levels impossible with classical methods." },
+    { icon: "fas fa-dna",           label: "Drug Discovery",           desc: "Molecular property simulation for pharmaceutical R&D. Quantum simulation predicts molecular interactions at accuracy levels impossible with classical methods." },
     { icon: "fas fa-lock",          label: "Cryptographic Migration",  desc: "Assess your organisation's exposure to harvest-now-decrypt-later attacks and migrate to post-quantum cryptography before the threat window opens." },
     { icon: "fas fa-shield-alt",    label: "Fraud Detection",          desc: "Quantum-enhanced anomaly detection for financial fraud patterns that exist in high-dimensional feature spaces classical models cannot efficiently explore." },
     { icon: "fas fa-industry",      label: "Materials Engineering",    desc: "Design of new materials — from battery chemistry to semiconductor properties — using quantum simulation of electronic structure at ab initio accuracy." },

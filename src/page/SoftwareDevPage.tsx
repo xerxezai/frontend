@@ -79,7 +79,7 @@ const config: ServicePageConfig = {
   ),
   useCases: [
     { icon: "fas fa-chart-bar",     label: "Business Intelligence",    desc: "Custom analytics dashboards, data warehouses, and executive reporting platforms that turn raw operational data into actionable business intelligence." },
-    { icon: "fas fa-handshake",     title: "CRM & Sales Platforms", label: "CRM & Sales Platforms",  desc: "Purpose-built CRM systems, sales automation tools, and pipeline management platforms designed around your specific sales process — not Salesforce's." },
+    { icon: "fas fa-handshake",     label: "CRM & Sales Platforms",  desc: "Purpose-built CRM systems, sales automation tools, and pipeline management platforms designed around your specific sales process — not Salesforce's." },
     { icon: "fas fa-shipping-fast", label: "Logistics & Supply Chain", desc: "Route optimisation platforms, warehouse management systems, driver apps, and real-time tracking portals for logistics operations at any scale." },
     { icon: "fas fa-heartbeat",     label: "HealthTech & MedTech",     desc: "HIPAA-compliant patient portals, electronic health record integrations, medical device data platforms, and clinical trial management systems." },
     { icon: "fas fa-university",    label: "FinTech & Banking",        desc: "Payment platforms, lending systems, open banking integrations, regulatory reporting engines, and fraud detection applications." },

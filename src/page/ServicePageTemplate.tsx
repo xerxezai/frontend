@@ -3,7 +3,7 @@
  * Matches AIERPPage.tsx visual language exactly:
  *   brand tokens, Card3D / DC glass cards, FI motion wrapper, SL pill, IB badge.
  */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import XzHeroSection from "../components/common/XzHeroSection";
