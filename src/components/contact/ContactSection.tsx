@@ -1,20 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
+import apiService from '../../services/api';
 
-const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
-
-async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response> {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { ...options, signal: ctrl.signal });
-    clearTimeout(t);
-    return res;
-  } catch (e) {
-    clearTimeout(t);
-    throw e;
-  }
-}
 
 interface ContactInfo {
   name: string; email: string; phone: string;
@@ -196,8 +183,7 @@ const ContactSection = () => {
   const set = useCallback((k: keyof ContactInfo, v: string) =>
     setForm(p => ({ ...p, [k]: v })), []);
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(async () => {
     console.log('SUBMIT FIRED', form);
     if (!form.name.trim()) { toast.error("Please enter your name."); return; }
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -209,37 +195,23 @@ const ContactSection = () => {
       toast.error("Please write a message (min 10 characters)."); return;
     }
     setSending(true);
-    const postOpts: RequestInit = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      const result = await apiService.post('/contact/', {
         full_name: form.name, email: form.email, phone: form.phone,
         subject: form.subject, message: form.message,
         company: "", service: "General Inquiry", urgency: "normal",
-      }),
-    };
-    try {
-      let res: Response | null = null;
-      // First attempt — 90 s covers Railway cold-start (typically 30–60 s)
-      try {
-        res = await fetchWithTimeout(`${BASE}/contact/`, postOpts, 90000);
-      } catch {
-        // Server timed out on first attempt — wait briefly then retry once
-        toast.info('Server is starting up, retrying…', { autoClose: 6000 });
-        await new Promise(r => setTimeout(r, 3000));
-        res = await fetchWithTimeout(`${BASE}/contact/`, postOpts, 60000);
-      }
-      const data = await res.json().catch(() => ({}));
-      if (res.ok) {
+      });
+      if (result.success) {
         setSent(true);
         setForm(EMPTY);
         toast.success("Message sent! We'll respond within 24 hours.");
         setTimeout(() => setSent(false), 5000);
       } else {
-        const firstErr = data && typeof data === 'object'
-          ? Object.values(data).flat().find((v): v is string => typeof v === 'string')
+        const details = (result as any).details;
+        const firstErr = details && typeof details === 'object'
+          ? Object.values(details).flat().find((v): v is string => typeof v === 'string')
           : null;
-        toast.error(firstErr || data?.message || 'Failed to send. Please try again.');
+        toast.error(firstErr || (result as any).message || 'Failed to send. Please try again.');
       }
     } catch {
       toast.error('Network error — please check your connection and try again.');
@@ -503,7 +475,7 @@ const ContactSection = () => {
                 fontSize: 13, color: "#9b9690", margin: "0 0 26px",
               }}>All fields marked * are required.</p>
 
-              <form onSubmit={handleSubmit} method="POST" noValidate>
+              <form method="POST" noValidate>
                 <div className="row g-3">
 
                   {/* Name */}
@@ -573,7 +545,7 @@ const ContactSection = () => {
 
                   {/* Submit */}
                   <div className="col-12" style={{ marginTop: 4 }}>
-                    <button type="submit" disabled={sending || sent}
+                    <button type="button" onClick={handleSubmit} disabled={sending || sent}
                       onMouseEnter={() => setBtnHov(true)}
                       onMouseLeave={() => setBtnHov(false)}
                       style={{
