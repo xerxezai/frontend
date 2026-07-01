@@ -10,36 +10,41 @@ const C  = "#cc785c";
 const CG = "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)";
 const OG = "#C9883A";
 
-// ── Motion safety ─────────────────────────────────────────────────────────
+// ── Motion safety (respects prefers-reduced-motion + touch devices) ────────
 const prefersReduced =
   typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+   window.matchMedia("(hover: none)").matches);
 
 // ── Filter config ─────────────────────────────────────────────────────────
-type FilterKey = "All" | "ERP" | "MLOps" | "SecOps" | "Cloud";
+type FilterKey = "All" | "ERP" | "MLOps" | "SecOps" | "Cloud" | "Industry" | "Healthcare";
 
 const FILTERS: { key: FilterKey; label: string; match: string[] }[] = [
-  { key: "All",    label: "All Projects", match: [] },
-  { key: "ERP",    label: "ERP",          match: ["AI & ERP"] },
-  { key: "MLOps",  label: "MLOps",        match: ["MLOPS"] },
-  { key: "SecOps", label: "SecOps",       match: ["DEVSECOPS"] },
-  { key: "Cloud",  label: "Cloud",        match: ["CLOUD"] },
+  { key: "All",        label: "All Projects",       match: [] },
+  { key: "ERP",        label: "ERP",                match: ["AI & ERP"] },
+  { key: "MLOps",      label: "MLOps",              match: ["MLOPS"] },
+  { key: "SecOps",     label: "SecOps",             match: ["DEVSECOPS"] },
+  { key: "Cloud",      label: "Cloud",              match: ["CLOUD"] },
+  { key: "Industry",   label: "Industry Solutions", match: ["Industry Solutions"] },
+  { key: "Healthcare", label: "Healthcare",         match: ["Healthcare"] },
 ];
 
 // ── Project metadata with outcome stats ────────────────────────────────────
 const projectMeta: Record<string, { desc: string; tags: string[]; stat: string; statLabel: string }> = {
-  "ai-erp-platform":          { desc: "End-to-end AI ERP deployment with automated workflows and real-time business intelligence.", tags: ["Python", "TensorFlow", "SAP", "Azure"],       stat: "$2M",    statLabel: "First-year savings" },
-  "mlops-pipeline":           { desc: "Scalable MLOps automation pipeline that cut model deployment cycles from weeks to hours.",  tags: ["Kubernetes", "MLflow", "Python", "AWS"],       stat: "95%",    statLabel: "Faster deployments" },
-  "cloud-infrastructure":     { desc: "Zero-trust cloud architecture achieving 99.9% uptime with continuous compliance monitoring.", tags: ["Terraform", "AWS", "K8s", "Vault"],          stat: "99.9%",  statLabel: "Uptime achieved" },
-  "enterprise-saas":          { desc: "Multi-tenant SaaS platform serving 500+ enterprise clients at 99.95% availability SLA.",    tags: ["React", "Node.js", "PostgreSQL", "GCP"],      stat: "500+",   statLabel: "Enterprise clients" },
-  "ai-training-program":      { desc: "Upskilled 1,200+ corporate professionals in AI/ML fundamentals and applied LLM engineering.", tags: ["Python", "Jupyter", "LangChain", "OpenAI"], stat: "1,200+", statLabel: "Engineers trained" },
-  "digital-transformation":   { desc: "Digital transformation roadmap that reduced operational costs by 38% across a 10,000-person org.", tags: ["Agile", "TOGAF", "AWS", "Power BI"],  stat: "38%",    statLabel: "Cost reduction" },
-  "supply-chain-ai":          { desc: "AI-driven supply chain optimisation cutting inventory costs and improving fulfilment speed.",  tags: ["PySpark", "Snowflake", "Python", "Azure"],  stat: "28%",    statLabel: "Inventory savings" },
-  "kubernetes-security":      { desc: "Hardened Kubernetes clusters across 3 cloud providers, achieving SOC 2 Type II certification.", tags: ["K8s", "Falco", "OPA", "AWS"],             stat: "SOC 2",  statLabel: "Type II certified" },
-  "fraud-detection-mlops":    { desc: "Real-time fraud detection processing 10M+ daily transactions at sub-100ms latency.",          tags: ["Kafka", "PyTorch", "Flink", "GCP"],         stat: "10M+",   statLabel: "Daily detections" },
-  "multi-cloud-finops":       { desc: "FinOps platform delivering $4M+ in annual cloud savings across AWS, Azure, and GCP.",        tags: ["Terraform", "Python", "Grafana", "Azure"],  stat: "$4M+",   statLabel: "Annual cloud savings" },
-  "iot-data-platform":        { desc: "IoT data management platform ingesting 2B+ events daily with predictive maintenance.",        tags: ["MQTT", "TimescaleDB", "React", "Rust"],     stat: "2B+",    statLabel: "Events per day" },
-  "llm-engineering-bootcamp": { desc: "Intensive LLM engineering programme graduating 300+ engineers into production-ready AI roles.", tags: ["Python", "LangChain", "OpenAI", "Pinecone"], stat: "300+", statLabel: "Engineers certified" },
+  "ai-erp-platform":                { desc: "End-to-end AI ERP deployment with automated workflows and real-time business intelligence.",                                                               tags: ["Python", "TensorFlow", "SAP", "Azure"],              stat: "$2M",    statLabel: "First-year savings"    },
+  "mlops-pipeline":                  { desc: "Scalable MLOps automation pipeline that cut model deployment cycles from weeks to hours.",                                                                tags: ["Kubernetes", "MLflow", "Python", "AWS"],              stat: "95%",    statLabel: "Faster deployments"    },
+  "cloud-infrastructure":            { desc: "Zero-trust cloud architecture achieving 99.9% uptime with continuous compliance monitoring.",                                                             tags: ["Terraform", "AWS", "K8s", "Vault"],                  stat: "99.9%",  statLabel: "Uptime achieved"       },
+  "enterprise-saas":                 { desc: "Multi-tenant SaaS platform serving 500+ enterprise clients at 99.95% availability SLA.",                                                                 tags: ["React", "Node.js", "PostgreSQL", "GCP"],              stat: "500+",   statLabel: "Enterprise clients"    },
+  "ai-training-program":             { desc: "Upskilled 1,200+ corporate professionals in AI/ML fundamentals and applied LLM engineering.",                                                            tags: ["Python", "Jupyter", "LangChain", "OpenAI"],          stat: "1,200+", statLabel: "Engineers trained"     },
+  "digital-transformation":          { desc: "Digital transformation roadmap that reduced operational costs by 38% across a 10,000-person org.",                                                       tags: ["Agile", "TOGAF", "AWS", "Power BI"],                 stat: "38%",    statLabel: "Cost reduction"        },
+  "supply-chain-ai":                 { desc: "AI-driven supply chain optimisation cutting inventory costs and improving fulfilment speed.",                                                             tags: ["PySpark", "Snowflake", "Python", "Azure"],           stat: "28%",    statLabel: "Inventory savings"     },
+  "kubernetes-security":             { desc: "Hardened Kubernetes clusters across 3 cloud providers, achieving SOC 2 Type II certification.",                                                          tags: ["K8s", "Falco", "OPA", "AWS"],                        stat: "SOC 2",  statLabel: "Type II certified"     },
+  "fraud-detection-mlops":           { desc: "Real-time fraud detection processing 10M+ daily transactions at sub-100ms latency.",                                                                     tags: ["Kafka", "PyTorch", "Flink", "GCP"],                  stat: "10M+",   statLabel: "Daily detections"      },
+  "multi-cloud-finops":              { desc: "FinOps platform delivering $4M+ in annual cloud savings across AWS, Azure, and GCP.",                                                                    tags: ["Terraform", "Python", "Grafana", "Azure"],           stat: "$4M+",   statLabel: "Annual cloud savings"  },
+  "iot-data-platform":               { desc: "IoT data management platform ingesting 2B+ events daily with predictive maintenance.",                                                                   tags: ["MQTT", "TimescaleDB", "React", "Rust"],              stat: "2B+",    statLabel: "Events per day"        },
+  "llm-engineering-bootcamp":        { desc: "Intensive LLM engineering programme graduating 300+ engineers into production-ready AI roles.",                                                          tags: ["Python", "LangChain", "OpenAI", "Pinecone"],         stat: "300+",   statLabel: "Engineers certified"   },
+  "oil-gas-digital-transformation":  { desc: "AI-powered digital transformation for Oil & Gas operations — predictive maintenance, real-time pipeline monitoring, and operational analytics to maximise efficiency and safety.", tags: ["Oil & Gas", "AI", "IoT", "Digital Transformation"], stat: "47%",    statLabel: "Efficiency gain"       },
+  "healthcare-management-system":    { desc: "End-to-end healthcare management platform covering patient records, appointment scheduling, billing, and clinical workflows for modern medical facilities.", tags: ["Healthcare", "ERP", "Patient Management", "Cloud"], stat: "99.5%",  statLabel: "Records accuracy"      },
 };
 
 // ── Hero cascade data ─────────────────────────────────────────────────────
@@ -51,7 +56,7 @@ const CASCADE_A = [
   "10M+ Daily fraud detections",
   "2B+ Events daily",
   "SOC 2 Type II certified",
-  "99.97% Model uptime",
+  "47% Oil & Gas efficiency gain",
   "500+ Enterprise clients",
 ];
 
@@ -60,7 +65,7 @@ const CASCADE_B = [
   "95% Faster deployments",
   "300+ LLM engineers certified",
   "28% Inventory savings",
-  "50M+ Predictions per day",
+  "99.5% Healthcare records accuracy",
   "99.95% SLA guaranteed",
   "10,000-person org transformed",
   "3 cloud providers secured",
@@ -114,40 +119,74 @@ const FilterBtn: React.FC<{
 const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const imgRef  = useRef<HTMLDivElement>(null);
-  const meta    = projectMeta[item.slug] ?? {
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  const meta = projectMeta[item.slug] ?? {
     desc: "Enterprise-grade solution delivering measurable business outcomes.",
     tags: ["React", "Python", "AWS"],
     stat: "—", statLabel: "Delivered",
   };
 
+  // ── Mouse move: 3D tilt + ambient spotlight ───────────────────────────
   const onMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (prefersReduced) return;
     const el = cardRef.current; if (!el) return;
     const r  = el.getBoundingClientRect();
     const x  = (e.clientX - r.left) / r.width;
     const y  = (e.clientY - r.top)  / r.height;
+
     el.style.transition = "transform 0.08s linear,box-shadow 0.08s linear";
-    el.style.transform  = `perspective(900px) rotateX(${(0.5 - y) * 5}deg) rotateY(${(x - 0.5) * 8}deg) translateY(-7px)`;
-    el.style.boxShadow  = "0 22px 56px rgba(204,120,92,0.18),0 6px 20px rgba(0,0,0,0.09)";
+    el.style.transform  = `perspective(900px) rotateX(${(0.5 - y) * 6}deg) rotateY(${(x - 0.5) * 9}deg) translateY(-8px)`;
+    // Depth shadow + golden glow border ring
+    el.style.boxShadow  =
+      "0 28px 64px rgba(204,120,92,0.22)," +
+      "0 8px 24px rgba(0,0,0,0.10)," +
+      "0 0 0 1.5px rgba(201,136,58,0.52)," +
+      "inset 0 1px 0 rgba(255,255,255,0.80)";
+
+    // Move ambient spotlight to follow cursor
+    if (glowRef.current) {
+      glowRef.current.style.background =
+        `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(201,136,58,0.13) 0%, transparent 62%)`;
+    }
   }, []);
 
+  // ── Mouse enter: image zoom + glow show + tag stagger lift ─────────────
+  const onEnter = useCallback(() => {
+    if (prefersReduced) return;
+    if (imgRef.current)  imgRef.current.style.transform  = "scale(1.06)";
+    if (glowRef.current) glowRef.current.style.opacity   = "1";
+    // Stagger tag lift using direct DOM — no React re-render
+    cardRef.current?.querySelectorAll<HTMLElement>(".xz-ptag").forEach((t, i) => {
+      setTimeout(() => {
+        t.style.transform   = "translateY(-3px)";
+        t.style.borderColor = "rgba(201,136,58,0.32)";
+        t.style.background  = "#F8F5F0";
+        t.style.color       = "#5A4030";
+      }, i * 45);
+    });
+  }, []);
+
+  // ── Mouse leave: reset everything ─────────────────────────────────────
   const onLeave = useCallback(() => {
     if (prefersReduced) return;
     const el  = cardRef.current;
     const img = imgRef.current;
     if (el) {
-      el.style.transition = "transform 0.5s cubic-bezier(0.22,1,0.36,1),box-shadow 0.5s ease";
+      el.style.transition = "transform 0.50s cubic-bezier(0.22,1,0.36,1),box-shadow 0.50s ease";
       el.style.transform  = "";
       el.style.boxShadow  = "";
-      setTimeout(() => { if (el) el.style.transition = ""; }, 510);
+      setTimeout(() => { if (el) el.style.transition = ""; }, 520);
     }
     if (img) img.style.transform = "scale(1)";
-  }, []);
-
-  const onEnter = useCallback(() => {
-    if (prefersReduced) return;
-    const img = imgRef.current;
-    if (img) img.style.transform = "scale(1.05)";
+    if (glowRef.current) glowRef.current.style.opacity = "0";
+    // Reset tags
+    cardRef.current?.querySelectorAll<HTMLElement>(".xz-ptag").forEach(t => {
+      t.style.transform   = "";
+      t.style.borderColor = "";
+      t.style.background  = "";
+      t.style.color       = "";
+    });
   }, []);
 
   return (
@@ -162,15 +201,29 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
         boxShadow: "0 2px 14px rgba(0,0,0,0.05)",
         overflow: "hidden", display: "flex", flexDirection: "column", height: "100%",
         cursor: "pointer", willChange: "transform", transformStyle: "preserve-3d",
+        position: "relative",
       }}
     >
-      {/* Image */}
-      <div style={{ position: "relative", height: 210, overflow: "hidden", flexShrink: 0 }}>
-        <div ref={imgRef} style={{ width: "100%", height: "100%", transition: "transform 0.45s ease" }}>
+      {/* ── Ambient spotlight that follows the cursor ── */}
+      <div
+        ref={glowRef}
+        aria-hidden="true"
+        style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          opacity: 0, transition: "opacity 0.35s ease", zIndex: 0, borderRadius: 18,
+          background: "radial-gradient(circle at 50% 50%, rgba(201,136,58,0.12) 0%, transparent 62%)",
+        }}
+      />
+
+      {/* ── Image panel ── */}
+      <div style={{ position: "relative", height: 210, overflow: "hidden", flexShrink: 0, zIndex: 1 }}>
+        <div ref={imgRef} style={{ width: "100%", height: "100%", transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1)" }}>
           <Image src={item.image} alt={item.title} width={416} height={210}
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         </div>
+        {/* Vignette gradient */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(15,10,5,0.60) 0%,transparent 55%)", pointerEvents: "none" }} />
+        {/* Category badge */}
         <span style={{
           position: "absolute", top: 14, left: 14,
           background: CG, color: "#fff", fontSize: 10, fontWeight: 700,
@@ -181,6 +234,7 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
         }}>
           {item.category}
         </span>
+        {/* Title overlay */}
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 18px 16px" }}>
           <Link to={`/project/${item.slug}`} style={{ color: "#fff", textDecoration: "none" }}>
             <h3 style={{
@@ -193,8 +247,8 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
         </div>
       </div>
 
-      {/* Card body */}
-      <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
+      {/* ── Card body ── */}
+      <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1, position: "relative", zIndex: 1 }}>
         {/* Outcome stat */}
         <div style={{
           display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14,
@@ -210,6 +264,7 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
             {meta.statLabel}
           </span>
         </div>
+
         {/* Description */}
         <p style={{
           fontSize: 13.5, color: "#6B6B6B", lineHeight: 1.68,
@@ -219,17 +274,21 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
         } as React.CSSProperties}>
           {meta.desc}
         </p>
-        {/* Tags */}
+
+        {/* Tags — lift with stagger on hover via direct DOM (.xz-ptag) */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
           {meta.tags.map(tag => (
-            <span key={tag} style={{
+            <span key={tag} className="xz-ptag" style={{
               fontSize: 10.5, fontWeight: 600, color: "#5A5A5A",
               background: "#F2EFE9", borderRadius: 6, padding: "4px 9px",
               fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.02em",
-              border: "1px solid rgba(0,0,0,0.05)",
+              border: "1px solid rgba(0,0,0,0.05)", display: "inline-block",
+              transition: "transform 0.28s cubic-bezier(0.22,1,0.36,1), border-color 0.28s ease, background 0.28s ease, color 0.28s ease",
+              willChange: "transform",
             }}>{tag}</span>
           ))}
         </div>
+
         {/* CTA */}
         <Link
           to={`/project/${item.slug}`}
@@ -375,6 +434,21 @@ const ProjectMainSection: React.FC = () => {
 
   return (
     <>
+      {/* ── Tag transition CSS injected once — keeps inline styles clean ── */}
+      <style>{`
+        .xz-ptag {
+          transition:
+            transform 0.28s cubic-bezier(0.22,1,0.36,1),
+            border-color 0.28s ease,
+            background 0.28s ease,
+            color 0.28s ease;
+          will-change: transform;
+        }
+        @media (hover: none) {
+          .xz-ptag { transition: none !important; }
+        }
+      `}</style>
+
       <XzHeroSection
         badgeText="Portfolio — Proven Outcomes"
         headline={
@@ -405,6 +479,8 @@ const ProjectMainSection: React.FC = () => {
       {/* ── Filter + Grid ── */}
       <section id="project-grid" style={{ background: "#F2EFE9", padding: "72px 0 96px" }}>
         <div className="container">
+
+          {/* Filter bar */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -426,6 +502,7 @@ const ProjectMainSection: React.FC = () => {
             </span>
           </motion.div>
 
+          {/* Card grid with AnimatePresence for filter transitions */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFilter + "-" + currentPage}
@@ -440,9 +517,13 @@ const ProjectMainSection: React.FC = () => {
                     <motion.div
                       key={item.id}
                       className="col-xl-4 col-lg-4 col-md-6 col-12"
-                      initial={{ opacity: 0, y: 26 }}
+                      initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.42, delay: index * 0.055, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{
+                        duration: 0.48,
+                        delay: index * 0.06,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
                     >
                       <ProjectCard item={item} />
                     </motion.div>
@@ -452,6 +533,7 @@ const ProjectMainSection: React.FC = () => {
             </motion.div>
           </AnimatePresence>
 
+          {/* Pagination */}
           {totalPages > 1 && (
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
@@ -482,6 +564,7 @@ const ProjectMainSection: React.FC = () => {
               </ul>
             </motion.div>
           )}
+
         </div>
       </section>
 
