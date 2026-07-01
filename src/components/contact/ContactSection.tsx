@@ -188,9 +188,9 @@ const ContactSection = () => {
     return () => obs.disconnect();
   }, []);
 
-  // Pre-warm Railway on mount — GET now returns 200 so server is guaranteed awake
+  // Pre-warm Railway on mount using health endpoint — keeps /contact/ clean in network tab
   useEffect(() => {
-    fetchWithTimeout(`${BASE}/contact/`, {}, 90000).catch(() => {});
+    fetch('https://backend-production-b9f2.up.railway.app/health/').catch(() => {});
   }, []);
 
   const set = useCallback((k: keyof ContactInfo, v: string) =>
@@ -502,7 +502,7 @@ const ContactSection = () => {
                 fontSize: 13, color: "#9b9690", margin: "0 0 26px",
               }}>All fields marked * are required.</p>
 
-              <form onSubmit={handleSubmit} noValidate>
+              <form onSubmit={handleSubmit} method="POST" noValidate>
                 <div className="row g-3">
 
                   {/* Name */}

@@ -150,9 +150,9 @@ const ContactSection2 = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
-  // Pre-warm Railway on mount — GET now returns 200 so server is guaranteed awake
+  // Pre-warm Railway on mount using health endpoint — keeps /contact/ clean in network tab
   useEffect(() => {
-    fetchWithTimeout(`${BASE}/contact/`, {}, 90000).catch(() => {});
+    fetch('https://backend-production-b9f2.up.railway.app/health/').catch(() => {});
   }, []);
 
   // count-up trigger
@@ -630,7 +630,7 @@ const ContactSection2 = () => {
                     </div>
                   </div>
 
-                  <form onSubmit={handleSubmit} noValidate>
+                  <form onSubmit={handleSubmit} method="POST" noValidate>
                     {/* ① Personal Info */}
                     <div style={{ marginBottom:18 }}>
                       <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
