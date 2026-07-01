@@ -12,10 +12,14 @@ const C = {
   border:     "rgba(0,0,0,0.07)",
 };
 
-const NAV = [
+type NavItem =
+  | { to: string; icon: string; label: string; adminOnly?: boolean }
+  | { group: string };
+
+const NAV: NavItem[] = [
   { to: '/erp/dashboard', icon: 'fas fa-th-large',            label: 'Dashboard' },
   { to: '/erp/crm',       icon: 'fas fa-users',               label: 'CRM' },
-  { to: '/erp/hr',        icon: 'fas fa-user-tie',            label: 'HR' },
+  { to: '/erp/hr',        icon: 'fas fa-user-tie',            label: 'HR Overview' },
   { to: '/erp/inventory', icon: 'fas fa-boxes',               label: 'Inventory' },
   { to: '/erp/sales',     icon: 'fas fa-shopping-cart',       label: 'Sales' },
   { to: '/erp/invoicing', icon: 'fas fa-file-invoice-dollar', label: 'Invoicing' },
@@ -23,7 +27,31 @@ const NAV = [
   { to: '/erp/logistics', icon: 'fas fa-shipping-fast',       label: 'Logistics' },
   { to: '/erp/accounting',icon: 'fas fa-book',                label: 'Accounting' },
   { to: '/erp/mlm',       icon: 'fas fa-sitemap',             label: 'MLM' },
+
+  { group: 'HR & PAYROLL' },
+
+  { to: '/erp/attendance',          icon: 'fas fa-clock',                 label: 'Attendance' },
+  { to: '/erp/my-attendance',       icon: 'fas fa-calendar-check',        label: 'My Attendance' },
+  { to: '/erp/leave',               icon: 'fas fa-calendar-minus',        label: 'Leave' },
+  { to: '/erp/all-attendance',      icon: 'fas fa-users-cog',             label: 'All Attendance',   adminOnly: true },
+  { to: '/erp/leave-approvals',     icon: 'fas fa-check-circle',          label: 'Leave Approvals',  adminOnly: true },
+  { to: '/erp/shifts',              icon: 'fas fa-exchange-alt',          label: 'Shifts',           adminOnly: true },
+  { to: '/erp/salary-structures',   icon: 'fas fa-money-bill-wave',       label: 'Salary Setup',     adminOnly: true },
+  { to: '/erp/payroll-generate',    icon: 'fas fa-cogs',                  label: 'Generate Payroll', adminOnly: true },
+  { to: '/erp/payroll-reports',     icon: 'fas fa-chart-bar',             label: 'Payroll Reports',  adminOnly: true },
+  { to: '/erp/my-payslips',         icon: 'fas fa-file-alt',              label: 'My Payslips' },
 ];
+
+function isAdminUser(): boolean {
+  try {
+    const stored = localStorage.getItem('auth_tokens');
+    if (stored) {
+      const payload = JSON.parse(atob(JSON.parse(stored).access.split('.')[1]));
+      return payload.is_staff === true;
+    }
+  } catch {}
+  return localStorage.getItem('xerxez_role') === 'admin';
+}
 
 interface Props { children: React.ReactNode; }
 
@@ -35,6 +63,7 @@ const ERPLayout = ({ children }: Props) => {
 
   const adminName = localStorage.getItem('xerxez_name') || 'Admin';
   const initial   = adminName.charAt(0).toUpperCase();
+  const isAdmin   = isAdminUser();
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -61,7 +90,6 @@ const ERPLayout = ({ children }: Props) => {
           }
         }
 
-        /* ── nav items ── */
         .erp-nav-item {
           display: flex;
           align-items: center;
@@ -91,7 +119,6 @@ const ERPLayout = ({ children }: Props) => {
           font-weight: 700 !important;
         }
 
-        /* ── icon badge ── */
         .erp-icon-badge {
           width: 28px; height: 28px;
           border-radius: 8px;
@@ -109,7 +136,27 @@ const ERPLayout = ({ children }: Props) => {
           background: rgba(201,136,58,0.18);
         }
 
-        /* ── stagger slide-in ── */
+        .erp-nav-group-label {
+          padding: 14px 16px 4px;
+          font-size: 9.5px;
+          font-weight: 800;
+          letter-spacing: 0.20em;
+          text-transform: uppercase;
+          color: rgba(201,136,58,0.55);
+          font-family: 'DM Sans', sans-serif;
+          white-space: nowrap;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .erp-nav-group-label::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(to right, rgba(201,136,58,0.25), transparent);
+        }
+
         .erp-nav-slide {
           animation: erpNavIn 0.38s cubic-bezier(0.22,1,0.36,1) both;
         }
@@ -118,7 +165,6 @@ const ERPLayout = ({ children }: Props) => {
           to   { opacity: 1; transform: translateX(0); }
         }
 
-        /* ── search ── */
         .erp-search {
           border: 1.5px solid rgba(0,0,0,0.09);
           border-radius: 9px;
@@ -137,7 +183,6 @@ const ERPLayout = ({ children }: Props) => {
         }
         .erp-search::placeholder { color: #9B9B9B; }
 
-        /* ── bell ── */
         .erp-bell {
           width: 38px; height: 38px;
           border-radius: 10px;
@@ -149,7 +194,6 @@ const ERPLayout = ({ children }: Props) => {
         }
         .erp-bell:hover { background: #F0EDE8; border-color: rgba(201,136,58,0.30); }
 
-        /* ── logout ── */
         .erp-logout {
           background: rgba(239,68,68,0.07);
           border: 1px solid rgba(239,68,68,0.16);
@@ -171,7 +215,6 @@ const ERPLayout = ({ children }: Props) => {
         }
       `}</style>
 
-      {/* ── mobile overlay ── */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
@@ -185,7 +228,7 @@ const ERPLayout = ({ children }: Props) => {
         />
       )}
 
-      {/* ── sidebar ── */}
+      {/* sidebar */}
       <aside
         className={mobileOpen ? 'd-flex' : 'd-none d-lg-flex'}
         style={{
@@ -211,17 +254,11 @@ const ERPLayout = ({ children }: Props) => {
           flexShrink: 0,
         }}>
           {!collapsed ? (
-            <img
-              src="/assets/img/logo/xerxez_logo.png"
-              alt="Xerxez"
-              style={{ height: 44, width: 'auto', display: 'block', objectFit: 'contain' }}
-            />
+            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
+              style={{ height: 44, width: 'auto', display: 'block', objectFit: 'contain' }} />
           ) : (
-            <img
-              src="/assets/img/logo/icon-logo.svg"
-              alt="Xerxez"
-              style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }}
-            />
+            <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
+              style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
           )}
           <button
             onClick={() => setCollapsed(c => !c)}
@@ -236,32 +273,43 @@ const ERPLayout = ({ children }: Props) => {
             onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.28)')}
           >
-            <i
-              className={`fas fa-${collapsed ? 'chevron-right' : 'chevron-left'}`}
-              style={{ fontSize: 11 }}
-            ></i>
+            <i className={`fas fa-${collapsed ? 'chevron-right' : 'chevron-left'}`} style={{ fontSize: 11 }}></i>
           </button>
         </div>
 
         {/* nav */}
         <nav style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', paddingTop: 10, paddingBottom: 10 }}>
-          {NAV.map((item, idx) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              title={item.label}
-              onClick={() => setMobileOpen(false)}
-              className={({ isActive }) =>
-                `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`
-              }
-              style={{ animationDelay: `${idx * 0.035}s` }}
-            >
-              <span className="erp-icon-badge">
-                <i className={item.icon} style={{ color: 'inherit', fontSize: 12 }}></i>
-              </span>
-              {!collapsed && <span>{item.label}</span>}
-            </NavLink>
-          ))}
+          {NAV.map((item, idx) => {
+            if ('group' in item) {
+              if (collapsed) return (
+                <div key={idx} style={{ height: 1, margin: '8px 0', background: 'rgba(201,136,58,0.18)' }} />
+              );
+              return (
+                <div key={idx} className="erp-nav-group-label">
+                  {item.group}
+                </div>
+              );
+            }
+            if (item.adminOnly && !isAdmin) return null;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/erp/hr'}
+                title={item.label}
+                onClick={() => setMobileOpen(false)}
+                className={({ isActive }) =>
+                  `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`
+                }
+                style={{ animationDelay: `${idx * 0.028}s` }}
+              >
+                <span className="erp-icon-badge">
+                  <i className={item.icon} style={{ color: 'inherit', fontSize: 12 }}></i>
+                </span>
+                {!collapsed && <span>{item.label}</span>}
+              </NavLink>
+            );
+          })}
         </nav>
 
         {/* logout */}
@@ -278,7 +326,7 @@ const ERPLayout = ({ children }: Props) => {
         </div>
       </aside>
 
-      {/* ── main ── */}
+      {/* main */}
       <div className="erp-main d-flex flex-column" style={{ minHeight: '100vh' }}>
 
         {/* header */}
@@ -294,7 +342,6 @@ const ERPLayout = ({ children }: Props) => {
           top: 0,
           zIndex: 100,
         }}>
-          {/* left */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <button
               className="d-lg-none"
@@ -304,25 +351,17 @@ const ERPLayout = ({ children }: Props) => {
             >
               <i className="fas fa-bars" style={{ fontSize: 18 }}></i>
             </button>
-            <img
-              src="/assets/img/logo/xerxez_logo.png"
-              alt="Xerxez"
-              style={{ height: 70, width: 'auto', display: 'block' }}
-            />
+            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
+              style={{ height: 70, width: 'auto', display: 'block' }} />
           </div>
 
-          {/* right */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {/* search */}
             <div className="d-none d-md-block" style={{ position: 'relative' }}>
-              <i
-                className="fas fa-search"
-                style={{
-                  position: 'absolute', left: 11,
-                  top: '50%', transform: 'translateY(-50%)',
-                  color: C.muted, fontSize: 12, pointerEvents: 'none',
-                }}
-              ></i>
+              <i className="fas fa-search" style={{
+                position: 'absolute', left: 11,
+                top: '50%', transform: 'translateY(-50%)',
+                color: C.muted, fontSize: 12, pointerEvents: 'none',
+              }}></i>
               <input
                 className="erp-search"
                 type="text"
@@ -333,7 +372,6 @@ const ERPLayout = ({ children }: Props) => {
               />
             </div>
 
-            {/* bell */}
             <button className="erp-bell" aria-label="Notifications">
               <i className="fas fa-bell" style={{ color: '#4B4B4B', fontSize: 14 }}></i>
               <span style={{
@@ -344,7 +382,6 @@ const ERPLayout = ({ children }: Props) => {
               }}></span>
             </button>
 
-            {/* avatar with orange ring */}
             <div
               title={adminName}
               style={{

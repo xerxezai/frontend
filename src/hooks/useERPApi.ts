@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
 
@@ -16,7 +16,7 @@ function clearAllTokens() {
   );
 }
 
-async function erpFetch(path: string, options: RequestInit = {}) {
+export async function erpFetch(path: string, options: RequestInit = {}) {
   const token = getToken();
   const res = await fetch(`${BASE}/${path}`, {
     ...options,
@@ -92,3 +92,92 @@ export function useERPDashboard() {
   return { data, loading, error };
 }
 
+// ── Attendance hooks ──────────────────────────────────────────────────────────
+
+export function useAttendanceTodayStatus() {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    erpFetch('hr/attendance/today-status/')
+      .then(setData)
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const clockIn = useCallback(async () => {
+    const res = await erpFetch('hr/attendance/clock-in/', { method: 'POST', body: JSON.stringify({}) });
+    load();
+    return res;
+  }, [load]);
+
+  const clockOut = useCallback(async () => {
+    const res = await erpFetch('hr/attendance/clock-out/', { method: 'POST', body: JSON.stringify({}) });
+    load();
+    return res;
+  }, [load]);
+
+  return { data, loading, error, clockIn, clockOut, reload: load };
+}
+
+export function useMyAttendance() {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    erpFetch('hr/attendance/my-records/')
+      .then((res: any) => setData(Array.isArray(res) ? res : res.results ?? []))
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+  return { data, loading, error, reload: load };
+}
+
+export function useMyLeaves() {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    erpFetch('hr/leave-requests/my-leaves/')
+      .then((res: any) => setData(Array.isArray(res) ? res : res.results ?? []))
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const submitLeave = useCallback(async (body: Record<string, unknown>) => {
+    const res = await erpFetch('hr/leave-requests/', { method: 'POST', body: JSON.stringify(body) });
+    load();
+    return res;
+  }, [load]);
+
+  return { data, loading, error, reload: load, submitLeave };
+}
+
+export function useMyPayslips() {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    erpFetch('hr/payroll/my-payslips/')
+      .then((res: any) => setData(Array.isArray(res) ? res : res.results ?? []))
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+  return { data, loading, error, reload: load };
+}
