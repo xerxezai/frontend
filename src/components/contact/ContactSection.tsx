@@ -3,16 +3,11 @@ import { toast } from "react-toastify";
 
 const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
 
-async function postContact(payload: object, timeoutMs: number): Promise<Response> {
+async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const res = await fetch(`${BASE}/contact/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: ctrl.signal,
-    });
+    const res = await fetch(url, { ...options, signal: ctrl.signal });
     clearTimeout(t);
     return res;
   } catch (e) {
@@ -193,9 +188,9 @@ const ContactSection = () => {
     return () => obs.disconnect();
   }, []);
 
-  // Pre-warm Railway on mount so it's awake by the time user submits
+  // Pre-warm Railway on mount — GET now returns 200 so server is guaranteed awake
   useEffect(() => {
-    fetch(`${BASE}/contact/`).catch(() => {});
+    fetchWithTimeout(`${BASE}/contact/`, {}, 90000).catch(() => {});
   }, []);
 
   const set = useCallback((k: keyof ContactInfo, v: string) =>
@@ -213,21 +208,25 @@ const ContactSection = () => {
       toast.error("Please write a message (min 10 characters)."); return;
     }
     setSending(true);
-    const payload = {
-      full_name: form.name, email: form.email, phone: form.phone,
-      subject: form.subject, message: form.message,
-      company: "", service: "General Inquiry", urgency: "normal",
+    const postOpts: RequestInit = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        full_name: form.name, email: form.email, phone: form.phone,
+        subject: form.subject, message: form.message,
+        company: "", service: "General Inquiry", urgency: "normal",
+      }),
     };
     try {
-      let res: Response;
+      let res: Response | null = null;
+      // First attempt — 90 s covers Railway cold-start (typically 30–60 s)
       try {
-        res = await postContact(payload, 14000);
-      } catch (e: any) {
-        if (e.name !== 'AbortError') throw e;
-        // Server was sleeping — first request woke it up, retry now
-        toast.info('Connecting to server, please wait…', { autoClose: 9000 });
-        await new Promise(r => setTimeout(r, 8000));
-        res = await postContact(payload, 30000);
+        res = await fetchWithTimeout(`${BASE}/contact/`, postOpts, 90000);
+      } catch {
+        // Server timed out on first attempt — wait briefly then retry once
+        toast.info('Server is starting up, retrying…', { autoClose: 6000 });
+        await new Promise(r => setTimeout(r, 3000));
+        res = await fetchWithTimeout(`${BASE}/contact/`, postOpts, 60000);
       }
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
