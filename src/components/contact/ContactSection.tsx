@@ -1,6 +1,26 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 
+const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
+
+async function postContact(payload: object, timeoutMs: number): Promise<Response> {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${BASE}/contact/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: ctrl.signal,
+    });
+    clearTimeout(t);
+    return res;
+  } catch (e) {
+    clearTimeout(t);
+    throw e;
+  }
+}
+
 interface ContactInfo {
   name: string; email: string; phone: string;
   subject: string; message: string;
@@ -188,26 +208,22 @@ const ContactSection = () => {
       toast.error("Please write a message (min 10 characters)."); return;
     }
     setSending(true);
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 12000);
+    const payload = {
+      full_name: form.name, email: form.email, phone: form.phone,
+      subject: form.subject, message: form.message,
+      company: "", service: "General Inquiry", urgency: "normal",
+    };
     try {
-      const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
-      const res = await fetch(`${BASE}/contact/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          full_name: form.name,
-          email: form.email,
-          phone: form.phone,
-          subject: form.subject,
-          message: form.message,
-          company: "",
-          service: "General Inquiry",
-          urgency: "normal",
-        }),
-        signal: ctrl.signal,
-      });
-      clearTimeout(timer);
+      let res: Response;
+      try {
+        res = await postContact(payload, 14000);
+      } catch (e: any) {
+        if (e.name !== 'AbortError') throw e;
+        // Server was sleeping — first request woke it up, retry now
+        toast.info('Connecting to server, please wait…', { autoClose: 4000 });
+        await new Promise(r => setTimeout(r, 3000));
+        res = await postContact(payload, 20000);
+      }
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setSent(true);
@@ -220,13 +236,8 @@ const ContactSection = () => {
           : null;
         toast.error(firstErr || data?.message || 'Failed to send. Please try again.');
       }
-    } catch (err: any) {
-      clearTimeout(timer);
-      if (err.name === 'AbortError') {
-        toast.error('Request timed out — the server may be starting up. Please try again in a moment.');
-      } else {
-        toast.error('Network error — please check your connection and try again.');
-      }
+    } catch {
+      toast.error('Network error — please check your connection and try again.');
     } finally {
       setSending(false);
     }
