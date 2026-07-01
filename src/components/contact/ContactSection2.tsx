@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import apiService from "../../services/api";
 
 // ── services / urgency ───────────────────────────────────────────────────────
 const SERVICES = [
@@ -176,34 +175,40 @@ const ContactSection2 = () => {
       toast.error("Message must be at least 10 characters."); return;
     }
     setSend(true);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 12000);
     try {
-      const res = await apiService.post('/contact/', {
-        full_name: form.fullName, email: form.email, phone: form.phone,
-        company: form.company, service: form.service,
-        urgency: form.urgency || 'normal', subject: form.subject, message: form.message,
+      const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
+      const res = await fetch(`${BASE}/contact/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: form.fullName, email: form.email, phone: form.phone,
+          company: form.company, service: form.service,
+          urgency: form.urgency || 'normal', subject: form.subject, message: form.message,
+        }),
+        signal: ctrl.signal,
       });
-      if (res.success) {
+      clearTimeout(timer);
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
         setSent(true); setForm(EMPTY);
         toast.success("Message sent! We'll get back to you within 24 hours.");
         setTimeout(() => setSent(false), 6000);
       } else {
-        const err = res as import('../../services/api').ApiError;
-        // Extract the first human-readable error from DRF field-error dicts
-        // e.g. {"full_name": ["This field may not be blank."]} → "This field may not be blank."
-        let msg = err.message;
-        const details = (err as any).details;
-        if (details && typeof details === 'object' && !Array.isArray(details)) {
-          const firstKey = Object.keys(details)[0];
-          if (firstKey) {
-            const val = details[firstKey];
-            const firstErr = Array.isArray(val) ? val[0] : val;
-            if (typeof firstErr === 'string') msg = firstErr;
-          }
-        }
-        toast.error(msg || 'Failed to send. Please try again.');
+        const firstErr = data && typeof data === 'object'
+          ? Object.values(data).flat().find((v): v is string => typeof v === 'string')
+          : null;
+        toast.error(firstErr || data?.message || 'Failed to send. Please try again.');
       }
-    } catch { toast.error('Network error — please check your connection.'); }
-    finally  { setSend(false); }
+    } catch (err: any) {
+      clearTimeout(timer);
+      if (err.name === 'AbortError') {
+        toast.error('Request timed out — the server may be starting up. Please try again in a moment.');
+      } else {
+        toast.error('Network error — please check your connection and try again.');
+      }
+    } finally { setSend(false); }
   }, [form]);
 
   const fldBase = (name: string): React.CSSProperties => ({

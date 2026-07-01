@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import apiService from "../../services/api";
 
 interface ContactInfo {
   name: string; email: string; phone: string;
@@ -189,35 +188,44 @@ const ContactSection = () => {
       toast.error("Please write a message (min 10 characters)."); return;
     }
     setSending(true);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 12000);
     try {
-      const res = await apiService.post('/contact/', {
-        full_name: form.name,
-        email: form.email,
-        phone: form.phone,
-        subject: form.subject,
-        message: form.message,
-        company: "",
-        service: "General Inquiry",
-        urgency: "normal",
+      const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
+      const res = await fetch(`${BASE}/contact/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: form.name,
+          email: form.email,
+          phone: form.phone,
+          subject: form.subject,
+          message: form.message,
+          company: "",
+          service: "General Inquiry",
+          urgency: "normal",
+        }),
+        signal: ctrl.signal,
       });
-      if (res.success) {
+      clearTimeout(timer);
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
         setSent(true);
         setForm(EMPTY);
         toast.success("Message sent! We'll respond within 24 hours.");
         setTimeout(() => setSent(false), 5000);
       } else {
-        const err = res as import('../../services/api').ApiError;
-        let msg = err.message;
-        const details = (err as any).details;
-        if (details && typeof details === 'object' && !Array.isArray(details)) {
-          const firstKey = Object.keys(details)[0];
-          if (firstKey) {
-            const val = details[firstKey];
-            const firstErr = Array.isArray(val) ? val[0] : val;
-            if (typeof firstErr === 'string') msg = firstErr;
-          }
-        }
-        toast.error(msg || 'Failed to send. Please try again.');
+        const firstErr = data && typeof data === 'object'
+          ? Object.values(data).flat().find((v): v is string => typeof v === 'string')
+          : null;
+        toast.error(firstErr || data?.message || 'Failed to send. Please try again.');
+      }
+    } catch (err: any) {
+      clearTimeout(timer);
+      if (err.name === 'AbortError') {
+        toast.error('Request timed out — the server may be starting up. Please try again in a moment.');
+      } else {
+        toast.error('Network error — please check your connection and try again.');
       }
     } finally {
       setSending(false);
