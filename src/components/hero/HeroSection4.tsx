@@ -9,19 +9,21 @@ const HeroSection4 = () => {
           alt="img"
           width={1832}
           height={1037}
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="shape-1">
-        <img src="/assets/img/hero/shape-1.png" alt="img" width={189} height={311} />
+        <img src="/assets/img/hero/shape-1.png" alt="img" width={189} height={311} loading="lazy" decoding="async" />
       </div>
       <div className="shape-2">
-        <img src="/assets/img/hero/shape-2.png" alt="img" width={86} height={104} />
+        <img src="/assets/img/hero/shape-2.png" alt="img" width={86} height={104} loading="lazy" decoding="async" />
       </div>
       <div className="shape-3">
-        <img src="/assets/img/hero/shape-3.png" alt="img" width={91} height={113} />
+        <img src="/assets/img/hero/shape-3.png" alt="img" width={91} height={113} loading="lazy" decoding="async" />
       </div>
       <div className="shape-4">
-        <img src="/assets/img/hero/shape-4.png" alt="img" width={100} height={100} />
+        <img src="/assets/img/hero/shape-4.png" alt="img" width={100} height={100} loading="lazy" decoding="async" />
       </div>
       <div className="container">
         <div className="row g-4">

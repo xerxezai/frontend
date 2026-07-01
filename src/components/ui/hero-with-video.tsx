@@ -365,7 +365,7 @@ const NavbarHero: React.FC<NavbarHeroProps> = ({
                 />
               </div>
               <button
-                onClick={() => console.log("email:", email)}
+                onClick={() => {}}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8,
                   background: joinHovered ? C.coralDark : C.coral,

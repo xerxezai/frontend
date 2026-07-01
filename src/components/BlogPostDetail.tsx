@@ -67,7 +67,7 @@ export const BlogPostDetail = () => {
 
       {post.featured_image && (
         <figure>
-          <img src={post.featured_image} alt={post.title} />
+          <img src={post.featured_image} alt={post.title} loading="lazy" decoding="async" />
         </figure>
       )}
 

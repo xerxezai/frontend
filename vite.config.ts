@@ -75,6 +75,7 @@ export default defineConfig({
           vendor:     ['react', 'react-dom', 'react-router-dom'],
           animations: ['gsap', 'split-type', 'aos'],
           ui:         ['swiper'],
+          erp:        ['./src/components/erp/ERPDashboard', './src/components/erp/ERPLogin'],
         },
       },
     }

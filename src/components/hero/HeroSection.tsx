@@ -69,6 +69,8 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
   const floatRef = useRef<HTMLDivElement>(null);
   const cardRef  = useRef<HTMLDivElement>(null);
   const hlRef    = useRef<HTMLDivElement>(null);
+  const flashTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cardLeaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => { const id = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(id); }, []);
   useEffect(() => { const t = setTimeout(() => setMounted(true), 120); return () => clearTimeout(t); }, []);
@@ -81,7 +83,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
       const e = 1 - Math.pow(2, -10 * p);
       setCounts({ uptime:Math.round(999*e), models:Math.round(247*e), clients:Math.round(120*e) });
       if (p === 1) clearInterval(id);
-    }, 16);
+    }, 33);
     return () => clearInterval(id);
   }, [prefersReduced]);
 
@@ -89,9 +91,9 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
     if (prefersReduced) return;
     const id = setInterval(() => {
       setFlashIdx(Math.floor(Math.random() * 3));
-      setTimeout(() => setFlashIdx(-1), 800);
+      flashTimerRef.current = setTimeout(() => setFlashIdx(-1), 800);
     }, 3500);
-    return () => clearInterval(id);
+    return () => { clearInterval(id); if (flashTimerRef.current) clearTimeout(flashTimerRef.current); };
   }, [prefersReduced]);
 
   const onCardMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -116,7 +118,8 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
     const el = cardRef.current;
     if (el) { el.style.transition = "transform 0.55s cubic-bezier(0.22,1,0.36,1),box-shadow 0.55s ease"; el.style.transform = ""; el.style.boxShadow = ""; }
     if (hlRef.current) hlRef.current.style.opacity = "0";
-    setTimeout(() => { if (floatRef.current) floatRef.current.style.animationPlayState = "running"; if (cardRef.current) cardRef.current.style.transition = ""; }, 560);
+    if (cardLeaveTimerRef.current) clearTimeout(cardLeaveTimerRef.current);
+    cardLeaveTimerRef.current = setTimeout(() => { if (floatRef.current) floatRef.current.style.animationPlayState = "running"; if (cardRef.current) cardRef.current.style.transition = ""; }, 560);
   };
 
   const timeStr = time.toLocaleTimeString("en-US", { hour12:false });
@@ -318,6 +321,8 @@ const HeroSection = () => {
   const [fadeIn,   setFadeIn  ] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const btnRef = useRef<HTMLAnchorElement>(null);
+  const sectionRef  = useRef<HTMLElement>(null);
+  const wordTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const fn = () => setIsMobile(window.innerWidth < 768);
@@ -328,15 +333,22 @@ const HeroSection = () => {
   useEffect(() => {
     const id = setInterval(() => {
       setFadeIn(false);
-      setTimeout(() => { setWordIdx(i => (i+1) % CYCLE_WORDS.length); setFadeIn(true); }, 350);
+      wordTimerRef.current = setTimeout(() => { setWordIdx(i => (i+1) % CYCLE_WORDS.length); setFadeIn(true); }, 350);
     }, 2500);
-    return () => clearInterval(id);
+    return () => { clearInterval(id); if (wordTimerRef.current) clearTimeout(wordTimerRef.current); };
   }, []);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 80);
     window.addEventListener("scroll", fn, { passive:true });
     return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    const fn = () => { if (el) el.classList.toggle("xz-hero-paused", document.hidden); };
+    document.addEventListener("visibilitychange", fn);
+    return () => document.removeEventListener("visibilitychange", fn);
   }, []);
 
   const onBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -354,7 +366,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section style={{
+    <section ref={sectionRef} style={{
       background:"linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)",
       padding:"24px 0 72px",
       minHeight:"calc(100vh - 70px)",
@@ -645,6 +657,7 @@ const HeroSection = () => {
 
       {/* ── Keyframes ── */}
       <style>{`
+        .xz-hero-paused *, .xz-hero-paused *::before, .xz-hero-paused *::after { animation-play-state: paused !important; }
         @keyframes xzBadgePing { 0%{transform:scale(1);opacity:0.8} 70%{transform:scale(2.4);opacity:0} 100%{transform:scale(1);opacity:0} }
         @keyframes xzCursor { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes xzBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }

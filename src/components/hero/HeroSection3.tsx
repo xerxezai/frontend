@@ -11,6 +11,8 @@ const HeroSection3 = () => {
           alt="img"
           width={401}
           height={255}
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="right-shape float-bob-y">
@@ -19,6 +21,8 @@ const HeroSection3 = () => {
           alt="img"
           width={386}
           height={390}
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="plane-shape float-bob-x">
@@ -27,6 +31,8 @@ const HeroSection3 = () => {
           alt="img"
           width={126}
           height={117}
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="plane-shape-2 float-bob-y">
@@ -35,6 +41,8 @@ const HeroSection3 = () => {
           alt="img"
           width={266}
           height={121}
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <button

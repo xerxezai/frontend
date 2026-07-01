@@ -43,7 +43,7 @@ export const BlogPostsList = () => {
         {posts.map(post => (
           <article key={post.id} className="post-card">
             {post.featured_image && (
-              <img src={post.featured_image} alt={post.title} />
+              <img src={post.featured_image} alt={post.title} loading="lazy" decoding="async" />
             )}
             <h3>{post.title}</h3>
             <p className="excerpt">{post.excerpt}</p>
