@@ -198,6 +198,7 @@ const ContactSection = () => {
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('SUBMIT FIRED', form);
     if (!form.name.trim()) { toast.error("Please enter your name."); return; }
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       toast.error("Please enter a valid email address."); return;
