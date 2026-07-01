@@ -211,20 +211,17 @@ const ERPLayout = ({ children }: Props) => {
           flexShrink: 0,
         }}>
           {!collapsed ? (
-            <span style={{
-              color: '#fff', fontWeight: 800, fontSize: 15,
-              fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em',
-              whiteSpace: 'nowrap',
-            }}>
-              XERXEZ ERP
-            </span>
+            <img
+              src="/assets/img/logo/xerxez_logo.png"
+              alt="Xerxez"
+              style={{ height: 44, width: 'auto', display: 'block', objectFit: 'contain' }}
+            />
           ) : (
-            <span style={{
-              color: C.orange, fontWeight: 900, fontSize: 16,
-              fontFamily: "'DM Sans', sans-serif",
-            }}>
-              X
-            </span>
+            <img
+              src="/assets/img/logo/icon-logo.svg"
+              alt="Xerxez"
+              style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }}
+            />
           )}
           <button
             onClick={() => setCollapsed(c => !c)}
