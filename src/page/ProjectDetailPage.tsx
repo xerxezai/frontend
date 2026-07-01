@@ -1,4 +1,4 @@
-﻿import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 import ErrorSection from "../components/error/ErrorSection";
 import CustomLayout from "../components/layout/CustomLayout";
@@ -7,27 +7,22 @@ import { projectsData } from "../data";
 
 const ProjectDetailPage = () => {
   const { slug } = useParams();
-
   const currentIndex = projectsData.findIndex((item) => item.slug === slug);
   const projectInfo = projectsData[currentIndex];
+
   return (
     <CustomLayout>
-      <BreadcrumbSection
-        title={projectInfo ? "Case Study Details" : "404 Page"}
-      />
-
-      {/* Wrap the conditional rendering block */}
       {projectInfo ? (
-        <ProjectDetailSection
-          projectInfo={projectInfo}
-          currentIndex={currentIndex}
-        />
+        // Hero replaces breadcrumb for valid projects
+        <ProjectDetailSection projectInfo={projectInfo} currentIndex={currentIndex} />
       ) : (
-        <ErrorSection />
+        <>
+          <BreadcrumbSection title="404 Page" />
+          <ErrorSection />
+        </>
       )}
     </CustomLayout>
   );
 };
 
 export default ProjectDetailPage;
-
