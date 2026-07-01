@@ -694,6 +694,22 @@ const projectsData = [
     title: "LLM Engineering Bootcamp",
     slug: "llm-engineering-bootcamp",
   },
+  {
+    id: 13,
+    image: "assets/img/project/project-3.jpg",
+    detailImg: "/assets/img/project/project-details-013.jpg",
+    category: "Industry Solutions",
+    title: "Oil & Gas Digital Transformation",
+    slug: "oil-gas-digital-transformation",
+  },
+  {
+    id: 14,
+    image: "assets/img/project/project-5.jpg",
+    detailImg: "/assets/img/project/project-details-01.jpg",
+    category: "Healthcare",
+    title: "Healthcare Management System",
+    slug: "healthcare-management-system",
+  },
 ];
 
 const services = [
