@@ -193,6 +193,11 @@ const ContactSection = () => {
     return () => obs.disconnect();
   }, []);
 
+  // Pre-warm Railway on mount so it's awake by the time user submits
+  useEffect(() => {
+    fetch(`${BASE}/contact/`).catch(() => {});
+  }, []);
+
   const set = useCallback((k: keyof ContactInfo, v: string) =>
     setForm(p => ({ ...p, [k]: v })), []);
 
@@ -220,9 +225,9 @@ const ContactSection = () => {
       } catch (e: any) {
         if (e.name !== 'AbortError') throw e;
         // Server was sleeping — first request woke it up, retry now
-        toast.info('Connecting to server, please wait…', { autoClose: 4000 });
-        await new Promise(r => setTimeout(r, 3000));
-        res = await postContact(payload, 20000);
+        toast.info('Connecting to server, please wait…', { autoClose: 9000 });
+        await new Promise(r => setTimeout(r, 8000));
+        res = await postContact(payload, 30000);
       }
       const data = await res.json().catch(() => ({}));
       if (res.ok) {

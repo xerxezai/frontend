@@ -155,6 +155,11 @@ const ContactSection2 = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
+  // Pre-warm Railway on mount so it's awake by the time user submits
+  useEffect(() => {
+    fetch(`${BASE}/contact/`).catch(() => {});
+  }, []);
+
   // count-up trigger
   useEffect(() => {
     const el = heroRef.current; if (!el) return;
@@ -206,9 +211,9 @@ const ContactSection2 = () => {
         res = await postContact(payload, 14000);
       } catch (e: any) {
         if (e.name !== 'AbortError') throw e;
-        toast.info('Connecting to server, please wait…', { autoClose: 4000 });
-        await new Promise(r => setTimeout(r, 3000));
-        res = await postContact(payload, 20000);
+        toast.info('Connecting to server, please wait…', { autoClose: 9000 });
+        await new Promise(r => setTimeout(r, 8000));
+        res = await postContact(payload, 30000);
       }
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
