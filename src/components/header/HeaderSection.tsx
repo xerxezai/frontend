@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import {} from "react";
 import MainMenuSection from "./MainMenuSection";
 import { useCustomContext } from "../../context/context";
 import { Link } from "react-router-dom";
@@ -8,47 +8,24 @@ interface Props {
   variant?: boolean;
 }
 
+
 const HeaderSection = ({ variant: _variant }: Props) => {
   const { toggleMobileMenu } = useCustomContext();
-  const headerRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = headerRef.current;
-      if (!el) return;
-      if (window.scrollY > 40) {
-        el.style.background = "rgba(14,9,3,0.82)";
-        el.style.borderBottomColor = "rgba(201,136,58,0.20)";
-        el.style.boxShadow = "0 8px 40px rgba(0,0,0,0.55), inset 0 -1px 0 rgba(201,136,58,0.10)";
-      } else {
-        el.style.background = "rgba(20,14,6,0.55)";
-        el.style.borderBottomColor = "rgba(180,140,100,0.10)";
-        el.style.boxShadow = "none";
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
-    <>
-      <style>{`
-        @keyframes xzNavIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
-        .xz-header { animation: xzNavIn 0.45s ease both; }
-      `}</style>
-      <header ref={headerRef} className="xz-header" style={{
+    <header style={{
       position: "fixed",
       top: 0,
       left: 0,
       right: 0,
       zIndex: 9999,
       height: 70,
-      background: "rgba(20,14,6,0.55)",
-      borderBottom: "1px solid rgba(180,140,100,0.10)",
-      boxShadow: "none",
-      backdropFilter: "blur(24px) saturate(1.8)",
-      WebkitBackdropFilter: "blur(24px) saturate(1.8)",
-      transition: "background 300ms ease, box-shadow 300ms ease, border-color 300ms ease",
+      background: "rgba(20,14,6,0.92)",
+      borderBottom: "1px solid rgba(180,140,100,0.16)",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.45)",
+      backdropFilter: "blur(20px) saturate(1.5)",
+      WebkitBackdropFilter: "blur(20px) saturate(1.5)",
+      transition: "background 250ms ease",
     }}>
       <div className="container h-100">
         <div style={{
@@ -134,8 +111,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
           </div>
         </div>
       </div>
-      </header>
-    </>
+    </header>
   );
 };
 
