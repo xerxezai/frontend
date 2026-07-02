@@ -78,7 +78,7 @@ const ERPLayout = ({ children }: Props) => {
     <div
       style={{
         minHeight: '100vh',
-        background: C.cream,
+        background: '#0c0804',
         '--sidebar-w': `${sidebarW}px`,
       } as React.CSSProperties}
     >
@@ -166,33 +166,33 @@ const ERPLayout = ({ children }: Props) => {
         }
 
         .erp-search {
-          border: 1.5px solid rgba(0,0,0,0.09);
+          border: 1.5px solid rgba(255,255,255,0.09);
           border-radius: 9px;
           padding: 7px 14px 7px 34px;
           font-size: 13px;
           font-family: 'DM Sans', sans-serif;
-          background: #F8F7F4;
-          color: #1A1A1A;
+          background: rgba(255,255,255,0.06);
+          color: rgba(255,255,255,0.85);
           outline: none;
           width: 200px;
           transition: border-color 0.2s, box-shadow 0.2s;
         }
         .erp-search:focus {
           border-color: #C9883A;
-          box-shadow: 0 0 0 3px rgba(201,136,58,0.12);
+          box-shadow: 0 0 0 3px rgba(201,136,58,0.15);
         }
-        .erp-search::placeholder { color: #9B9B9B; }
+        .erp-search::placeholder { color: rgba(255,255,255,0.28); }
 
         .erp-bell {
           width: 38px; height: 38px;
           border-radius: 10px;
-          background: #F8F7F4;
-          border: 1.5px solid rgba(0,0,0,0.08);
+          background: rgba(255,255,255,0.06);
+          border: 1.5px solid rgba(255,255,255,0.09);
           display: flex; align-items: center; justify-content: center;
           cursor: pointer; position: relative;
           transition: background 0.2s, border-color 0.2s;
         }
-        .erp-bell:hover { background: #F0EDE8; border-color: rgba(201,136,58,0.30); }
+        .erp-bell:hover { background: rgba(201,136,58,0.14); border-color: rgba(201,136,58,0.36); }
 
         .erp-logout {
           background: rgba(239,68,68,0.07);
@@ -331,8 +331,8 @@ const ERPLayout = ({ children }: Props) => {
 
         {/* header */}
         <header style={{
-          background: C.white,
-          boxShadow: '0 1px 0 rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)',
+          background: 'linear-gradient(90deg, #1a1208 0%, #0f0a05 100%)',
+          boxShadow: '0 1px 0 rgba(255,255,255,0.06), 0 2px 16px rgba(0,0,0,0.40)',
           padding: '0 24px',
           height: 64,
           display: 'flex',
@@ -347,7 +347,7 @@ const ERPLayout = ({ children }: Props) => {
               className="d-lg-none"
               onClick={() => setMobileOpen(o => !o)}
               aria-label="Open menu"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#1A1A1A' }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'rgba(255,255,255,0.70)' }}
             >
               <i className="fas fa-bars" style={{ fontSize: 18 }}></i>
             </button>
@@ -360,7 +360,7 @@ const ERPLayout = ({ children }: Props) => {
               <i className="fas fa-search" style={{
                 position: 'absolute', left: 11,
                 top: '50%', transform: 'translateY(-50%)',
-                color: C.muted, fontSize: 12, pointerEvents: 'none',
+                color: 'rgba(255,255,255,0.28)', fontSize: 12, pointerEvents: 'none',
               }}></i>
               <input
                 className="erp-search"
@@ -373,11 +373,11 @@ const ERPLayout = ({ children }: Props) => {
             </div>
 
             <button className="erp-bell" aria-label="Notifications">
-              <i className="fas fa-bell" style={{ color: '#4B4B4B', fontSize: 14 }}></i>
+              <i className="fas fa-bell" style={{ color: 'rgba(255,255,255,0.60)', fontSize: 14 }}></i>
               <span style={{
                 position: 'absolute', top: 8, right: 8,
                 width: 7, height: 7, borderRadius: '50%',
-                background: C.orange, border: '1.5px solid #fff',
+                background: C.orange, border: '1.5px solid #1a1208',
                 display: 'block',
               }}></span>
             </button>
@@ -387,7 +387,7 @@ const ERPLayout = ({ children }: Props) => {
               style={{
                 width: 38, height: 38, borderRadius: '50%',
                 background: C.orangeGrad,
-                boxShadow: `0 0 0 2px ${C.white}, 0 0 0 3.5px ${C.orange}`,
+                boxShadow: `0 0 0 2px #1a1208, 0 0 0 3.5px ${C.orange}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', flexShrink: 0,
               }}
@@ -401,7 +401,7 @@ const ERPLayout = ({ children }: Props) => {
         </header>
 
         {/* content */}
-        <div style={{ flex: 1, padding: '24px 28px', background: C.cream }}>
+        <div style={{ flex: 1, padding: '24px 28px', background: 'transparent' }}>
           {children}
         </div>
 
