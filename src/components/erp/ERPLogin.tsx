@@ -265,9 +265,9 @@ const ERPLogin = ({ onSuccess }: Props) => {
             <div style={{ marginBottom: 18, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both' }}>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: '#EDE8DF',
-                border: '1px solid rgba(180,155,120,0.40)',
-                color: '#3d3220', fontSize: 11, fontWeight: 700,
+                background: 'rgba(201,136,58,0.13)',
+                border: '1px solid rgba(201,136,58,0.35)',
+                color: '#E5B460', fontSize: 11, fontWeight: 700,
                 padding: '6px 16px', borderRadius: 20,
                 fontFamily: "'DM Sans', sans-serif",
                 letterSpacing: '0.12em', textTransform: 'uppercase',
