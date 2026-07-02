@@ -132,6 +132,7 @@ const ServiceCard = ({ card }: { card: ServiceItem }) => {
         <div style={{
           position: "absolute", inset: 0,
           background: `linear-gradient(135deg, ${card.colors[0]}, ${card.colors[2]})`,
+          pointerEvents: "none",
         }}>
           {hovered && (
             <Warp
