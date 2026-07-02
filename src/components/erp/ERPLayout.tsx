@@ -47,10 +47,11 @@ function isAdminUser(): boolean {
     const stored = localStorage.getItem('auth_tokens');
     if (stored) {
       const payload = JSON.parse(atob(JSON.parse(stored).access.split('.')[1]));
-      return payload.is_staff === true;
+      if (payload.is_staff === true || payload.is_superuser === true) return true;
     }
   } catch {}
-  return localStorage.getItem('xerxez_role') === 'admin';
+  const role = localStorage.getItem('xerxez_role') || '';
+  return role === 'admin' || role === 'super_admin' || role === 'superuser';
 }
 
 interface Props { children: React.ReactNode; }
@@ -433,105 +434,105 @@ const ERPLayout = ({ children }: Props) => {
               {/* ── Dropdown ── */}
               {profileOpen && (
                 <div style={{
-                  position: 'absolute', top: 'calc(100% + 10px)', right: 0,
-                  width: 272,
+                  position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                  width: 230,
                   background: 'linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)',
                   border: '1px solid rgba(255,255,255,0.07)',
-                  borderTop: '2.5px solid #C9883A',
-                  borderRadius: 16,
-                  boxShadow: '0 8px 0 rgba(0,0,0,0.45),0 24px 64px rgba(0,0,0,0.60),0 0 0 1px rgba(201,136,58,0.06)',
+                  borderTop: '2px solid #C9883A',
+                  borderRadius: 14,
+                  boxShadow: '0 6px 0 rgba(0,0,0,0.45),0 20px 48px rgba(0,0,0,0.60)',
                   overflow: 'hidden',
                   zIndex: 400,
                 }}>
 
-                  {/* user header */}
+                  {/* user header — compact */}
                   <div style={{
-                    padding: '18px 20px 16px',
+                    padding: '14px 16px 12px',
                     borderBottom: '1px solid rgba(255,255,255,0.06)',
                     background: 'rgba(201,136,58,0.04)',
+                    display: 'flex', alignItems: 'center', gap: 11,
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-                      <div style={{
-                        width: 46, height: 46, borderRadius: '50%', flexShrink: 0,
-                        background: C.orangeGrad,
-                        boxShadow: `0 0 0 2px #1a1208, 0 0 0 3.5px ${C.orange}`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    <div style={{
+                      width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+                      background: C.orangeGrad,
+                      boxShadow: `0 0 0 2px #1a1208, 0 0 0 3px ${C.orange}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <span style={{ color: '#fff', fontWeight: 800, fontSize: 15, fontFamily: "'DM Sans', sans-serif" }}>{initial}</span>
+                    </div>
+                    <div>
+                      <div style={{ color: '#fff', fontWeight: 700, fontSize: 13.5, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.2 }}>{adminName}</div>
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4,
+                        background: 'rgba(201,136,58,0.12)',
+                        border: '1px solid rgba(201,136,58,0.28)',
+                        color: C.orange, fontSize: 9, fontWeight: 700,
+                        padding: '2px 7px', borderRadius: 20,
+                        letterSpacing: '0.10em', textTransform: 'uppercase',
+                        fontFamily: "'DM Sans', sans-serif",
                       }}>
-                        <span style={{ color: '#fff', fontWeight: 800, fontSize: 18, fontFamily: "'DM Sans', sans-serif" }}>{initial}</span>
-                      </div>
-                      <div>
-                        <div style={{ color: '#fff', fontWeight: 700, fontSize: 14, fontFamily: "'DM Sans', sans-serif", marginBottom: 6 }}>{adminName}</div>
-                        <span style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 5,
-                          background: 'rgba(201,136,58,0.12)',
-                          border: '1px solid rgba(201,136,58,0.28)',
-                          color: C.orange, fontSize: 9.5, fontWeight: 700,
-                          padding: '2px 9px', borderRadius: 20,
-                          letterSpacing: '0.10em', textTransform: 'uppercase',
-                          fontFamily: "'DM Sans', sans-serif",
-                        }}>
-                          <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#4ade80', display: 'inline-block', boxShadow: '0 0 5px rgba(74,222,128,0.75)', flexShrink: 0 }} />
-                          {isAdmin ? 'Super Admin' : 'User'}
-                        </span>
-                      </div>
+                        <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#4ade80', display: 'inline-block', boxShadow: '0 0 5px rgba(74,222,128,0.75)', flexShrink: 0 }} />
+                        {isAdmin ? 'Super Admin' : 'User'}
+                      </span>
                     </div>
                   </div>
 
-                  {/* menu items */}
+                  {/* menu items — no desc, single-line */}
                   {([
-                    { icon: 'fas fa-user-circle', label: 'My Profile',      desc: 'View personal profile details'   },
-                    { icon: 'fas fa-edit',         label: 'Edit Profile',    desc: 'Modify your personal details'   },
-                    { icon: 'fas fa-cog',          label: 'Account Settings',desc: 'Manage your account parameters' },
-                    { icon: 'fas fa-lock',         label: 'Privacy Settings',desc: 'Control your privacy parameters'},
+                    { icon: 'fas fa-user-circle', label: 'My Profile',       to: '/erp/dashboard' },
+                    { icon: 'fas fa-edit',         label: 'Edit Profile',     to: '/erp/dashboard' },
+                    { icon: 'fas fa-cog',          label: 'Account Settings', to: '/erp/dashboard' },
+                    { icon: 'fas fa-lock',         label: 'Privacy Settings', to: '/erp/dashboard' },
                   ] as const).map(item => (
                     <button
                       key={item.label}
+                      onClick={() => { setProfileOpen(false); navigate(item.to); }}
                       style={{
                         width: '100%', background: 'none', border: 'none',
                         borderBottom: '1px solid rgba(255,255,255,0.04)',
-                        padding: '11px 20px',
-                        display: 'flex', alignItems: 'center', gap: 12,
+                        padding: '10px 16px',
+                        display: 'flex', alignItems: 'center', gap: 11,
                         cursor: 'pointer', textAlign: 'left',
                         transition: 'background 0.16s',
+                        minHeight: 44,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.07)'; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.08)'; }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
                     >
                       <div style={{
-                        width: 34, height: 34, borderRadius: 9, flexShrink: 0,
+                        width: 28, height: 28, borderRadius: 7, flexShrink: 0,
                         background: 'rgba(201,136,58,0.08)',
                         border: '1px solid rgba(201,136,58,0.15)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        <i className={item.icon} style={{ color: C.orange, fontSize: 13 }} />
+                        <i className={item.icon} style={{ color: C.orange, fontSize: 12 }} />
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ color: 'rgba(255,255,255,0.88)', fontSize: 13, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>{item.label}</div>
-                        <div style={{ color: 'rgba(255,255,255,0.33)', fontSize: 11, marginTop: 2, fontFamily: "'DM Sans', sans-serif" }}>{item.desc}</div>
-                      </div>
-                      <i className="fas fa-chevron-right" style={{ color: 'rgba(255,255,255,0.16)', fontSize: 10, flexShrink: 0 }} />
+                      <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 600, fontFamily: "'DM Sans', sans-serif", flex: 1 }}>
+                        {item.label}
+                      </span>
+                      <i className="fas fa-chevron-right" style={{ color: 'rgba(255,255,255,0.16)', fontSize: 9, flexShrink: 0 }} />
                     </button>
                   ))}
 
                   {/* sign out */}
-                  <div style={{ padding: '11px 14px 14px' }}>
+                  <div style={{ padding: '9px 12px 12px' }}>
                     <button
                       onClick={() => { setProfileOpen(false); handleLogout(); }}
                       style={{
-                        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                         background: 'rgba(239,68,68,0.07)',
                         border: '1px solid rgba(239,68,68,0.16)',
-                        borderRadius: 10, padding: '11px 16px',
+                        borderRadius: 9, padding: '9px 14px',
                         cursor: 'pointer', color: '#f87171',
                         fontSize: 13, fontWeight: 700,
                         fontFamily: "'DM Sans', sans-serif",
                         transition: 'background 0.18s, color 0.18s',
-                        minHeight: 44,
+                        minHeight: 40,
                       }}
                       onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.14)'; e.currentTarget.style.color = '#fca5a5'; }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.07)'; e.currentTarget.style.color = '#f87171'; }}
                     >
-                      <i className="fas fa-sign-out-alt" style={{ fontSize: 13 }} />
+                      <i className="fas fa-sign-out-alt" style={{ fontSize: 12 }} />
                       Sign Out
                     </button>
                   </div>
