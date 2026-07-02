@@ -55,7 +55,6 @@ const HealthCheck: React.FC<HealthCheckProps> = ({
     backendError = healthCheck.error;
     loading = healthCheck.loading;
   } catch (hookError) {
-    console.warn('Health check hook not available, using fallback mode:', hookError);
     backendError = 'Health check service unavailable';
   }
 

@@ -990,6 +990,7 @@
   background: linear-gradient(-45deg, #FDFCFB, #F8F3EC, #FFFAF6, #FAF6F0);
   background-size: 400% 400%;
   animation: xzGradientShift 14s ease infinite;
+  will-change: background-position;
 }
 
 
@@ -1200,6 +1201,7 @@ figure.xz-figure:hover img,
   background-size: 200% 100%;
   animation: xzSkeleton 1.6s ease-in-out infinite;
   border-radius: var(--xz-r-md);
+  will-change: background-position;
 }
 
 

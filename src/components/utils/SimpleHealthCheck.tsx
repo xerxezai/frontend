@@ -96,7 +96,6 @@ const SimpleHealthCheck: React.FC<SimpleHealthCheckProps> = ({
         throw new Error(`HTTP ${response.status}`);
       }
     } catch (error: any) {
-      console.warn('Backend health check failed:', error.message);
       return {
         status: 'unhealthy' as const,
         timestamp: new Date().toISOString(),
