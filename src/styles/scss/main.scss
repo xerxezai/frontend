@@ -12119,11 +12119,15 @@ body {
   }
 }
 
-/* ── Logo PNG — strictly 60px, no border/shadow ── */
-.header-logo1 img,
+/* ── Logo PNG — no border/shadow ── */
 .offcanvas__logo img,
 .widget-head a img {
   height: 60px !important;
+  width: auto !important;
+  background: transparent !important;
+}
+.header-logo1 img {
+  height: 100px !important;
   width: auto !important;
   background: transparent !important;
   border: none !important;
