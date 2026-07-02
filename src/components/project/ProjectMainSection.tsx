@@ -308,6 +308,131 @@ const ProjectCard: React.FC<{ item: typeof projectsData[0] }> = ({ item }) => {
   );
 };
 
+// ── Portfolio hero card ────────────────────────────────────────────────────
+const PortfolioHeroCard: React.FC = () => (
+  <div style={{
+    borderRadius: 20,
+    background: "linear-gradient(155deg,#fdf9f4 0%,#f0e4d0 100%)",
+    border: "1px solid rgba(201,136,58,0.18)",
+    borderTop: "3px solid #C9883A",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.95),0 8px 0 rgba(130,82,24,0.32),0 20px 60px rgba(0,0,0,0.18)",
+    padding: "26px 24px 22px",
+    position: "relative",
+    overflow: "hidden",
+  }}>
+    <div aria-hidden="true" style={{
+      position: "absolute", top: -50, right: -50,
+      width: 160, height: 160, borderRadius: "50%",
+      background: "radial-gradient(circle,rgba(201,136,58,0.13) 0%,transparent 68%)",
+      pointerEvents: "none",
+    }} />
+
+    {/* header: icon + live badge */}
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, position: "relative" }}>
+      <div style={{
+        width: 50, height: 50, borderRadius: 14,
+        background: "linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)",
+        boxShadow: "0 4px 0 rgba(140,88,22,0.50),0 8px 18px rgba(201,136,58,0.38)",
+        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+      }}>
+        <i className="fas fa-chart-line" style={{ color: "#fff", fontSize: 20 }} />
+      </div>
+      <span style={{
+        display: "inline-flex", alignItems: "center", gap: 5,
+        background: "rgba(201,136,58,0.09)",
+        border: "1px solid rgba(201,136,58,0.26)",
+        borderRadius: 20, padding: "4px 11px",
+        fontSize: 10, fontWeight: 700, letterSpacing: "0.13em",
+        textTransform: "uppercase", color: "#C9883A",
+        fontFamily: "'DM Sans',sans-serif",
+      }}>
+        <span style={{
+          width: 5, height: 5, borderRadius: "50%",
+          background: "#4ade80",
+          boxShadow: "0 0 6px rgba(74,222,128,0.75)",
+          display: "inline-block", flexShrink: 0,
+        }} />
+        Verified Outcomes
+      </span>
+    </div>
+
+    {/* eyebrow */}
+    <p style={{
+      fontSize: 10, fontWeight: 700, letterSpacing: "0.15em",
+      textTransform: "uppercase", color: "#cc785c",
+      fontFamily: "'DM Sans',sans-serif", marginBottom: 4, position: "relative",
+    }}>
+      Featured Result
+    </p>
+
+    {/* hero stat */}
+    <div style={{ marginBottom: 4, position: "relative" }}>
+      <span style={{
+        fontFamily: "'Cormorant Garamond',serif", fontWeight: 700,
+        fontSize: 52, lineHeight: 1, color: "#C9883A",
+        letterSpacing: "-0.02em",
+      }}>$4M+</span>
+    </div>
+    <p style={{
+      fontSize: 13, fontWeight: 700, color: "#1A1208",
+      fontFamily: "'DM Sans',sans-serif", marginBottom: 4, position: "relative",
+    }}>
+      Annual cloud savings delivered
+    </p>
+    <p style={{
+      fontSize: 11.5, color: "#8B7A6A", lineHeight: 1.5,
+      fontFamily: "'DM Sans',sans-serif", marginBottom: 18, position: "relative",
+    }}>
+      Multi-cloud FinOps · AWS, Azure &amp; GCP
+    </p>
+
+    {/* 4 outcome chips */}
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: 18, position: "relative" }}>
+      {[
+        { val: "50+",   label: "Projects delivered" },
+        { val: "99.9%", label: "Uptime SLA"         },
+        { val: "1,200+",label: "Engineers trained"  },
+        { val: "38%",   label: "Cost reduction"     },
+      ].map(d => (
+        <div key={d.label} style={{
+          background: "rgba(255,255,255,0.80)",
+          border: "1px solid rgba(201,136,58,0.14)",
+          borderRadius: 11, padding: "10px 12px",
+          display: "flex", alignItems: "baseline", gap: 8,
+        }}>
+          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 20, fontWeight: 700, color: "#C9883A", lineHeight: 1, flexShrink: 0 }}>{d.val}</span>
+          <span style={{ fontSize: 10, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.04em", lineHeight: 1.3 }}>{d.label}</span>
+        </div>
+      ))}
+    </div>
+
+    {/* CTA */}
+    <Link
+      to="/project"
+      style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        background: "linear-gradient(135deg,#e8a84e 0%,#C9883A 100%)",
+        color: "#fff", fontWeight: 700, fontSize: 14,
+        padding: "13px 20px", borderRadius: 12, textDecoration: "none",
+        fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.02em",
+        boxShadow: "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.40)",
+        cursor: "pointer", marginBottom: 14, position: "relative",
+        transition: "box-shadow 0.2s ease,transform 0.2s ease",
+      }}
+      onMouseEnter={e => { const a = e.currentTarget; a.style.transform = "translateY(-2px)"; a.style.boxShadow = "0 6px 0 rgba(130,78,18,0.50),0 12px 32px rgba(201,136,58,0.50)"; }}
+      onMouseLeave={e => { const a = e.currentTarget; a.style.transform = ""; a.style.boxShadow = "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.40)"; }}
+    >
+      View All Case Studies <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
+    </Link>
+
+    {/* strip */}
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, position: "relative" }}>
+      <i className="fas fa-certificate" style={{ color: "#C9883A", fontSize: 10 }} />
+      <span style={{ fontSize: 11, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif" }}>All outcomes independently verified</span>
+    </div>
+  </div>
+);
+
 // ── Empty state ────────────────────────────────────────────────────────────
 const EmptyFilter: React.FC<{ onReset: () => void }> = ({ onReset }) => (
   <motion.div
@@ -474,6 +599,7 @@ const ProjectMainSection: React.FC = () => {
         ]}
         cascadeA={CASCADE_A}
         cascadeB={CASCADE_B}
+        right={<PortfolioHeroCard />}
       />
 
       {/* ── Filter + Grid ── */}
