@@ -128,21 +128,27 @@ const ServiceCard = ({ card }: { card: ServiceItem }) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <div style={{ position: "absolute", inset: 0 }}>
-          <Warp
-            style={{ width: "100%", height: "100%" }}
-            proportion={0.38}
-            softness={0.95}
-            distortion={0.18}
-            swirl={0.75}
-            swirlIterations={10}
-            shape={card.shape}
-            shapeScale={0.1}
-            scale={1}
-            rotation={0}
-            speed={0.6}
-            colors={card.colors}
-          />
+        {/* CSS gradient always rendered — Warp WebGL only mounts on hover (1 context max vs 9) */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `linear-gradient(135deg, ${card.colors[0]}, ${card.colors[2]})`,
+        }}>
+          {hovered && (
+            <Warp
+              style={{ width: "100%", height: "100%" }}
+              proportion={0.38}
+              softness={0.95}
+              distortion={0.18}
+              swirl={0.75}
+              swirlIterations={10}
+              shape={card.shape}
+              shapeScale={0.1}
+              scale={1}
+              rotation={0}
+              speed={0.6}
+              colors={card.colors}
+            />
+          )}
         </div>
 
         <div style={{
