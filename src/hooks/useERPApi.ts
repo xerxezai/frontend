@@ -1,5 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 
+/** Decodes the JWT access token and returns true if is_superuser === true. */
+export function isSuperUser(): boolean {
+  try {
+    const stored = localStorage.getItem('auth_tokens');
+    if (stored) {
+      const payload = JSON.parse(atob(JSON.parse(stored).access.split('.')[1]));
+      if (payload.is_superuser === true) return true;
+    }
+  } catch {}
+  const role = localStorage.getItem('xerxez_role') || '';
+  return role === 'admin' || role === 'super_admin' || role === 'superuser';
+}
+
 const BASE = import.meta.env.VITE_API_BASE_URL || 'https://backend-production-b9f2.up.railway.app/api/v1';
 
 function getToken(): string | null {
