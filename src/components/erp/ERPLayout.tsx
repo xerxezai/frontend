@@ -341,7 +341,7 @@ const ERPLayout = ({ children }: Props) => {
       </aside>
 
       {/* main */}
-      <div className="erp-main d-flex flex-column" style={{ minHeight: '100vh' }}>
+      <div className="erp-main d-flex flex-column" style={{ minHeight: '100vh', minWidth: 0 }}>
 
         {/* header */}
         <header style={{
@@ -349,14 +349,15 @@ const ERPLayout = ({ children }: Props) => {
           boxShadow: '0 1px 0 rgba(255,255,255,0.06), 0 2px 16px rgba(0,0,0,0.40)',
           padding: '0 24px',
           height: 64,
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
           alignItems: 'center',
-          justifyContent: 'space-between',
           position: 'sticky',
           top: 0,
           zIndex: 100,
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {/* left — mobile hamburger only */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <button
               className="d-lg-none"
               onClick={() => setMobileOpen(o => !o)}
@@ -365,11 +366,15 @@ const ERPLayout = ({ children }: Props) => {
             >
               <i className="fas fa-bars" style={{ fontSize: 18 }}></i>
             </button>
-            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-              style={{ height: 70, width: 'auto', display: 'block' }} />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* center — logo */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
+              style={{ height: 52, width: 'auto', display: 'block', objectFit: 'contain' }} />
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-end' }}>
             <div className="d-none d-md-block" style={{ position: 'relative' }}>
               <i className="fas fa-search" style={{
                 position: 'absolute', left: 11,
@@ -543,7 +548,7 @@ const ERPLayout = ({ children }: Props) => {
         </header>
 
         {/* content */}
-        <div style={{ flex: 1, padding: '24px 28px', background: 'transparent' }}>
+        <div style={{ flex: 1, padding: '24px 28px', background: C.cream, minWidth: 0 }}>
           {children}
         </div>
 
