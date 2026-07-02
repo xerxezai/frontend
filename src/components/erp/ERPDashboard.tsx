@@ -1,20 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import { useERPDashboard } from '../../hooks/useERPApi';
 
-// ── colour tokens (mirrors AIERPPage exactly) ─────────────────────────────────
+// ── colour tokens ─────────────────────────────────────────────────────────────
 const C = {
   orange:     "#C9883A",
   orangeGrad: "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
   orangeDeep: "rgba(150,95,30,0.50)",
-  cream:      "#F8F7F4",
-  white:      "#FFFFFF",
-  dark:       "#1A1A1A",
-  muted:      "#6B6B6B",
-  border:     "rgba(0,0,0,0.07)",
+  card:       "#1a1208",
+  cardHover:  "#221607",
+  text:       "#F2EFE9",
+  muted:      "rgba(255,255,255,0.42)",
+  border:     "rgba(255,255,255,0.07)",
 };
 
 const shadow = {
-  card:  "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.03)",
+  card: "0 1px 0 rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.30), 0 1px 3px rgba(0,0,0,0.20)",
 };
 
 // ── category colour palette ───────────────────────────────────────────────────
@@ -84,13 +84,13 @@ const StatCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: C.white,
+        background: hovered ? C.cardHover : C.card,
         borderRadius: 12,
         border: `1px solid ${C.border}`,
         borderTop: `2px solid ${cat.accent}`,
         boxShadow: hovered
-          ? `0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04)`
-          : '0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04)',
+          ? `0 8px 28px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20), 0 0 0 1px rgba(201,136,58,0.18)`
+          : shadow.card,
         transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
         transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',
         padding: '18px 16px',
@@ -112,7 +112,7 @@ const StatCard = ({
 
       {/* number */}
       <div style={{
-        fontSize: 24, fontWeight: 700, color: C.dark,
+        fontSize: 24, fontWeight: 700, color: C.text,
         lineHeight: 1, marginBottom: 4,
         fontFamily: "'DM Sans', sans-serif",
         letterSpacing: '-0.01em', wordBreak: 'break-all',
@@ -134,16 +134,16 @@ const StatCard = ({
 // ── skeleton card ─────────────────────────────────────────────────────────────
 const SkeletonCard = ({ index }: { index: number }) => (
   <div style={{
-    background: C.white, borderRadius: 12,
+    background: C.card, borderRadius: 12,
     border: `1px solid ${C.border}`,
-    borderTop: '2px solid rgba(0,0,0,0.06)',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04)',
+    borderTop: '2px solid rgba(255,255,255,0.06)',
+    boxShadow: shadow.card,
     padding: '18px 16px',
     animation: `erpFadeUp 0.36s ease ${index * 0.04}s both`,
   }}>
-    <div style={{ width: 36, height: 36, borderRadius: 9, background: '#f0ede8', animation: 'erpShimmer 1.5s ease-in-out infinite', marginBottom: 12 }} />
-    <div style={{ height: 22, borderRadius: 5, background: '#f0ede8', animation: 'erpShimmer 1.5s 0.1s ease-in-out infinite', marginBottom: 6, width: '50%' }} />
-    <div style={{ height: 12, borderRadius: 4, background: '#f0ede8', animation: 'erpShimmer 1.5s 0.2s ease-in-out infinite', width: '75%' }} />
+    <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(255,255,255,0.06)', animation: 'erpShimmer 1.5s ease-in-out infinite', marginBottom: 12 }} />
+    <div style={{ height: 22, borderRadius: 5, background: 'rgba(255,255,255,0.06)', animation: 'erpShimmer 1.5s 0.1s ease-in-out infinite', marginBottom: 6, width: '50%' }} />
+    <div style={{ height: 12, borderRadius: 4, background: 'rgba(255,255,255,0.06)', animation: 'erpShimmer 1.5s 0.2s ease-in-out infinite', width: '75%' }} />
   </div>
 );
 
@@ -240,7 +240,7 @@ const ERPDashboard = () => {
       }}>
         <div>
           <h4 style={{
-            fontWeight: 800, fontSize: 26, color: C.dark,
+            fontWeight: 800, fontSize: 26, color: C.text,
             marginBottom: 4, fontFamily: "'DM Sans', sans-serif",
             letterSpacing: '-0.02em', margin: 0,
           }}>
@@ -254,7 +254,7 @@ const ERPDashboard = () => {
         {/* last updated */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 7,
-          background: C.white, padding: '8px 14px',
+          background: C.card, padding: '8px 14px',
           borderRadius: 10, border: `1px solid ${C.border}`,
           boxShadow: shadow.card, flexShrink: 0,
         }}>
