@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
 import XzHeroSection from "../components/common/XzHeroSection";
@@ -82,53 +82,165 @@ const TRAINING_CASCADE_B = [
 ];
 
 // ── Cohort card (hero right column) ───────────────────────────────────────
-const CohortCard = () => (
-  <div style={{
-    borderRadius: 18,
-    background: "linear-gradient(160deg,#faf7f3 0%,#e8e0d4 100%)",
-    border: "1px solid rgba(210,195,175,0.6)",
-    boxShadow: "0 6px 0 rgba(155,130,100,0.45),0 12px 32px rgba(0,0,0,0.18),inset 0 1px 0 rgba(255,255,255,0.9)",
-    padding: "28px 26px",
-  }}>
+const CohortCard = () => {
+  const [barW, setBarW] = useState(0);
+
+  useEffect(() => {
+    const t = setTimeout(() => setBarW(68), 500);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
     <div style={{
-      width: 44, height: 44, borderRadius: 12, marginBottom: 16,
-      background: CG,
-      boxShadow: "0 4px 0 rgba(150,95,30,0.5),0 6px 14px rgba(201,136,58,0.30)",
-      display: "flex", alignItems: "center", justifyContent: "center",
+      borderRadius: 20,
+      background: "linear-gradient(155deg,#fdf9f4 0%,#f0e4d0 100%)",
+      border: "1px solid rgba(201,136,58,0.18)",
+      borderTop: "3px solid #C9883A",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.95),0 8px 0 rgba(130,82,24,0.32),0 20px 60px rgba(0,0,0,0.18)",
+      padding: "26px 24px 22px",
+      position: "relative",
+      overflow: "hidden",
     }}>
-      <i className="fas fa-graduation-cap" style={{ color: "#fff", fontSize: 18 }} />
+
+      {/* ambient glow */}
+      <div aria-hidden="true" style={{
+        position: "absolute", top: -50, right: -50,
+        width: 160, height: 160, borderRadius: "50%",
+        background: "radial-gradient(circle,rgba(201,136,58,0.13) 0%,transparent 68%)",
+        pointerEvents: "none",
+      }} />
+
+      {/* header row: icon + live badge */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, position: "relative" }}>
+        <div style={{
+          width: 50, height: 50, borderRadius: 14,
+          background: "linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)",
+          boxShadow: "0 4px 0 rgba(140,88,22,0.50),0 8px 18px rgba(201,136,58,0.38)",
+          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        }}>
+          <i className="fas fa-graduation-cap" style={{ color: "#fff", fontSize: 21 }} />
+        </div>
+
+        <span style={{
+          display: "inline-flex", alignItems: "center", gap: 5,
+          background: "rgba(201,136,58,0.09)",
+          border: "1px solid rgba(201,136,58,0.26)",
+          borderRadius: 20, padding: "4px 11px",
+          fontSize: 10, fontWeight: 700, letterSpacing: "0.13em",
+          textTransform: "uppercase", color: "#C9883A",
+          fontFamily: "'DM Sans',sans-serif",
+        }}>
+          <span style={{
+            width: 5, height: 5, borderRadius: "50%",
+            background: "#4ade80",
+            boxShadow: "0 0 6px rgba(74,222,128,0.75)",
+            display: "inline-block", flexShrink: 0,
+          }} />
+          Enrolling Now
+        </span>
+      </div>
+
+      {/* eyebrow + title */}
+      <p style={{
+        fontSize: 10, fontWeight: 700, letterSpacing: "0.15em",
+        textTransform: "uppercase", color: "#cc785c",
+        fontFamily: "'DM Sans',sans-serif", marginBottom: 4, position: "relative",
+      }}>
+        Next Cohort · July 2026
+      </p>
+      <h4 style={{
+        fontSize: 20, fontWeight: 800, color: "#1A1208",
+        lineHeight: 1.18, fontFamily: "'DM Sans',sans-serif",
+        marginBottom: 8, letterSpacing: "-0.02em", position: "relative",
+      }}>
+        AI Practitioner<br />Program
+      </h4>
+      <p style={{
+        fontSize: 12.5, color: "#5C5047", lineHeight: 1.65,
+        fontFamily: "'DM Sans',sans-serif", marginBottom: 18, position: "relative",
+      }}>
+        Hands-on, certification-backed training for enterprise AI practitioners — live labs, real projects, no filler.
+      </p>
+
+      {/* 3 details grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginBottom: 16, position: "relative" }}>
+        {[
+          { icon: "fas fa-chalkboard-teacher", label: "Format",   val: "Live + Labs" },
+          { icon: "far fa-clock",              label: "Duration", val: "8 Weeks"     },
+          { icon: "fas fa-users",              label: "Cohort",   val: "≤25 Seats"   },
+        ].map(d => (
+          <div key={d.label} style={{
+            background: "rgba(255,255,255,0.80)",
+            border: "1px solid rgba(201,136,58,0.14)",
+            borderRadius: 11, padding: "10px 7px", textAlign: "center",
+          }}>
+            <i className={d.icon} style={{ color: "#C9883A", fontSize: 11, marginBottom: 5, display: "block" }} />
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#1A1208", fontFamily: "'DM Sans',sans-serif", lineHeight: 1 }}>{d.val}</div>
+            <div style={{ fontSize: 9, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif", marginTop: 3, letterSpacing: "0.06em", textTransform: "uppercase" }}>{d.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* seats meter */}
+      <div style={{
+        background: "rgba(255,255,255,0.65)",
+        border: "1px solid rgba(201,136,58,0.14)",
+        borderRadius: 12, padding: "12px 14px", marginBottom: 16, position: "relative",
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: "#5C5047", fontFamily: "'DM Sans',sans-serif" }}>
+            Seats Filled
+          </span>
+          <span style={{ fontSize: 11, fontFamily: "'DM Sans',sans-serif" }}>
+            <span style={{ fontWeight: 700, color: "#1A1208" }}>17</span>
+            <span style={{ color: "#A09080" }}> / 25 — </span>
+            <span style={{ fontWeight: 700, color: "#d64f38" }}>8 left</span>
+          </span>
+        </div>
+        <div style={{ height: 5, background: "rgba(0,0,0,0.09)", borderRadius: 3, overflow: "hidden" }}>
+          <div style={{
+            height: "100%",
+            width: `${barW}%`,
+            background: "linear-gradient(90deg,#e8a84e 0%,#C9883A 100%)",
+            borderRadius: 3,
+            boxShadow: "0 0 8px rgba(201,136,58,0.55)",
+            transition: "width 1.3s cubic-bezier(0.22,1,0.36,1)",
+          }} />
+        </div>
+      </div>
+
+      {/* CTA button */}
+      <Link to="/contact" style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        background: "linear-gradient(135deg,#e8a84e 0%,#C9883A 100%)",
+        color: "#fff", fontWeight: 700, fontSize: 14,
+        padding: "13px 20px", borderRadius: 12, textDecoration: "none",
+        fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.02em",
+        boxShadow: "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.40)",
+        cursor: "pointer", marginBottom: 14, position: "relative",
+        transition: "box-shadow 0.2s ease,transform 0.2s ease",
+      }}
+        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 0 rgba(130,78,18,0.50),0 12px 32px rgba(201,136,58,0.50)"; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = ""; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.40)"; }}
+      >
+        Reserve Your Seat <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
+      </Link>
+
+      {/* trust strip */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, position: "relative" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          <i className="fas fa-certificate" style={{ color: "#C9883A", fontSize: 10 }} />
+          <span style={{ fontSize: 11, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif" }}>CPD Accredited</span>
+        </div>
+        <span style={{ color: "rgba(0,0,0,0.15)", fontSize: 14, lineHeight: 1 }}>·</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          <i className="far fa-clock" style={{ color: "#C9883A", fontSize: 10 }} />
+          <span style={{ fontSize: 11, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif" }}>Closes 30 Jun</span>
+        </div>
+      </div>
     </div>
-    <p style={{
-      fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
-      textTransform: "uppercase", color: C2,
-      fontFamily: "'DM Sans',sans-serif", marginBottom: 6,
-    }}>
-      NEXT COHORT
-    </p>
-    <h4 style={{
-      fontSize: 18, fontWeight: 800, color: "#1A1A1A", lineHeight: 1.25,
-      fontFamily: "'DM Sans',sans-serif", marginBottom: 10,
-    }}>
-      Starts July 2026 —<br />Limited Seats
-    </h4>
-    <p style={{
-      fontSize: 13, color: "#6B6B6B", lineHeight: 1.65,
-      fontFamily: "'DM Sans',sans-serif", marginBottom: 20,
-    }}>
-      Join the next cohort of enterprise AI practitioners. Hands-on,
-      certification-backed, and built for your career.
-    </p>
-    <Link to="/contact" style={{
-      display: "inline-flex", alignItems: "center", gap: 8,
-      background: CG, color: "#fff", fontWeight: 700, fontSize: 13,
-      padding: "11px 22px", borderRadius: 10, textDecoration: "none",
-      fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.02em",
-      boxShadow: "0 4px 0 rgba(150,95,30,0.5),0 6px 18px rgba(201,136,58,0.30)",
-    }}>
-      Register Now <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
-    </Link>
-  </div>
-);
+  );
+};
 
 const TrainingPage: React.FC = () => (
   <CustomLayout>
