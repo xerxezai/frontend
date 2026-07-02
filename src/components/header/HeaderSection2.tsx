@@ -51,7 +51,7 @@ const HeaderSection2 = ({ variant }: Props) => {
       <div className={`header-1 ${isSticky ? "sticky" : ""}`}>
         <div className="container">
           <div className="mega-menu-wrapper">
-            <div className="header-main" style={{ padding: "0" }}>
+            <div className="header-main" style={{ padding: "5px 0" }}>
               <div className="header-left">
                 <Link to="/" className="header-logo1">
                   <Image
