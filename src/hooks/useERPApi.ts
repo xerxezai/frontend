@@ -39,13 +39,16 @@ export async function erpFetch(path: string, options: RequestInit = {}) {
       ...(options.headers || {}),
     },
   });
-  const data = await res.json();
+  // 204 No Content (successful DELETE) has no body — don't parse
+  if (res.status === 204) return null;
+  const contentType = res.headers.get('content-type') || '';
+  const data = contentType.includes('application/json') ? await res.json() : null;
   if (!res.ok) {
     if (res.status === 401) {
       clearAllTokens();
       window.location.href = '/erp';
     }
-    throw new Error(data.detail || JSON.stringify(data));
+    throw new Error(data?.detail || JSON.stringify(data) || `HTTP ${res.status}`);
   }
   return data;
 }

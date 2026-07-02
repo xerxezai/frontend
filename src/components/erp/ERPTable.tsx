@@ -1,4 +1,6 @@
-﻿interface Column { key: string; label: string; render?: (row: any) => React.ReactNode; }
+import React from 'react';
+
+interface Column { key: string; label: string; render?: (row: any) => React.ReactNode; }
 
 interface Props {
   title:     string;
@@ -11,6 +13,19 @@ interface Props {
   onEdit?:   (row: any) => void;
   onDelete?: (id: number) => void;
 }
+
+const TH: React.CSSProperties = {
+  fontSize: 10, letterSpacing: '0.6px', padding: '10px 10px',
+  textTransform: 'uppercase', fontWeight: 700, color: '#6B6B6B',
+  borderBottom: '1px solid rgba(0,0,0,0.07)', whiteSpace: 'nowrap',
+  overflow: 'hidden', textOverflow: 'ellipsis',
+};
+const TD: React.CSSProperties = {
+  padding: '9px 10px', verticalAlign: 'middle', color: '#333',
+  borderBottom: '1px solid rgba(0,0,0,0.05)',
+  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+  maxWidth: 140, fontSize: 12.5,
+};
 
 const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd, onEdit, onDelete }: Props) => {
   const showActions = isAdmin && (onEdit || onDelete);
@@ -26,40 +41,34 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
   return (
     <div>
       <div className="d-flex align-items-center justify-content-between mb-3">
-        <h5 className="fw-bold mb-0" style={{ color: '#1a1a2e' }}>{title}</h5>
+        <h5 className="fw-bold mb-0" style={{ color: '#1a1a2e', fontSize: 15 }}>{title}</h5>
         {isAdmin && onAdd && (
           <button
-            className="btn btn-sm d-flex align-items-center gap-2"
             onClick={onAdd}
-            style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 16px', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, boxShadow: '0 3px 0 rgba(150,95,30,0.40)' }}
+            style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 14px', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 12, boxShadow: '0 3px 0 rgba(150,95,30,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
           >
-            <i className="fas fa-plus" style={{ fontSize: 11 }}></i> Add New
+            <i className="fas fa-plus" style={{ fontSize: 10 }}></i> Add New
           </button>
         )}
       </div>
 
       {data.length === 0 ? (
         <div className="text-center py-5 bg-white rounded-3 shadow-sm">
-          <i className="fas fa-inbox text-muted" style={{ fontSize: 44, display: 'block', marginBottom: 12 }}></i>
-          <p className="text-muted mb-0" style={{ fontFamily: "'DM Sans',sans-serif" }}>
+          <i className="fas fa-inbox text-muted" style={{ fontSize: 40, display: 'block', marginBottom: 12 }}></i>
+          <p className="text-muted mb-0" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13 }}>
             No records found.{isAdmin && onAdd ? ' Add the first one.' : ''}
           </p>
         </div>
       ) : (
-        <div className="table-responsive bg-white rounded-3 shadow-sm">
-          <table className="table table-hover mb-0" style={{ fontSize: 13.5 }}>
-            <thead className="table-light">
-              <tr>
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', fontSize: 12.5 }}>
+            <thead>
+              <tr style={{ background: '#fafaf8' }}>
                 {columns.map(c => (
-                  <th key={c.key}
-                    style={{ fontSize: 10.5, letterSpacing: '0.5px', padding: '11px 16px', textTransform: 'uppercase', fontWeight: 700, color: '#6B6B6B', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
-                    {c.label}
-                  </th>
+                  <th key={c.key} style={TH} title={c.label}>{c.label}</th>
                 ))}
                 {showActions && (
-                  <th style={{ fontSize: 10.5, letterSpacing: '0.5px', padding: '11px 16px', textTransform: 'uppercase', fontWeight: 700, color: '#6B6B6B', borderBottom: '1px solid rgba(0,0,0,0.07)', width: 90 }}>
-                    Actions
-                  </th>
+                  <th style={{ ...TH, width: 76, minWidth: 76 }}>Actions</th>
                 )}
               </tr>
             </thead>
@@ -68,28 +77,32 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
                 <tr key={row.id ?? i}
                   onMouseEnter={e => { (e.currentTarget as HTMLTableRowElement).style.background = '#fafaf8'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLTableRowElement).style.background = ''; }}>
-                  {columns.map(c => (
-                    <td key={c.key} style={{ padding: '11px 16px', verticalAlign: 'middle', color: '#333', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-                      {c.render ? c.render(row) : (row[c.key] ?? '—')}
-                    </td>
-                  ))}
+                  {columns.map(c => {
+                    const rawVal = row[c.key];
+                    const plainText = !c.render && rawVal != null ? String(rawVal) : undefined;
+                    return (
+                      <td key={c.key} style={TD} title={plainText}>
+                        {c.render ? c.render(row) : (rawVal ?? '—')}
+                      </td>
+                    );
+                  })}
                   {showActions && (
-                    <td style={{ padding: '8px 16px', verticalAlign: 'middle', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        {onEdit && (
+                    <td style={{ ...TD, maxWidth: 76, width: 76, padding: '6px 10px' }}>
+                      <div style={{ display: 'flex', gap: 5 }}>
+                        {onEdit && row.id != null && (
                           <button
-                            style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}
-                            onClick={() => onEdit(row)} title="Edit"
+                            style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}
+                            onClick={() => onEdit!(row)} title="Edit"
                           >
-                            <i className="fas fa-pen" style={{ fontSize: 11 }}></i>
+                            <i className="fas fa-pen" style={{ fontSize: 10 }}></i>
                           </button>
                         )}
-                        {onDelete && (
+                        {onDelete && row.id != null && (
                           <button
-                            style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}
-                            onClick={() => onDelete(row.id)} title="Delete"
+                            style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}
+                            onClick={() => onDelete!(row.id)} title="Delete"
                           >
-                            <i className="fas fa-trash" style={{ fontSize: 11 }}></i>
+                            <i className="fas fa-trash" style={{ fontSize: 10 }}></i>
                           </button>
                         )}
                       </div>
@@ -106,5 +119,3 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
 };
 
 export default ERPTable;
-
-
