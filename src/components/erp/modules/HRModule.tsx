@@ -32,7 +32,7 @@ function DelDlg({ onCancel, onConfirm }: { onCancel:()=>void; onConfirm:()=>void
   );
 }
 
-const defEmp  = { full_name:'',email:'',phone:'',department:'',designation:'',status:'active',salary:'',date_joined:'' };
+const defEmp  = { full_name:'',email:'',phone:'',department:'',designation:'',status:'active',salary:'',joined_on:'' };
 const defDept = { name:'',code:'',description:'' };
 const defLeave = { employee:'',type:'annual',from_date:'',to_date:'',reason:'' };
 
@@ -56,10 +56,10 @@ const HRModule = () => {
   const saveEmployee = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const body: any = { ...empF };
-      if (empF.department) body.department = Number(empF.department); else delete body.department;
-      if (empF.salary) body.salary = Number(empF.salary); else delete body.salary;
-      if (!empF.date_joined) delete body.date_joined;
+      const body: any = { full_name: empF.full_name, email: empF.email, phone: empF.phone, designation: empF.designation, status: empF.status };
+      if (empF.department) body.department = Number(empF.department);
+      if (empF.salary) body.salary = Number(empF.salary);
+      if (empF.joined_on) body.joined_on = empF.joined_on;
       if (editing) { await employees.update(editing.id, body); toast.success('Employee updated'); }
       else { await employees.create(body); toast.success('Employee created'); }
       close();
@@ -130,7 +130,7 @@ const HRModule = () => {
 
       {tab==='Employees' && <ERPTable title="Employees" columns={empCols} data={employees.data} loading={employees.loading} error={employees.error} isAdmin={isAdmin}
         onAdd={()=>{ setEmpF({...defEmp}); setEditing(null); setShowModal(true); }}
-        onEdit={r=>{ setEditing(r); setEmpF({full_name:r.full_name||'',email:r.email||'',phone:r.phone||'',department:String(r.department||''),designation:r.designation||'',status:r.status||'active',salary:r.salary?String(r.salary):'',date_joined:r.date_joined||''}); setShowModal(true); }}
+        onEdit={r=>{ setEditing(r); setEmpF({full_name:r.full_name||'',email:r.email||'',phone:r.phone||'',department:String(r.department||''),designation:r.designation||'',status:r.status||'active',salary:r.salary?String(r.salary):'',joined_on:r.joined_on||''}); setShowModal(true); }}
         onDelete={id=>setDelId(id)} />}
 
       {tab==='Departments' && <ERPTable title="Departments" columns={deptCols} data={departments.data} loading={departments.loading} error={departments.error} isAdmin={isAdmin}
@@ -167,11 +167,11 @@ const HRModule = () => {
               </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
                 <div><label style={lbl}>Designation</label><input value={empF.designation} onChange={e=>setEmpF(f=>({...f,designation:e.target.value}))} style={inp} /></div>
-                <div><label style={lbl}>Status</label><select value={empF.status} onChange={e=>setEmpF(f=>({...f,status:e.target.value}))} style={inp}><option value="active">Active</option><option value="inactive">Inactive</option><option value="on_leave">On Leave</option><option value="terminated">Terminated</option></select></div>
+                <div><label style={lbl}>Status</label><select value={empF.status} onChange={e=>setEmpF(f=>({...f,status:e.target.value}))} style={inp}><option value="active">Active</option><option value="on_leave">On Leave</option><option value="resigned">Resigned</option><option value="terminated">Terminated</option></select></div>
               </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
                 <div><label style={lbl}>Salary ($)</label><input type="number" value={empF.salary} onChange={e=>setEmpF(f=>({...f,salary:e.target.value}))} style={inp} step="0.01" min="0" /></div>
-                <div><label style={lbl}>Date Joined</label><input type="date" value={empF.date_joined} onChange={e=>setEmpF(f=>({...f,date_joined:e.target.value}))} style={inp} /></div>
+                <div><label style={lbl}>Date Joined</label><input type="date" value={empF.joined_on} onChange={e=>setEmpF(f=>({...f,joined_on:e.target.value}))} style={inp} /></div>
               </div>
               <div style={{display:'flex',gap:10,marginTop:4}}><button type="button" onClick={close} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing?'Update':'Save'}</button></div>
             </form>
@@ -214,7 +214,7 @@ const HRModule = () => {
                   {employees.data.map((emp:any)=><option key={emp.id} value={emp.id}>{emp.full_name}</option>)}
                 </select>
               </div>
-              <div><label style={lbl}>Leave Type *</label><select value={leaveF.type} onChange={e=>setLeaveF(f=>({...f,type:e.target.value}))} style={inp}><option value="annual">Annual</option><option value="sick">Sick</option><option value="casual">Casual</option><option value="maternity">Maternity</option><option value="paternity">Paternity</option><option value="unpaid">Unpaid</option><option value="other">Other</option></select></div>
+              <div><label style={lbl}>Leave Type *</label><select value={leaveF.type} onChange={e=>setLeaveF(f=>({...f,type:e.target.value}))} style={inp}><option value="annual">Annual</option><option value="sick">Sick</option><option value="unpaid">Unpaid</option><option value="maternity">Maternity</option><option value="paternity">Paternity</option><option value="other">Other</option></select></div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
                 <div><label style={lbl}>From Date *</label><input type="date" value={leaveF.from_date} onChange={e=>setLeaveF(f=>({...f,from_date:e.target.value}))} style={inp} required /></div>
                 <div><label style={lbl}>To Date *</label><input type="date" value={leaveF.to_date} onChange={e=>setLeaveF(f=>({...f,to_date:e.target.value}))} style={inp} required /></div>

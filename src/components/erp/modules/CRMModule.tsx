@@ -33,7 +33,7 @@ function DelDlg({ onCancel, onConfirm }: { onCancel:()=>void; onConfirm:()=>void
 
 const defCust = { name:'',company:'',email:'',phone:'',industry:'',is_active:'true' };
 const defLead = { name:'',company:'',email:'',source:'website',status:'new',estimated_value:'' };
-const defAct  = { type:'call',summary:'',occurred_at:'' };
+const defAct  = { type:'call', summary:'', occurred_at:'' };
 
 const CRMModule = () => {
   const isAdmin = isSuperUser();
@@ -180,7 +180,7 @@ const CRMModule = () => {
               </div>
               <div><label style={lbl}>Email</label><input type="email" value={leadF.email} onChange={e=>setLeadF(f=>({...f,email:e.target.value}))} style={inp} /></div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
-                <div><label style={lbl}>Source</label><select value={leadF.source} onChange={e=>setLeadF(f=>({...f,source:e.target.value}))} style={inp}><option value="website">Website</option><option value="referral">Referral</option><option value="social">Social</option><option value="cold_call">Cold Call</option><option value="event">Event</option><option value="other">Other</option></select></div>
+                <div><label style={lbl}>Source</label><select value={leadF.source} onChange={e=>setLeadF(f=>({...f,source:e.target.value}))} style={inp}><option value="website">Website</option><option value="referral">Referral</option><option value="outbound">Outbound</option><option value="social">Social Media</option><option value="event">Event</option><option value="other">Other</option></select></div>
                 <div><label style={lbl}>Status</label><select value={leadF.status} onChange={e=>setLeadF(f=>({...f,status:e.target.value}))} style={inp}><option value="new">New</option><option value="contacted">Contacted</option><option value="qualified">Qualified</option><option value="won">Won</option><option value="lost">Lost</option></select></div>
               </div>
               <div><label style={lbl}>Estimated Value ($)</label><input type="number" value={leadF.estimated_value} onChange={e=>setLeadF(f=>({...f,estimated_value:e.target.value}))} style={inp} step="0.01" min="0" /></div>
@@ -199,7 +199,7 @@ const CRMModule = () => {
             </div>
             <form onSubmit={saveActivity} style={{display:'flex',flexDirection:'column',gap:14}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
-                <div><label style={lbl}>Type *</label><select value={actF.type} onChange={e=>setActF(f=>({...f,type:e.target.value}))} style={inp}><option value="call">Call</option><option value="email">Email</option><option value="meeting">Meeting</option><option value="note">Note</option><option value="task">Task</option></select></div>
+                <div><label style={lbl}>Type *</label><select value={actF.type} onChange={e=>setActF(f=>({...f,type:e.target.value}))} style={inp}><option value="call">Call</option><option value="email">Email</option><option value="meeting">Meeting</option><option value="demo">Demo</option><option value="note">Note</option></select></div>
                 <div><label style={lbl}>Date &amp; Time</label><input type="datetime-local" value={actF.occurred_at} onChange={e=>setActF(f=>({...f,occurred_at:e.target.value}))} style={inp} /></div>
               </div>
               <div><label style={lbl}>Summary *</label><textarea value={actF.summary} onChange={e=>setActF(f=>({...f,summary:e.target.value}))} style={{...inp,resize:'vertical',minHeight:80}} required /></div>

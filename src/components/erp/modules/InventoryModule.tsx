@@ -11,9 +11,10 @@ const SAVE: React.CSSProperties = { background:'linear-gradient(145deg,#e8a84e 0
 const CNCL: React.CSSProperties = { background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRadius:9,padding:'9px 20px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13 };
 
 const movColors: Record<string,{bg:string,color:string}> = {
-  in:         { bg:'#d1fae5', color:'#065f46' },
-  out:        { bg:'#fee2e2', color:'#991b1b' },
-  adjustment: { bg:'#dbeafe', color:'#1d4ed8' },
+  in:       { bg:'#d1fae5', color:'#065f46' },
+  out:      { bg:'#fee2e2', color:'#991b1b' },
+  transfer: { bg:'#ede9fe', color:'#6d28d9' },
+  adjust:   { bg:'#dbeafe', color:'#1d4ed8' },
 };
 
 function DelDlg({ onCancel, onConfirm }: { onCancel:()=>void; onConfirm:()=>void }) {
@@ -31,8 +32,8 @@ function DelDlg({ onCancel, onConfirm }: { onCancel:()=>void; onConfirm:()=>void
   );
 }
 
-const defP = { name:'',code:'',category:'',unit:'piece',cost_price:'',sale_price:'',is_active:'true' };
-const defW = { name:'',code:'',location:'',is_active:'true' };
+const defP = { name:'',category:'',unit:'pcs',cost_price:'',sale_price:'',is_active:'true' };
+const defW = { name:'',location:'',is_active:'true' };
 const defM = { product:'',warehouse:'',type:'in',quantity:'',notes:'' };
 
 const InventoryModule = () => {
@@ -55,7 +56,8 @@ const InventoryModule = () => {
   const saveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const body = { ...pF, is_active: pF.is_active==='true', cost_price: Number(pF.cost_price)||0, sale_price: Number(pF.sale_price)||0 };
+      const body: any = { name: pF.name, unit: pF.unit, is_active: pF.is_active==='true', cost_price: Number(pF.cost_price)||0, sale_price: Number(pF.sale_price)||0 };
+      if (pF.category) body.category = Number(pF.category);
       if (editing) { await products.update(editing.id, body); toast.success('Product updated'); }
       else { await products.create(body); toast.success('Product created'); }
       closeModal();
@@ -65,7 +67,7 @@ const InventoryModule = () => {
   const saveWarehouse = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const body = { ...wF, is_active: wF.is_active==='true' };
+      const body: any = { name: wF.name, location: wF.location, is_active: wF.is_active==='true' };
       if (editing) { await warehouses.update(editing.id, body); toast.success('Warehouse updated'); }
       else { await warehouses.create(body); toast.success('Warehouse created'); }
       closeModal();
@@ -75,7 +77,7 @@ const InventoryModule = () => {
   const saveMovement = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const body: any = { type: mF.type, quantity: Number(mF.quantity), notes: mF.notes };
+      const body: any = { type: mF.type, quantity: Number(mF.quantity), notes: mF.notes, occurred_at: new Date().toISOString() };
       if (mF.product)   body.product   = Number(mF.product);
       if (mF.warehouse) body.warehouse = Number(mF.warehouse);
       await movements.create(body);
@@ -129,11 +131,11 @@ const InventoryModule = () => {
 
       {tab==='Products' && <ERPTable title="Products" columns={pCols} data={products.data} loading={products.loading} error={products.error} isAdmin={isAdmin}
         onAdd={()=>{ setPF({...defP}); setEditing(null); setModal('addP'); }}
-        onEdit={r=>{ setEditing(r); setPF({name:r.name||'',code:r.code||'',category:r.category||'',unit:r.unit||'piece',cost_price:String(r.cost_price||''),sale_price:String(r.sale_price||''),is_active:String(r.is_active??true)}); setModal('editP'); }}
+        onEdit={r=>{ setEditing(r); setPF({name:r.name||'',category:String(r.category||''),unit:r.unit||'pcs',cost_price:String(r.cost_price||''),sale_price:String(r.sale_price||''),is_active:String(r.is_active??true)}); setModal('editP'); }}
         onDelete={id=>setDelId(id)} />}
       {tab==='Warehouses' && <ERPTable title="Warehouses" columns={wCols} data={warehouses.data} loading={warehouses.loading} error={warehouses.error} isAdmin={isAdmin}
         onAdd={()=>{ setWF({...defW}); setEditing(null); setModal('addW'); }}
-        onEdit={r=>{ setEditing(r); setWF({name:r.name||'',code:r.code||'',location:r.location||'',is_active:String(r.is_active??true)}); setModal('editW'); }}
+        onEdit={r=>{ setEditing(r); setWF({name:r.name||'',location:r.location||'',is_active:String(r.is_active??true)}); setModal('editW'); }}
         onDelete={id=>setDelId(id)} />}
       {tab==='Movements' && <ERPTable title="Stock Movements" columns={mCols} data={movements.data} loading={movements.loading} error={movements.error} isAdmin={isAdmin}
         onAdd={()=>{ setMF({...defM}); setEditing(null); setModal('addM'); }}
@@ -150,9 +152,8 @@ const InventoryModule = () => {
             <form onSubmit={saveProduct} style={{display:'flex',flexDirection:'column',gap:14}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
                 <div><label style={lbl}>Name *</label><input value={pF.name} onChange={e=>setPF(f=>({...f,name:e.target.value}))} style={inp} required /></div>
-                <div><label style={lbl}>SKU / Code</label><input value={pF.code} onChange={e=>setPF(f=>({...f,code:e.target.value}))} style={inp} /></div>
-                <div><label style={lbl}>Category</label><input value={pF.category} onChange={e=>setPF(f=>({...f,category:e.target.value}))} style={inp} /></div>
-                <div><label style={lbl}>Unit</label><select value={pF.unit} onChange={e=>setPF(f=>({...f,unit:e.target.value}))} style={inp}><option value="piece">Piece</option><option value="kg">kg</option><option value="litre">Litre</option><option value="box">Box</option><option value="meter">Meter</option></select></div>
+                <div><label style={lbl}>Unit</label><select value={pF.unit} onChange={e=>setPF(f=>({...f,unit:e.target.value}))} style={inp}><option value="pcs">Pieces</option><option value="kg">Kilogram</option><option value="lt">Litre</option><option value="hr">Hour</option><option value="lic">License</option><option value="sub">Subscription</option></select></div>
+                <div><label style={lbl}>Category ID</label><input type="number" value={pF.category} onChange={e=>setPF(f=>({...f,category:e.target.value}))} style={inp} placeholder="optional" /></div>
                 <div><label style={lbl}>Cost Price</label><input type="number" value={pF.cost_price} onChange={e=>setPF(f=>({...f,cost_price:e.target.value}))} style={inp} step="0.01" min="0" /></div>
                 <div><label style={lbl}>Sale Price</label><input type="number" value={pF.sale_price} onChange={e=>setPF(f=>({...f,sale_price:e.target.value}))} style={inp} step="0.01" min="0" /></div>
                 <div><label style={lbl}>Active</label><select value={pF.is_active} onChange={e=>setPF(f=>({...f,is_active:e.target.value}))} style={inp}><option value="true">Yes</option><option value="false">No</option></select></div>
@@ -172,10 +173,7 @@ const InventoryModule = () => {
               <button onClick={closeModal} style={{background:'none',border:'none',cursor:'pointer',color:'#6B6B6B',fontSize:22}}>&times;</button>
             </div>
             <form onSubmit={saveWarehouse} style={{display:'flex',flexDirection:'column',gap:14}}>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
-                <div><label style={lbl}>Name *</label><input value={wF.name} onChange={e=>setWF(f=>({...f,name:e.target.value}))} style={inp} required /></div>
-                <div><label style={lbl}>Code</label><input value={wF.code} onChange={e=>setWF(f=>({...f,code:e.target.value}))} style={inp} /></div>
-              </div>
+              <div><label style={lbl}>Name *</label><input value={wF.name} onChange={e=>setWF(f=>({...f,name:e.target.value}))} style={inp} required /></div>
               <div><label style={lbl}>Location</label><input value={wF.location} onChange={e=>setWF(f=>({...f,location:e.target.value}))} style={inp} /></div>
               <div><label style={lbl}>Active</label><select value={wF.is_active} onChange={e=>setWF(f=>({...f,is_active:e.target.value}))} style={inp}><option value="true">Yes</option><option value="false">No</option></select></div>
               <div style={{display:'flex',gap:10,marginTop:4}}><button type="button" onClick={closeModal} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing?'Update':'Save'}</button></div>
@@ -196,7 +194,7 @@ const InventoryModule = () => {
               <div><label style={lbl}>Product</label><select value={mF.product} onChange={e=>setMF(f=>({...f,product:e.target.value}))} style={inp}><option value="">— Select —</option>{products.data.map((p:any)=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
               <div><label style={lbl}>Warehouse</label><select value={mF.warehouse} onChange={e=>setMF(f=>({...f,warehouse:e.target.value}))} style={inp}><option value="">— Select —</option>{warehouses.data.map((w:any)=><option key={w.id} value={w.id}>{w.name}</option>)}</select></div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
-                <div><label style={lbl}>Type</label><select value={mF.type} onChange={e=>setMF(f=>({...f,type:e.target.value}))} style={inp}><option value="in">In</option><option value="out">Out</option><option value="adjustment">Adjustment</option></select></div>
+                <div><label style={lbl}>Type</label><select value={mF.type} onChange={e=>setMF(f=>({...f,type:e.target.value}))} style={inp}><option value="in">Receipt (In)</option><option value="out">Issue (Out)</option><option value="transfer">Transfer</option><option value="adjust">Adjustment</option></select></div>
                 <div><label style={lbl}>Quantity *</label><input type="number" value={mF.quantity} onChange={e=>setMF(f=>({...f,quantity:e.target.value}))} style={inp} required min="1" /></div>
               </div>
               <div><label style={lbl}>Notes</label><input value={mF.notes} onChange={e=>setMF(f=>({...f,notes:e.target.value}))} style={inp} /></div>
