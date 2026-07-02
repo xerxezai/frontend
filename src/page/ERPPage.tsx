@@ -25,6 +25,12 @@ const GeneratePayroll      = lazy(() => import('../components/erp/modules/payrol
 const PayrollReports       = lazy(() => import('../components/erp/modules/payroll/PayrollReportsModule'));
 const MyPayslips           = lazy(() => import('../components/erp/modules/payroll/MyPayslipsModule'));
 
+// Profile & Settings pages
+const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
+const EditProfilePage     = lazy(() => import('../components/erp/profile/EditProfilePage'));
+const AccountSettingsPage = lazy(() => import('../components/erp/profile/AccountSettingsPage'));
+const PrivacySettingsPage = lazy(() => import('../components/erp/profile/PrivacySettingsPage'));
+
 const ModuleLoader = () => (
   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
     <div className="spinner-border" style={{ color: '#C9883A' }} role="status"></div>
@@ -67,6 +73,12 @@ const ERPPage = () => {
           <Route path="payroll-generate"   element={<GeneratePayroll />} />
           <Route path="payroll-reports"    element={<PayrollReports />} />
           <Route path="my-payslips"        element={<MyPayslips />} />
+
+          {/* Profile & Settings */}
+          <Route path="profile"             element={<MyProfilePage />} />
+          <Route path="profile/edit"        element={<EditProfilePage />} />
+          <Route path="settings/account"    element={<AccountSettingsPage />} />
+          <Route path="settings/privacy"    element={<PrivacySettingsPage />} />
         </Routes>
       </Suspense>
     </ERPLayout>
