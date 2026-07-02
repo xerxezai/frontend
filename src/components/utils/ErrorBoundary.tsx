@@ -46,7 +46,6 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     this.props.onError?.(error, errorInfo);
 
     if (import.meta.env.DEV) {
-      console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
   }
 
@@ -197,7 +196,6 @@ export function useErrorHandler() {
     const enableErrorReporting = import.meta.env.VITE_ENABLE_DEBUG === 'true';
     
     if (import.meta.env.DEV || enableErrorReporting) {
-      console.error('Captured error:', error);
     }
     
     setError(error);

@@ -216,7 +216,6 @@ export function useSafeHook<T>(
       hasError: false 
     };
   } catch (error: any) {
-    console.warn(`Safe hook wrapper caught error in ${name}:`, error);
     
     if (!hasError) {
       setHasError(true);

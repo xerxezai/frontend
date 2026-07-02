@@ -123,7 +123,6 @@ const ApiContactForm: React.FC<ContactFormProps> = ({
         }
       }
     } catch (err: any) {
-      console.error('Contact form submission error:', err);
       if (onSubmitError) {
         onSubmitError(err.message || 'Failed to send message');
       }

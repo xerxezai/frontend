@@ -173,7 +173,6 @@ const ContactSection2 = () => {
   const chars    = form.message.length;
 
   const handleSubmit = useCallback(async () => {
-    console.log('SUBMIT FIRED', form);
     if (!form.fullName.trim())  { toast.error("Full name is required."); return; }
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       toast.error("Please enter a valid email address."); return;

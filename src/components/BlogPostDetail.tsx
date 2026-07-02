@@ -40,7 +40,6 @@ export const BlogPostDetail = () => {
         setComments((response.data ?? []) as unknown as Comment[]);
       }
     } catch (err) {
-      console.error('Failed to fetch comments:', err);
     }
   };
 

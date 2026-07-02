@@ -140,7 +140,6 @@ const ContactFormPanel = memo(() => {
     setForm(p => ({ ...p, [k]: v })), []);
 
   const handleSubmit = useCallback(async () => {
-    console.log('SUBMIT FIRED', form);
     if (!form.name.trim()) { toast.error("Please enter your name."); return; }
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       toast.error("Please enter a valid email address."); return;

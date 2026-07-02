@@ -106,7 +106,6 @@ class ApiService {
         this.authTokens = JSON.parse(tokens);
       }
     } catch (error) {
-      console.warn('Failed to load auth tokens:', error);
       this.clearAuthTokens();
     }
   }
@@ -119,7 +118,6 @@ class ApiService {
       this.authTokens = tokens;
       localStorage.setItem('auth_tokens', JSON.stringify(tokens));
     } catch (error) {
-      console.error('Failed to save auth tokens:', error);
     }
   }
 
@@ -201,7 +199,6 @@ class ApiService {
       };
 
     } catch (error: any) {
-      console.error(`API Request Error [${endpoint}]:`, error);
 
       // Retry logic for network errors with exponential backoff
       if (retryCount < this.config.retryAttempts && 
