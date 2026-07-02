@@ -479,10 +479,10 @@ const ERPLayout = ({ children }: Props) => {
 
                   {/* menu items — no desc, single-line */}
                   {([
-                    { icon: 'fas fa-user-circle', label: 'My Profile',       to: '/erp/dashboard' },
-                    { icon: 'fas fa-edit',         label: 'Edit Profile',     to: '/erp/dashboard' },
-                    { icon: 'fas fa-cog',          label: 'Account Settings', to: '/erp/dashboard' },
-                    { icon: 'fas fa-lock',         label: 'Privacy Settings', to: '/erp/dashboard' },
+                    { icon: 'fas fa-user-circle', label: 'My Profile',       to: '/erp/profile' },
+                    { icon: 'fas fa-edit',         label: 'Edit Profile',     to: '/erp/profile/edit' },
+                    { icon: 'fas fa-cog',          label: 'Account Settings', to: '/erp/settings/account' },
+                    { icon: 'fas fa-lock',         label: 'Privacy Settings', to: '/erp/settings/privacy' },
                   ] as const).map(item => (
                     <button
                       key={item.label}
