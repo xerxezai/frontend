@@ -89,51 +89,118 @@ const SVC_CASCADE_B = [
 // ── Floating consultation card (hero right column) ─────────────────────────
 const ConsultationCard = () => (
   <div style={{
-    borderRadius: 18,
-    background: "linear-gradient(160deg,#faf7f3 0%,#e8e0d4 100%)",
-    border: "1px solid rgba(210,195,175,0.6)",
-    boxShadow: "0 6px 0 rgba(155,130,100,0.45),0 12px 32px rgba(0,0,0,0.18),inset 0 1px 0 rgba(255,255,255,0.9)",
-    padding: "28px 26px",
+    borderRadius: 20,
+    background: "linear-gradient(155deg,#fdf9f4 0%,#f0e4d0 100%)",
+    border: "1px solid rgba(201,136,58,0.18)",
+    borderTop: "3px solid #C9883A",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.95),0 8px 0 rgba(130,82,24,0.32),0 20px 60px rgba(0,0,0,0.18)",
+    padding: "26px 24px 22px",
+    position: "relative",
+    overflow: "hidden",
   }}>
-    <div style={{
-      width: 44, height: 44, borderRadius: 12, marginBottom: 16,
-      background: "linear-gradient(135deg,#C9883A 0%,#e8a84e 100%)",
-      boxShadow: "0 4px 0 rgba(150,95,30,0.5),0 6px 14px rgba(201,136,58,0.30)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-    }}>
-      <i className="fas fa-rocket" style={{ color: "#fff", fontSize: 18 }} />
+
+    {/* ambient glow top-right */}
+    <div aria-hidden="true" style={{
+      position: "absolute", top: -50, right: -50,
+      width: 160, height: 160, borderRadius: "50%",
+      background: "radial-gradient(circle,rgba(201,136,58,0.13) 0%,transparent 68%)",
+      pointerEvents: "none",
+    }} />
+
+    {/* header: icon + live badge */}
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, position: "relative" }}>
+      <div style={{
+        width: 50, height: 50, borderRadius: 14,
+        background: "linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)",
+        boxShadow: "0 4px 0 rgba(140,88,22,0.50),0 8px 18px rgba(201,136,58,0.38)",
+        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+      }}>
+        <i className="fas fa-rocket" style={{ color: "#fff", fontSize: 21 }} />
+      </div>
+      <span style={{
+        display: "inline-flex", alignItems: "center", gap: 5,
+        background: "rgba(74,222,128,0.10)",
+        border: "1px solid rgba(74,222,128,0.30)",
+        borderRadius: 20, padding: "4px 11px",
+        fontSize: 10, fontWeight: 700, letterSpacing: "0.13em",
+        textTransform: "uppercase", color: "#15803d",
+        fontFamily: "'DM Sans',sans-serif",
+      }}>
+        <span style={{
+          width: 5, height: 5, borderRadius: "50%",
+          background: "#4ade80",
+          boxShadow: "0 0 6px rgba(74,222,128,0.75)",
+          display: "inline-block", flexShrink: 0,
+        }} />
+        Responds in 24h
+      </span>
     </div>
+
+    {/* eyebrow + title */}
     <p style={{
-      fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
+      fontSize: 10, fontWeight: 700, letterSpacing: "0.15em",
       textTransform: "uppercase", color: "#C9883A",
-      fontFamily: "'DM Sans',sans-serif", marginBottom: 6,
+      fontFamily: "'DM Sans',sans-serif", marginBottom: 4, position: "relative",
     }}>
       Free Consultation
     </p>
     <h4 style={{
-      fontSize: 18, fontWeight: 800, color: "#1A1A1A", lineHeight: 1.25,
-      fontFamily: "'DM Sans',sans-serif", marginBottom: 10,
+      fontSize: 20, fontWeight: 800, color: "#1A1208",
+      lineHeight: 1.18, fontFamily: "'DM Sans',sans-serif",
+      marginBottom: 8, letterSpacing: "-0.02em", position: "relative",
     }}>
       Let's Build<br />Something Great
     </h4>
     <p style={{
-      fontSize: 13, color: "#6B6B6B", lineHeight: 1.65,
-      fontFamily: "'DM Sans',sans-serif", marginBottom: 20,
+      fontSize: 12.5, color: "#5C5047", lineHeight: 1.65,
+      fontFamily: "'DM Sans',sans-serif", marginBottom: 18, position: "relative",
     }}>
-      Talk to our experts and get a tailored solution for your enterprise.
+      Talk to our experts and get a tailored solution designed around your enterprise goals.
     </p>
-    <Link to="/contact" style={{
-      display: "inline-flex", alignItems: "center", gap: 8,
-      background: "linear-gradient(135deg,#C9883A 0%,#e8a84e 100%)",
-      color: "#fff", fontWeight: 700, fontSize: 13,
-      padding: "11px 22px", borderRadius: 10, textDecoration: "none",
-      fontFamily: "'DM Sans',sans-serif",
-      boxShadow: "0 4px 0 rgba(150,95,30,0.5),0 6px 18px rgba(201,136,58,0.30)",
-      letterSpacing: "0.02em",
-    }}>
-      Book a Free Demo
-      <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
+
+    {/* 3 trust chips */}
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginBottom: 18, position: "relative" }}>
+      {[
+        { icon: "fas fa-briefcase",   val: "50+",  label: "Projects" },
+        { icon: "far fa-clock",       val: "24h",  label: "Response" },
+        { icon: "fas fa-lock",        val: "NDA",  label: "Protected" },
+      ].map(d => (
+        <div key={d.label} style={{
+          background: "rgba(255,255,255,0.80)",
+          border: "1px solid rgba(201,136,58,0.14)",
+          borderRadius: 11, padding: "10px 7px", textAlign: "center",
+        }}>
+          <i className={d.icon} style={{ color: "#C9883A", fontSize: 11, marginBottom: 5, display: "block" }} />
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#1A1208", fontFamily: "'DM Sans',sans-serif", lineHeight: 1 }}>{d.val}</div>
+          <div style={{ fontSize: 9, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif", marginTop: 3, letterSpacing: "0.06em", textTransform: "uppercase" }}>{d.label}</div>
+        </div>
+      ))}
+    </div>
+
+    {/* CTA button */}
+    <Link
+      to="/contact"
+      style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        background: "linear-gradient(135deg,#e8a84e 0%,#C9883A 100%)",
+        color: "#fff", fontWeight: 700, fontSize: 14,
+        padding: "13px 20px", borderRadius: 12, textDecoration: "none",
+        fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.02em",
+        boxShadow: "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.40)",
+        cursor: "pointer", marginBottom: 14, position: "relative",
+        transition: "box-shadow 0.2s ease,transform 0.2s ease",
+      }}
+      onMouseEnter={e => { const a = e.currentTarget; a.style.transform = "translateY(-2px)"; a.style.boxShadow = "0 6px 0 rgba(130,78,18,0.50),0 12px 32px rgba(201,136,58,0.50)"; }}
+      onMouseLeave={e => { const a = e.currentTarget; a.style.transform = ""; a.style.boxShadow = "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.40)"; }}
+    >
+      Book a Free Demo <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
     </Link>
+
+    {/* trust strip */}
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, position: "relative" }}>
+      <i className="fas fa-lock" style={{ color: "#C9883A", fontSize: 10 }} />
+      <span style={{ fontSize: 11, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif" }}>All enquiries handled under strict NDA</span>
+    </div>
   </div>
 );
 
