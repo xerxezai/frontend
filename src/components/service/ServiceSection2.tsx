@@ -1,46 +1,38 @@
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Warp } from "@paper-design/shaders-react";
 
+/* ─── 3D tilt wrapper ─── */
 const Tilt3D = ({ children }: { children: React.ReactNode }) => {
   const ref = useRef<HTMLDivElement>(null);
-
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    const rx = (0.5 - y) * 16;
-    const ry = (x - 0.5) * 16;
-    el.style.transform = `perspective(960px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px) scale(1.01)`;
-    el.style.boxShadow = `0 24px 56px rgba(201,136,58,0.22), 0 0 0 1.5px rgba(201,136,58,0.35)`;
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    el.style.transform = `perspective(900px) rotateX(${(0.5-y)*15}deg) rotateY(${(x-0.5)*15}deg) translateY(-10px) scale(1.02)`;
+    el.style.boxShadow = `0 32px 72px rgba(0,0,0,0.60), 0 0 0 1.5px rgba(201,136,58,0.42)`;
   };
-
   const onLeave = () => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.transform = "perspective(960px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
-    el.style.boxShadow = "none";
+    const el = ref.current; if (!el) return;
+    el.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
+    el.style.boxShadow = "0 4px 28px rgba(0,0,0,0.38), 0 0 0 1px rgba(255,255,255,0.06)";
   };
-
   return (
-    <div
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{
-        transition: "transform 0.14s ease-out, box-shadow 0.14s ease-out",
-        transformStyle: "preserve-3d",
-        borderRadius: 20,
-        willChange: "transform",
-      }}
-    >
+    <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave} style={{
+      transition: "transform 0.15s ease-out, box-shadow 0.15s ease-out",
+      transformStyle: "preserve-3d",
+      borderRadius: 18,
+      willChange: "transform",
+      boxShadow: "0 4px 28px rgba(0,0,0,0.38), 0 0 0 1px rgba(255,255,255,0.06)",
+      height: "100%",
+    }}>
       {children}
     </div>
   );
 };
 
+/* ─── Service data ─── */
 const SERVICES = [
   {
     icon: "fas fa-brain",
@@ -86,7 +78,7 @@ const SERVICES = [
     icon: "fas fa-atom",
     title: "Quantum Computing",
     slug: "quantum-computing",
-    desc: "Harness quantum algorithms for complex optimization, cryptography, and next-gen enterprise computing challenges.",
+    desc: "Harness quantum algorithms for complex optimisation, cryptography, and next-gen enterprise computing challenges.",
     colors: ["hsl(340,55%,30%)", "hsl(352,68%,52%)", "hsl(334,60%,36%)", "hsl(358,75%,62%)"],
     shape: "stripes" as const,
   },
@@ -118,20 +110,20 @@ const SERVICES = [
 
 type ServiceItem = typeof SERVICES[number];
 
+/* ─── Single card ─── */
 const ServiceCard = ({ card }: { card: ServiceItem }) => {
   const [hovered, setHovered] = useState(false);
-
   return (
     <Tilt3D>
       <div
-        style={{ position: "relative", height: 300, borderRadius: 20, overflow: "hidden" }}
+        style={{ position: "relative", height: 310, borderRadius: 18, overflow: "hidden" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* CSS gradient always rendered — Warp WebGL only mounts on hover (1 context max vs 9) */}
+        {/* Colorful background — static gradient, WebGL on hover */}
         <div style={{
           position: "absolute", inset: 0,
-          background: `linear-gradient(135deg, ${card.colors[0]}, ${card.colors[2]})`,
+          background: `linear-gradient(140deg, ${card.colors[0]} 0%, ${card.colors[2]} 100%)`,
           pointerEvents: "none",
         }}>
           {hovered && (
@@ -139,38 +131,63 @@ const ServiceCard = ({ card }: { card: ServiceItem }) => {
               style={{ width: "100%", height: "100%" }}
               proportion={0.38}
               softness={0.95}
-              distortion={0.18}
-              swirl={0.75}
+              distortion={0.20}
+              swirl={0.80}
               swirlIterations={10}
               shape={card.shape}
               shapeScale={0.1}
               scale={1}
               rotation={0}
-              speed={0.6}
+              speed={0.65}
               colors={card.colors}
             />
           )}
         </div>
 
+        {/* Gold top-edge accent on hover */}
         <div style={{
-          position: "relative", zIndex: 1, height: "100%",
+          position: "absolute", top: 0, left: 0, right: 0, height: 2,
+          background: hovered
+            ? "linear-gradient(90deg, transparent, #C9883A 30%, #E8A84E 70%, transparent)"
+            : "transparent",
+          transition: "background 0.30s ease",
+          zIndex: 2,
+        }} />
+
+        {/* Glass overlay */}
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 1,
+          background: hovered ? "rgba(8,5,2,0.76)" : "rgba(10,6,3,0.80)",
+          border: hovered
+            ? "1px solid rgba(201,136,58,0.30)"
+            : "1px solid rgba(255,255,255,0.08)",
+          backdropFilter: hovered ? "blur(6px)" : "none",
+          transition: "background 0.28s ease, border 0.28s ease, backdrop-filter 0.28s ease",
+          borderRadius: 18,
+        }} />
+
+        {/* Content */}
+        <div style={{
+          position: "relative", zIndex: 2, height: "100%",
           display: "flex", flexDirection: "column",
           padding: "28px 28px 24px",
-          background: hovered ? "rgba(8,5,2,0.78)" : "rgba(12,8,4,0.72)",
-          border: hovered ? "1px solid rgba(201,136,58,0.35)" : "1px solid rgba(255,255,255,0.10)",
-          borderTop: hovered ? "2px solid rgba(201,136,58,0.70)" : "1px solid rgba(255,255,255,0.10)",
-          transition: "background 0.28s ease, border 0.28s ease",
         }}>
-          {/* Icon */}
+          {/* Icon box */}
           <div style={{
-            width: 52, height: 52, borderRadius: 14,
-            background: hovered ? "rgba(201,136,58,0.22)" : "rgba(255,255,255,0.12)",
-            border: hovered ? "1px solid rgba(201,136,58,0.45)" : "1px solid rgba(255,255,255,0.18)",
+            width: 54, height: 54, borderRadius: 14, flexShrink: 0,
+            background: hovered
+              ? "linear-gradient(135deg, rgba(201,136,58,0.28) 0%, rgba(201,136,58,0.12) 100%)"
+              : "rgba(255,255,255,0.10)",
+            border: hovered
+              ? "1px solid rgba(201,136,58,0.50)"
+              : "1px solid rgba(255,255,255,0.14)",
+            boxShadow: hovered
+              ? "0 4px 18px rgba(201,136,58,0.25), inset 0 1px 0 rgba(255,255,255,0.12)"
+              : "inset 0 1px 0 rgba(255,255,255,0.10)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            marginBottom: 20, fontSize: 20,
-            color: hovered ? "#E5B460" : "#ffffff",
-            flexShrink: 0,
-            transition: "background 0.25s ease, border 0.25s ease, color 0.25s ease",
+            fontSize: 21, marginBottom: 20,
+            color: hovered ? "#E8A84E" : "rgba(255,255,255,0.88)",
+            transition: "all 0.28s ease",
           }}>
             <i className={card.icon} />
           </div>
@@ -178,39 +195,46 @@ const ServiceCard = ({ card }: { card: ServiceItem }) => {
           {/* Title */}
           <h3 style={{
             marginBottom: 10, fontSize: 17, lineHeight: 1.3,
-            fontWeight: 700, color: "#ffffff",
+            fontWeight: 700,
+            color: hovered ? "#fff" : "rgba(240,237,230,0.92)",
             fontFamily: "'DM Sans', sans-serif",
+            transition: "color 0.25s ease",
           }}>
             <Link to={`/service/${card.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
               {card.title}
             </Link>
           </h3>
 
-          {/* Description */}
+          {/* Desc */}
           <p style={{
-            color: "rgba(255,255,255,0.72)",
-            fontSize: 13, lineHeight: 1.7,
+            color: hovered ? "rgba(240,237,230,0.75)" : "rgba(255,255,255,0.55)",
+            fontSize: 13, lineHeight: 1.72,
             marginBottom: 20, flex: 1,
             fontFamily: "'DM Sans', sans-serif",
+            transition: "color 0.25s ease",
           }}>
             {card.desc}
           </p>
 
-          {/* More Details link with arrow slide */}
+          {/* CTA link */}
           <Link
             to={`/service/${card.slug}`}
             style={{
               display: "inline-flex", alignItems: "center",
-              gap: hovered ? "10px" : "6px",
-              color: hovered ? "#E5B460" : "rgba(255,255,255,0.85)",
-              fontWeight: 600, fontSize: 12,
+              gap: hovered ? 10 : 6,
+              color: hovered ? "#E8A84E" : "rgba(255,255,255,0.55)",
+              fontWeight: 600, fontSize: 11.5,
               textDecoration: "none", fontFamily: "'DM Sans', sans-serif",
-              letterSpacing: "0.04em", textTransform: "uppercase",
+              letterSpacing: "0.08em", textTransform: "uppercase",
               transition: "color 0.25s ease, gap 0.25s ease",
             }}
           >
             More Details
-            <i className="far fa-arrow-right" style={{ fontSize: 11, transition: "transform 0.25s ease", transform: hovered ? "translateX(3px)" : "translateX(0)" }} />
+            <i className="far fa-arrow-right" style={{
+              fontSize: 11,
+              transition: "transform 0.25s ease",
+              transform: hovered ? "translateX(4px)" : "translateX(0)",
+            }} />
           </Link>
         </div>
       </div>
@@ -218,33 +242,122 @@ const ServiceCard = ({ card }: { card: ServiceItem }) => {
   );
 };
 
-const ServiceSection2 = () => (
-  <section style={{ background: "#FDFCFB", padding: "100px 0" }}>
-    <div className="container">
-      <div className="section-title text-center" style={{ marginBottom: 56 }}>
-        <span className="fade-in">Our Services</span>
-        <h2 className="char-animation">
-          Enterprise Solutions for <br /> Every Business Challenge
-        </h2>
+/* ─── Section ─── */
+const ServiceSection2 = () => {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  /* Stagger scroll-reveal on cards */
+  useEffect(() => {
+    const cards = gridRef.current?.querySelectorAll<HTMLDivElement>(".svc-card-wrap");
+    if (!cards) return;
+    cards.forEach(c => {
+      c.style.opacity = "0";
+      c.style.transform = "translateY(40px)";
+      c.style.transition = "opacity 0.60s ease, transform 0.60s cubic-bezier(0.22,1,0.36,1)";
+    });
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = parseInt((entry.target as HTMLElement).dataset.idx ?? "0");
+            setTimeout(() => {
+              (entry.target as HTMLElement).style.opacity = "1";
+              (entry.target as HTMLElement).style.transform = "translateY(0)";
+            }, idx * 70);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    cards.forEach(c => observer.observe(c));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section style={{
+      background: "linear-gradient(180deg, #0d0906 0%, #0a0806 100%)",
+      padding: "112px 0 100px",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Ambient gold glow behind heading */}
+      <div style={{
+        position: "absolute", top: -60, left: "50%",
+        transform: "translateX(-50%)",
+        width: 900, height: 480,
+        background: "radial-gradient(ellipse 60% 60% at 50% 30%, rgba(201,136,58,0.10) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
+      {/* Subtle horizontal scan-line texture */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+        backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 48px)",
+      }} />
+
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
+
+        {/* ── Section header ── */}
+        <div style={{ textAlign: "center", marginBottom: 68 }}>
+          {/* Eyebrow with flanking lines */}
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 22,
+          }}>
+            <span style={{ width: 36, height: 1, background: "linear-gradient(90deg, transparent, #C9883A)", display: "block" }} />
+            <span style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 11, fontWeight: 700,
+              letterSpacing: "0.14em", textTransform: "uppercase",
+              color: "#C9883A",
+            }}>Our Services</span>
+            <span style={{ width: 36, height: 1, background: "linear-gradient(90deg, #C9883A, transparent)", display: "block" }} />
+          </div>
+
+          {/* Heading */}
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "clamp(30px, 3.8vw, 52px)",
+            fontWeight: 800, lineHeight: 1.12,
+            color: "rgba(240,237,230,0.96)",
+            margin: "0 auto 18px",
+            maxWidth: 700,
+          }}>
+            Enterprise Solutions for<br />Every Business Challenge
+          </h2>
+
+          {/* Sub-line */}
+          <p style={{
+            color: "rgba(240,237,230,0.40)",
+            fontSize: 15, lineHeight: 1.65,
+            fontFamily: "'DM Sans', sans-serif",
+            maxWidth: 460, margin: "0 auto",
+          }}>
+            From AI-native ERP to quantum computing — architected, built, and delivered end to end.
+          </p>
+        </div>
+
+        {/* ── Cards grid ── */}
+        <div className="row g-4" ref={gridRef}>
+          {SERVICES.map((card, i) => (
+            <div
+              key={card.slug}
+              className="col-xl-4 col-lg-4 col-md-6 svc-card-wrap"
+              data-idx={String(i)}
+            >
+              <ServiceCard card={card} />
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="row g-4 xz-stagger-grid">
-        {SERVICES.map((card, index) => (
-          <div
-            key={card.slug}
-            className="col-xl-4 col-lg-4 col-md-6"
-            data-aos="fade-up"
-            data-aos-delay={index * 60}
-            data-aos-duration="900"
-            data-aos-easing="ease-out-cubic"
-            data-aos-once="true"
-          >
-            <ServiceCard card={card} />
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+      <style>{`
+        @media (prefers-reduced-motion: reduce) {
+          .svc-card-wrap { opacity: 1 !important; transform: none !important; transition: none !important; }
+        }
+      `}</style>
+    </section>
+  );
+};
 
 export default ServiceSection2;
