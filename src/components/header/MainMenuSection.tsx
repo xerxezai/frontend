@@ -4,7 +4,7 @@ import type { MenuItem } from "../../types";
 import { Link, useLocation } from "react-router-dom";
 
 const LINK_DEFAULT = "#e2e8f0";
-const LINK_HOVER   = "#cc785c";
+const LINK_HOVER   = "#C9883A";
 
 const MainMenuSection = () => {
   const { pathname } = useLocation();

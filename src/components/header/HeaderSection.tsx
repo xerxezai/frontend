@@ -13,29 +13,28 @@ const HeaderSection = ({ variant: _variant }: Props) => {
   const { toggleMobileMenu } = useCustomContext();
 
   return (
-    <header style={{
+    <header className="hdr-s1" style={{
       position: "fixed",
       top: 0,
       left: 0,
       right: 0,
       zIndex: 9999,
       height: 70,
-      background: "rgba(20,14,6,0.92)",
-      borderBottom: "1px solid rgba(180,140,100,0.16)",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.45)",
-      backdropFilter: "blur(20px) saturate(1.5)",
-      WebkitBackdropFilter: "blur(20px) saturate(1.5)",
+      background: "rgba(20,14,6,0.94)",
+      borderBottom: "1px solid rgba(201,136,58,0.18)",
+      boxShadow: "0 2px 0 rgba(201,136,58,0.18), 0 8px 32px rgba(0,0,0,0.50)",
+      backdropFilter: "blur(20px) saturate(1.4)",
+      WebkitBackdropFilter: "blur(20px) saturate(1.4)",
       transition: "background 250ms ease",
     }}>
       <div className="container h-100">
         <div style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
           height: "100%",
         }}>
-          {/* Wordmark */}
-          <Link to="/" style={{ display: "block", textDecoration: "none" }}>
+          {/* Logo — left */}
+          <Link to="/" style={{ display: "block", textDecoration: "none", flexShrink: 0, marginRight: 44 }}>
             <Image
               src="/assets/img/logo/xerxez_logo.png"
               alt="Xerxez Solutions"
@@ -45,59 +44,69 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             />
           </Link>
 
-          {/* Desktop nav */}
-          <div className="header-main d-none d-xl-block" style={{ padding: 0, flex: "none" }}>
+          {/* Desktop nav — immediately after logo, left-aligned */}
+          <div className="header-main d-none d-xl-block" style={{ padding: 0, flexShrink: 0 }}>
             <MainMenuSection />
           </div>
 
-          {/* Right cluster */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginLeft: 60 }}>            <Link to="/contact" style={{
-              display: "none",
-            }} className="d-none d-xl-inline-block" />
+          {/* Spacer pushes actions to far right */}
+          <div style={{ flex: 1 }} />
 
+          {/* Right actions */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {/* Sign in — text link */}
             <Link to="/erp" className="d-none d-xl-inline-flex" style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: 14,
               fontWeight: 500,
-              color: "rgba(255,255,255,0.82)",
+              color: "rgba(255,255,255,0.75)",
               textDecoration: "none",
-              padding: "8px 4px",
-            }}>
+              padding: "8px 10px",
+              transition: "color 150ms ease",
+            }}
+              onMouseOver={e => (e.currentTarget.style.color = "#C9883A")}
+              onMouseOut={e => (e.currentTarget.style.color = "rgba(255,255,255,0.75)")}
+            >
               Sign in
             </Link>
 
-            {/* Primary CTA — coral */}
-            <Link to="/contact" style={{
-              display: "inline-flex",
+            {/* Primary CTA — gold */}
+            <Link to="/contact" className="d-none d-xl-inline-flex" style={{
               alignItems: "center",
               gap: 6,
-              background: "#cc785c",
-              color: "#ffffff",
+              background: "linear-gradient(135deg, #E8A84E 0%, #C9883A 100%)",
+              color: "#0a0806",
               fontFamily: "'Inter', sans-serif",
               fontSize: 14,
-              fontWeight: 500,
+              fontWeight: 600,
               lineHeight: 1,
-              padding: "10px 18px",
-              height: 40,
+              padding: "0 20px",
+              height: 38,
               borderRadius: 8,
               textDecoration: "none",
-              transition: "background 150ms ease",
+              transition: "opacity 150ms ease, box-shadow 150ms ease",
+              boxShadow: "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.22)",
               whiteSpace: "nowrap",
             }}
-              onMouseOver={e => (e.currentTarget.style.background = "#a9583e")}
-              onMouseOut={e => (e.currentTarget.style.background = "#cc785c")}
+              onMouseOver={e => {
+                e.currentTarget.style.opacity = "0.88";
+                e.currentTarget.style.boxShadow = "0 1px 0 rgba(100,58,10,0.40), 0 3px 10px rgba(201,136,58,0.18)";
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.opacity = "1";
+                e.currentTarget.style.boxShadow = "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.22)";
+              }}
             >
               Get Started
             </Link>
 
-            {/* Hamburger — mobile */}
+            {/* Hamburger — mobile only */}
             <button
               className="d-xl-none"
               onClick={toggleMobileMenu}
               style={{
                 background: "none",
-                border: "1px solid rgba(180,140,100,0.3)",
+                border: "1px solid rgba(201,136,58,0.28)",
                 borderRadius: 8,
                 padding: "8px 10px",
                 cursor: "pointer",

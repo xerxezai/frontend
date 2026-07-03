@@ -1636,6 +1636,25 @@ p {
   color: $theme-color-2;
 }
 
+/* ── hdr-s1 (HeaderSection / home page) dark nav overrides ── */
+.hdr-s1 .header-main .main-menu ul li > a {
+  color: rgba(240, 237, 230, 0.80) !important;
+  transition: color 0.22s ease !important;
+}
+.hdr-s1 .header-main .main-menu ul li:hover > a {
+  color: #C9883A !important;
+}
+.hdr-s1 .header-main .main-menu ul li.nav-active > a {
+  color: #C9883A !important;
+}
+.hdr-s1 .header-main .main-menu ul li .submenu li a {
+  color: rgba(240, 237, 230, 0.70) !important;
+}
+.hdr-s1 .header-main .main-menu ul li .submenu li a:hover,
+.hdr-s1 .header-main .main-menu ul li .submenu li:hover > a {
+  color: #C9883A !important;
+}
+
 /* ── header-section-2 dark nav overrides ── */
 
 /* top-level links: cream on dark, gold on hover with animated underline */
