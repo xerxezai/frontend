@@ -28,42 +28,34 @@ const HeaderSection = ({ variant: _variant }: Props) => {
       transition: "background 250ms ease",
     }}>
       <div className="container h-100">
+        {/* 3-column grid: logo | nav (centred) | actions */}
         <div style={{
-          position: "relative",
-          display: "flex",
+          display: "grid",
+          gridTemplateColumns: "1fr auto 1fr",
           alignItems: "center",
           height: "100%",
+          width: "100%",
         }}>
-          {/* Logo — far left */}
-          <Link to="/" style={{ display: "block", textDecoration: "none", flexShrink: 0 }}>
-            <Image
-              src="/assets/img/logo/xerxez_logo.png"
-              alt="Xerxez Solutions"
-              width={220}
-              height={80}
-              style={{ height: 100, width: "auto", display: "block" }}
-            />
-          </Link>
+          {/* Col 1 — Logo left */}
+          <div>
+            <Link to="/" style={{ display: "inline-block", textDecoration: "none" }}>
+              <Image
+                src="/assets/img/logo/xerxez_logo.png"
+                alt="Xerxez Solutions"
+                width={220}
+                height={80}
+                style={{ height: 100, width: "auto", display: "block" }}
+              />
+            </Link>
+          </div>
 
-          {/* Desktop nav — Portfolio centred on page */}
-          <div
-            className="header-main d-none d-xl-block"
-            style={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-              padding: 0,
-              flexShrink: 0,
-            }}
-          >
+          {/* Col 2 — Nav dead-centre */}
+          <div className="header-main d-none d-xl-block" style={{ padding: 0 }}>
             <MainMenuSection />
           </div>
 
-          {/* Spacer pushes actions to far right */}
-          <div style={{ flex: 1 }} />
-
-          {/* Right actions */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {/* Col 3 — Actions right */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10 }}>
             {/* Sign in — text link */}
             <Link to="/erp" className="d-none d-xl-inline-flex" style={{
               fontFamily: "'Inter', sans-serif",
