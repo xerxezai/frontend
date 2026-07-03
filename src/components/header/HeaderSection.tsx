@@ -50,7 +50,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             className="header-main d-none d-xl-block"
             style={{
               position: "absolute",
-              left: "50%",
+              left: "calc(50% - 60px)",
               transform: "translateX(-50%)",
               padding: 0,
               flexShrink: 0,
