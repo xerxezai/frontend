@@ -276,25 +276,11 @@ const ServiceSection2 = () => {
 
   return (
     <section style={{
-      background: "linear-gradient(180deg, #0d0906 0%, #0a0806 100%)",
+      background: "#FDFCFB",
       padding: "112px 0 100px",
       position: "relative",
       overflow: "hidden",
     }}>
-      {/* Ambient gold glow behind heading */}
-      <div style={{
-        position: "absolute", top: -60, left: "50%",
-        transform: "translateX(-50%)",
-        width: 900, height: 480,
-        background: "radial-gradient(ellipse 60% 60% at 50% 30%, rgba(201,136,58,0.10) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
-
-      {/* Subtle horizontal scan-line texture */}
-      <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-        backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 48px)",
-      }} />
 
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
 
@@ -319,7 +305,7 @@ const ServiceSection2 = () => {
             fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(30px, 3.8vw, 52px)",
             fontWeight: 800, lineHeight: 1.12,
-            color: "rgba(240,237,230,0.96)",
+            color: "#141413",
             margin: "0 auto 18px",
             maxWidth: 700,
           }}>
@@ -328,7 +314,7 @@ const ServiceSection2 = () => {
 
           {/* Sub-line */}
           <p style={{
-            color: "rgba(240,237,230,0.40)",
+            color: "rgba(20,20,19,0.50)",
             fontSize: 15, lineHeight: 1.65,
             fontFamily: "'DM Sans', sans-serif",
             maxWidth: 460, margin: "0 auto",

@@ -45,16 +45,10 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             />
           </Link>
 
-          {/* Desktop nav — true center of page */}
+          {/* Desktop nav — left side, right after logo */}
           <div
             className="header-main d-none d-xl-block"
-            style={{
-              position: "absolute",
-              left: "calc(50% - 60px)",
-              transform: "translateX(-50%)",
-              padding: 0,
-              flexShrink: 0,
-            }}
+            style={{ padding: 0, flexShrink: 0, marginLeft: 40 }}
           >
             <MainMenuSection />
           </div>
