@@ -1537,8 +1537,8 @@ p {
   width: 100%;
 }
 .header-section-2 .header-top-section {
-  background: $bg;
-  border-bottom: 1px solid $border;
+  background: #0a0806;
+  border-bottom: 1px solid rgba(201, 136, 58, 0.12);
 }
 .header-section-2 .container {
   max-width: 1555px;
@@ -1547,21 +1547,26 @@ p {
   position: static;
 }
 .header-section-2 .header-1.sticky {
-  background-color: #F2EFE9;
+  background: rgba(10, 8, 6, 0.94) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 2px 0 rgba(201,136,58,0.22), 0 4px 32px rgba(0,0,0,0.52);
 }
 .header-section-2 .header-1 .container {
   max-width: 1555px;
 }
 .header-section-2 .header-1 .mega-menu-wrapper {
-  border-radius: 9px;
-  background: linear-gradient(180deg, #faf7f3 0%, #e8e2d8 100%);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #1e140a 0%, #0f0b07 100%);
   box-shadow:
-    0 5px 0 rgba(155, 132, 108, 0.50),
-    0 8px 28px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgba(201, 136, 58, 0.18),
+    0 5px 0 rgba(120, 72, 14, 0.55),
+    0 12px 44px rgba(0, 0, 0, 0.58);
   padding: 0 40px;
-  border: 1px solid rgba(181, 160, 144, 0.35);
+  border: 1px solid rgba(201, 136, 58, 0.22);
   transform: translateZ(0);
+  transition: box-shadow 0.3s ease;
 }
 .header-section-2 .header-top-wrapper {
   padding: 9px 0;
@@ -1629,6 +1634,80 @@ p {
 }
 .header-section-2 .header-top-wrapper.style-2 .social-icon a:hover {
   color: $theme-color-2;
+}
+
+/* ── header-section-2 dark nav overrides ── */
+
+/* top-level links: cream on dark, gold on hover with animated underline */
+.header-section-2 .mega-menu-wrapper .main-menu ul li > a {
+  color: rgba(240, 237, 230, 0.78) !important;
+  position: relative;
+  transition: color 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+.header-section-2 .mega-menu-wrapper .main-menu ul li > a::after {
+  content: '';
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: #C9883A;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.header-section-2 .mega-menu-wrapper .main-menu ul li:hover > a {
+  color: #C9883A !important;
+  transform: translateY(-1px);
+}
+.header-section-2 .mega-menu-wrapper .main-menu ul li:hover > a::after {
+  transform: scaleX(1);
+}
+.header-section-2 .mega-menu-wrapper .main-menu ul li.nav-active > a {
+  color: #C9883A !important;
+}
+.header-section-2 .mega-menu-wrapper .main-menu ul li.nav-active > a::after {
+  transform: scaleX(1);
+}
+
+/* submenu: dark warm card with 3D rotateX entrance */
+.header-section-2 .mega-menu-wrapper .main-menu ul li .submenu {
+  background: linear-gradient(180deg, #1e140a 0%, #100b06 100%) !important;
+  border: 1px solid rgba(201, 136, 58, 0.18) !important;
+  border-top: 2px solid rgba(201, 136, 58, 0.50) !important;
+  box-shadow: 0 8px 44px rgba(0, 0, 0, 0.60) !important;
+  transform-origin: top center;
+  transform: translateY(8px) perspective(800px) rotateX(-9deg);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.28s !important;
+}
+.header-section-2 .mega-menu-wrapper .main-menu ul li:hover > .submenu {
+  transform: translateY(0) perspective(800px) rotateX(0deg) !important;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* submenu links */
+.header-section-2 .mega-menu-wrapper .main-menu ul li .submenu li a {
+  color: rgba(240, 237, 230, 0.70) !important;
+}
+.header-section-2 .mega-menu-wrapper .main-menu ul li .submenu li a:hover,
+.header-section-2 .mega-menu-wrapper .main-menu ul li .submenu li:hover > a {
+  color: #C9883A !important;
+}
+
+/* hamburger for mobile dark nav */
+.header-section-2 .header-main .sidebar__toggle {
+  color: rgba(240, 237, 230, 0.85) !important;
+}
+
+/* sticky state: keep dark glass + gold links */
+.header-section-2 .header-1.sticky .mega-menu-wrapper .main-menu ul li > a {
+  color: rgba(240, 237, 230, 0.78) !important;
+}
+.header-section-2 .header-1.sticky .mega-menu-wrapper .main-menu ul li:hover > a {
+  color: #C9883A !important;
 }
 
 .sticky {
