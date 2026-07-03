@@ -29,6 +29,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
     }}>
       <div className="container h-100">
         <div style={{
+          position: "relative",
           display: "flex",
           alignItems: "center",
           height: "100%",
@@ -44,13 +45,22 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             />
           </Link>
 
-          {/* Spacer pushes nav + actions to far right */}
-          <div style={{ flex: 1 }} />
-
-          {/* Desktop nav — right side, before action buttons */}
-          <div className="header-main d-none d-xl-block" style={{ padding: 0, flexShrink: 0, marginRight: 80 }}>
+          {/* Desktop nav — true center of page */}
+          <div
+            className="header-main d-none d-xl-block"
+            style={{
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+              padding: 0,
+              flexShrink: 0,
+            }}
+          >
             <MainMenuSection />
           </div>
+
+          {/* Spacer pushes actions to far right */}
+          <div style={{ flex: 1 }} />
 
           {/* Right actions */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
