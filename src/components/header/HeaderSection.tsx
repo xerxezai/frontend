@@ -33,8 +33,8 @@ const HeaderSection = ({ variant: _variant }: Props) => {
           alignItems: "center",
           height: "100%",
         }}>
-          {/* Logo — left */}
-          <Link to="/" style={{ display: "block", textDecoration: "none", flexShrink: 0, marginRight: 44 }}>
+          {/* Logo — far left */}
+          <Link to="/" style={{ display: "block", textDecoration: "none", flexShrink: 0 }}>
             <Image
               src="/assets/img/logo/xerxez_logo.png"
               alt="Xerxez Solutions"
@@ -44,13 +44,13 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             />
           </Link>
 
-          {/* Desktop nav — immediately after logo, left-aligned */}
-          <div className="header-main d-none d-xl-block" style={{ padding: 0, flexShrink: 0 }}>
+          {/* Spacer pushes nav + actions to far right */}
+          <div style={{ flex: 1 }} />
+
+          {/* Desktop nav — right side, before action buttons */}
+          <div className="header-main d-none d-xl-block" style={{ padding: 0, flexShrink: 0, marginRight: 32 }}>
             <MainMenuSection />
           </div>
-
-          {/* Spacer pushes actions to far right */}
-          <div style={{ flex: 1 }} />
 
           {/* Right actions */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
