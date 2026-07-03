@@ -48,7 +48,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
           <div style={{ flex: 1 }} />
 
           {/* Desktop nav — right side, before action buttons */}
-          <div className="header-main d-none d-xl-block" style={{ padding: 0, flexShrink: 0, marginRight: 32 }}>
+          <div className="header-main d-none d-xl-block" style={{ padding: 0, flexShrink: 0, marginRight: 80 }}>
             <MainMenuSection />
           </div>
 
