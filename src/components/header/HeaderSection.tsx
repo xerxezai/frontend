@@ -1,6 +1,5 @@
-import {} from "react";
-import MainMenuSection from "./MainMenuSection";
 import { useCustomContext } from "../../context/context";
+import MainMenuSection from "./MainMenuSection";
 import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
@@ -8,107 +7,112 @@ interface Props {
   variant?: boolean;
 }
 
-
 const HeaderSection = ({ variant: _variant }: Props) => {
   const { toggleMobileMenu } = useCustomContext();
 
   return (
-    <header className="hdr-s1" style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      zIndex: 9999,
-      height: 70,
-      background: "rgba(20,14,6,0.94)",
-      borderBottom: "1px solid rgba(201,136,58,0.18)",
-      boxShadow: "0 2px 0 rgba(201,136,58,0.18), 0 8px 32px rgba(0,0,0,0.50)",
-      backdropFilter: "blur(20px) saturate(1.4)",
-      WebkitBackdropFilter: "blur(20px) saturate(1.4)",
-      transition: "background 250ms ease",
-    }}>
-      <div className="container h-100">
-        {/* 3-column grid: logo | nav (centred) | actions */}
+    <header
+      className="hdr-s1"
+      style={{
+        position: "fixed",
+        top: 0, left: 0, right: 0,
+        zIndex: 9999,
+        height: 72,
+        background: "rgba(16,11,6,0.96)",
+        borderBottom: "1px solid rgba(201,136,58,0.16)",
+        boxShadow: "0 2px 0 rgba(201,136,58,0.14), 0 6px 28px rgba(0,0,0,0.50)",
+        backdropFilter: "blur(20px) saturate(1.4)",
+        WebkitBackdropFilter: "blur(20px) saturate(1.4)",
+      }}
+    >
+      <div className="container" style={{ height: "100%" }}>
         <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto 1fr",
-          alignItems: "center",
           height: "100%",
-          width: "100%",
+          display: "flex",
+          alignItems: "center",
         }}>
-          {/* Col 1 — Logo left */}
-          <div>
-            <Link to="/" style={{ display: "inline-block", textDecoration: "none" }}>
+
+          {/* ── Left: Logo ── */}
+          <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
+            <Link to="/" style={{ display: "inline-block", textDecoration: "none", lineHeight: 0 }}>
               <Image
                 src="/assets/img/logo/xerxez_logo.png"
                 alt="Xerxez Solutions"
                 width={220}
                 height={80}
-                style={{ height: 100, width: "auto", display: "block" }}
+                style={{ height: 58, width: "auto", display: "block" }}
               />
             </Link>
           </div>
 
-          {/* Col 2 — Nav dead-centre */}
-          <div className="header-main d-none d-xl-block" style={{ padding: 0 }}>
+          {/* ── Centre: Nav links ── */}
+          <div className="header-main d-none d-xl-block" style={{ padding: 0, flexShrink: 0 }}>
             <MainMenuSection />
           </div>
 
-          {/* Col 3 — Actions right */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10 }}>
-            {/* Sign in — text link */}
-            <Link to="/erp" className="d-none d-xl-inline-flex" style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 14,
-              fontWeight: 500,
-              color: "rgba(255,255,255,0.75)",
-              textDecoration: "none",
-              padding: "8px 10px",
-              transition: "color 150ms ease",
-            }}
+          {/* ── Right: Actions ── */}
+          <div style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: 8,
+          }}>
+            {/* Sign in */}
+            <Link
+              to="/erp"
+              className="d-none d-xl-inline-flex"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14, fontWeight: 500,
+                color: "rgba(255,255,255,0.72)",
+                textDecoration: "none",
+                padding: "8px 12px",
+                transition: "color 150ms ease",
+              }}
               onMouseOver={e => (e.currentTarget.style.color = "#C9883A")}
-              onMouseOut={e => (e.currentTarget.style.color = "rgba(255,255,255,0.75)")}
+              onMouseOut={e => (e.currentTarget.style.color = "rgba(255,255,255,0.72)")}
             >
               Sign in
             </Link>
 
-            {/* Primary CTA — gold */}
-            <Link to="/contact" className="d-none d-xl-inline-flex" style={{
-              alignItems: "center",
-              gap: 6,
-              background: "linear-gradient(135deg, #E8A84E 0%, #C9883A 100%)",
-              color: "#0a0806",
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 14,
-              fontWeight: 600,
-              lineHeight: 1,
-              padding: "0 20px",
-              height: 38,
-              borderRadius: 8,
-              textDecoration: "none",
-              transition: "opacity 150ms ease, box-shadow 150ms ease",
-              boxShadow: "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.22)",
-              whiteSpace: "nowrap",
-            }}
+            {/* Get Started */}
+            <Link
+              to="/contact"
+              className="d-none d-xl-inline-flex"
+              style={{
+                alignItems: "center",
+                background: "linear-gradient(135deg, #E8A84E 0%, #C9883A 100%)",
+                color: "#0a0806",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14, fontWeight: 700,
+                padding: "0 22px",
+                height: 40,
+                borderRadius: 8,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                boxShadow: "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.20)",
+                transition: "opacity 150ms ease, box-shadow 150ms ease",
+              }}
               onMouseOver={e => {
                 e.currentTarget.style.opacity = "0.88";
-                e.currentTarget.style.boxShadow = "0 1px 0 rgba(100,58,10,0.40), 0 3px 10px rgba(201,136,58,0.18)";
+                e.currentTarget.style.boxShadow = "0 1px 0 rgba(100,58,10,0.40), 0 2px 8px rgba(201,136,58,0.16)";
               }}
               onMouseOut={e => {
                 e.currentTarget.style.opacity = "1";
-                e.currentTarget.style.boxShadow = "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.22)";
+                e.currentTarget.style.boxShadow = "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.20)";
               }}
             >
               Get Started
             </Link>
 
-            {/* Hamburger — mobile only */}
+            {/* Hamburger — mobile */}
             <button
               className="d-xl-none"
               onClick={toggleMobileMenu}
               style={{
                 background: "none",
-                border: "1px solid rgba(201,136,58,0.28)",
+                border: "1px solid rgba(201,136,58,0.30)",
                 borderRadius: 8,
                 padding: "8px 10px",
                 cursor: "pointer",
@@ -120,6 +124,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               <i className="fal fa-bars" style={{ fontSize: 16 }} />
             </button>
           </div>
+
         </div>
       </div>
     </header>
