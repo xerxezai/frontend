@@ -52,14 +52,14 @@ const StatCard = ({
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
     const y = (e.clientY - r.top) / r.height;
-    el.style.transform = `perspective(800px) rotateX(${(0.5 - y) * 12}deg) rotateY(${(x - 0.5) * 12}deg) translateY(-6px) scale(1.02)`;
-    el.style.boxShadow = "0 24px 56px rgba(0,0,0,0.55), 0 0 0 1.5px rgba(201,136,58,0.40)";
+    el.style.transform = `perspective(800px) rotateX(${(0.5 - y) * 10}deg) rotateY(${(x - 0.5) * 10}deg) translateY(-5px) scale(1.015)`;
+    el.style.boxShadow = "0 20px 48px rgba(0,0,0,0.10), 0 0 0 1.5px rgba(201,136,58,0.34)";
     el.style.transition = "transform 0.10s ease, box-shadow 0.10s ease";
   };
   const onLeave = () => {
     const el = cardRef.current; if (!el) return;
     el.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
-    el.style.boxShadow = "0 4px 28px rgba(0,0,0,0.42), 0 0 0 1px rgba(201,136,58,0.10)";
+    el.style.boxShadow = "0 4px 22px rgba(0,0,0,0.07)";
     el.style.transition = "transform 0.25s ease, box-shadow 0.25s ease";
   };
 
@@ -69,27 +69,29 @@ const StatCard = ({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{
-        background: "linear-gradient(160deg, rgba(28,18,8,0.95) 0%, rgba(14,9,4,0.98) 100%)",
-        border: "1px solid rgba(201,136,58,0.18)",
-        borderTop: "2px solid rgba(201,136,58,0.55)",
+        background: "#ffffff",
+        border: "1px solid rgba(201,136,58,0.12)",
+        borderTop: "2px solid rgba(201,136,58,0.40)",
         borderRadius: 18,
         padding: "30px 24px 24px",
-        boxShadow: "0 4px 28px rgba(0,0,0,0.42), 0 0 0 1px rgba(201,136,58,0.10)",
+        boxShadow: "0 4px 22px rgba(0,0,0,0.07)",
         transformStyle: "preserve-3d",
         willChange: "transform",
         cursor: "default",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       {/* Icon */}
       <div style={{
         width: 50, height: 50, borderRadius: 13, flexShrink: 0,
-        background: "linear-gradient(135deg, rgba(201,136,58,0.28) 0%, rgba(201,136,58,0.10) 100%)",
-        border: "1px solid rgba(201,136,58,0.42)",
-        boxShadow: "0 4px 16px rgba(201,136,58,0.22), inset 0 1px 0 rgba(255,255,255,0.10)",
+        background: "linear-gradient(135deg, rgba(201,136,58,0.15) 0%, rgba(201,136,58,0.06) 100%)",
+        border: "1px solid rgba(201,136,58,0.28)",
+        boxShadow: "0 3px 12px rgba(201,136,58,0.14)",
         display: "flex", alignItems: "center", justifyContent: "center",
         marginBottom: 22,
       }}>
-        <i className={item.iconClass} style={{ color: "#E8A84E", fontSize: 20 }} />
+        <i className={item.iconClass} style={{ color: "#C9883A", fontSize: 20 }} />
       </div>
 
       {/* Number */}
@@ -109,7 +111,7 @@ const StatCard = ({
       {/* Label */}
       <div style={{
         fontSize: 13, fontWeight: 500,
-        color: "rgba(240,237,230,0.60)",
+        color: "rgba(20,20,19,0.52)",
         fontFamily: "'DM Sans', sans-serif",
         marginBottom: 18,
         letterSpacing: "0.01em",
@@ -120,7 +122,7 @@ const StatCard = ({
       {/* Progress bar */}
       <div style={{
         height: 3, borderRadius: 3,
-        background: "rgba(201,136,58,0.14)",
+        background: "rgba(201,136,58,0.12)",
         overflow: "hidden",
       }}>
         <div style={{
@@ -128,11 +130,11 @@ const StatCard = ({
           background: "linear-gradient(90deg, #C9883A, #E8A84E)",
           width: `${barWidth}%`,
           transition: "width 1.5s cubic-bezier(0.22,1,0.5,1)",
-          boxShadow: "0 0 10px rgba(232,168,78,0.55)",
+          boxShadow: "0 0 8px rgba(201,136,58,0.38)",
         }} />
       </div>
       <div style={{
-        fontSize: 10, color: "rgba(201,136,58,0.55)",
+        fontSize: 10, color: "rgba(201,136,58,0.60)",
         marginTop: 6, textAlign: "right",
         fontWeight: 700, letterSpacing: "0.08em",
         fontFamily: "'DM Sans', sans-serif",
@@ -147,18 +149,16 @@ const CounterSection = ({ variant }: Props) => {
   if (variant === "style-3") {
     return (
       <section style={{
-        background: "linear-gradient(180deg, #0d0906 0%, #0a0806 100%)",
+        background: "#F8F4EE",
         padding: "108px 0 100px",
         position: "relative",
         overflow: "hidden",
       }}>
-        {/* Ambient glow */}
+        {/* Dot-grid texture */}
         <div style={{
-          position: "absolute", top: -40, left: "50%",
-          transform: "translateX(-50%)",
-          width: 800, height: 440,
-          background: "radial-gradient(ellipse 60% 55% at 50% 20%, rgba(201,136,58,0.09) 0%, transparent 70%)",
-          pointerEvents: "none",
+          position: "absolute", inset: 0, pointerEvents: "none",
+          backgroundImage: "radial-gradient(circle, rgba(201,136,58,0.07) 1px, transparent 1px)",
+          backgroundSize: "36px 36px",
         }} />
 
         <div className="container" style={{ position: "relative", zIndex: 1 }}>
@@ -176,7 +176,7 @@ const CounterSection = ({ variant }: Props) => {
             <h2 style={{
               fontSize: "clamp(28px, 3.5vw, 48px)",
               fontWeight: 800, lineHeight: 1.12,
-              color: "rgba(240,237,230,0.95)",
+              color: "#141413",
               fontFamily: "'DM Sans', sans-serif",
               margin: 0,
             }}>
