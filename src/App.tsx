@@ -1,5 +1,22 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, Component } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+class PageErrorBoundary extends Component<{ children: ReactNode }, { caught: boolean }> {
+  state = { caught: false };
+  componentDidCatch(_e: Error, _i: ErrorInfo) { this.setState({ caught: true }); }
+  static getDerivedStateFromError() { return { caught: true }; }
+  render() {
+    if (this.state.caught) {
+      return (
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans',sans-serif", color: "#6b7280", fontSize: 15 }}>
+          Something went wrong. <a href="/" style={{ marginLeft: 8, color: "#C9883A" }}>Go home</a>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import ScrollToTop from "./components/utils/ScrollToTop";
 import AnimationWrapper from "./components/utils/AnimationWrapper";
 import BackToTopBtn from "./components/utils/BackToTopBtn";
@@ -62,7 +79,8 @@ function App() {
     <Router>
       <PageProgress />
       <ScrollToTop />
-      <Suspense fallback={null}>
+      <PageErrorBoundary>
+      <Suspense fallback={<div style={{ minHeight: "100vh" }} />}>
         <Routes>
           <Route path="/"                        element={<HomePage1 />} />
           <Route path="/home-2"                  element={<HomePage2 />} />
@@ -116,6 +134,7 @@ function App() {
           <Route path="*"                        element={<NotFoundPage />} />
         </Routes>
       </Suspense>
+      </PageErrorBoundary>
       <AnimationWrapper />
       <BackToTopBtn />
       <FloatingChat />

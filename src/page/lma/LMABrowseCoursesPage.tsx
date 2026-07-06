@@ -96,15 +96,23 @@ export default function LMABrowseCoursesPage() {
   const token = localStorage.getItem("lma_token");
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
   useEffect(() => {
     if (!token) { navigate("/lma/login"); return; }
+    setFetchError(false);
     fetch(`${API}/lma/courses/browse/`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json())
-      .then(d => setCourses(Array.isArray(d) ? d : []))
-      .catch(() => {})
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then(d => {
+        const list = Array.isArray(d) ? d : Array.isArray(d?.results) ? d.results : [];
+        setCourses(list);
+      })
+      .catch(() => setFetchError(true))
       .finally(() => setLoading(false));
   }, [token, navigate]);
 
@@ -131,10 +139,16 @@ export default function LMABrowseCoursesPage() {
 
   return (
     <LMAStudentLayout>
-      <div style={{ animation: "lmaPage-in 0.32s ease both", fontFamily: FF }}>
+      <div style={{ fontFamily: FF }}>
         <h2 style={{ fontSize: 22, fontWeight: 900, color: "#141413", margin: "0 0 20px", fontFamily: FF }}>
           Browse Courses
         </h2>
+
+        {fetchError && (
+          <div style={{ padding: "20px 24px", background: "rgba(239,68,68,0.08)", borderRadius: 12, border: "1px solid rgba(239,68,68,0.18)", marginBottom: 20, color: "#dc2626", fontSize: 14, fontWeight: 600, fontFamily: FF }}>
+            Could not load courses. Please check your connection or try refreshing.
+          </div>
+        )}
 
         {/* Search + categories */}
         <div style={{ marginBottom: 24 }}>

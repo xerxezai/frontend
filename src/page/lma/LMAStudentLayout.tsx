@@ -86,8 +86,15 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   const location = useLocation();
   const path = location.pathname;
 
+  const token = localStorage.getItem("lma_token");
   const name = localStorage.getItem("lma_name") ?? "Student";
   const canInstructor = localStorage.getItem("lma_can_instructor") === "true";
+
+  // Redirect to login if session is gone
+  if (!token) {
+    navigate(`/lma/login?redirect=${encodeURIComponent(path)}`);
+    return null;
+  }
   const [sideOpen, setSideOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
 
