@@ -371,6 +371,7 @@ export default function LMACourseDetailPage() {
   const [tab, setTab] = useState<"overview" | "curriculum" | "instructor" | "reviews">("overview");
   const [showPay, setShowPay] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -380,6 +381,12 @@ export default function LMACourseDetailPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    const onScroll = () => setShowStickyHeader(window.scrollY > 260);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleEnroll = () => {
     if (!token) { navigate("/lma/login"); return; }
@@ -404,6 +411,41 @@ export default function LMACourseDetailPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: CREAM, fontFamily: FF }}>
+
+      {/* ══ STICKY SCROLL HEADER ══ */}
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+        background: DARK, borderBottom: "1px solid rgba(201,136,58,0.18)",
+        transform: showStickyHeader ? "translateY(0)" : "translateY(-100%)",
+        transition: "transform 0.26s cubic-bezier(0.4,0,0.2,1)",
+        display: "flex", alignItems: "center", gap: 20,
+        padding: "10px 28px", boxShadow: "0 4px 24px rgba(0,0,0,0.40)",
+        fontFamily: FF, pointerEvents: showStickyHeader ? "auto" : "none",
+      }}>
+        <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
+            {course?.title}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
+            <Stars rating={course?.rating ?? 0} />
+            <span style={{ fontSize: 12, fontWeight: 700, color: AMBER }}>{course?.rating}</span>
+            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.28)" }}>
+              ({(course?.total_ratings ?? Math.round((course?.rating ?? 4) * 50)).toLocaleString()} ratings)
+            </span>
+          </div>
+        </div>
+        {!enrolled && (
+          <button onClick={handleEnroll} style={{
+            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+            color: "#0a0806", fontSize: 13, fontWeight: 800,
+            border: "none", borderRadius: 9, padding: "9px 22px",
+            cursor: "pointer", flexShrink: 0, fontFamily: FF,
+            boxShadow: "0 2px 0 rgba(130,78,18,0.40)",
+          }}>
+            Enroll Now
+          </button>
+        )}
+      </div>
 
       {/* ══ HERO ══ */}
       <div style={{ background: `linear-gradient(160deg,${DARK} 0%,#0e0905 100%)`, position: "relative", overflow: "hidden" }}>
@@ -504,7 +546,8 @@ export default function LMACourseDetailPage() {
 
           {/* Sticky tab nav */}
           <div style={{
-            position: "sticky", top: 0, zIndex: 90,
+            position: "sticky", top: showStickyHeader ? 52 : 0, zIndex: 90,
+            transition: "top 0.26s ease",
             background: CREAM,
             borderBottom: "2px solid rgba(0,0,0,0.07)",
             margin: "0 -24px 28px",
@@ -542,6 +585,41 @@ export default function LMACourseDetailPage() {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Skills you'll gain */}
+              <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 14px" }}>Skills you'll gain</h2>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
+                {[...(course.tech_stack ?? []), "Problem Solving", "System Design", "API Integration", "CI/CD", "Cloud Deployment"].slice(0, 10).map((skill: string) => (
+                  <span key={skill} style={{
+                    fontSize: 13, fontWeight: 500, padding: "7px 18px", borderRadius: 999,
+                    background: "rgba(201,136,58,0.09)", color: "#5c3d1a",
+                    border: "1px solid rgba(201,136,58,0.24)", fontFamily: FF,
+                  }}>
+                    {skill}
+                  </span>
+                ))}
+              </div>
+
+              {/* Details to know */}
+              <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>Details to know</h2>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 32 }} className="lmacd-details-grid">
+                {[
+                  { icon: "fab fa-linkedin", title: "Shareable certificate", sub: "Add to your LinkedIn profile", iconBg: "#e8f1fb", iconColor: "#0077b5" },
+                  { icon: "fas fa-globe", title: "Taught in English", sub: "Certificate in English", iconBg: "rgba(201,136,58,0.12)", iconColor: GOLD },
+                  { icon: "far fa-clock", title: `${course.hours} hours to complete`, sub: "Learn at your own pace", iconBg: "rgba(201,136,58,0.12)", iconColor: GOLD },
+                  { icon: "fas fa-layer-group", title: `${totalLessons} lessons`, sub: `${(course.level ?? "").charAt(0).toUpperCase() + (course.level ?? "").slice(1)} level`, iconBg: "rgba(201,136,58,0.12)", iconColor: GOLD },
+                ].map(d => (
+                  <div key={d.title} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: d.iconBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <i className={d.icon} style={{ fontSize: 18, color: d.iconColor }} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", marginBottom: 3, fontFamily: FF }}>{d.title}</div>
+                      <div style={{ fontSize: 12, color: "rgba(20,20,19,0.50)", fontFamily: FF }}>{d.sub}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>Requirements</h2>
@@ -663,6 +741,10 @@ export default function LMACourseDetailPage() {
 
       <style>{`
         @keyframes lmacd-spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 560px) {
+          .lmacd-details-grid { grid-template-columns: 1fr !important; }
+        }
 
         @media (max-width: 860px) {
           .lmacd-body { flex-direction: column !important; }

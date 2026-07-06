@@ -299,6 +299,7 @@ const AITrainingPage = () => {
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [openModules, setOpenModules]   = useState<Set<number>>(new Set([0]));
   const [activeTab, setActiveTab]       = useState<"about" | "curriculum">("about");
+  const [showStickyBar, setShowStickyBar] = useState(false);
 
   /* Fetch course list on mount */
   useEffect(() => {
@@ -341,10 +342,51 @@ const AITrainingPage = () => {
 
   const collapseAll = useCallback(() => setOpenModules(new Set()), []);
 
+  useEffect(() => {
+    const onScroll = () => setShowStickyBar(window.scrollY > 320);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const totalLessons = detail?.modules?.reduce((s, m) => s + (m.lessons?.length ?? 0), 0) ?? 0;
 
   return (
     <CustomLayout>
+
+      {/* ══ STICKY SCROLL BAR ══════════════════════════════════════════════════ */}
+      <div style={{
+        position: "fixed", top: 72, left: 0, right: 0, zIndex: 200,
+        background: DARK, borderBottom: "1px solid rgba(201,136,58,0.18)",
+        transform: showStickyBar ? "translateY(0)" : "translateY(-60px)",
+        opacity: showStickyBar ? 1 : 0,
+        transition: "transform 0.26s cubic-bezier(0.4,0,0.2,1), opacity 0.20s ease",
+        display: "flex", alignItems: "center", gap: 20,
+        padding: "10px 28px", boxShadow: "0 4px 24px rgba(0,0,0,0.35)",
+        fontFamily: "'DM Sans', sans-serif",
+        pointerEvents: showStickyBar ? "auto" : "none",
+      }}>
+        <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
+            {detail?.title ?? "XERXEZ AI Training Program"}
+          </div>
+          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", marginTop: 2 }}>
+            {detail
+              ? `${detail.modules?.length ?? 0} modules · ${totalLessons} lessons · ${detail.hours}h total`
+              : "Loading…"}
+          </div>
+        </div>
+        {detail && (
+          <Link to={`/lma/courses/${detail.id}`} style={{
+            display: "inline-flex", alignItems: "center", gap: 7,
+            background: `linear-gradient(135deg, ${AMBER}, ${GOLD})`,
+            color: "#0a0806", fontSize: 13, fontWeight: 800,
+            borderRadius: 9, padding: "8px 20px", textDecoration: "none", flexShrink: 0,
+            boxShadow: "0 2px 0 rgba(130,78,18,0.40)", fontFamily: "'DM Sans', sans-serif",
+          }}>
+            Enroll Now
+          </Link>
+        )}
+      </div>
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="at-hero">
@@ -465,7 +507,7 @@ const AITrainingPage = () => {
               </div>
 
               {/* Tech stack pills */}
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 24 }}>
                 {(detail.tech_stack ?? []).map(t => (
                   <span key={t} style={{
                     fontSize: 11, fontWeight: 600, padding: "3px 11px", borderRadius: 999,
@@ -473,6 +515,36 @@ const AITrainingPage = () => {
                     fontFamily: "'DM Sans', sans-serif",
                   }}>{t}</span>
                 ))}
+              </div>
+
+              {/* Hero CTAs */}
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <Link to={`/lma/courses/${detail.id}`} style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  background: `linear-gradient(135deg, ${AMBER}, ${GOLD})`,
+                  color: "#0a0806", fontSize: 14, fontWeight: 800,
+                  padding: "13px 28px", borderRadius: 11, textDecoration: "none",
+                  boxShadow: "0 4px 0 rgba(130,78,18,0.45), 0 10px 32px rgba(201,136,58,0.25)",
+                  fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  <i className="fas fa-graduation-cap" style={{ fontSize: 13 }} />
+                  Enroll Now
+                  {detail.price ? (
+                    <span style={{ fontSize: 12, opacity: 0.70, marginLeft: 4 }}>
+                      ₹{detail.price.toLocaleString()}
+                    </span>
+                  ) : null}
+                </Link>
+                <button onClick={() => setActiveTab("curriculum")} style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.78)",
+                  fontSize: 14, fontWeight: 700, padding: "13px 24px", borderRadius: 11,
+                  border: "1.5px solid rgba(255,255,255,0.18)", cursor: "pointer",
+                  fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  <i className="fas fa-list-ul" style={{ fontSize: 12 }} />
+                  View Curriculum
+                </button>
               </div>
             </div>
           ) : null}
@@ -501,7 +573,7 @@ const AITrainingPage = () => {
       </div>
 
       {/* ══ STICKY TAB NAV ════════════════════════════════════════════════════ */}
-      <div className="at-tab-nav">
+      <div className="at-tab-nav" style={{ top: showStickyBar ? 122 : 72, transition: "top 0.26s ease" }}>
         <div className="container">
           <div style={{ display: "flex" }}>
             {(["about", "curriculum"] as const).map(t => (
