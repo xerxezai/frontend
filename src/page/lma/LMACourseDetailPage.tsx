@@ -287,8 +287,8 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
 /* ════════════════════════════════════════════════════════════════════════════
    3-D HERO COURSE CARD
 ════════════════════════════════════════════════════════════════════════════ */
-const HeroCourseCard = ({ course, totalLessons, onEnroll }: {
-  course: any; totalLessons: number; onEnroll: () => void;
+const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
+  course: any; totalLessons: number; onEnroll: () => void; onPreview?: () => void;
 }) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -393,6 +393,15 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll }: {
         }}>
           Enroll Now — ₹{course.price?.toLocaleString() ?? "–"}
         </button>
+        <button onClick={onPreview} className="lmacd-preview-btn" style={{
+          width: "100%", padding: "11px", borderRadius: 11, marginTop: 10,
+          background: "transparent", color: GOLD, fontWeight: 700, fontSize: 12, fontFamily: FF,
+          border: `2px solid ${GOLD}`, cursor: "pointer",
+          transition: "background 0.20s ease",
+        }}>
+          <i className="fas fa-play-circle" style={{ fontSize: 11, marginRight: 6 }} />
+          Try Free Preview
+        </button>
       </div>
     </div>
   );
@@ -453,7 +462,56 @@ export default function LMACourseDetailPage() {
 
   const collapseAll = useCallback(() => setOpenModules(new Set()), []);
 
-  const tabNavRef = useRef<HTMLDivElement>(null);
+  const tabNavRef  = useRef<HTMLDivElement>(null);
+  const canvasRef  = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const N = 55, LINK = 130;
+    let W = 0, H = 0, raf = 0;
+    const pts = Array.from({ length: N }, () => ({
+      x: 0, y: 0,
+      vx: (Math.random() - 0.5) * 0.42,
+      vy: (Math.random() - 0.5) * 0.42,
+      r: Math.random() * 1.6 + 0.7,
+    }));
+    const resize = () => {
+      W = canvas.offsetWidth; H = canvas.offsetHeight;
+      canvas.width = W; canvas.height = H;
+      pts.forEach(p => { p.x = Math.random() * W; p.y = Math.random() * H; });
+    };
+    const tick = () => {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < LINK) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(201,136,58,${0.18 * (1 - d / LINK)})`;
+            ctx.lineWidth = 0.6;
+            ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      pts.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(201,136,58,0.36)"; ctx.fill();
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      });
+      raf = requestAnimationFrame(tick);
+    };
+    resize(); tick();
+    window.addEventListener("resize", resize);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
 
   const scrollToCurriculum = useCallback(() => {
     setActiveTab("curriculum");
@@ -519,6 +577,7 @@ export default function LMACourseDetailPage() {
 
       {/* ══ HERO ══ */}
       <section className="lmacd-hero">
+        <canvas ref={canvasRef} className="lmacd-particles" />
         <div className="lmacd-orb lmacd-orb-1" />
         <div className="lmacd-orb lmacd-orb-2" />
         <div className="lmacd-orb lmacd-orb-3" />
@@ -544,7 +603,7 @@ export default function LMACourseDetailPage() {
             {course.badge && (
               <span style={{
                 display: "inline-block", fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
-                textTransform: "uppercase", padding: "3px 10px", borderRadius: 999, marginBottom: 12,
+                textTransform: "uppercase", padding: "3px 10px", borderRadius: 999, marginBottom: 16,
                 background: "rgba(255,193,0,0.18)", color: "#f59e0b",
               }}>
                 {course.badge}
@@ -553,17 +612,17 @@ export default function LMACourseDetailPage() {
 
             <h1 style={{
               fontFamily: FF, fontWeight: 900,
-              fontSize: "clamp(26px,4vw,48px)", lineHeight: 1.1,
-              color: "#fff", margin: "0 0 14px", letterSpacing: "-0.025em",
+              fontSize: "clamp(32px,5vw,52px)", lineHeight: 1.1,
+              color: "#fff", margin: "0 0 20px", letterSpacing: "-0.025em",
             }}>
               {course.title}
             </h1>
 
-            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.52)", lineHeight: 1.68, margin: "0 0 18px", maxWidth: 620, fontFamily: FF }}>
+            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.52)", lineHeight: 1.68, margin: "0 0 24px", maxWidth: 620, fontFamily: FF }}>
               {course.description}
             </p>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", marginBottom: 16 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", marginBottom: 20 }}>
               {course.rating > 0 && (
                 <>
                   <StarRating rating={course.rating} />
@@ -578,7 +637,7 @@ export default function LMACourseDetailPage() {
               </span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
               <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Included with</span>
               <span style={{
                 fontSize: 11, fontWeight: 800, letterSpacing: "0.10em", textTransform: "uppercase",
@@ -602,7 +661,7 @@ export default function LMACourseDetailPage() {
               </span>
             </div>
 
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 24 }}>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 32 }}>
               {(course.tech_stack ?? []).map((t: string) => (
                 <span key={t} style={{
                   fontSize: 11, fontWeight: 600, padding: "3px 11px", borderRadius: 999,
@@ -627,7 +686,7 @@ export default function LMACourseDetailPage() {
                     display: "inline-flex", alignItems: "center", gap: 8,
                     background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                     color: "#0a0806", fontSize: 14, fontWeight: 800,
-                    padding: "13px 28px", borderRadius: 11, border: "none", cursor: "pointer",
+                    height: "52px", padding: "0 28px", borderRadius: 11, border: "none", cursor: "pointer",
                     boxShadow: "0 4px 0 rgba(130,78,18,0.45),0 10px 32px rgba(201,136,58,0.25)",
                     fontFamily: FF,
                   }}>
@@ -637,11 +696,12 @@ export default function LMACourseDetailPage() {
                       <span style={{ fontSize: 12, opacity: 0.70, marginLeft: 4 }}>₹{course.price.toLocaleString()}</span>
                     ) : null}
                   </button>
-                  <button onClick={scrollToCurriculum} style={{
+                  <button onClick={scrollToCurriculum} className="lmacd-preview-btn" style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
-                    background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.78)",
-                    fontSize: 14, fontWeight: 700, padding: "13px 24px", borderRadius: 11,
-                    border: "1.5px solid rgba(255,255,255,0.18)", cursor: "pointer", fontFamily: FF,
+                    background: "transparent", color: GOLD,
+                    fontSize: 14, fontWeight: 700, height: "52px", padding: "0 24px", borderRadius: 11,
+                    border: `2px solid ${GOLD}`, cursor: "pointer", fontFamily: FF,
+                    transition: "background 0.20s ease",
                   }}>
                     <i className="fas fa-list-ul" style={{ fontSize: 12 }} />
                     View Curriculum
@@ -651,7 +711,7 @@ export default function LMACourseDetailPage() {
             </div>
           </div>
           <div className="lmacd-hero-card-col">
-            <HeroCourseCard course={course} totalLessons={totalLessons} onEnroll={handleEnroll} />
+            <HeroCourseCard course={course} totalLessons={totalLessons} onEnroll={handleEnroll} onPreview={scrollToCurriculum} />
           </div>
           </div>
         </div>
@@ -978,9 +1038,9 @@ export default function LMACourseDetailPage() {
 
         .lmacd-hero {
           background: linear-gradient(160deg,${DARK} 0%,${DARK2} 100%);
-          padding: 80px 0 56px;
+          padding: 100px 0 72px;
+          min-height: 85vh;
           position: relative;
-          overflow: hidden;
         }
         /* Dot grid overlay */
         .lmacd-hero::before {
@@ -992,6 +1052,8 @@ export default function LMACourseDetailPage() {
           pointer-events: none;
           z-index: 0;
         }
+        /* Particle canvas */
+        .lmacd-particles { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
         .lmacd-orb { position: absolute; border-radius: 50%; pointer-events: none; }
         .lmacd-orb-1 { top:8%;left:4%;width:360px;height:360px;background:radial-gradient(circle,rgba(201,136,58,0.10) 0%,transparent 70%);animation:lmacd-float1 9s ease-in-out infinite; }
         .lmacd-orb-2 { bottom:4%;right:6%;width:240px;height:240px;background:radial-gradient(circle,rgba(232,168,78,0.07) 0%,transparent 70%);animation:lmacd-float2 13s ease-in-out infinite; }
@@ -1002,9 +1064,10 @@ export default function LMACourseDetailPage() {
         .lmacd-geo-1 { right:8%;top:15%;width:130px;height:130px;border:1.5px solid rgba(201,136,58,0.18);transform:rotate(45deg);animation:lmacd-geo-rot 20s linear infinite; }
         .lmacd-geo-2 { right:15%;top:55%;width:58px;height:58px;border:1.5px solid rgba(232,168,78,0.20);transform:rotate(45deg);animation:lmacd-geo-rot 14s linear infinite reverse; }
         .lmacd-geo-3 { right:4%;bottom:12%;width:180px;height:180px;border:1px solid rgba(201,136,58,0.10);border-radius:50%;animation:lmacd-float2 16s ease-in-out infinite; }
-        .lmacd-geo-4 { right:28%;top:10%;width:30px;height:30px;background:rgba(201,136,58,0.12);border:1px solid rgba(201,136,58,0.35);transform:rotate(45deg);animation:lmacd-geo-pulse 4s ease-in-out infinite; }
+        .lmacd-geo-4 { right:28%;top:10%;width:30px;height:30px;background:rgba(201,136,58,0.12);border:1px solid rgba(201,136,58,0.35);transform:rotate(45deg);animation:lmacd-geo-pulse 4s ease-in-out infinite,lmacd-geo-glow 3s ease-in-out infinite; }
         @keyframes lmacd-geo-rot { to{transform:rotate(405deg);} }
         @keyframes lmacd-geo-pulse { 0%,100%{opacity:0.8} 50%{opacity:0.18} }
+        @keyframes lmacd-geo-glow { 0%,100%{box-shadow:0 0 6px rgba(201,136,58,0.20),0 0 18px rgba(201,136,58,0.08)} 50%{box-shadow:0 0 22px rgba(201,136,58,0.80),0 0 50px rgba(201,136,58,0.40)} }
 
         .lmacd-tab-nav { background:#fff; border-bottom:2px solid rgba(0,0,0,0.08); position:sticky; z-index:90; }
 
@@ -1030,7 +1093,7 @@ export default function LMACourseDetailPage() {
         }
         @media (max-width:600px) {
           .lmacd-learn-grid { grid-template-columns:1fr !important; }
-          .lmacd-hero { padding:56px 0 36px; }
+          .lmacd-hero { padding:72px 0 48px; min-height:auto; }
           .lmacd-lesson-indent { padding-left:16px !important; }
         }
         /* Shimmer on sticky Enroll Now */
@@ -1050,7 +1113,7 @@ export default function LMACourseDetailPage() {
 
         /* 375px mobile */
         @media (max-width:420px) {
-          .lmacd-hero { padding:48px 0 32px; }
+          .lmacd-hero { padding:64px 0 40px; }
           .lmacd-container { padding:0 16px; }
           .lmacd-body-row { gap:24px; padding:20px 0 40px; }
         }
@@ -1060,13 +1123,14 @@ export default function LMACourseDetailPage() {
           .lmacd-shimmer-btn::after { animation:none !important; }
           .lmacd-spinner { animation-duration:0.01ms !important; }
           .lmacd-hcard-wrap { animation:none !important; }
+          .lmacd-particles { display:none !important; }
           * { transition-duration:0.01ms !important; }
         }
 
         /* ── Hero 2-col row ── */
-        .lmacd-hero-row { display:flex; gap:48px; align-items:center; }
-        .lmacd-hero-text { flex:1; min-width:0; }
-        .lmacd-hero-card-col { width:360px; flex-shrink:0; }
+        .lmacd-hero-row { display:flex; gap:48px; align-items:flex-start; }
+        .lmacd-hero-text { flex:1; min-width:0; padding-top:8px; }
+        .lmacd-hero-card-col { width:360px; flex-shrink:0; position:sticky; top:20px; align-self:flex-start; }
 
         /* ── 3-D floating card ── */
         .lmacd-hcard-wrap { animation:lmacd-card-float 4s ease-in-out infinite; }
@@ -1086,7 +1150,7 @@ export default function LMACourseDetailPage() {
 
         @media (max-width:1000px) {
           .lmacd-hero-row { flex-direction:column; }
-          .lmacd-hero-card-col { width:100%; max-width:440px; margin:0 auto; }
+          .lmacd-hero-card-col { width:100%; max-width:440px; margin:0 auto; position:static; }
         }
         @media (max-width:600px) {
           .lmacd-outcomes-grid { grid-template-columns:1fr; }
