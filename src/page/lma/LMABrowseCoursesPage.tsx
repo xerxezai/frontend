@@ -115,7 +115,7 @@ export default function LMABrowseCoursesPage() {
 
   const filtered = useMemo(() => {
     return courses.filter(c => {
-      const matchSearch = !search || c.title.toLowerCase().includes(search.toLowerCase()) || (c.category ?? "").toLowerCase().includes(search.toLowerCase());
+      const matchSearch = !search || (c.title ?? "").toLowerCase().includes(search.toLowerCase()) || (c.category ?? "").toLowerCase().includes(search.toLowerCase());
       const matchCat = category === "All" || c.category === category;
       return matchSearch && matchCat;
     });
@@ -171,12 +171,17 @@ export default function LMABrowseCoursesPage() {
             {[0, 1, 2, 3, 4, 5].map(i => <SkeletonCourseCard key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "64px 24px" }}>
+          <div style={{ textAlign: "center", padding: "64px 24px", background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)" }}>
             <BookOpen size={48} color="#d1d5db" style={{ display: "block", margin: "0 auto 16px" }} />
-            <p style={{ color: "#9ca3af", fontSize: 15, margin: 0, fontFamily: FF }}>
+            <p style={{ color: "#6b7280", fontSize: 15, margin: "0 0 6px", fontFamily: FF, fontWeight: 600 }}>
               {search || category !== "All"
                 ? "No courses match your filters."
-                : "You're enrolled in all available courses!"}
+                : "No new courses available right now."}
+            </p>
+            <p style={{ color: "#9ca3af", fontSize: 13, margin: 0, fontFamily: FF }}>
+              {search || category !== "All"
+                ? "Try different keywords or clear the filter."
+                : "Check back soon — new courses are added regularly."}
             </p>
           </div>
         ) : (
