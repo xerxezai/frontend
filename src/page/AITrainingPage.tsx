@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
+import SEO from "../components/seo/SEO";
 
 /* ── Brand tokens ──────────────────────────────────────────────────────────── */
 const GOLD  = "#C9883A";
@@ -352,6 +353,11 @@ const AITrainingPage = () => {
 
   return (
     <CustomLayout>
+      <SEO
+        title="AI Training & Consulting Services | XERXEZ"
+        description="Expert AI training and consulting for enterprises. Upskill your team in MLOps, LLMs, and cloud AI with XERXEZ's certified courses and workshops."
+        canonical="/service/ai-training-consulting"
+      />
 
       {/* ══ STICKY SCROLL BAR ══════════════════════════════════════════════════ */}
       <div style={{

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
+import SEO from "../components/seo/SEO";
 
 /* ── Design tokens ──────────────────────────────────────── */
 const T = {
@@ -428,6 +429,11 @@ const AboutPage = () => {
 
   return (
     <CustomLayout>
+      <SEO
+        title="About XERXEZ — Enterprise AI Company | UAE & India"
+        description="Learn about XERXEZ, an enterprise AI company building ERP, MLOps, and cloud solutions. Founded in India & UAE, serving 40+ enterprises globally."
+        canonical="/about"
+      />
       <style>{`
         /* ── Keyframes ── */
         @keyframes abt-dot  { 0%,100%{opacity:1}50%{opacity:.3} }

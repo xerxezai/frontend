@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+Disallow: /lma/student/
+Disallow: /lma/instructor/
+Disallow: /lma/login
+Disallow: /lma/register
+Disallow: /erp/
+Disallow: /mlm
+Disallow: /health
+Disallow: /documentation
+Disallow: /home-2
+Disallow: /home-3
+Disallow: /home-4
+Disallow: /landing
+
+Sitemap: https://www.xerxez.com/sitemap.xml

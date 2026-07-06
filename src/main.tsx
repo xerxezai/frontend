@@ -10,16 +10,19 @@ import "./styles/scss/main.scss";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import { ContextProvider } from "./context/context.tsx";
 import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ContextProvider>
-      <App />
-      <ToastContainer />
-    </ContextProvider>
+    <HelmetProvider>
+      <ContextProvider>
+        <App />
+        <ToastContainer />
+      </ContextProvider>
+    </HelmetProvider>
   </StrictMode>
 );
 

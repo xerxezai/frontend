@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle, Shield } from "lucide-react";
+import SEO from "../../components/seo/SEO";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#C9883A";
@@ -170,6 +171,8 @@ export default function LMARegisterPage() {
   const loginUrl = `/lma/login?redirect=${encodeURIComponent(redirect)}${action ? `&action=${action}` : ""}`;
 
   return (
+    <>
+    <SEO title="Register | XERXEZ Academy" description="Create your XERXEZ Academy account and start learning." canonical="/lma/register" noIndex />
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'DM Sans', sans-serif" }}>
 
       {/* ── LEFT PANEL ── */}
@@ -303,5 +306,6 @@ export default function LMARegisterPage() {
         @media (max-width: 991px) { .lmarg-panel-left { display: none !important; } }
       `}</style>
     </div>
+    </>
   );
 }

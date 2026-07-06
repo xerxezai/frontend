@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
 import XzHeroSection from "../components/common/XzHeroSection";
+import SEO from "../components/seo/SEO";
 
 /* ── Brand tokens ── */
 const GOLD   = "#C9883A";
@@ -623,6 +624,11 @@ const MetricRow = ({ icon, headline, sub, bg, border, index }: {
 ══════════════════════════════════════════════ */
 const TrainingPage: React.FC = () => (
   <CustomLayout>
+    <SEO
+      title="AI Training Courses — Full Stack AI & MLOps | XERXEZ Academy"
+      description="Enroll in XERXEZ Academy's AI courses: Full Stack AI, MLOps, DevSecOps, and cloud infrastructure. Hands-on training for enterprises and professionals."
+      canonical="/training"
+    />
     {/* 1. DARK — Hero */}
     <XzHeroSection
       badgeText="AI Training & Upskilling"

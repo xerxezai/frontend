@@ -8,6 +8,7 @@ import SectionProgressDots from "../components/nav/SectionProgressDots";
 import ProjectSection from "../components/project/ProjectSection";
 import ServiceSection2 from "../components/service/ServiceSection2";
 import { useCustomContext } from "../context/context";
+import SEO from "../components/seo/SEO";
 
 const SECTIONS = [
   { id: "sec-hero",     label: "Home"     },
@@ -20,6 +21,11 @@ const HomePage1 = () => {
   const { isMenuOpen, toggleMobileMenu } = useCustomContext();
   return (
     <>
+      <SEO
+        title="XERXEZ — AI-Powered ERP, MLOps & Cloud Solutions for Enterprises"
+        description="XERXEZ builds enterprise-grade AI ERP systems, MLOps pipelines, SecOps solutions, and cloud infrastructure. Trusted by 40+ enterprises across UAE, India & UK."
+        canonical="/"
+      />
       <HeaderSection />
 
       <div id="sec-hero" style={{ paddingTop: 70 }}><HeroSection /></div>

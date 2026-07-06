@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { GraduationCap, BookOpen, Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft, Shield, CheckCircle } from "lucide-react";
+import SEO from "../../components/seo/SEO";
 
 const API = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD = "#C9883A";
@@ -146,6 +147,8 @@ export default function LMALoginPage() {
   };
 
   return (
+    <>
+    <SEO title="Login | XERXEZ Academy" description="Sign in to your XERXEZ Academy account." canonical="/lma/login" noIndex />
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'DM Sans', sans-serif" }}>
 
       {/* ── LEFT PANEL ── */}
@@ -347,5 +350,6 @@ export default function LMALoginPage() {
         @media (max-width: 991px) { .d-none.d-lg-flex { display: none !important; } }
       `}</style>
     </div>
+    </>
   );
 }
