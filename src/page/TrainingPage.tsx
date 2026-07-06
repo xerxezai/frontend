@@ -155,40 +155,40 @@ const CohortCard = () => {
 /* ══════════════════════════════════════════════
    SECTION 2 — LIGHT: Featured Courses
 ══════════════════════════════════════════════ */
-const courses = [
-  {
-    icon: "fas fa-brain",
-    title: "Full Stack AI Development",
-    category: "AI & ML",
-    level: "Intermediate",
-    levelColor: GOLD,
-    duration: "60 Hours",
-    lessons: "48 Lessons",
-    badge: "BESTSELLER",
-    badgeColor: `linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
-    desc: "Build production-ready AI systems from scratch — LLMs, RAG pipelines, API development, and enterprise deployment patterns.",
-    tags: ["Python","LangChain","OpenAI","FastAPI"],
-    iconBg: `linear-gradient(135deg,rgba(232,168,78,0.20) 0%,rgba(201,136,58,0.10) 100%)`,
-    iconColor: GOLD,
-  },
-  {
-    icon: "fas fa-shield-alt",
-    title: "MLOps – Machine Learning Operations",
-    category: "DevSecOps & AI",
-    level: "Advanced",
-    levelColor: "#e63757",
-    duration: "50 Hours",
-    lessons: "40 Lessons",
-    badge: "NEW",
-    badgeColor: "linear-gradient(135deg,#e63757 0%,#c42d48 100%)",
-    desc: "Automate the full ML lifecycle — from training pipelines to production monitoring with Kubernetes, MLflow, and cloud platforms.",
-    tags: ["Kubernetes","MLflow","Docker","AWS"],
-    iconBg: "linear-gradient(135deg,rgba(63,131,248,0.16) 0%,rgba(63,131,248,0.06) 100%)",
-    iconColor: "#3f83f8",
-  },
-];
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 
-const CourseCard = ({ course, index }: { course: typeof courses[number]; index: number }) => {
+interface ApiCourse {
+  id: number; title: string; description: string; category: string; level: string;
+  price: number; badge: string; header_color: string; rating: number;
+  total_students: number; hours: number; lessons: number; tech_stack: string[];
+  instructor_name: string;
+}
+
+const ICON_MAP: Record<string, string> = {
+  "AI & ML": "fas fa-brain",
+  "DevSecOps & AI": "fas fa-shield-alt",
+  "Web Development": "fas fa-code",
+  "Data Science": "fas fa-chart-bar",
+  "Cloud & DevOps": "fas fa-cloud",
+};
+const ICON_BG_MAP: Record<string, string> = {
+  "AI & ML": `linear-gradient(135deg,rgba(232,168,78,0.20) 0%,rgba(201,136,58,0.10) 100%)`,
+  "DevSecOps & AI": "linear-gradient(135deg,rgba(63,131,248,0.16) 0%,rgba(63,131,248,0.06) 100%)",
+};
+const ICON_COLOR_MAP: Record<string, string> = {
+  "AI & ML": GOLD,
+  "DevSecOps & AI": "#3f83f8",
+};
+const BADGE_COLOR_MAP: Record<string, string> = {
+  BESTSELLER: `linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
+  NEW: "linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%)",
+  HOT: "linear-gradient(135deg,#e63757 0%,#c42d48 100%)",
+};
+const LEVEL_COLOR_MAP: Record<string, string> = {
+  beginner: "#10b981", intermediate: GOLD, advanced: "#e63757",
+};
+
+const CourseCard = ({ course, index }: { course: ApiCourse; index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [hov, setHov] = useState(false);
 
@@ -229,30 +229,33 @@ const CourseCard = ({ course, index }: { course: typeof courses[number]; index: 
       }}
     >
       {/* Badge */}
-      <span style={{
-        position: "absolute", top: 16, right: 16,
-        background: course.badgeColor, color: "#fff",
-        fontSize: 10, fontWeight: 800, padding: "4px 12px",
-        borderRadius: 999, letterSpacing: "0.08em",
-        textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif",
-        zIndex: 2,
-      }}>
-        {course.badge}
-      </span>
+      {course.badge && (
+        <span style={{
+          position: "absolute", top: 16, right: 16,
+          background: BADGE_COLOR_MAP[course.badge] ?? `linear-gradient(135deg,${AMBER},${GOLD})`,
+          color: "#fff",
+          fontSize: 10, fontWeight: 800, padding: "4px 12px",
+          borderRadius: 999, letterSpacing: "0.08em",
+          textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif",
+          zIndex: 2,
+        }}>
+          {course.badge}
+        </span>
+      )}
 
       {/* Icon banner */}
-      <div style={{ background: course.iconBg, padding: "32px 28px 24px" }}>
+      <div style={{ background: ICON_BG_MAP[course.category] ?? `linear-gradient(135deg,rgba(201,136,58,0.12),rgba(201,136,58,0.06))`, padding: "32px 28px 24px" }}>
         <div style={{
           width: 64, height: 64, borderRadius: 18,
           background: "#fff",
           border: `1px solid ${hov ? "rgba(201,136,58,0.22)" : "rgba(0,0,0,0.06)"}`,
           boxShadow: "0 4px 16px rgba(0,0,0,0.07)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 28, color: course.iconColor,
+          fontSize: 28, color: ICON_COLOR_MAP[course.category] ?? GOLD,
           transition: "border-color 0.25s ease, transform 0.25s ease",
           transform: hov ? "scale(1.06) translateY(-2px)" : "scale(1)",
         }}>
-          <i className={course.icon} />
+          <i className={ICON_MAP[course.category] ?? "fas fa-book"} />
         </div>
       </div>
 
@@ -262,7 +265,7 @@ const CourseCard = ({ course, index }: { course: typeof courses[number]; index: 
           <span style={{ fontSize:11, fontWeight:700, color: GOLD, background:"rgba(201,136,58,0.08)", padding:"3px 10px", borderRadius:6, fontFamily:"'DM Sans',sans-serif" }}>
             {course.category}
           </span>
-          <span style={{ fontSize:11, fontWeight:600, color: course.levelColor, fontFamily:"'DM Sans',sans-serif" }}>
+          <span style={{ fontSize:11, fontWeight:600, color: LEVEL_COLOR_MAP[course.level] ?? GOLD, fontFamily:"'DM Sans',sans-serif", textTransform:"capitalize" }}>
             {course.level}
           </span>
         </div>
@@ -270,11 +273,11 @@ const CourseCard = ({ course, index }: { course: typeof courses[number]; index: 
           {course.title}
         </h3>
         <p style={{ fontSize:13.5, color:"rgba(20,20,19,0.55)", lineHeight:1.72, marginBottom:16, fontFamily:"'DM Sans',sans-serif" }}>
-          {course.desc}
+          {course.description}
         </p>
         {/* Tags */}
         <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:4 }}>
-          {course.tags.map(tag => (
+          {(course.tech_stack ?? []).slice(0, 4).map(tag => (
             <span key={tag} style={{ fontSize:11, fontWeight:600, color:"rgba(20,20,19,0.55)", background:"rgba(0,0,0,0.04)", border:"1px solid rgba(0,0,0,0.06)", borderRadius:6, padding:"3px 9px", fontFamily:"'DM Sans',sans-serif" }}>
               {tag}
             </span>
@@ -286,13 +289,13 @@ const CourseCard = ({ course, index }: { course: typeof courses[number]; index: 
       <div style={{ padding:"14px 28px 22px", borderTop:"1px solid rgba(0,0,0,0.06)", display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap" }}>
         <div style={{ display:"flex", gap:16, fontSize:12.5, color:"rgba(20,20,19,0.45)", fontFamily:"'DM Sans',sans-serif" }}>
           <span style={{ display:"flex", alignItems:"center", gap:5 }}>
-            <i className="far fa-clock" style={{ color:GOLD }} /> {course.duration}
+            <i className="far fa-clock" style={{ color:GOLD }} /> {course.hours}h
           </span>
           <span style={{ display:"flex", alignItems:"center", gap:5 }}>
-            <i className="fas fa-play-circle" style={{ color:GOLD }} /> {course.lessons}
+            <i className="fas fa-play-circle" style={{ color:GOLD }} /> {course.lessons} lessons
           </span>
         </div>
-        <Link to="/contact" style={{
+        <Link to={`/lma/courses/${course.id}`} style={{
           display:"inline-flex", alignItems:"center", gap:7,
           background:`linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
           color:"#fff", fontSize:13, fontWeight:700,
@@ -309,6 +312,17 @@ const CourseCard = ({ course, index }: { course: typeof courses[number]; index: 
 
 const CoursesSection = () => {
   const headRef = useReveal(0);
+  const [apiCourses, setApiCourses] = useState<ApiCourse[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/lma/courses/`)
+      .then(r => r.json())
+      .then(d => { const list = Array.isArray(d) ? d : d.results ?? []; setApiCourses(list.slice(0, 4)); })
+      .catch(() => {})
+      .finally(() => setLoadingCourses(false));
+  }, []);
+
   return (
     <section style={{ background: CREAM, padding:"100px 0", position:"relative", overflow:"hidden" }}>
       {/* Dot grid */}
@@ -323,14 +337,26 @@ const CoursesSection = () => {
             Practitioner-built programs covering every layer of enterprise AI — from strategy to shipping.
           </p>
         </div>
-        <div className="row g-4 justify-content-center">
-          {courses.map((course, i) => (
-            <div key={i} className="col-lg-6 col-md-10">
-              <CourseCard course={course} index={i} />
-            </div>
-          ))}
+        {loadingCourses ? (
+          <div style={{ display:"flex", justifyContent:"center", padding:"40px 0" }}>
+            <div style={{ width:32, height:32, border:`3px solid rgba(201,136,58,0.20)`, borderTop:`3px solid ${GOLD}`, borderRadius:"50%", animation:"tp-spin 0.8s linear infinite" }} />
+          </div>
+        ) : (
+          <div className="row g-4 justify-content-center">
+            {apiCourses.map((course, i) => (
+              <div key={course.id} className="col-lg-6 col-md-10">
+                <CourseCard course={course} index={i} />
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{ textAlign:"center", marginTop:40 }}>
+          <Link to="/lma/courses" style={{ display:"inline-flex", alignItems:"center", gap:8, fontSize:14, fontWeight:700, color:GOLD, border:`1.5px solid ${GOLD}`, padding:"10px 24px", borderRadius:10, textDecoration:"none", fontFamily:"'DM Sans',sans-serif" }}>
+            Browse All Courses <i className="far fa-arrow-right" style={{ fontSize:12 }} />
+          </Link>
         </div>
       </div>
+      <style>{`@keyframes tp-spin { to { transform: rotate(360deg); } }`}</style>
     </section>
   );
 };
