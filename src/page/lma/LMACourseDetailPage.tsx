@@ -1,52 +1,222 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import {
-  Star, Users, Clock, BookOpen, ChevronDown,
-  Play, Lock, CheckCircle2, Award, Globe, ArrowLeft,
-  ShoppingCart, Zap, Shield,
-} from "lucide-react";
+import { CheckCircle2, Shield } from "lucide-react";
 
-const API  = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
+const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#C9883A";
 const AMBER = "#E8A84E";
 const DARK  = "#1a1208";
+const DARK2 = "#100c07";
 const CREAM = "#F8F4EE";
 const FF    = "'DM Sans', sans-serif";
 
-/* ── Module thumbnail palettes (6, cycling by index) ── */
-const PALETTES = [
-  { bg: "linear-gradient(145deg,#2b1b09 0%,#1c1006 100%)", icon: "fas fa-brain",      ac: "#C9883A" },
-  { bg: "linear-gradient(145deg,#0e2040 0%,#091428 100%)", icon: "fas fa-code",       ac: "#3b82f6" },
-  { bg: "linear-gradient(145deg,#0c2212 0%,#07160b 100%)", icon: "fas fa-server",     ac: "#10b981" },
-  { bg: "linear-gradient(145deg,#1e0d2c 0%,#140820 100%)", icon: "fas fa-database",   ac: "#a855f7" },
-  { bg: "linear-gradient(145deg,#280d0d 0%,#1b0808 100%)", icon: "fas fa-chart-line", ac: "#ef4444" },
-  { bg: "linear-gradient(145deg,#0d2024 0%,#081518 100%)", icon: "fas fa-robot",      ac: "#14b8a6" },
+const THUMB_GRADS = [
+  ["#1e3a5f", "#3b82f6"],
+  ["#3b1f6e", "#8b5cf6"],
+  ["#0f3d30", "#10b981"],
+  ["#5a3200", "#C9883A"],
+  ["#5a1020", "#f43f5e"],
+  ["#0f2040", "#60a5fa"],
+];
+const THUMB_ICONS = [
+  "fas fa-brain", "fas fa-code", "fas fa-cogs",
+  "fas fa-chart-bar", "fas fa-cloud", "fas fa-shield-alt",
 ];
 
-/* ── Scroll-reveal stagger helper ── */
-const useStagger = (index: number, delay = 70) => {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.opacity = "0";
-    el.style.transform = "translateY(18px)";
-    el.style.transition = `opacity 0.50s ease ${index * delay}ms, transform 0.50s cubic-bezier(0.22,1,0.36,1) ${index * delay}ms`;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; obs.disconnect(); }
-    }, { threshold: 0.08 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [index, delay]);
-  return ref;
+/* ── Module thumbnail ── */
+const ModuleThumbnail = ({ index, size = 80 }: { index: number; size?: number }) => {
+  const [a, b] = THUMB_GRADS[index % THUMB_GRADS.length];
+  return (
+    <div style={{
+      width: size, height: Math.round(size * 0.7), borderRadius: 8, flexShrink: 0,
+      background: `linear-gradient(135deg,${a} 0%,${b} 100%)`,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      position: "relative", overflow: "hidden",
+    }}>
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 30% 30%,rgba(255,255,255,0.18) 0%,transparent 60%)" }} />
+      <i className={THUMB_ICONS[index % THUMB_ICONS.length]}
+        style={{ color: "rgba(255,255,255,0.92)", fontSize: size * 0.25, position: "relative", zIndex: 1 }} />
+    </div>
+  );
 };
 
 /* ── Star rating ── */
-const Stars = ({ rating }: { rating: number }) => (
-  <div style={{ display: "flex", gap: 2 }}>
+const StarRating = ({ rating }: { rating: number }) => (
+  <span style={{ display: "inline-flex", gap: 2, alignItems: "center" }}>
     {[1,2,3,4,5].map(n => (
-      <Star key={n} size={13} color="#f59e0b" fill={n <= Math.round(rating) ? "#f59e0b" : "none"} />
+      <i key={n} className="fas fa-star"
+        style={{ fontSize: 12, color: n <= Math.round(rating) ? "#f59e0b" : "rgba(255,255,255,0.22)" }} />
     ))}
+    <span style={{ fontSize: 13, fontWeight: 700, color: "#f59e0b", marginLeft: 5 }}>{rating}</span>
+  </span>
+);
+
+/* ── Lesson row ── */
+const LessonRow = ({ lesson }: { lesson: any }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
+    {lesson.is_free_preview
+      ? <i className="fas fa-play-circle" style={{ fontSize: 14, color: GOLD, flexShrink: 0, width: 16 }} />
+      : <i className="fas fa-lock" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />}
+    <span style={{ flex: 1, fontSize: 13, lineHeight: 1.45, color: lesson.is_free_preview ? "#141413" : "rgba(20,20,19,0.52)", fontFamily: FF }}>
+      {lesson.title}
+    </span>
+    {lesson.is_free_preview && (
+      <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase" as const, color: GOLD, border: `1px solid ${GOLD}`, borderRadius: 4, padding: "1px 6px", flexShrink: 0 }}>
+        Free
+      </span>
+    )}
+    <span style={{ fontSize: 11.5, color: "rgba(20,20,19,0.38)", flexShrink: 0 }}>{lesson.duration}m</span>
+  </div>
+);
+
+/* ── Module accordion row ── */
+const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay }: {
+  mod: any; modIndex: number; isOpen: boolean; toggle: () => void; revealDelay: number;
+}) => {
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = rowRef.current; if (!el) return;
+    el.style.opacity = "0";
+    el.style.transform = "translateY(18px)";
+    el.style.transition = `opacity 0.48s ease ${revealDelay}ms, transform 0.48s cubic-bezier(0.22,1,0.36,1) ${revealDelay}ms`;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; obs.disconnect(); } },
+      { threshold: 0.08 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [revealDelay]);
+
+  const totalMins = mod.lessons?.reduce((s: number, l: any) => s + (l.duration ?? 0), 0) ?? mod.duration ?? 0;
+  const h = Math.floor(totalMins / 60), m = totalMins % 60;
+  const durStr = h > 0 ? `${h}h${m > 0 ? ` ${m}m` : ""}` : `${m}m`;
+
+  return (
+    <div ref={rowRef} style={{
+      border: "1px solid rgba(0,0,0,0.09)",
+      borderLeft: `3px solid ${isOpen ? GOLD : "transparent"}`,
+      borderRadius: 10, marginBottom: 8, overflow: "hidden", background: "#fff",
+      transition: "border-left-color 0.22s ease",
+    }}>
+      <button onClick={toggle} style={{
+        width: "100%", display: "flex", alignItems: "center", gap: 14,
+        padding: "13px 16px", border: "none", cursor: "pointer",
+        background: isOpen ? "#fdfaf6" : "#fff", fontFamily: FF, textAlign: "left",
+        transition: "background 0.18s ease",
+      }}>
+        <ModuleThumbnail index={modIndex} size={80} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", marginBottom: 3, lineHeight: 1.3 }}>{mod.title}</div>
+          <div style={{ fontSize: 12, color: "rgba(20,20,19,0.44)" }}>
+            Course {modIndex + 1} · {mod.lessons?.length ?? 0} lessons · {durStr}
+          </div>
+        </div>
+        <i className={`fas fa-chevron-${isOpen ? "up" : "down"}`}
+          style={{ fontSize: 12, color: "#9ca3af", flexShrink: 0 }} />
+      </button>
+      <div style={{
+        maxHeight: isOpen ? "3000px" : "0px", overflow: "hidden",
+        transition: isOpen ? "max-height 0.55s cubic-bezier(0.4,0,0.2,1)" : "max-height 0.35s cubic-bezier(0.4,0,0.2,1)",
+      }}>
+        <div className="lmacd-lesson-indent" style={{ padding: "2px 16px 12px", paddingLeft: 110, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+          {(mod.lessons ?? []).map((l: any) => <LessonRow key={l.id} lesson={l} />)}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── Instructor item ── */
+const InstructorItem = ({ name, designation, courses, learners }: {
+  name: string; designation: string; courses: number; learners: string;
+}) => {
+  const [hov, setHov] = useState(false);
+  const initials = name.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase();
+  return (
+    <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 14 }}>
+      <div
+        onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+        style={{
+          width: 44, height: 44, borderRadius: "50%", flexShrink: 0,
+          background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          color: "#0a0806", fontWeight: 800, fontSize: 15, cursor: "pointer",
+          boxShadow: hov ? `0 0 0 3px ${GOLD},0 0 18px rgba(201,136,58,0.40)` : "none",
+          transition: "box-shadow 0.22s ease",
+        }}
+      >{initials}</div>
+      <div>
+        <div style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, marginBottom: 2, fontFamily: FF }}>{name}</div>
+        <div style={{ fontSize: 12, color: "rgba(20,20,19,0.52)", marginBottom: 3, fontFamily: FF }}>{designation}</div>
+        <div style={{ fontSize: 11, color: "rgba(20,20,19,0.38)", fontFamily: FF }}>
+          {courses} Course{courses !== 1 ? "s" : ""} · {learners} learners
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── What you'll learn ── */
+const WhatYouLearnBox = ({ techStack }: { techStack: string[] }) => {
+  const items = [
+    `Hands-on with ${techStack[0] ?? "Python"} from day one`,
+    "Build production-ready AI systems end-to-end",
+    `Deploy and monitor with ${techStack[1] ?? "cloud platforms"}`,
+    "Earn XERXEZ AI certification",
+    `Work with real enterprise ${techStack[2] ?? "data pipelines"}`,
+    "Master industry deployment patterns and MLOps",
+  ];
+  return (
+    <div style={{ border: "1px solid rgba(0,0,0,0.09)", borderRadius: 14, padding: "22px 26px", marginBottom: 24, background: "#fff" }}>
+      <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>What you'll learn</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 24px" }} className="lmacd-learn-grid">
+        {items.map(item => (
+          <div key={item} style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
+            <i className="fas fa-check" style={{ color: "#10b981", fontSize: 12, marginTop: 4, flexShrink: 0 }} />
+            <span style={{ fontSize: 13, color: "#374151", lineHeight: 1.55, fontFamily: FF }}>{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/* ── Skills pills ── */
+const SkillsPills = ({ items, heading }: { items: string[]; heading: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 12px", fontFamily: FF }}>{heading}</h3>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+      {items.map(t => (
+        <span key={t} style={{
+          fontSize: 12, fontWeight: 500, padding: "5px 14px", borderRadius: 999,
+          background: "#f3f4f6", color: "#374151", border: "1px solid #e5e7eb", fontFamily: FF,
+        }}>{t}</span>
+      ))}
+    </div>
+  </div>
+);
+
+/* ── Details to know ── */
+const DetailsToKnow = ({ hours, lessonsCount, level }: { hours: number; lessonsCount: number; level: string }) => (
+  <div style={{ marginBottom: 28 }}>
+    <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>Details to know</h3>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+      {[
+        { icon: "fab fa-linkedin", label: "Shareable certificate", sub: "Add to LinkedIn profile",  iconColor: "#0077b5" },
+        { icon: "fas fa-globe",    label: "Taught in English",     sub: "Certificate in English",   iconColor: GOLD     },
+        { icon: "far fa-clock",    label: `${hours} hours`,        sub: "Flexible schedule",        iconColor: GOLD     },
+        { icon: "fas fa-layer-group", label: `${lessonsCount} lessons`, sub: level.charAt(0).toUpperCase() + level.slice(1) + " level", iconColor: GOLD },
+      ].map(d => (
+        <div key={d.label} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+          <i className={d.icon} style={{ fontSize: 20, color: d.iconColor, width: 24, textAlign: "center" as const, marginTop: 2, flexShrink: 0 }} />
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>{d.label}</div>
+            <div style={{ fontSize: 12, color: "rgba(20,20,19,0.48)", fontFamily: FF }}>{d.sub}</div>
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 );
 
@@ -96,7 +266,7 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
         )}
         {step === "processing" && (
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ width: 40, height: 40, border: `3px solid rgba(201,136,58,0.20)`, borderTop: `3px solid ${GOLD}`, borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite", display: "inline-block", marginBottom: 16 }} />
+            <div className="lmacd-spinner" style={{ margin: "0 auto 16px" }} />
             <p style={{ fontSize: 15, fontWeight: 600, color: "#141413", fontFamily: FF }}>Processing…</p>
           </div>
         )}
@@ -114,264 +284,22 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
   );
 };
 
-/* ── Module accordion row ── */
-const ModuleRow = ({ mod, index }: { mod: any; index: number }) => {
-  const [open, setOpen] = useState(index === 0);
-  const ref = useStagger(index, 65);
-  const pal = PALETTES[index % PALETTES.length];
-  const totalMins = (mod.lessons ?? []).reduce((s: number, l: any) => s + (l.duration ?? 0), 0);
-
-  return (
-    <div ref={ref} style={{
-      borderRadius: 14,
-      border: `1px solid ${open ? "rgba(201,136,58,0.30)" : "rgba(0,0,0,0.07)"}`,
-      borderLeft: `3px solid ${open ? GOLD : "rgba(0,0,0,0.07)"}`,
-      background: "#fff",
-      marginBottom: 10,
-      overflow: "hidden",
-      transition: "border-color 0.25s ease, border-left-color 0.25s ease",
-    }}>
-      {/* Header button */}
-      <button
-        onClick={() => setOpen(o => !o)}
-        style={{
-          width: "100%", display: "flex", alignItems: "center", gap: 14,
-          padding: "14px 18px", background: open ? "#fdfaf5" : "#fff",
-          border: "none", cursor: "pointer", fontFamily: FF,
-          transition: "background 0.20s ease",
-        }}
-      >
-        {/* Thumbnail */}
-        <div style={{
-          width: 54, height: 54, borderRadius: 12, flexShrink: 0,
-          background: pal.bg,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.06)",
-        }}>
-          <i className={pal.icon} style={{ color: pal.ac, fontSize: 21 }} />
-        </div>
-        {/* Info */}
-        <div style={{ flex: 1, textAlign: "left" }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "#141413", lineHeight: 1.3, marginBottom: 4 }}>
-            {mod.title}
-          </div>
-          <div style={{ fontSize: 12, color: "rgba(20,20,19,0.42)" }}>
-            {mod.lessons?.length ?? 0} lessons
-            {totalMins > 0 && ` · ${Math.floor(totalMins / 60)}h ${totalMins % 60}m`}
-          </div>
-        </div>
-        {/* Chevron chip */}
-        <div style={{
-          width: 30, height: 30, borderRadius: 8, flexShrink: 0,
-          background: open ? "rgba(201,136,58,0.12)" : "rgba(0,0,0,0.04)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          transition: "background 0.20s ease",
-        }}>
-          <ChevronDown
-            size={15}
-            color={open ? GOLD : "#9ca3af"}
-            style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}
-          />
-        </div>
-      </button>
-
-      {/* Lesson list — CSS max-height accordion */}
-      <div style={{
-        maxHeight: open ? "3000px" : "0px",
-        overflow: "hidden",
-        transition: open
-          ? "max-height 0.50s cubic-bezier(0.4,0,0.2,1)"
-          : "max-height 0.32s cubic-bezier(0.4,0,0.2,1)",
-      }}>
-        <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-          {(mod.lessons ?? []).map((l: any, li: number) => (
-            <div
-              key={l.id ?? li}
-              style={{
-                display: "flex", alignItems: "center", gap: 12,
-                padding: "10px 18px 10px 86px",
-                borderBottom: li < (mod.lessons.length - 1) ? "1px solid rgba(0,0,0,0.045)" : "none",
-                background: l.is_free_preview ? "rgba(201,136,58,0.025)" : "transparent",
-              }}
-            >
-              <div style={{
-                width: 28, height: 28, borderRadius: 7, flexShrink: 0,
-                background: l.is_free_preview ? "rgba(201,136,58,0.12)" : "rgba(0,0,0,0.04)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                {l.is_free_preview
-                  ? <Play size={12} color={GOLD} />
-                  : <Lock size={12} color="#bcc0c8" />}
-              </div>
-              <span style={{
-                flex: 1, fontSize: 13,
-                color: l.is_free_preview ? "#2d2a27" : "rgba(20,20,19,0.50)",
-                lineHeight: 1.4,
-              }}>
-                {l.title}
-              </span>
-              {l.is_free_preview && (
-                <span style={{
-                  fontSize: 10, fontWeight: 700, color: GOLD, flexShrink: 0,
-                  background: "rgba(201,136,58,0.10)", border: "1px solid rgba(201,136,58,0.24)",
-                  borderRadius: 5, padding: "2px 8px", letterSpacing: "0.05em",
-                }}>
-                  FREE
-                </span>
-              )}
-              {l.duration > 0 && (
-                <span style={{ fontSize: 11, color: "rgba(20,20,19,0.30)", flexShrink: 0, minWidth: 32, textAlign: "right" }}>
-                  {l.duration}m
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ── Price sidebar card ── */
-const PriceCard = ({ course, enrolled, totalLessons, onEnroll }: {
-  course: any; enrolled: boolean; totalLessons: number; onEnroll: () => void;
-}) => (
-  <div style={{
-    background: "#fff", borderRadius: 20, overflow: "hidden",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.06), 0 12px 40px rgba(0,0,0,0.11), 0 0 0 1px rgba(0,0,0,0.06)",
-  }}>
-    <div style={{ height: 5, background: `linear-gradient(90deg,${AMBER},${GOLD})` }} />
-    <div style={{ padding: "24px 22px" }}>
-      <div style={{ marginBottom: 22 }}>
-        <div style={{ fontSize: 38, fontWeight: 900, color: GOLD, fontFamily: FF, lineHeight: 1 }}>
-          ₹{course.price?.toLocaleString()}
-        </div>
-        <div style={{ fontSize: 12, color: "rgba(20,20,19,0.38)", fontFamily: FF, marginTop: 5 }}>
-          One-time payment · Lifetime access
-        </div>
-      </div>
-
-      {enrolled ? (
-        <Link to="/lma/student/dashboard" style={{
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-          background: "#d1fae5", color: "#059669", fontSize: 14, fontWeight: 700,
-          padding: "13px", borderRadius: 12, textDecoration: "none", marginBottom: 10,
-          fontFamily: FF,
-        }}>
-          <CheckCircle2 size={16} /> Go to Dashboard
-        </Link>
-      ) : (
-        <>
-          <button onClick={onEnroll} style={{
-            width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            background: `linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
-            color: "#fff", fontSize: 14, fontWeight: 700,
-            border: "none", borderRadius: 12, padding: "14px", cursor: "pointer",
-            boxShadow: "0 4px 0 rgba(130,78,18,0.45), 0 8px 24px rgba(201,136,58,0.28)",
-            marginBottom: 10, fontFamily: FF,
-          }}>
-            <ShoppingCart size={16} /> Enroll Now
-          </button>
-          <button onClick={onEnroll} style={{
-            width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            background: "transparent", color: GOLD, fontSize: 13, fontWeight: 700,
-            border: "1.5px solid rgba(201,136,58,0.40)", borderRadius: 12, padding: "12px",
-            cursor: "pointer", fontFamily: FF, marginBottom: 14,
-          }}>
-            <Zap size={14} /> Try Free Preview
-          </button>
-        </>
-      )}
-
-      <div style={{ display: "flex", gap: 6, alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-        <Shield size={12} color="#9ca3af" />
-        <span style={{ fontSize: 11, color: "#9ca3af", fontFamily: FF }}>30-day money-back guarantee</span>
-      </div>
-
-      <div style={{ borderTop: "1px solid rgba(0,0,0,0.07)", paddingTop: 18 }}>
-        <h5 style={{ fontSize: 11, fontWeight: 700, color: "#141413", margin: "0 0 14px", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF }}>
-          This course includes
-        </h5>
-        {([
-          [Clock, `${course.hours}h on-demand video`],
-          [BookOpen, `${totalLessons} lessons`],
-          [Globe, "Full lifetime access"],
-          [Award, "Certificate of completion"],
-        ] as [React.ElementType, string][]).map(([Icon, text]) => (
-          <div key={text} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
-            <Icon size={13} color={GOLD} />
-            <span style={{ fontSize: 13, color: "rgba(20,20,19,0.58)", fontFamily: FF }}>{text}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-/* ── Instructor sidebar card ── */
-const InstructorCard = ({ course }: { course: any }) => {
-  const [hov, setHov] = useState(false);
-  return (
-    <div style={{ background: "#fff", borderRadius: 18, border: "1px solid rgba(0,0,0,0.07)", padding: "20px 20px 18px", marginTop: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
-      <h4 style={{ fontSize: 11, fontWeight: 700, color: "rgba(20,20,19,0.40)", margin: "0 0 14px", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF }}>
-        Instructor
-      </h4>
-      <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
-        <div
-          onMouseEnter={() => setHov(true)}
-          onMouseLeave={() => setHov(false)}
-          style={{
-            width: 50, height: 50, borderRadius: "50%", flexShrink: 0,
-            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 20, fontWeight: 800, color: "#0a0806",
-            boxShadow: hov ? `0 0 0 3px ${GOLD}` : "0 0 0 3px rgba(201,136,58,0.18)",
-            transition: "box-shadow 0.25s ease", cursor: "default",
-          }}
-        >
-          {(course.instructor_name ?? "I").charAt(0)}
-        </div>
-        <div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: GOLD, marginBottom: 2, fontFamily: FF }}>{course.instructor_name}</div>
-          <div style={{ fontSize: 12, color: "rgba(20,20,19,0.45)", fontFamily: FF }}>Senior Instructor</div>
-        </div>
-      </div>
-      <div style={{ fontSize: 12, color: "rgba(20,20,19,0.40)", lineHeight: 1.55, marginBottom: 14, fontFamily: FF }}>
-        ★ {course.rating} rating · {(course.total_students ?? 0).toLocaleString()} learners
-      </div>
-
-      {/* Offered by */}
-      <div style={{ borderTop: "1px solid rgba(0,0,0,0.07)", paddingTop: 14 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(20,20,19,0.35)", letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 10, fontFamily: FF }}>
-          Offered by
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 38, height: 38, borderRadius: 10, background: DARK, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <i className="fas fa-graduation-cap" style={{ color: GOLD, fontSize: 16 }} />
-          </div>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>XERXEZ Academy</div>
-            <span style={{ fontSize: 12, color: GOLD, fontWeight: 600, cursor: "pointer", fontFamily: FF }}>Learn more</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ══════════════════════════════════════════════════════════ */
-
+/* ════════════════════════════════════════════════════════════════════════════
+   MAIN COMPONENT
+════════════════════════════════════════════════════════════════════════════ */
 export default function LMACourseDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const token = localStorage.getItem("lma_token") ?? "";
 
-  const [course, setCourse] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"overview" | "curriculum" | "instructor" | "reviews">("overview");
-  const [showPay, setShowPay] = useState(false);
-  const [enrolled, setEnrolled] = useState(false);
-  const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const [course, setCourse]         = useState<any>(null);
+  const [courseList, setCourseList] = useState<any[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [openModules, setOpenModules] = useState<Set<number>>(new Set([0]));
+  const [activeTab, setActiveTab]   = useState<"about" | "curriculum">("about");
+  const [showPay, setShowPay]       = useState(false);
+  const [enrolled, setEnrolled]     = useState(false);
+  const [showStickyBar, setShowStickyBar] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -383,10 +311,32 @@ export default function LMACourseDetailPage() {
   }, [id]);
 
   useEffect(() => {
-    const onScroll = () => setShowStickyHeader(window.scrollY > 260);
+    fetch(`${API}/lma/courses/`)
+      .then(r => r.json())
+      .then(d => setCourseList(Array.isArray(d) ? d : (d.results ?? [])))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowStickyBar(window.scrollY > 320);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const toggleModule = useCallback((idx: number) => {
+    setOpenModules(prev => {
+      const next = new Set(prev);
+      next.has(idx) ? next.delete(idx) : next.add(idx);
+      return next;
+    });
+  }, []);
+
+  const expandAll  = useCallback(() => {
+    if (!course) return;
+    setOpenModules(new Set((course.modules ?? []).map((_: any, i: number) => i)));
+  }, [course]);
+
+  const collapseAll = useCallback(() => setOpenModules(new Set()), []);
 
   const handleEnroll = () => {
     if (!token) { navigate("/lma/login"); return; }
@@ -397,7 +347,7 @@ export default function LMACourseDetailPage() {
 
   if (loading) return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", background: CREAM }}>
-      <div style={{ width: 36, height: 36, border: "3px solid rgba(201,136,58,0.18)", borderTop: `3px solid ${GOLD}`, borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite" }} />
+      <div className="lmacd-spinner" />
       <style>{`@keyframes lmacd-spin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
@@ -412,26 +362,23 @@ export default function LMACourseDetailPage() {
   return (
     <div style={{ minHeight: "100vh", background: CREAM, fontFamily: FF }}>
 
-      {/* ══ STICKY SCROLL HEADER ══ */}
+      {/* ══ STICKY SCROLL BAR ══ */}
       <div style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
         background: DARK, borderBottom: "1px solid rgba(201,136,58,0.18)",
-        transform: showStickyHeader ? "translateY(0)" : "translateY(-100%)",
-        transition: "transform 0.26s cubic-bezier(0.4,0,0.2,1)",
+        transform: showStickyBar ? "translateY(0)" : "translateY(-100%)",
+        opacity: showStickyBar ? 1 : 0,
+        transition: "transform 0.26s cubic-bezier(0.4,0,0.2,1), opacity 0.20s ease",
         display: "flex", alignItems: "center", gap: 20,
-        padding: "10px 28px", boxShadow: "0 4px 24px rgba(0,0,0,0.40)",
-        fontFamily: FF, pointerEvents: showStickyHeader ? "auto" : "none",
+        padding: "10px 28px", boxShadow: "0 4px 24px rgba(0,0,0,0.35)",
+        fontFamily: FF, pointerEvents: showStickyBar ? "auto" : "none",
       }}>
         <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
-            {course?.title}
+            {course.title}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
-            <Stars rating={course?.rating ?? 0} />
-            <span style={{ fontSize: 12, fontWeight: 700, color: AMBER }}>{course?.rating}</span>
-            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.28)" }}>
-              ({(course?.total_ratings ?? Math.round((course?.rating ?? 4) * 50)).toLocaleString()} ratings)
-            </span>
+          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", marginTop: 2 }}>
+            {course.modules?.length ?? 0} modules · {totalLessons} lessons · {course.hours}h total
           </div>
         </div>
         {!enrolled && (
@@ -448,285 +395,394 @@ export default function LMACourseDetailPage() {
       </div>
 
       {/* ══ HERO ══ */}
-      <div style={{ background: `linear-gradient(160deg,${DARK} 0%,#0e0905 100%)`, position: "relative", overflow: "hidden" }}>
-        {/* Ambient glow orbs */}
-        <div aria-hidden="true" style={{ position: "absolute", top: "20%", left: "15%", width: 800, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.07) 0%,transparent 65%)", pointerEvents: "none" }} />
-        <div aria-hidden="true" style={{ position: "absolute", bottom: "-30%", right: "5%",  width: 600, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.04) 0%,transparent 65%)", pointerEvents: "none" }} />
+      <section className="lmacd-hero">
+        <div className="lmacd-orb lmacd-orb-1" />
+        <div className="lmacd-orb lmacd-orb-2" />
+        <div className="lmacd-orb lmacd-orb-3" />
 
-        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "36px 24px 72px", position: "relative", zIndex: 1 }}>
-          {/* Back link */}
+        <div className="lmacd-container" style={{ position: "relative", zIndex: 1 }}>
           <Link to="/lma/courses" style={{
             display: "inline-flex", alignItems: "center", gap: 6,
-            fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.40)",
-            textDecoration: "none", marginBottom: 32,
-            transition: "color 0.20s ease",
+            fontSize: 12, color: "rgba(255,255,255,0.38)", textDecoration: "none",
+            marginBottom: 22, fontFamily: FF, transition: "color 0.18s ease",
           }}
-            onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.75)")}
-            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.40)")}
+            onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.38)")}
           >
-            <ArrowLeft size={14} /> Back to Courses
+            ← Back to Courses
           </Link>
 
-          {/* Badge */}
-          {course.badge && (
-            <span style={{
-              display: "inline-block", fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
-              padding: "4px 13px", borderRadius: 999, marginBottom: 14,
-              background: "rgba(201,136,58,0.14)", color: AMBER,
-              border: "1px solid rgba(201,136,58,0.28)",
-            }}>
-              {course.badge}
-            </span>
-          )}
-
-          {/* Category */}
-          <div style={{ fontSize: 11, color: AMBER, fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", marginBottom: 12 }}>
-            {course.category}
-          </div>
-
-          {/* Title */}
-          <h1 style={{
-            fontSize: "clamp(26px, 3.8vw, 44px)", fontWeight: 900, color: "#fff",
-            margin: "0 0 18px", lineHeight: 1.16, letterSpacing: "-0.025em",
-            maxWidth: 700,
-          }}>
-            {course.title}
-          </h1>
-
-          {/* Description */}
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.50)", margin: "0 0 22px", lineHeight: 1.68, maxWidth: 620 }}>
-            {course.description}
-          </p>
-
-          {/* Rating + students */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", marginBottom: 18 }}>
-            {course.rating && (
-              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                <Stars rating={course.rating} />
-                <span style={{ fontSize: 14, fontWeight: 800, color: "#f59e0b" }}>{course.rating}</span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.32)" }}>
-                  ({(course.total_ratings ?? Math.round(course.rating * 50)).toLocaleString()} ratings)
-                </span>
-              </div>
+          <div style={{ maxWidth: 740 }}>
+            {course.badge && (
+              <span style={{
+                display: "inline-block", fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
+                textTransform: "uppercase", padding: "3px 10px", borderRadius: 999, marginBottom: 12,
+                background: "rgba(255,193,0,0.18)", color: "#f59e0b",
+              }}>
+                {course.badge}
+              </span>
             )}
-            <div style={{ display: "flex", alignItems: "center", gap: 5, color: "rgba(255,255,255,0.38)", fontSize: 13 }}>
-              <Users size={13} /> {(course.total_students ?? 0).toLocaleString()} students
+
+            <h1 style={{
+              fontFamily: FF, fontWeight: 900,
+              fontSize: "clamp(26px,4vw,48px)", lineHeight: 1.1,
+              color: "#fff", margin: "0 0 14px", letterSpacing: "-0.025em",
+            }}>
+              {course.title}
+            </h1>
+
+            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.52)", lineHeight: 1.68, margin: "0 0 18px", maxWidth: 620, fontFamily: FF }}>
+              {course.description}
+            </p>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", marginBottom: 16 }}>
+              {course.rating > 0 && (
+                <>
+                  <StarRating rating={course.rating} />
+                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>
+                    ({(course.total_ratings ?? Math.round(course.rating * 50)).toLocaleString()} ratings)
+                  </span>
+                </>
+              )}
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", display: "flex", alignItems: "center", gap: 6, fontFamily: FF }}>
+                <i className="fas fa-users" style={{ fontSize: 12 }} />
+                {(course.total_students ?? 0).toLocaleString()} already enrolled
+              </span>
             </div>
-          </div>
 
-          {/* Meta row */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 20, color: "rgba(255,255,255,0.36)", fontSize: 13, marginBottom: 22 }}>
-            <span style={{ display: "flex", alignItems: "center", gap: 5 }}><Clock size={13} /> {course.hours}h total</span>
-            <span style={{ display: "flex", alignItems: "center", gap: 5 }}><BookOpen size={13} /> {totalLessons} lessons</span>
-            <span style={{ display: "flex", alignItems: "center", gap: 5 }}><Globe size={13} /> English</span>
-          </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Included with</span>
+              <span style={{
+                fontSize: 11, fontWeight: 800, letterSpacing: "0.10em", textTransform: "uppercase",
+                padding: "2px 10px", borderRadius: 4,
+                background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
+              }}>
+                XERXEZ Academy
+              </span>
+              <span style={{ fontSize: 12, color: GOLD, fontFamily: FF, cursor: "pointer" }}>· Learn more</span>
+            </div>
 
-          {/* Tech stack pills */}
-          {(course.tech_stack ?? []).length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+              <span style={{ fontSize: 11, fontWeight: 600, padding: "4px 13px", borderRadius: 999, border: `1px solid rgba(201,136,58,0.55)`, color: AMBER, fontFamily: FF }}>
+                {course.category}
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 600, padding: "4px 13px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.55)", fontFamily: FF, textTransform: "capitalize" }}>
+                {course.level} level
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 600, padding: "4px 13px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.50)", fontFamily: FF }}>
+                {course.hours}h · {totalLessons} lessons
+              </span>
+            </div>
+
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 24 }}>
               {(course.tech_stack ?? []).map((t: string) => (
                 <span key={t} style={{
-                  fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.65)",
-                  background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.11)",
-                  borderRadius: 7, padding: "4px 13px",
-                }}>
-                  {t}
-                </span>
+                  fontSize: 11, fontWeight: 600, padding: "3px 11px", borderRadius: 999,
+                  background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.62)", fontFamily: FF,
+                }}>{t}</span>
               ))}
             </div>
-          )}
+
+            {/* Hero CTAs */}
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {enrolled ? (
+                <Link to="/lma/student/dashboard" style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  background: "#d1fae5", color: "#059669", fontSize: 14, fontWeight: 800,
+                  padding: "13px 28px", borderRadius: 11, textDecoration: "none", fontFamily: FF,
+                }}>
+                  <CheckCircle2 size={16} /> Go to Dashboard
+                </Link>
+              ) : (
+                <>
+                  <button onClick={handleEnroll} style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+                    color: "#0a0806", fontSize: 14, fontWeight: 800,
+                    padding: "13px 28px", borderRadius: 11, border: "none", cursor: "pointer",
+                    boxShadow: "0 4px 0 rgba(130,78,18,0.45),0 10px 32px rgba(201,136,58,0.25)",
+                    fontFamily: FF,
+                  }}>
+                    <i className="fas fa-graduation-cap" style={{ fontSize: 13 }} />
+                    Enroll Now
+                    {course.price ? (
+                      <span style={{ fontSize: 12, opacity: 0.70, marginLeft: 4 }}>₹{course.price.toLocaleString()}</span>
+                    ) : null}
+                  </button>
+                  <button onClick={() => setActiveTab("curriculum")} style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.78)",
+                    fontSize: 14, fontWeight: 700, padding: "13px 24px", borderRadius: 11,
+                    border: "1.5px solid rgba(255,255,255,0.18)", cursor: "pointer", fontFamily: FF,
+                  }}>
+                    <i className="fas fa-list-ul" style={{ fontSize: 12 }} />
+                    View Curriculum
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ TRUST BAR ══ */}
+      <div style={{ background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.07)", padding: "13px 0" }}>
+        <div className="lmacd-container">
+          <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+            {[
+              { icon: "fas fa-award",         label: "CPD Accredited" },
+              { icon: "fas fa-certificate",    label: "AWS Certified"  },
+              { icon: "fas fa-shield-alt",     label: "ISO 27001"      },
+              { icon: "fas fa-graduation-cap", label: "Hands-On Labs"  },
+              { icon: "fas fa-users",          label: "500+ Trained"   },
+              { icon: "fas fa-brain",          label: "OpenAI Partner" },
+            ].map(t => (
+              <div key={t.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "rgba(20,20,19,0.52)", fontFamily: FF }}>
+                <i className={t.icon} style={{ color: GOLD, fontSize: 13 }} />
+                {t.label}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* ══ BODY — 70/30 layout ══ */}
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "0 24px 80px", display: "flex", gap: 28, alignItems: "flex-start" }} className="lmacd-body">
+      {/* ══ STICKY TAB NAV ══ */}
+      <div className="lmacd-tab-nav" style={{ top: showStickyBar ? 52 : 0, transition: "top 0.26s ease" }}>
+        <div className="lmacd-container">
+          <div style={{ display: "flex" }}>
+            {(["about", "curriculum"] as const).map(t => (
+              <button key={t} onClick={() => setActiveTab(t)} style={{
+                fontSize: 13.5, fontWeight: activeTab === t ? 700 : 500,
+                color: activeTab === t ? GOLD : "rgba(20,20,19,0.48)",
+                borderBottom: `2px solid ${activeTab === t ? GOLD : "transparent"}`,
+                marginBottom: -2, padding: "13px 20px",
+                background: "none", border: "none", borderRadius: 0, cursor: "pointer",
+                fontFamily: FF, textTransform: "capitalize",
+                transition: "color 0.18s ease",
+              }}>
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-        {/* ── LEFT: tabs + content ── */}
-        <div style={{ flex: 1, minWidth: 0, marginTop: 32 }}>
+      {/* ══ CONTENT AREA ══ */}
+      <div style={{ background: CREAM, minHeight: 500 }}>
+        <div className="lmacd-container">
+          <div className="lmacd-body-row">
 
-          {/* Sticky tab nav */}
-          <div style={{
-            position: "sticky", top: showStickyHeader ? 52 : 0, zIndex: 90,
-            transition: "top 0.26s ease",
-            background: CREAM,
-            borderBottom: "2px solid rgba(0,0,0,0.07)",
-            margin: "0 -24px 28px",
-            padding: "0 24px",
-          }}>
-            <div style={{ display: "flex", gap: 0, overflowX: "auto" }}>
-              {(["overview", "curriculum", "instructor", "reviews"] as const).map(t => (
-                <button key={t} onClick={() => setTab(t)} style={{
-                  fontSize: 13.5, fontWeight: tab === t ? 700 : 500,
-                  color: tab === t ? GOLD : "rgba(20,20,19,0.48)",
-                  borderBottom: `2px solid ${tab === t ? GOLD : "transparent"}`,
-                  marginBottom: -2,
-                  padding: "14px 20px",
-                  background: "none", border: "none", borderRadius: 0,
-                  cursor: "pointer", fontFamily: FF, whiteSpace: "nowrap",
-                  textTransform: "capitalize",
-                  transition: "color 0.18s ease",
-                }}>
-                  {t.charAt(0).toUpperCase() + t.slice(1)}
+            {/* ── LEFT COLUMN ── */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              {activeTab === "about" && (
+                <>
+                  <WhatYouLearnBox techStack={course.tech_stack ?? []} />
+                  <SkillsPills items={course.tech_stack ?? []} heading="Skills you'll gain" />
+                  <DetailsToKnow hours={course.hours} lessonsCount={totalLessons} level={course.level ?? ""} />
+                  <button onClick={() => setActiveTab("curriculum")} style={{
+                    fontSize: 14, fontWeight: 700, color: GOLD,
+                    background: "transparent", border: `1.5px solid ${GOLD}`,
+                    borderRadius: 9, padding: "10px 22px", cursor: "pointer", fontFamily: FF,
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                  }}>
+                    View full curriculum <i className="fas fa-arrow-right" style={{ fontSize: 12 }} />
+                  </button>
+                </>
+              )}
+
+              {activeTab === "curriculum" && (
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+                    <h2 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>
+                      {course.modules?.length ?? 0}-Module Program
+                    </h2>
+                    <span style={{ fontSize: 12, color: "rgba(20,20,19,0.42)", fontFamily: FF }}>
+                      {course.modules?.length ?? 0} modules · {totalLessons} lessons · {course.hours}h
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>
+                    <button onClick={expandAll} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0 }}>
+                      Expand all
+                    </button>
+                    <span style={{ color: "rgba(20,20,19,0.22)", fontSize: 14 }}>·</span>
+                    <button onClick={collapseAll} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0 }}>
+                      Collapse all
+                    </button>
+                  </div>
+                  {(course.modules ?? []).map((mod: any, i: number) => (
+                    <ModuleRow
+                      key={mod.id ?? i}
+                      mod={mod}
+                      modIndex={i}
+                      isOpen={openModules.has(i)}
+                      toggle={() => toggleModule(i)}
+                      revealDelay={Math.min(i * 45, 280)}
+                    />
+                  ))}
+                  <div style={{ marginTop: 24, textAlign: "center" }}>
+                    <button onClick={handleEnroll} style={{
+                      display: "inline-flex", alignItems: "center", gap: 8,
+                      background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+                      color: "#0a0806", fontSize: 14, fontWeight: 700,
+                      padding: "12px 28px", borderRadius: 10, border: "none", cursor: "pointer",
+                      boxShadow: "0 4px 0 rgba(140,80,20,0.38),0 8px 24px rgba(201,136,58,0.22)",
+                      fontFamily: FF,
+                    }}>
+                      Enroll in this course <i className="fas fa-arrow-right" style={{ fontSize: 12 }} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── RIGHT COLUMN ── */}
+            <div className="lmacd-right-col">
+
+              <div className="lmacd-sidebar-card">
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 18px", fontFamily: FF }}>Instructors</h3>
+                <InstructorItem
+                  name={course.instructor_name ?? "Expert Instructor"}
+                  designation="Senior AI Instructor · XERXEZ Academy"
+                  courses={2}
+                  learners="1,650"
+                />
+                <InstructorItem
+                  name="Danish Sheikh"
+                  designation="Chief AI Officer · XERXEZ"
+                  courses={2}
+                  learners="500"
+                />
+                <button style={{ fontSize: 12.5, fontWeight: 700, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0, marginTop: 4 }}>
+                  View all instructors →
                 </button>
+              </div>
+
+              <div style={{ height: 1, background: "rgba(0,0,0,0.07)", margin: "0 0 16px" }} />
+
+              <div className="lmacd-sidebar-card">
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>Offered by</h3>
+                <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
+                  <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 30, width: "auto" }} />
+                </div>
+                <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.52)", lineHeight: 1.62, margin: "0 0 10px", fontFamily: FF }}>
+                  Enterprise AI training and software solutions across UAE, India, and UK.
+                </p>
+                <Link to="/about" style={{ fontSize: 12.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: FF }}>
+                  Learn more →
+                </Link>
+              </div>
+
+              <div style={{ height: 1, background: "rgba(0,0,0,0.07)", margin: "0 0 16px" }} />
+
+              <div style={{ background: `linear-gradient(160deg,${DARK} 0%,${DARK2} 100%)`, borderRadius: 16, padding: "20px 22px", border: `1px solid rgba(201,136,58,0.22)` }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.36)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6, fontFamily: FF }}>
+                  One-time · Lifetime access
+                </div>
+                <div style={{ fontSize: 30, fontWeight: 900, color: GOLD, marginBottom: 14, fontFamily: FF }}>
+                  ₹{course.price?.toLocaleString()}
+                </div>
+                {enrolled ? (
+                  <Link to="/lma/student/dashboard" style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    background: "#d1fae5", color: "#059669", fontSize: 14, fontWeight: 700,
+                    padding: "12px", borderRadius: 10, textDecoration: "none", marginBottom: 10, fontFamily: FF,
+                  }}>
+                    <CheckCircle2 size={16} /> Go to Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <button onClick={handleEnroll} style={{
+                      width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                      background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+                      color: "#0a0806", fontSize: 14, fontWeight: 700,
+                      border: "none", borderRadius: 10, padding: "12px", cursor: "pointer",
+                      boxShadow: "0 4px 0 rgba(130,78,18,0.45)", marginBottom: 10, fontFamily: FF,
+                    }}>
+                      Enroll Now
+                    </button>
+                    <button onClick={handleEnroll} style={{
+                      width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                      background: "transparent", color: "rgba(255,255,255,0.55)", fontSize: 13,
+                      border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, padding: "11px",
+                      cursor: "pointer", fontFamily: FF, marginBottom: 12,
+                    }}>
+                      Try Free Preview
+                    </button>
+                  </>
+                )}
+                <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.32)", textAlign: "center", fontFamily: FF }}>
+                  30-day money-back guarantee
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ══ SOCIAL PROOF ══ */}
+      <div style={{ background: "#fff", borderTop: "1px solid rgba(0,0,0,0.06)", padding: "40px 0" }}>
+        <div className="lmacd-container">
+          <div style={{ display: "flex", gap: 40, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
+            <div style={{ textAlign: "center", maxWidth: 400 }}>
+              <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: "0 0 10px", fontFamily: FF }}>
+                See how top teams master AI faster with XERXEZ
+              </h3>
+              <Link to="/contact" style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: FF }}>
+                Request enterprise training →
+              </Link>
+            </div>
+            <div style={{ display: "flex", gap: 28, flexWrap: "wrap", alignItems: "center" }}>
+              {["Tata", "Capgemini", "P&G", "L'Oréal", "Danone", "HCL"].map(co => (
+                <span key={co} style={{ fontSize: 14, fontWeight: 700, color: "rgba(20,20,19,0.30)", fontFamily: FF }}>{co}</span>
               ))}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* ── Overview ── */}
-          {tab === "overview" && (
-            <div>
-              <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 18px" }}>What you'll learn</h2>
-              <div style={{ background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)", padding: "24px 26px", marginBottom: 28, boxShadow: "0 1px 6px rgba(0,0,0,0.04)" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px 28px" }} className="lmacd-learn-grid">
-                  {[...(course.tech_stack ?? []).map((t: string) => `Hands-on with ${t}`), "Build real production systems", "Certificate of completion", "Enterprise-grade best practices"].map(item => (
-                    <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                      <CheckCircle2 size={15} color="#10b981" style={{ flexShrink: 0, marginTop: 2 }} />
-                      <span style={{ fontSize: 13.5, color: "#374151", lineHeight: 1.52 }}>{item}</span>
-                    </div>
+      {/* ══ ADVANCE EXPERTISE STRIP ══ */}
+      <div style={{ background: CREAM, padding: "56px 0" }}>
+        <div className="lmacd-container">
+          <div style={{ display: "flex", gap: 48, alignItems: "center", flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 260 }}>
+              <h2 style={{ fontSize: "clamp(20px,3vw,30px)", fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>
+                Advance your team's AI expertise
+              </h2>
+              <ul style={{ fontSize: 13.5, color: "#374151", lineHeight: 1.82, paddingLeft: 20, margin: "0 0 20px", fontFamily: FF }}>
+                <li>Learn from practitioners with real production deployments</li>
+                <li>Master models and tools in hands-on labs from day one</li>
+                <li>Build deep understanding of production AI systems</li>
+                <li>Earn XERXEZ AI certification recognised at 40+ organisations</li>
+              </ul>
+              <Link to="/contact" style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: FF }}>
+                Learn more about enterprise plans →
+              </Link>
+            </div>
+            {courseList.length > 0 && (
+              <div style={{ flexShrink: 0, maxWidth: 400, width: "100%" }}>
+                <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
+                  {courseList.map((c: any, i: number) => (
+                    <Link key={c.id} to={`/lma/courses/${c.id}`} style={{
+                      display: "flex", gap: 14, padding: "16px 18px", textDecoration: "none",
+                      background: c.id === course.id ? "#fdfaf6" : "#fff",
+                      borderBottom: i < courseList.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none",
+                    }}>
+                      <ModuleThumbnail index={i} size={70} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", lineHeight: 1.3, marginBottom: 3 }}>{c.title}</div>
+                        <div style={{ fontSize: 12, color: "rgba(20,20,19,0.44)" }}>Course {i + 1} · {c.hours} hours</div>
+                      </div>
+                      <i className="fas fa-chevron-right" style={{ fontSize: 12, color: "#9ca3af", alignSelf: "center", flexShrink: 0 }} />
+                    </Link>
                   ))}
                 </div>
-              </div>
-
-              {/* Skills you'll gain */}
-              <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 14px" }}>Skills you'll gain</h2>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
-                {[...(course.tech_stack ?? []), "Problem Solving", "System Design", "API Integration", "CI/CD", "Cloud Deployment"].slice(0, 10).map((skill: string) => (
-                  <span key={skill} style={{
-                    fontSize: 13, fontWeight: 500, padding: "7px 18px", borderRadius: 999,
-                    background: "rgba(201,136,58,0.09)", color: "#5c3d1a",
-                    border: "1px solid rgba(201,136,58,0.24)", fontFamily: FF,
-                  }}>
-                    {skill}
-                  </span>
-                ))}
-              </div>
-
-              {/* Details to know */}
-              <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>Details to know</h2>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 32 }} className="lmacd-details-grid">
-                {[
-                  { icon: "fab fa-linkedin", title: "Shareable certificate", sub: "Add to your LinkedIn profile", iconBg: "#e8f1fb", iconColor: "#0077b5" },
-                  { icon: "fas fa-globe", title: "Taught in English", sub: "Certificate in English", iconBg: "rgba(201,136,58,0.12)", iconColor: GOLD },
-                  { icon: "far fa-clock", title: `${course.hours} hours to complete`, sub: "Learn at your own pace", iconBg: "rgba(201,136,58,0.12)", iconColor: GOLD },
-                  { icon: "fas fa-layer-group", title: `${totalLessons} lessons`, sub: `${(course.level ?? "").charAt(0).toUpperCase() + (course.level ?? "").slice(1)} level`, iconBg: "rgba(201,136,58,0.12)", iconColor: GOLD },
-                ].map(d => (
-                  <div key={d.title} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: d.iconBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <i className={d.icon} style={{ fontSize: 18, color: d.iconColor }} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", marginBottom: 3, fontFamily: FF }}>{d.title}</div>
-                      <div style={{ fontSize: 12, color: "rgba(20,20,19,0.50)", fontFamily: FF }}>{d.sub}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>Requirements</h2>
-              <div style={{ background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)", padding: "20px 26px", boxShadow: "0 1px 6px rgba(0,0,0,0.04)" }}>
-                <ul style={{ fontSize: 13.5, color: "#4b5563", lineHeight: 1.78, paddingLeft: 20, margin: 0 }}>
-                  <li>Basic programming knowledge</li>
-                  <li>Computer with stable internet access</li>
-                  <li>No prior {course.category} experience required</li>
-                  <li>Willingness to work on real-world projects</li>
-                </ul>
-              </div>
-            </div>
-          )}
-
-          {/* ── Curriculum ── */}
-          {tab === "curriculum" && (
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 22, flexWrap: "wrap", gap: 8 }}>
-                <div>
-                  <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 4px" }}>Course Curriculum</h2>
-                  <span style={{ fontSize: 13, color: "rgba(20,20,19,0.40)" }}>
-                    {course.modules?.length ?? 0} modules · {totalLessons} lessons · {course.hours}h total
-                  </span>
-                </div>
-              </div>
-              {(course.modules ?? []).map((m: any, i: number) => (
-                <ModuleRow key={m.id ?? i} mod={m} index={i} />
-              ))}
-            </div>
-          )}
-
-          {/* ── Instructor ── */}
-          {tab === "instructor" && (
-            <div>
-              <h2 style={{ fontSize: 19, fontWeight: 800, color: "#141413", margin: "0 0 22px" }}>Your Instructor</h2>
-              <div style={{ background: "#fff", borderRadius: 18, border: "1px solid rgba(0,0,0,0.07)", padding: "26px", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
-                <div style={{ display: "flex", gap: 18, alignItems: "flex-start", marginBottom: 20 }}>
-                  <div style={{
-                    width: 76, height: 76, borderRadius: "50%", flexShrink: 0,
-                    background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 28, fontWeight: 800, color: "#0a0806",
-                    boxShadow: `0 0 0 4px rgba(201,136,58,0.18)`,
-                  }}>
-                    {(course.instructor_name ?? "I").charAt(0)}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 19, fontWeight: 800, color: GOLD, marginBottom: 4 }}>{course.instructor_name}</div>
-                    <div style={{ fontSize: 13.5, color: "rgba(20,20,19,0.50)", marginBottom: 12 }}>Senior Instructor · XERXEZ Academy</div>
-                    <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
-                      {[
-                        { icon: "fas fa-star",  val: `${course.rating} Instructor Rating`, col: "#f59e0b" },
-                        { icon: "fas fa-users", val: `${(course.total_students ?? 0).toLocaleString()} Students`, col: "rgba(20,20,19,0.42)" },
-                        { icon: "fas fa-book",  val: "3 Courses", col: "rgba(20,20,19,0.42)" },
-                      ].map(s => (
-                        <span key={s.val} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 13, color: s.col, fontWeight: 600 }}>
-                          <i className={s.icon} style={{ fontSize: 12 }} /> {s.val}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p style={{ fontSize: 13.5, color: "#4b5563", lineHeight: 1.74, margin: 0 }}>
-                  An expert practitioner with years of hands-on experience building enterprise AI and cloud systems at scale. No fluff — just what you need to ship real systems in production. Passionate about making complex technology accessible through clear, practical teaching that directly transfers to your work.
+                <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.48)", margin: "10px 4px 0", lineHeight: 1.6, fontFamily: FF }}>
+                  {course.description?.substring(0, 90)}…
                 </p>
               </div>
-            </div>
-          )}
-
-          {/* ── Reviews ── */}
-          {tab === "reviews" && (
-            <div>
-              <div style={{ display: "flex", gap: 24, alignItems: "center", marginBottom: 28, flexWrap: "wrap" }}>
-                <div style={{ background: "#fff", borderRadius: 18, border: "1px solid rgba(0,0,0,0.07)", padding: "24px 32px", textAlign: "center", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
-                  <div style={{ fontSize: 60, fontWeight: 900, color: "#141413", lineHeight: 1, fontFamily: FF }}>{course.rating ?? "–"}</div>
-                  <div style={{ margin: "8px 0 6px" }}><Stars rating={course.rating ?? 0} /></div>
-                  <div style={{ fontSize: 12, color: "rgba(20,20,19,0.40)" }}>Course Rating</div>
-                </div>
-              </div>
-              {(course.reviews ?? []).length === 0 ? (
-                <div style={{ background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)", padding: "40px", textAlign: "center", boxShadow: "0 1px 6px rgba(0,0,0,0.04)" }}>
-                  <div style={{ fontSize: 13.5, color: "#9ca3af" }}>No reviews yet — be the first after enrolling!</div>
-                </div>
-              ) : (
-                (course.reviews ?? []).map((r: any) => (
-                  <div key={r.id} style={{ background: "#fff", borderRadius: 14, border: "1px solid rgba(0,0,0,0.07)", padding: "20px 22px", marginBottom: 12, boxShadow: "0 1px 6px rgba(0,0,0,0.04)" }}>
-                    <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-                      <div style={{ width: 42, height: 42, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 15, color: "#0a0806", flexShrink: 0 }}>
-                        {r.student_name?.charAt(0)}
-                      </div>
-                      <div>
-                        <div style={{ fontSize: 14, fontWeight: 700, color: "#141413", marginBottom: 4 }}>{r.student_name}</div>
-                        <Stars rating={r.rating} />
-                        <p style={{ fontSize: 13.5, color: "#4b5563", margin: "10px 0 0", lineHeight: 1.66 }}>{r.comment}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* ── RIGHT: sticky sidebar ── */}
-        <div style={{ width: 310, flexShrink: 0, position: "sticky", top: 20, marginTop: -48 }} className="lmacd-sidebar">
-          <PriceCard course={course} enrolled={enrolled} totalLessons={totalLessons} onEnroll={handleEnroll} />
-          <InstructorCard course={course} />
+            )}
+          </div>
         </div>
       </div>
 
@@ -740,20 +796,50 @@ export default function LMACourseDetailPage() {
       )}
 
       <style>{`
-        @keyframes lmacd-spin { to { transform: rotate(360deg); } }
+        .lmacd-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 
-        @media (max-width: 560px) {
-          .lmacd-details-grid { grid-template-columns: 1fr !important; }
+        .lmacd-hero {
+          background: linear-gradient(160deg,${DARK} 0%,${DARK2} 100%);
+          padding: 80px 0 56px;
+          position: relative;
+          overflow: hidden;
         }
+        .lmacd-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+        .lmacd-orb-1 { top:8%;left:4%;width:360px;height:360px;background:radial-gradient(circle,rgba(201,136,58,0.10) 0%,transparent 70%);animation:lmacd-float1 9s ease-in-out infinite; }
+        .lmacd-orb-2 { bottom:4%;right:6%;width:240px;height:240px;background:radial-gradient(circle,rgba(232,168,78,0.07) 0%,transparent 70%);animation:lmacd-float2 13s ease-in-out infinite; }
+        .lmacd-orb-3 { top:48%;right:22%;width:110px;height:110px;background:radial-gradient(circle,rgba(201,136,58,0.13) 0%,transparent 70%);animation:lmacd-float3 7s ease-in-out infinite; }
 
-        @media (max-width: 860px) {
-          .lmacd-body { flex-direction: column !important; }
-          .lmacd-sidebar { width: 100% !important; position: static !important; margin-top: 24px !important; order: -1; }
-          .lmacd-learn-grid { grid-template-columns: 1fr !important; }
+        .lmacd-tab-nav { background:#fff; border-bottom:2px solid rgba(0,0,0,0.08); position:sticky; z-index:90; }
+
+        .lmacd-body-row { display:flex; gap:40px; align-items:flex-start; padding:32px 0 60px; }
+
+        .lmacd-right-col { width:300px; flex-shrink:0; position:sticky; top:132px; }
+        .lmacd-sidebar-card { background:#fff; border-radius:16px; padding:22px 22px 18px; border:1px solid rgba(0,0,0,0.08); box-shadow:0 4px 20px rgba(0,0,0,0.07); margin-bottom:16px; }
+
+        .lmacd-spinner { width:36px; height:36px; border:3px solid rgba(201,136,58,0.18); border-top-color:${GOLD}; border-radius:50%; animation:lmacd-spin 0.8s linear infinite; display:inline-block; }
+
+        @keyframes lmacd-float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(22px,-32px) scale(1.06)} }
+        @keyframes lmacd-float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,26px) scale(0.95)} }
+        @keyframes lmacd-float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(14px,-18px)} }
+        @keyframes lmacd-spin { to{transform:rotate(360deg)} }
+
+        button:focus-visible { outline:2px solid ${GOLD}; outline-offset:2px; }
+        html { scroll-behavior:smooth; }
+
+        @media (max-width:960px) {
+          .lmacd-body-row { flex-direction:column; }
+          .lmacd-right-col { width:100%; position:static; }
+          .lmacd-tab-nav { top:0 !important; }
         }
-
-        @media (prefers-reduced-motion: reduce) {
-          * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        @media (max-width:600px) {
+          .lmacd-learn-grid { grid-template-columns:1fr !important; }
+          .lmacd-hero { padding:56px 0 36px; }
+          .lmacd-lesson-indent { padding-left:16px !important; }
+        }
+        @media (prefers-reduced-motion:reduce) {
+          .lmacd-orb { animation:none !important; }
+          .lmacd-spinner { animation-duration:0.01ms !important; }
+          * { transition-duration:0.01ms !important; }
         }
       `}</style>
     </div>
