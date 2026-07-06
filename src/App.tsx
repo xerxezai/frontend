@@ -43,12 +43,19 @@ const PrivacyPolicyPage  = lazy(() => import("./page/PrivacyPolicyPage"));
 const TermsPage          = lazy(() => import("./page/TermsPage"));
 
 // LMA (Learning Management Application)
-const LMALoginPage           = lazy(() => import("./page/lma/LMALoginPage"));
-const LMARegisterPage        = lazy(() => import("./page/lma/LMARegisterPage"));
-const LMAStudentDashboard    = lazy(() => import("./page/lma/LMAStudentDashboard"));
-const LMAInstructorDashboard = lazy(() => import("./page/lma/LMAInstructorDashboard"));
-const LMACoursesPage         = lazy(() => import("./page/lma/LMACoursesPage"));
-const LMACourseDetailPage    = lazy(() => import("./page/lma/LMACourseDetailPage"));
+const LMALoginPage              = lazy(() => import("./page/lma/LMALoginPage"));
+const LMARegisterPage           = lazy(() => import("./page/lma/LMARegisterPage"));
+const LMAStudentDashboard       = lazy(() => import("./page/lma/LMAStudentDashboard"));
+const LMAInstructorDashboard    = lazy(() => import("./page/lma/LMAInstructorDashboard"));
+const LMACoursesPage            = lazy(() => import("./page/lma/LMACoursesPage"));
+const LMACourseDetailPage       = lazy(() => import("./page/lma/LMACourseDetailPage"));
+const LMAMyCoursesPage          = lazy(() => import("./page/lma/LMAMyCoursesPage"));
+const LMABrowseCoursesPage      = lazy(() => import("./page/lma/LMABrowseCoursesPage"));
+const LMAAssignmentsPage        = lazy(() => import("./page/lma/LMAAssignmentsPage"));
+const LMACertificatesPage       = lazy(() => import("./page/lma/LMACertificatesPage"));
+const LMAProgressPage           = lazy(() => import("./page/lma/LMAProgressPage"));
+const LMAContinueLearningPage   = lazy(() => import("./page/lma/LMAContinueLearningPage"));
+const LMAProfilePage            = lazy(() => import("./page/lma/LMAProfilePage"));
 
 function App() {
   return (
@@ -92,12 +99,19 @@ function App() {
           <Route path="/terms"                   element={<TermsPage />} />
 
           {/* LMA routes */}
-          <Route path="/lma/login"               element={<LMALoginPage />} />
-          <Route path="/lma/register"            element={<LMARegisterPage />} />
-          <Route path="/lma/student/dashboard"   element={<LMAStudentDashboard />} />
-          <Route path="/lma/instructor/dashboard" element={<LMAInstructorDashboard />} />
-          <Route path="/lma/courses"             element={<LMACoursesPage />} />
-          <Route path="/lma/courses/:id"         element={<LMACourseDetailPage />} />
+          <Route path="/lma/login"                        element={<LMALoginPage />} />
+          <Route path="/lma/register"                     element={<LMARegisterPage />} />
+          <Route path="/lma/student/dashboard"            element={<LMAStudentDashboard />} />
+          <Route path="/lma/student/courses"              element={<LMAMyCoursesPage />} />
+          <Route path="/lma/student/continue-learning"    element={<LMAContinueLearningPage />} />
+          <Route path="/lma/student/browse"               element={<LMABrowseCoursesPage />} />
+          <Route path="/lma/student/assignments"          element={<LMAAssignmentsPage />} />
+          <Route path="/lma/student/certificates"         element={<LMACertificatesPage />} />
+          <Route path="/lma/student/progress"             element={<LMAProgressPage />} />
+          <Route path="/lma/student/profile"              element={<LMAProfilePage />} />
+          <Route path="/lma/instructor/dashboard"         element={<LMAInstructorDashboard />} />
+          <Route path="/lma/courses"                      element={<LMACoursesPage />} />
+          <Route path="/lma/courses/:id"                  element={<LMACourseDetailPage />} />
 
           <Route path="*"                        element={<NotFoundPage />} />
         </Routes>
