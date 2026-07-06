@@ -7,7 +7,7 @@ import {
   LayoutDashboard, BookOpen, Users, DollarSign, Star,
   ClipboardList, TrendingUp, PlusCircle, ChevronRight,
   Bell, Menu, X, User, LogOut, Edit3, CheckCircle,
-  Eye, Clock, BarChart2, Award, Check,
+  Eye, Clock, BarChart2, Award, Check, GraduationCap,
 } from "lucide-react";
 
 const API = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
@@ -364,7 +364,25 @@ export default function LMAInstructorDashboard() {
           ))}
         </nav>
 
-        <div style={{ padding: "12px 12px 24px" }}>
+        <div style={{ padding: "0 12px 8px" }}>
+          <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.25)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "12px 4px 6px" }}>
+            SWITCH PORTAL
+          </div>
+          <Link to="/lma/student/dashboard" style={{
+            display: "flex", alignItems: "center", gap: 10,
+            padding: "10px 16px", borderRadius: 10, textDecoration: "none",
+            background: "linear-gradient(135deg, rgba(201,136,58,0.20) 0%, rgba(232,168,78,0.10) 100%)",
+            border: "1px solid rgba(201,136,58,0.35)",
+            color: AMBER, fontSize: 13.5, fontWeight: 700, fontFamily: FF,
+            marginBottom: 8, transition: "all 0.18s ease",
+          }}>
+            <GraduationCap size={16} />
+            <span style={{ flex: 1 }}>Student Portal</span>
+            <ChevronRight size={14} />
+          </Link>
+        </div>
+
+        <div style={{ padding: "0 12px 24px" }}>
           <SideItem icon={LogOut} label="Logout" onClick={logout} danger />
         </div>
       </aside>

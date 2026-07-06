@@ -87,6 +87,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   const path = location.pathname;
 
   const name = localStorage.getItem("lma_name") ?? "Student";
+  const canInstructor = localStorage.getItem("lma_can_instructor") === "true";
   const [sideOpen, setSideOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
 
@@ -216,6 +217,26 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
             </div>
           ))}
         </nav>
+
+        {canInstructor && (
+          <div style={{ padding: "0 12px 8px" }}>
+            <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.25)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "12px 4px 6px" }}>
+              SWITCH PORTAL
+            </div>
+            <Link to="/lma/instructor/dashboard" style={{
+              display: "flex", alignItems: "center", gap: 10,
+              padding: "10px 16px", borderRadius: 10, textDecoration: "none",
+              background: "linear-gradient(135deg, rgba(201,136,58,0.20) 0%, rgba(232,168,78,0.10) 100%)",
+              border: "1px solid rgba(201,136,58,0.35)",
+              color: AMBER, fontSize: 13.5, fontWeight: 700, fontFamily: FF,
+              marginBottom: 2, transition: "all 0.18s ease",
+            }}>
+              <BookOpen size={16} />
+              <span style={{ flex: 1 }}>Instructor Portal</span>
+              <ChevronRight size={14} />
+            </Link>
+          </div>
+        )}
 
         <div style={{ padding: "12px 12px 24px" }}>
           <SideItem icon={LogOut} label="Logout" danger onClick={logout} />
