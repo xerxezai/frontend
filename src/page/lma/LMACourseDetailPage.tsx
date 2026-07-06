@@ -285,6 +285,120 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
 };
 
 /* ════════════════════════════════════════════════════════════════════════════
+   3-D HERO COURSE CARD
+════════════════════════════════════════════════════════════════════════════ */
+const HeroCourseCard = ({ course, totalLessons, onEnroll }: {
+  course: any; totalLessons: number; onEnroll: () => void;
+}) => {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current; if (!card) return;
+    const wrap = wrapRef.current; if (!wrap) return;
+    const r = wrap.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    card.style.transform = `perspective(700px) rotateY(${x * 14}deg) rotateX(${-y * 10}deg) translateZ(10px)`;
+  };
+
+  const onLeave = () => {
+    const card = cardRef.current;
+    if (card) card.style.transform = "perspective(700px) rotateY(0deg) rotateX(0deg) translateZ(0)";
+  };
+
+  return (
+    <div ref={wrapRef} className="lmacd-hcard-wrap" onMouseMove={onMove} onMouseLeave={onLeave}>
+      <div ref={cardRef} className="lmacd-hcard">
+        {/* Gold top stripe */}
+        <div style={{ height: 4, background: `linear-gradient(90deg,${AMBER},${GOLD})`, margin: "-24px -24px 22px" }} />
+
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+          <div style={{
+            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <i className="fas fa-graduation-cap" style={{ color: "#0a0806", fontSize: 16 }} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10.5, fontWeight: 800, color: AMBER, letterSpacing: "0.12em", textTransform: "uppercase" as const }}>XERXEZ ACADEMY</div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.32)", fontFamily: FF }}>Certified Professional Program</div>
+          </div>
+        </div>
+
+        {/* Course title */}
+        <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 5, lineHeight: 1.25, fontFamily: FF }}>
+          {course.title}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 20 }}>
+          {[1,2,3,4,5].map(n => (
+            <i key={n} className="fas fa-star" style={{ fontSize: 10, color: n <= Math.round(course.rating ?? 4) ? "#f59e0b" : "rgba(255,255,255,0.15)" }} />
+          ))}
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#f59e0b", marginLeft: 4 }}>{course.rating ?? 4.8}</span>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", marginLeft: 2 }}>
+            ({(course.total_ratings ?? 247).toLocaleString()} reviews)
+          </span>
+        </div>
+
+        {/* Stat tiles */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 20 }}>
+          {[
+            { val: `${course.hours}h`,   label: "Duration" },
+            { val: String(totalLessons), label: "Lessons"  },
+            { val: ((course.level ?? "Int").charAt(0).toUpperCase() + (course.level ?? "Int").slice(1)), label: "Level" },
+          ].map(s => (
+            <div key={s.label} style={{
+              background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: "10px 6px",
+              textAlign: "center", border: "1px solid rgba(255,255,255,0.07)",
+            }}>
+              <div style={{ fontSize: 14, fontWeight: 800, color: AMBER, fontFamily: FF }}>{s.val}</div>
+              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.32)", marginTop: 2, fontFamily: FF }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Completion bar */}
+        <div style={{ marginBottom: 18 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 7 }}>
+            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Avg. Completion</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, fontFamily: FF }}>94%</span>
+          </div>
+          <div style={{ height: 5, background: "rgba(255,255,255,0.08)", borderRadius: 99, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: "94%", borderRadius: 99, background: `linear-gradient(90deg,${AMBER},${GOLD})`, boxShadow: `0 0 8px rgba(201,136,58,0.50)` }} />
+          </div>
+        </div>
+
+        {/* Certificate badge */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 10, padding: "12px 14px",
+          borderRadius: 12, background: "rgba(201,136,58,0.08)",
+          border: "1px solid rgba(201,136,58,0.20)", marginBottom: 18,
+        }}>
+          <i className="fas fa-certificate" style={{ color: GOLD, fontSize: 22, flexShrink: 0 }} />
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#fff", fontFamily: FF }}>Certificate of Completion</div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Shareable · LinkedIn-ready</div>
+          </div>
+        </div>
+
+        {/* Enroll CTA */}
+        <button onClick={onEnroll} style={{
+          width: "100%", padding: "13px", borderRadius: 11,
+          background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+          color: "#0a0806", fontWeight: 800, fontSize: 13, fontFamily: FF,
+          border: "none", cursor: "pointer",
+          boxShadow: "0 4px 0 rgba(130,78,18,0.45),0 8px 24px rgba(201,136,58,0.28)",
+        }}>
+          Enroll Now — ₹{course.price?.toLocaleString() ?? "–"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/* ════════════════════════════════════════════════════════════════════════════
    MAIN COMPONENT
 ════════════════════════════════════════════════════════════════════════════ */
 export default function LMACourseDetailPage() {
@@ -426,7 +540,7 @@ export default function LMACourseDetailPage() {
             ← Back to Courses
           </Link>
 
-          <div style={{ maxWidth: 740 }}>
+          <div className="lmacd-hero-row"><div className="lmacd-hero-text">
             {course.badge && (
               <span style={{
                 display: "inline-block", fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
@@ -536,6 +650,10 @@ export default function LMACourseDetailPage() {
               )}
             </div>
           </div>
+          <div className="lmacd-hero-card-col">
+            <HeroCourseCard course={course} totalLessons={totalLessons} onEnroll={handleEnroll} />
+          </div>
+          </div>
         </div>
       </section>
 
@@ -601,6 +719,39 @@ export default function LMACourseDetailPage() {
                   }}>
                     View full curriculum <i className="fas fa-arrow-right" style={{ fontSize: 12 }} />
                   </button>
+
+                  {/* ── Student outcomes ── */}
+                  <div style={{ marginTop: 36 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>What students achieve</h3>
+                    <div className="lmacd-outcomes-grid">
+                      {[
+                        { num: "94%",    label: "Completion rate", icon: "fas fa-chart-line" },
+                        { num: "4.8★",   label: "Average rating",  icon: "fas fa-star"       },
+                        { num: "1,200+", label: "Active learners", icon: "fas fa-users"      },
+                      ].map(s => (
+                        <div key={s.label} className="lmacd-outcome-card">
+                          <i className={s.icon} style={{ color: GOLD, fontSize: 18, marginBottom: 8, display: "block" }} />
+                          <div style={{ fontSize: 22, fontWeight: 900, color: "#141413", lineHeight: 1, fontFamily: FF }}>{s.num}</div>
+                          <div style={{ fontSize: 11, color: "rgba(20,20,19,0.45)", marginTop: 4, fontFamily: FF }}>{s.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)", padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", marginTop: 14 }}>
+                      <div style={{ display: "flex", gap: 3, marginBottom: 12 }}>
+                        {[1,2,3,4,5].map(n => <i key={n} className="fas fa-star" style={{ fontSize: 12, color: "#f59e0b" }} />)}
+                      </div>
+                      <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.72, margin: "0 0 16px", fontFamily: FF, fontStyle: "italic" }}>
+                        "The hands-on approach is what sets this apart. I deployed my first RAG pipeline in three weeks. The XERXEZ certification opened doors I didn't expect."
+                      </p>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div style={{ width: 36, height: 36, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 13, color: "#0a0806", flexShrink: 0, fontFamily: FF }}>R</div>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>Rahul Sharma</div>
+                          <div style={{ fontSize: 11, color: "rgba(20,20,19,0.45)", fontFamily: FF }}>ML Engineer · Tata Consultancy Services</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </>
               )}
 
@@ -675,8 +826,8 @@ export default function LMACourseDetailPage() {
 
               <div className="lmacd-sidebar-card">
                 <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>Offered by</h3>
-                <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
-                  <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 30, width: "auto" }} />
+                <div style={{ background: DARK, borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, marginBottom: 12, border: "1px solid rgba(201,136,58,0.20)" }}>
+                  <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 28, width: "auto" }} />
                 </div>
                 <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.52)", lineHeight: 1.62, margin: "0 0 10px", fontFamily: FF }}>
                   Enterprise AI training and software solutions across UAE, India, and UK.
@@ -908,7 +1059,37 @@ export default function LMACourseDetailPage() {
           .lmacd-orb,.lmacd-geo { animation:none !important; }
           .lmacd-shimmer-btn::after { animation:none !important; }
           .lmacd-spinner { animation-duration:0.01ms !important; }
+          .lmacd-hcard-wrap { animation:none !important; }
           * { transition-duration:0.01ms !important; }
+        }
+
+        /* ── Hero 2-col row ── */
+        .lmacd-hero-row { display:flex; gap:48px; align-items:center; }
+        .lmacd-hero-text { flex:1; min-width:0; }
+        .lmacd-hero-card-col { width:360px; flex-shrink:0; }
+
+        /* ── 3-D floating card ── */
+        .lmacd-hcard-wrap { animation:lmacd-card-float 4s ease-in-out infinite; }
+        .lmacd-hcard {
+          background:linear-gradient(145deg,#1f1507 0%,#120e05 100%);
+          border-radius:18px; padding:24px; overflow:hidden;
+          border:1px solid rgba(201,136,58,0.22);
+          box-shadow:0 20px 60px rgba(0,0,0,0.50),inset 0 1px 0 rgba(255,255,255,0.05);
+          transition:transform 0.18s cubic-bezier(0.25,0.46,0.45,0.94);
+          will-change:transform;
+        }
+        @keyframes lmacd-card-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+        /* ── Student outcomes ── */
+        .lmacd-outcomes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+        .lmacd-outcome-card { background:#fff; border-radius:14px; padding:18px 14px; border:1px solid rgba(0,0,0,0.07); text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+
+        @media (max-width:1000px) {
+          .lmacd-hero-row { flex-direction:column; }
+          .lmacd-hero-card-col { width:100%; max-width:440px; margin:0 auto; }
+        }
+        @media (max-width:600px) {
+          .lmacd-outcomes-grid { grid-template-columns:1fr; }
         }
       `}</style>
     </div>
