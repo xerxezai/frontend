@@ -311,95 +311,95 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
     <div ref={wrapRef} className="lmacd-hcard-wrap" onMouseMove={onMove} onMouseLeave={onLeave}>
       <div ref={cardRef} className="lmacd-hcard">
         {/* Gold top stripe */}
-        <div style={{ height: 4, background: `linear-gradient(90deg,${AMBER},${GOLD})`, margin: "-24px -24px 22px" }} />
+        <div style={{ height: 4, background: `linear-gradient(90deg,${AMBER},${GOLD})`, margin: "-20px -20px 16px" }} />
 
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
           <div style={{
-            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+            width: 34, height: 34, borderRadius: 9, flexShrink: 0,
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <i className="fas fa-graduation-cap" style={{ color: "#0a0806", fontSize: 16 }} />
+            <i className="fas fa-graduation-cap" style={{ color: "#0a0806", fontSize: 14 }} />
           </div>
           <div>
-            <div style={{ fontSize: 10.5, fontWeight: 800, color: AMBER, letterSpacing: "0.12em", textTransform: "uppercase" as const }}>XERXEZ ACADEMY</div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.32)", fontFamily: FF }}>Certified Professional Program</div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: AMBER, letterSpacing: "0.12em", textTransform: "uppercase" as const }}>XERXEZ ACADEMY</div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.32)", fontFamily: FF }}>Certified Professional Program</div>
           </div>
         </div>
 
         {/* Course title */}
-        <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 5, lineHeight: 1.25, fontFamily: FF }}>
+        <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 4, lineHeight: 1.25, fontFamily: FF }}>
           {course.title}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 14 }}>
           {[1,2,3,4,5].map(n => (
-            <i key={n} className="fas fa-star" style={{ fontSize: 10, color: n <= Math.round(course.rating ?? 4) ? "#f59e0b" : "rgba(255,255,255,0.15)" }} />
+            <i key={n} className="fas fa-star" style={{ fontSize: 9, color: n <= Math.round(course.rating ?? 4) ? "#f59e0b" : "rgba(255,255,255,0.15)" }} />
           ))}
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#f59e0b", marginLeft: 4 }}>{course.rating ?? 4.8}</span>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", marginLeft: 2 }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#f59e0b", marginLeft: 3 }}>{course.rating ?? 4.8}</span>
+          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.28)", marginLeft: 2 }}>
             ({(course.total_ratings ?? 247).toLocaleString()} reviews)
           </span>
         </div>
 
         {/* Stat tiles */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 7, marginBottom: 14 }}>
           {[
             { val: `${course.hours}h`,   label: "Duration" },
             { val: String(totalLessons), label: "Lessons"  },
             { val: ((course.level ?? "Int").charAt(0).toUpperCase() + (course.level ?? "Int").slice(1)), label: "Level" },
           ].map(s => (
             <div key={s.label} style={{
-              background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: "10px 6px",
+              background: "rgba(255,255,255,0.05)", borderRadius: 9, padding: "8px 5px",
               textAlign: "center", border: "1px solid rgba(255,255,255,0.07)",
             }}>
-              <div style={{ fontSize: 14, fontWeight: 800, color: AMBER, fontFamily: FF }}>{s.val}</div>
-              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.32)", marginTop: 2, fontFamily: FF }}>{s.label}</div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: AMBER, fontFamily: FF }}>{s.val}</div>
+              <div style={{ fontSize: 9.5, color: "rgba(255,255,255,0.32)", marginTop: 2, fontFamily: FF }}>{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Completion bar */}
-        <div style={{ marginBottom: 18 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 7 }}>
-            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Avg. Completion</span>
-            <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, fontFamily: FF }}>94%</span>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+            <span style={{ fontSize: 10.5, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Avg. Completion</span>
+            <span style={{ fontSize: 10.5, fontWeight: 700, color: GOLD, fontFamily: FF }}>94%</span>
           </div>
-          <div style={{ height: 5, background: "rgba(255,255,255,0.08)", borderRadius: 99, overflow: "hidden" }}>
+          <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 99, overflow: "hidden" }}>
             <div style={{ height: "100%", width: "94%", borderRadius: 99, background: `linear-gradient(90deg,${AMBER},${GOLD})`, boxShadow: `0 0 8px rgba(201,136,58,0.50)` }} />
           </div>
         </div>
 
         {/* Certificate badge */}
         <div style={{
-          display: "flex", alignItems: "center", gap: 10, padding: "12px 14px",
-          borderRadius: 12, background: "rgba(201,136,58,0.08)",
-          border: "1px solid rgba(201,136,58,0.20)", marginBottom: 18,
+          display: "flex", alignItems: "center", gap: 9, padding: "9px 12px",
+          borderRadius: 10, background: "rgba(201,136,58,0.08)",
+          border: "1px solid rgba(201,136,58,0.20)", marginBottom: 14,
         }}>
-          <i className="fas fa-certificate" style={{ color: GOLD, fontSize: 22, flexShrink: 0 }} />
+          <i className="fas fa-certificate" style={{ color: GOLD, fontSize: 18, flexShrink: 0 }} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#fff", fontFamily: FF }}>Certificate of Completion</div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Shareable · LinkedIn-ready</div>
+            <div style={{ fontSize: 11.5, fontWeight: 700, color: "#fff", fontFamily: FF }}>Certificate of Completion</div>
+            <div style={{ fontSize: 9.5, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Shareable · LinkedIn-ready</div>
           </div>
         </div>
 
         {/* Enroll CTA */}
         <button onClick={onEnroll} style={{
-          width: "100%", padding: "13px", borderRadius: 11,
+          width: "100%", padding: "11px", borderRadius: 10,
           background: `linear-gradient(135deg,${AMBER},${GOLD})`,
           color: "#0a0806", fontWeight: 800, fontSize: 13, fontFamily: FF,
           border: "none", cursor: "pointer",
-          boxShadow: "0 4px 0 rgba(130,78,18,0.45),0 8px 24px rgba(201,136,58,0.28)",
+          boxShadow: "0 3px 0 rgba(130,78,18,0.45),0 6px 20px rgba(201,136,58,0.28)",
         }}>
           Enroll Now — ₹{course.price?.toLocaleString() ?? "–"}
         </button>
         <button onClick={onPreview} className="lmacd-preview-btn" style={{
-          width: "100%", padding: "11px", borderRadius: 11, marginTop: 10,
-          background: "transparent", color: GOLD, fontWeight: 700, fontSize: 12, fontFamily: FF,
+          width: "100%", padding: "9px", borderRadius: 10, marginTop: 8,
+          background: "transparent", color: GOLD, fontWeight: 700, fontSize: 11.5, fontFamily: FF,
           border: `2px solid ${GOLD}`, cursor: "pointer",
           transition: "background 0.20s ease",
         }}>
-          <i className="fas fa-play-circle" style={{ fontSize: 11, marginRight: 6 }} />
+          <i className="fas fa-play-circle" style={{ fontSize: 10, marginRight: 5 }} />
           Try Free Preview
         </button>
       </div>
@@ -591,7 +591,7 @@ export default function LMACourseDetailPage() {
           <Link to="/lma/courses" style={{
             display: "inline-flex", alignItems: "center", gap: 6,
             fontSize: 12, color: "rgba(255,255,255,0.38)", textDecoration: "none",
-            marginBottom: 22, fontFamily: FF, transition: "color 0.18s ease",
+            marginBottom: 14, fontFamily: FF, transition: "color 0.18s ease",
           }}
             onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
             onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.38)")}
@@ -603,7 +603,7 @@ export default function LMACourseDetailPage() {
             {course.badge && (
               <span style={{
                 display: "inline-block", fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
-                textTransform: "uppercase", padding: "3px 10px", borderRadius: 999, marginBottom: 16,
+                textTransform: "uppercase", padding: "3px 10px", borderRadius: 999, marginBottom: 12,
                 background: "rgba(255,193,0,0.18)", color: "#f59e0b",
               }}>
                 {course.badge}
@@ -612,17 +612,17 @@ export default function LMACourseDetailPage() {
 
             <h1 style={{
               fontFamily: FF, fontWeight: 900,
-              fontSize: "clamp(32px,5vw,52px)", lineHeight: 1.1,
-              color: "#fff", margin: "0 0 20px", letterSpacing: "-0.025em",
+              fontSize: "clamp(28px,4.2vw,48px)", lineHeight: 1.1,
+              color: "#fff", margin: "0 0 14px", letterSpacing: "-0.025em",
             }}>
               {course.title}
             </h1>
 
-            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.52)", lineHeight: 1.68, margin: "0 0 24px", maxWidth: 620, fontFamily: FF }}>
+            <p style={{ fontSize: 14.5, color: "rgba(255,255,255,0.52)", lineHeight: 1.62, margin: "0 0 16px", maxWidth: 620, fontFamily: FF }}>
               {course.description}
             </p>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", marginBottom: 20 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center", marginBottom: 14 }}>
               {course.rating > 0 && (
                 <>
                   <StarRating rating={course.rating} />
@@ -637,7 +637,7 @@ export default function LMACourseDetailPage() {
               </span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
               <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Included with</span>
               <span style={{
                 fontSize: 11, fontWeight: 800, letterSpacing: "0.10em", textTransform: "uppercase",
@@ -649,7 +649,7 @@ export default function LMACourseDetailPage() {
               <span style={{ fontSize: 12, color: GOLD, fontFamily: FF, cursor: "pointer" }}>· Learn more</span>
             </div>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
               <span style={{ fontSize: 11, fontWeight: 600, padding: "4px 13px", borderRadius: 999, border: `1px solid rgba(201,136,58,0.55)`, color: AMBER, fontFamily: FF }}>
                 {course.category}
               </span>
@@ -661,7 +661,7 @@ export default function LMACourseDetailPage() {
               </span>
             </div>
 
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 32 }}>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 22 }}>
               {(course.tech_stack ?? []).map((t: string) => (
                 <span key={t} style={{
                   fontSize: 11, fontWeight: 600, padding: "3px 11px", borderRadius: 999,
@@ -1038,8 +1038,7 @@ export default function LMACourseDetailPage() {
 
         .lmacd-hero {
           background: linear-gradient(160deg,${DARK} 0%,${DARK2} 100%);
-          padding: 100px 0 72px;
-          min-height: 85vh;
+          padding: 68px 0 52px;
           position: relative;
         }
         /* Dot grid overlay */
@@ -1093,7 +1092,7 @@ export default function LMACourseDetailPage() {
         }
         @media (max-width:600px) {
           .lmacd-learn-grid { grid-template-columns:1fr !important; }
-          .lmacd-hero { padding:72px 0 48px; min-height:auto; }
+          .lmacd-hero { padding:56px 0 36px; }
           .lmacd-lesson-indent { padding-left:16px !important; }
         }
         /* Shimmer on sticky Enroll Now */
@@ -1113,7 +1112,7 @@ export default function LMACourseDetailPage() {
 
         /* 375px mobile */
         @media (max-width:420px) {
-          .lmacd-hero { padding:64px 0 40px; }
+          .lmacd-hero { padding:48px 0 32px; }
           .lmacd-container { padding:0 16px; }
           .lmacd-body-row { gap:24px; padding:20px 0 40px; }
         }
@@ -1136,9 +1135,9 @@ export default function LMACourseDetailPage() {
         .lmacd-hcard-wrap { animation:lmacd-card-float 4s ease-in-out infinite; }
         .lmacd-hcard {
           background:linear-gradient(145deg,#1f1507 0%,#120e05 100%);
-          border-radius:18px; padding:24px; overflow:hidden;
+          border-radius:16px; padding:20px; overflow:hidden;
           border:1px solid rgba(201,136,58,0.22);
-          box-shadow:0 20px 60px rgba(0,0,0,0.50),inset 0 1px 0 rgba(255,255,255,0.05);
+          box-shadow:0 16px 48px rgba(0,0,0,0.50),inset 0 1px 0 rgba(255,255,255,0.05);
           transition:transform 0.18s cubic-bezier(0.25,0.46,0.45,0.94);
           will-change:transform;
         }
