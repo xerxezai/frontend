@@ -276,7 +276,7 @@ const ServiceSection2 = () => {
 
   return (
     <section style={{
-      background: "#FDFCFB",
+      background: "#F8F4EE",
       padding: "112px 0 100px",
       position: "relative",
       overflow: "hidden",
