@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, BookOpen, Play, Search,
@@ -90,13 +90,18 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   const name = localStorage.getItem("lma_name") ?? "Student";
   const canInstructor = localStorage.getItem("lma_can_instructor") === "true";
 
-  // Redirect to login if session is gone
-  if (!token) {
-    navigate(`/lma/login?redirect=${encodeURIComponent(path)}`);
-    return null;
-  }
+  // All hooks must be declared before any conditional return (Rules of Hooks)
   const [sideOpen, setSideOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
+
+  // Redirect in an effect — never call navigate() during render
+  useEffect(() => {
+    if (!token) {
+      navigate(`/lma/login?redirect=${encodeURIComponent(path)}`);
+    }
+  }, [token, navigate, path]);
+
+  if (!token) return null;
 
   const logout = () => {
     ["lma_token", "lma_role", "lma_can_instructor", "lma_name"].forEach(k =>
