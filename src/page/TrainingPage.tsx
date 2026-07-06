@@ -60,7 +60,7 @@ const makeTiltHandlers = (el: HTMLDivElement | null, dark = false) => ({
 });
 
 /* ── Eyebrow ── */
-const Eyebrow = ({ label, dark: isDark = false }: { label: string; dark?: boolean }) => (
+const Eyebrow = ({ label }: { label: string }) => (
   <div style={{ display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
     <span style={{ width: 32, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD})`, display: "block" }} />
     <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: GOLD, fontFamily: "'DM Sans', sans-serif" }}>
