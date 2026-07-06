@@ -44,6 +44,7 @@ const TermsPage          = lazy(() => import("./page/TermsPage"));
 
 // LMA (Learning Management Application)
 const LMALoginPage           = lazy(() => import("./page/lma/LMALoginPage"));
+const LMARegisterPage        = lazy(() => import("./page/lma/LMARegisterPage"));
 const LMAStudentDashboard    = lazy(() => import("./page/lma/LMAStudentDashboard"));
 const LMAInstructorDashboard = lazy(() => import("./page/lma/LMAInstructorDashboard"));
 const LMACoursesPage         = lazy(() => import("./page/lma/LMACoursesPage"));
@@ -92,6 +93,7 @@ function App() {
 
           {/* LMA routes */}
           <Route path="/lma/login"               element={<LMALoginPage />} />
+          <Route path="/lma/register"            element={<LMARegisterPage />} />
           <Route path="/lma/student/dashboard"   element={<LMAStudentDashboard />} />
           <Route path="/lma/instructor/dashboard" element={<LMAInstructorDashboard />} />
           <Route path="/lma/courses"             element={<LMACoursesPage />} />

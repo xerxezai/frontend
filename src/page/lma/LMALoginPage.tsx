@@ -90,6 +90,7 @@ export default function LMALoginPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const redirect = params.get("redirect") || "/lma/student/dashboard";
+  const action   = params.get("action")   || "";
 
   const [step, setStep] = useState<1 | 2>(1);
   const [role, setRole] = useState<Role | null>(null);
@@ -134,7 +135,8 @@ export default function LMALoginPage() {
       if (role === "instructor" && data.can_access_instructor) {
         navigate("/lma/instructor/dashboard");
       } else {
-        navigate(redirect.startsWith("/lma") ? redirect : "/lma/student/dashboard");
+        const dest = redirect.startsWith("/lma") ? redirect : "/lma/student/dashboard";
+        navigate(action ? `${dest}?action=${action}` : dest);
       }
     } catch {
       setError("Network error. Please try again.");
@@ -318,7 +320,7 @@ export default function LMALoginPage() {
 
               <p style={{ textAlign: "center", fontSize: 13, color: "rgba(20,20,19,0.50)", marginTop: 20 }}>
                 Don't have an account?{" "}
-                <Link to="/contact" style={{ color: GOLD, fontWeight: 600, textDecoration: "none" }}>Register</Link>
+                <Link to={`/lma/register?redirect=${encodeURIComponent(redirect)}${action ? `&action=${action}` : ""}`} style={{ color: GOLD, fontWeight: 600, textDecoration: "none" }}>Register</Link>
               </p>
 
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.06)" }}>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircle2, Shield, ShieldCheck } from "lucide-react";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
@@ -229,7 +229,7 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
   const pay = async () => {
     setStep("processing");
     try {
-      const r = await fetch(`${API}/lma/courses/${course.id}/mock-payment/`, {
+      const r = await fetch(`${API}/lma/mock-payment/${course.id}/`, {
         method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (r.ok) { setStep("done"); setTimeout(() => { onEnrolled(); onClose(); }, 2000); }
@@ -413,17 +413,21 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
 export default function LMACourseDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const action = searchParams.get("action") || "";
   const token = localStorage.getItem("lma_token") ?? "";
+  const isInstructor = localStorage.getItem("lma_can_instructor") === "true";
 
-  const [course, setCourse]         = useState<any>(null);
-  const [courseList, setCourseList] = useState<any[]>([]);
-  const [loading, setLoading]       = useState(true);
-  const [openModules, setOpenModules] = useState<Set<number>>(new Set([0]));
-  const [activeTab, setActiveTab]   = useState<"about" | "curriculum">("about");
-  const [showPay, setShowPay]       = useState(false);
-  const [enrolled, setEnrolled]     = useState(false);
+  const [course, setCourse]               = useState<any>(null);
+  const [courseList, setCourseList]       = useState<any[]>([]);
+  const [loading, setLoading]             = useState(true);
+  const [openModules, setOpenModules]     = useState<Set<number>>(new Set([0]));
+  const [activeTab, setActiveTab]         = useState<"about" | "curriculum">("about");
+  const [showPay, setShowPay]             = useState(false);
+  const [enrolled, setEnrolled]           = useState(false);
+  const [enrollStatusChecked, setEnrollStatusChecked] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
-  const [hovCourse, setHovCourse] = useState<number | null>(null);
+  const [hovCourse, setHovCourse]         = useState<number | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -433,6 +437,29 @@ export default function LMACourseDetailPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [id]);
+
+  /* Check enrollment status once course is loaded and user is logged in */
+  useEffect(() => {
+    if (!id || !token) { setEnrollStatusChecked(true); return; }
+    fetch(`${API}/lma/enrollment-status/${id}/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(r => r.ok ? r.json() : { enrolled: false })
+      .then(d => { setEnrolled(d.enrolled ?? false); })
+      .catch(() => {})
+      .finally(() => setEnrollStatusChecked(true));
+  }, [id, token]);
+
+  /* Auto-trigger payment when action=enroll and conditions are met */
+  useEffect(() => {
+    if (action !== "enroll") return;
+    if (loading || !enrollStatusChecked) return;
+    if (!course) return;
+    if (enrolled) { navigate("/lma/student/dashboard"); return; }
+    if (isInstructor) return;
+    if (!token) return;
+    setShowPay(true);
+  }, [action, loading, enrollStatusChecked, course, enrolled, isInstructor, token, navigate]);
 
   useEffect(() => {
     fetch(`${API}/lma/courses/`)
@@ -519,7 +546,13 @@ export default function LMACourseDetailPage() {
   }, []);
 
   const handleEnroll = () => {
-    if (!token) { navigate("/lma/login"); return; }
+    if (isInstructor) { navigate("/lma/instructor/dashboard"); return; }
+    if (!token) {
+      const courseUrl = `/lma/courses/${id}`;
+      navigate(`/lma/login?redirect=${encodeURIComponent(courseUrl)}&action=enroll`);
+      return;
+    }
+    if (enrolled) { navigate("/lma/student/dashboard"); return; }
     setShowPay(true);
   };
 
@@ -1029,7 +1062,7 @@ export default function LMACourseDetailPage() {
           course={course}
           token={token}
           onClose={() => setShowPay(false)}
-          onEnrolled={() => setEnrolled(true)}
+          onEnrolled={() => { setEnrolled(true); setTimeout(() => navigate("/lma/student/dashboard"), 2000); }}
         />
       )}
 
