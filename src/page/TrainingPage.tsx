@@ -8,6 +8,7 @@ const GOLD   = "#C9883A";
 const AMBER  = "#E8A84E";
 const DARK   = "#0a0806";
 const DARK2  = "#100c07";
+const CREAM  = "#F8F4EE";
 const CREAM2 = "#FDFCFB";
 
 /* ── Scroll-reveal hook ── */
@@ -170,7 +171,14 @@ const ICON_MAP: Record<string, string> = {
   "Data Science": "fas fa-chart-bar",
   "Cloud & DevOps": "fas fa-cloud",
 };
-
+const ICON_BG_MAP: Record<string, string> = {
+  "AI & ML": `linear-gradient(135deg,rgba(232,168,78,0.20) 0%,rgba(201,136,58,0.10) 100%)`,
+  "DevSecOps & AI": "linear-gradient(135deg,rgba(63,131,248,0.16) 0%,rgba(63,131,248,0.06) 100%)",
+};
+const ICON_COLOR_MAP: Record<string, string> = {
+  "AI & ML": GOLD,
+  "DevSecOps & AI": "#3f83f8",
+};
 const BADGE_COLOR_MAP: Record<string, string> = {
   BESTSELLER: `linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
   NEW: "linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%)",
@@ -197,114 +205,80 @@ const CourseCard = ({ course, index }: { course: ApiCourse; index: number }) => 
     return () => obs.disconnect();
   }, [index]);
 
-  const tilt = makeTiltHandlers(cardRef.current, true);
+  const { onMouseMove, onMouseLeave } = makeTiltHandlers(cardRef.current, false);
 
   return (
     <div
       ref={cardRef}
-      onMouseMove={tilt.onMouseMove}
-      onMouseLeave={() => { tilt.onMouseLeave(); setHov(false); }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { onMouseLeave(); setHov(false); }}
       onMouseEnter={() => setHov(true)}
       style={{
-        background: "linear-gradient(160deg, #1E1309 0%, #130D06 100%)",
-        borderRadius: 22,
-        border: `1px solid ${hov ? "rgba(201,136,58,0.55)" : "rgba(201,136,58,0.14)"}`,
+        background: "#fff",
+        borderRadius: 20,
+        border: `1px solid ${hov ? "rgba(201,136,58,0.28)" : "rgba(0,0,0,0.07)"}`,
+        borderTop: `2px solid ${hov ? GOLD : "rgba(201,136,58,0.25)"}`,
         overflow: "hidden",
         display: "flex", flexDirection: "column",
         height: "100%", position: "relative",
         transformStyle: "preserve-3d",
         willChange: "transform",
-        boxShadow: hov
-          ? "0 0 0 1px rgba(201,136,58,0.28), 0 24px 64px rgba(0,0,0,0.60), 0 0 48px rgba(201,136,58,0.07)"
-          : "0 4px 32px rgba(0,0,0,0.50)",
-        transition: "border-color 0.30s ease, box-shadow 0.30s ease",
+        boxShadow: "0 4px 22px rgba(0,0,0,0.07)",
+        transition: "border-color 0.25s ease, border-top-color 0.25s ease",
         cursor: "default",
       }}
     >
-      {/* Gold top line on hover */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: 2, zIndex: 3, pointerEvents: "none",
-        background: hov ? `linear-gradient(90deg, transparent 0%, ${GOLD} 40%, ${AMBER} 60%, transparent 100%)` : "transparent",
-        transition: "background 0.35s ease",
-      }} />
-
-      {/* Ambient corner glow */}
-      <div style={{
-        position: "absolute", top: -50, right: -50, width: 200, height: 200, borderRadius: "50%", pointerEvents: "none",
-        background: hov
-          ? "radial-gradient(circle, rgba(201,136,58,0.14) 0%, transparent 68%)"
-          : "radial-gradient(circle, rgba(201,136,58,0.05) 0%, transparent 68%)",
-        transition: "background 0.35s ease",
-      }} />
-
       {/* Badge */}
       {course.badge && (
         <span style={{
-          position: "absolute", top: 18, right: 18, zIndex: 4,
+          position: "absolute", top: 16, right: 16,
           background: BADGE_COLOR_MAP[course.badge] ?? `linear-gradient(135deg,${AMBER},${GOLD})`,
-          color: "#fff", fontSize: 9.5, fontWeight: 800, padding: "4px 11px",
-          borderRadius: 999, letterSpacing: "0.09em",
+          color: "#fff",
+          fontSize: 10, fontWeight: 800, padding: "4px 12px",
+          borderRadius: 999, letterSpacing: "0.08em",
           textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.40)",
+          zIndex: 2,
         }}>
           {course.badge}
         </span>
       )}
 
-      {/* Icon header */}
-      <div style={{ padding: "28px 28px 20px", position: "relative" }}>
+      {/* Icon banner */}
+      <div style={{ background: ICON_BG_MAP[course.category] ?? `linear-gradient(135deg,rgba(201,136,58,0.12),rgba(201,136,58,0.06))`, padding: "32px 28px 24px" }}>
         <div style={{
-          width: 58, height: 58, borderRadius: 16,
-          background: `linear-gradient(145deg, rgba(232,168,78,0.16) 0%, rgba(201,136,58,0.07) 100%)`,
-          border: `1px solid ${hov ? "rgba(201,136,58,0.50)" : "rgba(201,136,58,0.22)"}`,
+          width: 64, height: 64, borderRadius: 18,
+          background: "#fff",
+          border: `1px solid ${hov ? "rgba(201,136,58,0.22)" : "rgba(0,0,0,0.06)"}`,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.07)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          boxShadow: hov ? "0 0 22px rgba(201,136,58,0.22)" : "none",
-          transition: "border-color 0.30s ease, box-shadow 0.30s ease, transform 0.30s ease",
+          fontSize: 28, color: ICON_COLOR_MAP[course.category] ?? GOLD,
+          transition: "border-color 0.25s ease, transform 0.25s ease",
           transform: hov ? "scale(1.06) translateY(-2px)" : "scale(1)",
         }}>
-          <i className={ICON_MAP[course.category] ?? "fas fa-book"} style={{ color: GOLD, fontSize: 23 }} />
+          <i className={ICON_MAP[course.category] ?? "fas fa-book"} />
         </div>
       </div>
 
       {/* Body */}
-      <div style={{ padding: "0 28px 20px", flex: 1, position: "relative" }}>
+      <div style={{ padding: "22px 28px 18px", flex: 1 }}>
         <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:12 }}>
-          <span style={{
-            fontSize: 11, fontWeight: 700, color: GOLD,
-            background: "rgba(201,136,58,0.10)", border: "1px solid rgba(201,136,58,0.22)",
-            padding: "3px 10px", borderRadius: 6, fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.03em",
-          }}>
+          <span style={{ fontSize:11, fontWeight:700, color: GOLD, background:"rgba(201,136,58,0.08)", padding:"3px 10px", borderRadius:6, fontFamily:"'DM Sans',sans-serif" }}>
             {course.category}
           </span>
-          <span style={{
-            fontSize: 11, fontWeight: 600, color: LEVEL_COLOR_MAP[course.level] ?? GOLD,
-            fontFamily: "'DM Sans',sans-serif", textTransform: "capitalize",
-          }}>
+          <span style={{ fontSize:11, fontWeight:600, color: LEVEL_COLOR_MAP[course.level] ?? GOLD, fontFamily:"'DM Sans',sans-serif", textTransform:"capitalize" }}>
             {course.level}
           </span>
         </div>
-        <h3 style={{
-          fontSize: 20, fontWeight: 800,
-          color: hov ? "#fff" : "rgba(248,244,238,0.92)",
-          lineHeight: 1.25, marginBottom: 12,
-          fontFamily: "'DM Sans',sans-serif", letterSpacing: "-0.01em",
-          transition: "color 0.25s ease",
-        }}>
+        <h3 style={{ fontSize:20, fontWeight:800, color:"#141413", lineHeight:1.25, marginBottom:12, fontFamily:"'DM Sans',sans-serif", letterSpacing:"-0.01em" }}>
           {course.title}
         </h3>
-        <p style={{
-          fontSize: 13.5, color: "rgba(248,244,238,0.40)",
-          lineHeight: 1.72, marginBottom: 18, fontFamily: "'DM Sans',sans-serif",
-        }}>
+        <p style={{ fontSize:13.5, color:"rgba(20,20,19,0.55)", lineHeight:1.72, marginBottom:16, fontFamily:"'DM Sans',sans-serif" }}>
           {course.description}
         </p>
-        <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+        {/* Tags */}
+        <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:4 }}>
           {(course.tech_stack ?? []).slice(0, 4).map(tag => (
-            <span key={tag} style={{
-              fontSize: 11, fontWeight: 600, color: "rgba(201,136,58,0.75)",
-              background: "rgba(201,136,58,0.08)", border: "1px solid rgba(201,136,58,0.16)",
-              borderRadius: 6, padding: "3px 9px", fontFamily: "'DM Sans',sans-serif",
-            }}>
+            <span key={tag} style={{ fontSize:11, fontWeight:600, color:"rgba(20,20,19,0.55)", background:"rgba(0,0,0,0.04)", border:"1px solid rgba(0,0,0,0.06)", borderRadius:6, padding:"3px 9px", fontFamily:"'DM Sans',sans-serif" }}>
               {tag}
             </span>
           ))}
@@ -312,30 +286,24 @@ const CourseCard = ({ course, index }: { course: ApiCourse; index: number }) => 
       </div>
 
       {/* Footer */}
-      <div style={{
-        padding: "16px 28px 24px",
-        borderTop: "1px solid rgba(201,136,58,0.10)",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        gap: 12, flexWrap: "wrap", position: "relative",
-      }}>
-        <div style={{ display:"flex", gap:16, fontSize:12.5, color:"rgba(248,244,238,0.38)", fontFamily:"'DM Sans',sans-serif" }}>
+      <div style={{ padding:"14px 28px 22px", borderTop:"1px solid rgba(0,0,0,0.06)", display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap" }}>
+        <div style={{ display:"flex", gap:16, fontSize:12.5, color:"rgba(20,20,19,0.45)", fontFamily:"'DM Sans',sans-serif" }}>
           <span style={{ display:"flex", alignItems:"center", gap:5 }}>
-            <i className="far fa-clock" style={{ color: GOLD }} /> {course.hours}h
+            <i className="far fa-clock" style={{ color:GOLD }} /> {course.hours}h
           </span>
           <span style={{ display:"flex", alignItems:"center", gap:5 }}>
-            <i className="fas fa-play-circle" style={{ color: GOLD }} /> {course.lessons} lessons
+            <i className="fas fa-play-circle" style={{ color:GOLD }} /> {course.lessons} lessons
           </span>
         </div>
         <Link to={`/lma/courses/${course.id}`} style={{
-          display: "inline-flex", alignItems: "center", gap: 7,
-          background: `linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
-          color: "#fff", fontSize: 13, fontWeight: 700,
-          padding: "9px 20px", borderRadius: 9, textDecoration: "none",
-          fontFamily: "'DM Sans',sans-serif",
-          boxShadow: "0 3px 0 rgba(130,78,18,0.50), 0 6px 18px rgba(201,136,58,0.30)",
-          transition: "box-shadow 0.25s ease",
+          display:"inline-flex", alignItems:"center", gap:7,
+          background:`linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
+          color:"#fff", fontSize:13, fontWeight:700,
+          padding:"9px 20px", borderRadius:9, textDecoration:"none",
+          fontFamily:"'DM Sans',sans-serif",
+          boxShadow:"0 3px 0 rgba(140,80,20,0.40), 0 6px 16px rgba(201,136,58,0.25)",
         }}>
-          Enroll Now <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
+          Enroll Now <i className="far fa-arrow-right" style={{ fontSize:11 }} />
         </Link>
       </div>
     </div>
@@ -356,24 +324,22 @@ const CoursesSection = () => {
   }, []);
 
   return (
-    <section style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 100%)`, padding:"100px 0", position:"relative", overflow:"hidden" }}>
-      {/* Subtle dot grid */}
-      <div style={{ position:"absolute", inset:0, pointerEvents:"none", backgroundImage:"radial-gradient(circle,rgba(201,136,58,0.05) 1px,transparent 1px)", backgroundSize:"40px 40px" }} />
-      {/* Center ambient glow */}
-      <div style={{ position:"absolute", top:"10%", left:"50%", transform:"translateX(-50%)", width:800, height:400, background:"radial-gradient(ellipse 55% 45% at 50% 20%, rgba(201,136,58,0.06) 0%, transparent 70%)", pointerEvents:"none" }} />
+    <section style={{ background: CREAM, padding:"100px 0", position:"relative", overflow:"hidden" }}>
+      {/* Dot grid */}
+      <div style={{ position:"absolute", inset:0, pointerEvents:"none", backgroundImage:"radial-gradient(circle,rgba(201,136,58,0.07) 1px,transparent 1px)", backgroundSize:"36px 36px" }} />
       <div className="container" style={{ position:"relative", zIndex:1 }}>
         <div ref={headRef} style={{ textAlign:"center", marginBottom:68 }}>
           <Eyebrow label="What We Offer" />
-          <h2 style={{ fontSize:"clamp(28px,3.8vw,50px)", fontWeight:800, color:"rgba(248,244,238,0.95)", lineHeight:1.12, fontFamily:"'DM Sans',sans-serif", margin:"0 auto 16px", maxWidth:560 }}>
+          <h2 style={{ fontSize:"clamp(28px,3.8vw,50px)", fontWeight:800, color:"#141413", lineHeight:1.12, fontFamily:"'DM Sans',sans-serif", margin:"0 auto 16px", maxWidth:560 }}>
             Featured Courses
           </h2>
-          <p style={{ color:"rgba(248,244,238,0.42)", fontSize:15, lineHeight:1.65, fontFamily:"'DM Sans',sans-serif", maxWidth:440, margin:"0 auto" }}>
+          <p style={{ color:"rgba(20,20,19,0.50)", fontSize:15, lineHeight:1.65, fontFamily:"'DM Sans',sans-serif", maxWidth:440, margin:"0 auto" }}>
             Practitioner-built programs covering every layer of enterprise AI — from strategy to shipping.
           </p>
         </div>
         {loadingCourses ? (
           <div style={{ display:"flex", justifyContent:"center", padding:"40px 0" }}>
-            <div style={{ width:32, height:32, border:`3px solid rgba(201,136,58,0.15)`, borderTop:`3px solid ${GOLD}`, borderRadius:"50%", animation:"tp-spin 0.8s linear infinite" }} />
+            <div style={{ width:32, height:32, border:`3px solid rgba(201,136,58,0.20)`, borderTop:`3px solid ${GOLD}`, borderRadius:"50%", animation:"tp-spin 0.8s linear infinite" }} />
           </div>
         ) : (
           <div className="row g-4 justify-content-center">
@@ -384,15 +350,8 @@ const CoursesSection = () => {
             ))}
           </div>
         )}
-        <div style={{ textAlign:"center", marginTop:44 }}>
-          <Link to="/lma/courses" style={{
-            display:"inline-flex", alignItems:"center", gap:8,
-            fontSize:14, fontWeight:700, color:GOLD,
-            border:`1.5px solid rgba(201,136,58,0.40)`,
-            background:"rgba(201,136,58,0.07)",
-            padding:"11px 26px", borderRadius:10, textDecoration:"none",
-            fontFamily:"'DM Sans',sans-serif",
-          }}>
+        <div style={{ textAlign:"center", marginTop:40 }}>
+          <Link to="/lma/courses" style={{ display:"inline-flex", alignItems:"center", gap:8, fontSize:14, fontWeight:700, color:GOLD, border:`1.5px solid ${GOLD}`, padding:"10px 24px", borderRadius:10, textDecoration:"none", fontFamily:"'DM Sans',sans-serif" }}>
             Browse All Courses <i className="far fa-arrow-right" style={{ fontSize:12 }} />
           </Link>
         </div>
