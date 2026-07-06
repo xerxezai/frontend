@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { CheckCircle2, Shield } from "lucide-react";
+import { CheckCircle2, Shield, ShieldCheck } from "lucide-react";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#C9883A";
@@ -173,7 +173,7 @@ const WhatYouLearnBox = ({ techStack }: { techStack: string[] }) => {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 24px" }} className="lmacd-learn-grid">
         {items.map(item => (
           <div key={item} style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
-            <i className="fas fa-check" style={{ color: "#10b981", fontSize: 12, marginTop: 4, flexShrink: 0 }} />
+            <i className="fas fa-check" style={{ color: GOLD, fontSize: 12, marginTop: 4, flexShrink: 0 }} />
             <span style={{ fontSize: 13, color: "#374151", lineHeight: 1.55, fontFamily: FF }}>{item}</span>
           </div>
         ))}
@@ -300,6 +300,7 @@ export default function LMACourseDetailPage() {
   const [showPay, setShowPay]       = useState(false);
   const [enrolled, setEnrolled]     = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [hovCourse, setHovCourse] = useState<number | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -337,6 +338,13 @@ export default function LMACourseDetailPage() {
   }, [course]);
 
   const collapseAll = useCallback(() => setOpenModules(new Set()), []);
+
+  const tabNavRef = useRef<HTMLDivElement>(null);
+
+  const scrollToCurriculum = useCallback(() => {
+    setActiveTab("curriculum");
+    setTimeout(() => tabNavRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+  }, []);
 
   const handleEnroll = () => {
     if (!token) { navigate("/lma/login"); return; }
@@ -382,12 +390,13 @@ export default function LMACourseDetailPage() {
           </div>
         </div>
         {!enrolled && (
-          <button onClick={handleEnroll} style={{
+          <button onClick={handleEnroll} className="lmacd-shimmer-btn" style={{
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             color: "#0a0806", fontSize: 13, fontWeight: 800,
             border: "none", borderRadius: 9, padding: "9px 22px",
             cursor: "pointer", flexShrink: 0, fontFamily: FF,
             boxShadow: "0 2px 0 rgba(130,78,18,0.40)",
+            position: "relative", overflow: "hidden",
           }}>
             Enroll Now
           </button>
@@ -399,6 +408,11 @@ export default function LMACourseDetailPage() {
         <div className="lmacd-orb lmacd-orb-1" />
         <div className="lmacd-orb lmacd-orb-2" />
         <div className="lmacd-orb lmacd-orb-3" />
+        {/* Floating geometric shapes */}
+        <div className="lmacd-geo lmacd-geo-1" />
+        <div className="lmacd-geo lmacd-geo-2" />
+        <div className="lmacd-geo lmacd-geo-3" />
+        <div className="lmacd-geo lmacd-geo-4" />
 
         <div className="lmacd-container" style={{ position: "relative", zIndex: 1 }}>
           <Link to="/lma/courses" style={{
@@ -509,7 +523,7 @@ export default function LMACourseDetailPage() {
                       <span style={{ fontSize: 12, opacity: 0.70, marginLeft: 4 }}>₹{course.price.toLocaleString()}</span>
                     ) : null}
                   </button>
-                  <button onClick={() => setActiveTab("curriculum")} style={{
+                  <button onClick={scrollToCurriculum} style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
                     background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.78)",
                     fontSize: 14, fontWeight: 700, padding: "13px 24px", borderRadius: 11,
@@ -547,7 +561,7 @@ export default function LMACourseDetailPage() {
       </div>
 
       {/* ══ STICKY TAB NAV ══ */}
-      <div className="lmacd-tab-nav" style={{ top: showStickyBar ? 52 : 0, transition: "top 0.26s ease" }}>
+      <div ref={tabNavRef} className="lmacd-tab-nav" style={{ top: showStickyBar ? 52 : 0, transition: "top 0.26s ease" }}>
         <div className="lmacd-container">
           <div style={{ display: "flex" }}>
             {(["about", "curriculum"] as const).map(t => (
@@ -579,7 +593,7 @@ export default function LMACourseDetailPage() {
                   <WhatYouLearnBox techStack={course.tech_stack ?? []} />
                   <SkillsPills items={course.tech_stack ?? []} heading="Skills you'll gain" />
                   <DetailsToKnow hours={course.hours} lessonsCount={totalLessons} level={course.level ?? ""} />
-                  <button onClick={() => setActiveTab("curriculum")} style={{
+                  <button onClick={scrollToCurriculum} style={{
                     fontSize: 14, fontWeight: 700, color: GOLD,
                     background: "transparent", border: `1.5px solid ${GOLD}`,
                     borderRadius: 9, padding: "10px 22px", cursor: "pointer", fontFamily: FF,
@@ -700,17 +714,19 @@ export default function LMACourseDetailPage() {
                     }}>
                       Enroll Now
                     </button>
-                    <button onClick={handleEnroll} style={{
+                    <button onClick={handleEnroll} className="lmacd-preview-btn" style={{
                       width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-                      background: "transparent", color: "rgba(255,255,255,0.55)", fontSize: 13,
-                      border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, padding: "11px",
+                      background: "transparent", color: GOLD, fontSize: 13, fontWeight: 600,
+                      border: `2px solid ${GOLD}`, borderRadius: 10, padding: "11px",
                       cursor: "pointer", fontFamily: FF, marginBottom: 12,
+                      transition: "background 0.20s ease",
                     }}>
                       Try Free Preview
                     </button>
                   </>
                 )}
-                <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.32)", textAlign: "center", fontFamily: FF }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5, fontSize: 11, color: "rgba(255,255,255,0.42)", fontFamily: FF }}>
+                  <ShieldCheck size={13} color="rgba(201,136,58,0.65)" />
                   30-day money-back guarantee
                 </div>
               </div>
@@ -734,7 +750,12 @@ export default function LMACourseDetailPage() {
             </div>
             <div style={{ display: "flex", gap: 28, flexWrap: "wrap", alignItems: "center" }}>
               {["Tata", "Capgemini", "P&G", "L'Oréal", "Danone", "HCL"].map(co => (
-                <span key={co} style={{ fontSize: 14, fontWeight: 700, color: "rgba(20,20,19,0.30)", fontFamily: FF }}>{co}</span>
+                <span key={co} style={{
+                  fontSize: 13, fontWeight: 600, color: "#3d2a10",
+                  background: "rgba(201,136,58,0.10)",
+                  border: "1px solid rgba(201,136,58,0.20)",
+                  borderRadius: 8, padding: "6px 16px", fontFamily: FF,
+                }}>{co}</span>
               ))}
             </div>
           </div>
@@ -763,11 +784,17 @@ export default function LMACourseDetailPage() {
               <div style={{ flexShrink: 0, maxWidth: 400, width: "100%" }}>
                 <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
                   {courseList.map((c: any, i: number) => (
-                    <Link key={c.id} to={`/lma/courses/${c.id}`} style={{
-                      display: "flex", gap: 14, padding: "16px 18px", textDecoration: "none",
-                      background: c.id === course.id ? "#fdfaf6" : "#fff",
-                      borderBottom: i < courseList.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none",
-                    }}>
+                    <Link key={c.id} to={`/lma/courses/${c.id}`}
+                      onMouseEnter={() => setHovCourse(c.id)}
+                      onMouseLeave={() => setHovCourse(null)}
+                      style={{
+                        display: "flex", gap: 14, padding: "16px 18px", textDecoration: "none",
+                        background: c.id === course.id ? "#fdfaf6" : "#fff",
+                        borderLeft: `4px solid ${GOLD}`,
+                        borderBottom: i < courseList.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none",
+                        transform: hovCourse === c.id ? "translateX(4px)" : "translateX(0)",
+                        transition: "transform 0.20s ease",
+                      }}>
                       <ModuleThumbnail index={i} size={70} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", lineHeight: 1.3, marginBottom: 3 }}>{c.title}</div>
@@ -804,10 +831,29 @@ export default function LMACourseDetailPage() {
           position: relative;
           overflow: hidden;
         }
+        /* Dot grid overlay */
+        .lmacd-hero::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: radial-gradient(rgba(201,136,58,0.09) 1px, transparent 1px);
+          background-size: 28px 28px;
+          pointer-events: none;
+          z-index: 0;
+        }
         .lmacd-orb { position: absolute; border-radius: 50%; pointer-events: none; }
         .lmacd-orb-1 { top:8%;left:4%;width:360px;height:360px;background:radial-gradient(circle,rgba(201,136,58,0.10) 0%,transparent 70%);animation:lmacd-float1 9s ease-in-out infinite; }
         .lmacd-orb-2 { bottom:4%;right:6%;width:240px;height:240px;background:radial-gradient(circle,rgba(232,168,78,0.07) 0%,transparent 70%);animation:lmacd-float2 13s ease-in-out infinite; }
         .lmacd-orb-3 { top:48%;right:22%;width:110px;height:110px;background:radial-gradient(circle,rgba(201,136,58,0.13) 0%,transparent 70%);animation:lmacd-float3 7s ease-in-out infinite; }
+
+        /* Floating geometric shapes */
+        .lmacd-geo { position:absolute; pointer-events:none; }
+        .lmacd-geo-1 { right:8%;top:15%;width:130px;height:130px;border:1.5px solid rgba(201,136,58,0.18);transform:rotate(45deg);animation:lmacd-geo-rot 20s linear infinite; }
+        .lmacd-geo-2 { right:15%;top:55%;width:58px;height:58px;border:1.5px solid rgba(232,168,78,0.20);transform:rotate(45deg);animation:lmacd-geo-rot 14s linear infinite reverse; }
+        .lmacd-geo-3 { right:4%;bottom:12%;width:180px;height:180px;border:1px solid rgba(201,136,58,0.10);border-radius:50%;animation:lmacd-float2 16s ease-in-out infinite; }
+        .lmacd-geo-4 { right:28%;top:10%;width:30px;height:30px;background:rgba(201,136,58,0.12);border:1px solid rgba(201,136,58,0.35);transform:rotate(45deg);animation:lmacd-geo-pulse 4s ease-in-out infinite; }
+        @keyframes lmacd-geo-rot { to{transform:rotate(405deg);} }
+        @keyframes lmacd-geo-pulse { 0%,100%{opacity:0.8} 50%{opacity:0.18} }
 
         .lmacd-tab-nav { background:#fff; border-bottom:2px solid rgba(0,0,0,0.08); position:sticky; z-index:90; }
 
@@ -836,8 +882,31 @@ export default function LMACourseDetailPage() {
           .lmacd-hero { padding:56px 0 36px; }
           .lmacd-lesson-indent { padding-left:16px !important; }
         }
+        /* Shimmer on sticky Enroll Now */
+        .lmacd-shimmer-btn::after {
+          content:'';
+          position:absolute;
+          top:0;left:-100%;
+          width:55%;height:100%;
+          background:linear-gradient(90deg,transparent,rgba(255,255,255,0.28),transparent);
+          animation:lmacd-shimmer 2.4s ease-in-out infinite 0.8s;
+          pointer-events:none;
+        }
+        @keyframes lmacd-shimmer { to{left:200%;} }
+
+        /* Try Free Preview hover fill */
+        .lmacd-preview-btn:hover { background:rgba(201,136,58,0.14) !important; }
+
+        /* 375px mobile */
+        @media (max-width:420px) {
+          .lmacd-hero { padding:48px 0 32px; }
+          .lmacd-container { padding:0 16px; }
+          .lmacd-body-row { gap:24px; padding:20px 0 40px; }
+        }
+
         @media (prefers-reduced-motion:reduce) {
-          .lmacd-orb { animation:none !important; }
+          .lmacd-orb,.lmacd-geo { animation:none !important; }
+          .lmacd-shimmer-btn::after { animation:none !important; }
           .lmacd-spinner { animation-duration:0.01ms !important; }
           * { transition-duration:0.01ms !important; }
         }
