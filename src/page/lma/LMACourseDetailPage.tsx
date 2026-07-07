@@ -582,15 +582,19 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
         <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 4, lineHeight: 1.25, fontFamily: FF }}>
           {course.title}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 14 }}>
-          {[1,2,3,4,5].map(n => (
-            <i key={n} className="fas fa-star" style={{ fontSize: 9, color: n <= Math.round(course.rating ?? 4) ? "#f59e0b" : "rgba(255,255,255,0.15)" }} />
-          ))}
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#f59e0b", marginLeft: 3 }}>{course.rating ?? 4.8}</span>
-          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.28)", marginLeft: 2 }}>
-            ({(course.total_ratings ?? 247).toLocaleString()} reviews)
-          </span>
-        </div>
+        {(course.total_ratings ?? 0) > 0 ? (
+          <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 14 }}>
+            {[1,2,3,4,5].map(n => (
+              <i key={n} className="fas fa-star" style={{ fontSize: 9, color: n <= Math.round(course.rating) ? "#f59e0b" : "rgba(255,255,255,0.15)" }} />
+            ))}
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#f59e0b", marginLeft: 3 }}>{course.rating}</span>
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.28)", marginLeft: 2 }}>
+              ({(course.total_ratings).toLocaleString()} reviews)
+            </span>
+          </div>
+        ) : (
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.30)", marginBottom: 14, fontFamily: FF }}>No reviews yet</div>
+        )}
 
         {/* Stat tiles */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 7, marginBottom: 14 }}>
@@ -613,10 +617,10 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
             <span style={{ fontSize: 10.5, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Avg. Completion</span>
-            <span style={{ fontSize: 10.5, fontWeight: 700, color: GOLD, fontFamily: FF }}>94%</span>
+            <span style={{ fontSize: 10.5, fontWeight: 700, color: GOLD, fontFamily: FF }}>{course.avg_completion ?? 0}%</span>
           </div>
           <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 99, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: "94%", borderRadius: 99, background: `linear-gradient(90deg,${AMBER},${GOLD})`, boxShadow: `0 0 8px rgba(201,136,58,0.50)` }} />
+            <div style={{ height: "100%", width: `${course.avg_completion ?? 0}%`, borderRadius: 99, background: `linear-gradient(90deg,${AMBER},${GOLD})`, boxShadow: `0 0 8px rgba(201,136,58,0.50)` }} />
           </div>
         </div>
 
@@ -1069,9 +1073,9 @@ export default function LMACourseDetailPage() {
                     <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>What students achieve</h3>
                     <div className="lmacd-outcomes-grid">
                       {[
-                        { num: "94%",    label: "Completion rate", icon: "fas fa-chart-line" },
-                        { num: "4.8★",   label: "Average rating",  icon: "fas fa-star"       },
-                        { num: "1,200+", label: "Active learners", icon: "fas fa-users"      },
+                        { num: `${course.avg_completion ?? 0}%`,  label: "Completion rate", icon: "fas fa-chart-line" },
+                        { num: (course.rating ?? 0) > 0 ? `${course.rating}★` : "—",  label: "Average rating",  icon: "fas fa-star"       },
+                        { num: (course.total_students ?? 0).toLocaleString(), label: "Active learners", icon: "fas fa-users"      },
                       ].map(s => (
                         <div key={s.label} className="lmacd-outcome-card">
                           <i className={s.icon} style={{ color: GOLD, fontSize: 18, marginBottom: 8, display: "block" }} />
