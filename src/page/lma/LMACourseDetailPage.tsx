@@ -683,6 +683,10 @@ export default function LMACourseDetailPage() {
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [hovCourse, setHovCourse]         = useState<number | null>(null);
   const [selectedLesson, setSelectedLesson] = useState<any | null>(null);
+  const [wordIdx,  setWordIdx ] = useState(0);
+  const [fadeIn,   setFadeIn  ] = useState(true);
+  const wordTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prefersReduced = typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion:reduce)").matches : false;
 
   useEffect(() => {
     if (!id) return;
@@ -800,6 +804,17 @@ export default function LMACourseDetailPage() {
     setTimeout(() => tabNavRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   }, []);
 
+  useEffect(() => {
+    if (!course) return;
+    const words: string[] = course.tech_stack ?? [];
+    if (words.length <= 1) return;
+    const id = setInterval(() => {
+      setFadeIn(false);
+      wordTimerRef.current = setTimeout(() => { setWordIdx(i => (i + 1) % words.length); setFadeIn(true); }, 340);
+    }, 2600);
+    return () => { clearInterval(id); if (wordTimerRef.current) clearTimeout(wordTimerRef.current); };
+  }, [course]);
+
   const handleEnroll = () => {
     if (isInstructor) { navigate("/lma/instructor/dashboard"); return; }
     if (!token) {
@@ -866,141 +881,189 @@ export default function LMACourseDetailPage() {
       {/* ══ HERO ══ */}
       <section className="lmacd-hero">
         <canvas ref={canvasRef} className="lmacd-particles" />
+        {/* Atmospheric orbs */}
         <div className="lmacd-orb lmacd-orb-1" />
         <div className="lmacd-orb lmacd-orb-2" />
         <div className="lmacd-orb lmacd-orb-3" />
-        {/* Floating geometric shapes */}
+        <div className="lmacd-orb lmacd-orb-4" />
+        {/* Diagonal light rays */}
+        <div className="lmacd-ray lmacd-ray-1" />
+        <div className="lmacd-ray lmacd-ray-2" />
+        {/* Orbit rings */}
+        <div className="lmacd-orbit lmacd-orbit-1" />
+        <div className="lmacd-orbit lmacd-orbit-2" />
+        <div className="lmacd-orbit lmacd-orbit-3" />
+        {/* Floating diamonds */}
         <div className="lmacd-geo lmacd-geo-1" />
         <div className="lmacd-geo lmacd-geo-2" />
         <div className="lmacd-geo lmacd-geo-3" />
         <div className="lmacd-geo lmacd-geo-4" />
 
         <div className="lmacd-container" style={{ position: "relative", zIndex: 1 }}>
-          <Link to="/lma/courses" style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            fontSize: 12, color: "rgba(255,255,255,0.38)", textDecoration: "none",
-            marginBottom: 14, fontFamily: FF, transition: "color 0.18s ease",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
-            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.38)")}
-          >
-            ← Back to Courses
+          {/* Back link */}
+          <Link to="/lma/courses" className="lmacd-back-link">
+            <i className="fas fa-arrow-left" style={{ fontSize: 10 }} />
+            Back to Courses
           </Link>
 
-          <div className="lmacd-hero-row"><div className="lmacd-hero-text">
-            {course.badge && (
-              <span style={{
-                display: "inline-block", fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
-                textTransform: "uppercase", padding: "3px 10px", borderRadius: 999, marginBottom: 12,
-                background: "rgba(255,193,0,0.18)", color: "#f59e0b",
-              }}>
-                {course.badge}
-              </span>
-            )}
+          <div className="lmacd-hero-row">
+            {/* ── Left text column ── */}
+            <div className="lmacd-hero-text">
 
-            <h1 style={{
-              fontFamily: FF, fontWeight: 900,
-              fontSize: "clamp(28px,4.2vw,48px)", lineHeight: 1.1,
-              color: "#fff", margin: "0 0 14px", letterSpacing: "-0.025em",
-            }}>
-              {course.title}
-            </h1>
-
-            <p style={{ fontSize: 14.5, color: "rgba(255,255,255,0.52)", lineHeight: 1.62, margin: "0 0 16px", maxWidth: 620, fontFamily: FF }}>
-              {course.description}
-            </p>
-
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center", marginBottom: 14 }}>
-              {course.rating > 0 && (
-                <>
-                  <StarRating rating={course.rating} />
-                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>
-                    ({(course.total_ratings ?? Math.round(course.rating * 50)).toLocaleString()} ratings)
+              {/* Eyebrow chip */}
+              <div className="lmacd-eyebrow-chip" style={{ animation: prefersReduced ? "none" : "lmacd-fadeUp 0.6s ease both" }}>
+                <span className="lmacd-eyebrow-dot" />
+                <i className="fas fa-graduation-cap" style={{ fontSize: 10, color: GOLD }} />
+                <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: "0.13em", textTransform: "uppercase", color: GOLD }}>
+                  {course.category}
+                </span>
+                {course.badge && (
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#fff", background: "rgba(255,255,255,0.13)", padding: "1px 8px", borderRadius: 999, marginLeft: 2 }}>
+                    {course.badge}
                   </span>
-                </>
-              )}
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", display: "flex", alignItems: "center", gap: 6, fontFamily: FF }}>
-                <i className="fas fa-users" style={{ fontSize: 12 }} />
-                {(course.total_students ?? 0).toLocaleString()} already enrolled
-              </span>
-            </div>
+                )}
+              </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>Included with</span>
-              <span style={{
-                fontSize: 11, fontWeight: 800, letterSpacing: "0.10em", textTransform: "uppercase",
-                padding: "2px 10px", borderRadius: 4,
-                background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
+              {/* Animated title — letter by letter */}
+              <h1 className="lmacd-hero-title">
+                {course.title.split("").map((ch: string, i: number) => (
+                  <span key={i} className="lmacd-letter" style={{ animationDelay: prefersReduced ? "0s" : `${0.15 + i * 0.022}s` }}>
+                    {ch === " " ? " " : ch}
+                  </span>
+                ))}
+              </h1>
+
+              {/* Level / hours subtitle */}
+              <p className="lmacd-hero-sub" style={{ animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.3s both" }}>
+                <span style={{ textTransform: "capitalize" }}>{course.level}</span>{" "}level
+                {course.hours > 0 && <> &nbsp;·&nbsp; {course.hours}h of content</>}
+                {totalLessons > 0 && <> &nbsp;·&nbsp; {totalLessons} lessons</>}
+              </p>
+
+              {/* Description */}
+              <p style={{
+                fontSize: 14.5, color: "rgba(255,255,255,0.54)", lineHeight: 1.67, maxWidth: 580,
+                margin: "0 0 16px", fontFamily: FF,
+                animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.38s both",
               }}>
-                XERXEZ Academy
-              </span>
-              <span style={{ fontSize: 12, color: GOLD, fontFamily: FF, cursor: "pointer" }}>· Learn more</span>
-            </div>
+                {course.description}
+              </p>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, padding: "4px 13px", borderRadius: 999, border: `1px solid rgba(201,136,58,0.55)`, color: AMBER, fontFamily: FF }}>
-                {course.category}
-              </span>
-              <span style={{ fontSize: 11, fontWeight: 600, padding: "4px 13px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.55)", fontFamily: FF, textTransform: "capitalize" }}>
-                {course.level} level
-              </span>
-              <span style={{ fontSize: 11, fontWeight: 600, padding: "4px 13px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.50)", fontFamily: FF }}>
-                {course.hours}h · {totalLessons} lessons
-              </span>
-            </div>
-
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 22 }}>
-              {(course.tech_stack ?? []).map((t: string) => (
-                <span key={t} style={{
-                  fontSize: 11, fontWeight: 600, padding: "3px 11px", borderRadius: 999,
-                  background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.62)", fontFamily: FF,
-                }}>{t}</span>
-              ))}
-            </div>
-
-            {/* Hero CTAs */}
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              {enrolled ? (
-                <Link to="/lma/student/dashboard" style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  background: "#d1fae5", color: "#059669", fontSize: 14, fontWeight: 800,
-                  padding: "13px 28px", borderRadius: 11, textDecoration: "none", fontFamily: FF,
+              {/* Cycling tech stack word */}
+              {(course.tech_stack ?? []).length > 0 && (
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 9, marginBottom: 16,
+                  animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.44s both",
                 }}>
-                  <CheckCircle2 size={16} /> Go to Dashboard
-                </Link>
-              ) : (
-                <>
-                  <button type="button" onClick={handleEnroll} style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
-                    background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-                    color: "#0a0806", fontSize: 14, fontWeight: 800,
-                    height: "52px", padding: "0 28px", borderRadius: 11, border: "none", cursor: "pointer",
-                    boxShadow: "0 4px 0 rgba(130,78,18,0.45),0 10px 32px rgba(201,136,58,0.25)",
-                    fontFamily: FF,
+                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.34)", fontFamily: FF }}>Covering:</span>
+                  <span style={{
+                    fontSize: 12.5, fontWeight: 700, color: AMBER, fontFamily: FF,
+                    display: "inline-block",
+                    opacity: fadeIn ? 1 : 0,
+                    transform: fadeIn ? "translateY(0)" : "translateY(-7px)",
+                    transition: prefersReduced ? "none" : "opacity 0.34s ease, transform 0.34s ease",
                   }}>
-                    <i className="fas fa-graduation-cap" style={{ fontSize: 13 }} />
-                    Enroll Now
-                    {course.price ? (
-                      <span style={{ fontSize: 12, opacity: 0.70, marginLeft: 4 }}>₹{course.price.toLocaleString()}</span>
-                    ) : null}
-                  </button>
-                  <button type="button" onClick={scrollToCurriculum} className="lmacd-preview-btn" style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
-                    background: "transparent", color: GOLD,
-                    fontSize: 14, fontWeight: 700, height: "52px", padding: "0 24px", borderRadius: 11,
-                    border: `2px solid ${GOLD}`, cursor: "pointer", fontFamily: FF,
-                    transition: "background 0.20s ease",
-                  }}>
-                    <i className="fas fa-list-ul" style={{ fontSize: 12 }} />
-                    View Curriculum
-                  </button>
-                </>
+                    {(course.tech_stack ?? [])[wordIdx] ?? ""}
+                  </span>
+                  <div style={{ display: "flex", gap: 5 }}>
+                    {(course.tech_stack ?? []).map((_: string, i: number) => (
+                      <span key={i} style={{
+                        width: i === wordIdx ? 16 : 4, height: 4, borderRadius: 999,
+                        background: i === wordIdx ? GOLD : "rgba(255,255,255,0.20)",
+                        transition: "width 0.35s ease, background 0.35s ease",
+                      }} />
+                    ))}
+                  </div>
+                </div>
               )}
+
+              {/* Included with badge */}
+              <div style={{
+                display: "flex", alignItems: "center", gap: 8, marginBottom: 14,
+                animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.50s both",
+              }}>
+                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.34)", fontFamily: FF }}>Included with</span>
+                <span style={{
+                  fontSize: 11, fontWeight: 800, letterSpacing: "0.10em", textTransform: "uppercase",
+                  padding: "3px 11px", borderRadius: 5,
+                  background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
+                }}>XERXEZ Academy</span>
+              </div>
+
+              {/* Rating + enrolled */}
+              {(course.rating > 0 || (course.total_students ?? 0) > 0) && (
+                <div style={{
+                  display: "flex", gap: 16, alignItems: "center", marginBottom: 20, flexWrap: "wrap",
+                  animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.54s both",
+                }}>
+                  {course.rating > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <StarRating rating={course.rating} />
+                      <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontFamily: FF }}>
+                        ({(course.total_ratings ?? 0).toLocaleString()} reviews)
+                      </span>
+                    </div>
+                  )}
+                  {(course.total_students ?? 0) > 0 && (
+                    <span style={{ fontSize: 12, color: "rgba(255,255,255,0.42)", display: "flex", alignItems: "center", gap: 5, fontFamily: FF }}>
+                      <i className="fas fa-users" style={{ fontSize: 11, color: GOLD }} />
+                      {(course.total_students ?? 0).toLocaleString()} enrolled
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* CTAs */}
+              <div style={{
+                display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 32,
+                animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.60s both",
+              }}>
+                {enrolled ? (
+                  <Link to="/lma/student/dashboard" style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    background: "#d1fae5", color: "#059669", fontSize: 14, fontWeight: 800,
+                    padding: "0 28px", height: 52, borderRadius: 11, textDecoration: "none", fontFamily: FF,
+                  }}>
+                    <CheckCircle2 size={16} /> Go to Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <button type="button" onClick={handleEnroll} className="lmacd-enroll-btn">
+                      <i className="fas fa-graduation-cap" style={{ fontSize: 13 }} />
+                      Enroll Now
+                      {course.price ? (
+                        <span style={{ fontSize: 12, opacity: 0.70, marginLeft: 4 }}>₹{course.price.toLocaleString()}</span>
+                      ) : null}
+                    </button>
+                    <button type="button" onClick={scrollToCurriculum} className="lmacd-preview-btn">
+                      <i className="fas fa-list-ul" style={{ fontSize: 12 }} />
+                      View Curriculum
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Trust metrics row — like home hero */}
+              <div className="lmacd-trust-row" style={{ animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.70s both" }}>
+                {[
+                  { val: course.hours > 0 ? `${course.hours}h` : "—", label: "Content" },
+                  { val: totalLessons > 0 ? String(totalLessons) : "—", label: "Lessons" },
+                  { val: course.rating > 0 ? `${course.rating}★` : "New", label: "Rating" },
+                  { val: (course.total_students ?? 0) > 0 ? `${(course.total_students ?? 0).toLocaleString()}+` : "Open", label: "Enrolled" },
+                ].map(m => (
+                  <div key={m.label} className="lmacd-trust-item">
+                    <div className="lmacd-trust-val">{m.val}</div>
+                    <div className="lmacd-trust-label">{m.label}</div>
+                  </div>
+                ))}
+              </div>
+
             </div>
-          </div>
-          <div className="lmacd-hero-card-col">
-            <HeroCourseCard course={course} totalLessons={totalLessons} onEnroll={handleEnroll} onPreview={scrollToCurriculum} />
-          </div>
+
+            {/* ── Right card column ── */}
+            <div className="lmacd-hero-card-col">
+              <HeroCourseCard course={course} totalLessons={totalLessons} onEnroll={handleEnroll} onPreview={scrollToCurriculum} />
+            </div>
           </div>
         </div>
       </section>
@@ -1337,75 +1400,187 @@ export default function LMACourseDetailPage() {
       <style>{`
         .lmacd-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 
+        /* ══ HERO ══ */
         .lmacd-hero {
           background: linear-gradient(160deg,${DARK} 0%,${DARK2} 100%);
-          padding: 68px 0 52px;
+          min-height: calc(100vh - 70px);
+          padding: 24px 0 72px;
           position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          overflow: hidden;
         }
-        /* Dot grid overlay */
+        /* Dot grid */
         .lmacd-hero::before {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: radial-gradient(rgba(201,136,58,0.09) 1px, transparent 1px);
-          background-size: 28px 28px;
+          background-image: radial-gradient(rgba(201,136,58,0.08) 1px, transparent 1px);
+          background-size: 30px 30px;
           pointer-events: none;
           z-index: 0;
         }
         /* Particle canvas */
         .lmacd-particles { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-        .lmacd-orb { position: absolute; border-radius: 50%; pointer-events: none; }
-        .lmacd-orb-1 { top:8%;left:4%;width:360px;height:360px;background:radial-gradient(circle,rgba(201,136,58,0.10) 0%,transparent 70%);animation:lmacd-float1 9s ease-in-out infinite; }
-        .lmacd-orb-2 { bottom:4%;right:6%;width:240px;height:240px;background:radial-gradient(circle,rgba(232,168,78,0.07) 0%,transparent 70%);animation:lmacd-float2 13s ease-in-out infinite; }
-        .lmacd-orb-3 { top:48%;right:22%;width:110px;height:110px;background:radial-gradient(circle,rgba(201,136,58,0.13) 0%,transparent 70%);animation:lmacd-float3 7s ease-in-out infinite; }
 
-        /* Floating geometric shapes */
+        /* Atmospheric orbs */
+        .lmacd-orb { position:absolute; border-radius:50%; pointer-events:none; }
+        .lmacd-orb-1 { top:-5%;left:-8%;width:520px;height:520px;background:radial-gradient(circle,rgba(201,136,58,0.12) 0%,transparent 65%);animation:lmacd-float1 11s ease-in-out infinite; }
+        .lmacd-orb-2 { bottom:-10%;right:-5%;width:440px;height:440px;background:radial-gradient(circle,rgba(232,168,78,0.09) 0%,transparent 65%);animation:lmacd-float2 15s ease-in-out infinite; }
+        .lmacd-orb-3 { top:42%;right:28%;width:180px;height:180px;background:radial-gradient(circle,rgba(201,136,58,0.16) 0%,transparent 70%);animation:lmacd-float3 8s ease-in-out infinite; }
+        .lmacd-orb-4 { top:18%;right:8%;width:260px;height:260px;background:radial-gradient(circle,rgba(232,168,78,0.06) 0%,transparent 70%);animation:lmacd-float1 13s ease-in-out infinite 2s; }
+
+        /* Diagonal light rays */
+        .lmacd-ray { position:absolute; pointer-events:none; opacity:0.04; }
+        .lmacd-ray-1 { top:-30%;left:-10%;width:120px;height:200%;background:linear-gradient(180deg,transparent,rgba(201,136,58,0.9),transparent);transform:rotate(-35deg);animation:lmacd-rayDrift 9s ease-in-out infinite; }
+        .lmacd-ray-2 { top:-20%;left:18%;width:60px;height:180%;background:linear-gradient(180deg,transparent,rgba(232,168,78,0.7),transparent);transform:rotate(-35deg);animation:lmacd-rayDrift 12s ease-in-out infinite 3s; }
+
+        /* Orbit rings */
+        .lmacd-orbit { position:absolute; border-radius:50%; pointer-events:none; border:1px solid; right:-120px; top:50%; transform:translateY(-50%); }
+        .lmacd-orbit-1 { width:560px;height:560px;border-color:rgba(201,136,58,0.08);animation:lmacd-orbitSpin 60s linear infinite; }
+        .lmacd-orbit-2 { width:420px;height:420px;border-color:rgba(201,136,58,0.12);right:-60px;animation:lmacd-orbitSpin 40s linear infinite reverse; }
+        .lmacd-orbit-3 { width:280px;height:280px;border-color:rgba(201,136,58,0.18);right:0px;animation:lmacd-orbitSpin 28s linear infinite; }
+
+        /* Floating diamonds */
         .lmacd-geo { position:absolute; pointer-events:none; }
-        .lmacd-geo-1 { right:8%;top:15%;width:130px;height:130px;border:1.5px solid rgba(201,136,58,0.18);transform:rotate(45deg);animation:lmacd-geo-rot 20s linear infinite; }
-        .lmacd-geo-2 { right:15%;top:55%;width:58px;height:58px;border:1.5px solid rgba(232,168,78,0.20);transform:rotate(45deg);animation:lmacd-geo-rot 14s linear infinite reverse; }
-        .lmacd-geo-3 { right:4%;bottom:12%;width:180px;height:180px;border:1px solid rgba(201,136,58,0.10);border-radius:50%;animation:lmacd-float2 16s ease-in-out infinite; }
-        .lmacd-geo-4 { right:28%;top:10%;width:30px;height:30px;background:rgba(201,136,58,0.12);border:1px solid rgba(201,136,58,0.35);transform:rotate(45deg);animation:lmacd-geo-pulse 4s ease-in-out infinite,lmacd-geo-glow 3s ease-in-out infinite; }
-        @keyframes lmacd-geo-rot { to{transform:rotate(405deg);} }
-        @keyframes lmacd-geo-pulse { 0%,100%{opacity:0.8} 50%{opacity:0.18} }
-        @keyframes lmacd-geo-glow { 0%,100%{box-shadow:0 0 6px rgba(201,136,58,0.20),0 0 18px rgba(201,136,58,0.08)} 50%{box-shadow:0 0 22px rgba(201,136,58,0.80),0 0 50px rgba(201,136,58,0.40)} }
+        .lmacd-geo-1 { right:6%;top:12%;width:16px;height:16px;background:rgba(201,136,58,0.28);border:1px solid rgba(201,136,58,0.50);transform:rotate(45deg);animation:lmacd-diamondFloat 6s ease-in-out infinite; }
+        .lmacd-geo-2 { right:22%;top:70%;width:10px;height:10px;background:rgba(232,168,78,0.20);border:1px solid rgba(232,168,78,0.45);transform:rotate(45deg);animation:lmacd-diamondFloat 8s ease-in-out infinite 1.5s; }
+        .lmacd-geo-3 { left:6%;bottom:22%;width:12px;height:12px;background:rgba(201,136,58,0.18);border:1px solid rgba(201,136,58,0.40);transform:rotate(45deg);animation:lmacd-diamondFloat 7s ease-in-out infinite 3s; }
+        .lmacd-geo-4 { right:32%;top:8%;width:8px;height:8px;background:rgba(201,136,58,0.25);border:1px solid rgba(201,136,58,0.55);transform:rotate(45deg);animation:lmacd-diamondFloat 5s ease-in-out infinite 0.8s; }
 
+        /* Back link */
+        .lmacd-back-link {
+          display:inline-flex; align-items:center; gap:6px;
+          font-size:12px; color:rgba(255,255,255,0.36); text-decoration:none;
+          margin-bottom:28px; font-family:${FF}; font-weight:600;
+          transition:color 0.18s ease;
+          animation:lmacd-fadeUp 0.5s ease both;
+        }
+        .lmacd-back-link:hover { color:rgba(255,255,255,0.70); }
+
+        /* Eyebrow chip */
+        .lmacd-eyebrow-chip {
+          display:inline-flex; align-items:center; gap:7px;
+          padding:6px 14px 6px 10px; border-radius:999px; margin-bottom:18px;
+          background:rgba(201,136,58,0.10); border:1px solid rgba(201,136,58,0.30);
+          backdrop-filter:blur(8px);
+        }
+        .lmacd-eyebrow-dot {
+          width:6px; height:6px; border-radius:50%;
+          background:${GOLD}; flex-shrink:0;
+          box-shadow:0 0 0 2px rgba(201,136,58,0.30);
+          animation:lmacd-pulse 2s ease-in-out infinite;
+        }
+
+        /* Animated hero title */
+        .lmacd-hero-title {
+          font-family:${FF}; font-weight:900;
+          font-size:clamp(30px,4.5vw,52px); line-height:1.08;
+          color:#fff; margin:0 0 10px; letter-spacing:-0.03em;
+        }
+        .lmacd-letter {
+          display:inline-block;
+          opacity:0;
+          animation:lmacd-letterIn 0.5s ease forwards;
+        }
+
+        /* Sub line */
+        .lmacd-hero-sub {
+          font-size:13px; font-weight:600; letter-spacing:0.01em;
+          color:rgba(255,255,255,0.38); margin:0 0 16px; font-family:${FF};
+          text-transform:uppercase; letter-spacing:0.06em;
+        }
+
+        /* Trust metrics row */
+        .lmacd-trust-row {
+          display:flex; gap:0; flex-wrap:wrap;
+          border:1px solid rgba(255,255,255,0.09); border-radius:14px;
+          overflow:hidden; background:rgba(255,255,255,0.03);
+          max-width:440px;
+        }
+        .lmacd-trust-item {
+          flex:1; min-width:80px; padding:14px 16px; text-align:center;
+          border-right:1px solid rgba(255,255,255,0.08);
+        }
+        .lmacd-trust-item:last-child { border-right:none; }
+        .lmacd-trust-val {
+          font-size:18px; font-weight:800; color:#fff; font-family:${FF};
+          line-height:1.1; margin-bottom:3px;
+        }
+        .lmacd-trust-label {
+          font-size:10px; font-weight:600; color:rgba(255,255,255,0.35);
+          text-transform:uppercase; letter-spacing:0.08em; font-family:${FF};
+        }
+
+        /* CTA Buttons */
+        .lmacd-enroll-btn {
+          display:inline-flex; align-items:center; gap:8px;
+          background:linear-gradient(135deg,${AMBER},${GOLD});
+          color:#0a0806; font-size:14px; font-weight:800;
+          height:52px; padding:0 28px; border-radius:11px; border:none;
+          cursor:pointer; font-family:${FF};
+          box-shadow:0 4px 0 rgba(130,78,18,0.45),0 10px 32px rgba(201,136,58,0.25);
+          transition:transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .lmacd-enroll-btn:hover {
+          transform:translateY(-2px);
+          box-shadow:0 6px 0 rgba(130,78,18,0.45),0 14px 36px rgba(201,136,58,0.35);
+        }
+        .lmacd-preview-btn {
+          display:inline-flex; align-items:center; gap:8px;
+          background:transparent; color:${GOLD};
+          font-size:14px; font-weight:700; height:52px; padding:0 24px;
+          border-radius:11px; border:2px solid ${GOLD}; cursor:pointer;
+          font-family:${FF}; transition:background 0.20s ease;
+        }
+        .lmacd-preview-btn:hover { background:rgba(201,136,58,0.14); }
+
+        /* Hero layout */
+        .lmacd-hero-row { display:flex; gap:56px; align-items:center; }
+        .lmacd-hero-text { flex:1; min-width:0; padding-top:8px; }
+        .lmacd-hero-card-col { width:370px; flex-shrink:0; position:sticky; top:24px; align-self:flex-start; }
+
+        /* 3-D floating card */
+        .lmacd-hcard-wrap { animation:lmacd-card-float 4.5s ease-in-out infinite; }
+        .lmacd-hcard {
+          background:linear-gradient(145deg,#1f1507 0%,#120e05 100%);
+          border-radius:18px; padding:20px; overflow:hidden;
+          border:1px solid rgba(201,136,58,0.22);
+          box-shadow:0 20px 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.05);
+          transition:transform 0.18s cubic-bezier(0.25,0.46,0.45,0.94);
+          will-change:transform;
+        }
+
+        /* Tab nav + body */
         .lmacd-tab-nav { background:#fff; border-bottom:2px solid rgba(0,0,0,0.08); position:sticky; z-index:90; }
-
         .lmacd-body-row { display:flex; gap:40px; align-items:flex-start; padding:32px 0 60px; }
-
         .lmacd-right-col { width:300px; flex-shrink:0; position:sticky; top:132px; }
         .lmacd-sidebar-card { background:#fff; border-radius:16px; padding:22px 22px 18px; border:1px solid rgba(0,0,0,0.08); box-shadow:0 4px 20px rgba(0,0,0,0.07); margin-bottom:16px; }
 
+        /* Spinner */
         .lmacd-spinner { width:36px; height:36px; border:3px solid rgba(201,136,58,0.18); border-top-color:${GOLD}; border-radius:50%; animation:lmacd-spin 0.8s linear infinite; display:inline-block; }
 
-        @keyframes lmacd-float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(22px,-32px) scale(1.06)} }
-        @keyframes lmacd-float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,26px) scale(0.95)} }
-        @keyframes lmacd-float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(14px,-18px)} }
-        @keyframes lmacd-spin { to{transform:rotate(360deg)} }
+        /* Keyframes */
+        @keyframes lmacd-float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(28px,-40px) scale(1.07)} }
+        @keyframes lmacd-float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-24px,32px) scale(0.94)} }
+        @keyframes lmacd-float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(18px,-22px)} }
+        @keyframes lmacd-spin  { to{transform:rotate(360deg)} }
         @keyframes lmacd-fadeIn  { from{opacity:0} to{opacity:1} }
+        @keyframes lmacd-fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
         @keyframes lmacd-slideUp { from{opacity:0;transform:translateY(40px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
-        @media (max-width:600px) {
-          .lmacd-lesson-modal { border-radius:16px 16px 0 0 !important; max-height:94vh !important; }
-        }
+        @keyframes lmacd-letterIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes lmacd-pulse { 0%,100%{box-shadow:0 0 0 2px rgba(201,136,58,0.30)} 50%{box-shadow:0 0 0 5px rgba(201,136,58,0.08)} }
+        @keyframes lmacd-card-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+        @keyframes lmacd-rayDrift { 0%,100%{opacity:0.04} 50%{opacity:0.09} }
+        @keyframes lmacd-orbitSpin { to{transform:translateY(-50%) rotate(360deg)} }
+        @keyframes lmacd-diamondFloat { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(-10px)} }
+        @keyframes lmacd-geo-rot { to{transform:rotate(405deg);} }
 
-        button:focus-visible { outline:2px solid ${GOLD}; outline-offset:2px; }
-        html { scroll-behavior:smooth; }
-
-        @media (max-width:960px) {
-          .lmacd-body-row { flex-direction:column; }
-          .lmacd-right-col { width:100%; position:static; }
-          .lmacd-tab-nav { top:0 !important; }
-        }
-        @media (max-width:600px) {
-          .lmacd-learn-grid { grid-template-columns:1fr !important; }
-          .lmacd-hero { padding:56px 0 36px; }
-          .lmacd-lesson-indent { padding-left:16px !important; }
-        }
-        /* Shimmer on sticky Enroll Now */
+        /* Shimmer */
+        .lmacd-shimmer-btn { position:relative; overflow:hidden; }
         .lmacd-shimmer-btn::after {
-          content:'';
-          position:absolute;
-          top:0;left:-100%;
+          content:''; position:absolute; top:0;left:-100%;
           width:55%;height:100%;
           background:linear-gradient(90deg,transparent,rgba(255,255,255,0.28),transparent);
           animation:lmacd-shimmer 2.4s ease-in-out infinite 0.8s;
@@ -1413,52 +1588,46 @@ export default function LMACourseDetailPage() {
         }
         @keyframes lmacd-shimmer { to{left:200%;} }
 
-        /* Try Free Preview hover fill */
-        .lmacd-preview-btn:hover { background:rgba(201,136,58,0.14) !important; }
+        /* Student outcomes */
+        .lmacd-outcomes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+        .lmacd-outcome-card { background:#fff; border-radius:14px; padding:18px 14px; border:1px solid rgba(0,0,0,0.07); text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
 
-        /* 375px mobile */
+        button:focus-visible { outline:2px solid ${GOLD}; outline-offset:2px; }
+        html { scroll-behavior:smooth; }
+
+        /* Responsive */
+        @media (max-width:1000px) {
+          .lmacd-hero-row { flex-direction:column; gap:36px; }
+          .lmacd-hero-card-col { width:100%; max-width:440px; margin:0 auto; position:static; }
+          .lmacd-orbit { display:none; }
+        }
+        @media (max-width:960px) {
+          .lmacd-body-row { flex-direction:column; }
+          .lmacd-right-col { width:100%; position:static; }
+          .lmacd-tab-nav { top:0 !important; }
+        }
+        @media (max-width:600px) {
+          .lmacd-hero { min-height:auto; padding:56px 0 48px; }
+          .lmacd-learn-grid { grid-template-columns:1fr !important; }
+          .lmacd-lesson-indent { padding-left:16px !important; }
+          .lmacd-lesson-modal { border-radius:16px 16px 0 0 !important; max-height:94vh !important; }
+          .lmacd-outcomes-grid { grid-template-columns:1fr; }
+          .lmacd-trust-row { max-width:100%; }
+          .lmacd-trust-item { padding:12px 10px; }
+        }
         @media (max-width:420px) {
-          .lmacd-hero { padding:48px 0 32px; }
+          .lmacd-hero { padding:48px 0 40px; }
           .lmacd-container { padding:0 16px; }
           .lmacd-body-row { gap:24px; padding:20px 0 40px; }
         }
-
         @media (prefers-reduced-motion:reduce) {
-          .lmacd-orb,.lmacd-geo { animation:none !important; }
+          .lmacd-orb,.lmacd-geo,.lmacd-ray,.lmacd-orbit { animation:none !important; }
           .lmacd-shimmer-btn::after { animation:none !important; }
           .lmacd-spinner { animation-duration:0.01ms !important; }
           .lmacd-hcard-wrap { animation:none !important; }
           .lmacd-particles { display:none !important; }
+          .lmacd-letter { opacity:1 !important; animation:none !important; }
           * { transition-duration:0.01ms !important; }
-        }
-
-        /* ── Hero 2-col row ── */
-        .lmacd-hero-row { display:flex; gap:48px; align-items:flex-start; }
-        .lmacd-hero-text { flex:1; min-width:0; padding-top:8px; }
-        .lmacd-hero-card-col { width:360px; flex-shrink:0; position:sticky; top:20px; align-self:flex-start; }
-
-        /* ── 3-D floating card ── */
-        .lmacd-hcard-wrap { animation:lmacd-card-float 4s ease-in-out infinite; }
-        .lmacd-hcard {
-          background:linear-gradient(145deg,#1f1507 0%,#120e05 100%);
-          border-radius:16px; padding:20px; overflow:hidden;
-          border:1px solid rgba(201,136,58,0.22);
-          box-shadow:0 16px 48px rgba(0,0,0,0.50),inset 0 1px 0 rgba(255,255,255,0.05);
-          transition:transform 0.18s cubic-bezier(0.25,0.46,0.45,0.94);
-          will-change:transform;
-        }
-        @keyframes lmacd-card-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-
-        /* ── Student outcomes ── */
-        .lmacd-outcomes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-        .lmacd-outcome-card { background:#fff; border-radius:14px; padding:18px 14px; border:1px solid rgba(0,0,0,0.07); text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
-
-        @media (max-width:1000px) {
-          .lmacd-hero-row { flex-direction:column; }
-          .lmacd-hero-card-col { width:100%; max-width:440px; margin:0 auto; position:static; }
-        }
-        @media (max-width:600px) {
-          .lmacd-outcomes-grid { grid-template-columns:1fr; }
         }
       `}</style>
     </div>
