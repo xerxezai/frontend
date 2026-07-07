@@ -6,9 +6,9 @@ import {
 } from "recharts";
 import {
   LayoutDashboard, BookOpen, Users, DollarSign, Star,
-  ClipboardList, TrendingUp, PlusCircle, ChevronRight, ChevronDown,
-  Bell, Menu, X, User, LogOut, Edit3, Trash2, GraduationCap,
-  Check, BarChart2, Award, Eye, Clock, AlertCircle, BookMarked,
+  ClipboardList, PlusCircle, ChevronRight, ChevronDown,
+  Bell, Menu, X, LogOut, Edit3, Trash2, GraduationCap,
+  Check, BarChart2, Eye, Clock, AlertCircle, BookMarked,
   Play, Plus, Save, Layers,
 } from "lucide-react";
 
@@ -19,7 +19,6 @@ const AMBER = "#E8A84E";
 const DARK  = "#1a1208";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06)";
-const BHOV  = "0 2px 4px rgba(0,0,0,0.06),0 12px 40px rgba(201,136,58,0.14)";
 
 type Section = "Dashboard" | "My Courses" | "Students" | "Earnings" | "Analytics" | "Reviews" | "Assignments";
 
@@ -654,7 +653,7 @@ function DashboardView({ data, earningsChart, onGrade }: { data: any; earningsCh
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={v => `₹${((v as number) / 1000).toFixed(0)}k`} />
-              <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v: number) => [`₹${v.toLocaleString()}`, "Earnings"]} />
+              <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v) => [`₹${Number(v ?? 0).toLocaleString()}`, "Earnings"]} />
               <Area type="monotone" dataKey="value" stroke={GOLD} strokeWidth={2.5} fill="url(#eg)" dot={{ fill: GOLD, strokeWidth: 0, r: 4 }} activeDot={{ r: 6, fill: AMBER }} />
             </AreaChart>
           </ResponsiveContainer>
@@ -889,7 +888,7 @@ function EarningsView({ data, earningsChart }: { data: any; earningsChart: any[]
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
             <XAxis dataKey="month" tick={{ fontSize: 11, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 10, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={v => `₹${((v as number) / 1000).toFixed(0)}k`} />
-            <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v: number) => [`₹${v.toLocaleString()}`, "Revenue"]} />
+            <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v) => [`₹${Number(v ?? 0).toLocaleString()}`, "Revenue"]} />
             <Area type="monotone" dataKey="value" stroke={GOLD} strokeWidth={2.5} fill="url(#eg2)" dot={{ fill: GOLD, strokeWidth: 0, r: 4 }} activeDot={{ r: 6, fill: AMBER }} />
           </AreaChart>
         </ResponsiveContainer>
@@ -954,7 +953,7 @@ function AnalyticsView({ token }: { token: string }) {
                 <XAxis dataKey="title" tick={{ fontSize: 10, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false}
                   tickFormatter={v => v.length > 12 ? v.slice(0, 12) + "…" : v} />
                 <YAxis tick={{ fontSize: 10, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} allowDecimals={false} />
-                <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v: number) => [v, "Students"]} />
+                <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v) => [Number(v ?? 0), "Students"]} />
                 <Bar dataKey="total_students" fill={GOLD} radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
