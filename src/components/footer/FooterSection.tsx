@@ -63,11 +63,6 @@ const FooterSection = () => {
                       style={{ color: NAV.icon }} {...linkHover}>
                       <i className="fab fa-github"></i>
                     </a>
-                    <a href="https://instagram.com/xerxez"
-                      target="_blank" rel="noreferrer"
-                      style={{ color: NAV.icon }} {...linkHover}>
-                      <i className="fab fa-instagram"></i>
-                    </a>
                   </div>
                 </div>
               </div>

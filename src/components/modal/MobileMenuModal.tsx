@@ -44,9 +44,6 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                 <a href="https://github.com/" target="_blank" rel="noreferrer">
                   <i className="fab fa-github"></i>
                 </a>
-                <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer">
-                  <i className="fab fa-instagram"></i>
-                </a>
               </div>
               <div className="offcanvas__contact">
                 <h3>Information</h3>

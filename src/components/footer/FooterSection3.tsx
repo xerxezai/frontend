@@ -92,7 +92,6 @@ const FooterSection3 = () => {
                     {[
                       { href: "https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/", icon: "fab fa-linkedin-in",  label: "LinkedIn" },
                       { href: "https://github.com/",          icon: "fab fa-github",       label: "GitHub" },
-                      { href: "https://instagram.com/xerxez",  icon: "fab fa-instagram",   label: "Instagram" },
                     ].map(({ href, icon, label }) => (
                       <a key={label} href={href}
                         target="_blank" rel="noreferrer" aria-label={label}

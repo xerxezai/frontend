@@ -41,9 +41,6 @@ const HeaderSection2 = ({ variant }: Props) => {
               <a href="https://github.com/" target="_blank" rel="noreferrer" title="GitHub">
                 <i className="fab fa-github"></i>
               </a>
-              <a href="https://instagram.com/xerxez" target="_blank" rel="noreferrer" title="Instagram">
-                <i className="fab fa-instagram"></i>
-              </a>
             </div>
           </div>
         </div>
