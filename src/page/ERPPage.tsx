@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ERPLogin from '../components/erp/ERPLogin';
 import ERPLayout from '../components/erp/ERPLayout';
 import ERPDashboard from '../components/erp/ERPDashboard';
@@ -38,12 +38,20 @@ const ModuleLoader = () => (
 );
 
 const ERPPage = () => {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => !!localStorage.getItem('xerxez_token')
   );
 
   if (!isAuthenticated) {
-    return <ERPLogin onSuccess={() => setIsAuthenticated(true)} />;
+    return (
+      <ERPLogin
+        onSuccess={() => {
+          setIsAuthenticated(true);
+          navigate('/home', { replace: true });
+        }}
+      />
+    );
   }
 
   return (

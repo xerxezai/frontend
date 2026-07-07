@@ -73,6 +73,7 @@ const LMACertificatesPage       = lazy(() => import("./page/lma/LMACertificatesP
 const LMAProgressPage           = lazy(() => import("./page/lma/LMAProgressPage"));
 const LMAContinueLearningPage   = lazy(() => import("./page/lma/LMAContinueLearningPage"));
 const LMAProfilePage            = lazy(() => import("./page/lma/LMAProfilePage"));
+const PortalHub                 = lazy(() => import("./page/PortalHub"));
 
 function App() {
   return (
@@ -110,6 +111,7 @@ function App() {
           <Route path="/documentation"           element={<DocsPage />} />
           <Route path="/health"                  element={<HealthPage />} />
           <Route path="/mlm"                     element={<MLMPage />} />
+          <Route path="/home"                    element={<PortalHub />} />
           <Route path="/erp/*"                   element={<ERPPage />} />
           <Route path="/training"                element={<TrainingPage />} />
           <Route path="/landing"                 element={<LandingPage />} />

@@ -189,12 +189,8 @@ export default function LMALoginPage() {
       localStorage.setItem("lma_role",           data.lma_role);
       localStorage.setItem("lma_can_instructor", String(data.can_access_instructor));
       localStorage.setItem("lma_name",           data.name);
-      if (role === "instructor" && data.can_access_instructor) {
-        navigate("/lma/instructor/dashboard");
-      } else {
-        const dest = redirect.startsWith("/lma") ? redirect : "/lma/student/dashboard";
-        navigate(action ? `${dest}?action=${action}` : dest);
-      }
+      // Portal hub handles routing: 1 portal → direct, 2+ → /home
+      navigate("/home", { replace: true });
     } catch {
       setError("Network error. Please try again."); shake();
     } finally {
