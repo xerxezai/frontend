@@ -924,11 +924,15 @@ export default function LMACourseDetailPage() {
                 )}
               </div>
 
-              {/* Animated title — letter by letter */}
+              {/* Animated title — word-safe: words never break mid-word */}
               <h1 className="lmacd-hero-title">
-                {course.title.split("").map((ch: string, i: number) => (
-                  <span key={i} className="lmacd-letter" style={{ animationDelay: prefersReduced ? "0s" : `${0.15 + i * 0.022}s` }}>
-                    {ch === " " ? " " : ch}
+                {course.title.split(" ").map((word: string, wi: number) => (
+                  <span key={wi} style={{ display: "inline-block", whiteSpace: "nowrap", marginRight: "0.28em" }}>
+                    {word.split("").map((ch: string, ci: number) => (
+                      <span key={ci} className="lmacd-letter" style={{ animationDelay: prefersReduced ? "0s" : `${0.15 + (wi * 7 + ci) * 0.022}s` }}>
+                        {ch}
+                      </span>
+                    ))}
                   </span>
                 ))}
               </h1>
@@ -1398,7 +1402,7 @@ export default function LMACourseDetailPage() {
       )}
 
       <style>{`
-        .lmacd-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+        .lmacd-container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
 
         /* ══ HERO ══ */
         .lmacd-hero {
@@ -1476,7 +1480,7 @@ export default function LMACourseDetailPage() {
         /* Animated hero title */
         .lmacd-hero-title {
           font-family:${FF}; font-weight:900;
-          font-size:clamp(30px,4.5vw,52px); line-height:1.08;
+          font-size:clamp(28px,3.8vw,46px); line-height:1.1;
           color:#fff; margin:0 0 10px; letter-spacing:-0.03em;
         }
         .lmacd-letter {
