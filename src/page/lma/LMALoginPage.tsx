@@ -167,7 +167,7 @@ export default function LMALoginPage() {
         <div style={{ position: "relative", zIndex: 1, maxWidth: 480 }}>
           {/* Logo */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 48 }}>
-            <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 48, width: "auto" }} />
+            <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 70, width: "auto" }} />
           </div>
 
           <h1 style={{ fontSize: "clamp(32px, 3.5vw, 48px)", fontWeight: 800, color: "#fff", lineHeight: 1.1, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
@@ -206,6 +206,11 @@ export default function LMALoginPage() {
           boxShadow: "0 2px 4px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.08), 0 32px 64px rgba(0,0,0,0.04)",
           padding: "40px 36px",
         }}>
+
+          {/* Logo — shown on both steps */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
+            <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 70, width: "auto" }} />
+          </div>
 
           {step === 1 ? (
             <>
