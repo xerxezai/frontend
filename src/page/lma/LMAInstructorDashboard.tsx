@@ -1617,7 +1617,7 @@ export default function LMAInstructorDashboard() {
       {/* Sidebar */}
       <aside className={`lmai-sidebar${sideOpen ? " open" : ""}`} style={{ width: 240, background: DARK, flexShrink: 0, display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, height: "100vh", zIndex: 200, overflowY: "auto" }}>
         <div style={{ padding: "22px 16px 14px" }}>
-          <Link to="/"><img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 34, width: "auto" }} /></Link>
+          <Link to="/"><img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 52, width: "auto" }} /></Link>
           <div style={{ marginTop: 7, fontSize: 10, color: AMBER, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>Academy · Instructor</div>
         </div>
 
