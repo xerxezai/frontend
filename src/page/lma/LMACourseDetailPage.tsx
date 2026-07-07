@@ -40,12 +40,29 @@ function toEmbedUrl(url: string): string | null {
 }
 
 /* ── Lesson modal ── */
-const LessonModal = ({ lesson, enrolled, onClose, onEnroll }: {
+const LessonModal = ({ lesson, enrolled, onClose, onEnroll, token, isInstructor }: {
   lesson: any; enrolled: boolean; onClose: () => void; onEnroll: () => void;
+  token: string; isInstructor: boolean;
 }) => {
-  const canWatch = lesson.is_free_preview || enrolled;
-  const embedUrl = canWatch ? toEmbedUrl(lesson.video_url ?? "") : null;
+  const canWatch = lesson.is_free_preview || enrolled || isInstructor;
+  const [secureVideoUrl, setSecureVideoUrl] = useState("");
+  const [videoFetching, setVideoFetching] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+
+  // Fetch video URL from authenticated endpoint — never expose URL via public course API
+  useEffect(() => {
+    if (!canWatch) return;
+    setVideoFetching(true);
+    const headers: Record<string, string> = {};
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    fetch(`${API}/lma/lessons/${lesson.id}/video/`, { headers })
+      .then(r => r.ok ? r.json() : null)
+      .then((d: { video_url?: string } | null) => { if (d?.video_url) setSecureVideoUrl(d.video_url); })
+      .catch(() => {})
+      .finally(() => setVideoFetching(false));
+  }, [lesson.id, canWatch, token]);
+
+  const embedUrl = secureVideoUrl ? toEmbedUrl(secureVideoUrl) : null;
 
   // Close on Escape
   useEffect(() => {
@@ -110,7 +127,21 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll }: {
         <div style={{ padding: "0 0 28px" }}>
           {/* Video section */}
           {canWatch ? (
-            embedUrl ? (
+            videoFetching ? (
+              <div style={{ position: "relative", paddingBottom: "56.25%", background: "#0a0806" }}>
+                <div style={{
+                  position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                  background: "#0a0806",
+                }}>
+                  <div style={{
+                    width: 36, height: 36,
+                    border: `3px solid rgba(201,136,58,0.20)`,
+                    borderTop: `3px solid ${GOLD}`,
+                    borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite",
+                  }} />
+                </div>
+              </div>
+            ) : embedUrl ? (
               <div style={{ position: "relative", paddingBottom: "56.25%", background: "#0a0806" }}>
                 {!videoLoaded && (
                   <div style={{
@@ -137,24 +168,22 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll }: {
                   }}
                 />
               </div>
-            ) : (
-              // Has access but no video URL — just show content
-              lesson.video_url ? (
-                <div style={{ padding: "20px 24px 0", background: "#f9f7f4" }}>
-                  <div style={{
-                    display: "flex", alignItems: "center", gap: 8, padding: "12px 16px",
-                    background: "rgba(201,136,58,0.08)", borderRadius: 10, border: "1px solid rgba(201,136,58,0.20)",
-                  }}>
-                    <PlayCircle size={15} color={GOLD} />
-                    <span style={{ fontSize: 13, color: GOLD, fontWeight: 600, fontFamily: FF }}>Video link: </span>
-                    <a href={lesson.video_url} target="_blank" rel="noopener noreferrer"
-                      style={{ fontSize: 13, color: GOLD, fontFamily: FF, wordBreak: "break-all" }}>
-                      {lesson.video_url}
-                    </a>
-                  </div>
+            ) : secureVideoUrl ? (
+              // Non-embeddable URL — show direct link
+              <div style={{ padding: "20px 24px 0", background: "#f9f7f4" }}>
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 8, padding: "12px 16px",
+                  background: "rgba(201,136,58,0.08)", borderRadius: 10, border: "1px solid rgba(201,136,58,0.20)",
+                }}>
+                  <PlayCircle size={15} color={GOLD} />
+                  <span style={{ fontSize: 13, color: GOLD, fontWeight: 600, fontFamily: FF }}>Video link: </span>
+                  <a href={secureVideoUrl} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize: 13, color: GOLD, fontFamily: FF, wordBreak: "break-all" }}>
+                    {secureVideoUrl}
+                  </a>
                 </div>
-              ) : null
-            )
+              </div>
+            ) : null
           ) : (
             /* Locked state */
             <div style={{
@@ -205,7 +234,7 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll }: {
           )}
 
           {/* No content placeholder for free preview without content */}
-          {canWatch && !lesson.content && !lesson.video_url && (
+          {canWatch && !lesson.content && !secureVideoUrl && !videoFetching && (
             <div style={{ padding: "32px 24px", textAlign: "center", color: "rgba(20,20,19,0.40)", fontSize: 13, fontFamily: FF }}>
               No content has been added for this lesson yet.
             </div>
@@ -279,7 +308,7 @@ const LessonRow = ({ lesson, enrolled, onClick }: {
           Free
         </span>
       )}
-      {lesson.video_url && canWatch && (
+      {lesson.has_video && canWatch && (
         <i className="fas fa-film" style={{ fontSize: 10, color: "rgba(20,20,19,0.28)", flexShrink: 0 }} />
       )}
       <span style={{ fontSize: 11.5, color: "rgba(20,20,19,0.38)", flexShrink: 0 }}>{lesson.duration}m</span>
@@ -1294,6 +1323,8 @@ export default function LMACourseDetailPage() {
         <LessonModal
           lesson={selectedLesson}
           enrolled={enrolled}
+          token={token}
+          isInstructor={isInstructor}
           onClose={() => setSelectedLesson(null)}
           onEnroll={() => { setSelectedLesson(null); handleEnroll(); }}
         />
