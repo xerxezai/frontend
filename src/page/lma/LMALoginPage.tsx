@@ -207,14 +207,6 @@ export default function LMALoginPage() {
           padding: "40px 36px",
         }}>
 
-          {/* Brand mark — shown on both steps */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 28 }}>
-            <img src="/assets/img/logo/black-logo.svg" alt="" aria-hidden="true" style={{ height: 36, width: 36, flexShrink: 0 }} />
-            <span style={{ fontSize: 18, fontWeight: 900, color: "#141413", letterSpacing: "-0.02em", fontFamily: "'DM Sans', sans-serif" }}>
-              XERXEZ <span style={{ color: "#C9883A" }}>Academy</span>
-            </span>
-          </div>
-
           {step === 1 ? (
             <>
               <h2 style={{ fontSize: 24, fontWeight: 800, color: "#141413", margin: "0 0 6px", letterSpacing: "-0.01em" }}>
