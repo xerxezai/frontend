@@ -387,10 +387,15 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
     setLoading(true);
     try {
       const r = await fetch(`${API}/lma/courses/${course.id}/modules/`, { headers: { Authorization: `Bearer ${token}` } });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const d = await r.json();
       setModules(Array.isArray(d) ? d : []);
-    } catch { /* silent */ }
-    setLoading(false);
+    } catch (e) {
+      console.error("[LMA] fetchModules error:", e);
+      // Don't clear existing modules on refresh failure
+    } finally {
+      setLoading(false);
+    }
   }, [course.id, token]);
 
   useEffect(() => { fetchModules(); }, [fetchModules]);
@@ -401,12 +406,25 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
     setSaving(true);
     try {
       const url = id ? `${API}/lma/modules/${id}/` : `${API}/lma/courses/${course.id}/modules/`;
-      const r = await fetch(url, { method: id ? "PUT" : "POST", headers: hdr(token), body: JSON.stringify({ title, order: Number(order) }) });
-      if (!r.ok) { showToast("Failed to save module", "error"); return; }
+      const r = await fetch(url, {
+        method: id ? "PUT" : "POST",
+        headers: hdr(token),
+        body: JSON.stringify({ title, order: Number(order), duration: 0 }),
+      });
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        const msg = err.error ?? err.detail ?? Object.values(err).flat().join(", ") ?? "Failed to save module";
+        console.error("[LMA] saveModule failed:", r.status, err);
+        showToast(String(msg), "error");
+        return;
+      }
       showToast(id ? "Module updated!" : "Module added!");
       setModForm({ show: false, id: null, title: "", order: "0" });
       fetchModules();
-    } catch { showToast("Network error", "error"); } finally { setSaving(false); }
+    } catch (e) {
+      console.error("[LMA] saveModule network error:", e);
+      showToast("Network error — check console", "error");
+    } finally { setSaving(false); }
   };
 
   const deleteModule = async (id: number) => {
@@ -424,14 +442,31 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
     try {
       const url = id ? `${API}/lma/lessons/${id}/` : `${API}/lma/modules/${modId}/lessons/`;
       const r = await fetch(url, {
-        method: id ? "PUT" : "POST", headers: hdr(token),
-        body: JSON.stringify({ title, duration: Number(duration), order: Number(order), content, video_url, is_free_preview }),
+        method: id ? "PUT" : "POST",
+        headers: hdr(token),
+        body: JSON.stringify({
+          title,
+          duration: Number(duration) || 0,
+          order: Number(order) || 0,
+          content: content || "",
+          video_url: video_url || "",
+          is_free_preview,
+        }),
       });
-      if (!r.ok) { showToast("Failed to save lesson", "error"); return; }
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        const msg = err.error ?? err.detail ?? Object.values(err).flat().join(", ") ?? "Failed to save lesson";
+        console.error("[LMA] saveLesson failed:", r.status, err);
+        showToast(String(msg), "error");
+        return;
+      }
       showToast(id ? "Lesson updated!" : "Lesson added!");
       setLesForm({ show: false, modId: null, id: null, title: "", duration: "0", order: "0", content: "", video_url: "", is_free_preview: false });
       fetchModules();
-    } catch { showToast("Network error", "error"); } finally { setSaving(false); }
+    } catch (e) {
+      console.error("[LMA] saveLesson network error:", e);
+      showToast("Network error — check console", "error");
+    } finally { setSaving(false); }
   };
 
   const deleteLesson = async (id: number) => {
