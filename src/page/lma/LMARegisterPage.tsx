@@ -111,7 +111,7 @@ const PrimaryBtn = ({ label, onClick, busy, disabled }: {
 };
 
 /* Input style */
-const iCss = (foc: boolean, rightPad = 12) => ({
+const iCss = (rightPad = 12) => ({
   border: "none", outline: "none", background: "transparent",
   flex: 1, fontSize: 14, color: "#141413", fontFamily: FF,
   padding: `12px ${rightPad}px 12px 10px`,
@@ -402,7 +402,7 @@ export default function LMARegisterPage() {
                   type="text" value={name} placeholder="Your full name"
                   onChange={e => setName(e.target.value)}
                   onFocus={() => setFocName(true)} onBlur={() => setFocName(false)}
-                  style={iCss(focName)}
+                  style={iCss()}
                   onKeyDown={e => e.key === "Enter" && handleRegister()}
                 />
               </div>
@@ -417,7 +417,7 @@ export default function LMARegisterPage() {
                   type="email" value={email} placeholder="you@example.com"
                   onChange={e => setEmail(e.target.value)}
                   onFocus={() => setFocEmail(true)} onBlur={() => setFocEmail(false)}
-                  style={iCss(focEmail)}
+                  style={iCss()}
                   onKeyDown={e => e.key === "Enter" && handleRegister()}
                 />
               </div>
@@ -432,7 +432,7 @@ export default function LMARegisterPage() {
                   type={showPw ? "text" : "password"} value={pw} placeholder="At least 6 characters"
                   onChange={e => setPw(e.target.value)}
                   onFocus={() => setFocPw(true)} onBlur={() => setFocPw(false)}
-                  style={iCss(focPw, 4)}
+                  style={iCss(4)}
                   onKeyDown={e => e.key === "Enter" && handleRegister()}
                 />
                 <button type="button" onClick={() => setShowPw(p => !p)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0 8px", color: "#9ca3af", display: "flex" }}>
@@ -451,7 +451,7 @@ export default function LMARegisterPage() {
                   type={showCf ? "text" : "password"} value={cf} placeholder="Re-enter your password"
                   onChange={e => setCf(e.target.value)}
                   onFocus={() => setFocCf(true)} onBlur={() => setFocCf(false)}
-                  style={iCss(focCf, 4)}
+                  style={iCss(4)}
                   onKeyDown={e => e.key === "Enter" && handleRegister()}
                 />
                 <button type="button" onClick={() => setShowCf(p => !p)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0 8px", color: "#9ca3af", display: "flex" }}>
