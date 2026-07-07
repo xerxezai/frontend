@@ -122,8 +122,8 @@ function ConfirmDialog({ title, body, onConfirm, onCancel, danger = true }: {
         <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 8px", fontFamily: FF }}>{title}</h3>
         <p style={{ fontSize: 13, color: "rgba(20,20,19,0.55)", margin: "0 0 24px", fontFamily: FF, lineHeight: 1.5 }}>{body}</p>
         <div style={{ display: "flex", gap: 10 }}>
-          <button onClick={onCancel} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
-          <button onClick={onConfirm} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "none", background: danger ? "#dc2626" : `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#fff" }}>
+          <button type="button" onClick={onCancel} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+          <button type="button" onClick={onConfirm} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "none", background: danger ? "#dc2626" : `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#fff" }}>
             {danger ? "Delete" : "Confirm"}
           </button>
         </div>
@@ -201,7 +201,7 @@ function GradePanel({ sub, token, onClose, showToast }: {
             <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 4px", fontFamily: FF }}>Grade Submission</h3>
             <p style={{ fontSize: 12, color: "rgba(20,20,19,0.50)", margin: 0, fontFamily: FF }}>{sub.student_name} · {sub.assignment_title}</p>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", padding: 4 }}><X size={18} /></button>
+          <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", padding: 4 }}><X size={18} /></button>
         </div>
         {done ? (
           <div style={{ textAlign: "center", padding: "20px 0" }}>
@@ -229,7 +229,7 @@ function GradePanel({ sub, token, onClose, showToast }: {
               <textarea rows={3} value={feedback} onChange={e => setFeedback(e.target.value)} placeholder="Suggestions for the student…"
                 style={{ ...inputStyle, resize: "vertical" }} onFocus={focusGold} onBlur={blurGold} />
             </div>
-            <button onClick={save} disabled={saving} style={{
+            <button type="button" onClick={save} disabled={saving} style={{
               width: "100%", fontSize: 14, fontWeight: 700, color: "#0a0806",
               background: `linear-gradient(135deg,${AMBER},${GOLD})`,
               border: "none", borderRadius: 10, padding: "13px", cursor: "pointer",
@@ -269,6 +269,7 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
   const removeTag = (t: string) => set("tech_stack", form.tech_stack.filter(x => x !== t));
 
   const save = async () => {
+    console.log("[LMA] CourseFormPanel.save called", { editing, form });
     if (!form.title.trim()) { showToast("Title is required", "error"); return; }
     setSaving(true);
     try {
@@ -292,7 +293,7 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
             <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>{editing ? "Edit Course" : "Create New Course"}</h3>
             <p style={{ fontSize: 12, color: "rgba(20,20,19,0.45)", margin: "3px 0 0", fontFamily: FF }}>Fill out the course details</p>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", padding: 4 }}><X size={20} /></button>
+          <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", padding: 4 }}><X size={20} /></button>
         </div>
 
         <div style={{ flex: 1, padding: "22px 26px", overflowY: "auto" }}>
@@ -329,7 +330,7 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
               {form.tech_stack.map(t => (
                 <span key={t} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "rgba(201,136,58,0.12)", padding: "3px 10px", borderRadius: 999, display: "flex", alignItems: "center", gap: 6 }}>
                   {t}
-                  <button onClick={() => removeTag(t)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "#9ca3af", lineHeight: 1 }}><X size={12} /></button>
+                  <button type="button" onClick={() => removeTag(t)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "#9ca3af", lineHeight: 1 }}><X size={12} /></button>
                 </span>
               ))}
             </div>
@@ -340,7 +341,7 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
           <Field label="Status">
             <div style={{ display: "flex", gap: 0, background: "#f3f4f6", borderRadius: 10, padding: 3 }}>
               {["draft", "published"].map(s => (
-                <button key={s} onClick={() => set("status", s)} style={{
+                <button type="button" key={s} onClick={() => set("status", s)} style={{
                   flex: 1, padding: "8px 0", borderRadius: 8, border: "none", cursor: "pointer", fontFamily: FF,
                   fontSize: 13, fontWeight: 600, transition: "all 0.18s ease",
                   background: form.status === s ? (s === "published" ? "#059669" : "#fff") : "transparent",
@@ -353,8 +354,8 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
         </div>
 
         <div style={{ padding: "14px 26px 26px", borderTop: "1px solid rgba(0,0,0,0.07)", display: "flex", gap: 10 }}>
-          <button onClick={onClose} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", border: "none", borderRadius: 10, padding: "12px", cursor: "pointer", fontFamily: FF }}>Cancel</button>
-          <button onClick={save} disabled={saving} style={{
+          <button type="button" onClick={onClose} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", border: "none", borderRadius: 10, padding: "12px", cursor: "pointer", fontFamily: FF }}>Cancel</button>
+          <button type="button" onClick={save} disabled={saving} style={{
             flex: 2, fontSize: 13, fontWeight: 700, color: "#0a0806",
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             border: "none", borderRadius: 10, padding: "12px", cursor: "pointer",
@@ -401,8 +402,9 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
   useEffect(() => { fetchModules(); }, [fetchModules]);
 
   const saveModule = async () => {
+    console.log("[LMA] saveModule called", { courseId: course.id, modForm });
     const { id, title, order } = modForm;
-    if (!title.trim()) return;
+    if (!title.trim()) { showToast("Module title is required", "error"); return; }
     setSaving(true);
     try {
       const url = id ? `${API}/lma/modules/${id}/` : `${API}/lma/courses/${course.id}/modules/`;
@@ -436,8 +438,10 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
   };
 
   const saveLesson = async () => {
+    console.log("[LMA] saveLesson called", { lesForm });
     const { id, modId, title, duration, order, content, video_url, is_free_preview } = lesForm;
-    if (!title.trim() || !modId) return;
+    if (!title.trim()) { showToast("Lesson title is required", "error"); return; }
+    if (!modId) { showToast("Module not selected", "error"); return; }
     setSaving(true);
     try {
       const url = id ? `${API}/lma/lessons/${id}/` : `${API}/lma/modules/${modId}/lessons/`;
@@ -497,7 +501,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
             <h3 style={{ fontSize: 15, fontWeight: 800, color: "#fff", margin: 0, fontFamily: FF, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Manage Curriculum</h3>
             <p style={{ fontSize: 11, color: AMBER, margin: 0, fontFamily: FF, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{course.title}</p>
           </div>
-          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.10)", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.70)", padding: 8, borderRadius: 8 }}><X size={18} /></button>
+          <button type="button" onClick={onClose} style={{ background: "rgba(255,255,255,0.10)", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.70)", padding: 8, borderRadius: 8 }}><X size={18} /></button>
         </div>
 
         {/* Body */}
@@ -505,7 +509,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
 
           {/* Add Module button */}
           {!modForm.show && (
-            <button onClick={() => setModForm({ show: true, id: null, title: "", order: String(modules.length) })} style={{
+            <button type="button" onClick={() => setModForm({ show: true, id: null, title: "", order: String(modules.length) })} style={{
               display: "flex", alignItems: "center", gap: 8, marginBottom: 20,
               background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
               border: "none", borderRadius: 10, padding: "10px 18px", cursor: "pointer",
@@ -524,8 +528,8 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
               <input type="number" style={{ ...inputStyle, marginBottom: 12 }} value={modForm.order} placeholder="Order"
                 onChange={e => setModForm(f => ({ ...f, order: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
               <div style={{ display: "flex", gap: 8 }}>
-                <button onClick={() => setModForm({ show: false, id: null, title: "", order: "0" })} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
-                <button onClick={saveModule} disabled={saving} style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#0a0806", opacity: saving ? 0.7 : 1 }}>
+                <button type="button" onClick={() => setModForm({ show: false, id: null, title: "", order: "0" })} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+                <button type="button" onClick={saveModule} disabled={saving} style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#0a0806", opacity: saving ? 0.7 : 1 }}>
                   <Save size={13} style={{ verticalAlign: "middle", marginRight: 6 }} />{saving ? "Saving…" : "Save Module"}
                 </button>
               </div>
@@ -548,7 +552,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                 <div key={mod.id} style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, overflow: "hidden", boxShadow: BCARD }}>
                   {/* Module row */}
                   <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "13px 16px", background: "#fff" }}>
-                    <button onClick={() => setExpanded(expanded === mod.id ? null : mod.id)}
+                    <button type="button" onClick={() => setExpanded(expanded === mod.id ? null : mod.id)}
                       style={{ background: "none", border: "none", cursor: "pointer", color: GOLD, padding: 0, display: "flex", alignItems: "center", gap: 6, flex: 1, textAlign: "left" }}>
                       <div style={{ width: 28, height: 28, borderRadius: 7, background: "rgba(201,136,58,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                         <BookOpen size={13} color={GOLD} />
@@ -559,11 +563,11 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                       </div>
                       <ChevronDown size={15} style={{ marginLeft: "auto", transform: expanded === mod.id ? "rotate(180deg)" : "none", transition: "transform 0.22s ease" }} />
                     </button>
-                    <button onClick={() => { setModForm({ show: true, id: mod.id, title: mod.title, order: String(mod.order) }); setExpanded(null); }}
+                    <button type="button" onClick={() => { setModForm({ show: true, id: mod.id, title: mod.title, order: String(mod.order) }); setExpanded(null); }}
                       style={{ background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: GOLD }}>
                       <Edit3 size={13} />
                     </button>
-                    <button onClick={() => deleteModule(mod.id)}
+                    <button type="button" onClick={() => deleteModule(mod.id)}
                       style={{ background: "rgba(239,68,68,0.08)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: "#dc2626" }}>
                       <Trash2 size={13} />
                     </button>
@@ -585,11 +589,11 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                                 {les.is_free_preview && <span style={{ fontSize: 10, fontWeight: 700, color: "#059669", background: "rgba(5,150,105,0.10)", padding: "1px 7px", borderRadius: 999, marginLeft: 6 }}>FREE</span>}
                                 {les.video_url && <span style={{ fontSize: 10, fontWeight: 700, color: "#3b82f6", background: "rgba(59,130,246,0.10)", padding: "1px 7px", borderRadius: 999, marginLeft: 4 }}>VIDEO</span>}
                               </div>
-                              <button onClick={() => openEditLesson(mod, les)}
+                              <button type="button" onClick={() => openEditLesson(mod, les)}
                                 style={{ background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: GOLD }}>
                                 <Edit3 size={12} />
                               </button>
-                              <button onClick={() => deleteLesson(les.id)}
+                              <button type="button" onClick={() => deleteLesson(les.id)}
                                 style={{ background: "rgba(239,68,68,0.08)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#dc2626" }}>
                                 <Trash2 size={12} />
                               </button>
@@ -621,16 +625,16 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                             Free Preview (visible without enrollment)
                           </label>
                           <div style={{ display: "flex", gap: 8 }}>
-                            <button onClick={() => setLesForm({ show: false, modId: null, id: null, title: "", duration: "0", order: "0", content: "", video_url: "", is_free_preview: false })}
+                            <button type="button" onClick={() => setLesForm({ show: false, modId: null, id: null, title: "", duration: "0", order: "0", content: "", video_url: "", is_free_preview: false })}
                               style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "none", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
-                            <button onClick={saveLesson} disabled={saving}
+                            <button type="button" onClick={saveLesson} disabled={saving}
                               style={{ flex: 2, padding: "8px", borderRadius: 8, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#0a0806", opacity: saving ? 0.7 : 1 }}>
                               <Save size={12} style={{ verticalAlign: "middle", marginRight: 5 }} />{saving ? "Saving…" : "Save Lesson"}
                             </button>
                           </div>
                         </div>
                       ) : (
-                        <button onClick={() => setLesForm({ show: true, modId: mod.id, id: null, title: "", duration: "0", order: String((mod.lessons ?? []).length), content: "", video_url: "", is_free_preview: false })}
+                        <button type="button" onClick={() => setLesForm({ show: true, modId: mod.id, id: null, title: "", duration: "0", order: String((mod.lessons ?? []).length), content: "", video_url: "", is_free_preview: false })}
                           style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(201,136,58,0.10)", border: "1.5px dashed rgba(201,136,58,0.35)", borderRadius: 9, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontWeight: 700, color: GOLD, fontFamily: FF }}>
                           <Plus size={13} /> Add Lesson
                         </button>
@@ -645,7 +649,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
 
         {/* Footer */}
         <div style={{ padding: "14px 24px 24px", borderTop: "1px solid rgba(0,0,0,0.07)" }}>
-          <button onClick={onClose} style={{
+          <button type="button" onClick={onClose} style={{
             width: "100%", padding: "12px", borderRadius: 10, border: "none",
             background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
             fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF,
@@ -712,7 +716,7 @@ function DashboardView({ data, earningsChart, onGrade }: { data: any; earningsCh
                     <div style={{ fontSize: 12.5, fontWeight: 600, color: "#141413", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontFamily: FF }}>{s.student_name}</div>
                     <div style={{ fontSize: 11, color: "rgba(20,20,19,0.45)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontFamily: FF }}>{s.assignment_title}</div>
                   </div>
-                  <button onClick={() => onGrade(s)} style={{ fontSize: 11, fontWeight: 700, color: "#fff", background: `linear-gradient(135deg,${AMBER},${GOLD})`, border: "none", borderRadius: 7, padding: "5px 10px", cursor: "pointer", flexShrink: 0 }}>Grade</button>
+                  <button type="button" onClick={() => onGrade(s)} style={{ fontSize: 11, fontWeight: 700, color: "#fff", background: `linear-gradient(135deg,${AMBER},${GOLD})`, border: "none", borderRadius: 7, padding: "5px 10px", cursor: "pointer", flexShrink: 0 }}>Grade</button>
                 </div>
               ))}
             </div>
@@ -756,7 +760,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }:
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search courses…"
             style={{ ...inputStyle, width: 220, padding: "8px 14px" }} onFocus={focusGold} onBlur={blurGold} />
-          <button onClick={onCreate} style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)", whiteSpace: "nowrap" }}>
+          <button type="button" onClick={onCreate} style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)", whiteSpace: "nowrap" }}>
             <PlusCircle size={15} /> Add Course
           </button>
         </div>
@@ -770,7 +774,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }:
           <p style={{ color: "#9ca3af", fontSize: 14, margin: "0 0 20px", fontFamily: FF }}>
             {search ? "No courses match your search." : "No courses yet. Create your first!"}
           </p>
-          {!search && <button onClick={onCreate} style={{ background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 10, padding: "10px 24px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF }}>Create Course</button>}
+          {!search && <button type="button" onClick={onCreate} style={{ background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 10, padding: "10px 24px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF }}>Create Course</button>}
         </div>
       ) : (
         <div style={{ background: "#fff", borderRadius: 16, overflow: "auto", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
@@ -805,9 +809,9 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }:
                   <td style={{ padding: "13px 16px" }}>
                     <div style={{ display: "flex", gap: 6 }}>
                       <Link to={`/lma/courses/${c.id}`} title="Preview" style={{ display: "inline-flex", color: "#6b7280", background: "#f3f4f6", borderRadius: 7, padding: 7, textDecoration: "none" }}><Eye size={13} /></Link>
-                      <button title="Edit" onClick={() => onEdit(c)} style={{ color: GOLD, background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Edit3 size={13} /></button>
-                      <button title="Manage Curriculum" onClick={() => onManage(c)} style={{ color: "#3b82f6", background: "rgba(59,130,246,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Layers size={13} /></button>
-                      <button title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
+                      <button type="button" title="Edit" onClick={() => onEdit(c)} style={{ color: GOLD, background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Edit3 size={13} /></button>
+                      <button type="button" title="Manage Curriculum" onClick={() => onManage(c)} style={{ color: "#3b82f6", background: "rgba(59,130,246,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Layers size={13} /></button>
+                      <button type="button" title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
                     </div>
                   </td>
                 </tr>
@@ -1098,7 +1102,7 @@ function AssignmentsView({ data, onGrade }: { data: any; onGrade: (s: any) => vo
                   {s.content}
                 </div>
               )}
-              <button onClick={() => onGrade(s)} style={{
+              <button type="button" onClick={() => onGrade(s)} style={{
                 flexShrink: 0, fontSize: 12, fontWeight: 700, color: "#fff",
                 background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                 border: "none", borderRadius: 9, padding: "9px 18px", cursor: "pointer",
@@ -1250,7 +1254,7 @@ export default function LMAInstructorDashboard() {
       <div className="lmai-main" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         {/* Header */}
         <header style={{ background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.07)", padding: "0 28px", height: 64, display: "flex", alignItems: "center", gap: 16, position: "sticky", top: 0, zIndex: 100 }}>
-          <button onClick={() => setSideOpen(o => !o)} className="lmai-menu-btn"
+          <button type="button" onClick={() => setSideOpen(o => !o)} className="lmai-menu-btn"
             style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#141413", display: "none" }}>
             {sideOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -1259,7 +1263,7 @@ export default function LMAInstructorDashboard() {
               Instructor · <span style={{ color: GOLD, fontWeight: 800 }}>{name.split(" ")[0]}</span>
             </span>
           </div>
-          <button onClick={() => { setShowCreate(true); setActive("My Courses"); }} style={{
+          <button type="button" onClick={() => { setShowCreate(true); setActive("My Courses"); }} style={{
             display: "flex", alignItems: "center", gap: 7,
             background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
             fontSize: 13, fontWeight: 700, border: "none", borderRadius: 9, padding: "9px 18px",
@@ -1267,7 +1271,7 @@ export default function LMAInstructorDashboard() {
           }}>
             <PlusCircle size={15} /> New Course
           </button>
-          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 8, color: "#6b7280" }}><Bell size={20} /></button>
+          <button type="button" style={{ background: "none", border: "none", cursor: "pointer", padding: 8, color: "#6b7280" }}><Bell size={20} /></button>
           <div style={{ width: 36, height: 36, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#0a0806", fontWeight: 800, fontSize: 14, cursor: "pointer" }}>
             {avatarInit(name)}
           </div>

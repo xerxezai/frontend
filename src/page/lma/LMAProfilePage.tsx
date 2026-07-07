@@ -290,7 +290,7 @@ export default function LMAProfilePage() {
                   <p style={{ color: "#dc2626", fontSize: 13, margin: "0 0 12px", fontFamily: FF }}>{saveError}</p>
                 )}
 
-                <button onClick={handleSave} disabled={saving} style={{
+                <button type="button" onClick={handleSave} disabled={saving} style={{
                   padding: "10px 24px", borderRadius: 10, border: "none",
                   background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                   color: "#0a0806", fontSize: 13.5, fontWeight: 700, cursor: "pointer", fontFamily: FF,
@@ -366,7 +366,7 @@ export default function LMAProfilePage() {
                   <p style={{ color: "#dc2626", fontSize: 13, margin: "0 0 12px", fontFamily: FF }}>{pwError}</p>
                 )}
 
-                <button onClick={handleChangePassword} disabled={changingPw} style={{
+                <button type="button" onClick={handleChangePassword} disabled={changingPw} style={{
                   padding: "10px 24px", borderRadius: 10, border: "none",
                   background: "linear-gradient(135deg,#8b5cf6,#6d28d9)",
                   color: "#fff", fontSize: 13.5, fontWeight: 700, cursor: "pointer", fontFamily: FF,

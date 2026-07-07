@@ -93,7 +93,7 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll }: {
               </div>
             )}
           </div>
-          <button onClick={onClose} style={{
+          <button type="button" onClick={onClose} style={{
             background: "rgba(255,255,255,0.10)", border: "none", borderRadius: 8,
             padding: 8, cursor: "pointer", color: "rgba(255,255,255,0.60)",
             display: "flex", alignItems: "center", flexShrink: 0,
@@ -175,7 +175,7 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll }: {
               <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.45)", margin: "0 0 24px", maxWidth: 340, lineHeight: 1.6, fontFamily: FF }}>
                 This lesson is only available to enrolled students. Get full access to all {lesson.duration > 0 ? `${lesson.duration}-minute ` : ""}lessons in this course.
               </p>
-              <button onClick={onEnroll} style={{
+              <button type="button" onClick={onEnroll} style={{
                 background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                 color: "#0a0806", fontWeight: 800, fontSize: 14, fontFamily: FF,
                 border: "none", borderRadius: 11, padding: "13px 32px", cursor: "pointer",
@@ -318,7 +318,7 @@ const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLes
       borderRadius: 10, marginBottom: 8, overflow: "hidden", background: "#fff",
       transition: "border-left-color 0.22s ease",
     }}>
-      <button onClick={toggle} style={{
+      <button type="button" onClick={toggle} style={{
         width: "100%", display: "flex", alignItems: "center", gap: 14,
         padding: "13px 16px", border: "none", cursor: "pointer",
         background: isOpen ? "#fdfaf6" : "#fff", fontFamily: FF, textAlign: "left",
@@ -478,8 +478,8 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
               <span style={{ fontSize: 11, color: "#9ca3af", fontFamily: FF }}>30-day money-back guarantee · Lifetime access</span>
             </div>
             <div style={{ display: "flex", gap: 10 }}>
-              <button onClick={onClose} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF }}>Cancel</button>
-              <button onClick={pay} style={{ flex: 2, fontSize: 13, fontWeight: 700, color: "#fff", background: `linear-gradient(135deg,${AMBER},${GOLD})`, border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF, boxShadow: "0 3px 0 rgba(140,80,20,0.40)" }}>
+              <button type="button" onClick={onClose} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF }}>Cancel</button>
+              <button type="button" onClick={pay} style={{ flex: 2, fontSize: 13, fontWeight: 700, color: "#fff", background: `linear-gradient(135deg,${AMBER},${GOLD})`, border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF, boxShadow: "0 3px 0 rgba(140,80,20,0.40)" }}>
                 Pay ₹{course.price?.toLocaleString()} →
               </button>
             </div>
@@ -605,7 +605,7 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
         </div>
 
         {/* Enroll CTA */}
-        <button onClick={onEnroll} style={{
+        <button type="button" onClick={onEnroll} style={{
           width: "100%", padding: "11px", borderRadius: 10,
           background: `linear-gradient(135deg,${AMBER},${GOLD})`,
           color: "#0a0806", fontWeight: 800, fontSize: 13, fontFamily: FF,
@@ -614,7 +614,7 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
         }}>
           Enroll Now — ₹{course.price?.toLocaleString() ?? "–"}
         </button>
-        <button onClick={onPreview} className="lmacd-preview-btn" style={{
+        <button type="button" onClick={onPreview} className="lmacd-preview-btn" style={{
           width: "100%", padding: "9px", borderRadius: 10, marginTop: 8,
           background: "transparent", color: GOLD, fontWeight: 700, fontSize: 11.5, fontFamily: FF,
           border: `2px solid ${GOLD}`, cursor: "pointer",
@@ -817,7 +817,7 @@ export default function LMACourseDetailPage() {
           </div>
         </div>
         {!enrolled && (
-          <button onClick={handleEnroll} className="lmacd-shimmer-btn" style={{
+          <button type="button" onClick={handleEnroll} className="lmacd-shimmer-btn" style={{
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             color: "#0a0806", fontSize: 13, fontWeight: 800,
             border: "none", borderRadius: 9, padding: "9px 22px",
@@ -937,7 +937,7 @@ export default function LMACourseDetailPage() {
                 </Link>
               ) : (
                 <>
-                  <button onClick={handleEnroll} style={{
+                  <button type="button" onClick={handleEnroll} style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
                     background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                     color: "#0a0806", fontSize: 14, fontWeight: 800,
@@ -951,7 +951,7 @@ export default function LMACourseDetailPage() {
                       <span style={{ fontSize: 12, opacity: 0.70, marginLeft: 4 }}>₹{course.price.toLocaleString()}</span>
                     ) : null}
                   </button>
-                  <button onClick={scrollToCurriculum} className="lmacd-preview-btn" style={{
+                  <button type="button" onClick={scrollToCurriculum} className="lmacd-preview-btn" style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
                     background: "transparent", color: GOLD,
                     fontSize: 14, fontWeight: 700, height: "52px", padding: "0 24px", borderRadius: 11,
@@ -998,7 +998,7 @@ export default function LMACourseDetailPage() {
         <div className="lmacd-container">
           <div style={{ display: "flex" }}>
             {(["about", "curriculum"] as const).map(t => (
-              <button key={t} onClick={() => setActiveTab(t)} style={{
+              <button type="button" key={t} onClick={() => setActiveTab(t)} style={{
                 fontSize: 13.5, fontWeight: activeTab === t ? 700 : 500,
                 color: activeTab === t ? GOLD : "rgba(20,20,19,0.48)",
                 borderBottom: `2px solid ${activeTab === t ? GOLD : "transparent"}`,
@@ -1026,7 +1026,7 @@ export default function LMACourseDetailPage() {
                   <WhatYouLearnBox techStack={course.tech_stack ?? []} />
                   <SkillsPills items={course.tech_stack ?? []} heading="Skills you'll gain" />
                   <DetailsToKnow hours={course.hours} lessonsCount={totalLessons} level={course.level ?? ""} />
-                  <button onClick={scrollToCurriculum} style={{
+                  <button type="button" onClick={scrollToCurriculum} style={{
                     fontSize: 14, fontWeight: 700, color: GOLD,
                     background: "transparent", border: `1.5px solid ${GOLD}`,
                     borderRadius: 9, padding: "10px 22px", cursor: "pointer", fontFamily: FF,
@@ -1081,11 +1081,11 @@ export default function LMACourseDetailPage() {
                     </span>
                   </div>
                   <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>
-                    <button onClick={expandAll} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0 }}>
+                    <button type="button" onClick={expandAll} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0 }}>
                       Expand all
                     </button>
                     <span style={{ color: "rgba(20,20,19,0.22)", fontSize: 14 }}>·</span>
-                    <button onClick={collapseAll} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0 }}>
+                    <button type="button" onClick={collapseAll} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0 }}>
                       Collapse all
                     </button>
                   </div>
@@ -1102,7 +1102,7 @@ export default function LMACourseDetailPage() {
                     />
                   ))}
                   <div style={{ marginTop: 24, textAlign: "center" }}>
-                    <button onClick={handleEnroll} style={{
+                    <button type="button" onClick={handleEnroll} style={{
                       display: "inline-flex", alignItems: "center", gap: 8,
                       background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                       color: "#0a0806", fontSize: 14, fontWeight: 700,
@@ -1134,7 +1134,7 @@ export default function LMACourseDetailPage() {
                   courses={2}
                   learners="500"
                 />
-                <button style={{ fontSize: 12.5, fontWeight: 700, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0, marginTop: 4 }}>
+                <button type="button" style={{ fontSize: 12.5, fontWeight: 700, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0, marginTop: 4 }}>
                   View all instructors →
                 </button>
               </div>
@@ -1173,7 +1173,7 @@ export default function LMACourseDetailPage() {
                   </Link>
                 ) : (
                   <>
-                    <button onClick={handleEnroll} style={{
+                    <button type="button" onClick={handleEnroll} style={{
                       width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
                       background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                       color: "#0a0806", fontSize: 14, fontWeight: 700,
@@ -1182,7 +1182,7 @@ export default function LMACourseDetailPage() {
                     }}>
                       Enroll Now
                     </button>
-                    <button onClick={handleEnroll} className="lmacd-preview-btn" style={{
+                    <button type="button" onClick={handleEnroll} className="lmacd-preview-btn" style={{
                       width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
                       background: "transparent", color: GOLD, fontSize: 13, fontWeight: 600,
                       border: `2px solid ${GOLD}`, borderRadius: 10, padding: "11px",

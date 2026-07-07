@@ -106,7 +106,7 @@ const SubmitModal = ({ assignment, token, onClose, onSuccess }: {
             <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: "0 0 4px", fontFamily: FF }}>Submit Assignment</h3>
             <p style={{ fontSize: 13, color: "#9ca3af", margin: 0, fontFamily: FF }}>{assignment.title}</p>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", padding: 4, color: "#9ca3af" }}>
+          <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", padding: 4, color: "#9ca3af" }}>
             <X size={20} />
           </button>
         </div>
@@ -124,10 +124,10 @@ const SubmitModal = ({ assignment, token, onClose, onSuccess }: {
         />
         {error && <p style={{ color: "#dc2626", fontSize: 13, margin: "8px 0 0", fontFamily: FF }}>{error}</p>}
         <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-          <button onClick={onClose} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid rgba(0,0,0,0.12)", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>
+          <button type="button" onClick={onClose} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid rgba(0,0,0,0.12)", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>
             Cancel
           </button>
-          <button onClick={submit} disabled={submitting} style={{
+          <button type="button" onClick={submit} disabled={submitting} style={{
             flex: 2, padding: "10px", borderRadius: 9, border: "none",
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             color: "#0a0806", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF,
@@ -222,7 +222,7 @@ export default function LMAAssignmentsPage() {
           <h2 style={{ fontSize: 22, fontWeight: 900, color: "#141413", margin: 0, fontFamily: FF }}>Assignments</h2>
           <div style={{ display: "flex", gap: 8 }}>
             {tabs.map(t => (
-              <button key={t} onClick={() => setTab(t)} style={{
+              <button type="button" key={t} onClick={() => setTab(t)} style={{
                 padding: "7px 16px", borderRadius: 999, fontSize: 13, fontWeight: 600,
                 border: "none", cursor: "pointer", fontFamily: FF,
                 background: tab === t ? `linear-gradient(135deg,${AMBER},${GOLD})` : "rgba(0,0,0,0.06)",
@@ -280,7 +280,7 @@ export default function LMAAssignmentsPage() {
 
                   {/* Action */}
                   {!a.submitted && (
-                    <button onClick={() => setModalItem(a)} style={{
+                    <button type="button" onClick={() => setModalItem(a)} style={{
                       flexShrink: 0, padding: "8px 16px", borderRadius: 9,
                       border: `1.5px solid ${GOLD}`,
                       background: "none", color: GOLD, fontSize: 12, fontWeight: 700,
