@@ -289,7 +289,7 @@ export default function LMARegisterPage() {
         <div className="lmarg-left" style={{
           flex: "0 0 52%", position: "relative", overflow: "hidden",
           display: "flex", flexDirection: "column", justifyContent: "flex-start",
-          padding: "clamp(48px,7vh,80px) clamp(32px,5vw,72px) 32px",
+          padding: "clamp(80px,11vh,120px) clamp(32px,5vw,72px) 32px",
         }}>
           {/* Particle canvas */}
           <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />
