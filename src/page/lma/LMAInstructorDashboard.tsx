@@ -808,7 +808,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }:
                   </td>
                   <td style={{ padding: "13px 16px" }}>
                     <div style={{ display: "flex", gap: 6 }}>
-                      <Link to={`/lma/courses/${c.id}`} title="Preview" style={{ display: "inline-flex", color: "#6b7280", background: "#f3f4f6", borderRadius: 7, padding: 7, textDecoration: "none" }}><Eye size={13} /></Link>
+                      <a href={`/lma/courses/${c.id}`} title="Preview" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", color: "#6b7280", background: "#f3f4f6", borderRadius: 7, padding: 7, textDecoration: "none" }}><Eye size={13} /></a>
                       <button type="button" title="Edit" onClick={() => onEdit(c)} style={{ color: GOLD, background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Edit3 size={13} /></button>
                       <button type="button" title="Manage Curriculum" onClick={() => onManage(c)} style={{ color: "#3b82f6", background: "rgba(59,130,246,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Layers size={13} /></button>
                       <button type="button" title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
@@ -1176,7 +1176,14 @@ export default function LMAInstructorDashboard() {
   const onDeleteConfirm = async () => {
     if (!deletingCourse) return;
     try {
-      await fetch(`${API}/lma/courses/${deletingCourse.id}/delete/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const r = await fetch(`${API}/lma/courses/${deletingCourse.id}/delete/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      if (r.status === 400) {
+        const body = await r.json().catch(() => ({}));
+        showToast(body.error ?? "Cannot delete this course.", "error");
+        setDeletingCourse(null);
+        return;
+      }
+      if (!r.ok) throw new Error("Delete failed");
       showToast("Course deleted");
       loadDashboard();
     } catch { showToast("Delete failed", "error"); }
