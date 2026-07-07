@@ -240,15 +240,15 @@ export default function LMABrowseCoursesPage() {
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                      <StarRating value={course.rating ?? 0} />
-                      <span style={{ fontSize: 12, fontWeight: 700, color: "#f59e0b" }}>{(course.rating ?? 0).toFixed(1)}</span>
-                      <span style={{ fontSize: 11, color: "#9ca3af" }}>({course.total_ratings ?? 0})</span>
+                      <StarRating value={Number(course.rating) || 0} />
+                      <span style={{ fontSize: 12, fontWeight: 700, color: "#f59e0b" }}>{(Number(course.rating) || 0).toFixed(1)}</span>
+                      <span style={{ fontSize: 11, color: "#9ca3af" }}>({Number(course.total_ratings) || 0})</span>
                     </div>
 
                     <div style={{ display: "flex", gap: 12, fontSize: 11, color: "#9ca3af", marginBottom: 14 }}>
-                      <span><Clock size={10} style={{ verticalAlign: "middle", marginRight: 3 }} />{course.hours ?? 0}h</span>
-                      <span><BookOpen size={10} style={{ verticalAlign: "middle", marginRight: 3 }} />{course.lessons ?? 0} lessons</span>
-                      <span><Users size={10} style={{ verticalAlign: "middle", marginRight: 3 }} />{course.total_students ?? 0}</span>
+                      <span><Clock size={10} style={{ verticalAlign: "middle", marginRight: 3 }} />{Number(course.hours) || 0}h</span>
+                      <span><BookOpen size={10} style={{ verticalAlign: "middle", marginRight: 3 }} />{Number(course.lessons) || 0} lessons</span>
+                      <span><Users size={10} style={{ verticalAlign: "middle", marginRight: 3 }} />{Number(course.total_students) || 0}</span>
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
