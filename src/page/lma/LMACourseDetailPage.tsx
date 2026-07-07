@@ -1402,7 +1402,7 @@ export default function LMACourseDetailPage() {
       )}
 
       <style>{`
-        .lmacd-container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+        .lmacd-container { width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
 
         /* ══ HERO ══ */
         .lmacd-hero {
@@ -1410,9 +1410,6 @@ export default function LMACourseDetailPage() {
           min-height: calc(100vh - 70px);
           padding: 24px 0 72px;
           position: relative;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
           overflow: hidden;
         }
         /* Dot grid */
@@ -1541,7 +1538,7 @@ export default function LMACourseDetailPage() {
         .lmacd-preview-btn:hover { background:rgba(201,136,58,0.14); }
 
         /* Hero layout */
-        .lmacd-hero-row { display:flex; gap:56px; align-items:center; }
+        .lmacd-hero-row { display:flex; gap:56px; align-items:flex-start; }
         .lmacd-hero-text { flex:1; min-width:0; padding-top:8px; }
         .lmacd-hero-card-col { width:370px; flex-shrink:0; position:sticky; top:24px; align-self:flex-start; }
 
@@ -1601,7 +1598,7 @@ export default function LMACourseDetailPage() {
 
         /* Responsive */
         @media (max-width:1000px) {
-          .lmacd-hero-row { flex-direction:column; gap:36px; }
+          .lmacd-hero-row { flex-direction:column; gap:36px; align-items:flex-start; }
           .lmacd-hero-card-col { width:100%; max-width:440px; margin:0 auto; position:static; }
           .lmacd-orbit { display:none; }
         }
