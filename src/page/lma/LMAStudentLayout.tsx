@@ -196,7 +196,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
       <aside className={`lma-sidebar${sideOpen ? " open" : ""}`}>
         <div style={{ padding: "24px 16px 16px" }}>
           <Link to="/">
-            <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 52, width: "auto" }} />
+            <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 60, width: "auto" }} />
           </Link>
           <div style={{ marginTop: 8, fontSize: 10, color: AMBER, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>
             Academy · Student
