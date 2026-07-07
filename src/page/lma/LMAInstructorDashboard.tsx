@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -9,7 +9,7 @@ import {
   ClipboardList, PlusCircle, ChevronRight, ChevronDown,
   Bell, Menu, X, LogOut, Edit3, Trash2, GraduationCap,
   Check, BarChart2, Eye, Clock, AlertCircle, BookMarked,
-  Play, Plus, Save, Layers,
+  Play, Plus, Save, Layers, Award, UserX, Search,
 } from "lucide-react";
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -824,35 +824,407 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }:
   );
 }
 
-function StudentsView({ token }: { token: string }) {
-  const [students, setStudents] = useState<any[]>([]);
+// ── Student types ─────────────────────────────────────────────────────────────
+interface EnrollmentRow {
+  id: number;
+  student_id: number;
+  student_name: string;
+  student_email: string;
+  course_id: number;
+  course_title: string;
+  enrolled_at: string;
+  progress: number;
+  completed: boolean;
+}
+
+// ── UnenrollConfirmModal ───────────────────────────────────────────────────────
+function UnenrollConfirmModal({
+  courseName, studentName, onConfirm, onCancel, loading,
+}: {
+  courseName: string; studentName: string;
+  onConfirm: () => void; onCancel: () => void; loading: boolean;
+}) {
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => { if (e.key === "Escape") onCancel(); };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, [onCancel]);
+
+  return (
+    <>
+      <div onClick={onCancel} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 700, animation: "lmai-fadeIn 0.2s ease both" }} />
+      <div style={{
+        position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
+        zIndex: 701, width: 360, padding: "32px 28px",
+        background: "#fff", borderRadius: 18, border: "1px solid rgba(0,0,0,0.08)",
+        borderTop: `3px solid #dc2626`,
+        boxShadow: "0 24px 80px rgba(0,0,0,0.20)",
+        animation: "lmai-scaleIn 0.22s cubic-bezier(0.22,1,0.36,1) both",
+      }}>
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(220,38,38,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+            <UserX size={24} color="#dc2626" />
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: "#141413", fontFamily: FF, marginBottom: 10 }}>Unenroll Student?</div>
+          <div style={{ fontSize: 13.5, color: "rgba(20,20,19,0.55)", fontFamily: FF, lineHeight: 1.6 }}>
+            Remove <strong style={{ color: "#141413" }}>{studentName}</strong> from{" "}
+            <strong style={{ color: "#141413" }}>{courseName}</strong>?{" "}
+            All lesson progress for this course will be deleted.
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={onCancel} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13.5, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+          <button onClick={onConfirm} disabled={loading} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "none", background: "#dc2626", color: "#fff", fontSize: 13.5, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", fontFamily: FF, opacity: loading ? 0.65 : 1 }}>
+            {loading ? "Removing…" : "Unenroll"}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── StudentDetailPanel ─────────────────────────────────────────────────────────
+function StudentDetailPanel({ studentId, token, onClose, onUnenrolled, studentName }: {
+  studentId: number; token: string; onClose: () => void;
+  onUnenrolled: (enrollmentId: number) => void; studentName: string;
+}) {
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [unenrolling, setUnenrolling] = useState<{ enrollment_id: number; course_title: string } | null>(null);
+  const [unenrollLoading, setUnenrollLoading] = useState(false);
+  const [removingId, setRemovingId] = useState<number | null>(null);
 
   useEffect(() => {
+    setLoading(true); setData(null); setEnrollments([]);
+    fetch(`${API}/lma/instructor/students/${studentId}/details/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) { setData(d); setEnrollments(d.enrollments ?? []); } })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [studentId, token]);
+
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => { if (e.key === "Escape" && !unenrolling) onClose(); };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, [onClose, unenrolling]);
+
+  const confirmUnenroll = async () => {
+    if (!unenrolling) return;
+    setUnenrollLoading(true);
+    const eid = unenrolling.enrollment_id;
+    const r = await fetch(`${API}/lma/instructor/enrollments/${eid}/`, { method: "DELETE", headers: hdr(token) });
+    setUnenrollLoading(false);
+    setUnenrolling(null);
+    if (r.ok || r.status === 204) {
+      setRemovingId(eid);
+      setTimeout(() => { setEnrollments(prev => prev.filter(e => e.enrollment_id !== eid)); setRemovingId(null); onUnenrolled(eid); }, 320);
+    }
+  };
+
+  const reltime = (ts: string) => {
+    const diff = Date.now() - new Date(ts).getTime();
+    const mins = Math.floor(diff / 60000), hrs = Math.floor(mins / 60), days = Math.floor(hrs / 24);
+    if (days > 30) return new Date(ts).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+    if (days > 0) return `${days}d ago`;
+    if (hrs > 0) return `${hrs}h ago`;
+    if (mins > 0) return `${mins}m ago`;
+    return "Just now";
+  };
+
+  const actIcon = (type: string) => {
+    if (type === "enrolled")             return <BookOpen size={12} color={GOLD} />;
+    if (type === "completed_lesson")     return <Check size={12} color="#059669" />;
+    if (type === "completed_course")     return <GraduationCap size={12} color="#7c3aed" />;
+    if (type === "submitted_assignment") return <ClipboardList size={12} color="#2563eb" />;
+    if (type === "earned_certificate")   return <Award size={12} color={GOLD} />;
+    return <Clock size={12} color="#9ca3af" />;
+  };
+
+  const actColor = (type: string) => {
+    if (type === "completed_lesson")     return "#059669";
+    if (type === "completed_course")     return "#7c3aed";
+    if (type === "submitted_assignment") return "#2563eb";
+    return GOLD;
+  };
+
+  const gradeBadge = (grade: number | null) => {
+    if (grade === null) return { bg: "#f3f4f6", color: "#6b7280", text: "Pending" };
+    if (grade >= 70)    return { bg: "#d1fae5", color: "#059669", text: `${grade}%` };
+    if (grade >= 40)    return { bg: "#fef3c7", color: "#d97706", text: `${grade}%` };
+    return               { bg: "rgba(220,38,38,0.08)", color: "#dc2626", text: `${grade}%` };
+  };
+
+  const C3D = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+    <div style={{
+      background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)",
+      borderTop: `3px solid ${GOLD}`, boxShadow: BCARD,
+      padding: "20px 18px", marginBottom: 14,
+      animation: "lmai-pageIn 0.35s ease both", animationDelay: `${delay}ms`,
+    }}>
+      {children}
+    </div>
+  );
+
+  const SLabel = ({ children }: { children: React.ReactNode }) => (
+    <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(20,20,19,0.38)", fontFamily: FF, marginBottom: 14, textTransform: "uppercase" as const }}>{children}</div>
+  );
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.40)", zIndex: 500, animation: "lmai-fadeIn 0.3s ease both" }} />
+
+      <div style={{
+        position: "fixed", top: 0, right: 0, width: "min(480px, 100vw)", height: "100dvh",
+        background: "#F8F7F4", zIndex: 501,
+        animation: "lmai-slideIn 0.35s cubic-bezier(0.22,1,0.36,1) both",
+        overflowY: "auto", boxShadow: "-8px 0 48px rgba(0,0,0,0.14)",
+      }}>
+        {/* Header */}
+        <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid rgba(0,0,0,0.07)", background: "#F8F7F4", position: "sticky", top: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#141413", fontFamily: FF }}>{studentName}</div>
+            <div style={{ fontSize: 11.5, color: "rgba(20,20,19,0.45)", fontFamily: FF }}>Student Detail</div>
+          </div>
+          <button onClick={onClose} style={{ width: 34, height: 34, borderRadius: "50%", border: "1.5px solid rgba(0,0,0,0.10)", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.06)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+            <X size={15} color="#141413" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: "16px 18px 48px" }}>
+          {loading ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {[100, 180, 140, 220].map((h, i) => <SkeletonBox key={i} h={h} />)}
+            </div>
+          ) : !data ? (
+            <div style={{ textAlign: "center", padding: "60px 0", color: "#9ca3af", fontFamily: FF, fontSize: 13 }}>Could not load student data.</div>
+          ) : (
+            <>
+              {/* Contact */}
+              <C3D delay={0}>
+                <SLabel>Contact Info</SLabel>
+                <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+                  <div style={{ width: 52, height: 52, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, color: "#0a0806", flexShrink: 0 }}>
+                    {avatarInit(data.name)}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14.5, fontWeight: 800, color: "#141413", fontFamily: FF }}>{data.name}</div>
+                    <div style={{ fontSize: 11.5, color: "#9ca3af", fontFamily: FF }}>@{data.username}</div>
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                  <div style={{ fontSize: 12.5, color: "rgba(20,20,19,0.65)", fontFamily: FF }}>
+                    <span style={{ color: "rgba(20,20,19,0.40)", marginRight: 8, fontSize: 11, fontWeight: 700, letterSpacing: "0.04em" }}>EMAIL</span>{data.email}
+                  </div>
+                  <div style={{ fontSize: 12.5, color: "rgba(20,20,19,0.65)", fontFamily: FF }}>
+                    <span style={{ color: "rgba(20,20,19,0.40)", marginRight: 8, fontSize: 11, fontWeight: 700, letterSpacing: "0.04em" }}>MEMBER SINCE</span>
+                    {new Date(data.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+                  </div>
+                </div>
+              </C3D>
+
+              {/* Enrolled Courses */}
+              <C3D delay={80}>
+                <SLabel>Enrolled Courses ({enrollments.length})</SLabel>
+                {enrollments.length === 0 ? (
+                  <div style={{ fontSize: 13, color: "#9ca3af", fontFamily: FF, textAlign: "center", padding: "10px 0" }}>No enrollments</div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    {enrollments.map(enr => (
+                      <div key={enr.enrollment_id} style={{ opacity: removingId === enr.enrollment_id ? 0 : 1, maxHeight: removingId === enr.enrollment_id ? 0 : 300, overflow: "hidden", transition: "opacity 0.3s ease, max-height 0.32s ease", pointerEvents: removingId === enr.enrollment_id ? "none" : "auto" }}>
+                        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 7 }}>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 12.5, fontWeight: 600, color: "#141413", fontFamily: FF, marginBottom: 3 }}>{enr.course_title}</div>
+                            <div style={{ fontSize: 11, color: "#9ca3af", fontFamily: FF }}>
+                              {enr.completed_lessons}/{enr.total_lessons} lessons ·{" "}
+                              <span style={{ fontWeight: 700, color: enr.completed ? "#059669" : "#d97706" }}>
+                                {enr.completed ? "Completed" : "In Progress"}
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            title="Unenroll from this course"
+                            onClick={() => setUnenrolling({ enrollment_id: enr.enrollment_id, course_title: enr.course_title })}
+                            style={{ width: 28, height: 28, borderRadius: 7, border: "1.5px solid rgba(220,38,38,0.18)", background: "rgba(220,38,38,0.06)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, transition: "background 0.2s, border-color 0.2s" }}
+                            onMouseEnter={e => { e.currentTarget.style.background = "rgba(220,38,38,0.14)"; e.currentTarget.style.borderColor = "rgba(220,38,38,0.40)"; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = "rgba(220,38,38,0.06)"; e.currentTarget.style.borderColor = "rgba(220,38,38,0.18)"; }}
+                          >
+                            <Trash2 size={12} color="#dc2626" />
+                          </button>
+                        </div>
+                        <div style={{ height: 5, borderRadius: 3, background: "rgba(0,0,0,0.08)", overflow: "hidden" }}>
+                          <div style={{ height: "100%", borderRadius: 3, background: `linear-gradient(90deg,${AMBER},${GOLD})`, width: `${enr.progress}%`, transition: "width 0.8s cubic-bezier(0.22,1,0.36,1)" }} />
+                        </div>
+                        <div style={{ fontSize: 10.5, color: "rgba(20,20,19,0.38)", fontFamily: FF, marginTop: 3, textAlign: "right" }}>{enr.progress}%</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </C3D>
+
+              {/* Assignment Scores */}
+              <C3D delay={160}>
+                <SLabel>Assignment Scores</SLabel>
+                {(data.submissions as any[]).length === 0 ? (
+                  <div style={{ fontSize: 13, color: "#9ca3af", fontFamily: FF, textAlign: "center", padding: "10px 0" }}>No submissions yet</div>
+                ) : (
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                      <thead>
+                        <tr style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+                          {["Assignment", "Course", "Grade"].map(h => (
+                            <th key={h} style={{ padding: "5px 8px 8px", textAlign: "left", fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.38)", letterSpacing: "0.07em", textTransform: "uppercase", fontFamily: FF, whiteSpace: "nowrap" }}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(data.submissions as any[]).map((s: any) => {
+                          const g = gradeBadge(s.grade);
+                          return (
+                            <tr key={s.id} style={{ borderBottom: "1px solid rgba(0,0,0,0.04)" }}>
+                              <td style={{ padding: "8px 8px", fontSize: 12, color: "#141413", fontFamily: FF }}>{s.assignment_title}</td>
+                              <td style={{ padding: "8px 8px", fontSize: 11, color: "#9ca3af", fontFamily: FF, whiteSpace: "nowrap", maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis" }}>{s.course_title}</td>
+                              <td style={{ padding: "8px 8px" }}>
+                                <span style={{ padding: "2px 9px", borderRadius: 999, fontSize: 11, fontWeight: 700, background: g.bg, color: g.color, whiteSpace: "nowrap" }}>{g.text}</span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </C3D>
+
+              {/* Activity Log */}
+              <C3D delay={240}>
+                <SLabel>Activity Log</SLabel>
+                {(data.activity as any[]).length === 0 ? (
+                  <div style={{ fontSize: 13, color: "#9ca3af", fontFamily: FF, textAlign: "center", padding: "10px 0" }}>No activity recorded</div>
+                ) : (
+                  <div style={{ position: "relative" }}>
+                    <div style={{ position: "absolute", left: 11, top: 8, bottom: 8, width: 2, background: `linear-gradient(180deg,${GOLD},rgba(201,136,58,0.12))`, borderRadius: 2 }} />
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                      {(data.activity as any[]).map((a: any, i: number) => (
+                        <div key={i} style={{ display: "flex", gap: 14, alignItems: "flex-start", animation: "lmai-pageIn 0.3s ease both", animationDelay: `${260 + i * 35}ms` }}>
+                          <div style={{ width: 24, height: 24, borderRadius: "50%", background: "#F8F7F4", border: `2px solid ${actColor(a.type)}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1, position: "relative" }}>
+                            {actIcon(a.type)}
+                          </div>
+                          <div style={{ paddingTop: 2 }}>
+                            <div style={{ fontSize: 12.5, color: "#141413", fontFamily: FF, lineHeight: 1.5 }}>{a.description}</div>
+                            <div style={{ fontSize: 11, color: "rgba(20,20,19,0.40)", fontFamily: FF, marginTop: 2 }}>{reltime(a.timestamp)}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </C3D>
+            </>
+          )}
+        </div>
+      </div>
+
+      {unenrolling && (
+        <UnenrollConfirmModal
+          courseName={unenrolling.course_title}
+          studentName={data?.name ?? studentName}
+          onConfirm={confirmUnenroll}
+          onCancel={() => setUnenrolling(null)}
+          loading={unenrollLoading}
+        />
+      )}
+    </>
+  );
+}
+
+// ── StudentsView (enhanced) ────────────────────────────────────────────────────
+function StudentsView({ token }: { token: string }) {
+  const [students, setStudents] = useState<EnrollmentRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [courseFilter, setCourseFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [selectedStudentId, setSelectedStudentId] = useState<number | null>(null);
+  const [selectedStudentName, setSelectedStudentName] = useState("");
+  const [filterKey, setFilterKey] = useState(0);
+
+  const load = useCallback(() => {
+    setLoading(true);
     fetch(`${API}/lma/instructor/students/`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json()).then(d => setStudents(Array.isArray(d) ? d : []))
       .catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
-  const filtered = students.filter(s =>
-    s.student_name.toLowerCase().includes(search.toLowerCase()) ||
-    s.course_title.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => { load(); }, [load]);
+  useEffect(() => { setFilterKey(k => k + 1); }, [search, courseFilter, statusFilter]);
+
+  const courses = useMemo(() => {
+    const s = new Set<string>();
+    students.forEach(st => s.add(st.course_title));
+    return Array.from(s).sort();
+  }, [students]);
+
+  const filtered = useMemo(() => students.filter(s => {
+    const q = search.toLowerCase();
+    const ok = !q || s.student_name.toLowerCase().includes(q) || s.student_email.toLowerCase().includes(q) || s.course_title.toLowerCase().includes(q);
+    const okC = courseFilter === "All" || s.course_title === courseFilter;
+    const okS = statusFilter === "All"
+      || (statusFilter === "Completed"   &&  s.completed)
+      || (statusFilter === "In Progress" && !s.completed && s.progress > 0)
+      || (statusFilter === "Not Started" && !s.completed && s.progress === 0);
+    return ok && okC && okS;
+  }), [students, search, courseFilter, statusFilter]);
+
+  const selectStyle: React.CSSProperties = {
+    ...inputStyle, padding: "8px 28px 8px 10px", fontSize: 13, cursor: "pointer",
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+    backgroundRepeat: "no-repeat", backgroundPosition: "right 9px center",
+    appearance: "none",
+  };
 
   return (
     <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 12 }}>
         <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: 0, fontFamily: FF }}>Students</h2>
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search students or courses…"
-          style={{ ...inputStyle, width: 260, padding: "8px 14px" }} onFocus={focusGold} onBlur={blurGold} />
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ position: "relative" }}>
+            <Search size={13} color="#9ca3af" style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search students…"
+              style={{ ...inputStyle, width: 190, padding: "8px 12px 8px 30px" }} onFocus={focusGold} onBlur={blurGold} />
+          </div>
+          <select value={courseFilter} onChange={e => setCourseFilter(e.target.value)} style={{ ...selectStyle, width: 160 }} onFocus={focusGold} onBlur={blurGold}>
+            <option value="All">All Courses</option>
+            {courses.map(c => <option key={c}>{c}</option>)}
+          </select>
+          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...selectStyle, width: 136 }} onFocus={focusGold} onBlur={blurGold}>
+            {(["All", "In Progress", "Completed", "Not Started"] as const).map(v => (
+              <option key={v} value={v}>{v === "All" ? "All Status" : v}</option>
+            ))}
+          </select>
+        </div>
       </div>
+
+      {!loading && (
+        <div style={{ fontSize: 11.5, color: "rgba(20,20,19,0.42)", fontFamily: FF, marginBottom: 10 }}>
+          {filtered.length === students.length
+            ? `${students.length} enrollment${students.length !== 1 ? "s" : ""}`
+            : `${filtered.length} of ${students.length} showing`}
+        </div>
+      )}
+
       {loading ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>{[0,1,2,3,4].map(i => <SkeletonBox key={i} h={60} />)}</div>
       ) : filtered.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
           <Users size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
-          <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>{search ? "No students match your search." : "No students enrolled yet."}</p>
+          <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>
+            {search || courseFilter !== "All" || statusFilter !== "All" ? "No students match your filters." : "No students enrolled yet."}
+          </p>
         </div>
       ) : (
         <div style={{ background: "#fff", borderRadius: 16, overflow: "auto", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
@@ -864,9 +1236,14 @@ function StudentsView({ token }: { token: string }) {
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {filtered.map((s: any, i: number) => (
-                <tr key={s.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none" }} className="lmai-tr">
+            <tbody key={filterKey}>
+              {filtered.map((s, i) => (
+                <tr
+                  key={s.id}
+                  onClick={() => { setSelectedStudentId(s.student_id); setSelectedStudentName(s.student_name); }}
+                  style={{ borderBottom: i < filtered.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none", cursor: "pointer", animation: "lmai-rowIn 0.28s ease both", animationDelay: `${Math.min(i * 45, 450)}ms` }}
+                  className="lmai-tr"
+                >
                   <td style={{ padding: "12px 16px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ width: 32, height: 32, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#0a0806", flexShrink: 0 }}>{avatarInit(s.student_name)}</div>
@@ -877,7 +1254,7 @@ function StudentsView({ token }: { token: string }) {
                     </div>
                   </td>
                   <td style={{ padding: "12px 16px", fontSize: 12.5, color: "#141413", fontFamily: FF }}>{s.course_title}</td>
-                  <td style={{ padding: "12px 16px", fontSize: 11.5, color: "#9ca3af" }}>{new Date(s.enrolled_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
+                  <td style={{ padding: "12px 16px", fontSize: 11.5, color: "#9ca3af", whiteSpace: "nowrap" }}>{new Date(s.enrolled_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
                   <td style={{ padding: "12px 16px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <div style={{ flex: 1, height: 5, borderRadius: 3, background: "rgba(0,0,0,0.08)", overflow: "hidden", maxWidth: 80 }}>
@@ -887,8 +1264,8 @@ function StudentsView({ token }: { token: string }) {
                     </div>
                   </td>
                   <td style={{ padding: "12px 16px" }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: s.completed ? "#d1fae5" : "#f3f4f6", color: s.completed ? "#059669" : "#6b7280" }}>
-                      {s.completed ? "Completed" : "In Progress"}
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: s.completed ? "#d1fae5" : s.progress > 0 ? "#fef3c7" : "#f3f4f6", color: s.completed ? "#059669" : s.progress > 0 ? "#d97706" : "#6b7280" }}>
+                      {s.completed ? "Completed" : s.progress > 0 ? "In Progress" : "Not Started"}
                     </span>
                   </td>
                 </tr>
@@ -896,6 +1273,16 @@ function StudentsView({ token }: { token: string }) {
             </tbody>
           </table>
         </div>
+      )}
+
+      {selectedStudentId !== null && (
+        <StudentDetailPanel
+          studentId={selectedStudentId}
+          token={token}
+          studentName={selectedStudentName}
+          onClose={() => setSelectedStudentId(null)}
+          onUnenrolled={enrollmentId => setStudents(prev => prev.filter(r => r.id !== enrollmentId))}
+        />
       )}
     </div>
   );
@@ -1318,6 +1705,9 @@ export default function LMAInstructorDashboard() {
         @keyframes lmai-slideUp  { from { transform: translateY(60px); opacity:0; } to { transform: translateY(0); opacity:1; } }
         @keyframes lmai-pageIn   { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
         @keyframes lmai-shimmer  { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+        @keyframes lmai-fadeIn   { from { opacity:0; } to { opacity:1; } }
+        @keyframes lmai-rowIn    { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes lmai-scaleIn  { from { opacity:0; transform:translate(-50%,-48%) scale(0.94); } to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
         .lmai-tr:hover { background:#fafaf9 !important; }
         .lmai-sidebar { transition: transform 0.30s cubic-bezier(0.22,1,0.36,1); }
         @media (max-width:1023px) {
