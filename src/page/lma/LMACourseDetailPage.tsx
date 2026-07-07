@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
-import { CheckCircle2, Shield, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Shield, ShieldCheck, X, Lock, PlayCircle, FileText } from "lucide-react";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#C9883A";
@@ -22,6 +22,199 @@ const THUMB_ICONS = [
   "fas fa-brain", "fas fa-code", "fas fa-cogs",
   "fas fa-chart-bar", "fas fa-cloud", "fas fa-shield-alt",
 ];
+
+/* ── URL → embed URL ── */
+function toEmbedUrl(url: string): string | null {
+  if (!url) return null;
+  // YouTube: watch?v=ID or youtu.be/ID or already embed
+  const ytWatch = url.match(/[?&]v=([^&\s]+)/);
+  if (ytWatch) return `https://www.youtube.com/embed/${ytWatch[1]}`;
+  const ytShort = url.match(/youtu\.be\/([^?&\s]+)/);
+  if (ytShort) return `https://www.youtube.com/embed/${ytShort[1]}`;
+  if (url.includes("youtube.com/embed/")) return url;
+  // Vimeo: vimeo.com/ID or already embed
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+  if (url.includes("player.vimeo.com/video/")) return url;
+  return null;
+}
+
+/* ── Lesson modal ── */
+const LessonModal = ({ lesson, enrolled, onClose, onEnroll }: {
+  lesson: any; enrolled: boolean; onClose: () => void; onEnroll: () => void;
+}) => {
+  const canWatch = lesson.is_free_preview || enrolled;
+  const embedUrl = canWatch ? toEmbedUrl(lesson.video_url ?? "") : null;
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  // Close on Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(10,8,6,0.78)", zIndex: 600,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "16px", backdropFilter: "blur(4px)",
+        animation: "lmacd-fadeIn 0.22s ease both",
+      }}
+    >
+      <div style={{
+        background: "#fff", borderRadius: 20, width: "100%", maxWidth: 820,
+        maxHeight: "92vh", overflowY: "auto", boxShadow: "0 32px 80px rgba(0,0,0,0.45)",
+        animation: "lmacd-slideUp 0.28s cubic-bezier(0.22,1,0.36,1) both",
+        display: "flex", flexDirection: "column",
+      }}>
+        {/* Header */}
+        <div style={{
+          display: "flex", alignItems: "flex-start", gap: 12,
+          padding: "20px 24px 16px", borderBottom: "1px solid rgba(0,0,0,0.07)",
+          background: DARK, borderRadius: "20px 20px 0 0",
+        }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 9, flexShrink: 0,
+            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            {canWatch
+              ? <PlayCircle size={18} color="#0a0806" />
+              : <Lock size={16} color="#0a0806" />}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#fff", lineHeight: 1.25, fontFamily: FF }}>{lesson.title}</div>
+            {lesson.duration > 0 && (
+              <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.38)", marginTop: 3, fontFamily: FF }}>
+                {lesson.duration} min{lesson.is_free_preview ? " · Free Preview" : ""}
+              </div>
+            )}
+          </div>
+          <button onClick={onClose} style={{
+            background: "rgba(255,255,255,0.10)", border: "none", borderRadius: 8,
+            padding: 8, cursor: "pointer", color: "rgba(255,255,255,0.60)",
+            display: "flex", alignItems: "center", flexShrink: 0,
+            transition: "background 0.18s ease",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.20)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.10)")}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: "0 0 28px" }}>
+          {/* Video section */}
+          {canWatch ? (
+            embedUrl ? (
+              <div style={{ position: "relative", paddingBottom: "56.25%", background: "#0a0806" }}>
+                {!videoLoaded && (
+                  <div style={{
+                    position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                    background: "#0a0806",
+                  }}>
+                    <div style={{
+                      width: 36, height: 36,
+                      border: `3px solid rgba(201,136,58,0.20)`,
+                      borderTop: `3px solid ${GOLD}`,
+                      borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite",
+                    }} />
+                  </div>
+                )}
+                <iframe
+                  src={embedUrl}
+                  title={lesson.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  onLoad={() => setVideoLoaded(true)}
+                  style={{
+                    position: "absolute", top: 0, left: 0,
+                    width: "100%", height: "100%", border: "none",
+                  }}
+                />
+              </div>
+            ) : (
+              // Has access but no video URL — just show content
+              lesson.video_url ? (
+                <div style={{ padding: "20px 24px 0", background: "#f9f7f4" }}>
+                  <div style={{
+                    display: "flex", alignItems: "center", gap: 8, padding: "12px 16px",
+                    background: "rgba(201,136,58,0.08)", borderRadius: 10, border: "1px solid rgba(201,136,58,0.20)",
+                  }}>
+                    <PlayCircle size={15} color={GOLD} />
+                    <span style={{ fontSize: 13, color: GOLD, fontWeight: 600, fontFamily: FF }}>Video link: </span>
+                    <a href={lesson.video_url} target="_blank" rel="noopener noreferrer"
+                      style={{ fontSize: 13, color: GOLD, fontFamily: FF, wordBreak: "break-all" }}>
+                      {lesson.video_url}
+                    </a>
+                  </div>
+                </div>
+              ) : null
+            )
+          ) : (
+            /* Locked state */
+            <div style={{
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              padding: "48px 24px", textAlign: "center",
+              background: `linear-gradient(160deg,${DARK} 0%,#120e05 100%)`,
+            }}>
+              <div style={{
+                width: 72, height: 72, borderRadius: "50%",
+                background: "rgba(201,136,58,0.12)", border: `1.5px solid rgba(201,136,58,0.30)`,
+                display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18,
+              }}>
+                <Lock size={28} color={GOLD} />
+              </div>
+              <h3 style={{ fontSize: 18, fontWeight: 800, color: "#fff", margin: "0 0 8px", fontFamily: FF }}>
+                Enroll to watch this lesson
+              </h3>
+              <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.45)", margin: "0 0 24px", maxWidth: 340, lineHeight: 1.6, fontFamily: FF }}>
+                This lesson is only available to enrolled students. Get full access to all {lesson.duration > 0 ? `${lesson.duration}-minute ` : ""}lessons in this course.
+              </p>
+              <button onClick={onEnroll} style={{
+                background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+                color: "#0a0806", fontWeight: 800, fontSize: 14, fontFamily: FF,
+                border: "none", borderRadius: 11, padding: "13px 32px", cursor: "pointer",
+                boxShadow: "0 4px 0 rgba(130,78,18,0.45),0 8px 24px rgba(201,136,58,0.28)",
+              }}>
+                Enroll Now →
+              </button>
+            </div>
+          )}
+
+          {/* Content / Notes */}
+          {canWatch && lesson.content && (
+            <div style={{ padding: "22px 24px 0" }}>
+              <div style={{
+                display: "flex", alignItems: "center", gap: 8, marginBottom: 12,
+              }}>
+                <FileText size={15} color={GOLD} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF }}>Lesson Notes</span>
+              </div>
+              <div style={{
+                fontSize: 14, color: "#374151", lineHeight: 1.75, fontFamily: FF,
+                whiteSpace: "pre-wrap", wordBreak: "break-word",
+              }}>
+                {lesson.content}
+              </div>
+            </div>
+          )}
+
+          {/* No content placeholder for free preview without content */}
+          {canWatch && !lesson.content && !lesson.video_url && (
+            <div style={{ padding: "32px 24px", textAlign: "center", color: "rgba(20,20,19,0.40)", fontSize: 13, fontFamily: FF }}>
+              No content has been added for this lesson yet.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /* ── Module thumbnail ── */
 const ModuleThumbnail = ({ index, size = 80 }: { index: number; size?: number }) => {
@@ -52,26 +245,52 @@ const StarRating = ({ rating }: { rating: number }) => (
 );
 
 /* ── Lesson row ── */
-const LessonRow = ({ lesson }: { lesson: any }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
-    {lesson.is_free_preview
-      ? <i className="fas fa-play-circle" style={{ fontSize: 14, color: GOLD, flexShrink: 0, width: 16 }} />
-      : <i className="fas fa-lock" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />}
-    <span style={{ flex: 1, fontSize: 13, lineHeight: 1.45, color: lesson.is_free_preview ? "#141413" : "rgba(20,20,19,0.52)", fontFamily: FF }}>
-      {lesson.title}
-    </span>
-    {lesson.is_free_preview && (
-      <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase" as const, color: GOLD, border: `1px solid ${GOLD}`, borderRadius: 4, padding: "1px 6px", flexShrink: 0 }}>
-        Free
+const LessonRow = ({ lesson, enrolled, onClick }: {
+  lesson: any; enrolled: boolean; onClick: (lesson: any) => void;
+}) => {
+  const canWatch = lesson.is_free_preview || enrolled;
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      onClick={() => onClick(lesson)}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: "flex", alignItems: "center", gap: 10, padding: "9px 8px",
+        borderBottom: "1px solid rgba(0,0,0,0.05)", cursor: "pointer",
+        borderRadius: 7, transition: "background 0.16s ease",
+        background: hov ? (canWatch ? "rgba(201,136,58,0.06)" : "rgba(0,0,0,0.03)") : "transparent",
+        margin: "0 -8px",
+      }}
+    >
+      {canWatch
+        ? <i className="fas fa-play-circle" style={{ fontSize: 14, color: hov ? AMBER : GOLD, flexShrink: 0, width: 16, transition: "color 0.16s ease" }} />
+        : <i className="fas fa-lock" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />}
+      <span style={{
+        flex: 1, fontSize: 13, lineHeight: 1.45, fontFamily: FF,
+        color: canWatch ? "#141413" : "rgba(20,20,19,0.52)",
+        fontWeight: hov && canWatch ? 600 : 400,
+        transition: "font-weight 0.12s ease",
+      }}>
+        {lesson.title}
       </span>
-    )}
-    <span style={{ fontSize: 11.5, color: "rgba(20,20,19,0.38)", flexShrink: 0 }}>{lesson.duration}m</span>
-  </div>
-);
+      {lesson.is_free_preview && (
+        <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase" as const, color: GOLD, border: `1px solid ${GOLD}`, borderRadius: 4, padding: "1px 6px", flexShrink: 0 }}>
+          Free
+        </span>
+      )}
+      {lesson.video_url && canWatch && (
+        <i className="fas fa-film" style={{ fontSize: 10, color: "rgba(20,20,19,0.28)", flexShrink: 0 }} />
+      )}
+      <span style={{ fontSize: 11.5, color: "rgba(20,20,19,0.38)", flexShrink: 0 }}>{lesson.duration}m</span>
+    </div>
+  );
+};
 
 /* ── Module accordion row ── */
-const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay }: {
+const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLessonClick }: {
   mod: any; modIndex: number; isOpen: boolean; toggle: () => void; revealDelay: number;
+  enrolled: boolean; onLessonClick: (lesson: any) => void;
 }) => {
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -120,7 +339,9 @@ const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay }: {
         transition: isOpen ? "max-height 0.55s cubic-bezier(0.4,0,0.2,1)" : "max-height 0.35s cubic-bezier(0.4,0,0.2,1)",
       }}>
         <div className="lmacd-lesson-indent" style={{ padding: "2px 16px 12px", paddingLeft: 110, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-          {(mod.lessons ?? []).map((l: any) => <LessonRow key={l.id} lesson={l} />)}
+          {(mod.lessons ?? []).map((l: any) => (
+            <LessonRow key={l.id} lesson={l} enrolled={enrolled} onClick={onLessonClick} />
+          ))}
         </div>
       </div>
     </div>
@@ -428,6 +649,7 @@ export default function LMACourseDetailPage() {
   const [enrollStatusChecked, setEnrollStatusChecked] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [hovCourse, setHovCourse]         = useState<number | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<any | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -875,6 +1097,8 @@ export default function LMACourseDetailPage() {
                       isOpen={openModules.has(i)}
                       toggle={() => toggleModule(i)}
                       revealDelay={Math.min(i * 45, 280)}
+                      enrolled={enrolled}
+                      onLessonClick={setSelectedLesson}
                     />
                   ))}
                   <div style={{ marginTop: 24, textAlign: "center" }}>
@@ -1066,6 +1290,15 @@ export default function LMACourseDetailPage() {
         />
       )}
 
+      {selectedLesson && (
+        <LessonModal
+          lesson={selectedLesson}
+          enrolled={enrolled}
+          onClose={() => setSelectedLesson(null)}
+          onEnroll={() => { setSelectedLesson(null); handleEnroll(); }}
+        />
+      )}
+
       <style>{`
         .lmacd-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 
@@ -1114,6 +1347,11 @@ export default function LMACourseDetailPage() {
         @keyframes lmacd-float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,26px) scale(0.95)} }
         @keyframes lmacd-float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(14px,-18px)} }
         @keyframes lmacd-spin { to{transform:rotate(360deg)} }
+        @keyframes lmacd-fadeIn  { from{opacity:0} to{opacity:1} }
+        @keyframes lmacd-slideUp { from{opacity:0;transform:translateY(40px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @media (max-width:600px) {
+          .lmacd-lesson-modal { border-radius:16px 16px 0 0 !important; max-height:94vh !important; }
+        }
 
         button:focus-visible { outline:2px solid ${GOLD}; outline-offset:2px; }
         html { scroll-behavior:smooth; }
