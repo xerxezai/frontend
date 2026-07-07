@@ -46,7 +46,7 @@ const StatTile = ({ icon, value, label, color, delay }: {
 
 /* Gold-square icon bullet */
 const Bullet = ({ icon, text, delay }: { icon: string; text: string; delay: number }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14, animation: `lmarg-fadeUp 0.65s ease both ${delay}ms` }}>
+  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 11, animation: `lmarg-fadeUp 0.65s ease both ${delay}ms` }}>
     <div style={{
       width: 28, height: 28, borderRadius: 8, flexShrink: 0,
       background: `linear-gradient(135deg,${AMBER},${GOLD})`,
@@ -288,8 +288,8 @@ export default function LMARegisterPage() {
         ══════════════════════════════ */}
         <div className="lmarg-left" style={{
           flex: "0 0 52%", position: "relative", overflow: "hidden",
-          display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "60px clamp(32px,5vw,72px)",
+          display: "flex", flexDirection: "column", justifyContent: "flex-start",
+          padding: "clamp(48px,7vh,80px) clamp(32px,5vw,72px) 32px",
         }}>
           {/* Particle canvas */}
           <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />
@@ -317,7 +317,7 @@ export default function LMARegisterPage() {
             {/* Eyebrow chip */}
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "6px 16px 6px 10px", borderRadius: 999, marginBottom: 24,
+              padding: "6px 16px 6px 10px", borderRadius: 999, marginBottom: 18,
               border: "1px solid rgba(201,136,58,0.28)", background: "rgba(201,136,58,0.10)",
               animation: "lmarg-fadeUp 0.55s ease both",
             }}>
@@ -337,7 +337,7 @@ export default function LMARegisterPage() {
               </em>
             </h1>
 
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.48)", lineHeight: 1.65, marginBottom: 34, maxWidth: 400, animation: "lmarg-fadeUp 0.60s ease 0.16s both" }}>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.48)", lineHeight: 1.60, marginBottom: 24, maxWidth: 400, animation: "lmarg-fadeUp 0.60s ease 0.16s both" }}>
               Your AI &amp; ML career starts here. Join students building real skills with real projects — guided by industry experts.
             </p>
 
@@ -347,7 +347,7 @@ export default function LMARegisterPage() {
             <Bullet icon="certificate"  text="Earn verified certificates recognised industry-wide" delay={480} />
 
             {/* Divider */}
-            <div style={{ height: 1, background: "rgba(255,255,255,0.09)", margin: "30px 0 26px", animation: "lmarg-fadeUp 0.6s ease 0.55s both" }} />
+            <div style={{ height: 1, background: "rgba(255,255,255,0.09)", margin: "20px 0 18px", animation: "lmarg-fadeUp 0.6s ease 0.55s both" }} />
 
             {/* Stat tiles */}
             <div style={{ display: "flex", gap: 12, animation: "lmarg-fadeUp 0.6s ease 0.62s both" }}>
