@@ -1,260 +1,190 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import {
-  GraduationCap, BookOpen, Mail, Lock, Eye, EyeOff,
-  ArrowRight, ArrowLeft, Shield, CheckCircle,
-} from "lucide-react";
 import SEO from "../../components/seo/SEO";
 
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
-const FF    = "'DM Sans', sans-serif";
-const CREAM = "#f9f7f4";
+// ── colour tokens — identical to ERPLogin ────────────────────────────────────
+const C = {
+  orange:      "#C9883A",
+  orangeGrad:  "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
+  orangeDeep:  "rgba(150,95,30,0.50)",
+  orangeLight: "rgba(201,136,58,0.09)",
+  warmDark:    "#1a1208",
+  warmDarker:  "#0f0a05",
+  cream:       "#F8F7F4",
+  white:       "#FFFFFF",
+  dark:        "#1A1A1A",
+  muted:       "#6B6B6B",
+};
+const shadow = {
+  card:  "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.03)",
+  badge: "0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.30)",
+};
+const FF = "'DM Sans', sans-serif";
 
 type Role = "student" | "instructor";
 
-/* ── 3D card tilt ── */
-function useCardTilt(intensity = 6) {
-  const ref = useRef<HTMLDivElement>(null);
-  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current; if (!el) return;
-    const r  = el.getBoundingClientRect();
-    const x  = (e.clientX - r.left) / r.width  - 0.5;
-    const y  = (e.clientY - r.top)  / r.height - 0.5;
-    el.style.transform  = `perspective(1400px) rotateY(${x * intensity}deg) rotateX(${-y * intensity}deg) translateZ(16px)`;
-    el.style.transition = "transform 0.07s linear";
-    el.style.boxShadow  = `0 32px 72px rgba(0,0,0,0.20), 0 0 0 1px rgba(0,0,0,0.06), 0 ${Math.abs(y * 18) + 8}px ${Math.abs(x * 28) + 32}px rgba(0,0,0,0.10)`;
-  };
-  const onMouseLeave = () => {
-    const el = ref.current; if (!el) return;
-    el.style.transform  = "perspective(1400px) rotateY(0deg) rotateX(0deg) translateZ(0px)";
-    el.style.transition = "transform 0.55s cubic-bezier(0.22,1,0.36,1), box-shadow 0.55s cubic-bezier(0.22,1,0.36,1)";
-    el.style.boxShadow  = "0 4px 6px rgba(0,0,0,0.04), 0 16px 40px rgba(0,0,0,0.10), 0 40px 80px rgba(0,0,0,0.06)";
-  };
-  return { ref, onMouseMove, onMouseLeave };
-}
-
-/* ── Floating label input with gold glow ── */
-const FloatInput = ({
-  id, label, type = "text", value, onChange, icon: Icon, right,
-}: {
-  id: string; label: string; type?: string; value: string;
-  onChange: (v: string) => void; icon: React.ElementType; right?: React.ReactNode;
+// ── StatTile — exact ERP copy ─────────────────────────────────────────────────
+const StatTile = ({ val, label, icon, color, delay }: {
+  val: string; label: string; icon: string; color: string; delay: number;
 }) => {
-  const [focus, setFocus] = useState(false);
-  const raised = focus || value.length > 0;
+  const [hov, setHov] = useState(false);
   return (
-    <div style={{ position: "relative", marginBottom: 18 }}>
-      <div style={{
-        display: "flex", alignItems: "center",
-        border: `1.5px solid ${focus ? GOLD : "rgba(0,0,0,0.12)"}`,
-        borderRadius: 12,
-        background: focus ? "rgba(201,136,58,0.025)" : "#fafaf9",
-        boxShadow: focus
-          ? `0 0 0 3px rgba(201,136,58,0.15), 0 1px 3px rgba(0,0,0,0.06)`
-          : `0 1px 2px rgba(0,0,0,0.04)`,
-        transition: "all 0.20s ease",
-        paddingLeft: 14,
-      }}>
-        <Icon size={16} color={focus ? GOLD : "#b0b8c4"} style={{ flexShrink: 0, transition: "color 0.20s ease" }} />
-        <div style={{ flex: 1, position: "relative", paddingTop: 18, paddingBottom: 6 }}>
-          <label htmlFor={id} style={{
-            position: "absolute", left: 10,
-            top: raised ? 4 : "50%", transform: raised ? "none" : "translateY(-50%)",
-            fontSize: raised ? 10 : 14,
-            color: raised ? GOLD : "#9ca3af",
-            fontWeight: raised ? 700 : 400,
-            letterSpacing: raised ? "0.06em" : "normal",
-            transition: "all 0.18s ease",
-            fontFamily: FF, pointerEvents: "none",
-          }}>{label}</label>
-          <input
-            id={id} type={type} value={value}
-            onChange={e => onChange(e.target.value)}
-            onFocus={() => setFocus(true)}
-            onBlur={() => setFocus(false)}
-            style={{
-              border: "none", outline: "none", background: "transparent",
-              width: "100%", fontSize: 14, color: "#141413",
-              fontFamily: FF, paddingLeft: 10,
-            }}
-          />
-        </div>
-        {right}
+    <div
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        flex: 1,
+        background: "rgba(255,255,255,0.06)",
+        backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+        border: "1px solid rgba(255,255,255,0.08)", borderTop: `2px solid ${color}`,
+        borderRadius: 14, padding: "16px 14px", cursor: "default",
+        transform: hov ? "translateY(-5px)" : "translateY(0)",
+        boxShadow: hov ? "0 16px 40px rgba(0,0,0,0.35)" : "0 4px 14px rgba(0,0,0,0.20)",
+        transition: "transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms cubic-bezier(0.22,1,0.36,1)",
+        animation: `lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
+      }}
+    >
+      <div style={{ width: 30, height: 30, borderRadius: 8, background: `${color}20`, border: `1px solid ${color}44`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
+        <i className={icon} style={{ color, fontSize: 12 }} />
       </div>
+      <div style={{ color, fontWeight: 800, fontSize: 20, lineHeight: 1, marginBottom: 4, fontFamily: FF }}>{val}</div>
+      <div style={{ color: "rgba(255,255,255,0.50)", fontSize: 11, fontFamily: FF, lineHeight: 1.35 }}>{label}</div>
     </div>
   );
 };
 
-/* ── Left panel feature bullet ── */
-const Feature = ({ text, delay }: { text: string; delay: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    el.style.opacity = "0"; el.style.transform = "translateX(-28px)";
-    el.style.transition = `opacity 0.65s ease ${delay}ms, transform 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}ms`;
-    const t = setTimeout(() => { el.style.opacity = "1"; el.style.transform = "translateX(0)"; }, 80);
-    return () => clearTimeout(t);
-  }, [delay]);
-  return (
-    <div ref={ref} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-      <div style={{
-        width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-        background: "rgba(201,136,58,0.16)", border: "1px solid rgba(201,136,58,0.28)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}>
-        <CheckCircle size={14} color={AMBER} />
-      </div>
-      <span style={{ color: "rgba(255,255,255,0.80)", fontSize: 14, fontFamily: FF }}>{text}</span>
+// ── Bullet — exact ERP copy ───────────────────────────────────────────────────
+const Bullet = ({ icon, text, delay }: { icon: string; text: string; delay: number }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 12, animation: `lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both` }}>
+    <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, background: C.orangeGrad, boxShadow: shadow.badge, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <i className={icon} style={{ color: "#fff", fontSize: 11 }} />
     </div>
-  );
-};
+    <span style={{ color: "rgba(255,255,255,0.72)", fontSize: 13.5, fontFamily: FF }}>{text}</span>
+  </div>
+);
 
-/* ── 3D role selection card ── */
-const RoleCard3D = ({
-  Icon, title, sub, badgeBg, selected, onClick,
-}: {
-  Icon: React.ElementType; title: string; sub: string;
-  badgeBg: string; selected: boolean; onClick: () => void;
+// ── InputBadge — exact ERP copy ───────────────────────────────────────────────
+const InputBadge = ({ icon, focused }: { icon: string; focused: boolean }) => (
+  <span style={{
+    display: "flex", alignItems: "center", justifyContent: "center",
+    width: 26, height: 26, borderRadius: 7,
+    background: focused ? C.orangeGrad : "linear-gradient(145deg, #e2e8f0, #cbd5e1)",
+    boxShadow: focused ? shadow.badge : "0 2px 0 rgba(0,0,0,0.12)",
+    transition: "background 200ms, box-shadow 200ms", flexShrink: 0,
+  }}>
+    <i className={icon} style={{ color: "#fff", fontSize: 10 }} />
+  </span>
+);
+
+// ── Spinner — exact ERP copy ──────────────────────────────────────────────────
+const Spinner = () => (
+  <svg className="lma-spin-svg" width={17} height={17} viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
+    <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.30)" strokeWidth="2.5" />
+    <path d="M9 2a7 7 0 0 1 7 7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+  </svg>
+);
+
+// ── PrimaryBtn — exact ERP copy ───────────────────────────────────────────────
+const PrimaryBtn = ({ label, onClick, busy, disabled: dis }: {
+  label: string; onClick?: () => void; busy: boolean; disabled?: boolean;
 }) => {
-  const ref = useRef<HTMLButtonElement>(null);
-  const onMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const el = ref.current; if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width  - 0.5;
-    const y = (e.clientY - rect.top)  / rect.height - 0.5;
-    el.style.transform  = `perspective(600px) rotateY(${x * 15}deg) rotateX(${-y * 15}deg) translateZ(10px)`;
-    el.style.transition = "transform 0.07s linear";
-  };
-  const onLeave = () => {
-    const el = ref.current; if (!el) return;
-    el.style.transform  = "perspective(600px) rotateY(0) rotateX(0) translateZ(0)";
-    el.style.transition = "transform 0.45s cubic-bezier(0.22,1,0.36,1)";
-  };
+  const [hov, setHov] = useState(false);
+  const off = busy || !!dis;
   return (
     <button
-      ref={ref} onClick={onClick}
-      onMouseMove={onMove} onMouseLeave={onLeave}
+      type={onClick ? "button" : "submit"}
+      onClick={onClick}
+      disabled={off}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       style={{
-        border: `2px solid ${selected ? GOLD : "rgba(0,0,0,0.09)"}`,
-        borderRadius: 16, padding: "20px 16px", cursor: "pointer",
-        background: selected ? "rgba(201,136,58,0.05)" : "#fafaf9",
-        textAlign: "left", outline: "none", willChange: "transform",
-        boxShadow: selected
-          ? `0 0 0 3px rgba(201,136,58,0.14), 0 8px 20px rgba(0,0,0,0.09)`
-          : `0 2px 8px rgba(0,0,0,0.06)`,
-        transition: "border-color 0.20s ease, background 0.20s ease, box-shadow 0.20s ease",
-      }}>
-      <div style={{
-        width: 44, height: 44, borderRadius: 12, marginBottom: 14,
-        background: badgeBg, display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: `0 4px 0 rgba(0,0,0,0.22), 0 6px 16px rgba(0,0,0,0.12)`,
-      }}>
-        <Icon size={20} color="#fff" />
-      </div>
-      <div style={{ fontSize: 15, fontWeight: 700, color: "#141413", marginBottom: 4, fontFamily: FF }}>{title}</div>
-      <div style={{ fontSize: 11.5, color: "rgba(20,20,19,0.50)", lineHeight: 1.4, fontFamily: FF }}>{sub}</div>
+        width: "100%", height: 50,
+        background: off ? "#e5e7eb" : C.orangeGrad,
+        color: off ? "#9ca3af" : "#fff",
+        border: "none", borderRadius: 12, fontSize: 15, fontWeight: 700,
+        fontFamily: FF, cursor: off ? "not-allowed" : "pointer",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+        boxShadow: hov && !off
+          ? `0 6px 0 ${C.orangeDeep}, 0 10px 28px rgba(201,136,58,0.35)`
+          : off ? "none" : `0 4px 0 ${C.orangeDeep}, 0 6px 20px rgba(201,136,58,0.28)`,
+        transform: hov && !off ? "translateY(-2px)" : "translateY(0)",
+        transition: "transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms cubic-bezier(0.22,1,0.36,1)",
+        opacity: busy ? 0.88 : 1,
+      }}
+    >
+      {busy
+        ? <><Spinner />{label}…</>
+        : <>{label}<i className="fas fa-arrow-right" style={{ fontSize: 12 }} /></>
+      }
     </button>
   );
 };
 
-/* ── Animated stat counter (left panel) ── */
-const StatCounter = ({ target, label, suffix = "" }: { target: number; label: string; suffix?: string }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    el.style.opacity = "0"; el.style.transform = "translateY(14px)";
-    const t = setTimeout(() => {
-      el.style.transition = "opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)";
-      el.style.opacity = "1"; el.style.transform = "translateY(0)";
-      let s = 0;
-      const step = target / 40;
-      const iv = setInterval(() => {
-        s = Math.min(s + step, target);
-        setCount(Math.round(s));
-        if (s >= target) clearInterval(iv);
-      }, 28);
-    }, 820);
-    return () => clearTimeout(t);
-  }, [target]);
-  return (
-    <div ref={ref}>
-      <div style={{
-        fontSize: 26, fontWeight: 900, lineHeight: 1,
-        background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-        WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-      }}>{count}{suffix}</div>
-      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.42)", fontWeight: 500, marginTop: 4, letterSpacing: "0.06em" }}>{label}</div>
-    </div>
-  );
+// ── shared input styles (exact ERP) ──────────────────────────────────────────
+const iBorder  = (foc: boolean) => foc ? C.orange : "rgba(0,0,0,0.11)";
+const iShadow  = (foc: boolean) => foc ? "0 0 0 3px rgba(201,136,58,0.14)" : "none";
+const iCss = (foc: boolean, rp = 0): React.CSSProperties => ({
+  width: "100%", boxSizing: "border-box",
+  padding: `12px ${12 + rp}px 12px 46px`,
+  border: `1.5px solid ${iBorder(foc)}`,
+  borderRadius: 11, fontSize: 14,
+  color: C.dark, background: C.white,
+  boxShadow: iShadow(foc),
+  transition: "border-color 200ms, box-shadow 200ms",
+  fontFamily: FF, outline: "none",
+});
+const labelCss: React.CSSProperties = {
+  display: "block", fontSize: 12.5, fontWeight: 700,
+  color: C.dark, marginBottom: 7, fontFamily: FF,
 };
 
-/* ── Security badge row ── */
-const SecurityBadges = () => (
-  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 18, marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-    {[
-      { dot: "#22c55e", text: "AES-256 Encrypted" },
-      { dot: AMBER,     text: "ISO 27001"         },
-    ].map(b => (
-      <div key={b.text} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <div style={{ width: 7, height: 7, borderRadius: "50%", background: b.dot, boxShadow: `0 0 6px ${b.dot}80` }} />
-        <span style={{ fontSize: 11, color: "rgba(20,20,19,0.42)", fontWeight: 600, fontFamily: FF }}>{b.text}</span>
-      </div>
-    ))}
+const ErrBanner = ({ msg }: { msg: string }) => !msg ? null : (
+  <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#DC2626", fontFamily: FF, display: "flex", alignItems: "center", gap: 8 }}>
+    <i className="fas fa-exclamation-circle" style={{ flexShrink: 0 }} />{msg}
   </div>
 );
 
-/* ════════════════════════════════════════════════════════════ */
+const Hr = () => <div style={{ height: 1, background: "rgba(0,0,0,0.07)", margin: "10px 0" }} />;
+
+// ════════════════════════════════════════════════════════════════════════════════
 export default function LMALoginPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const redirect = params.get("redirect") || "/lma/student/dashboard";
   const action   = params.get("action")   || "";
 
-  const [step, setStep]       = useState<1 | 2>(1);
-  const [role, setRole]       = useState<Role | null>(null);
-  const [email, setEmail]     = useState("");
+  const [step, setStep]         = useState<1 | 2>(1);
+  const [role, setRole]         = useState<Role | null>(null);
+  const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
-  const [showPw, setShowPw]   = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState("");
+  const [showPw, setShowPw]     = useState(false);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState("");
   const [remember, setRemember] = useState(false);
+  const [shaking, setShaking]   = useState(false);
+  const [slideDir, setSlideDir] = useState<"fwd" | "bck">("fwd");
+  const [slideKey, setSlideKey] = useState(0);
+  const [eFoc, setEFoc] = useState(false);
+  const [pFoc, setPFoc] = useState(false);
 
-  const card = useCardTilt(6);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  /* Step transition — slide card out then swap content */
-  const goStep2 = () => {
-    const el = card.ref.current;
-    if (el) {
-      el.style.opacity   = "0";
-      el.style.transform = "perspective(1400px) translateX(36px) scale(0.97)";
-      el.style.transition = "opacity 0.18s ease, transform 0.18s ease";
-    }
-    setTimeout(() => {
-      setStep(2);
-      requestAnimationFrame(() => {
-        if (!el) return;
-        el.style.transition = "opacity 0.38s ease, transform 0.38s cubic-bezier(0.22,1,0.36,1)";
-        el.style.opacity   = "1";
-        el.style.transform = "perspective(1400px) translateX(0) scale(1)";
-      });
-    }, 190);
+  const shake = () => { setShaking(true); setTimeout(() => setShaking(false), 520); };
+
+  const go = (s: 1 | 2, dir: "fwd" | "bck") => {
+    setSlideDir(dir); setSlideKey(k => k + 1); setStep(s); setError("");
   };
 
-  const handleLogin = async () => {
-    if (!email || !password) { setError("Please fill in all fields."); return; }
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) { setError("Please fill in all fields."); shake(); return; }
     setLoading(true); setError("");
     try {
-      const res = await fetch(`${API}/lma/auth/login/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1"}/lma/auth/login/`,
+        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password, role }) }
+      );
       const data = await res.json();
-      if (!res.ok) { setError(data.error || "Login failed."); return; }
+      if (!res.ok) { setError(data.error || "Login failed."); shake(); return; }
       localStorage.setItem("lma_token",          data.lma_token);
       localStorage.setItem("lma_role",           data.lma_role);
       localStorage.setItem("lma_can_instructor", String(data.can_access_instructor));
@@ -266,262 +196,318 @@ export default function LMALoginPage() {
         navigate(action ? `${dest}?action=${action}` : dest);
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError("Network error. Please try again."); shake();
     } finally {
       setLoading(false);
     }
   };
 
+  // 3D mouse-tracking tilt
+  const onCardMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    el.style.transform  = `perspective(1200px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg) translateZ(10px)`;
+    el.style.transition = "transform 0.07s linear";
+    el.style.boxShadow  = `0 24px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)`;
+  };
+  const onCardLeave = () => {
+    const el = cardRef.current; if (!el) return;
+    el.style.transform  = "perspective(1200px) rotateY(0) rotateX(0) translateZ(0)";
+    el.style.transition = "transform 0.55s cubic-bezier(0.22,1,0.36,1), box-shadow 0.55s cubic-bezier(0.22,1,0.36,1)";
+    el.style.boxShadow  = shadow.card;
+  };
+
   return (
     <>
       <SEO title="Login | XERXEZ Academy" description="Sign in to your XERXEZ Academy account." canonical="/lma/login" noIndex />
-      <div style={{ minHeight: "100vh", display: "flex", fontFamily: FF }}>
-
-        {/* ══ LEFT PANEL ══════════════════════════════════════════════ */}
-        <div className="lma-left" style={{
-          flex: "0 0 55%",
-          background: `linear-gradient(158deg, ${DARK} 0%, #0d0702 100%)`,
-          position: "relative", overflow: "hidden",
-          display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "60px 64px",
-        }}>
-          {/* Atmospheric orbs */}
-          <div style={{ position: "absolute", top: "12%", left: "22%", width: 520, height: 520, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.14) 0%, transparent 66%)", pointerEvents: "none", animation: "lma-float 9s ease-in-out infinite" }} />
-          <div style={{ position: "absolute", bottom: "6%", right: "4%", width: 280, height: 280, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 70%)", pointerEvents: "none", animation: "lma-float 7s ease-in-out infinite reverse" }} />
-          <div style={{ position: "absolute", top: "62%", left: "-6%", width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,168,78,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
-          {/* Dot grid */}
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none" }} />
-
-          <div style={{ position: "relative", zIndex: 1, maxWidth: 480 }}>
-            {/* Logo */}
-            <div style={{ marginBottom: 48, animation: "lma-fadeSlideIn 0.7s ease both" }}>
-              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 70, width: "auto" }} />
-            </div>
-
-            <h1 style={{
-              fontSize: "clamp(32px,3.5vw,48px)", fontWeight: 800, color: "#fff",
-              lineHeight: 1.1, margin: "0 0 8px", letterSpacing: "-0.02em",
-              animation: "lma-fadeSlideIn 0.7s ease 0.1s both",
-            }}>
-              XERXEZ Academy
-            </h1>
-            <p style={{
-              fontSize: 18, color: AMBER, fontStyle: "italic",
-              fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, marginBottom: 40,
-              animation: "lma-fadeSlideIn 0.7s ease 0.2s both",
-            }}>
-              Enterprise AI Learning Platform
-            </p>
-
-            <Feature text="World-class AI & cloud technology courses"         delay={350} />
-            <Feature text="Industry expert instructors — built what they teach" delay={500} />
-            <Feature text="Certified on completion, recognised by 40+ enterprises" delay={650} />
-
-            {/* Stats */}
-            <div style={{ display: "flex", gap: 32, marginTop: 48, paddingTop: 32, borderTop: "1px solid rgba(255,255,255,0.09)" }}>
-              <StatCounter target={500} label="Students"     suffix="+" />
-              <StatCounter target={12}  label="Courses"      suffix="+" />
-              <StatCounter target={95}  label="Satisfaction" suffix="%" />
-            </div>
-          </div>
-        </div>
-
-        {/* ══ RIGHT PANEL ═════════════════════════════════════════════ */}
-        <div style={{
-          flex: 1, display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          background: CREAM, padding: "40px 24px",
-        }}>
-
-          {/* ── 3D CARD ── */}
-          <div
-            ref={card.ref}
-            onMouseMove={card.onMouseMove}
-            onMouseLeave={card.onMouseLeave}
-            style={{
-              width: "100%", maxWidth: 444,
-              background: "#fff",
-              borderRadius: 22,
-              borderTop: `3px solid ${GOLD}`,
-              boxShadow: "0 4px 6px rgba(0,0,0,0.04), 0 16px 40px rgba(0,0,0,0.10), 0 40px 80px rgba(0,0,0,0.06)",
-              padding: "40px 36px",
-              willChange: "transform, box-shadow",
-              animation: "lma-cardIn 0.65s cubic-bezier(0.22,1,0.36,1) both",
-            }}
-          >
-            {/* ── STEP 1: Role picker ── */}
-            {step === 1 ? (
-              <>
-                <h2 style={{ fontSize: 24, fontWeight: 800, color: "#141413", margin: "0 0 6px", letterSpacing: "-0.01em" }}>
-                  Welcome to XERXEZ Academy
-                </h2>
-                <p style={{ color: "rgba(20,20,19,0.50)", fontSize: 14, marginBottom: 32 }}>
-                  Select your role to continue
-                </p>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 28 }}>
-                  <RoleCard3D
-                    Icon={GraduationCap} title="Student"
-                    sub="Access courses & track progress"
-                    badgeBg={`linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`}
-                    selected={role === "student"} onClick={() => setRole("student")}
-                  />
-                  <RoleCard3D
-                    Icon={BookOpen} title="Instructor"
-                    sub="Create & manage courses"
-                    badgeBg={`linear-gradient(135deg,#2d2d2d 0%,${DARK} 100%)`}
-                    selected={role === "instructor"} onClick={() => setRole("instructor")}
-                  />
-                </div>
-
-                <button onClick={goStep2} disabled={!role} style={{
-                  width: "100%", height: 52, borderRadius: 12, border: "none",
-                  cursor: role ? "pointer" : "not-allowed",
-                  background: role ? `linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)` : "#e5e7eb",
-                  color: role ? "#0a0806" : "#9ca3af",
-                  fontSize: 15, fontWeight: 700, fontFamily: FF,
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  boxShadow: role ? `0 4px 0 rgba(140,80,20,0.38), 0 8px 24px rgba(201,136,58,0.26)` : "none",
-                  transition: "all 0.20s ease",
-                }}>
-                  Continue <ArrowRight size={16} />
-                </button>
-
-                <div style={{ textAlign: "center", marginTop: 22 }}>
-                  <Link to="/training" style={{ fontSize: 12, color: "rgba(20,20,19,0.40)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5 }}>
-                    <ArrowLeft size={11} /> Back to Website
-                  </Link>
-                </div>
-              </>
-            ) : (
-              /* ── STEP 2: Sign in form ── */
-              <>
-                <button onClick={() => setStep(1)} style={{ background: "none", border: "none", cursor: "pointer", color: GOLD, fontSize: 13, fontWeight: 600, marginBottom: 20, display: "flex", alignItems: "center", gap: 6, padding: 0, fontFamily: FF }}>
-                  <ArrowLeft size={14} /> Back
-                </button>
-
-                {/* Role pill */}
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(201,136,58,0.08)", border: "1px solid rgba(201,136,58,0.22)", borderRadius: 999, padding: "4px 14px", marginBottom: 20 }}>
-                  {role === "student"
-                    ? <GraduationCap size={13} color={GOLD} />
-                    : <BookOpen size={13} color={GOLD} />}
-                  <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF }}>
-                    {role === "student" ? "Student Login" : "Instructor Login"}
-                  </span>
-                </div>
-
-                <h2 style={{ fontSize: 22, fontWeight: 800, color: "#141413", margin: "0 0 6px", fontFamily: FF }}>Sign In</h2>
-                <p style={{ color: "rgba(20,20,19,0.50)", fontSize: 13, marginBottom: 28, fontFamily: FF }}>
-                  {role === "student"
-                    ? "Enter your XERXEZ Academy credentials"
-                    : "Enter your instructor credentials"}
-                </p>
-
-                {error && (
-                  <div style={{ background: "#fff5f5", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px", marginBottom: 20, fontSize: 13, color: "#dc2626", fontFamily: FF }}>
-                    {error}
-                  </div>
-                )}
-
-                <FloatInput id="email"    label="Email address" value={email}    onChange={setEmail}    icon={Mail} />
-                <FloatInput id="password" label="Password"
-                  type={showPw ? "text" : "password"}
-                  value={password} onChange={setPassword} icon={Lock}
-                  right={
-                    <button onClick={() => setShowPw(p => !p)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0 14px", color: "#9ca3af" }}>
-                      {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
-                  }
-                />
-
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "rgba(20,20,19,0.60)", fontFamily: FF }}>
-                    <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)} style={{ accentColor: GOLD }} />
-                    Remember me
-                  </label>
-                  <a href="#" style={{ fontSize: 13, color: GOLD, textDecoration: "none", fontWeight: 600, fontFamily: FF }}>Forgot Password?</a>
-                </div>
-
-                <button
-                  onClick={handleLogin}
-                  disabled={loading}
-                  className="lma-signin-btn"
-                  style={{
-                    width: "100%", height: 52, borderRadius: 12, border: "none",
-                    background: `linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
-                    color: "#0a0806", fontSize: 15, fontWeight: 800,
-                    cursor: loading ? "wait" : "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                    boxShadow: `0 4px 0 rgba(140,80,20,0.38), 0 8px 24px rgba(201,136,58,0.28)`,
-                    position: "relative", overflow: "hidden", fontFamily: FF,
-                    transition: "transform 0.12s ease, box-shadow 0.12s ease",
-                  }}
-                >
-                  {loading ? (
-                    <div style={{ width: 20, height: 20, border: "2.5px solid rgba(10,8,6,0.25)", borderTop: "2.5px solid #0a0806", borderRadius: "50%", animation: "lma-spin 0.8s linear infinite" }} />
-                  ) : (
-                    <>Sign In <ArrowRight size={16} /></>
-                  )}
-                </button>
-
-                {/* ── Role-conditional bottom section ── */}
-                {role === "student" ? (
-                  <p style={{ textAlign: "center", fontSize: 13, color: "rgba(20,20,19,0.50)", marginTop: 20, fontFamily: FF }}>
-                    Don't have an account?{" "}
-                    <Link
-                      to={`/lma/register?redirect=${encodeURIComponent(redirect)}${action ? `&action=${action}` : ""}`}
-                      style={{ color: GOLD, fontWeight: 600, textDecoration: "none" }}
-                    >Register</Link>
-                  </p>
-                ) : (
-                  /* Instructor: restricted access notice, no register link */
-                  <div style={{
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                    marginTop: 20, padding: "11px 16px", borderRadius: 10,
-                    background: "rgba(201,136,58,0.06)", border: "1px solid rgba(201,136,58,0.18)",
-                  }}>
-                    <Shield size={13} color={GOLD} />
-                    <span style={{ fontSize: 12, color: "rgba(20,20,19,0.55)", fontFamily: FF }}>
-                      Access restricted to invited instructors only
-                    </span>
-                  </div>
-                )}
-
-                <SecurityBadges />
-
-                <div style={{ textAlign: "center", marginTop: 16 }}>
-                  <Link to="/training" style={{ fontSize: 12, color: "rgba(20,20,19,0.36)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, fontFamily: FF }}>
-                    <ArrowLeft size={11} /> Back to Website
-                  </Link>
-                </div>
-              </>
-            )}
-          </div>
-
-          <div style={{ marginTop: 28, fontSize: 11.5, color: "rgba(20,20,19,0.28)", fontFamily: FF }}>
-            © 2026 XERXEZ. All Rights Reserved.
-          </div>
-        </div>
-      </div>
 
       <style>{`
-        @keyframes lma-spin        { to { transform: rotate(360deg); } }
-        @keyframes lma-float       { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-22px)} }
-        @keyframes lma-fadeSlideIn { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes lma-cardIn      {
-          from { opacity:0; transform:perspective(1400px) translateY(30px) scale(0.96); }
-          to   { opacity:1; transform:perspective(1400px) translateY(0)    scale(1);    }
+        @keyframes lmaFadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes lmaOrbPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.09);opacity:0.82} }
+        @keyframes lmaCardIn   { from{opacity:0;transform:perspective(1200px) translateY(28px) scale(0.97)} to{opacity:1;transform:perspective(1200px) translateY(0) scale(1)} }
+        @keyframes lmaStepFwd  { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes lmaStepBck  { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes lmaShake    { 0%,100%{transform:translateX(0)} 15%,55%{transform:translateX(-7px)} 35%,75%{transform:translateX(7px)} }
+        @keyframes lmaSpin     { to{transform:rotate(360deg)} }
+        .lma-spin-svg { animation: lmaSpin 0.75s linear infinite; }
+        .lma-shake    { animation: lmaShake 0.5s cubic-bezier(0.36,0.07,0.19,0.97) both !important; }
+        .lma-step-fwd { animation: lmaStepFwd 0.30s cubic-bezier(0.22,1,0.36,1) both; }
+        .lma-step-bck { animation: lmaStepBck 0.30s cubic-bezier(0.22,1,0.36,1) both; }
+        .lma-card     { animation: lmaCardIn 0.65s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
+        .lma-orb-1    { animation: lmaOrbPulse 8s ease-in-out infinite; }
+        .lma-orb-2    { animation: lmaOrbPulse 10s 2.5s ease-in-out infinite; }
+        .lma-orb-3    { animation: lmaOrbPulse 12s 5s ease-in-out infinite; }
+        .lma-input::placeholder { color: #BBBBBB; }
+        .lma-input:focus { outline: none; }
+        .lma-right { background: ${C.cream}; }
+        .lma-left  { display: flex; }
+        .lma-role-btn { transition: border-color 180ms, background 180ms, box-shadow 180ms; }
+        .lma-role-btn:hover:not(.lma-role-selected) { border-color: rgba(201,136,58,0.45) !important; background: rgba(201,136,58,0.04) !important; }
+        @media(max-width:991px) {
+          .lma-left  { display: none !important; }
+          .lma-right { background: linear-gradient(150deg,#1a1208 0%,#0f0a05 100%) !important; }
+          .lma-card  { box-shadow: 0 8px 48px rgba(0,0,0,0.52), 0 2px 8px rgba(0,0,0,0.32) !important; }
         }
-        .lma-left { display: flex; }
-        .lma-signin-btn:active:not(:disabled) {
-          transform: translateY(2px) !important;
-          box-shadow: 0 2px 0 rgba(140,80,20,0.38) !important;
-        }
-        @media (max-width: 991px) { .lma-left { display: none !important; } }
-        @media (prefers-reduced-motion: reduce) {
-          *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+        @media(prefers-reduced-motion:reduce) {
+          .lma-orb-1,.lma-orb-2,.lma-orb-3,.lma-card { animation: none !important; }
+          * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
         }
       `}</style>
+
+      <div style={{ minHeight: "100vh", display: "flex", fontFamily: FF }}>
+
+        {/* ══ LEFT PANEL — mirrors ERP layout ════════════════════════════════ */}
+        <div className="lma-left" style={{
+          flex: "0 0 56%", flexDirection: "column", justifyContent: "flex-start",
+          padding: "56px 60px 48px", position: "relative", overflow: "hidden",
+          background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
+        }}>
+          <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
+          <span className="lma-orb-1" style={{ position: "absolute", top: "-10%", left: "-8%", width: 540, height: 540, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.15) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <span className="lma-orb-2" style={{ position: "absolute", bottom: "-18%", right: "-4%", width: 440, height: 440, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <span className="lma-orb-3" style={{ position: "absolute", top: "38%", right: "10%", width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+
+          <div style={{ position: "relative", zIndex: 1 }}>
+            {/* Logo */}
+            <div style={{ marginBottom: 24, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
+              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 60, width: "auto" }} />
+            </div>
+
+            {/* Chip — same shape as ERP */}
+            <div style={{ marginBottom: 18, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(201,136,58,0.13)", border: "1px solid rgba(201,136,58,0.35)", color: "#E5B460", fontSize: 11, fontWeight: 700, padding: "6px 16px", borderRadius: 20, fontFamily: FF, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                <i className="fas fa-graduation-cap" style={{ fontSize: 9, color: C.orange }} />
+                Enterprise Learning Platform
+              </span>
+            </div>
+
+            {/* Headline — same structure as ERP */}
+            <h1 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(28px,2.8vw,44px)", lineHeight: 1.1, marginBottom: 18, fontFamily: FF, letterSpacing: "-0.025em", animation: "lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both" }}>
+              Learn from the<br />
+              <em style={{ color: C.orange, fontStyle: "italic" }}>world's best</em>
+            </h1>
+            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 14.5, lineHeight: 1.72, maxWidth: 420, marginBottom: 34, fontFamily: FF, animation: "lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.19s both" }}>
+              AI-powered courses, expert instructors, and industry certificates — built to enterprise and global standards.
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 38 }}>
+              <Bullet icon="fas fa-brain"      text="World-class AI & cloud technology courses"  delay={0.25} />
+              <Bullet icon="fas fa-shield-alt" text="ISO 27001 & certified curriculum"            delay={0.30} />
+              <Bullet icon="fas fa-chart-bar"  text="Expert instructors — built what they teach"  delay={0.35} />
+            </div>
+
+            {/* Stat tiles — exact ERP StatTile component */}
+            <div style={{ display: "flex", gap: 12 }}>
+              <StatTile val="500+" label="Students enrolled" icon="fas fa-users"      color={C.orange} delay={0.41} />
+              <StatTile val="12+"  label="Active courses"    icon="fas fa-book-open"  color="#10b981"  delay={0.47} />
+              <StatTile val="95%"  label="Satisfaction rate" icon="fas fa-star"       color="#3b82f6"  delay={0.53} />
+            </div>
+          </div>
+        </div>
+
+        {/* ══ RIGHT PANEL ═════════════════════════════════════════════════════ */}
+        <div className="lma-right" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", paddingTop: 52, paddingBottom: 32, paddingLeft: 28, paddingRight: 28, minHeight: "100vh" }}>
+
+          {/* 3D card */}
+          <div
+            ref={cardRef}
+            onMouseMove={onCardMove}
+            onMouseLeave={onCardLeave}
+            className={`lma-card${shaking ? " lma-shake" : ""}`}
+            style={{
+              background: C.white, borderRadius: 20,
+              padding: "24px 28px 20px",
+              width: "100%", maxWidth: 460,
+              boxShadow: shadow.card,
+              border: "1px solid rgba(0,0,0,0.06)",
+              borderTop: `3px solid ${C.orange}`,
+              overflow: "hidden", willChange: "transform",
+            }}
+          >
+            {/* animated step wrapper */}
+            <div key={slideKey} className={`lma-step-${slideDir}`}>
+
+              {/* ══ STEP 1: Role picker ═══════════════════════════════════════ */}
+              {step === 1 && (
+                <>
+                  <div style={{ textAlign: "center", marginBottom: 14 }}>
+                    <h2 style={{ color: C.dark, fontWeight: 800, fontSize: 20, margin: "0 0 4px", fontFamily: FF, letterSpacing: "-0.02em" }}>XERXEZ Academy</h2>
+                    <p style={{ color: C.muted, fontSize: 12.5, margin: 0, fontFamily: FF }}>Select your role to sign in</p>
+                  </div>
+                  <Hr />
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+                    {(["student", "instructor"] as Role[]).map(r => {
+                      const sel = role === r;
+                      return (
+                        <button
+                          key={r}
+                          onClick={() => setRole(r)}
+                          className={`lma-role-btn${sel ? " lma-role-selected" : ""}`}
+                          style={{
+                            border: `1.5px solid ${sel ? C.orange : "rgba(0,0,0,0.11)"}`,
+                            borderRadius: 12, padding: "18px 14px", cursor: "pointer",
+                            background: sel ? C.orangeLight : C.white,
+                            textAlign: "left", outline: "none",
+                            boxShadow: sel ? `0 0 0 3px rgba(201,136,58,0.14), ${shadow.card}` : shadow.card,
+                          }}
+                        >
+                          <div style={{ width: 36, height: 36, borderRadius: 10, marginBottom: 10, background: sel ? C.orangeGrad : "linear-gradient(145deg,#e2e8f0,#cbd5e1)", boxShadow: sel ? shadow.badge : "0 2px 0 rgba(0,0,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", transition: "background 180ms, box-shadow 180ms" }}>
+                            <i className={r === "student" ? "fas fa-graduation-cap" : "fas fa-chalkboard-teacher"} style={{ color: "#fff", fontSize: 14 }} />
+                          </div>
+                          <div style={{ fontSize: 14, fontWeight: 700, color: C.dark, marginBottom: 3, fontFamily: FF }}>{r === "student" ? "Student" : "Instructor"}</div>
+                          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.4, fontFamily: FF }}>{r === "student" ? "Access courses & progress" : "Create & manage courses"}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <PrimaryBtn label="Continue" onClick={() => role && go(2, "fwd")} busy={false} disabled={!role} />
+
+                  <Hr />
+                  <div style={{ textAlign: "center" }}>
+                    <Link to="/training"
+                      style={{ fontSize: 13, color: "#999", textDecoration: "none", fontFamily: FF, display: "inline-flex", alignItems: "center", gap: 6, transition: "color 150ms" }}
+                      onMouseEnter={e => (e.currentTarget.style.color = C.dark)}
+                      onMouseLeave={e => (e.currentTarget.style.color = "#999")}>
+                      <i className="fas fa-arrow-left" style={{ fontSize: 10 }} />Back to Website
+                    </Link>
+                  </div>
+                </>
+              )}
+
+              {/* ══ STEP 2: Sign in form ══════════════════════════════════════ */}
+              {step === 2 && (
+                <>
+                  <div style={{ textAlign: "center", marginBottom: 14 }}>
+                    <h2 style={{ color: C.dark, fontWeight: 800, fontSize: 20, margin: "0 0 4px", fontFamily: FF, letterSpacing: "-0.02em" }}>
+                      {role === "student" ? "XERXEZ Academy" : "Instructor Portal"}
+                    </h2>
+                    <p style={{ color: C.muted, fontSize: 12.5, margin: 0, fontFamily: FF }}>
+                      {role === "student" ? "Sign in to access your courses" : "Sign in to manage your courses"}
+                    </p>
+                  </div>
+                  <Hr />
+
+                  <ErrBanner msg={error} />
+
+                  <form onSubmit={handleLogin} noValidate>
+                    {/* Email */}
+                    <div style={{ marginBottom: 10 }}>
+                      <label style={labelCss}>Email Address</label>
+                      <div style={{ position: "relative" }}>
+                        <span style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+                          <InputBadge icon="fas fa-envelope" focused={eFoc} />
+                        </span>
+                        <input
+                          className="lma-input" type="email" value={email}
+                          placeholder="Enter your email address" autoComplete="email"
+                          onChange={e => setEmail(e.target.value)}
+                          onFocus={() => setEFoc(true)} onBlur={() => setEFoc(false)}
+                          style={iCss(eFoc)}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Password */}
+                    <div style={{ marginBottom: 10 }}>
+                      <label style={labelCss}>Password</label>
+                      <div style={{ position: "relative" }}>
+                        <span style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+                          <InputBadge icon="fas fa-lock" focused={pFoc} />
+                        </span>
+                        <input
+                          className="lma-input"
+                          type={showPw ? "text" : "password"} value={password}
+                          placeholder="Enter your password" autoComplete="current-password"
+                          onChange={e => setPassword(e.target.value)}
+                          onFocus={() => setPFoc(true)} onBlur={() => setPFoc(false)}
+                          style={iCss(pFoc, 32)}
+                        />
+                        <button type="button" onClick={() => setShowPw(v => !v)} aria-label={showPw ? "Hide" : "Show"}
+                          style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#AAA", padding: 4, fontSize: 13, lineHeight: 1 }}>
+                          <i className={`fas fa-eye${showPw ? "-slash" : ""}`} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Remember + Forgot */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                      <label style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer", userSelect: "none" }}>
+                        <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)} style={{ width: 15, height: 15, accentColor: C.orange, cursor: "pointer" }} />
+                        <span style={{ fontSize: 12.5, color: C.muted, fontFamily: FF }}>Remember me</span>
+                      </label>
+                      <a href="#" style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12.5, color: C.orange, fontWeight: 600, fontFamily: FF, textDecoration: "none" }}>
+                        Forgot Password?
+                      </a>
+                    </div>
+
+                    <PrimaryBtn label="Sign In" busy={loading} />
+                  </form>
+
+                  {/* Security badges — exact ERP layout */}
+                  <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "#9B9B9B", fontSize: 11.5, fontFamily: FF }}>
+                      <i className="fas fa-lock" style={{ color: "#4ade80", fontSize: 11 }} />AES-256 Encrypted
+                    </span>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: C.cream, border: "1px solid rgba(201,136,58,0.20)", borderRadius: 20, padding: "3px 12px" }}>
+                      <i className="fas fa-certificate" style={{ color: C.orange, fontSize: 10 }} />
+                      <span style={{ fontSize: 11, color: C.muted, fontWeight: 600, fontFamily: FF }}>ISO 27001</span>
+                    </div>
+                  </div>
+
+                  <Hr />
+
+                  {/* Role-conditional section */}
+                  {role === "student" ? (
+                    <div style={{ textAlign: "center", marginBottom: 2 }}>
+                      <span style={{ fontSize: 12.5, color: C.muted, fontFamily: FF }}>
+                        Don't have an account?{" "}
+                        <Link
+                          to={`/lma/register?redirect=${encodeURIComponent(redirect)}${action ? `&action=${action}` : ""}`}
+                          style={{ color: C.orange, fontWeight: 700, fontSize: 12.5, fontFamily: FF, textDecoration: "none" }}
+                        >Register</Link>
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center", marginBottom: 2 }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: C.muted, fontFamily: FF }}>
+                        <i className="fas fa-shield-alt" style={{ color: C.orange, fontSize: 11 }} />
+                        Access restricted to invited instructors only
+                      </span>
+                    </div>
+                  )}
+
+                  <Hr />
+
+                  {/* Back links row */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <button type="button" onClick={() => go(1, "bck")}
+                      style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12.5, color: C.muted, fontFamily: FF, display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 0", transition: "color 150ms" }}
+                      onMouseEnter={e => (e.currentTarget.style.color = C.dark)}
+                      onMouseLeave={e => (e.currentTarget.style.color = C.muted)}>
+                      <i className="fas fa-arrow-left" style={{ fontSize: 10 }} />Back
+                    </button>
+                    <Link to="/training"
+                      style={{ fontSize: 13, color: "#999", textDecoration: "none", fontFamily: FF, display: "inline-flex", alignItems: "center", gap: 6, transition: "color 150ms" }}
+                      onMouseEnter={e => (e.currentTarget.style.color = C.dark)}
+                      onMouseLeave={e => (e.currentTarget.style.color = "#999")}>
+                      <i className="fas fa-arrow-left" style={{ fontSize: 10 }} />Back to Website
+                    </Link>
+                  </div>
+                </>
+              )}
+
+            </div>
+          </div>
+
+          <p style={{ marginTop: 20, color: "rgba(0,0,0,0.28)", fontSize: 11.5, fontFamily: FF, textAlign: "center" }}>
+            © {new Date().getFullYear()} XERXEZ. All Rights Reserved.
+          </p>
+        </div>
+      </div>
     </>
   );
 }
