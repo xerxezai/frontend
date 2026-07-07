@@ -7,10 +7,11 @@ import apiService from '../../../services/api';
 const OG   = '#C9883A';
 const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
 const CARD: React.CSSProperties = {
-  background:   'rgba(255,255,255,0.04)',
-  border:       '1px solid rgba(255,255,255,0.07)',
-  borderTop:    '2px solid rgba(201,136,58,0.40)',
+  background:   '#FFFFFF',
+  border:       '1px solid rgba(0,0,0,0.08)',
+  borderTop:    '2px solid rgba(201,136,58,0.55)',
   borderRadius: 14,
+  boxShadow:    '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
 const FONT = "'DM Sans', sans-serif";
 
@@ -27,11 +28,11 @@ function Field({
 
   const base: React.CSSProperties = {
     width: '100%', boxSizing: 'border-box',
-    background: disabled  ? 'rgba(255,255,255,0.02)'
-               : focused  ? 'rgba(201,136,58,0.06)'
-               :             'rgba(255,255,255,0.03)',
-    border: `1px solid ${focused ? 'rgba(201,136,58,0.55)' : 'rgba(255,255,255,0.09)'}`,
-    borderRadius: 10, color: '#fff', fontFamily: FONT, fontSize: 14,
+    background: disabled  ? 'rgba(0,0,0,0.03)'
+               : focused  ? 'rgba(201,136,58,0.04)'
+               :             '#F8F7F4',
+    border: `1px solid ${focused ? 'rgba(201,136,58,0.55)' : 'rgba(0,0,0,0.12)'}`,
+    borderRadius: 10, color: '#141413', fontFamily: FONT, fontSize: 14,
     outline: 'none', resize: 'none',
     transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s',
     boxShadow: focused ? '0 0 0 3px rgba(201,136,58,0.12)' : 'none',
@@ -45,7 +46,7 @@ function Field({
         top:        elevated ? 7       : '50%',
         transform:  elevated ? 'none'  : 'translateY(-50%)',
         fontSize:   elevated ? 9.5     : 13.5,
-        color:      focused  ? OG      : 'rgba(255,255,255,0.35)',
+        color:      focused  ? OG      : 'rgba(20,20,19,0.45)',
         fontWeight: elevated ? 700     : 400,
         letterSpacing: elevated ? '0.07em' : '0',
         textTransform: (elevated ? 'uppercase' : 'none') as React.CSSProperties['textTransform'],
@@ -150,15 +151,15 @@ export default function EditProfilePage() {
       >
         <button
           onClick={() => navigate('/erp/profile')} aria-label="Back"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 9, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.55)', flexShrink: 0, transition: 'background 0.18s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+          style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(20,20,19,0.55)', flexShrink: 0, transition: 'background 0.18s' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.08)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; }}
         >
           <i className="fas fa-arrow-left" style={{ fontSize: 12 }} />
         </button>
         <div>
-          <h2 style={{ color: '#fff', fontWeight: 800, fontSize: 18, margin: 0, letterSpacing: '-0.02em' }}>Edit Profile</h2>
-          <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12, margin: 0 }}>Update your personal information</p>
+          <h2 style={{ color: '#141413', fontWeight: 800, fontSize: 18, margin: 0, letterSpacing: '-0.02em' }}>Edit Profile</h2>
+          <p style={{ color: 'rgba(20,20,19,0.45)', fontSize: 12, margin: 0 }}>Update your personal information</p>
         </div>
       </motion.div>
 
@@ -184,7 +185,7 @@ export default function EditProfilePage() {
                 <i className="fas fa-camera" style={{ color: '#fff', fontSize: 9 }} />
               </div>
             </div>
-            <p style={{ color: 'rgba(255,255,255,0.28)', fontSize: 10.5, textAlign: 'center', lineHeight: 1.55, margin: 0 }}>
+            <p style={{ color: 'rgba(20,20,19,0.40)', fontSize: 10.5, textAlign: 'center', lineHeight: 1.55, margin: 0 }}>
               Avatar upload coming soon
             </p>
           </div>
@@ -194,7 +195,7 @@ export default function EditProfilePage() {
         <motion.div initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.40, delay: 0.09 }}>
           <div style={{ ...CARD, padding: '22px 20px' }}>
             {loading ? (
-              <div style={{ color: 'rgba(255,255,255,0.28)', textAlign: 'center', padding: '40px 0', fontSize: 13 }}>Loading…</div>
+              <div style={{ color: 'rgba(20,20,19,0.40)', textAlign: 'center', padding: '40px 0', fontSize: 13 }}>Loading…</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -224,9 +225,9 @@ export default function EditProfilePage() {
       >
         <button
           onClick={() => navigate('/erp/profile')}
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 10, padding: '10px 22px', color: 'rgba(255,255,255,0.68)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: FONT, transition: 'background 0.18s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+          style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 10, padding: '10px 22px', color: 'rgba(20,20,19,0.68)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: FONT, transition: 'background 0.18s' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.08)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; }}
         >Cancel</button>
         <button
           onClick={handleSave} disabled={saving}

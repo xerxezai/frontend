@@ -7,10 +7,11 @@ import apiService from '../../../services/api';
 const OG   = '#C9883A';
 const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
 const CARD: React.CSSProperties = {
-  background:   'rgba(255,255,255,0.04)',
-  border:       '1px solid rgba(255,255,255,0.07)',
-  borderTop:    '2px solid rgba(201,136,58,0.40)',
+  background:   '#FFFFFF',
+  border:       '1px solid rgba(0,0,0,0.08)',
+  borderTop:    '2px solid rgba(201,136,58,0.55)',
   borderRadius: 14,
+  boxShadow:    '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
 const FONT = "'DM Sans', sans-serif";
 
@@ -27,7 +28,7 @@ function PwdField({ label, value, onChange }: { label: string; value: string; on
         top:           elevated ? 7       : '50%',
         transform:     elevated ? 'none'  : 'translateY(-50%)',
         fontSize:      elevated ? 9.5     : 13.5,
-        color:         focused  ? OG      : 'rgba(255,255,255,0.35)',
+        color:         focused  ? OG      : 'rgba(20,20,19,0.45)',
         fontWeight:    elevated ? 700     : 400,
         letterSpacing: elevated ? '0.07em': '0',
         textTransform: (elevated ? 'uppercase' : 'none') as React.CSSProperties['textTransform'],
@@ -39,9 +40,9 @@ function PwdField({ label, value, onChange }: { label: string; value: string; on
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         style={{
           width: '100%', boxSizing: 'border-box',
-          background: focused ? 'rgba(201,136,58,0.06)' : 'rgba(255,255,255,0.03)',
-          border: `1px solid ${focused ? 'rgba(201,136,58,0.55)' : 'rgba(255,255,255,0.09)'}`,
-          borderRadius: 10, color: '#fff', fontFamily: FONT, fontSize: 14, outline: 'none',
+          background: focused ? 'rgba(201,136,58,0.04)' : '#F8F7F4',
+          border: `1px solid ${focused ? 'rgba(201,136,58,0.55)' : 'rgba(0,0,0,0.12)'}`,
+          borderRadius: 10, color: '#141413', fontFamily: FONT, fontSize: 14, outline: 'none',
           padding: elevated ? '20px 44px 10px 14px' : '14px 44px 14px 14px',
           height: 52,
           transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s',
@@ -49,7 +50,7 @@ function PwdField({ label, value, onChange }: { label: string; value: string; on
         }}
       />
       <button type="button" onClick={() => setShow(s => !s)} tabIndex={-1}
-        style={{ position: 'absolute', right: 13, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.30)', padding: 4 }}>
+        style={{ position: 'absolute', right: 13, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(20,20,19,0.35)', padding: 4 }}>
         <i className={`fas fa-eye${show ? '-slash' : ''}`} style={{ fontSize: 13 }} />
       </button>
     </div>
@@ -109,15 +110,15 @@ export default function AccountSettingsPage() {
       >
         <button
           onClick={() => navigate('/erp/profile')} aria-label="Back"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 9, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.55)', flexShrink: 0, transition: 'background 0.18s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+          style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(20,20,19,0.55)', flexShrink: 0, transition: 'background 0.18s' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.08)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; }}
         >
           <i className="fas fa-arrow-left" style={{ fontSize: 12 }} />
         </button>
         <div>
-          <h2 style={{ color: '#fff', fontWeight: 800, fontSize: 18, margin: 0, letterSpacing: '-0.02em' }}>Account Settings</h2>
-          <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12, margin: 0 }}>Manage your security and account preferences</p>
+          <h2 style={{ color: '#141413', fontWeight: 800, fontSize: 18, margin: 0, letterSpacing: '-0.02em' }}>Account Settings</h2>
+          <p style={{ color: 'rgba(20,20,19,0.45)', fontSize: 12, margin: 0 }}>Manage your security and account preferences</p>
         </div>
       </motion.div>
 
@@ -128,7 +129,7 @@ export default function AccountSettingsPage() {
             <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <i className="fas fa-key" style={{ color: OG, fontSize: 11 }} />
             </span>
-            <span style={{ color: '#fff', fontWeight: 700, fontSize: 13.5 }}>Change Password</span>
+            <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Change Password</span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -158,15 +159,15 @@ export default function AccountSettingsPage() {
             <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <i className="fas fa-desktop" style={{ color: OG, fontSize: 11 }} />
             </span>
-            <span style={{ color: '#fff', fontWeight: 700, fontSize: 13.5 }}>Active Sessions</span>
+            <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Active Sessions</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px', background: 'rgba(201,136,58,0.04)', border: '1px solid rgba(201,136,58,0.12)', borderRadius: 10 }}>
             <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(201,136,58,0.09)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <i className="fas fa-globe" style={{ color: OG, fontSize: 14 }} />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 600 }}>Current browser session</div>
-              <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11.5, marginTop: 2 }}>Signed in as {adminName} · Active now</div>
+              <div style={{ color: '#141413', fontSize: 13, fontWeight: 600 }}>Current browser session</div>
+              <div style={{ color: 'rgba(20,20,19,0.45)', fontSize: 11.5, marginTop: 2 }}>Signed in as {adminName} · Active now</div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', display: 'inline-block', boxShadow: '0 0 6px rgba(74,222,128,0.70)' }} />
@@ -190,8 +191,8 @@ export default function AccountSettingsPage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
             <div>
-              <div style={{ color: 'rgba(255,255,255,0.80)', fontSize: 13, fontWeight: 600 }}>Delete Account</div>
-              <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12, marginTop: 3 }}>This action is permanent and cannot be undone.</div>
+              <div style={{ color: '#141413', fontSize: 13, fontWeight: 600 }}>Delete Account</div>
+              <div style={{ color: 'rgba(20,20,19,0.45)', fontSize: 12, marginTop: 3 }}>This action is permanent and cannot be undone.</div>
             </div>
             <button
               onClick={() => setShowModal(true)}

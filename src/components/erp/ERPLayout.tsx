@@ -92,7 +92,7 @@ const ERPLayout = ({ children }: Props) => {
     <div
       style={{
         minHeight: '100vh',
-        background: '#0c0804',
+        background: '#F8F7F4',
         '--sidebar-w': `${sidebarW}px`,
       } as React.CSSProperties}
     >
@@ -543,7 +543,7 @@ const ERPLayout = ({ children }: Props) => {
         </header>
 
         {/* content */}
-        <div style={{ flex: 1, padding: '24px 28px', background: 'transparent' }}>
+        <div style={{ flex: 1, padding: '24px 28px', background: '#F8F7F4' }}>
           {children}
         </div>
 

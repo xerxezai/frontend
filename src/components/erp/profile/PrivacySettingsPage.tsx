@@ -5,10 +5,11 @@ import { toast } from 'react-toastify';
 
 const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
 const CARD: React.CSSProperties = {
-  background:   'rgba(255,255,255,0.04)',
-  border:       '1px solid rgba(255,255,255,0.07)',
-  borderTop:    '2px solid rgba(201,136,58,0.40)',
+  background:   '#FFFFFF',
+  border:       '1px solid rgba(0,0,0,0.08)',
+  borderTop:    '2px solid rgba(201,136,58,0.55)',
   borderRadius: 14,
+  boxShadow:    '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
 const FONT = "'DM Sans', sans-serif";
 
@@ -41,7 +42,7 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       type="button" role="switch" aria-checked={on} onClick={onToggle}
       style={{
         width: 44, height: 24, borderRadius: 12, border: 'none', padding: 0,
-        background: on ? OG_G : 'rgba(255,255,255,0.12)',
+        background: on ? OG_G : 'rgba(0,0,0,0.12)',
         cursor: 'pointer', position: 'relative', flexShrink: 0,
         transition: 'background 0.25s ease',
         boxShadow: on ? '0 0 10px rgba(201,136,58,0.28)' : 'none',
@@ -88,15 +89,15 @@ export default function PrivacySettingsPage() {
       >
         <button
           onClick={() => navigate('/erp/profile')} aria-label="Back"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 9, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.55)', flexShrink: 0, transition: 'background 0.18s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+          style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(20,20,19,0.55)', flexShrink: 0, transition: 'background 0.18s' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.08)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; }}
         >
           <i className="fas fa-arrow-left" style={{ fontSize: 12 }} />
         </button>
         <div>
-          <h2 style={{ color: '#fff', fontWeight: 800, fontSize: 18, margin: 0, letterSpacing: '-0.02em' }}>Privacy Settings</h2>
-          <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12, margin: 0 }}>Control your data, notifications, and visibility</p>
+          <h2 style={{ color: '#141413', fontWeight: 800, fontSize: 18, margin: 0, letterSpacing: '-0.02em' }}>Privacy Settings</h2>
+          <p style={{ color: 'rgba(20,20,19,0.45)', fontSize: 12, margin: 0 }}>Control your data, notifications, and visibility</p>
         </div>
       </motion.div>
 
@@ -109,7 +110,7 @@ export default function PrivacySettingsPage() {
               style={{
                 display: 'flex', alignItems: 'center', gap: 16,
                 padding: '16px 20px',
-                borderBottom: i < SETTINGS.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                borderBottom: i < SETTINGS.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
                 cursor: 'default',
                 transition: 'background 0.16s',
               }}
@@ -117,8 +118,8 @@ export default function PrivacySettingsPage() {
               onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
             >
               <div style={{ flex: 1 }}>
-                <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13.5, fontWeight: 600, lineHeight: 1.3 }}>{s.label}</div>
-                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12, marginTop: 3, lineHeight: 1.5 }}>{s.desc}</div>
+                <div style={{ color: '#141413', fontSize: 13.5, fontWeight: 600, lineHeight: 1.3 }}>{s.label}</div>
+                <div style={{ color: 'rgba(20,20,19,0.45)', fontSize: 12, marginTop: 3, lineHeight: 1.5 }}>{s.desc}</div>
               </div>
               <Toggle on={priv[s.key]} onToggle={() => toggle(s.key)} />
             </div>

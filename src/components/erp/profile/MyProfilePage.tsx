@@ -6,10 +6,11 @@ import apiService from '../../../services/api';
 const OG   = '#C9883A';
 const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
 const CARD: React.CSSProperties = {
-  background:  'rgba(255,255,255,0.04)',
-  border:      '1px solid rgba(255,255,255,0.07)',
-  borderTop:   '2px solid rgba(201,136,58,0.40)',
+  background:  '#FFFFFF',
+  border:      '1px solid rgba(0,0,0,0.08)',
+  borderTop:   '2px solid rgba(201,136,58,0.55)',
   borderRadius: 14,
+  boxShadow:   '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
 const FONT = "'DM Sans', sans-serif";
 
@@ -144,11 +145,11 @@ export default function MyProfilePage() {
               <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <i className="fas fa-user" style={{ color: OG, fontSize: 11 }} />
               </span>
-              <span style={{ color: '#fff', fontWeight: 700, fontSize: 13.5 }}>Personal Info</span>
+              <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Personal Info</span>
             </div>
 
             {loading ? (
-              <div style={{ color: 'rgba(255,255,255,0.28)', fontSize: 13, padding: '20px 0', textAlign: 'center' }}>Loading…</div>
+              <div style={{ color: 'rgba(20,20,19,0.40)', fontSize: 13, padding: '20px 0', textAlign: 'center' }}>Loading…</div>
             ) : (
               <div>
                 {[
@@ -162,11 +163,11 @@ export default function MyProfilePage() {
                   <div key={f.label} style={{
                     display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
                     padding: '9px 0',
-                    borderBottom: i < 5 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    borderBottom: i < 5 ? '1px solid rgba(0,0,0,0.06)' : 'none',
                     gap: 12,
                   }}>
-                    <span style={{ color: 'rgba(255,255,255,0.38)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', flexShrink: 0 }}>{f.label}</span>
-                    <span style={{ color: 'rgba(255,255,255,0.80)', fontSize: 12.5, fontWeight: 500, textAlign: 'right', wordBreak: 'break-all' }}>{f.val}</span>
+                    <span style={{ color: 'rgba(20,20,19,0.45)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', flexShrink: 0 }}>{f.label}</span>
+                    <span style={{ color: '#141413', fontSize: 12.5, fontWeight: 500, textAlign: 'right', wordBreak: 'break-all' }}>{f.val}</span>
                   </div>
                 ))}
               </div>
@@ -181,7 +182,7 @@ export default function MyProfilePage() {
               <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <i className="fas fa-history" style={{ color: OG, fontSize: 11 }} />
               </span>
-              <span style={{ color: '#fff', fontWeight: 700, fontSize: 13.5 }}>Recent Activity</span>
+              <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Recent Activity</span>
             </div>
             <div>
               {activity.map((item, i) => (
@@ -193,8 +194,8 @@ export default function MyProfilePage() {
                     <i className={item.icon} style={{ color: OG, fontSize: 10 }} />
                   </div>
                   <div>
-                    <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12.5, fontWeight: 500, lineHeight: 1.4 }}>{item.action}</div>
-                    <div style={{ color: 'rgba(255,255,255,0.28)', fontSize: 11, marginTop: 3 }}>{item.time}</div>
+                    <div style={{ color: '#141413', fontSize: 12.5, fontWeight: 500, lineHeight: 1.4 }}>{item.action}</div>
+                    <div style={{ color: 'rgba(20,20,19,0.42)', fontSize: 11, marginTop: 3 }}>{item.time}</div>
                   </div>
                 </div>
               ))}
@@ -207,7 +208,7 @@ export default function MyProfilePage() {
       {/* ── Quick actions ─────────────────────────────────────────────── */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.42, delay: 0.19 }}>
         <div style={{ ...CARD, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <span style={{ color: 'rgba(255,255,255,0.28)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', marginRight: 4, flexShrink: 0 }}>Quick Actions</span>
+          <span style={{ color: 'rgba(20,20,19,0.40)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', marginRight: 4, flexShrink: 0 }}>Quick Actions</span>
           {[
             { to: '/erp/profile/edit',     icon: 'fas fa-edit',  label: 'Edit Profile' },
             { to: '/erp/settings/account', icon: 'fas fa-key',   label: 'Change Password' },
