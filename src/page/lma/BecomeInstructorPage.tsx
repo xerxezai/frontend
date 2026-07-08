@@ -224,10 +224,10 @@ const FloatTextarea = ({ id, label, value, onChange, icon, rows = 3, error, vali
         {minChars !== undefined && (
           <div style={{
             position: "absolute", bottom: 8, right: 12, fontSize: 10.5, fontFamily: FF,
-            color: value.length >= minChars ? "#10b981" : value.length > 0 ? "#f59e0b" : "#ccc",
+            color: error ? "#ef4444" : value.length >= minChars ? "#10b981" : value.length > 0 ? GOLD : "#ccc",
             fontWeight: 600, transition: "color 200ms",
           }}>
-            {value.length} / {minChars} min
+            {value.length} / {minChars} characters minimum
           </div>
         )}
       </div>
@@ -374,6 +374,8 @@ export default function BecomeInstructorPage() {
     else if (!/^[^@]+@[^@]+\.[^@]+$/.test(fields.email))    e.email     = "Enter a valid email address.";
     if (!fields.password)                                     e.password  = "Password is required.";
     else if (fields.password.length < 6)                      e.password  = "Password must be at least 6 characters.";
+    if (!fields.phone.trim())                                 e.phone     = "Phone number is required.";
+    else if (fields.phone.replace(/\D/g, "").length < 10)     e.phone     = "Please enter a valid phone number (min 10 digits).";
     if (fields.bio.trim().length > 0 && fields.bio.trim().length < 30)
                                                               e.bio       = `Bio must be at least 30 characters (${fields.bio.trim().length}/30).`;
     else if (!fields.bio.trim())                              e.bio       = "Bio is required.";
@@ -439,6 +441,10 @@ export default function BecomeInstructorPage() {
         @keyframes biFloat4   { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-8px,-10px)} }
         @keyframes biUnderline{ from{width:0} to{width:100%} }
         @keyframes biOrb1 { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.09);opacity:0.82} }
+        @keyframes biSlideLeft  { from{opacity:0;transform:translateX(-40px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes biSlideRight { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+        .bi-left  { animation: biSlideLeft 0.4s ease-out both; }
+        .bi-right { animation: biSlideRight 0.4s ease-out both; }
         .bi-card  { animation: biCardIn 0.65s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
         .bi-shake { animation: biShake 0.5s cubic-bezier(0.36,0.07,0.19,0.97) both !important; }
         .bi-spin  { animation: biSpin 0.75s linear infinite; }
@@ -483,7 +489,7 @@ export default function BecomeInstructorPage() {
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Logo */}
             <div style={{ marginBottom: 28, animation: "biFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
-              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ Academy" style={{ height: 52, width: "auto" }} />
+              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ Academy" style={{ height: 70, width: "auto" }} />
             </div>
 
             {/* Headline — letter-by-letter rotateX reveal */}
@@ -630,9 +636,11 @@ export default function BecomeInstructorPage() {
                           autoComplete="email" onBlur={() => touch("email")} />
                       )}
                       {i === 2 && (
-                        <FloatLabel id="phone" label="Phone Number (optional)" value={phone} onChange={setPhone}
+                        <FloatLabel id="phone" label="Phone Number" value={phone} onChange={setPhone}
                           icon={<Phone size={16} strokeWidth={2} />}
-                          valid={phone.length > 6} autoComplete="tel" />
+                          placeholder="Phone Number"
+                          error={errsFor("phone")} valid={validFor("phone") as boolean}
+                          autoComplete="tel" onBlur={() => touch("phone")} />
                       )}
                       {i === 3 && (
                         <FloatLabel id="expertise" label="Expertise / Subject" value={expertise} onChange={setExpertise}
