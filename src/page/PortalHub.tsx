@@ -345,9 +345,11 @@ export default function PortalHub() {
         {/* ── HEADER ───────────────────────────────────────────────────────── */}
         <header style={{
           position:      "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          background:    "rgba(255,255,255,0.88)",
-          backdropFilter:"blur(18px)",
-          WebkitBackdropFilter: "blur(18px)",
+          background:    "rgba(16,11,6,0.96)",
+          borderBottom:  "1px solid rgba(201,136,58,0.16)",
+          boxShadow:     "0 2px 0 rgba(201,136,58,0.14), 0 6px 28px rgba(0,0,0,0.50)",
+          backdropFilter:"blur(20px) saturate(1.4)",
+          WebkitBackdropFilter: "blur(20px) saturate(1.4)",
           animation:     "phFadeDown 0.5s cubic-bezier(0.22,1,0.36,1) both",
         }}>
           <div style={{
