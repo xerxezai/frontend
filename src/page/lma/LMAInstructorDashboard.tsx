@@ -1656,11 +1656,20 @@ function PendingReviewsView({ token, showToast }: { token: string; showToast: (m
   const load = useCallback(() => {
     setLoading(true);
     fetch(`${API}/lma/instructor/pending-reviews/`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(d => setCourses(Array.isArray(d) ? d : []))
-      .catch(() => {}).finally(() => setLoading(false));
+      .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
+      .then(({ ok, data }) => {
+        if (!ok) { showToast(data?.error || "Failed to load pending reviews", "error"); setCourses([]); return; }
+        setCourses(Array.isArray(data) ? data : []);
+      })
+      .catch(() => showToast("Network error loading pending reviews", "error"))
+      .finally(() => setLoading(false));
   }, [token]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+    const iv = setInterval(load, 30_000);
+    return () => clearInterval(iv);
+  }, [load]);
 
   const publish = async (id: number) => {
     setActioning(id);
