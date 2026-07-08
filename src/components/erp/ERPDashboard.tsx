@@ -154,7 +154,7 @@ const SectionLabel = ({ title, colorKey }: { title: string; colorKey: CatKey }) 
     <div style={{
       gridColumn: '1 / -1',
       display: 'flex', alignItems: 'center', gap: 14,
-      marginTop: 8, marginBottom: 2,
+      marginTop: 20, marginBottom: 8,
     }}>
       <span style={{
         fontSize: 11, fontWeight: 700, color: accent,
@@ -299,11 +299,14 @@ const ERPDashboard = () => {
             <StatCard label="Outstanding"          rawValue={parseFloat(data.finance?.outstanding_invoices || '0') || 0} prefix="$" decimals={2} icon="fas fa-exclamation-circle"  colorKey="orange" index={5}  loaded={loaded} />
             <StatCard label="Overdue Invoices"     rawValue={data.finance?.overdue_invoices   ?? null}                                            icon="fas fa-clock"              colorKey="red"    index={6}  loaded={loaded} />
 
+            {/* ── HR & Payroll ── */}
+            <SectionLabel title="HR & Payroll" colorKey="teal" />
+            <StatCard label="Active Employees"     rawValue={data.hr?.total_employees          ?? null} icon="fas fa-users"            colorKey="teal"   index={7}  loaded={loaded} />
+            <StatCard label="Pending Leave"        rawValue={data.hr?.pending_leave_requests   ?? null} icon="fas fa-calendar-times"   colorKey="orange" index={8}  loaded={loaded} />
+
             {/* ── Operations ── */}
             <SectionLabel title="Operations" colorKey="orange" />
-            <StatCard label="Open Orders"          rawValue={data.sales?.open_orders           ?? null} icon="fas fa-shopping-cart"    colorKey="orange" index={7}  loaded={loaded} />
-            <StatCard label="Active Employees"     rawValue={data.hr?.total_employees          ?? null} icon="fas fa-users"            colorKey="teal"   index={8}  loaded={loaded} />
-            <StatCard label="Pending Leave"        rawValue={data.hr?.pending_leave_requests   ?? null} icon="fas fa-calendar-times"   colorKey="orange" index={9}  loaded={loaded} />
+            <StatCard label="Open Orders"          rawValue={data.sales?.open_orders           ?? null} icon="fas fa-shopping-cart"    colorKey="orange" index={9}  loaded={loaded} />
             <StatCard label="Active Products"      rawValue={data.inventory?.total_products    ?? null} icon="fas fa-boxes"            colorKey="blue"   index={10} loaded={loaded} />
             <StatCard label="Pending POs"          rawValue={data.purchases?.pending_orders    ?? null} icon="fas fa-truck-loading"    colorKey="orange" index={11} loaded={loaded} />
 

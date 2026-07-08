@@ -151,7 +151,7 @@ const ERPLayout = ({ children }: Props) => {
         }
 
         .erp-nav-group-label {
-          padding: 14px 16px 4px;
+          padding: 18px 16px 8px;
           font-size: 9.5px;
           font-weight: 800;
           letter-spacing: 0.20em;
@@ -366,7 +366,7 @@ const ERPLayout = ({ children }: Props) => {
               <i className="fas fa-bars" style={{ fontSize: 18 }}></i>
             </button>
             <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-              style={{ height: 70, width: 'auto', display: 'block' }} />
+              style={{ height: 44, width: 'auto', display: 'block' }} />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
