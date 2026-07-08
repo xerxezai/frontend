@@ -10,6 +10,7 @@ import {
   Bell, Menu, X, LogOut, Edit3, Trash2, GraduationCap,
   Check, BarChart2, Eye, Clock, AlertCircle, BookMarked,
   Play, Plus, Save, Layers, Award, UserX, Search, FileCheck,
+  UserCircle, Lock,
 } from "lucide-react";
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -20,7 +21,7 @@ const DARK  = "#1a1208";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06)";
 
-type Section = "Dashboard" | "My Courses" | "Students" | "Earnings" | "Analytics" | "Reviews" | "Assignments" | "Instructors" | "Pending Reviews" | "Applications";
+type Section = "Dashboard" | "My Courses" | "Students" | "Earnings" | "Analytics" | "Reviews" | "Assignments" | "Instructors" | "Pending Reviews" | "Applications" | "Profile";
 
 const CATEGORIES = ["AI & ML", "DevSecOps & AI", "Web Development", "Data Science", "Cloud & DevOps", "Mobile Dev", "Business"];
 const LEVELS     = ["beginner", "intermediate", "advanced"];
@@ -1566,6 +1567,136 @@ function InstructorSlidePanel({ title, onClose, children }: { title: string; onC
   );
 }
 
+// ── ProfileView ────────────────────────────────────────────────────────────────
+function ProfileView({ token, showToast, onUpdated }: {
+  token: string; showToast: (m: string, t?: "success" | "error") => void; onUpdated: (name: string) => void;
+}) {
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState({ name: "", email: "", phone: "", bio: "", role: "", username: "", date_joined: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", bio: "" });
+  const [saving, setSaving] = useState(false);
+
+  const [pw, setPw] = useState({ current_password: "", new_password: "", confirm: "" });
+  const [pwSaving, setPwSaving] = useState(false);
+  const [showPw, setShowPw] = useState({ cur: false, next: false, conf: false });
+
+  useEffect(() => {
+    fetch(`${API}/lma/profile/`, { headers: hdr(token) })
+      .then(r => r.json())
+      .then(d => {
+        setProfile(d);
+        setForm({ name: d.name ?? "", email: d.email ?? "", phone: d.phone ?? "", bio: d.bio ?? "" });
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [token]);
+
+  const saveProfile = async () => {
+    if (!form.name.trim()) { showToast("Name is required", "error"); return; }
+    setSaving(true);
+    try {
+      const r = await fetch(`${API}/lma/profile/`, { method: "PUT", headers: hdr(token), body: JSON.stringify(form) });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Update failed", "error"); return; }
+      showToast("Profile updated!");
+      localStorage.setItem("lma_name", d.name);
+      onUpdated(d.name);
+      setProfile(p => ({ ...p, ...form }));
+    } catch { showToast("Network error", "error"); } finally { setSaving(false); }
+  };
+
+  const savePassword = async () => {
+    if (!pw.current_password || !pw.new_password) { showToast("Fill in both password fields", "error"); return; }
+    if (pw.new_password.length < 6) { showToast("New password must be at least 6 characters", "error"); return; }
+    if (pw.new_password !== pw.confirm) { showToast("Passwords do not match", "error"); return; }
+    setPwSaving(true);
+    try {
+      const r = await fetch(`${API}/lma/profile/change-password/`, {
+        method: "POST", headers: hdr(token),
+        body: JSON.stringify({ current_password: pw.current_password, new_password: pw.new_password }),
+      });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Password change failed", "error"); return; }
+      showToast("Password changed!");
+      setPw({ current_password: "", new_password: "", confirm: "" });
+    } catch { showToast("Network error", "error"); } finally { setPwSaving(false); }
+  };
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 560 }}>
+        {[0,1,2].map(i => <SkeletonBox key={i} h={70} />)}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ animation: "lmai-pageIn 0.32s ease both", maxWidth: 560 }}>
+      <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: "0 0 20px", fontFamily: FF }}>My Profile</h2>
+
+      {/* Identity card */}
+      <div style={{ background: "#fff", borderRadius: 16, padding: "24px", border: "1px solid rgba(0,0,0,0.07)", borderTop: `3px solid ${GOLD}`, boxShadow: BCARD, marginBottom: 20, display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ width: 58, height: 58, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#0a0806", fontWeight: 800, fontSize: 20, flexShrink: 0 }}>
+          {avatarInit(profile.name)}
+        </div>
+        <div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: "#141413", fontFamily: FF }}>{profile.name}</div>
+          <div style={{ fontSize: 12.5, color: "#6b7280", fontFamily: FF, marginTop: 2 }}>@{profile.username}</div>
+          {profile.date_joined && (
+            <div style={{ fontSize: 11.5, color: "#9ca3af", fontFamily: FF, marginTop: 3 }}>
+              Joined {new Date(profile.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Edit form */}
+      <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 20 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>Personal Information</h3>
+        <Field label="Full Name">
+          <input style={inputStyle} value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+        </Field>
+        <Field label="Email">
+          <input type="email" style={inputStyle} value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+        </Field>
+        <Field label="Phone">
+          <input style={inputStyle} value={form.phone} placeholder="Optional" onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+        </Field>
+        <Field label="Bio">
+          <textarea rows={3} style={{ ...inputStyle, resize: "vertical" }} value={form.bio} placeholder="A short intro students will see…" onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+        </Field>
+        <button type="button" onClick={saveProfile} disabled={saving}
+          style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", fontSize: 14, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", fontFamily: FF, opacity: saving ? 0.7 : 1, boxShadow: "0 4px 0 rgba(140,80,20,0.28)" }}>
+          {saving ? "Saving…" : "Save Changes"}
+        </button>
+      </div>
+
+      {/* Change password */}
+      <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
+        <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>Change Password</h3>
+        <Field label="Current Password">
+          <div style={{ position: "relative" }}>
+            <input type={showPw.cur ? "text" : "password"} style={{ ...inputStyle, paddingRight: 36 }} value={pw.current_password} onChange={e => setPw(p => ({ ...p, current_password: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+            <button type="button" onClick={() => setShowPw(s => ({ ...s, cur: !s.cur }))} style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#9ca3af" }}>
+              {showPw.cur ? <Eye size={15} /> : <Eye size={15} style={{ opacity: 0.5 }} />}
+            </button>
+          </div>
+        </Field>
+        <Field label="New Password">
+          <input type={showPw.next ? "text" : "password"} style={inputStyle} value={pw.new_password} placeholder="Min 6 characters" onChange={e => setPw(p => ({ ...p, new_password: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+        </Field>
+        <Field label="Confirm New Password">
+          <input type={showPw.conf ? "text" : "password"} style={inputStyle} value={pw.confirm} onChange={e => setPw(p => ({ ...p, confirm: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+        </Field>
+        <button type="button" onClick={savePassword} disabled={pwSaving}
+          style={{ width: "100%", padding: "12px", borderRadius: 10, border: "1.5px solid rgba(0,0,0,0.10)", background: "#f9f7f4", color: "#374151", fontSize: 14, fontWeight: 700, cursor: pwSaving ? "not-allowed" : "pointer", fontFamily: FF, opacity: pwSaving ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          <Lock size={15} /> {pwSaving ? "Updating…" : "Update Password"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ── ManageInstructorsView ─────────────────────────────────────────────────────
 function ManageInstructorsView({ token, showToast }: { token: string; showToast: (m: string, t?: "success" | "error") => void }) {
   const currentUserId = getCurrentUserId();
@@ -2258,7 +2389,7 @@ function ApplicationsView({ token, showToast }: {
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function LMAInstructorDashboard() {
   const navigate = useNavigate();
-  const name            = localStorage.getItem("lma_name") ?? "Instructor";
+  const [name, setName] = useState(localStorage.getItem("lma_name") ?? "Instructor");
   const token           = localStorage.getItem("lma_token") ?? "";
   const canInstructor   = localStorage.getItem("lma_can_instructor") === "true";
   const instructorLevel = localStorage.getItem("lma_instructor_level") ?? "regular";
@@ -2274,6 +2405,8 @@ export default function LMAInstructorDashboard() {
   const [unreadCount, setUnreadCount]     = useState(0);
   const [bellOpen, setBellOpen]           = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const fetchNotifications = useCallback(() => {
     if (!token) return;
@@ -2289,9 +2422,12 @@ export default function LMAInstructorDashboard() {
     return () => clearInterval(iv);
   }, [fetchNotifications]);
 
-  // Close bell dropdown when clicking outside
+  // Close bell / profile dropdowns when clicking outside
   useEffect(() => {
-    const fn = (e: MouseEvent) => { if (bellRef.current && !bellRef.current.contains(e.target as Node)) setBellOpen(false); };
+    const fn = (e: MouseEvent) => {
+      if (bellRef.current && !bellRef.current.contains(e.target as Node)) setBellOpen(false);
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) setProfileMenuOpen(false);
+    };
     document.addEventListener("mousedown", fn);
     return () => document.removeEventListener("mousedown", fn);
   }, []);
@@ -2410,6 +2546,9 @@ export default function LMAInstructorDashboard() {
       { icon: Users,      label: "Instructors" as Section },
       { icon: FileCheck,  label: "Applications" as Section },
     ]}] : []),
+    { section: "ACCOUNT", items: [
+      { icon: UserCircle, label: "Profile" as Section },
+    ]},
   ];
 
   const renderSection = () => {
@@ -2429,6 +2568,7 @@ export default function LMAInstructorDashboard() {
       case "Instructors":    return isSuperInstructor ? <ManageInstructorsView token={token} showToast={showToast} /> : null;
       case "Pending Reviews": return isSuperInstructor ? <PendingReviewsView token={token} showToast={showToast} initialCourses={pendingReviewCourses} onRefresh={loadDashboard} /> : null;
       case "Applications":   return isSuperInstructor ? <ApplicationsView token={token} showToast={showToast} /> : null;
+      case "Profile":        return <ProfileView token={token} showToast={showToast} onUpdated={(n) => setName(n)} />;
       default:               return null;
     }
   };
@@ -2527,8 +2667,34 @@ export default function LMAInstructorDashboard() {
               </div>
             )}
           </div>
-          <div style={{ width: 36, height: 36, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#0a0806", fontWeight: 800, fontSize: 14, cursor: "pointer" }}>
-            {avatarInit(name)}
+          {/* Profile dropdown */}
+          <div ref={profileRef} style={{ position: "relative" }}>
+            <button type="button" onClick={() => setProfileMenuOpen(v => !v)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#0a0806", fontWeight: 800, fontSize: 14 }}>
+                {avatarInit(name)}
+              </div>
+              <ChevronDown size={14} color="#9ca3af" style={{ transition: "transform 180ms", transform: profileMenuOpen ? "rotate(180deg)" : "none" }} />
+            </button>
+            {profileMenuOpen && (
+              <div style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 220, background: "#fff", borderRadius: 14, boxShadow: "0 8px 40px rgba(0,0,0,0.18)", border: "1px solid rgba(0,0,0,0.08)", zIndex: 500, overflow: "hidden" }}>
+                <div style={{ padding: "14px 16px", borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 800, color: "#141413", fontFamily: FF, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</div>
+                  <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, fontFamily: FF, marginTop: 2 }}>{isSuperInstructor ? "Super Instructor" : "Instructor"}</div>
+                </div>
+                <button type="button" onClick={() => { setActive("Profile"); setProfileMenuOpen(false); }}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "11px 16px", background: "none", border: "none", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#374151", fontFamily: FF, textAlign: "left" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#f9f7f4")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                  <UserCircle size={16} color="#6b7280" /> View Profile
+                </button>
+                <button type="button" onClick={logout}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "11px 16px", background: "none", border: "none", borderTop: "1px solid rgba(0,0,0,0.06)", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#dc2626", fontFamily: FF, textAlign: "left" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#fef2f2")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                  <LogOut size={16} /> Logout
+                </button>
+              </div>
+            )}
           </div>
         </header>
 
