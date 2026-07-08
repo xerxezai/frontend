@@ -310,7 +310,7 @@ const ERPLayout = ({ children }: Props) => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'flex-start' }}>
             {!collapsed ? (
               <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-                style={{ height: 75, width: 'auto', display: 'block', objectFit: 'contain' }} />
+                style={{ height: 68, width: 'auto', display: 'block', objectFit: 'contain' }} />
             ) : (
               <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
                 style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
