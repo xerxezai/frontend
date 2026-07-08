@@ -306,8 +306,7 @@ const ERPLayout = ({ children }: Props) => {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
+          justifyContent: collapsed ? 'center' : 'space-between',
           padding: '18px 12px 14px',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           minHeight: 68,
@@ -328,7 +327,7 @@ const ERPLayout = ({ children }: Props) => {
               padding: '5px 6px', borderRadius: 6, flexShrink: 0,
               color: 'rgba(255,255,255,0.28)',
               transition: 'color 0.2s',
-              position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
+              marginLeft: collapsed ? 0 : 8,
             }}
             onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.28)')}
