@@ -306,7 +306,8 @@ const ERPLayout = ({ children }: Props) => {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: collapsed ? 'center' : 'space-between',
+          justifyContent: 'center',
+          position: 'relative',
           padding: '18px 12px 14px',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           minHeight: 68,
@@ -314,7 +315,7 @@ const ERPLayout = ({ children }: Props) => {
         }}>
           {!collapsed ? (
             <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-              style={{ height: 44, width: 'auto', display: 'block', objectFit: 'contain' }} />
+              style={{ height: 75, width: 'auto', display: 'block', objectFit: 'contain' }} />
           ) : (
             <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
               style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
@@ -327,7 +328,7 @@ const ERPLayout = ({ children }: Props) => {
               padding: '5px 6px', borderRadius: 6, flexShrink: 0,
               color: 'rgba(255,255,255,0.28)',
               transition: 'color 0.2s',
-              marginLeft: collapsed ? 0 : 8,
+              position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
             }}
             onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.28)')}
