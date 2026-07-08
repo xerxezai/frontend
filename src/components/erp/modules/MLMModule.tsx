@@ -37,9 +37,9 @@ const MLMModule = () => {
   const isAdmin = isSuperUser();
   const [tab, setTab] = useState<'Structures'|'Commissions'|'Profiles'>('Structures');
 
-  const structures  = useERPList<any>('mlm/commission-structures/');
+  const structures  = useERPList<any>('mlm/commission-structure/');
   const commissions = useERPList<any>('mlm/commissions/');
-  const profiles    = useERPList<any>('mlm/profiles/');
+  const profiles    = useERPList<any>('mlm/profile/');
 
   const [showModal, setShowModal] = useState(false);
   const [editing,   setEditing]   = useState<any>(null);
