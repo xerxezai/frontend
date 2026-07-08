@@ -1,15 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Play, BookOpen, Search, TrendingUp } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
+import { ProgressBar, levelColor, GOLD, AMBER, DARK, FF, BCARD, BHOV } from "./LMACourseCard";
 
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
-const FF    = "'DM Sans', sans-serif";
-const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)";
-const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)";
+const API = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 
 interface Enrollment {
   id: number;
@@ -23,28 +18,6 @@ interface Enrollment {
   completed: boolean;
   completed_at: string | null;
 }
-
-const levelColor = (level: string) => {
-  const l = (level ?? "").toLowerCase();
-  if (l.includes("beginner"))     return { color: "#059669", bg: "rgba(5,150,105,0.12)" };
-  if (l.includes("intermediate")) return { color: "#3b82f6", bg: "rgba(59,130,246,0.12)" };
-  if (l.includes("advanced"))     return { color: "#8b5cf6", bg: "rgba(139,92,246,0.12)" };
-  return { color: GOLD, bg: "rgba(201,136,58,0.12)" };
-};
-
-const ProgressBar = ({ value, color = GOLD }: { value: number; color?: string }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    el.style.width = "0%";
-    setTimeout(() => { el.style.width = `${value}%`; el.style.transition = "width 1.1s cubic-bezier(0.22,1,0.36,1)"; }, 200);
-  }, [value]);
-  return (
-    <div style={{ height: 5, borderRadius: 3, background: "rgba(0,0,0,0.08)", overflow: "hidden" }}>
-      <div ref={ref} style={{ height: "100%", borderRadius: 3, background: `linear-gradient(90deg,${color},${AMBER})` }} />
-    </div>
-  );
-};
 
 const SkeletonCard = ({ h = 180 }: { h?: number }) => (
   <div style={{ height: h, borderRadius: 16, background: "linear-gradient(90deg,#f0ede8 25%,#e8e4de 50%,#f0ede8 75%)", backgroundSize: "800px 100%", animation: "lma-shimmer 1.4s infinite" }} />
