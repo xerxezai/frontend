@@ -4,6 +4,7 @@ import {
   LayoutDashboard, BookOpen, Play, Search,
   ClipboardList, Award, TrendingUp, User,
   LogOut, ChevronRight, Bell, Menu, X,
+  Maximize, Minimize,
 } from "lucide-react";
 
 const GOLD  = "#C9883A";
@@ -93,6 +94,18 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   // All hooks must be declared before any conditional return (Rules of Hooks)
   const [sideOpen, setSideOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  };
 
   // Redirect in an effect — never call navigate() during render
   useEffect(() => {
@@ -280,6 +293,15 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
               <span style={{ color: GOLD, fontWeight: 800 }}>{name.split(" ")[0]}</span>!
             </span>
           </div>
+
+          <button
+            onClick={toggleFullscreen}
+            aria-label="Toggle fullscreen"
+            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#6b7280" }}
+          >
+            {isFullscreen ? <Minimize size={19} /> : <Maximize size={19} />}
+          </button>
 
           <button style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#6b7280" }}>
             <Bell size={20} />

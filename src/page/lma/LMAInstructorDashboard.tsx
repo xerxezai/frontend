@@ -10,7 +10,7 @@ import {
   Bell, Menu, X, LogOut, Edit3, Trash2, GraduationCap,
   Check, BarChart2, Eye, Clock, AlertCircle, BookMarked,
   Play, Plus, Save, Layers, Award, UserX, Search, FileCheck,
-  UserCircle, Lock,
+  UserCircle, Lock, Maximize, Minimize,
 } from "lucide-react";
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -2407,6 +2407,18 @@ export default function LMAInstructorDashboard() {
   const bellRef = useRef<HTMLDivElement>(null);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  };
 
   const fetchNotifications = useCallback(() => {
     if (!token) return;
@@ -2629,6 +2641,15 @@ export default function LMAInstructorDashboard() {
             cursor: "pointer", boxShadow: "0 2px 0 rgba(140,80,20,0.35)", fontFamily: FF,
           }}>
             <PlusCircle size={15} /> New Course
+          </button>
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            aria-label="Toggle fullscreen"
+            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#6b7280" }}
+          >
+            {isFullscreen ? <Minimize size={19} /> : <Maximize size={19} />}
           </button>
           {/* Bell with dropdown */}
           <div ref={bellRef} style={{ position: "relative" }}>
