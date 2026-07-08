@@ -438,8 +438,8 @@ const ERPLayout = ({ children }: Props) => {
             </div>
 
             {/* language selector */}
-            <div className="d-none d-md-flex erp-topbtn" style={{ gap: 6, padding: '7px 11px' }}>
-              <span style={{ fontSize: 15, lineHeight: 1 }}>🇬🇧</span>
+            <div className="d-none d-md-flex erp-topbtn" style={{ gap: 7, padding: '7px 11px' }}>
+              <i className="fas fa-globe" style={{ color: C.orange, fontSize: 12 }} />
               <span style={{ color: C.dark, fontSize: 13, fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }}>English</span>
               <i className="fas fa-chevron-down" style={{ color: C.muted, fontSize: 9 }} />
             </div>

@@ -236,22 +236,13 @@ const ERPDashboard = () => {
 
       {/* page header */}
       <div style={{
-        display: 'flex', alignItems: 'flex-start',
+        display: 'flex', alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 28, flexWrap: 'wrap', gap: 12,
       }}>
-        <div>
-          <h4 style={{
-            fontWeight: 800, fontSize: 26, color: C.text,
-            marginBottom: 4, fontFamily: "'DM Sans', sans-serif",
-            letterSpacing: '-0.02em', margin: 0,
-          }}>
-            Dashboard
-          </h4>
-          <p style={{ color: C.muted, fontSize: 13, margin: '4px 0 0', fontFamily: "'DM Sans', sans-serif" }}>
-            Live overview of your enterprise
-          </p>
-        </div>
+        <p style={{ color: C.muted, fontSize: 13, margin: 0, fontFamily: "'DM Sans', sans-serif" }}>
+          Live overview of your enterprise
+        </p>
 
         {/* last updated */}
         <div style={{
