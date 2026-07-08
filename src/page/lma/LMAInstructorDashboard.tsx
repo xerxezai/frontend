@@ -1878,18 +1878,21 @@ function ApplicationsView({ token, showToast }: {
                       </div>
                     )}
 
-                    {app.status === "pending" && (
-                      <div style={{ display: "flex", gap: 10 }}>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      {app.status !== "approved" && (
                         <button type="button" onClick={() => approve(app.id)} disabled={actioning === app.id}
-                          style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "none", background: "linear-gradient(135deg,#10b981,#059669)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, opacity: actioning === app.id ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-                          <Check size={14} />{actioning === app.id ? "Processing…" : "Approve & Send Credentials"}
+                          style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "none", background: "linear-gradient(135deg,#10b981,#059669)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: actioning === app.id ? "not-allowed" : "pointer", fontFamily: FF, opacity: actioning === app.id ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                          <Check size={14} />
+                          {actioning === app.id ? "Processing…" : app.status === "rejected" ? "Reconsider & Approve" : "Approve & Send Credentials"}
                         </button>
-                        <button type="button" onClick={() => setRejectId(app.id)}
-                          style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "1.5px solid #dc2626", background: "transparent", color: "#dc2626", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
-                          Reject
+                      )}
+                      {app.status !== "rejected" && (
+                        <button type="button" onClick={() => setRejectId(app.id)} disabled={actioning === app.id}
+                          style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "1.5px solid #dc2626", background: "transparent", color: "#dc2626", fontSize: 13, fontWeight: 700, cursor: actioning === app.id ? "not-allowed" : "pointer", fontFamily: FF, opacity: actioning === app.id ? 0.7 : 1 }}>
+                          {app.status === "approved" ? "Revoke Approval" : "Reject"}
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
