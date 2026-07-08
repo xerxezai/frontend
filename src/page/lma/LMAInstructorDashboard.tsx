@@ -1646,30 +1646,19 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
 }
 
 // ── PendingReviewsView ────────────────────────────────────────────────────────
-function PendingReviewsView({ token, showToast }: { token: string; showToast: (m: string, t?: "success" | "error") => void }) {
-  const [courses, setCourses] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+function PendingReviewsView({ token, showToast, initialCourses, onRefresh }: {
+  token: string;
+  showToast: (m: string, t?: "success" | "error") => void;
+  initialCourses: any[];
+  onRefresh: () => void;
+}) {
+  const [courses, setCourses] = useState<any[]>(initialCourses);
   const [rejectingId, setRejectingId] = useState<number | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [actioning, setActioning] = useState<number | null>(null);
 
-  const load = useCallback(() => {
-    setLoading(true);
-    fetch(`${API}/lma/instructor/pending-reviews/`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
-      .then(({ ok, data }) => {
-        if (!ok) { showToast(data?.error || "Failed to load pending reviews", "error"); setCourses([]); return; }
-        setCourses(Array.isArray(data) ? data : []);
-      })
-      .catch(() => showToast("Network error loading pending reviews", "error"))
-      .finally(() => setLoading(false));
-  }, [token]);
-
-  useEffect(() => {
-    load();
-    const iv = setInterval(load, 30_000);
-    return () => clearInterval(iv);
-  }, [load]);
+  // Keep in sync when parent re-fetches dashboard data
+  useEffect(() => { setCourses(initialCourses); }, [initialCourses]);
 
   const publish = async (id: number) => {
     setActioning(id);
@@ -1677,7 +1666,7 @@ function PendingReviewsView({ token, showToast }: { token: string; showToast: (m
       const r = await fetch(`${API}/lma/courses/${id}/publish/`, { method: "PUT", headers: hdr(token) });
       const d = await r.json();
       if (!r.ok) { showToast(d.error || "Failed", "error"); return; }
-      showToast("Course published!"); load();
+      showToast("Course published!"); onRefresh();
     } catch { showToast("Network error", "error"); } finally { setActioning(null); }
   };
 
@@ -1691,7 +1680,7 @@ function PendingReviewsView({ token, showToast }: { token: string; showToast: (m
       const d = await r.json();
       if (!r.ok) { showToast(d.error || "Failed", "error"); return; }
       showToast("Course rejected — instructor notified.");
-      setRejectingId(null); setRejectReason(""); load();
+      setRejectingId(null); setRejectReason(""); onRefresh();
     } catch { showToast("Network error", "error"); } finally { setActioning(null); }
   };
 
@@ -1701,9 +1690,7 @@ function PendingReviewsView({ token, showToast }: { token: string; showToast: (m
         Pending Reviews
         {courses.length > 0 && <span style={{ marginLeft: 10, fontSize: 13, fontWeight: 700, color: "#d97706", background: "#fef3c7", padding: "3px 10px", borderRadius: 999 }}>{courses.length}</span>}
       </h2>
-      {loading ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>{[0,1,2].map(i => <SkeletonBox key={i} h={120} />)}</div>
-      ) : courses.length === 0 ? (
+      {courses.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
           <Check size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
           <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>No courses awaiting review.</p>
@@ -1825,7 +1812,12 @@ export default function LMAInstructorDashboard() {
       .then(r => r.json()).then(d => setData(d)).catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
-  useEffect(() => { if (token && canInstructor) loadDashboard(); }, [loadDashboard, token, canInstructor]);
+  useEffect(() => {
+    if (!token || !canInstructor) return;
+    loadDashboard();
+    const iv = setInterval(loadDashboard, 30_000);
+    return () => clearInterval(iv);
+  }, [loadDashboard, token, canInstructor]);
 
   const logout = () => {
     ["lma_token", "lma_role", "lma_can_instructor", "lma_instructor_level", "lma_name"].forEach(k => localStorage.removeItem(k));
@@ -1856,6 +1848,7 @@ export default function LMAInstructorDashboard() {
   });
 
   const courses: any[] = data?.courses ?? [];
+  const pendingReviewCourses: any[] = courses.filter((c: any) => c.status === "pending_review");
 
   const onDeleteConfirm = async () => {
     if (!deletingCourse) return;
@@ -1914,7 +1907,7 @@ export default function LMAInstructorDashboard() {
       case "Reviews":        return <ReviewsView token={token} />;
       case "Assignments":    return <AssignmentsView data={data} onGrade={setGradingSub} />;
       case "Instructors":    return isSuperInstructor ? <ManageInstructorsView token={token} showToast={showToast} /> : null;
-      case "Pending Reviews": return isSuperInstructor ? <PendingReviewsView token={token} showToast={showToast} /> : null;
+      case "Pending Reviews": return isSuperInstructor ? <PendingReviewsView token={token} showToast={showToast} initialCourses={pendingReviewCourses} onRefresh={loadDashboard} /> : null;
       default:               return null;
     }
   };
