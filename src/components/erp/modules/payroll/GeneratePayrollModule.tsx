@@ -62,6 +62,32 @@ const Badge = ({ s }: { s: string }) => (
   </span>
 );
 
+function SummaryStatCard({ label, val, icon, color, index }: { label: string; val: string; icon: string; color: string; index: number }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, borderTop: `2px solid ${color}`,
+        padding: '16px 14px',
+        boxShadow: hovered
+          ? '0 6px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(201,136,58,0.18)'
+          : '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',
+        animation: `gpFadeUp 0.45s ease ${index * 0.08}s both`,
+      }}
+    >
+      <div style={{ width: 32, height: 32, borderRadius: 9, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+        <i className={icon} style={{ color, fontSize: 13 }} />
+      </div>
+      <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 20, color: C.dark }}>{val}</div>
+      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11.5, color: C.muted, marginTop: 3 }}>{label}</div>
+    </div>
+  );
+}
+
 export default function GeneratePayrollModule() {
   const now = new Date();
   const [month, setMonth] = useState(String(now.getMonth() + 1).padStart(2, '0'));
@@ -180,13 +206,7 @@ export default function GeneratePayrollModule() {
             { label: 'Gross Payroll', val: `$${totalGross.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, icon: 'fas fa-dollar-sign', color: '#10b981' },
             { label: 'Net Payroll', val: `$${totalNet.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, icon: 'fas fa-hand-holding-usd', color: C.orange },
           ].map((s, i) => (
-            <div key={i} style={{ background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, borderTop: `2px solid ${s.color}`, padding: '16px 14px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
-              <div style={{ width: 32, height: 32, borderRadius: 9, background: `${s.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
-                <i className={s.icon} style={{ color: s.color, fontSize: 13 }} />
-              </div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 20, color: C.dark }}>{s.val}</div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11.5, color: C.muted, marginTop: 3 }}>{s.label}</div>
-            </div>
+            <SummaryStatCard key={i} label={s.label} val={s.val} icon={s.icon} color={s.color} index={i} />
           ))}
         </div>
       )}

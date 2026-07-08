@@ -73,7 +73,7 @@ const StatCard = ({
   const target  = isNull ? 0
     : decimals > 0 ? Math.round(rawValue * Math.pow(10, decimals))
     : rawValue;
-  const counted = useCountUp(target, 1200, loaded && !isNull);
+  const counted = useCountUp(target, 1500, loaded && !isNull);
 
   const display = isNull ? '—'
     : decimals > 0 ? `${prefix}${(counted / Math.pow(10, decimals)).toFixed(decimals)}`
@@ -85,29 +85,31 @@ const StatCard = ({
       onMouseLeave={() => setHovered(false)}
       style={{
         background: hovered ? C.cardHover : C.card,
-        borderRadius: 12,
+        borderRadius: 14,
         border: `1px solid ${C.border}`,
-        borderTop: `2px solid ${cat.accent}`,
+        borderTop: `3px solid ${cat.accent}`,
         boxShadow: hovered
-          ? `0 6px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(201,136,58,0.18)`
-          : shadow.card,
-        transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
-        transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',
+          ? `0 2px 4px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.10), 0 20px 44px ${cat.glow}`
+          : `0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)`,
+        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
+        transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1), box-shadow 280ms cubic-bezier(0.22,1,0.36,1)',
         padding: '18px 16px',
         cursor: 'default',
-        animation: `erpFadeUp 0.48s cubic-bezier(0.22,1,0.36,1) ${index * 0.055}s both`,
+        animation: `erpFadeUp 0.48s cubic-bezier(0.22,1,0.36,1) ${index * 0.08}s both`,
       }}
     >
-      {/* icon badge */}
+      {/* icon badge — 3D style */}
       <div style={{
-        width: 36, height: 36,
-        borderRadius: 9,
+        width: 44, height: 44,
+        borderRadius: 12,
         background: cat.grad,
-        boxShadow: `0 2px 6px ${cat.glow}`,
+        boxShadow: `0 4px 0 ${cat.deep}, 0 6px 16px ${cat.glow}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: 12, flexShrink: 0,
+        transform: hovered ? 'scale(1.08) rotate(-4deg)' : 'scale(1) rotate(0deg)',
+        transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1)',
       }}>
-        <i className={icon} style={{ color: '#fff', fontSize: 14 }}></i>
+        <i className={icon} style={{ color: '#fff', fontSize: 17 }}></i>
       </div>
 
       {/* number */}

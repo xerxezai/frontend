@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Column { key: string; label: string; render?: (row: any) => React.ReactNode; }
 
@@ -29,6 +29,7 @@ const TD: React.CSSProperties = {
 
 const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd, onEdit, onDelete }: Props) => {
   const showActions = isAdmin && (onEdit || onDelete);
+  const [tableHover, setTableHover] = useState(false);
 
   if (loading) return (
     <div className="d-flex flex-column align-items-center justify-content-center py-5 gap-3 text-muted">
@@ -40,6 +41,12 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
 
   return (
     <div>
+      <style>{`
+        @keyframes erpTableIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) {
+          .erp-table-card { animation: none !important; transition: none !important; }
+        }
+      `}</style>
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h5 className="fw-bold mb-0" style={{ color: '#1a1a2e', fontSize: 15 }}>{title}</h5>
         {isAdmin && onAdd && (
@@ -53,14 +60,45 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
       </div>
 
       {data.length === 0 ? (
-        <div className="text-center py-5 bg-white rounded-3 shadow-sm">
-          <i className="fas fa-inbox text-muted" style={{ fontSize: 40, display: 'block', marginBottom: 12 }}></i>
-          <p className="text-muted mb-0" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13 }}>
+        <div
+          className="erp-table-card"
+          style={{
+            textAlign: 'center', padding: '64px 24px',
+            background: '#fff', borderRadius: 16,
+            border: '1px solid rgba(0,0,0,0.07)', borderTop: '3px solid #C9883A',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+            animation: 'erpTableIn 0.42s cubic-bezier(0.22,1,0.36,1) both',
+          }}
+        >
+          <div style={{
+            width: 56, height: 56, borderRadius: 14, margin: '0 auto 16px',
+            background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)',
+            boxShadow: '0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.30)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <i className="fas fa-inbox" style={{ color: '#fff', fontSize: 22 }}></i>
+          </div>
+          <p className="mb-0" style={{ color: '#6B6B6B', fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, fontWeight: 600 }}>
             No records found.{isAdmin && onAdd ? ' Add the first one.' : ''}
           </p>
         </div>
       ) : (
-        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', overflowX: 'auto' }}>
+        <div
+          className="erp-table-card"
+          onMouseEnter={() => setTableHover(true)}
+          onMouseLeave={() => setTableHover(false)}
+          style={{
+            background: '#fff', borderRadius: 16,
+            border: '1px solid rgba(0,0,0,0.07)', borderTop: '3px solid #C9883A',
+            boxShadow: tableHover
+              ? '0 2px 4px rgba(0,0,0,0.07), 0 12px 32px rgba(0,0,0,0.10), 0 20px 48px rgba(201,136,58,0.10)'
+              : '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+            transform: tableHover ? 'translateY(-4px)' : 'translateY(0)',
+            transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1), box-shadow 280ms cubic-bezier(0.22,1,0.36,1)',
+            overflowX: 'auto',
+            animation: 'erpTableIn 0.42s cubic-bezier(0.22,1,0.36,1) both',
+          }}
+        >
           <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', fontSize: 12.5 }}>
             <thead>
               <tr style={{ background: '#fafaf8' }}>

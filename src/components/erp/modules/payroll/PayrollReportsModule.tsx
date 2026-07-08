@@ -70,6 +70,32 @@ const Badge = ({ s }: { s: string }) => (
   </span>
 );
 
+function KpiStatCard({ label, val, icon, color, index }: { label: string; val: string; icon: string; color: string; index: number }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, borderTop: `2px solid ${color}`,
+        padding: '14px',
+        boxShadow: hovered
+          ? '0 6px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(201,136,58,0.18)'
+          : '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',
+        animation: `prFadeUp 0.45s ease ${index * 0.08}s both`,
+      }}
+    >
+      <div style={{ width: 30, height: 30, borderRadius: 8, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+        <i className={icon} style={{ color, fontSize: 12 }} />
+      </div>
+      <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 18, color: C.dark }}>{val}</div>
+      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: C.muted, marginTop: 2 }}>{label}</div>
+    </div>
+  );
+}
+
 export default function PayrollReportsModule() {
   const now  = new Date();
   const [year, setYear] = useState(String(now.getFullYear()));
@@ -132,13 +158,7 @@ export default function PayrollReportsModule() {
           { label: 'Total Deductions', val: `$${totalDeductions.toLocaleString(undefined,{minimumFractionDigits:2})}`, icon: 'fas fa-minus-circle', color: '#ef4444' },
           { label: 'Paid Out', val: String(paidCount), icon: 'fas fa-check-circle', color: '#6366f1' },
         ].map((s, i) => (
-          <div key={i} style={{ background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, borderTop: `2px solid ${s.color}`, padding: '14px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
-            <div style={{ width: 30, height: 30, borderRadius: 8, background: `${s.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
-              <i className={s.icon} style={{ color: s.color, fontSize: 12 }} />
-            </div>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 18, color: C.dark }}>{s.val}</div>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: C.muted, marginTop: 2 }}>{s.label}</div>
-          </div>
+          <KpiStatCard key={i} label={s.label} val={s.val} icon={s.icon} color={s.color} index={i} />
         ))}
       </div>
 

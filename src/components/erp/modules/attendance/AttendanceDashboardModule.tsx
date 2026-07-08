@@ -121,23 +121,28 @@ const MiniCard = ({ label, value, icon, color, idx }: MiniCardProps) => {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: C.white,
-        borderRadius: 12,
+        borderRadius: 14,
         border: `1px solid ${C.border}`,
-        borderTop: `2px solid ${color}`,
+        borderTop: `3px solid ${color}`,
         padding: '16px 14px',
-        transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 8px 24px rgba(0,0,0,0.10)' : '0 1px 4px rgba(0,0,0,0.05)',
-        transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',
-        animation: `attFadeUp 0.45s cubic-bezier(0.22,1,0.36,1) ${idx * 0.07}s both`,
+        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
+        boxShadow: hovered
+          ? `0 2px 4px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.10), 0 20px 40px ${color}22`
+          : '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+        transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1), box-shadow 280ms cubic-bezier(0.22,1,0.36,1)',
+        animation: `attFadeUp 0.45s cubic-bezier(0.22,1,0.36,1) ${idx * 0.08}s both`,
       }}
     >
       <div style={{
-        width: 34, height: 34, borderRadius: 9,
-        background: color, display: 'flex', alignItems: 'center',
-        justifyContent: 'center', marginBottom: 10,
-        boxShadow: `0 3px 10px ${color}44`,
+        width: 40, height: 40, borderRadius: 11,
+        background: `linear-gradient(145deg, ${color}, ${color}dd)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: 10,
+        boxShadow: `0 4px 0 ${color}66, 0 6px 16px ${color}4d`,
+        transform: hovered ? 'scale(1.08) rotate(-4deg)' : 'scale(1) rotate(0deg)',
+        transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1)',
       }}>
-        <i className={icon} style={{ color: '#fff', fontSize: 13 }}></i>
+        <i className={icon} style={{ color: '#fff', fontSize: 15 }}></i>
       </div>
       <div style={{ fontSize: 22, fontWeight: 700, color: C.dark, fontFamily: "'DM Sans', sans-serif", lineHeight: 1 }}>
         {counted}
