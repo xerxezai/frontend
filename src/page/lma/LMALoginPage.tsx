@@ -277,7 +277,7 @@ export default function LMALoginPage() {
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Logo */}
             <div style={{ marginBottom: 24, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
-              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 60, width: "auto" }} />
+              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 75, width: "auto" }} />
             </div>
 
             {/* Chip — same shape as ERP */}
