@@ -1731,12 +1731,12 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
           <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>No instructors yet. Add your first one above.</p>
         </div>
       ) : (
-        <div style={{ background: "#fff", borderRadius: 16, overflow: "auto", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
+        <div style={{ background: "#fff", borderRadius: 16, overflowX: "auto", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 680 }}>
             <thead>
               <tr style={{ background: "#f9f7f4", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
                 {["Instructor", "Email", "Level", "Courses", "Joined", "Actions"].map(h => (
-                  <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 10.5, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF, whiteSpace: "nowrap" }}>{h}</th>
+                  <th key={h} style={{ padding: "12px 14px", textAlign: "left", fontSize: 10.5, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF, whiteSpace: "nowrap" }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -1750,24 +1750,24 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
                     transition: fadingOut.has(ins.id) ? "opacity 0.30s ease, transform 0.30s ease" : "none",
                     transformOrigin: "top",
                   }}>
-                  <td style={{ padding: "13px 16px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ width: 34, height: 34, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#0a0806", flexShrink: 0 }}>{avatarInit(ins.name)}</div>
+                  <td style={{ padding: "12px 14px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                      <div style={{ width: 32, height: 32, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#0a0806", flexShrink: 0 }}>{avatarInit(ins.name)}</div>
                       <div>
                         <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>{ins.name}</div>
                         {isSelf(ins) && <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, fontFamily: FF }}>You</div>}
                       </div>
                     </div>
                   </td>
-                  <td style={{ padding: "13px 16px", fontSize: 12.5, color: "#6b7280", fontFamily: FF }}>{ins.email}</td>
-                  <td style={{ padding: "13px 16px" }}>
+                  <td style={{ padding: "12px 14px", fontSize: 12.5, color: "#6b7280", fontFamily: FF }}>{ins.email}</td>
+                  <td style={{ padding: "12px 14px" }}>
                     <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: isSuper(ins) ? "rgba(139,92,246,0.10)" : "rgba(201,136,58,0.10)", color: isSuper(ins) ? "#7c3aed" : GOLD }}>
                       {isSuper(ins) ? "Super" : "Regular"}
                     </span>
                   </td>
-                  <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413", fontFamily: FF }}>{ins.course_count}</td>
-                  <td style={{ padding: "13px 16px", fontSize: 12, color: "#9ca3af", whiteSpace: "nowrap" }}>{new Date(ins.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
-                  <td style={{ padding: "13px 16px" }}>
+                  <td style={{ padding: "12px 14px", fontSize: 13, color: "#141413", fontFamily: FF }}>{ins.course_count}</td>
+                  <td style={{ padding: "12px 14px", fontSize: 12, color: "#9ca3af", whiteSpace: "nowrap" }}>{new Date(ins.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
+                  <td style={{ padding: "12px 14px" }}>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                       {/* View courses */}
                       <button type="button" title="View Courses" onClick={() => openViewCourses(ins)}
@@ -1836,31 +1836,52 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
       )}
 
       {/* ── EDIT slide panel ──────────────────────────────────────────────── */}
-      {editTarget && (
+      {editTarget && (() => {
+        const focusEdit = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+          e.target.style.borderColor = GOLD;
+          e.target.style.boxShadow = `0 0 0 3px rgba(201,136,58,0.15)`;
+        };
+        const blurEdit = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+          e.target.style.borderColor = "#e5e7eb";
+          e.target.style.boxShadow = "none";
+        };
+        const editInputStyle: React.CSSProperties = { ...inputStyle, transition: "border-color 150ms, box-shadow 150ms" };
+        const levelLocked = isSuper(editTarget) || isSelf(editTarget);
+        const selectStyle: React.CSSProperties = {
+          ...editInputStyle,
+          appearance: "none" as const,
+          paddingRight: 36,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "right 12px center",
+          cursor: levelLocked ? "not-allowed" : "pointer",
+          opacity: levelLocked ? 0.55 : 1,
+        };
+        return (
         <InstructorSlidePanel title={`Edit — ${editTarget.name}`} onClose={() => setEditTarget(null)}>
           <Field label="Full Name">
-            <input style={inputStyle} value={editForm.full_name} onChange={e => setEditForm(f => ({ ...f, full_name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+            <input style={editInputStyle} value={editForm.full_name} onChange={e => setEditForm(f => ({ ...f, full_name: e.target.value }))} onFocus={focusEdit} onBlur={blurEdit} />
           </Field>
           <Field label="Email">
-            <input type="email" style={inputStyle} value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+            <input type="email" style={editInputStyle} value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} onFocus={focusEdit} onBlur={blurEdit} />
           </Field>
           <Field label="Instructor Level">
-            <div style={{ position: "relative" }}>
+            <div>
               <select
-                style={{ ...inputStyle, appearance: "none", cursor: isSuper(editTarget) ? "not-allowed" : "pointer", opacity: isSuper(editTarget) ? 0.55 : 1 }}
+                style={selectStyle}
                 value={editForm.instructor_level}
-                disabled={isSuper(editTarget) || isSelf(editTarget)}
+                disabled={levelLocked}
                 onChange={e => setEditForm(f => ({ ...f, instructor_level: e.target.value }))}
-                onFocus={focusGold} onBlur={blurGold}
+                onFocus={focusEdit} onBlur={blurEdit}
               >
                 <option value="regular">Regular Instructor</option>
                 <option value="super">Super Instructor</option>
               </select>
               {isSuper(editTarget) && (
-                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4, fontFamily: FF }}>Cannot change a super instructor's level</div>
+                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 5, fontFamily: FF }}>Cannot change a super instructor's level</div>
               )}
               {isSelf(editTarget) && !isSuper(editTarget) && (
-                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4, fontFamily: FF }}>Cannot change your own level</div>
+                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 5, fontFamily: FF }}>Cannot change your own level</div>
               )}
             </div>
           </Field>
@@ -1894,7 +1915,8 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
             )}
           </div>
         </InstructorSlidePanel>
-      )}
+        );
+      })()}
 
       {/* ── DELETE confirmation modal ──────────────────────────────────────── */}
       {deleteTarget && (
