@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
-import { CheckCircle2, Shield, ShieldCheck, X, Lock, PlayCircle, FileText } from "lucide-react";
+import { CheckCircle2, Shield, ShieldCheck, X, Lock, PlayCircle, FileText, Star } from "lucide-react";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#C9883A";
@@ -272,6 +272,219 @@ const StarRating = ({ rating }: { rating: number }) => (
     <span style={{ fontSize: 13, fontWeight: 700, color: "#f59e0b", marginLeft: 5 }}>{rating}</span>
   </span>
 );
+
+/* ── Interactive star input ── */
+const StarInput = ({ value, onChange }: { value: number; onChange: (n: number) => void }) => {
+  const [hover, setHover] = useState(0);
+  return (
+    <div style={{ display: "flex", gap: 4 }}>
+      {[1, 2, 3, 4, 5].map(n => (
+        <button
+          key={n}
+          type="button"
+          onClick={() => onChange(n)}
+          onMouseEnter={() => setHover(n)}
+          onMouseLeave={() => setHover(0)}
+          aria-label={`${n} star${n > 1 ? "s" : ""}`}
+          style={{ background: "none", border: "none", cursor: "pointer", padding: 2 }}
+        >
+          <Star
+            size={26}
+            color="#f59e0b"
+            fill={n <= (hover || value) ? "#f59e0b" : "none"}
+            style={{ transition: "transform 0.1s ease", transform: n <= (hover || value) ? "scale(1.08)" : "scale(1)" }}
+          />
+        </button>
+      ))}
+    </div>
+  );
+};
+
+interface CourseReview {
+  id: number;
+  student_name: string;
+  rating: number;
+  comment: string;
+  created_at: string;
+}
+
+/* ── Reviews section: leave-a-review form (enrolled only) + list of real reviews ── */
+const ReviewsSection = ({ courseId, enrolled, token }: { courseId: string; enrolled: boolean; token: string }) => {
+  const [reviews, setReviews]   = useState<CourseReview[]>([]);
+  const [loading, setLoading]   = useState(true);
+  const [myRating, setMyRating] = useState(0);
+  const [myComment, setMyComment] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted]   = useState(false);
+  const [error, setError]       = useState("");
+  const [editing, setEditing]   = useState(false);
+
+  const loadReviews = useCallback(() => {
+    fetch(`${API}/lma/courses/${courseId}/reviews/`)
+      .then(r => r.json())
+      .then(d => setReviews(Array.isArray(d) ? d : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [courseId]);
+
+  useEffect(() => { loadReviews(); }, [loadReviews]);
+
+  useEffect(() => {
+    if (!enrolled || !token) return;
+    fetch(`${API}/lma/courses/${courseId}/my-review/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d) { setMyRating(d.rating); setMyComment(d.comment || ""); setSubmitted(true); }
+      })
+      .catch(() => {});
+  }, [enrolled, token, courseId]);
+
+  const handleSubmit = async () => {
+    if (myRating < 1) { setError("Please select a star rating."); return; }
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch(`${API}/lma/courses/${courseId}/review/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ rating: myRating, comment: myComment }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Could not submit your review."); return; }
+      setSubmitted(true);
+      setEditing(false);
+      loadReviews();
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 36 }}>
+      <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>
+        Student Reviews {reviews.length > 0 && <span style={{ color: "rgba(20,20,19,0.40)", fontWeight: 600 }}>({reviews.length})</span>}
+      </h3>
+
+      {/* Leave / edit a review */}
+      {enrolled && (
+        <div style={{
+          background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)",
+          borderTop: `3px solid ${GOLD}`, padding: "22px 24px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.05)", marginBottom: 20,
+        }}>
+          {submitted && !editing ? (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <div style={{ display: "flex", gap: 3, marginBottom: 6 }}>
+                  {[1, 2, 3, 4, 5].map(n => (
+                    <Star key={n} size={16} color="#f59e0b" fill={n <= myRating ? "#f59e0b" : "none"} />
+                  ))}
+                </div>
+                <p style={{ fontSize: 13, color: "#6b7280", margin: 0, fontFamily: FF }}>
+                  {myComment ? `"${myComment}"` : "Thanks for rating this course!"}
+                </p>
+              </div>
+              <button type="button" onClick={() => setEditing(true)} style={{
+                fontSize: 12.5, fontWeight: 700, color: GOLD, background: "rgba(201,136,58,0.08)",
+                border: "1px solid rgba(201,136,58,0.22)", borderRadius: 8, padding: "7px 14px",
+                cursor: "pointer", fontFamily: FF, flexShrink: 0,
+              }}>
+                Edit Review
+              </button>
+            </div>
+          ) : (
+            <>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", marginBottom: 10, fontFamily: FF }}>
+                {submitted ? "Update your review" : "Leave a review"}
+              </div>
+              <div style={{ marginBottom: 14 }}>
+                <StarInput value={myRating} onChange={setMyRating} />
+              </div>
+              <textarea
+                value={myComment}
+                onChange={e => setMyComment(e.target.value)}
+                placeholder="Share your experience with this course… (optional)"
+                rows={3}
+                style={{
+                  width: "100%", boxSizing: "border-box", resize: "vertical",
+                  border: "1.5px solid rgba(0,0,0,0.12)", borderRadius: 10, padding: "12px 14px",
+                  fontSize: 13.5, fontFamily: FF, outline: "none", color: "#141413",
+                  marginBottom: 14,
+                }}
+              />
+              {error && <p style={{ color: "#ef4444", fontSize: 12.5, margin: "0 0 12px", fontFamily: FF }}>{error}</p>}
+              <div style={{ display: "flex", gap: 10 }}>
+                <button type="button" onClick={handleSubmit} disabled={submitting} style={{
+                  background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
+                  fontSize: 13, fontWeight: 700, border: "none", borderRadius: 9,
+                  padding: "10px 22px", cursor: submitting ? "not-allowed" : "pointer",
+                  opacity: submitting ? 0.7 : 1, fontFamily: FF,
+                  boxShadow: "0 4px 0 rgba(140,80,20,0.30)",
+                }}>
+                  {submitting ? "Submitting…" : submitted ? "Update Review" : "Submit Review"}
+                </button>
+                {editing && (
+                  <button type="button" onClick={() => { setEditing(false); setError(""); }} style={{
+                    background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.10)",
+                    borderRadius: 9, padding: "10px 20px", color: "#6b7280", fontSize: 13,
+                    fontWeight: 600, cursor: "pointer", fontFamily: FF,
+                  }}>
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Review list */}
+      {loading ? null : reviews.length === 0 ? (
+        <p style={{ fontSize: 13, color: "rgba(20,20,19,0.40)", fontFamily: FF }}>
+          No reviews yet{enrolled ? " — be the first to share your thoughts!" : "."}
+        </p>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {reviews.map(r => (
+            <div key={r.id} style={{
+              background: "#fff", borderRadius: 14, border: "1px solid rgba(0,0,0,0.07)",
+              padding: "18px 20px", boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: "50%",
+                  background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontWeight: 800, fontSize: 12.5, color: "#0a0806", flexShrink: 0, fontFamily: FF,
+                }}>
+                  {r.student_name.charAt(0).toUpperCase()}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>{r.student_name}</div>
+                  <div style={{ display: "flex", gap: 2 }}>
+                    {[1, 2, 3, 4, 5].map(n => (
+                      <Star key={n} size={11} color="#f59e0b" fill={n <= r.rating ? "#f59e0b" : "none"} />
+                    ))}
+                  </div>
+                </div>
+                <span style={{ fontSize: 11, color: "rgba(20,20,19,0.35)", fontFamily: FF, flexShrink: 0 }}>
+                  {new Date(r.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                </span>
+              </div>
+              {r.comment && (
+                <p style={{ fontSize: 13.5, color: "#374151", lineHeight: 1.65, margin: 0, fontFamily: FF }}>
+                  {r.comment}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 /* ── Lesson row ── */
 const LessonRow = ({ lesson, enrolled, onClick }: {
@@ -1151,22 +1364,9 @@ export default function LMACourseDetailPage() {
                         </div>
                       ))}
                     </div>
-                    <div style={{ background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)", padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", marginTop: 14 }}>
-                      <div style={{ display: "flex", gap: 3, marginBottom: 12 }}>
-                        {[1,2,3,4,5].map(n => <i key={n} className="fas fa-star" style={{ fontSize: 12, color: "#f59e0b" }} />)}
-                      </div>
-                      <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.72, margin: "0 0 16px", fontFamily: FF, fontStyle: "italic" }}>
-                        "The hands-on approach is what sets this apart. I deployed my first RAG pipeline in three weeks. The XERXEZ certification opened doors I didn't expect."
-                      </p>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div style={{ width: 36, height: 36, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 13, color: "#0a0806", flexShrink: 0, fontFamily: FF }}>R</div>
-                        <div>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>Rahul Sharma</div>
-                          <div style={{ fontSize: 11, color: "rgba(20,20,19,0.45)", fontFamily: FF }}>ML Engineer · Tata Consultancy Services</div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
+
+                  <ReviewsSection courseId={id ?? ""} enrolled={enrolled} token={token} />
                 </>
               )}
 
