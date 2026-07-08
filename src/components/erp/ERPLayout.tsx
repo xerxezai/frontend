@@ -123,56 +123,54 @@ const ERPLayout = ({ children }: Props) => {
         .erp-nav-item {
           display: flex;
           align-items: center;
-          gap: 11px;
-          padding: 9px 13px;
+          gap: 10px;
+          padding: 10px 16px;
           margin: 2px 0;
           border-left: 3px solid transparent;
-          border-radius: 0 10px 10px 0;
+          border-radius: 10px;
           text-decoration: none;
-          color: rgba(255,255,255,0.50);
+          color: rgba(255,255,255,0.60);
           font-size: 13.5px;
           font-weight: 500;
           font-family: 'DM Sans', sans-serif;
-          transition: color 0.22s, background 0.22s, transform 0.22s;
+          transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
           white-space: nowrap;
           overflow: hidden;
         }
         .erp-nav-item:hover {
           color: rgba(255,255,255,0.88);
           background: rgba(201,136,58,0.09);
-          transform: translateX(3px);
         }
         .erp-nav-active {
-          color: #C9883A !important;
-          background: rgba(201,136,58,0.13) !important;
+          color: #e8a84e !important;
+          background: rgba(201,136,58,0.14) !important;
           border-left-color: #C9883A !important;
           font-weight: 700 !important;
         }
+        .erp-nav-chevron {
+          margin-left: auto;
+          opacity: 0;
+          transition: opacity 0.18s ease;
+        }
+        .erp-nav-active .erp-nav-chevron {
+          opacity: 1;
+        }
 
         .erp-icon-badge {
-          width: 28px; height: 28px;
-          border-radius: 8px;
+          width: 16px; height: 16px;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
           font-size: 12px;
-          background: rgba(255,255,255,0.07);
-          transition: background 0.22s, box-shadow 0.22s;
-        }
-        .erp-nav-active .erp-icon-badge {
-          background: linear-gradient(145deg, #e8a84e 0%, #C9883A 100%);
-          box-shadow: 0 3px 0 rgba(150,95,30,0.50), 0 4px 10px rgba(201,136,58,0.28);
-        }
-        .erp-nav-item:hover .erp-icon-badge {
-          background: rgba(201,136,58,0.18);
+          color: inherit;
         }
 
         .erp-nav-group-label {
           padding: 18px 16px 8px;
-          font-size: 9.5px;
+          font-size: 9px;
           font-weight: 800;
-          letter-spacing: 0.20em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(201,136,58,0.55);
+          color: rgba(255,255,255,0.25);
           font-family: 'DM Sans', sans-serif;
           white-space: nowrap;
           overflow: hidden;
@@ -184,7 +182,7 @@ const ERPLayout = ({ children }: Props) => {
           content: '';
           flex: 1;
           height: 1px;
-          background: linear-gradient(to right, rgba(201,136,58,0.25), transparent);
+          background: linear-gradient(to right, rgba(201,136,58,0.20), transparent);
         }
 
         .erp-nav-slide {
@@ -304,30 +302,38 @@ const ERPLayout = ({ children }: Props) => {
       >
         {/* brand */}
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: collapsed ? 'center' : 'space-between',
-          padding: '18px 12px 14px',
+          position: 'relative',
+          padding: '22px 16px 16px',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
-          minHeight: 68,
           flexShrink: 0,
         }}>
-          {!collapsed ? (
-            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-              style={{ height: 75, width: 'auto', display: 'block', objectFit: 'contain' }} />
-          ) : (
-            <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
-              style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'flex-start' }}>
+            {!collapsed ? (
+              <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
+                style={{ height: 75, width: 'auto', display: 'block', objectFit: 'contain' }} />
+            ) : (
+              <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
+                style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
+            )}
+          </div>
+          {!collapsed && (
+            <div style={{
+              marginTop: 7, fontSize: 10, color: C.orange, fontWeight: 700,
+              letterSpacing: '0.14em', textTransform: 'uppercase',
+              fontFamily: "'DM Sans', sans-serif",
+            }}>
+              Enterprise · ERP
+            </div>
           )}
           <button
             onClick={() => setCollapsed(c => !c)}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             style={{
               background: 'none', border: 'none', cursor: 'pointer',
-              padding: '5px 6px', borderRadius: 6, flexShrink: 0,
+              padding: '5px 6px', borderRadius: 6,
               color: 'rgba(255,255,255,0.28)',
               transition: 'color 0.2s',
-              marginLeft: collapsed ? 0 : 8,
+              position: 'absolute', right: 10, top: 18,
             }}
             onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.28)')}
@@ -363,9 +369,12 @@ const ERPLayout = ({ children }: Props) => {
                 style={{ animationDelay: `${idx * 0.028}s` }}
               >
                 <span className="erp-icon-badge">
-                  <i className={item.icon} style={{ color: 'inherit', fontSize: 12 }}></i>
+                  <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
                 </span>
-                {!collapsed && <span>{item.label}</span>}
+                {!collapsed && <span style={{ flex: 1 }}>{item.label}</span>}
+                {!collapsed && (
+                  <i className="fas fa-chevron-right erp-nav-chevron" style={{ fontSize: 10 }}></i>
+                )}
               </NavLink>
             );
           })}
