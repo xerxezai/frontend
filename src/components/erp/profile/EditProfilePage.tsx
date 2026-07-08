@@ -43,9 +43,10 @@ function Field({
     <div style={{ position: 'relative' }}>
       <label style={{
         position: 'absolute', left: 14, zIndex: 1, pointerEvents: 'none', fontFamily: FONT,
-        top:        elevated ? 7       : '50%',
+        top:        elevated ? 8       : '50%',
         transform:  elevated ? 'none'  : 'translateY(-50%)',
         fontSize:   elevated ? 9.5     : 13.5,
+        lineHeight: 1,
         color:      focused  ? OG      : 'rgba(20,20,19,0.45)',
         fontWeight: elevated ? 700     : 400,
         letterSpacing: elevated ? '0.07em' : '0',
@@ -58,14 +59,14 @@ function Field({
           rows={3} value={value} disabled={disabled}
           onChange={e => onChange(e.target.value)}
           onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-          style={{ ...base, padding: '22px 14px 10px', minHeight: 88 }}
+          style={{ ...base, padding: '26px 14px 10px', minHeight: 88 }}
         />
       ) : (
         <input
           type={type} value={value} disabled={disabled}
           onChange={e => onChange(e.target.value)}
           onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-          style={{ ...base, padding: elevated ? '20px 14px 10px' : '14px', height: 52 }}
+          style={{ ...base, padding: elevated ? '24px 14px 8px' : '14px', height: 54 }}
         />
       )}
     </div>

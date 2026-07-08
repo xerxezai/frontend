@@ -67,7 +67,7 @@ export default function MyProfilePage() {
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       >
         <div style={{
-          background: 'linear-gradient(135deg, #1a1208 0%, rgba(201,136,58,0.07) 55%, #0f0a05 100%)',
+          background: 'linear-gradient(135deg, #1a1208 0%, #241809 55%, #0f0a05 100%)',
           border: '1px solid rgba(255,255,255,0.06)',
           borderTop: `3px solid ${OG}`,
           borderRadius: 16,
@@ -78,7 +78,7 @@ export default function MyProfilePage() {
         }}>
           <div aria-hidden style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: 'repeating-linear-gradient(135deg, transparent, transparent 24px, rgba(201,136,58,0.028) 24px, rgba(201,136,58,0.028) 25px)',
+            backgroundImage: 'repeating-linear-gradient(135deg, transparent, transparent 24px, rgba(201,136,58,0.018) 24px, rgba(201,136,58,0.018) 25px)',
           }} />
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, position: 'relative', flexWrap: 'wrap' }}>

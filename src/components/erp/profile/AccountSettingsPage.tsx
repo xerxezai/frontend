@@ -25,9 +25,10 @@ function PwdField({ label, value, onChange }: { label: string; value: string; on
     <div style={{ position: 'relative' }}>
       <label style={{
         position: 'absolute', left: 14, zIndex: 1, pointerEvents: 'none', fontFamily: FONT,
-        top:           elevated ? 7       : '50%',
+        top:           elevated ? 8       : '50%',
         transform:     elevated ? 'none'  : 'translateY(-50%)',
         fontSize:      elevated ? 9.5     : 13.5,
+        lineHeight: 1,
         color:         focused  ? OG      : 'rgba(20,20,19,0.45)',
         fontWeight:    elevated ? 700     : 400,
         letterSpacing: elevated ? '0.07em': '0',
@@ -43,8 +44,8 @@ function PwdField({ label, value, onChange }: { label: string; value: string; on
           background: focused ? 'rgba(201,136,58,0.04)' : '#F8F7F4',
           border: `1px solid ${focused ? 'rgba(201,136,58,0.55)' : 'rgba(0,0,0,0.12)'}`,
           borderRadius: 10, color: '#141413', fontFamily: FONT, fontSize: 14, outline: 'none',
-          padding: elevated ? '20px 44px 10px 14px' : '14px 44px 14px 14px',
-          height: 52,
+          padding: elevated ? '24px 44px 8px 14px' : '14px 44px 14px 14px',
+          height: 54,
           transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s',
           boxShadow: focused ? '0 0 0 3px rgba(201,136,58,0.12)' : 'none',
         }}
