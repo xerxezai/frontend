@@ -2456,12 +2456,14 @@ export default function LMAInstructorDashboard() {
           ))}
         </nav>
 
+        {isSuperInstructor && (
         <div style={{ padding: "0 12px 8px" }}>
           <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.25)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "10px 4px 5px" }}>SWITCH PORTAL</div>
           <Link to="/lma/student/dashboard" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderRadius: 10, textDecoration: "none", background: "linear-gradient(135deg,rgba(201,136,58,0.20),rgba(232,168,78,0.10))", border: "1px solid rgba(201,136,58,0.35)", color: AMBER, fontSize: 13.5, fontWeight: 700, marginBottom: 8 }}>
             <GraduationCap size={16} /><span style={{ flex: 1 }}>Student Portal</span><ChevronRight size={14} />
           </Link>
         </div>
+        )}
         <div style={{ padding: "0 12px 24px" }}>
           <SideItem icon={LogOut} label="Logout" danger onClick={logout} />
         </div>
