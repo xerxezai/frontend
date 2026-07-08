@@ -482,6 +482,22 @@ export default function LMALoginPage() {
                         <i className="fas fa-shield-alt" style={{ color: C.orange, fontSize: 11 }} />
                         Access restricted to invited instructors only
                       </span>
+                      <div style={{ marginTop: 10 }}>
+                        <Link
+                          to="/lma/become-instructor"
+                          style={{
+                            fontSize: 12.5, color: C.orange, fontWeight: 700,
+                            fontFamily: FF, textDecoration: "none",
+                            display: "inline-flex", alignItems: "center", gap: 5,
+                            transition: "gap 180ms, opacity 180ms",
+                          }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.gap = "8px"; (e.currentTarget as HTMLElement).style.opacity = "0.82"; }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.gap = "5px"; (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                        >
+                          Want to teach? Apply as Instructor
+                          <i className="fas fa-arrow-right" style={{ fontSize: 10 }} />
+                        </Link>
+                      </div>
                     </div>
                   )}
 

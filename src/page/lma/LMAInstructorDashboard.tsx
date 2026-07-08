@@ -9,7 +9,7 @@ import {
   ClipboardList, PlusCircle, ChevronRight, ChevronDown,
   Bell, Menu, X, LogOut, Edit3, Trash2, GraduationCap,
   Check, BarChart2, Eye, Clock, AlertCircle, BookMarked,
-  Play, Plus, Save, Layers, Award, UserX, Search,
+  Play, Plus, Save, Layers, Award, UserX, Search, FileCheck,
 } from "lucide-react";
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -20,7 +20,7 @@ const DARK  = "#1a1208";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06)";
 
-type Section = "Dashboard" | "My Courses" | "Students" | "Earnings" | "Analytics" | "Reviews" | "Assignments" | "Instructors" | "Pending Reviews";
+type Section = "Dashboard" | "My Courses" | "Students" | "Earnings" | "Analytics" | "Reviews" | "Assignments" | "Instructors" | "Pending Reviews" | "Applications";
 
 const CATEGORIES = ["AI & ML", "DevSecOps & AI", "Web Development", "Data Science", "Cloud & DevOps", "Mobile Dev", "Business"];
 const LEVELS     = ["beginner", "intermediate", "advanced"];
@@ -1736,6 +1736,190 @@ function PendingReviewsView({ token, showToast, initialCourses, onRefresh }: {
   );
 }
 
+// ── ApplicationsView ─────────────────────────────────────────────────────────
+function ApplicationsView({ token, showToast }: {
+  token: string; showToast: (m: string, t?: "success" | "error") => void;
+}) {
+  const [apps, setApps]             = useState<any[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [filter, setFilter]         = useState<"all" | "pending" | "approved" | "rejected">("all");
+  const [expanded, setExpanded]     = useState<Record<number, boolean>>({});
+  const [actioning, setActioning]   = useState<number | null>(null);
+  const [rejectId, setRejectId]     = useState<number | null>(null);
+  const [rejectReason, setRejectReason] = useState("");
+
+  const load = useCallback(async () => {
+    try {
+      const r = await fetch(`${API}/lma/instructor/applications/`, { headers: hdr(token) });
+      if (!r.ok) return;
+      const d = await r.json();
+      setApps(Array.isArray(d) ? d : (d.applications ?? []));
+    } catch { /* ignore */ } finally { setLoading(false); }
+  }, [token]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const visible = apps.filter(a => filter === "all" || a.status === filter);
+
+  const approve = async (id: number) => {
+    setActioning(id);
+    try {
+      const r = await fetch(`${API}/lma/instructor/applications/${id}/approve/`, { method: "POST", headers: hdr(token) });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Approve failed", "error"); return; }
+      showToast("Application approved — credentials sent via email!");
+      load();
+    } catch { showToast("Network error", "error"); } finally { setActioning(null); }
+  };
+
+  const reject = async () => {
+    if (!rejectId || !rejectReason.trim()) { showToast("Rejection reason required", "error"); return; }
+    setActioning(rejectId);
+    try {
+      const r = await fetch(`${API}/lma/instructor/applications/${rejectId}/reject/`, {
+        method: "POST", headers: hdr(token), body: JSON.stringify({ reason: rejectReason }),
+      });
+      if (!r.ok) { showToast("Reject failed", "error"); return; }
+      showToast("Application rejected — applicant notified.");
+      setRejectId(null); setRejectReason(""); load();
+    } catch { showToast("Network error", "error"); } finally { setActioning(null); }
+  };
+
+  const STATUS_PILL: Record<string, { bg: string; color: string; label: string }> = {
+    pending:  { bg: "#fef3c7", color: "#d97706", label: "Pending" },
+    approved: { bg: "#d1fae5", color: "#059669", label: "Approved" },
+    rejected: { bg: "#fee2e2", color: "#dc2626", label: "Rejected" },
+  };
+
+  return (
+    <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: 0, fontFamily: FF }}>
+          Instructor Applications
+          {apps.filter(a => a.status === "pending").length > 0 && (
+            <span style={{ marginLeft: 10, fontSize: 12, fontWeight: 700, color: "#d97706", background: "#fef3c7", padding: "2px 10px", borderRadius: 999 }}>
+              {apps.filter(a => a.status === "pending").length} pending
+            </span>
+          )}
+        </h2>
+        <div style={{ display: "flex", gap: 6 }}>
+          {(["all", "pending", "approved", "rejected"] as const).map(f => (
+            <button key={f} type="button" onClick={() => setFilter(f)}
+              style={{ padding: "6px 14px", borderRadius: 9, border: `1.5px solid ${filter === f ? GOLD : "rgba(0,0,0,0.10)"}`, background: filter === f ? "rgba(201,136,58,0.10)" : "#fff", fontSize: 12.5, fontWeight: filter === f ? 700 : 500, color: filter === f ? GOLD : "#6b7280", cursor: "pointer", fontFamily: FF, transition: "all 150ms" }}>
+              {f.charAt(0).toUpperCase() + f.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {loading ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>{[0,1,2].map(i => <SkeletonBox key={i} h={80} />)}</div>
+      ) : visible.length === 0 ? (
+        <div style={{ background: "#fff", borderRadius: 16, padding: "60px 32px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
+          <FileCheck size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
+          <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>
+            {filter === "all" ? "No applications yet." : `No ${filter} applications.`}
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {visible.map((app: any, i: number) => {
+            const pill = STATUS_PILL[app.status] ?? STATUS_PILL.pending;
+            const isExp = !!expanded[app.id];
+            return (
+              <div key={app.id} style={{ background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)", borderLeft: `4px solid ${pill.color}`, boxShadow: BCARD, animation: "lmai-pageIn 0.38s ease both", animationDelay: `${i * 50}ms` }}>
+                {/* Card header */}
+                <div style={{ padding: "18px 20px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }} onClick={() => setExpanded(e => ({ ...e, [app.id]: !e[app.id] }))}>
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 16, fontWeight: 800, color: "#0a0806" }}>
+                    {avatarInit(app.full_name)}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: "#141413", fontFamily: FF }}>{app.full_name}</div>
+                    <div style={{ fontSize: 12, color: "#6b7280", fontFamily: FF, marginTop: 2 }}>{app.email}{app.expertise ? ` · ${app.expertise}` : ""}</div>
+                  </div>
+                  <span style={{ ...pill, fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, flexShrink: 0 }}>{pill.label}</span>
+                  <ChevronDown size={16} color="#9ca3af" style={{ transition: "transform 200ms", transform: isExp ? "rotate(180deg)" : "none", flexShrink: 0 }} />
+                </div>
+
+                {/* Expandable body */}
+                {isExp && (
+                  <div style={{ padding: "0 20px 18px", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+                    <div style={{ paddingTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                      {app.phone && (
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Phone</div>
+                          <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.phone}</div>
+                        </div>
+                      )}
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Applied</div>
+                        <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{new Date(app.applied_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</div>
+                      </div>
+                    </div>
+
+                    {app.bio && (
+                      <div style={{ marginBottom: 12 }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 4 }}>Bio</div>
+                        <p style={{ fontSize: 13, color: "#374151", fontFamily: FF, lineHeight: 1.6, margin: 0, background: "#f9f7f4", borderRadius: 8, padding: "10px 12px" }}>{app.bio}</p>
+                      </div>
+                    )}
+
+                    {app.why_teach && (
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 4 }}>Why They Want to Teach</div>
+                        <p style={{ fontSize: 13, color: "#374151", fontFamily: FF, lineHeight: 1.6, margin: 0, background: "#f9f7f4", borderRadius: 8, padding: "10px 12px" }}>{app.why_teach}</p>
+                      </div>
+                    )}
+
+                    {app.rejection_reason && app.status === "rejected" && (
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "#dc2626", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 4 }}>Rejection Reason</div>
+                        <p style={{ fontSize: 13, color: "#dc2626", fontFamily: FF, lineHeight: 1.6, margin: 0, background: "#fee2e2", borderRadius: 8, padding: "10px 12px" }}>{app.rejection_reason}</p>
+                      </div>
+                    )}
+
+                    {app.status === "pending" && (
+                      <div style={{ display: "flex", gap: 10 }}>
+                        <button type="button" onClick={() => approve(app.id)} disabled={actioning === app.id}
+                          style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "none", background: "linear-gradient(135deg,#10b981,#059669)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, opacity: actioning === app.id ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                          <Check size={14} />{actioning === app.id ? "Processing…" : "Approve & Send Credentials"}
+                        </button>
+                        <button type="button" onClick={() => setRejectId(app.id)}
+                          style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "1.5px solid #dc2626", background: "transparent", color: "#dc2626", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
+                          Reject
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Reject modal */}
+      {rejectId !== null && (
+        <>
+          <div onClick={() => { setRejectId(null); setRejectReason(""); }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.50)", zIndex: 700 }} />
+          <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 701, width: 380, padding: "28px 26px", background: "#fff", borderRadius: 18, borderTop: "3px solid #dc2626", boxShadow: "0 24px 80px rgba(0,0,0,0.20)", animation: "lmai-scaleIn 0.22s cubic-bezier(0.22,1,0.36,1) both" }}>
+            <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 6px", fontFamily: FF }}>Reject Application</h3>
+            <p style={{ fontSize: 12.5, color: "#6b7280", margin: "0 0 16px", fontFamily: FF }}>The applicant will receive an email with this reason.</p>
+            <textarea rows={4} value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="Explain why the application was not accepted…"
+              style={{ ...inputStyle, resize: "vertical", marginBottom: 16 }} onFocus={focusGold} onBlur={blurGold} />
+            <div style={{ display: "flex", gap: 10 }}>
+              <button type="button" onClick={() => { setRejectId(null); setRejectReason(""); }} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+              <button type="button" onClick={reject} disabled={actioning !== null} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "none", background: "#dc2626", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#fff", opacity: actioning !== null ? 0.7 : 1 }}>
+                {actioning !== null ? "Rejecting…" : "Reject"}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function LMAInstructorDashboard() {
   const navigate = useNavigate();
@@ -1888,7 +2072,8 @@ export default function LMAInstructorDashboard() {
       { icon: ClipboardList, label: "Assignments" as Section },
     ]},
     ...(isSuperInstructor ? [{ section: "ADMIN", items: [
-      { icon: Users, label: "Instructors" as Section },
+      { icon: Users,      label: "Instructors" as Section },
+      { icon: FileCheck,  label: "Applications" as Section },
     ]}] : []),
   ];
 
@@ -1908,6 +2093,7 @@ export default function LMAInstructorDashboard() {
       case "Assignments":    return <AssignmentsView data={data} onGrade={setGradingSub} />;
       case "Instructors":    return isSuperInstructor ? <ManageInstructorsView token={token} showToast={showToast} /> : null;
       case "Pending Reviews": return isSuperInstructor ? <PendingReviewsView token={token} showToast={showToast} initialCourses={pendingReviewCourses} onRefresh={loadDashboard} /> : null;
+      case "Applications":   return isSuperInstructor ? <ApplicationsView token={token} showToast={showToast} /> : null;
       default:               return null;
     }
   };
