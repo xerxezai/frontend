@@ -185,10 +185,11 @@ export default function LMALoginPage() {
       );
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Login failed."); shake(); return; }
-      localStorage.setItem("lma_token",          data.lma_token);
-      localStorage.setItem("lma_role",           data.lma_role);
-      localStorage.setItem("lma_can_instructor", String(data.can_access_instructor));
-      localStorage.setItem("lma_name",           data.name);
+      localStorage.setItem("lma_token",            data.lma_token);
+      localStorage.setItem("lma_role",             data.lma_role);
+      localStorage.setItem("lma_can_instructor",   String(data.can_access_instructor));
+      localStorage.setItem("lma_instructor_level", data.instructor_level || "regular");
+      localStorage.setItem("lma_name",             data.name);
       // Portal hub handles routing: 1 portal → direct, 2+ → /home
       navigate("/home", { replace: true });
     } catch {

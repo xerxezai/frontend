@@ -20,15 +20,17 @@ const DARK  = "#1a1208";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06)";
 
-type Section = "Dashboard" | "My Courses" | "Students" | "Earnings" | "Analytics" | "Reviews" | "Assignments";
+type Section = "Dashboard" | "My Courses" | "Students" | "Earnings" | "Analytics" | "Reviews" | "Assignments" | "Instructors" | "Pending Reviews";
 
 const CATEGORIES = ["AI & ML", "DevSecOps & AI", "Web Development", "Data Science", "Cloud & DevOps", "Mobile Dev", "Business"];
 const LEVELS     = ["beginner", "intermediate", "advanced"];
 const BADGES     = ["", "Bestseller", "New", "Hot", "Top Rated", "Free"];
 const COLORS_MAP: Record<string, string> = { beginner: "#059669", intermediate: "#2563eb", advanced: "#7c3aed" };
 const STATUS_COLOR: Record<string, { bg: string; color: string }> = {
-  published: { bg: "#d1fae5", color: "#059669" },
-  draft:     { bg: "#f3f4f6", color: "#6b7280" },
+  published:      { bg: "#d1fae5", color: "#059669" },
+  draft:          { bg: "#f3f4f6", color: "#6b7280" },
+  pending_review: { bg: "#fef3c7", color: "#d97706" },
+  rejected:       { bg: "#fee2e2", color: "#dc2626" },
 };
 
 // ── Utility ──────────────────────────────────────────────────────────────────
@@ -243,8 +245,8 @@ function GradePanel({ sub, token, onClose, showToast }: {
 }
 
 // ── CreateEditCoursePanel ────────────────────────────────────────────────────
-function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
-  token: string; course?: any; onClose: () => void;
+function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperInstructor }: {
+  token: string; course?: any; onClose: () => void; isSuperInstructor: boolean;
   showToast: (m: string, t?: "success" | "error") => void; onSaved: () => void;
 }) {
   const editing = !!course;
@@ -338,6 +340,7 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
               onFocus={focusGold} onBlur={blurGold}
               onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }} />
           </Field>
+          {isSuperInstructor ? (
           <Field label="Status">
             <div style={{ display: "flex", gap: 0, background: "#f3f4f6", borderRadius: 10, padding: 3 }}>
               {["draft", "published"].map(s => (
@@ -351,6 +354,13 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved }: {
               ))}
             </div>
           </Field>
+          ) : (
+          <Field label="Status">
+            <div style={{ background: "#f3f4f6", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#6b7280", fontFamily: FF }}>
+              Draft — submit for review to publish
+            </div>
+          </Field>
+          )}
         </div>
 
         <div style={{ padding: "14px 26px 26px", borderTop: "1px solid rgba(0,0,0,0.07)", display: "flex", gap: 10 }}>
@@ -663,19 +673,24 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
 
 // ── Section views ─────────────────────────────────────────────────────────────
 
-function DashboardView({ data, earningsChart, onGrade }: { data: any; earningsChart: any[]; onGrade: (s: any) => void }) {
+function DashboardView({ data, earningsChart, onGrade, isSuperInstructor }: {
+  data: any; earningsChart: any[]; onGrade: (s: any) => void; isSuperInstructor: boolean;
+}) {
   return (
     <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
       {/* Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 16, marginBottom: 28 }}>
-        <StatCard index={0} label="Total Courses"  value={data?.stats?.total_courses ?? 0}  icon={BookOpen}     color="#3b82f6" />
-        <StatCard index={1} label="Total Students" value={data?.stats?.total_students ?? 0} icon={Users}        color="#10b981" />
+        <StatCard index={0} label="Total Courses"   value={data?.stats?.total_courses ?? 0}  icon={BookOpen}     color="#3b82f6" />
+        <StatCard index={1} label="Total Students"  value={data?.stats?.total_students ?? 0} icon={Users}        color="#10b981" />
         <StatCard index={2} label="Pending Reviews" value={data?.stats?.pending_reviews ?? 0} icon={ClipboardList} color="#f59e0b" />
-        <StatCard index={3} label="Total Earnings" value={data?.stats?.total_earnings ?? 0} icon={DollarSign}   color="#8b5cf6" prefix="₹" />
+        {isSuperInstructor && (
+          <StatCard index={3} label="Total Earnings" value={data?.stats?.total_earnings ?? 0} icon={DollarSign} color="#8b5cf6" prefix="₹" />
+        )}
       </div>
 
       {/* Chart + Queue */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }} className="lmai-2col">
+        {isSuperInstructor && (
         <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
             <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>Monthly Earnings</h3>
@@ -697,6 +712,7 @@ function DashboardView({ data, earningsChart, onGrade }: { data: any; earningsCh
             </AreaChart>
           </ResponsiveContainer>
         </div>
+        )}
 
         <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
           <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>Assignment Review Queue</h3>
@@ -745,10 +761,11 @@ function DashboardView({ data, earningsChart, onGrade }: { data: any; earningsCh
   );
 }
 
-function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }: {
-  courses: any[]; loading: boolean;
+function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, onSubmitReview, isSuperInstructor }: {
+  courses: any[]; loading: boolean; isSuperInstructor: boolean;
   onEdit: (c: any) => void; onManage: (c: any) => void;
   onDelete: (c: any) => void; onCreate: () => void;
+  onSubmitReview: (c: any) => void;
 }) {
   const [search, setSearch] = useState("");
   const filtered = courses.filter(c => c.title.toLowerCase().includes(search.toLowerCase()));
@@ -781,7 +798,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }:
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 640 }}>
             <thead>
               <tr style={{ background: "#f9f7f4", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-                {["Course", "Level", "Students", "Rating", "Revenue", "Status", "Actions"].map(h => (
+                {["Course", "Level", "Students", "Rating", ...(isSuperInstructor ? ["Revenue"] : []), "Status", "Actions"].map(h => (
                   <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 10.5, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF, whiteSpace: "nowrap" }}>{h}</th>
                 ))}
               </tr>
@@ -800,18 +817,31 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate }:
                   <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413", fontFamily: FF }}>
                     {c.rating ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Star size={12} color="#f59e0b" fill="#f59e0b" />{c.rating}</span> : "—"}
                   </td>
+                  {isSuperInstructor && (
                   <td style={{ padding: "13px 16px", fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>
                     ₹{((c.total_students ?? 0) * (parseFloat(c.price) ?? 0) * 0.7).toLocaleString()}
                   </td>
+                  )}
                   <td style={{ padding: "13px 16px" }}>
-                    <span style={{ ...STATUS_COLOR[c.status as string], fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 999 }}>{c.status}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                      <span style={{ ...(STATUS_COLOR[c.status as string] ?? { bg: "#f3f4f6", color: "#6b7280" }), fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 999 }}>
+                        {c.status === "pending_review" ? "Pending Review" : c.status === "rejected" ? "Rejected" : c.status.charAt(0).toUpperCase() + c.status.slice(1)}
+                      </span>
+                      {c.status === "rejected" && c.rejection_reason && (
+                        <span title={c.rejection_reason} style={{ cursor: "help", color: "#dc2626", fontSize: 11 }}>ℹ</span>
+                      )}
+                    </div>
                   </td>
                   <td style={{ padding: "13px 16px" }}>
                     <div style={{ display: "flex", gap: 6 }}>
                       <a href={`/lma/courses/${c.id}`} title="Preview" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", color: "#6b7280", background: "#f3f4f6", borderRadius: 7, padding: 7, textDecoration: "none" }}><Eye size={13} /></a>
                       <button type="button" title="Edit" onClick={() => onEdit(c)} style={{ color: GOLD, background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Edit3 size={13} /></button>
                       <button type="button" title="Manage Curriculum" onClick={() => onManage(c)} style={{ color: "#3b82f6", background: "rgba(59,130,246,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Layers size={13} /></button>
-                      <button type="button" title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
+                      {isSuperInstructor ? (
+                        <button type="button" title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
+                      ) : (c.status === "draft" || c.status === "rejected") && (
+                        <button type="button" title="Submit for Review" onClick={() => onSubmitReview(c)} style={{ color: "#d97706", background: "rgba(217,119,6,0.10)", border: "none", borderRadius: 7, padding: "7px 10px", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: FF }}>Submit</button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -1349,7 +1379,7 @@ function EarningsView({ data, earningsChart }: { data: any; earningsChart: any[]
   );
 }
 
-function AnalyticsView({ token }: { token: string }) {
+function AnalyticsView({ token, isSuperInstructor }: { token: string; isSuperInstructor: boolean }) {
   const [analytics, setAnalytics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -1394,7 +1424,7 @@ function AnalyticsView({ token }: { token: string }) {
                     { label: "Students", value: c.total_students, color: "#3b82f6" },
                     { label: "Completion", value: `${c.completion_rate}%`, color: "#10b981" },
                     { label: "Avg Rating", value: c.avg_rating ? `${c.avg_rating}★` : "—", color: "#f59e0b" },
-                    { label: "Revenue", value: `₹${c.revenue.toLocaleString()}`, color: "#8b5cf6" },
+                    ...(isSuperInstructor ? [{ label: "Revenue", value: `₹${(c.revenue ?? 0).toLocaleString()}`, color: "#8b5cf6" }] : []),
                   ].map(({ label, value, color }) => (
                     <div key={label} style={{ background: `${color}08`, borderRadius: 10, padding: "10px 12px" }}>
                       <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", letterSpacing: "0.06em", textTransform: "uppercase", fontFamily: FF }}>{label}</div>
@@ -1503,17 +1533,263 @@ function AssignmentsView({ data, onGrade }: { data: any; onGrade: (s: any) => vo
   );
 }
 
+// ── ManageInstructorsView ─────────────────────────────────────────────────────
+function ManageInstructorsView({ token, showToast }: { token: string; showToast: (m: string, t?: "success" | "error") => void }) {
+  const [instructors, setInstructors] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", password: "", bio: "" });
+  const [saving, setSaving] = useState(false);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    fetch(`${API}/lma/instructor/instructors/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json()).then(d => setInstructors(Array.isArray(d) ? d : []))
+      .catch(() => {}).finally(() => setLoading(false));
+  }, [token]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const createInstructor = async () => {
+    if (!form.name || !form.email || !form.password) { showToast("Name, email and password required", "error"); return; }
+    setSaving(true);
+    try {
+      const r = await fetch(`${API}/lma/instructor/create-instructor/`, {
+        method: "POST", headers: hdr(token), body: JSON.stringify(form),
+      });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Failed to create instructor", "error"); return; }
+      showToast(`Instructor ${form.name} created!`);
+      setShowForm(false);
+      setForm({ name: "", email: "", password: "", bio: "" });
+      load();
+    } catch { showToast("Network error", "error"); } finally { setSaving(false); }
+  };
+
+  return (
+    <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: 0, fontFamily: FF }}>Manage Instructors</h2>
+        <button type="button" onClick={() => setShowForm(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)" }}>
+          <PlusCircle size={15} /> Add Instructor
+        </button>
+      </div>
+
+      {showForm && (
+        <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 20 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>New Regular Instructor</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+            <Field label="Full Name">
+              <input style={inputStyle} value={form.name} placeholder="e.g. Sarah Khan" onChange={e => setForm(f => ({ ...f, name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+            </Field>
+            <Field label="Email">
+              <input type="email" style={inputStyle} value={form.email} placeholder="e.g. sarah@company.com" onChange={e => setForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+            </Field>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+            <Field label="Temporary Password">
+              <input type="password" style={inputStyle} value={form.password} placeholder="Min 6 characters" onChange={e => setForm(f => ({ ...f, password: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+            </Field>
+            <Field label="Bio (optional)">
+              <input style={inputStyle} value={form.bio} placeholder="Brief introduction…" onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+            </Field>
+          </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button type="button" onClick={() => setShowForm(false)} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+            <button type="button" onClick={createInstructor} disabled={saving} style={{ flex: 2, padding: "10px", borderRadius: 9, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#0a0806", opacity: saving ? 0.7 : 1 }}>{saving ? "Creating…" : "Create Instructor →"}</button>
+          </div>
+        </div>
+      )}
+
+      {loading ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>{[0,1,2].map(i => <SkeletonBox key={i} h={70} />)}</div>
+      ) : instructors.length === 0 ? (
+        <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
+          <Users size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
+          <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>No instructors yet. Add your first one above.</p>
+        </div>
+      ) : (
+        <div style={{ background: "#fff", borderRadius: 16, overflow: "auto", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
+            <thead>
+              <tr style={{ background: "#f9f7f4", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+                {["Instructor", "Email", "Level", "Courses", "Joined"].map(h => (
+                  <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 10.5, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {instructors.map((ins: any, i: number) => (
+                <tr key={ins.id} style={{ borderBottom: i < instructors.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none" }} className="lmai-tr">
+                  <td style={{ padding: "13px 16px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 32, height: 32, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#0a0806" }}>{avatarInit(ins.name)}</div>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "#141413", fontFamily: FF }}>{ins.name}</span>
+                    </div>
+                  </td>
+                  <td style={{ padding: "13px 16px", fontSize: 12.5, color: "#6b7280", fontFamily: FF }}>{ins.email}</td>
+                  <td style={{ padding: "13px 16px" }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: ins.instructor_level === "super" ? "rgba(139,92,246,0.10)" : "rgba(201,136,58,0.10)", color: ins.instructor_level === "super" ? "#7c3aed" : GOLD }}>
+                      {ins.instructor_level}
+                    </span>
+                  </td>
+                  <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413", fontFamily: FF }}>{ins.course_count}</td>
+                  <td style={{ padding: "13px 16px", fontSize: 12, color: "#9ca3af" }}>{new Date(ins.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── PendingReviewsView ────────────────────────────────────────────────────────
+function PendingReviewsView({ token, showToast }: { token: string; showToast: (m: string, t?: "success" | "error") => void }) {
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [rejectingId, setRejectingId] = useState<number | null>(null);
+  const [rejectReason, setRejectReason] = useState("");
+  const [actioning, setActioning] = useState<number | null>(null);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    fetch(`${API}/lma/instructor/pending-reviews/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json()).then(d => setCourses(Array.isArray(d) ? d : []))
+      .catch(() => {}).finally(() => setLoading(false));
+  }, [token]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const publish = async (id: number) => {
+    setActioning(id);
+    try {
+      const r = await fetch(`${API}/lma/courses/${id}/publish/`, { method: "PUT", headers: hdr(token) });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Failed", "error"); return; }
+      showToast("Course published!"); load();
+    } catch { showToast("Network error", "error"); } finally { setActioning(null); }
+  };
+
+  const reject = async (id: number) => {
+    if (!rejectReason.trim()) { showToast("Enter a rejection reason", "error"); return; }
+    setActioning(id);
+    try {
+      const r = await fetch(`${API}/lma/courses/${id}/reject/`, {
+        method: "PUT", headers: hdr(token), body: JSON.stringify({ reason: rejectReason }),
+      });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Failed", "error"); return; }
+      showToast("Course rejected — instructor notified.");
+      setRejectingId(null); setRejectReason(""); load();
+    } catch { showToast("Network error", "error"); } finally { setActioning(null); }
+  };
+
+  return (
+    <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
+      <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: "0 0 20px", fontFamily: FF }}>
+        Pending Reviews
+        {courses.length > 0 && <span style={{ marginLeft: 10, fontSize: 13, fontWeight: 700, color: "#d97706", background: "#fef3c7", padding: "3px 10px", borderRadius: 999 }}>{courses.length}</span>}
+      </h2>
+      {loading ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>{[0,1,2].map(i => <SkeletonBox key={i} h={120} />)}</div>
+      ) : courses.length === 0 ? (
+        <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
+          <Check size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
+          <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>No courses awaiting review.</p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {courses.map((c: any, i: number) => (
+            <div key={c.id} style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid rgba(0,0,0,0.07)", borderLeft: `4px solid #d97706`, boxShadow: BCARD, animation: "lmai-pageIn 0.40s ease both", animationDelay: `${i * 60}ms` }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 14, flexWrap: "wrap" }}>
+                <div style={{ flex: 1, minWidth: 200 }}>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: "#141413", marginBottom: 4, fontFamily: FF }}>{c.title}</div>
+                  <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 8, fontFamily: FF }}>By {c.instructor_name} · {c.category} · {c.level}</div>
+                  <div style={{ fontSize: 12.5, color: "#6b7280", lineHeight: 1.5, fontFamily: FF }}>{c.description}</div>
+                </div>
+                <div style={{ display: "flex", gap: 8, flexShrink: 0, alignItems: "flex-start" }}>
+                  <button type="button" onClick={() => publish(c.id)} disabled={actioning === c.id}
+                    style={{ background: "#059669", color: "#fff", border: "none", borderRadius: 9, padding: "9px 18px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, opacity: actioning === c.id ? 0.7 : 1 }}>
+                    {actioning === c.id ? "…" : "Publish ✓"}
+                  </button>
+                  <button type="button" onClick={() => { setRejectingId(c.id); setRejectReason(""); }}
+                    style={{ background: "rgba(220,38,38,0.08)", color: "#dc2626", border: "1.5px solid rgba(220,38,38,0.20)", borderRadius: 9, padding: "9px 18px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF }}>
+                    Reject
+                  </button>
+                </div>
+              </div>
+              {rejectingId === c.id && (
+                <div style={{ marginTop: 14, borderTop: "1px solid rgba(0,0,0,0.07)", paddingTop: 14 }}>
+                  <textarea rows={2} value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="Reason for rejection (required)…"
+                    style={{ ...inputStyle, resize: "vertical", marginBottom: 10 }} onFocus={focusGold} onBlur={blurGold} />
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button type="button" onClick={() => { setRejectingId(null); setRejectReason(""); }} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "none", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+                    <button type="button" onClick={() => reject(c.id)} disabled={actioning === c.id} style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: "#dc2626", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#fff", opacity: actioning === c.id ? 0.7 : 1 }}>
+                      {actioning === c.id ? "Rejecting…" : "Send Rejection"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function LMAInstructorDashboard() {
   const navigate = useNavigate();
-  const name         = localStorage.getItem("lma_name") ?? "Instructor";
-  const token        = localStorage.getItem("lma_token") ?? "";
-  const canInstructor = localStorage.getItem("lma_can_instructor") === "true";
+  const name            = localStorage.getItem("lma_name") ?? "Instructor";
+  const token           = localStorage.getItem("lma_token") ?? "";
+  const canInstructor   = localStorage.getItem("lma_can_instructor") === "true";
+  const instructorLevel = localStorage.getItem("lma_instructor_level") ?? "regular";
+  const isSuperInstructor = instructorLevel === "super";
 
   const [sideOpen, setSideOpen] = useState(false);
   const [active, setActive] = useState<Section>("Dashboard");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Notifications
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount]     = useState(0);
+  const [bellOpen, setBellOpen]           = useState(false);
+  const bellRef = useRef<HTMLDivElement>(null);
+
+  const fetchNotifications = useCallback(() => {
+    if (!token) return;
+    fetch(`${API}/lma/notifications/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) { setNotifications(d.notifications ?? []); setUnreadCount(d.unread_count ?? 0); } })
+      .catch(() => {});
+  }, [token]);
+
+  useEffect(() => {
+    fetchNotifications();
+    const iv = setInterval(fetchNotifications, 60_000);
+    return () => clearInterval(iv);
+  }, [fetchNotifications]);
+
+  // Close bell dropdown when clicking outside
+  useEffect(() => {
+    const fn = (e: MouseEvent) => { if (bellRef.current && !bellRef.current.contains(e.target as Node)) setBellOpen(false); };
+    document.addEventListener("mousedown", fn);
+    return () => document.removeEventListener("mousedown", fn);
+  }, []);
+
+  const markRead = async (id: number) => {
+    await fetch(`${API}/lma/notifications/${id}/read/`, { method: "POST", headers: hdr(token) });
+    fetchNotifications();
+  };
+
+  const markAllRead = async () => {
+    await fetch(`${API}/lma/notifications/read-all/`, { method: "POST", headers: hdr(token) });
+    fetchNotifications();
+  };
 
   // Panels
   const [showCreate, setShowCreate]         = useState(false);
@@ -1543,8 +1819,20 @@ export default function LMAInstructorDashboard() {
   useEffect(() => { if (token && canInstructor) loadDashboard(); }, [loadDashboard, token, canInstructor]);
 
   const logout = () => {
-    ["lma_token", "lma_role", "lma_can_instructor", "lma_name"].forEach(k => localStorage.removeItem(k));
+    ["lma_token", "lma_role", "lma_can_instructor", "lma_instructor_level", "lma_name"].forEach(k => localStorage.removeItem(k));
     navigate("/lma/login");
+  };
+
+  const handleSubmitReview = async (course: any) => {
+    try {
+      const r = await fetch(`${API}/lma/courses/${course.id}/submit-for-review/`, {
+        method: "POST", headers: hdr(token),
+      });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Failed to submit", "error"); return; }
+      showToast("Course submitted for review!");
+      loadDashboard();
+    } catch { showToast("Network error", "error"); }
   };
 
   // Earnings chart
@@ -1583,30 +1871,42 @@ export default function LMAInstructorDashboard() {
       { icon: BookOpen,        label: "My Courses" as Section },
       { icon: Users,           label: "Students" as Section },
     ]},
-    { section: "ANALYTICS", items: [
+    ...(isSuperInstructor ? [{ section: "REVIEW", items: [
+      { icon: ClipboardList, label: "Pending Reviews" as Section },
+    ]}] : []),
+    ...(isSuperInstructor ? [{ section: "ANALYTICS", items: [
       { icon: DollarSign, label: "Earnings" as Section },
       { icon: BarChart2,  label: "Analytics" as Section },
       { icon: Star,       label: "Reviews" as Section },
-    ]},
+    ]}] : [{ section: "ANALYTICS", items: [
+      { icon: BarChart2, label: "Analytics" as Section },
+      { icon: Star,      label: "Reviews" as Section },
+    ]}]),
     { section: "TEACHING", items: [
       { icon: ClipboardList, label: "Assignments" as Section },
     ]},
+    ...(isSuperInstructor ? [{ section: "ADMIN", items: [
+      { icon: Users, label: "Instructors" as Section },
+    ]}] : []),
   ];
 
   const renderSection = () => {
-    if (loading) return (
+    if (loading && active === "Dashboard") return (
       <div style={{ padding: "60px 0", textAlign: "center" }}>
         <div style={{ width: 32, height: 32, border: `3px solid rgba(201,136,58,0.20)`, borderTop: `3px solid ${GOLD}`, borderRadius: "50%", animation: "lmai-spin 0.8s linear infinite", display: "inline-block" }} />
       </div>
     );
     switch (active) {
-      case "Dashboard":   return <DashboardView data={data} earningsChart={earningsChart} onGrade={setGradingSub} />;
-      case "My Courses":  return <CoursesView courses={courses} loading={false} onEdit={setEditCourse} onManage={setManageCourse} onDelete={setDeletingCourse} onCreate={() => setShowCreate(true)} />;
-      case "Students":    return <StudentsView token={token} />;
-      case "Earnings":    return <EarningsView data={data} earningsChart={earningsChart} />;
-      case "Analytics":   return <AnalyticsView token={token} />;
-      case "Reviews":     return <ReviewsView token={token} />;
-      case "Assignments": return <AssignmentsView data={data} onGrade={setGradingSub} />;
+      case "Dashboard":      return <DashboardView data={data} earningsChart={earningsChart} onGrade={setGradingSub} isSuperInstructor={isSuperInstructor} />;
+      case "My Courses":     return <CoursesView courses={courses} loading={false} isSuperInstructor={isSuperInstructor} onEdit={setEditCourse} onManage={setManageCourse} onDelete={setDeletingCourse} onCreate={() => setShowCreate(true)} onSubmitReview={handleSubmitReview} />;
+      case "Students":       return <StudentsView token={token} />;
+      case "Earnings":       return isSuperInstructor ? <EarningsView data={data} earningsChart={earningsChart} /> : null;
+      case "Analytics":      return <AnalyticsView token={token} isSuperInstructor={isSuperInstructor} />;
+      case "Reviews":        return <ReviewsView token={token} />;
+      case "Assignments":    return <AssignmentsView data={data} onGrade={setGradingSub} />;
+      case "Instructors":    return isSuperInstructor ? <ManageInstructorsView token={token} showToast={showToast} /> : null;
+      case "Pending Reviews": return isSuperInstructor ? <PendingReviewsView token={token} showToast={showToast} /> : null;
+      default:               return null;
     }
   };
 
@@ -1665,7 +1965,43 @@ export default function LMAInstructorDashboard() {
           }}>
             <PlusCircle size={15} /> New Course
           </button>
-          <button type="button" style={{ background: "none", border: "none", cursor: "pointer", padding: 8, color: "#6b7280" }}><Bell size={20} /></button>
+          {/* Bell with dropdown */}
+          <div ref={bellRef} style={{ position: "relative" }}>
+            <button type="button" onClick={() => setBellOpen(v => !v)} style={{ background: "none", border: "none", cursor: "pointer", padding: 8, color: "#6b7280", position: "relative" }}>
+              <Bell size={20} />
+              {unreadCount > 0 && (
+                <span style={{ position: "absolute", top: 4, right: 4, width: 16, height: 16, borderRadius: "50%", background: "#dc2626", color: "#fff", fontSize: 9, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
+            {bellOpen && (
+              <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, width: 320, background: "#fff", borderRadius: 14, boxShadow: "0 8px 40px rgba(0,0,0,0.18)", border: "1px solid rgba(0,0,0,0.08)", zIndex: 500, overflow: "hidden" }}>
+                <div style={{ padding: "12px 16px 10px", borderBottom: "1px solid rgba(0,0,0,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 13, fontWeight: 800, color: "#141413", fontFamily: FF }}>Notifications</span>
+                  {unreadCount > 0 && <button type="button" onClick={markAllRead} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: GOLD, fontWeight: 700, fontFamily: FF }}>Mark all read</button>}
+                </div>
+                <div style={{ maxHeight: 320, overflowY: "auto" }}>
+                  {notifications.length === 0 ? (
+                    <div style={{ padding: "28px 16px", textAlign: "center", color: "#9ca3af", fontSize: 13, fontFamily: FF }}>No notifications</div>
+                  ) : notifications.map((n: any) => (
+                    <div key={n.id} onClick={() => markRead(n.id)} style={{ padding: "12px 16px", borderBottom: "1px solid rgba(0,0,0,0.05)", cursor: "pointer", background: n.is_read ? "#fff" : "rgba(201,136,58,0.05)", transition: "background 0.15s" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "#f9f7f4")}
+                      onMouseLeave={e => (e.currentTarget.style.background = n.is_read ? "#fff" : "rgba(201,136,58,0.05)")}>
+                      <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                        {!n.is_read && <div style={{ width: 7, height: 7, borderRadius: "50%", background: GOLD, flexShrink: 0, marginTop: 5 }} />}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 12.5, fontWeight: 700, color: "#141413", fontFamily: FF, marginBottom: 2 }}>{n.title}</div>
+                          <div style={{ fontSize: 11.5, color: "#6b7280", fontFamily: FF, lineHeight: 1.4 }}>{n.message}</div>
+                          <div style={{ fontSize: 10.5, color: "#9ca3af", marginTop: 4 }}>{new Date(n.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           <div style={{ width: 36, height: 36, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#0a0806", fontWeight: 800, fontSize: 14, cursor: "pointer" }}>
             {avatarInit(name)}
           </div>
@@ -1676,11 +2012,11 @@ export default function LMAInstructorDashboard() {
 
       {/* Panels & Dialogs */}
       {showCreate && (
-        <CourseFormPanel token={token} onClose={() => setShowCreate(false)} showToast={showToast}
+        <CourseFormPanel token={token} isSuperInstructor={isSuperInstructor} onClose={() => setShowCreate(false)} showToast={showToast}
           onSaved={() => { setShowCreate(false); loadDashboard(); setActive("My Courses"); }} />
       )}
       {editCourse && (
-        <CourseFormPanel token={token} course={editCourse} onClose={() => setEditCourse(null)} showToast={showToast}
+        <CourseFormPanel token={token} isSuperInstructor={isSuperInstructor} course={editCourse} onClose={() => setEditCourse(null)} showToast={showToast}
           onSaved={() => { setEditCourse(null); loadDashboard(); }} />
       )}
       {manageCourse && (
