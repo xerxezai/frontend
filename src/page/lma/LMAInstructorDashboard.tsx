@@ -1590,6 +1590,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
   const [editForm, setEditForm] = useState({ full_name: "", email: "", instructor_level: "" });
   const [editSaving, setEditSaving] = useState(false);
   const [resetPwConfirm, setResetPwConfirm] = useState(false);
+  const [resetPwInput, setResetPwInput] = useState("");
   const [resetPwLoading, setResetPwLoading] = useState(false);
 
   // Delete modal
@@ -1654,11 +1655,14 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
     if (!editTarget) return;
     setResetPwLoading(true);
     try {
-      const r = await fetch(`${API}/lma/instructor/instructors/${editTarget.id}/reset-password/`, { method: "POST", headers: hdr(token) });
+      const r = await fetch(`${API}/lma/instructor/instructors/${editTarget.id}/reset-password/`, {
+        method: "POST", headers: hdr(token),
+        body: JSON.stringify({ password: resetPwInput.trim() || undefined }),
+      });
       const d = await r.json();
       if (!r.ok) { showToast(d.error || "Reset failed", "error"); return; }
-      showToast(`New password sent to ${d.email}`);
-      setResetPwConfirm(false);
+      showToast(`Password reset. Email + bell notification sent to ${d.email}`);
+      setResetPwConfirm(false); setResetPwInput("");
     } catch { showToast("Network error", "error"); } finally { setResetPwLoading(false); }
   };
 
@@ -1895,20 +1899,32 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
           <div style={{ borderTop: "1px solid rgba(0,0,0,0.07)", paddingTop: 18 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(20,20,19,0.45)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 10 }}>Password</div>
             {!resetPwConfirm ? (
-              <button type="button" onClick={() => setResetPwConfirm(true)}
+              <button type="button" onClick={() => { setResetPwConfirm(true); setResetPwInput(""); }}
                 style={{ width: "100%", padding: "11px", borderRadius: 9, border: "1.5px solid rgba(0,0,0,0.10)", background: "#f9f7f4", color: "#374151", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                 <Plus size={14} /> Reset Password
               </button>
             ) : (
               <div style={{ background: "#fef3c7", borderRadius: 10, padding: "14px", border: "1px solid #fde68a" }}>
-                <p style={{ fontSize: 12.5, color: "#92400e", margin: "0 0 12px", fontFamily: FF, lineHeight: 1.5 }}>
-                  A new 12-character password will be generated and emailed to <strong>{editTarget.email}</strong>.
+                <p style={{ fontSize: 12.5, color: "#92400e", margin: "0 0 10px", fontFamily: FF, lineHeight: 1.5 }}>
+                  Set a custom password or leave blank to auto-generate. Will be emailed to <strong>{editTarget.email}</strong> + bell notification sent.
                 </p>
+                <input
+                  type="text"
+                  value={resetPwInput}
+                  onChange={e => setResetPwInput(e.target.value)}
+                  placeholder="Custom password (min 6 chars) or leave blank"
+                  style={{ ...inputStyle, marginBottom: 10, background: "#fff", borderColor: resetPwInput && resetPwInput.length < 6 ? "#dc2626" : "#e5e7eb", transition: "border-color 150ms" }}
+                  onFocus={e => { e.target.style.borderColor = GOLD; e.target.style.boxShadow = `0 0 0 3px rgba(201,136,58,0.15)`; }}
+                  onBlur={e => { e.target.style.borderColor = resetPwInput && resetPwInput.length < 6 ? "#dc2626" : "#e5e7eb"; e.target.style.boxShadow = "none"; }}
+                />
+                {resetPwInput && resetPwInput.length < 6 && (
+                  <div style={{ fontSize: 11, color: "#dc2626", marginBottom: 8, fontFamily: FF }}>Password must be at least 6 characters</div>
+                )}
                 <div style={{ display: "flex", gap: 8 }}>
-                  <button type="button" onClick={() => setResetPwConfirm(false)} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "#fff", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
-                  <button type="button" onClick={resetPassword} disabled={resetPwLoading}
-                    style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: "#d97706", color: "#fff", fontSize: 12.5, fontWeight: 700, cursor: resetPwLoading ? "not-allowed" : "pointer", fontFamily: FF, opacity: resetPwLoading ? 0.7 : 1 }}>
-                    {resetPwLoading ? "Sending…" : "Send New Password"}
+                  <button type="button" onClick={() => { setResetPwConfirm(false); setResetPwInput(""); }} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "#fff", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+                  <button type="button" onClick={resetPassword} disabled={resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)}
+                    style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: "#d97706", color: "#fff", fontSize: 12.5, fontWeight: 700, cursor: (resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)) ? "not-allowed" : "pointer", fontFamily: FF, opacity: (resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)) ? 0.6 : 1 }}>
+                    {resetPwLoading ? "Sending…" : "Set & Send Password"}
                   </button>
                 </div>
               </div>
