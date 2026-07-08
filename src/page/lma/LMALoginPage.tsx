@@ -266,7 +266,7 @@ export default function LMALoginPage() {
         {/* ══ LEFT PANEL — mirrors ERP layout ════════════════════════════════ */}
         <div className="lma-left" style={{
           flex: "0 0 56%", flexDirection: "column", justifyContent: "flex-start",
-          padding: "56px 60px 48px", position: "relative", overflow: "hidden",
+          padding: "34px 60px 48px", position: "relative", overflow: "hidden",
           background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
         }}>
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
