@@ -374,11 +374,11 @@ export default function BecomeInstructorPage() {
     else if (!/^[^@]+@[^@]+\.[^@]+$/.test(fields.email))    e.email     = "Enter a valid email address.";
     if (!fields.password)                                     e.password  = "Password is required.";
     else if (fields.password.length < 6)                      e.password  = "Password must be at least 6 characters.";
-    if (fields.bio.trim().length > 0 && fields.bio.trim().length < 50)
-                                                              e.bio       = `Bio must be at least 50 characters (${fields.bio.trim().length}/50).`;
+    if (fields.bio.trim().length > 0 && fields.bio.trim().length < 30)
+                                                              e.bio       = `Bio must be at least 30 characters (${fields.bio.trim().length}/30).`;
     else if (!fields.bio.trim())                              e.bio       = "Bio is required.";
-    if (fields.whyTeach.trim().length > 0 && fields.whyTeach.trim().length < 100)
-                                                              e.whyTeach  = `Must be at least 100 characters (${fields.whyTeach.trim().length}/100).`;
+    if (fields.whyTeach.trim().length > 0 && fields.whyTeach.trim().length < 50)
+                                                              e.whyTeach  = `Must be at least 50 characters (${fields.whyTeach.trim().length}/50).`;
     else if (!fields.whyTeach.trim())                         e.whyTeach  = "This field is required.";
     return e;
   }, [fullName, email, phone, expertise, bio, whyTeach, password]);
@@ -643,14 +643,14 @@ export default function BecomeInstructorPage() {
                       {i === 4 && (
                         <FloatTextarea id="bio" label="Short Bio" value={bio} onChange={setBio}
                           icon={<FileText size={16} strokeWidth={2} />}
-                          rows={3} minChars={50}
+                          rows={3} minChars={30}
                           error={errsFor("bio")} valid={validFor("bio") as boolean}
                           onBlur={() => touch("bio")} />
                       )}
                       {i === 5 && (
                         <FloatTextarea id="whyTeach" label="Why do you want to teach?" value={whyTeach} onChange={setWhyTeach}
                           icon={<MessageSquare size={16} strokeWidth={2} />}
-                          rows={4} minChars={100}
+                          rows={4} minChars={50}
                           error={errsFor("whyTeach")} valid={validFor("whyTeach") as boolean}
                           onBlur={() => touch("whyTeach")} />
                       )}
