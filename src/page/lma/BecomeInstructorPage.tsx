@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   User, Mail, Phone, BookOpen, FileText, MessageSquare,
-  Check, ArrowRight, Users, IndianRupee, Award, ChevronRight,
+  Check, ArrowRight, Users, IndianRupee, Award, ChevronRight, Lock,
 } from "lucide-react";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
@@ -336,6 +336,7 @@ export default function BecomeInstructorPage() {
   const [expertise, setExpertise] = useState("");
   const [bio,       setBio]       = useState("");
   const [whyTeach,  setWhyTeach]  = useState("");
+  const [password,  setPassword]  = useState("");
 
   const [errors,   setErrors]   = useState<Record<string, string>>({});
   const [touched,  setTouched]  = useState<Record<string, boolean>>({});
@@ -366,11 +367,13 @@ export default function BecomeInstructorPage() {
   const s3 = useCountUp(95,  1100, 1050, "%");
 
   // Validation
-  const validate = useCallback((fields = { fullName, email, phone, expertise, bio, whyTeach }) => {
+  const validate = useCallback((fields = { fullName, email, phone, expertise, bio, whyTeach, password }) => {
     const e: Record<string, string> = {};
     if (!fields.fullName.trim())                              e.fullName  = "Full name is required.";
     if (!fields.email.trim())                                 e.email     = "Email is required.";
     else if (!/^[^@]+@[^@]+\.[^@]+$/.test(fields.email))    e.email     = "Enter a valid email address.";
+    if (!fields.password)                                     e.password  = "Password is required.";
+    else if (fields.password.length < 6)                      e.password  = "Password must be at least 6 characters.";
     if (fields.bio.trim().length > 0 && fields.bio.trim().length < 50)
                                                               e.bio       = `Bio must be at least 50 characters (${fields.bio.trim().length}/50).`;
     else if (!fields.bio.trim())                              e.bio       = "Bio is required.";
@@ -378,10 +381,10 @@ export default function BecomeInstructorPage() {
                                                               e.whyTeach  = `Must be at least 100 characters (${fields.whyTeach.trim().length}/100).`;
     else if (!fields.whyTeach.trim())                         e.whyTeach  = "This field is required.";
     return e;
-  }, [fullName, email, phone, expertise, bio, whyTeach]);
+  }, [fullName, email, phone, expertise, bio, whyTeach, password]);
 
   const errsFor = (field: string) => touched[field] ? (errors[field] || "") : "";
-  const validFor = (field: string) => touched[field] && !errors[field] && !!{ fullName, email, bio, whyTeach, phone, expertise }[field as keyof typeof errors];
+  const validFor = (field: string) => touched[field] && !errors[field] && !!{ fullName, email, bio, whyTeach, phone, expertise, password }[field as keyof typeof errors];
   const touch = (field: string) => {
     setTouched(t => ({ ...t, [field]: true }));
     setErrors(validate());
@@ -389,11 +392,11 @@ export default function BecomeInstructorPage() {
 
   useEffect(() => {
     if (Object.keys(touched).length > 0) setErrors(validate());
-  }, [fullName, email, phone, expertise, bio, whyTeach]);
+  }, [fullName, email, phone, expertise, bio, whyTeach, password]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const allTouched = { fullName: true, email: true, phone: true, expertise: true, bio: true, whyTeach: true };
+    const allTouched = { fullName: true, email: true, phone: true, expertise: true, bio: true, whyTeach: true, password: true };
     setTouched(allTouched);
     const errs = validate();
     setErrors(errs);
@@ -405,7 +408,7 @@ export default function BecomeInstructorPage() {
       const res = await fetch(`${API}/lma/become-instructor/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ full_name: fullName, email, phone, expertise, bio, why_teach: whyTeach }),
+        body: JSON.stringify({ full_name: fullName, email, phone, expertise, bio, why_teach: whyTeach, password }),
       });
       const data = await res.json();
       if (!res.ok) { setApiErr(data.error || "Submission failed. Please try again."); setShaking(true); setTimeout(() => setShaking(false), 520); return; }
@@ -606,13 +609,19 @@ export default function BecomeInstructorPage() {
 
                 <form onSubmit={handleSubmit} noValidate>
                   {/* Fields stagger in */}
-                  {[0,1,2,3,4,5].map(i => (
+                  {[0,1,6,2,3,4,5].map(i => (
                     <div key={i} style={{ animation: `biFadeUp 0.38s cubic-bezier(0.22,1,0.36,1) ${0.22 + i * 0.06}s both` }}>
                       {i === 0 && (
                         <FloatLabel id="fullName" label="Full Name" value={fullName} onChange={setFullName}
                           icon={<User size={16} strokeWidth={2} />}
                           error={errsFor("fullName")} valid={validFor("fullName") as boolean}
                           autoComplete="name" onBlur={() => touch("fullName")} />
+                      )}
+                      {i === 6 && (
+                        <FloatLabel id="password" label="Choose a Password" type="password" value={password} onChange={setPassword}
+                          icon={<Lock size={16} strokeWidth={2} />}
+                          error={errsFor("password")} valid={validFor("password") as boolean}
+                          autoComplete="new-password" onBlur={() => touch("password")} />
                       )}
                       {i === 1 && (
                         <FloatLabel id="email" label="Email Address" type="email" value={email} onChange={setEmail}
