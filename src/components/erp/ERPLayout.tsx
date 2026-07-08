@@ -97,10 +97,19 @@ const ERPLayout = ({ children }: Props) => {
       } as React.CSSProperties}
     >
       <style>{`
+        .erp-sidebar {
+          display: none;
+        }
+        .erp-sidebar.erp-sidebar-mobile-open {
+          display: flex;
+        }
         @media (min-width: 992px) {
           .erp-main {
             margin-left: var(--sidebar-w) !important;
             transition: margin-left 0.28s cubic-bezier(0.22,1,0.36,1);
+          }
+          .erp-sidebar {
+            display: flex !important;
           }
         }
 
@@ -244,7 +253,7 @@ const ERPLayout = ({ children }: Props) => {
 
       {/* sidebar */}
       <aside
-        className={mobileOpen ? 'd-flex' : 'd-none d-lg-flex'}
+        className={`erp-sidebar${mobileOpen ? ' erp-sidebar-mobile-open' : ''}`}
         style={{
           width: sidebarW,
           background: `linear-gradient(180deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
