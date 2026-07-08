@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
@@ -90,6 +90,10 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving,  setSaving]  = useState(false);
 
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     apiService.get('/auth/profile/').then(res => {
       if ('success' in res && res.success) {
@@ -103,10 +107,43 @@ export default function EditProfilePage() {
           department:  d.department  || '',
           bio:         d.bio         || '',
         });
+        setAvatarUrl(d.avatar_url || null);
       }
       setLoading(false);
     });
   }, []);
+
+  const handleAvatarPick = () => fileInputRef.current?.click();
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be under 5MB');
+      return;
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarUrl(previewUrl);
+
+    setAvatarUploading(true);
+    const formData = new FormData();
+    formData.append('avatar', file);
+    const res = await apiService.uploadFile('/auth/profile/avatar/', formData);
+    setAvatarUploading(false);
+
+    if ('success' in res && res.success) {
+      setAvatarUrl((res.data as any)?.avatar_url || previewUrl);
+      toast.success('Photo updated');
+    } else {
+      toast.error((res as any).message || 'Upload failed');
+    }
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const set = (key: keyof FormData) => (v: string) => setForm(p => ({ ...p, [key]: v }));
 
@@ -169,13 +206,26 @@ export default function EditProfilePage() {
         {/* Avatar column */}
         <motion.div initial={{ opacity: 0, x: -14 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.40, delay: 0.06 }}>
           <div style={{ ...CARD, padding: '24px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
-            <div style={{ position: 'relative' }}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              style={{ display: 'none' }}
+            />
+            <div style={{ position: 'relative', cursor: 'pointer' }} onClick={handleAvatarPick}>
               <div style={{
-                width: 76, height: 76, borderRadius: '50%', background: OG_G,
+                width: 76, height: 76, borderRadius: '50%',
+                background: avatarUrl ? `#000 url(${avatarUrl}) center/cover no-repeat` : OG_G,
                 boxShadow: `0 0 0 3px #0c0804, 0 0 0 5px ${OG}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
+                opacity: avatarUploading ? 0.5 : 1,
+                transition: 'opacity 0.2s',
               }}>
-                <span style={{ fontSize: 30, fontWeight: 800, color: '#fff' }}>{initial}</span>
+                {!avatarUrl && <span style={{ fontSize: 30, fontWeight: 800, color: '#fff' }}>{initial}</span>}
+                {avatarUploading && (
+                  <span style={{ width: 20, height: 20, border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'erpSpin 0.7s linear infinite', display: 'inline-block' }} />
+                )}
               </div>
               <div style={{
                 position: 'absolute', bottom: 0, right: 0,
@@ -186,8 +236,21 @@ export default function EditProfilePage() {
                 <i className="fas fa-camera" style={{ color: '#fff', fontSize: 9 }} />
               </div>
             </div>
-            <p style={{ color: 'rgba(20,20,19,0.40)', fontSize: 10.5, textAlign: 'center', lineHeight: 1.55, margin: 0 }}>
-              Avatar upload coming soon
+            <button
+              type="button"
+              onClick={handleAvatarPick}
+              style={{
+                background: 'rgba(201,136,58,0.08)', border: '1px solid rgba(201,136,58,0.20)',
+                borderRadius: 8, padding: '6px 14px', color: OG, fontSize: 11.5, fontWeight: 600,
+                fontFamily: FONT, cursor: 'pointer', transition: 'background 0.18s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.08)'; }}
+            >
+              {avatarUrl ? 'Change Photo' : 'Add Photo'}
+            </button>
+            <p style={{ color: 'rgba(20,20,19,0.40)', fontSize: 10, textAlign: 'center', lineHeight: 1.5, margin: 0 }}>
+              JPG or PNG, up to 5MB
             </p>
           </div>
         </motion.div>

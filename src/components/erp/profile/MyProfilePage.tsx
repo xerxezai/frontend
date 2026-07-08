@@ -88,12 +88,12 @@ export default function MyProfilePage() {
               transition={{ duration: 0.5, delay: 0.10, ease: [0.34, 1.56, 0.64, 1] }}
               style={{
                 width: 76, height: 76, borderRadius: '50%', flexShrink: 0,
-                background: OG_G,
+                background: profile?.avatar_url ? `#000 url(${profile.avatar_url}) center/cover no-repeat` : OG_G,
                 boxShadow: `0 0 0 3px #1a1208, 0 0 0 5px ${OG}, 0 8px 28px rgba(201,136,58,0.25)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
             >
-              <span style={{ fontSize: 30, fontWeight: 800, color: '#fff' }}>{initial}</span>
+              {!profile?.avatar_url && <span style={{ fontSize: 30, fontWeight: 800, color: '#fff' }}>{initial}</span>}
             </motion.div>
 
             <div style={{ flex: 1, minWidth: 160 }}>
