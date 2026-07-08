@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 
 const C = {
   orange:     "#C9883A",
   orangeGrad: "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
   warmDark:   "#1a1208",
   warmDarker: "#0f0a05",
+  dark:       "#1a1208",
   cream:      "#F8F7F4",
   white:      "#FFFFFF",
   muted:      "#6B6B6B",
@@ -63,6 +64,7 @@ const ERPLayout = ({ children }: Props) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!profileOpen) return;
@@ -78,6 +80,11 @@ const ERPLayout = ({ children }: Props) => {
   const adminName = localStorage.getItem('xerxez_name') || 'Admin';
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
+
+  const currentNavItem = NAV.find(
+    item => 'to' in item && (item.to === location.pathname || location.pathname.startsWith(item.to + '/'))
+  );
+  const pageTitle = currentNavItem && 'label' in currentNavItem ? currentNavItem.label : 'Dashboard';
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -206,6 +213,17 @@ const ERPLayout = ({ children }: Props) => {
         }
         .erp-search::placeholder { color: rgba(255,255,255,0.28); }
 
+        .erp-search-light {
+          border: 1.5px solid rgba(0,0,0,0.10);
+          background: #F8F7F4;
+          color: #1a1208;
+        }
+        .erp-search-light:focus {
+          border-color: #C9883A;
+          box-shadow: 0 0 0 3px rgba(201,136,58,0.14);
+        }
+        .erp-search-light::placeholder { color: rgba(0,0,0,0.32); }
+
         .erp-bell {
           width: 38px; height: 38px;
           border-radius: 10px;
@@ -216,6 +234,24 @@ const ERPLayout = ({ children }: Props) => {
           transition: background 0.2s, border-color 0.2s;
         }
         .erp-bell:hover { background: rgba(201,136,58,0.14); border-color: rgba(201,136,58,0.36); }
+
+        .erp-bell-light {
+          background: #F8F7F4;
+          border: 1.5px solid rgba(0,0,0,0.08);
+        }
+        .erp-bell-light:hover { background: rgba(201,136,58,0.12); border-color: rgba(201,136,58,0.30); }
+
+        .erp-topbtn {
+          height: 38px;
+          border-radius: 10px;
+          background: #F8F7F4;
+          border: 1.5px solid rgba(0,0,0,0.08);
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; position: relative;
+          padding: 0 11px;
+          transition: background 0.2s, border-color 0.2s;
+        }
+        .erp-topbtn:hover { background: rgba(201,136,58,0.12); border-color: rgba(201,136,58,0.30); }
 
         .erp-logout {
           background: rgba(239,68,68,0.07);
@@ -354,8 +390,8 @@ const ERPLayout = ({ children }: Props) => {
 
         {/* header */}
         <header style={{
-          background: 'linear-gradient(90deg, #1a1208 0%, #0f0a05 100%)',
-          boxShadow: '0 1px 0 rgba(255,255,255,0.06), 0 2px 16px rgba(0,0,0,0.40)',
+          background: C.white,
+          boxShadow: '0 1px 0 rgba(0,0,0,0.06), 0 2px 16px rgba(0,0,0,0.05)',
           padding: '0 24px',
           height: 64,
           display: 'flex',
@@ -364,29 +400,35 @@ const ERPLayout = ({ children }: Props) => {
           position: 'sticky',
           top: 0,
           zIndex: 100,
+          gap: 16,
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
             <button
               className="d-lg-none"
               onClick={() => setMobileOpen(o => !o)}
               aria-label="Open menu"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'rgba(255,255,255,0.70)' }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: C.dark, flexShrink: 0 }}
             >
               <i className="fas fa-bars" style={{ fontSize: 18 }}></i>
             </button>
-            <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-              style={{ height: 44, width: 'auto', display: 'block' }} />
+            <h1 style={{
+              fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 20,
+              color: C.dark, margin: 0, letterSpacing: '-0.01em',
+              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>
+              {pageTitle}
+            </h1>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div className="d-none d-md-block" style={{ position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+            <div className="d-none d-lg-block" style={{ position: 'relative', marginRight: 4 }}>
               <i className="fas fa-search" style={{
                 position: 'absolute', left: 11,
                 top: '50%', transform: 'translateY(-50%)',
-                color: 'rgba(255,255,255,0.28)', fontSize: 12, pointerEvents: 'none',
+                color: 'rgba(0,0,0,0.28)', fontSize: 12, pointerEvents: 'none',
               }}></i>
               <input
-                className="erp-search"
+                className="erp-search erp-search-light"
                 type="text"
                 placeholder="Search..."
                 value={searchVal}
@@ -395,12 +437,36 @@ const ERPLayout = ({ children }: Props) => {
               />
             </div>
 
-            <button className="erp-bell" aria-label="Notifications">
-              <i className="fas fa-bell" style={{ color: 'rgba(255,255,255,0.60)', fontSize: 14 }}></i>
+            {/* language selector */}
+            <div className="d-none d-md-flex erp-topbtn" style={{ gap: 6, padding: '7px 11px' }}>
+              <span style={{ fontSize: 15, lineHeight: 1 }}>🇬🇧</span>
+              <span style={{ color: C.dark, fontSize: 13, fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }}>English</span>
+              <i className="fas fa-chevron-down" style={{ color: C.muted, fontSize: 9 }} />
+            </div>
+
+            {/* fullscreen toggle */}
+            <button
+              className="erp-topbtn d-none d-md-flex"
+              aria-label="Toggle fullscreen"
+              onClick={() => {
+                if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+                else document.exitFullscreen?.();
+              }}
+            >
+              <i className="fas fa-expand" style={{ color: C.dark, fontSize: 13 }}></i>
+            </button>
+
+            {/* mail */}
+            <button className="erp-topbtn" aria-label="Messages" style={{ position: 'relative' }}>
+              <i className="fas fa-envelope" style={{ color: C.dark, fontSize: 13 }}></i>
+            </button>
+
+            <button className="erp-bell erp-bell-light" aria-label="Notifications">
+              <i className="fas fa-bell" style={{ color: C.dark, fontSize: 14 }}></i>
               <span style={{
                 position: 'absolute', top: 8, right: 8,
                 width: 7, height: 7, borderRadius: '50%',
-                background: C.orange, border: '1.5px solid #1a1208',
+                background: C.orange, border: '1.5px solid #fff',
                 display: 'block',
               }}></span>
             </button>
@@ -413,8 +479,8 @@ const ERPLayout = ({ children }: Props) => {
                 aria-label="User menu"
                 style={{
                   display: 'flex', alignItems: 'center', gap: 9,
-                  background: profileOpen ? 'rgba(201,136,58,0.12)' : 'rgba(255,255,255,0.04)',
-                  border: `1px solid ${profileOpen ? 'rgba(201,136,58,0.36)' : 'rgba(255,255,255,0.08)'}`,
+                  background: profileOpen ? 'rgba(201,136,58,0.12)' : '#F8F7F4',
+                  border: `1px solid ${profileOpen ? 'rgba(201,136,58,0.36)' : 'rgba(0,0,0,0.08)'}`,
                   borderRadius: 12, padding: '5px 11px 5px 5px',
                   cursor: 'pointer',
                   transition: 'background 0.2s, border-color 0.2s',
@@ -424,19 +490,19 @@ const ERPLayout = ({ children }: Props) => {
                 <div style={{
                   width: 32, height: 32, borderRadius: '50%',
                   background: C.orangeGrad,
-                  boxShadow: `0 0 0 2px #1a1208, 0 0 0 3px ${C.orange}`,
+                  boxShadow: `0 0 0 2px #fff, 0 0 0 3px ${C.orange}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
                   <span style={{ color: '#fff', fontWeight: 800, fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>{initial}</span>
                 </div>
                 {/* name + role — hidden on small screens */}
                 <div className="d-none d-md-block" style={{ textAlign: 'left' }}>
-                  <div style={{ color: '#fff', fontWeight: 700, fontSize: 12.5, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.2, whiteSpace: 'nowrap' }}>{adminName}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10.5, fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap' }}>{isAdmin ? 'super_admin' : 'user'}</div>
+                  <div style={{ color: C.dark, fontWeight: 700, fontSize: 12.5, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.2, whiteSpace: 'nowrap' }}>{adminName}</div>
+                  <div style={{ color: C.muted, fontSize: 10.5, fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap' }}>{isAdmin ? 'super_admin' : 'user'}</div>
                 </div>
                 <i
                   className={`fas fa-chevron-${profileOpen ? 'up' : 'down'}`}
-                  style={{ color: 'rgba(255,255,255,0.30)', fontSize: 9, transition: 'transform 0.2s' }}
+                  style={{ color: C.muted, fontSize: 9, transition: 'transform 0.2s' }}
                 />
               </button>
 
