@@ -1533,66 +1533,187 @@ function AssignmentsView({ data, onGrade }: { data: any; onGrade: (s: any) => vo
   );
 }
 
+// ── Decode current user id from lma_token ─────────────────────────────────────
+function getCurrentUserId(): number | null {
+  try {
+    const tok = localStorage.getItem("lma_token");
+    if (!tok) return null;
+    const payload = JSON.parse(atob(tok.split(".")[1]));
+    return payload.user_id ?? null;
+  } catch { return null; }
+}
+
+// ── InstructorSlidePanel ───────────────────────────────────────────────────────
+function InstructorSlidePanel({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.40)", zIndex: 500, animation: "lmai-fadeIn 0.18s ease both" }} />
+      <div style={{
+        position: "fixed", top: 0, right: 0, height: "100vh", width: "min(500px, 100vw)",
+        background: "#fff", zIndex: 501, display: "flex", flexDirection: "column",
+        boxShadow: "-8px 0 48px rgba(0,0,0,0.18)",
+        animation: "lmai-slideIn 0.35s cubic-bezier(0.22,1,0.36,1) both",
+      }}>
+        <div style={{ padding: "20px 24px 16px", borderBottom: "1px solid rgba(0,0,0,0.07)", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+          <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>{title}</h3>
+          <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", padding: 6, borderRadius: 8 }}><X size={20} /></button>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px 28px" }}>
+          {children}
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ── ManageInstructorsView ─────────────────────────────────────────────────────
 function ManageInstructorsView({ token, showToast }: { token: string; showToast: (m: string, t?: "success" | "error") => void }) {
+  const currentUserId = getCurrentUserId();
+
+  // List state
   const [instructors, setInstructors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fadingOut, setFadingOut] = useState<Set<number>>(new Set());
+
+  // Create form
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", password: "", bio: "" });
   const [saving, setSaving] = useState(false);
 
+  // View Courses panel
+  const [viewTarget, setViewTarget] = useState<any | null>(null);
+  const [viewCourses, setViewCourses] = useState<any[]>([]);
+  const [viewLoading, setViewLoading] = useState(false);
+
+  // Edit panel
+  const [editTarget, setEditTarget] = useState<any | null>(null);
+  const [editForm, setEditForm] = useState({ full_name: "", email: "", instructor_level: "" });
+  const [editSaving, setEditSaving] = useState(false);
+  const [resetPwConfirm, setResetPwConfirm] = useState(false);
+  const [resetPwLoading, setResetPwLoading] = useState(false);
+
+  // Delete modal
+  const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
   const load = useCallback(() => {
     setLoading(true);
-    fetch(`${API}/lma/instructor/instructors/`, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${API}/lma/instructor/instructors/`, { headers: hdr(token) })
       .then(r => r.json()).then(d => setInstructors(Array.isArray(d) ? d : []))
       .catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
   useEffect(() => { load(); }, [load]);
 
+  // ── Create
   const createInstructor = async () => {
     if (!form.name || !form.email || !form.password) { showToast("Name, email and password required", "error"); return; }
     setSaving(true);
     try {
-      const r = await fetch(`${API}/lma/instructor/create-instructor/`, {
-        method: "POST", headers: hdr(token), body: JSON.stringify(form),
+      const r = await fetch(`${API}/lma/instructor/create-instructor/`, { method: "POST", headers: hdr(token), body: JSON.stringify(form) });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Failed", "error"); return; }
+      showToast(`Instructor ${form.name} created!`);
+      setShowForm(false); setForm({ name: "", email: "", password: "", bio: "" }); load();
+    } catch { showToast("Network error", "error"); } finally { setSaving(false); }
+  };
+
+  // ── View Courses
+  const openViewCourses = async (ins: any) => {
+    setViewTarget(ins); setViewLoading(true); setViewCourses([]);
+    try {
+      const r = await fetch(`${API}/lma/instructor/instructors/${ins.id}/courses/`, { headers: hdr(token) });
+      const d = await r.json(); setViewCourses(Array.isArray(d) ? d : []);
+    } catch { showToast("Failed to load courses", "error"); } finally { setViewLoading(false); }
+  };
+
+  // ── Edit
+  const openEdit = (ins: any) => {
+    setEditTarget(ins);
+    setEditForm({ full_name: ins.name, email: ins.email, instructor_level: ins.instructor_level });
+    setResetPwConfirm(false);
+  };
+
+  const saveEdit = async () => {
+    if (!editTarget) return;
+    setEditSaving(true);
+    try {
+      const r = await fetch(`${API}/lma/instructor/instructors/${editTarget.id}/`, {
+        method: "PUT", headers: hdr(token), body: JSON.stringify(editForm),
       });
       const d = await r.json();
-      if (!r.ok) { showToast(d.error || "Failed to create instructor", "error"); return; }
-      showToast(`Instructor ${form.name} created!`);
-      setShowForm(false);
-      setForm({ name: "", email: "", password: "", bio: "" });
-      load();
-    } catch { showToast("Network error", "error"); } finally { setSaving(false); }
+      if (!r.ok) { showToast(d.error || "Update failed", "error"); return; }
+      showToast("Instructor updated!");
+      setInstructors(prev => prev.map(i => i.id === editTarget.id ? { ...i, name: d.name, email: d.email, instructor_level: d.instructor_level } : i));
+      setEditTarget(null);
+    } catch { showToast("Network error", "error"); } finally { setEditSaving(false); }
+  };
+
+  // ── Reset Password
+  const resetPassword = async () => {
+    if (!editTarget) return;
+    setResetPwLoading(true);
+    try {
+      const r = await fetch(`${API}/lma/instructor/instructors/${editTarget.id}/reset-password/`, { method: "POST", headers: hdr(token) });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Reset failed", "error"); return; }
+      showToast(`New password sent to ${d.email}`);
+      setResetPwConfirm(false);
+    } catch { showToast("Network error", "error"); } finally { setResetPwLoading(false); }
+  };
+
+  // ── Delete
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const r = await fetch(`${API}/lma/instructor/instructors/${deleteTarget.id}/delete/`, { method: "DELETE", headers: hdr(token) });
+      const d = await r.json();
+      if (!r.ok) { showToast(d.error || "Delete failed", "error"); return; }
+      const count = d.courses_unassigned ?? 0;
+      showToast(`${deleteTarget.name} deleted. ${count > 0 ? `${count} course${count > 1 ? "s" : ""} moved to draft.` : "No courses affected."}`);
+      setFadingOut(prev => new Set([...prev, deleteTarget.id]));
+      setTimeout(() => {
+        setInstructors(prev => prev.filter(i => i.id !== deleteTarget.id));
+        setFadingOut(prev => { const s = new Set(prev); s.delete(deleteTarget.id); return s; });
+      }, 320);
+      setDeleteTarget(null);
+    } catch { showToast("Network error", "error"); } finally { setDeleting(false); }
+  };
+
+  const isSuper  = (ins: any) => ins.instructor_level === "super";
+  const isSelf   = (ins: any) => ins.id === currentUserId;
+
+  const STATUS_C: Record<string, { bg: string; color: string }> = {
+    published:      { bg: "#d1fae5", color: "#059669" },
+    draft:          { bg: "#f3f4f6", color: "#6b7280" },
+    pending_review: { bg: "#fef3c7", color: "#d97706" },
+    rejected:       { bg: "#fee2e2", color: "#dc2626" },
   };
 
   return (
     <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
+
+      {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
         <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: 0, fontFamily: FF }}>Manage Instructors</h2>
-        <button type="button" onClick={() => setShowForm(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)" }}>
+        <button type="button" onClick={() => setShowForm(v => !v)}
+          style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)" }}>
           <PlusCircle size={15} /> Add Instructor
         </button>
       </div>
 
+      {/* Create form */}
       {showForm && (
-        <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 20 }}>
+        <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 20, animation: "lmai-pageIn 0.22s ease both" }}>
           <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>New Regular Instructor</h3>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-            <Field label="Full Name">
-              <input style={inputStyle} value={form.name} placeholder="e.g. Sarah Khan" onChange={e => setForm(f => ({ ...f, name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-            </Field>
-            <Field label="Email">
-              <input type="email" style={inputStyle} value={form.email} placeholder="e.g. sarah@company.com" onChange={e => setForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-            </Field>
+            <Field label="Full Name"><input style={inputStyle} value={form.name} placeholder="e.g. Sarah Khan" onChange={e => setForm(f => ({ ...f, name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
+            <Field label="Email"><input type="email" style={inputStyle} value={form.email} placeholder="sarah@company.com" onChange={e => setForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-            <Field label="Temporary Password">
-              <input type="password" style={inputStyle} value={form.password} placeholder="Min 6 characters" onChange={e => setForm(f => ({ ...f, password: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-            </Field>
-            <Field label="Bio (optional)">
-              <input style={inputStyle} value={form.bio} placeholder="Brief introduction…" onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-            </Field>
+            <Field label="Temporary Password"><input type="password" style={inputStyle} value={form.password} placeholder="Min 6 characters" onChange={e => setForm(f => ({ ...f, password: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
+            <Field label="Bio (optional)"><input style={inputStyle} value={form.bio} placeholder="Brief introduction…" onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <button type="button" onClick={() => setShowForm(false)} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
@@ -1601,6 +1722,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
         </div>
       )}
 
+      {/* Table */}
       {loading ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>{[0,1,2].map(i => <SkeletonBox key={i} h={70} />)}</div>
       ) : instructors.length === 0 ? (
@@ -1610,36 +1732,208 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
         </div>
       ) : (
         <div style={{ background: "#fff", borderRadius: 16, overflow: "auto", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
             <thead>
               <tr style={{ background: "#f9f7f4", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-                {["Instructor", "Email", "Level", "Courses", "Joined"].map(h => (
-                  <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 10.5, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF }}>{h}</th>
+                {["Instructor", "Email", "Level", "Courses", "Joined", "Actions"].map(h => (
+                  <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 10.5, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF, whiteSpace: "nowrap" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {instructors.map((ins: any, i: number) => (
-                <tr key={ins.id} style={{ borderBottom: i < instructors.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none" }} className="lmai-tr">
+                <tr key={ins.id} className="lmai-tr"
+                  style={{
+                    borderBottom: i < instructors.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none",
+                    opacity: fadingOut.has(ins.id) ? 0 : 1,
+                    transform: fadingOut.has(ins.id) ? "scaleY(0.85)" : "scaleY(1)",
+                    transition: fadingOut.has(ins.id) ? "opacity 0.30s ease, transform 0.30s ease" : "none",
+                    transformOrigin: "top",
+                  }}>
                   <td style={{ padding: "13px 16px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#0a0806" }}>{avatarInit(ins.name)}</div>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: "#141413", fontFamily: FF }}>{ins.name}</span>
+                      <div style={{ width: 34, height: 34, borderRadius: "50%", background: `linear-gradient(135deg,${AMBER},${GOLD})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#0a0806", flexShrink: 0 }}>{avatarInit(ins.name)}</div>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>{ins.name}</div>
+                        {isSelf(ins) && <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, fontFamily: FF }}>You</div>}
+                      </div>
                     </div>
                   </td>
                   <td style={{ padding: "13px 16px", fontSize: 12.5, color: "#6b7280", fontFamily: FF }}>{ins.email}</td>
                   <td style={{ padding: "13px 16px" }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: ins.instructor_level === "super" ? "rgba(139,92,246,0.10)" : "rgba(201,136,58,0.10)", color: ins.instructor_level === "super" ? "#7c3aed" : GOLD }}>
-                      {ins.instructor_level}
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: isSuper(ins) ? "rgba(139,92,246,0.10)" : "rgba(201,136,58,0.10)", color: isSuper(ins) ? "#7c3aed" : GOLD }}>
+                      {isSuper(ins) ? "Super" : "Regular"}
                     </span>
                   </td>
                   <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413", fontFamily: FF }}>{ins.course_count}</td>
-                  <td style={{ padding: "13px 16px", fontSize: 12, color: "#9ca3af" }}>{new Date(ins.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
+                  <td style={{ padding: "13px 16px", fontSize: 12, color: "#9ca3af", whiteSpace: "nowrap" }}>{new Date(ins.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
+                  <td style={{ padding: "13px 16px" }}>
+                    <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                      {/* View courses */}
+                      <button type="button" title="View Courses" onClick={() => openViewCourses(ins)}
+                        style={{ color: "#6b7280", background: "#f3f4f6", border: "none", borderRadius: 7, padding: 7, cursor: "pointer", display: "flex", alignItems: "center" }}>
+                        <Eye size={13} />
+                      </button>
+                      {/* Edit */}
+                      <button type="button" title="Edit" onClick={() => openEdit(ins)}
+                        style={{ color: GOLD, background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer", display: "flex", alignItems: "center" }}>
+                        <Edit3 size={13} />
+                      </button>
+                      {/* Delete — locked for super / self */}
+                      {isSuper(ins) || isSelf(ins) ? (
+                        <span title={isSuper(ins) ? "Cannot delete a super instructor" : "Cannot delete your own account"}
+                          style={{ color: "#d1d5db", background: "#f9f9f9", border: "none", borderRadius: 7, padding: 7, display: "flex", alignItems: "center", cursor: "not-allowed" }}>
+                          <Award size={13} />
+                        </span>
+                      ) : (
+                        <button type="button" title="Delete Instructor" onClick={() => setDeleteTarget(ins)}
+                          style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer", display: "flex", alignItems: "center" }}>
+                          <Trash2 size={13} />
+                        </button>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* ── VIEW COURSES slide panel ───────────────────────────────────────── */}
+      {viewTarget && (
+        <InstructorSlidePanel title={`${viewTarget.name}'s Courses`} onClose={() => setViewTarget(null)}>
+          {viewLoading ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>{[0,1,2].map(i => <SkeletonBox key={i} h={62} />)}</div>
+          ) : viewCourses.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "48px 0" }}>
+              <BookOpen size={40} color="#d1d5db" style={{ display: "block", margin: "0 auto 12px" }} />
+              <p style={{ color: "#9ca3af", fontSize: 13, margin: 0, fontFamily: FF }}>No courses yet.</p>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {viewCourses.map((c: any) => {
+                const sc = STATUS_C[c.status] ?? STATUS_C.draft;
+                return (
+                  <div key={c.id} style={{ background: "#f9f7f4", borderRadius: 12, padding: "14px 16px", border: "1px solid rgba(0,0,0,0.06)", display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", fontFamily: FF, marginBottom: 4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.title}</div>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        <span style={{ ...sc, fontSize: 10.5, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>{c.status === "pending_review" ? "Pending Review" : c.status.charAt(0).toUpperCase() + c.status.slice(1)}</span>
+                        <span style={{ fontSize: 11, color: "#9ca3af", fontFamily: FF }}>{c.total_students} students · {c.created_at}</span>
+                      </div>
+                    </div>
+                    <a href={`/lma/courses/${c.id}`} target="_blank" rel="noopener noreferrer"
+                      style={{ color: "#6b7280", background: "#fff", border: "1px solid rgba(0,0,0,0.10)", borderRadius: 7, padding: 6, display: "flex", textDecoration: "none" }}>
+                      <Eye size={13} />
+                    </a>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </InstructorSlidePanel>
+      )}
+
+      {/* ── EDIT slide panel ──────────────────────────────────────────────── */}
+      {editTarget && (
+        <InstructorSlidePanel title={`Edit — ${editTarget.name}`} onClose={() => setEditTarget(null)}>
+          <Field label="Full Name">
+            <input style={inputStyle} value={editForm.full_name} onChange={e => setEditForm(f => ({ ...f, full_name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+          </Field>
+          <Field label="Email">
+            <input type="email" style={inputStyle} value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+          </Field>
+          <Field label="Instructor Level">
+            <div style={{ position: "relative" }}>
+              <select
+                style={{ ...inputStyle, appearance: "none", cursor: isSuper(editTarget) ? "not-allowed" : "pointer", opacity: isSuper(editTarget) ? 0.55 : 1 }}
+                value={editForm.instructor_level}
+                disabled={isSuper(editTarget) || isSelf(editTarget)}
+                onChange={e => setEditForm(f => ({ ...f, instructor_level: e.target.value }))}
+                onFocus={focusGold} onBlur={blurGold}
+              >
+                <option value="regular">Regular Instructor</option>
+                <option value="super">Super Instructor</option>
+              </select>
+              {isSuper(editTarget) && (
+                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4, fontFamily: FF }}>Cannot change a super instructor's level</div>
+              )}
+              {isSelf(editTarget) && !isSuper(editTarget) && (
+                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4, fontFamily: FF }}>Cannot change your own level</div>
+              )}
+            </div>
+          </Field>
+
+          <button type="button" onClick={saveEdit} disabled={editSaving}
+            style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", fontSize: 14, fontWeight: 700, cursor: editSaving ? "not-allowed" : "pointer", fontFamily: FF, opacity: editSaving ? 0.7 : 1, marginBottom: 20, boxShadow: "0 4px 0 rgba(140,80,20,0.28)" }}>
+            {editSaving ? "Saving…" : "Save Changes"}
+          </button>
+
+          {/* Reset Password section */}
+          <div style={{ borderTop: "1px solid rgba(0,0,0,0.07)", paddingTop: 18 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(20,20,19,0.45)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 10 }}>Password</div>
+            {!resetPwConfirm ? (
+              <button type="button" onClick={() => setResetPwConfirm(true)}
+                style={{ width: "100%", padding: "11px", borderRadius: 9, border: "1.5px solid rgba(0,0,0,0.10)", background: "#f9f7f4", color: "#374151", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                <Plus size={14} /> Reset Password
+              </button>
+            ) : (
+              <div style={{ background: "#fef3c7", borderRadius: 10, padding: "14px", border: "1px solid #fde68a" }}>
+                <p style={{ fontSize: 12.5, color: "#92400e", margin: "0 0 12px", fontFamily: FF, lineHeight: 1.5 }}>
+                  A new 12-character password will be generated and emailed to <strong>{editTarget.email}</strong>.
+                </p>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button type="button" onClick={() => setResetPwConfirm(false)} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "#fff", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+                  <button type="button" onClick={resetPassword} disabled={resetPwLoading}
+                    style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: "#d97706", color: "#fff", fontSize: 12.5, fontWeight: 700, cursor: resetPwLoading ? "not-allowed" : "pointer", fontFamily: FF, opacity: resetPwLoading ? 0.7 : 1 }}>
+                    {resetPwLoading ? "Sending…" : "Send New Password"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </InstructorSlidePanel>
+      )}
+
+      {/* ── DELETE confirmation modal ──────────────────────────────────────── */}
+      {deleteTarget && (
+        <>
+          <div onClick={() => !deleting && setDeleteTarget(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.52)", zIndex: 800, animation: "lmai-fadeIn 0.18s ease both" }} />
+          <div style={{
+            position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
+            zIndex: 801, width: 400, padding: "32px 28px 26px",
+            background: "#fff", borderRadius: 20, borderTop: "3px solid #dc2626",
+            boxShadow: "0 24px 80px rgba(0,0,0,0.22)",
+            animation: "lmai-scaleIn 0.22s cubic-bezier(0.22,1,0.36,1) both",
+          }}>
+            <div style={{ textAlign: "center", marginBottom: 22 }}>
+              <div style={{ width: 54, height: 54, borderRadius: "50%", background: "rgba(220,38,38,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+                <Trash2 size={24} color="#dc2626" />
+              </div>
+              <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: "0 0 8px", fontFamily: FF }}>Delete {deleteTarget.name}?</h3>
+              {deleteTarget.course_count > 0 ? (
+                <p style={{ fontSize: 13, color: "#6b7280", margin: 0, fontFamily: FF, lineHeight: 1.6 }}>
+                  Their <strong style={{ color: "#141413" }}>{deleteTarget.course_count} course{deleteTarget.course_count > 1 ? "s" : ""}</strong> will be moved to <strong style={{ color: "#141413" }}>Draft</strong> and become unassigned.
+                  <br /><span style={{ color: "#dc2626", fontWeight: 600 }}>This cannot be undone.</span>
+                </p>
+              ) : (
+                <p style={{ fontSize: 13, color: "#6b7280", margin: 0, fontFamily: FF, lineHeight: 1.6 }}>
+                  This account will be permanently deleted.<br />
+                  <span style={{ color: "#dc2626", fontWeight: 600 }}>This cannot be undone.</span>
+                </p>
+              )}
+            </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button type="button" onClick={() => setDeleteTarget(null)} disabled={deleting}
+                style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13.5, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+              <button type="button" onClick={confirmDelete} disabled={deleting}
+                style={{ flex: 2, padding: "11px", borderRadius: 10, border: "none", background: "#dc2626", color: "#fff", fontSize: 13.5, fontWeight: 700, cursor: deleting ? "not-allowed" : "pointer", fontFamily: FF, opacity: deleting ? 0.7 : 1, boxShadow: "0 4px 0 rgba(185,28,28,0.30)" }}>
+                {deleting ? "Deleting…" : "Delete Account"}
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
