@@ -48,7 +48,17 @@ const ERPPage = () => {
       <ERPLogin
         onSuccess={() => {
           setIsAuthenticated(true);
-          navigate('/home', { replace: true });
+          const role = localStorage.getItem('xerxez_role') || '';
+          let isStaff = false;
+          try {
+            const tokens = localStorage.getItem('auth_tokens');
+            if (tokens) {
+              const payload = JSON.parse(atob(JSON.parse(tokens).access.split('.')[1]));
+              isStaff = payload.is_staff === true || payload.is_superuser === true;
+            }
+          } catch { /* malformed token — treat as non-admin */ }
+          const isAdmin = isStaff || role === 'admin' || role === 'super_admin' || role === 'superuser' || role === 'manager';
+          navigate(isAdmin ? '/home' : '/erp/dashboard', { replace: true });
         }}
       />
     );

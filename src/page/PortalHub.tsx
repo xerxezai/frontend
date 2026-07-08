@@ -269,6 +269,15 @@ export default function PortalHub() {
   const isAdmin = isAdminUser();
 
   useEffect(() => {
+    // Regular instructors must never land here — send them directly to their dashboard
+    const lmaToken  = localStorage.getItem("lma_token");
+    const instLevel = localStorage.getItem("lma_instructor_level");
+    const erpToken  = localStorage.getItem("auth_tokens");
+    if (lmaToken && instLevel === "regular" && !erpToken) {
+      navigate("/lma/instructor/dashboard", { replace: true });
+      return;
+    }
+
     const visible = getVisiblePortals();
     if (visible.length === 0) { navigate("/lma/login", { replace: true }); return; }
     if (visible.length === 1) { navigate(visible[0].route, { replace: true }); return; }
