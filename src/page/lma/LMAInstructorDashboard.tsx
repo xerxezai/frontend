@@ -272,7 +272,6 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
   const removeTag = (t: string) => set("tech_stack", form.tech_stack.filter(x => x !== t));
 
   const save = async () => {
-    console.log("[LMA] CourseFormPanel.save called", { editing, form });
     if (!form.title.trim()) { showToast("Title is required", "error"); return; }
     setSaving(true);
     try {
@@ -413,7 +412,6 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
   useEffect(() => { fetchModules(); }, [fetchModules]);
 
   const saveModule = async () => {
-    console.log("[LMA] saveModule called", { courseId: course.id, modForm });
     const { id, title, order } = modForm;
     if (!title.trim()) { showToast("Module title is required", "error"); return; }
     setSaving(true);
@@ -449,7 +447,6 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
   };
 
   const saveLesson = async () => {
-    console.log("[LMA] saveLesson called", { lesForm });
     const { id, modId, title, duration, order, content, video_url, is_free_preview } = lesForm;
     if (!title.trim()) { showToast("Lesson title is required", "error"); return; }
     if (!modId) { showToast("Module not selected", "error"); return; }

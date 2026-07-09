@@ -349,7 +349,8 @@ const ContactSection = () => {
   }, []);
 
   useEffect(() => {
-    fetch('https://backend-production-b9f2.up.railway.app/health/').catch(() => {});
+    const base = (import.meta.env.VITE_API_BASE_URL ?? 'https://backend-production-b9f2.up.railway.app/api/v1').replace(/\/api\/v1\/?$/, '');
+    fetch(`${base}/health/`).catch(() => {});
   }, []);
 
   return (
