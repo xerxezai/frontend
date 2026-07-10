@@ -4,7 +4,7 @@ import {
   PointerSensor, useSensor, useSensors, closestCenter,
 } from '@dnd-kit/core';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent } from 'lucide-react';
+import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent, Pencil, Trash2 } from 'lucide-react';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
 import {
   Card3D, OG, DARK, FF, STAGES, stageMeta, fmtINR, initials,
@@ -36,27 +36,84 @@ const StatCard = ({ label, value, sub, color, icon: Icon }: { label: string; val
   </Card3D>
 );
 
-// ── deal card (draggable) ────────────────────────────────────────────────────
-const DealCard = ({ deal }: { deal: Deal }) => {
+// ── delete confirmation modal ────────────────────────────────────────────────
+const DeleteConfirm = ({ dealTitle, onCancel, onConfirm }: { dealTitle: string; onCancel: () => void; onConfirm: () => void }) => (
+  <div onClick={onCancel} style={{ position: 'fixed', inset: 0, zIndex: 950, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(3px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, animation: 'crmFadeIn 0.18s ease both' }}>
+    <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 380, width: '100%', borderTop: '2px solid #ef4444', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+      <h6 style={{ fontWeight: 800, marginBottom: 8, color: DARK, fontSize: 15 }}>Delete this deal?</h6>
+      <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>“{dealTitle}” will be permanently removed. This cannot be undone.</p>
+      <div style={{ display: 'flex', gap: 10 }}>
+        <button onClick={onCancel} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
+        <button onClick={onConfirm} style={{ flex: 1, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: '9px', cursor: 'pointer', color: '#ef4444', fontFamily: FF, fontWeight: 700, fontSize: 13 }}>Delete</button>
+      </div>
+    </div>
+  </div>
+);
+
+// ── deal card (draggable, with edit/delete on hover) ─────────────────────────
+const DealCard = ({ deal, removing, onEdit, onDelete }: {
+  deal: Deal; removing: boolean; onEdit: () => void; onDelete: () => void;
+}) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: deal.id });
+  const [hovered, setHovered] = useState(false);
   const name = deal.customer_name || deal.lead_name || 'Unassigned';
+
+  const liveTransform = isDragging
+    ? (transform ? `translate3d(${transform.x}px,${transform.y}px,0) scale(1.03)` : undefined)
+    : (hovered ? 'translateY(-2px)' : 'translateY(0)');
+
   return (
     <div
       ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         background: '#fff', borderRadius: 12,
         border: '1px solid rgba(0,0,0,0.07)',
-        boxShadow: isDragging ? '0 16px 40px rgba(0,0,0,0.20)' : '0 1px 3px rgba(0,0,0,0.05)',
-        padding: '14px 14px 12px', marginBottom: 10,
-        opacity: isDragging ? 0.4 : 1,
-        transform: transform ? `translate3d(${transform.x}px,${transform.y}px,0) scale(1.03)` : undefined,
-        transition: isDragging ? 'none' : 'box-shadow 0.18s ease',
-        cursor: 'default', touchAction: 'none',
+        boxShadow: isDragging ? '0 16px 40px rgba(0,0,0,0.20)' : hovered ? '0 6px 18px rgba(0,0,0,0.10)' : '0 1px 3px rgba(0,0,0,0.05)',
+        padding: '14px 14px 12px',
+        opacity: removing ? 0 : isDragging ? 0.4 : 1,
+        maxHeight: removing ? 0 : 260,
+        marginTop: removing ? 0 : undefined,
+        marginBottom: removing ? 0 : 10,
+        overflow: 'hidden',
+        transform: liveTransform,
+        transition: removing
+          ? 'opacity 0.3s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease'
+          : isDragging ? 'none' : 'transform 0.18s ease, box-shadow 0.18s ease',
+        cursor: 'grab', touchAction: 'none', position: 'relative',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6, marginBottom: 6 }}>
+      {/* edit / delete — visible on hover */}
+      <div
+        onPointerDown={e => e.stopPropagation()}
+        style={{
+          position: 'absolute', top: 8, right: 8, display: 'flex', gap: 4,
+          opacity: hovered && !isDragging ? 1 : 0,
+          transition: 'opacity 0.15s ease', pointerEvents: hovered ? 'auto' : 'none',
+        }}
+      >
+        <button
+          onClick={onEdit}
+          title="Edit deal"
+          style={{ background: 'rgba(201,136,58,0.10)', border: 'none', borderRadius: 6, width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: OG }}
+        >
+          <Pencil size={11} />
+        </button>
+        <button
+          onClick={onDelete}
+          title="Delete deal"
+          style={{ background: 'rgba(239,68,68,0.10)', border: 'none', borderRadius: 6, width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ef4444' }}
+        >
+          <Trash2 size={11} />
+        </button>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6, marginBottom: 6, paddingRight: 52 }}>
         <div style={{ fontSize: 15, fontWeight: 700, color: DARK, fontFamily: FF, lineHeight: 1.3 }}>{deal.title}</div>
-        <span {...listeners} {...attributes} style={{ cursor: 'grab', color: '#c4c4c4', flexShrink: 0, padding: 2, touchAction: 'none' }}>
+        <span style={{ color: '#c4c4c4', flexShrink: 0, padding: 2, position: 'absolute', top: 8, right: hovered ? 60 : 8, transition: 'right 0.15s ease' }}>
           <GripVertical size={15} />
         </span>
       </div>
@@ -84,10 +141,13 @@ const DealCard = ({ deal }: { deal: Deal }) => {
 };
 
 // ── kanban column (droppable) ────────────────────────────────────────────────
-const Column = ({ stage, deals, onAdd }: { stage: DealStage; deals: Deal[]; onAdd: () => void }) => {
+const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete }: {
+  stage: DealStage; deals: Deal[]; removingIds: Set<number>;
+  onAdd: () => void; onEdit: (d: Deal) => void; onDelete: (d: Deal) => void;
+}) => {
   const meta = stageMeta(stage);
   const { setNodeRef, isOver } = useDroppable({ id: stage });
-  const totalValue = deals.reduce((s, d) => s + Number(d.value || 0), 0);
+  const totalValue = deals.filter(d => !removingIds.has(d.id)).reduce((s, d) => s + Number(d.value || 0), 0);
 
   return (
     <div
@@ -120,7 +180,15 @@ const Column = ({ stage, deals, onAdd }: { stage: DealStage; deals: Deal[]; onAd
         {fmtINR(totalValue)}
       </div>
       <div style={{ overflowY: 'auto', flex: 1, minHeight: 40, padding: '0 1px' }}>
-        {deals.map(d => <DealCard key={d.id} deal={d} />)}
+        {deals.map(d => (
+          <DealCard
+            key={d.id}
+            deal={d}
+            removing={removingIds.has(d.id)}
+            onEdit={() => onEdit(d)}
+            onDelete={() => onDelete(d)}
+          />
+        ))}
         {deals.length === 0 && (
           <div style={{ textAlign: 'center', padding: '20px 8px', fontSize: 12, color: '#b0aca4', fontFamily: FF }}>
             No deals
@@ -137,6 +205,9 @@ export default function CRMPipeline() {
   const [stats, setStats] = useState<PipelineStats | null>(null);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [addPanel, setAddPanel] = useState<DealStage | null>(null);
+  const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
+  const [deletingDeal, setDeletingDeal] = useState<Deal | null>(null);
+  const [removingIds, setRemovingIds] = useState<Set<number>>(new Set());
 
   useEffect(() => { setDeals(dealsList.data); }, [dealsList.data]);
 
@@ -176,6 +247,24 @@ export default function CRMPipeline() {
 
   const activeDeal = activeId ? deals.find(d => d.id === activeId) ?? null : null;
 
+  const confirmDelete = () => {
+    if (!deletingDeal) return;
+    const id = deletingDeal.id;
+    setDeletingDeal(null);
+    setRemovingIds(prev => new Set(prev).add(id));
+    erpFetch(`crm/deals/${id}/`, { method: 'DELETE' })
+      .then(() => {
+        setTimeout(() => {
+          setDeals(prev => prev.filter(d => d.id !== id));
+          setRemovingIds(prev => { const next = new Set(prev); next.delete(id); return next; });
+          loadStats();
+        }, 300);
+      })
+      .catch(() => {
+        setRemovingIds(prev => { const next = new Set(prev); next.delete(id); return next; });
+      });
+  };
+
   return (
     <div style={{ animation: 'crmFadeIn 0.3s ease both' }}>
       <style>{`
@@ -195,13 +284,21 @@ export default function CRMPipeline() {
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 8, alignItems: 'flex-start' }}>
           {STAGES.map(s => (
-            <Column key={s.key} stage={s.key} deals={byStage[s.key]} onAdd={() => setAddPanel(s.key)} />
+            <Column
+              key={s.key}
+              stage={s.key}
+              deals={byStage[s.key]}
+              removingIds={removingIds}
+              onAdd={() => setAddPanel(s.key)}
+              onEdit={setEditingDeal}
+              onDelete={setDeletingDeal}
+            />
           ))}
         </div>
         <DragOverlay>
           {activeDeal ? (
             <div style={{ width: 232, transform: 'rotate(2deg)' }}>
-              <DealCard deal={activeDeal} />
+              <DealCard deal={activeDeal} removing={false} onEdit={() => {}} onDelete={() => {}} />
             </div>
           ) : null}
         </DragOverlay>
@@ -211,7 +308,23 @@ export default function CRMPipeline() {
         <CRMDealForm
           defaultStage={addPanel}
           onClose={() => setAddPanel(null)}
-          onCreated={() => { dealsList.reload(); loadStats(); }}
+          onSaved={() => { dealsList.reload(); loadStats(); }}
+        />
+      )}
+
+      {editingDeal && (
+        <CRMDealForm
+          deal={editingDeal}
+          onClose={() => setEditingDeal(null)}
+          onSaved={() => { dealsList.reload(); loadStats(); }}
+        />
+      )}
+
+      {deletingDeal && (
+        <DeleteConfirm
+          dealTitle={deletingDeal.title}
+          onCancel={() => setDeletingDeal(null)}
+          onConfirm={confirmDelete}
         />
       )}
     </div>

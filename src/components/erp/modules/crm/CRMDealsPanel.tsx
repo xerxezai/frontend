@@ -115,7 +115,7 @@ export default function CRMDealsPanel({ target, onClose, onChanged }: Props) {
           defaultCustomerId={target.type === 'customer' ? target.id : null}
           defaultLeadId={target.type === 'lead' ? target.id : null}
           onClose={() => setShowForm(false)}
-          onCreated={() => { load(); onChanged?.(); }}
+          onSaved={() => { load(); onChanged?.(); }}
         />
       )}
     </>

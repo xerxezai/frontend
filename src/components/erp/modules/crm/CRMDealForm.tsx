@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
-import { OG, OG_G, DARK, FF, STAGES, type DealStage } from './crmShared';
+import { OG, OG_G, DARK, FF, STAGES, type DealStage, type Deal } from './crmShared';
 
 const inp: React.CSSProperties = {
   width: '100%', padding: '9px 12px', borderRadius: 9,
@@ -14,26 +14,42 @@ const lbl: React.CSSProperties = {
 };
 
 interface Props {
+  deal?: Deal;
   defaultStage?: DealStage;
   defaultCustomerId?: number | null;
   defaultLeadId?: number | null;
   onClose: () => void;
-  onCreated: () => void;
+  onSaved: () => void;
 }
 
-export default function CRMDealForm({ defaultStage = 'new', defaultCustomerId = null, defaultLeadId = null, onClose, onCreated }: Props) {
+export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustomerId = null, defaultLeadId = null, onClose, onSaved }: Props) {
   const customers = useERPList<any>('crm/customers/');
   const leads = useERPList<any>('crm/leads/');
+  const isEdit = !!deal;
 
-  const [form, setForm] = useState({
-    title: '',
-    linkType: defaultCustomerId ? 'customer' : defaultLeadId ? 'lead' : 'customer',
-    customer: defaultCustomerId ? String(defaultCustomerId) : '',
-    lead: defaultLeadId ? String(defaultLeadId) : '',
-    value: '',
-    stage: defaultStage,
-    expected_close: '',
-    notes: '',
+  const [form, setForm] = useState(() => {
+    if (deal) {
+      return {
+        title: deal.title,
+        linkType: deal.customer ? 'customer' : deal.lead ? 'lead' : 'customer',
+        customer: deal.customer ? String(deal.customer) : '',
+        lead: deal.lead ? String(deal.lead) : '',
+        value: deal.value ?? '',
+        stage: deal.stage,
+        expected_close: deal.expected_close ? deal.expected_close.slice(0, 10) : '',
+        notes: deal.notes ?? '',
+      };
+    }
+    return {
+      title: '',
+      linkType: defaultCustomerId ? 'customer' : defaultLeadId ? 'lead' : 'customer',
+      customer: defaultCustomerId ? String(defaultCustomerId) : '',
+      lead: defaultLeadId ? String(defaultLeadId) : '',
+      value: '',
+      stage: defaultStage,
+      expected_close: '',
+      notes: '',
+    };
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -60,9 +76,11 @@ export default function CRMDealForm({ defaultStage = 'new', defaultCustomerId = 
         customer: form.linkType === 'customer' && form.customer ? Number(form.customer) : null,
         lead: form.linkType === 'lead' && form.lead ? Number(form.lead) : null,
       };
-      const res = await erpFetch('crm/deals/', { method: 'POST', body: JSON.stringify(body) });
-      if (res?.id === undefined) { setError('Could not save the deal.'); return; }
-      onCreated();
+      const res = isEdit
+        ? await erpFetch(`crm/deals/${deal!.id}/`, { method: 'PUT', body: JSON.stringify(body) })
+        : await erpFetch('crm/deals/', { method: 'POST', body: JSON.stringify(body) });
+      if (res?.id === undefined) { setError(isEdit ? 'Could not save changes.' : 'Could not save the deal.'); return; }
+      onSaved();
       onClose();
     } catch {
       setError('Network error. Please try again.');
@@ -90,7 +108,7 @@ export default function CRMDealForm({ defaultStage = 'new', defaultCustomerId = 
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
-          <h3 style={{ fontFamily: FF, fontWeight: 800, fontSize: 16, color: DARK, margin: 0 }}>New Deal</h3>
+          <h3 style={{ fontFamily: FF, fontWeight: 800, fontSize: 16, color: DARK, margin: 0 }}>{isEdit ? 'Edit Deal' : 'New Deal'}</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B6B6B', padding: 4 }}>
             <X size={20} />
           </button>
@@ -177,7 +195,7 @@ export default function CRMDealForm({ defaultStage = 'new', defaultCustomerId = 
               opacity: saving ? 0.7 : 1,
             }}
           >
-            {saving ? 'Saving…' : 'Add Deal'}
+            {saving ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Deal'}
           </button>
         </div>
       </div>
