@@ -1,3 +1,4 @@
+import AcademySection from "../components/academy/AcademySection";
 import BrandSection from "../components/brand/BrandSection";
 import ContactSection from "../components/contact/ContactSection";
 import FooterSection2 from "../components/footer/FooterSection2";
@@ -31,6 +32,7 @@ const HomePage1 = () => {
       <div id="sec-hero" style={{ paddingTop: 70 }}><HeroSection /></div>
       <div id="sec-about">
         <ServiceSection2 />
+        <AcademySection />
         <BrandSection />
       </div>
       <div id="sec-projects"><ProjectSection /></div>
