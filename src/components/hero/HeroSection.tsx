@@ -542,9 +542,9 @@ const HeroSection = () => {
               display:"flex", alignItems:"center", gap:14, flexWrap:"wrap",
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.25s both",
             }}>
-              {/* Primary */}
+              {/* Primary — Try ERP Free */}
               <Link
-                to="/contact"
+                to="/erp/login"
                 ref={btnRef}
                 onClick={onBtnClick}
                 className="xz-btn-shimmer"
@@ -562,16 +562,16 @@ const HeroSection = () => {
                 onMouseOut={ e => { e.currentTarget.style.background=C2;        e.currentTarget.style.transform="translateY(0)"; }}
               >
                 <span style={{ position:"relative", zIndex:1, display:"flex", alignItems:"center", gap:8 }}>
-                  Get Started
+                  Try ERP Free
                   <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
                     <path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </span>
               </Link>
 
-              {/* Secondary */}
+              {/* Secondary — Join Academy */}
               <Link
-                to="/service"
+                to="/lma/student/dashboard"
                 style={{
                   display:"inline-flex", alignItems:"center", gap:8,
                   background:"rgba(255,255,255,0.07)", color:"rgba(255,255,255,0.90)",
@@ -597,7 +597,47 @@ const HeroSection = () => {
                   if (line) line.style.transform="scaleX(0)";
                 }}
               >
-                Explore Services
+                Join Academy
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                  <path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span className="xz-uline" style={{
+                  position:"absolute", bottom:7, left:24, right:40, height:1,
+                  background:C2, borderRadius:1,
+                  transform:"scaleX(0)", transformOrigin:"left",
+                  transition:"transform 0.32s cubic-bezier(0.22,1,0.36,1)",
+                }}/>
+              </Link>
+
+              {/* Secondary — Book a Demo */}
+              <Link
+                to="/contact"
+                style={{
+                  display:"inline-flex", alignItems:"center", gap:8,
+                  background:"rgba(255,255,255,0.07)", color:"rgba(255,255,255,0.90)",
+                  fontFamily:"'Inter',sans-serif", fontSize:14, fontWeight:500, lineHeight:1,
+                  padding:"13px 24px", borderRadius:8,
+                  border:"1px solid rgba(255,255,255,0.18)", textDecoration:"none",
+                  position:"relative",
+                  transition:"border-color 150ms ease,background 150ms ease,transform 0.15s ease",
+                  cursor:"pointer",
+                }}
+                onMouseOver={e => {
+                  e.currentTarget.style.borderColor="rgba(201,136,58,0.50)";
+                  e.currentTarget.style.background="rgba(201,136,58,0.12)";
+                  e.currentTarget.style.transform="translateY(-1px)";
+                  const line = e.currentTarget.querySelector(".xz-uline") as HTMLElement|null;
+                  if (line) line.style.transform="scaleX(1)";
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.borderColor="rgba(255,255,255,0.18)";
+                  e.currentTarget.style.background="rgba(255,255,255,0.07)";
+                  e.currentTarget.style.transform="translateY(0)";
+                  const line = e.currentTarget.querySelector(".xz-uline") as HTMLElement|null;
+                  if (line) line.style.transform="scaleX(0)";
+                }}
+              >
+                Book a Demo
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
                   <path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -609,6 +649,16 @@ const HeroSection = () => {
                 }}/>
               </Link>
             </div>
+
+            {/* Reassurance line */}
+            <p style={{
+              fontFamily:"'Inter',sans-serif", fontSize:12.5, fontWeight:500,
+              color:"rgba(255,255,255,0.40)", letterSpacing:"0.01em",
+              marginTop:14, marginBottom:0,
+              animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.32s both",
+            }}>
+              No credit card required · Free trial available · Setup in minutes
+            </p>
 
             {/* Trust metrics */}
             <div style={{
