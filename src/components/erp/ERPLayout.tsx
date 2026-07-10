@@ -470,30 +470,6 @@ const ERPLayout = ({ children }: Props) => {
               />
             </div>
 
-            {/* language selector */}
-            <div className="d-none d-md-flex erp-topbtn" style={{ gap: 7, padding: '7px 11px' }}>
-              <i className="fas fa-globe" style={{ color: C.orange, fontSize: 12 }} />
-              <span style={{ color: C.dark, fontSize: 13, fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }}>English</span>
-              <i className="fas fa-chevron-down" style={{ color: C.muted, fontSize: 9 }} />
-            </div>
-
-            {/* fullscreen toggle */}
-            <button
-              className="erp-topbtn d-none d-md-flex"
-              aria-label="Toggle fullscreen"
-              onClick={() => {
-                if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
-                else document.exitFullscreen?.();
-              }}
-            >
-              <i className="fas fa-expand" style={{ color: C.dark, fontSize: 13 }}></i>
-            </button>
-
-            {/* mail */}
-            <button className="erp-topbtn" aria-label="Messages" style={{ position: 'relative' }}>
-              <i className="fas fa-envelope" style={{ color: C.dark, fontSize: 13 }}></i>
-            </button>
-
             <button className="erp-bell erp-bell-light" aria-label="Notifications">
               <i className="fas fa-bell" style={{ color: C.dark, fontSize: 14 }}></i>
               <span style={{

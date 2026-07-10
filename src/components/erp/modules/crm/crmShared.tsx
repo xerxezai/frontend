@@ -67,13 +67,13 @@ export interface CustomerNote {
   created_at: string;
 }
 
-export const STAGES: { key: DealStage; label: string; color: string; bg: string; grad: string }[] = [
-  { key: 'new',         label: 'New',          color: '#6b7280', bg: 'rgba(107,114,128,0.09)', grad: 'linear-gradient(135deg,#9ca3af,#6b7280)' },
-  { key: 'contacted',   label: 'Contacted',     color: '#3b82f6', bg: 'rgba(59,130,246,0.09)',  grad: 'linear-gradient(135deg,#60a5fa,#3b82f6)' },
-  { key: 'proposal',    label: 'Proposal Sent', color: OG,        bg: 'rgba(201,136,58,0.09)',  grad: OG_G },
-  { key: 'negotiation', label: 'Negotiation',   color: '#8b5cf6', bg: 'rgba(139,92,246,0.09)',  grad: 'linear-gradient(135deg,#a78bfa,#8b5cf6)' },
-  { key: 'won',         label: 'Won',           color: '#10b981', bg: 'rgba(16,185,129,0.09)',  grad: 'linear-gradient(135deg,#34d399,#10b981)' },
-  { key: 'lost',        label: 'Lost',          color: '#ef4444', bg: 'rgba(239,68,68,0.09)',   grad: 'linear-gradient(135deg,#f87171,#ef4444)' },
+export const STAGES: { key: DealStage; label: string; color: string; bg: string; columnBg: string; grad: string }[] = [
+  { key: 'new',         label: 'New',          color: '#6b7280', bg: 'rgba(107,114,128,0.09)', columnBg: '#F8F9FA', grad: 'linear-gradient(135deg,#9ca3af,#6b7280)' },
+  { key: 'contacted',   label: 'Contacted',     color: '#3b82f6', bg: 'rgba(59,130,246,0.09)',  columnBg: '#EFF6FF', grad: 'linear-gradient(135deg,#60a5fa,#3b82f6)' },
+  { key: 'proposal',    label: 'Proposal Sent', color: OG,        bg: 'rgba(201,136,58,0.09)',  columnBg: '#FFF7ED', grad: OG_G },
+  { key: 'negotiation', label: 'Negotiation',   color: '#8b5cf6', bg: 'rgba(139,92,246,0.09)',  columnBg: '#FAF5FF', grad: 'linear-gradient(135deg,#a78bfa,#8b5cf6)' },
+  { key: 'won',         label: 'Won',           color: '#10b981', bg: 'rgba(16,185,129,0.09)',  columnBg: '#F0FDF4', grad: 'linear-gradient(135deg,#34d399,#10b981)' },
+  { key: 'lost',        label: 'Lost',          color: '#ef4444', bg: 'rgba(239,68,68,0.09)',   columnBg: '#FFF1F2', grad: 'linear-gradient(135deg,#f87171,#ef4444)' },
 ];
 
 export const stageMeta = (stage: string) => STAGES.find(s => s.key === stage) ?? STAGES[0];

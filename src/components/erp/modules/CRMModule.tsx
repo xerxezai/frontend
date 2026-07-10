@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { StickyNote } from 'lucide-react';
+import { StickyNote, Users, Target, Activity, LayoutGrid } from 'lucide-react';
 import { useERPList, isSuperUser } from '../../../hooks/useERPApi';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
@@ -170,16 +170,51 @@ const CRMModule = () => {
     { key:'occurred_at', label:'Date',    render:(r:any)=>r.occurred_at?new Date(r.occurred_at).toLocaleString():'—' },
   ];
 
-  const ts = (t: string): React.CSSProperties => ({ borderRadius:8,padding:'7px 18px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13,transition:'all 0.15s',background:tab===t?'#C9883A':'transparent',color:tab===t?'#fff':'#6B6B6B',border:tab===t?'none':'1px solid rgba(0,0,0,0.10)' });
+  const TAB_META = [
+    { key: 'Customers'  as const, label: 'Customers',  icon: Users,      count: customers.data.length },
+    { key: 'Leads'      as const, label: 'Leads',      icon: Target,     count: leads.data.length },
+    { key: 'Activities' as const, label: 'Activities', icon: Activity,   count: activities.data.length },
+    { key: 'Pipeline'   as const, label: 'Pipeline',   icon: LayoutGrid, count: deals.data.length },
+  ];
 
   return (
     <div>
       <style>{`@keyframes erpModalIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}`}</style>
-      <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap'}}>
-        <button style={ts('Customers')}  onClick={()=>setTab('Customers')}>Customers</button>
-        <button style={ts('Leads')}      onClick={()=>setTab('Leads')}>Leads</button>
-        <button style={ts('Activities')} onClick={()=>setTab('Activities')}>Activities</button>
-        <button style={ts('Pipeline')}   onClick={()=>setTab('Pipeline')}>Pipeline</button>
+
+      {/* premium segmented tab bar */}
+      <div style={{
+        display: 'inline-flex', flexWrap: 'wrap', gap: 3, marginBottom: 22,
+        background: '#fff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: 14, padding: 5,
+        boxShadow: '0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.05)',
+      }}>
+        {TAB_META.map(t => {
+          const active = tab === t.key;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '9px 16px', borderRadius: 10, border: 'none', cursor: 'pointer',
+                fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13,
+                background: active ? 'linear-gradient(135deg,#e8a84e,#C9883A)' : 'transparent',
+                color: active ? '#fff' : '#6B6B6B',
+                boxShadow: active ? '0 3px 10px rgba(201,136,58,0.30)' : 'none',
+                transition: 'color 0.2s ease, background 0.2s ease',
+              }}
+              onMouseEnter={e => { if (!active) e.currentTarget.style.color = '#C9883A'; }}
+              onMouseLeave={e => { if (!active) e.currentTarget.style.color = '#6B6B6B'; }}
+            >
+              <t.icon size={15} />
+              {t.label}
+              <span style={{
+                fontSize: 10.5, fontWeight: 800, padding: '1px 7px', borderRadius: 999, lineHeight: 1.5,
+                background: active ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.06)',
+                color: active ? '#fff' : '#9ca3af',
+              }}>{t.count}</span>
+            </button>
+          );
+        })}
       </div>
 
       {tab==='Pipeline' && <CRMPipeline />}

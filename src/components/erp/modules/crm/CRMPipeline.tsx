@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   DndContext, useDraggable, useDroppable, DragOverlay,
   PointerSensor, useSensor, useSensors, closestCenter,
@@ -7,7 +7,7 @@ import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent, Pencil, Trash2 } from 'lucide-react';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
 import {
-  Card3D, OG, DARK, FF, STAGES, stageMeta, fmtINR, initials,
+  OG, DARK, FF, BCARD, BHOV, STAGES, stageMeta, fmtINR, initials,
   type Deal, type DealStage,
 } from './crmShared';
 import CRMDealForm from './CRMDealForm';
@@ -20,21 +20,63 @@ interface PipelineStats {
   win_rate: number;
 }
 
-// ── mini stat card ────────────────────────────────────────────────────────────
-const StatCard = ({ label, value, sub, color, icon: Icon }: { label: string; value: string; sub?: string; color: string; icon: React.ElementType }) => (
-  <Card3D accent={color} p="18px 20px">
-    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-      <div>
-        <div style={{ fontSize: 11, fontWeight: 700, color: '#6B6B6B', letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: FF, marginBottom: 6 }}>{label}</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color, fontFamily: FF, lineHeight: 1 }}>{value}</div>
-        {sub && <div style={{ fontSize: 11.5, color: '#9ca3af', fontFamily: FF, marginTop: 4 }}>{sub}</div>}
-      </div>
-      <div style={{ width: 34, height: 34, borderRadius: 9, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <Icon size={16} color={color} />
+const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+// ── count-up hook ─────────────────────────────────────────────────────────────
+function useCountUp(target: number, duration = 1400) {
+  const [val, setVal] = useState(prefersReduced ? target : 0);
+  const raf = useRef<number>(0);
+  useEffect(() => {
+    if (prefersReduced) { setVal(target); return; }
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setVal(eased * target);
+      if (t < 1) raf.current = requestAnimationFrame(tick);
+      else setVal(target);
+    };
+    raf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf.current);
+  }, [target, duration]);
+  return val;
+}
+
+// ── gradient stat card ─────────────────────────────────────────────────────────
+const GradStat = ({ label, target, format, sub, subTarget, grad, icon: Icon, index }: {
+  label: string; target: number; format: (n: number) => string;
+  sub?: (n: number) => string; subTarget?: number;
+  grad: string; icon: React.ElementType; index: number;
+}) => {
+  const v = useCountUp(target);
+  const sv = useCountUp(subTarget ?? 0);
+  return (
+    <div style={{
+      background: grad, borderRadius: 16, padding: '22px 24px', color: '#fff',
+      position: 'relative', overflow: 'hidden',
+      boxShadow: '0 8px 28px rgba(0,0,0,0.16)',
+      animation: `crmStatUp 0.55s cubic-bezier(0.22,1,0.36,1) ${index * 0.08}s both`,
+    }}>
+      <div aria-hidden style={{
+        position: 'absolute', right: -30, top: -30, width: 120, height: 120,
+        borderRadius: '50%', background: 'rgba(255,255,255,0.10)',
+      }} />
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, position: 'relative' }}>
+        <div>
+          <div style={{ fontSize: 11.5, fontWeight: 700, color: 'rgba(255,255,255,0.82)', letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: FF, marginBottom: 10 }}>{label}</div>
+          <div style={{ fontSize: 28, fontWeight: 900, color: '#fff', fontFamily: FF, lineHeight: 1, letterSpacing: '-0.01em' }}>{format(v)}</div>
+          {sub && <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.78)', fontFamily: FF, marginTop: 6, fontWeight: 600 }}>{sub(sv)}</div>}
+        </div>
+        <div style={{
+          width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,255,255,0.18)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}>
+          <Icon size={22} color="#fff" />
+        </div>
       </div>
     </div>
-  </Card3D>
-);
+  );
+};
 
 // ── delete confirmation modal ────────────────────────────────────────────────
 const DeleteConfirm = ({ dealTitle, onCancel, onConfirm }: { dealTitle: string; onCancel: () => void; onConfirm: () => void }) => (
@@ -50,17 +92,18 @@ const DeleteConfirm = ({ dealTitle, onCancel, onConfirm }: { dealTitle: string; 
   </div>
 );
 
-// ── deal card (draggable, with edit/delete on hover) ─────────────────────────
+// ── deal card (Card3D style, left stage border, edit/delete on hover) ────────
 const DealCard = ({ deal, removing, onEdit, onDelete }: {
   deal: Deal; removing: boolean; onEdit: () => void; onDelete: () => void;
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: deal.id });
   const [hovered, setHovered] = useState(false);
+  const meta = stageMeta(deal.stage);
   const name = deal.customer_name || deal.lead_name || 'Unassigned';
 
   const liveTransform = isDragging
     ? (transform ? `translate3d(${transform.x}px,${transform.y}px,0) scale(1.03)` : undefined)
-    : (hovered ? 'translateY(-2px)' : 'translateY(0)');
+    : (hovered ? 'translateY(-3px)' : 'translateY(0)');
 
   return (
     <div
@@ -72,7 +115,8 @@ const DealCard = ({ deal, removing, onEdit, onDelete }: {
       style={{
         background: '#fff', borderRadius: 12,
         border: '1px solid rgba(0,0,0,0.07)',
-        boxShadow: isDragging ? '0 16px 40px rgba(0,0,0,0.20)' : hovered ? '0 6px 18px rgba(0,0,0,0.10)' : '0 1px 3px rgba(0,0,0,0.05)',
+        borderLeft: `3px solid ${meta.color}`,
+        boxShadow: isDragging ? '0 18px 44px rgba(0,0,0,0.22)' : hovered ? BHOV : BCARD,
         padding: '14px 14px 12px',
         opacity: removing ? 0 : isDragging ? 0.4 : 1,
         maxHeight: removing ? 0 : 260,
@@ -82,7 +126,7 @@ const DealCard = ({ deal, removing, onEdit, onDelete }: {
         transform: liveTransform,
         transition: removing
           ? 'opacity 0.3s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease'
-          : isDragging ? 'none' : 'transform 0.18s ease, box-shadow 0.18s ease',
+          : isDragging ? 'none' : 'transform 0.2s cubic-bezier(0.22,1,0.36,1), box-shadow 0.2s ease',
         cursor: 'grab', touchAction: 'none', position: 'relative',
       }}
     >
@@ -140,54 +184,64 @@ const DealCard = ({ deal, removing, onEdit, onDelete }: {
   );
 };
 
-// ── kanban column (droppable) ────────────────────────────────────────────────
+// ── kanban column (droppable, colored bg, hover glow) ────────────────────────
 const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete }: {
   stage: DealStage; deals: Deal[]; removingIds: Set<number>;
   onAdd: () => void; onEdit: (d: Deal) => void; onDelete: (d: Deal) => void;
 }) => {
   const meta = stageMeta(stage);
   const { setNodeRef, isOver } = useDroppable({ id: stage });
+  const [hovered, setHovered] = useState(false);
   const totalValue = deals.filter(d => !removingIds.has(d.id)).reduce((s, d) => s + Number(d.value || 0), 0);
+
+  const glow = isOver
+    ? `0 0 0 1.5px ${meta.color}, 0 10px 30px ${meta.color}33`
+    : hovered
+      ? `0 0 0 1px ${meta.color}55, 0 6px 22px ${meta.color}22`
+      : '0 1px 2px rgba(0,0,0,0.03)';
 
   return (
     <div
       ref={setNodeRef}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
-        background: isOver ? meta.bg : '#F8F7F4',
-        borderRadius: 14, padding: 12, minWidth: 260, width: 260, flexShrink: 0,
-        border: isOver ? `1.5px dashed ${meta.color}` : '1.5px solid transparent',
-        transition: 'background 0.18s ease, border-color 0.18s ease',
+        background: meta.columnBg,
+        borderRadius: 14, padding: 12, minWidth: 264, width: 264, flexShrink: 0,
+        boxShadow: glow,
+        transition: 'box-shadow 0.22s ease',
         display: 'flex', flexDirection: 'column', maxHeight: '100%',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4, padding: '2px 4px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: meta.color, flexShrink: 0 }} />
+          <span style={{ width: 9, height: 9, borderRadius: '50%', background: meta.color, flexShrink: 0, boxShadow: `0 0 0 3px ${meta.color}22` }} />
           <span style={{ fontSize: 13.5, fontWeight: 800, color: DARK, fontFamily: FF }}>{meta.label}</span>
-          <span style={{ fontSize: 10.5, fontWeight: 700, color: '#6B6B6B', background: 'rgba(0,0,0,0.06)', padding: '2px 8px', borderRadius: 999, fontFamily: FF }}>
+          <span style={{ fontSize: 10.5, fontWeight: 800, color: meta.color, background: '#fff', border: `1px solid ${meta.color}33`, padding: '2px 8px', borderRadius: 999, fontFamily: FF }}>
             {deals.length}
           </span>
         </div>
         <button
           onClick={onAdd}
           title={`Add deal to ${meta.label}`}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: meta.color, padding: 4, borderRadius: 6, display: 'flex' }}
+          style={{ background: '#fff', border: `1px solid ${meta.color}33`, cursor: 'pointer', color: meta.color, width: 24, height: 24, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          <Plus size={16} />
+          <Plus size={15} />
         </button>
       </div>
-      <div style={{ fontSize: 12.5, fontWeight: 700, color: OG, fontFamily: FF, padding: '0 4px', marginBottom: 12 }}>
+      <div style={{ fontSize: 12.5, fontWeight: 800, color: OG, fontFamily: FF, padding: '0 4px', marginBottom: 12 }}>
         {fmtINR(totalValue)}
       </div>
       <div style={{ overflowY: 'auto', flex: 1, minHeight: 40, padding: '0 1px' }}>
-        {deals.map(d => (
-          <DealCard
-            key={d.id}
-            deal={d}
-            removing={removingIds.has(d.id)}
-            onEdit={() => onEdit(d)}
-            onDelete={() => onDelete(d)}
-          />
+        {deals.map((d, i) => (
+          <div key={d.id} style={{ animation: removingIds.has(d.id) ? undefined : `crmCardUp 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 0.05}s both` }}>
+            <DealCard
+              deal={d}
+              removing={removingIds.has(d.id)}
+              onEdit={() => onEdit(d)}
+              onDelete={() => onDelete(d)}
+            />
+          </div>
         ))}
         {deals.length === 0 && (
           <div style={{ textAlign: 'center', padding: '20px 8px', fontSize: 12, color: '#b0aca4', fontFamily: FF }}>
@@ -270,14 +324,36 @@ export default function CRMPipeline() {
       <style>{`
         @keyframes crmFadeIn { from{opacity:0} to{opacity:1} }
         @keyframes crmSlideInRight { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes crmStatUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes crmCardUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="crmStatUp"], [style*="crmCardUp"], [style*="crmFadeIn"] { animation: none !important; }
+        }
       `}</style>
 
-      {/* pipeline stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 22 }}>
-        <StatCard label="Total Pipeline Value" value={fmtINR(stats?.total_pipeline_value ?? 0)} color={OG} icon={TrendingUp} />
-        <StatCard label="Deals Won" value={String(stats?.deals_won.count ?? 0)} sub={fmtINR(stats?.deals_won.value ?? 0)} color="#10b981" icon={Trophy} />
-        <StatCard label="Deals Lost" value={String(stats?.deals_lost.count ?? 0)} color="#ef4444" icon={XCircle} />
-        <StatCard label="Win Rate" value={`${stats?.win_rate ?? 0}%`} color={OG} icon={Percent} />
+      {/* pipeline stats — premium gradient cards */}
+      <div className="crm-stat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 22 }}>
+        <GradStat
+          label="Total Pipeline" target={stats?.total_pipeline_value ?? 0}
+          format={n => fmtINR(Math.round(n))}
+          grad="linear-gradient(135deg,#C9883A,#8B5E28)" icon={TrendingUp} index={0}
+        />
+        <GradStat
+          label="Deals Won" target={stats?.deals_won.count ?? 0}
+          format={n => String(Math.round(n))}
+          sub={n => fmtINR(Math.round(n))} subTarget={stats?.deals_won.value ?? 0}
+          grad="linear-gradient(135deg,#16A34A,#15803D)" icon={Trophy} index={1}
+        />
+        <GradStat
+          label="Deals Lost" target={stats?.deals_lost.count ?? 0}
+          format={n => String(Math.round(n))}
+          grad="linear-gradient(135deg,#DC2626,#B91C1C)" icon={XCircle} index={2}
+        />
+        <GradStat
+          label="Win Rate" target={stats?.win_rate ?? 0}
+          format={n => `${n.toFixed(1)}%`}
+          grad="linear-gradient(135deg,#0D9488,#0F766E)" icon={Percent} index={3}
+        />
       </div>
 
       {/* kanban board */}
@@ -297,7 +373,7 @@ export default function CRMPipeline() {
         </div>
         <DragOverlay>
           {activeDeal ? (
-            <div style={{ width: 232, transform: 'rotate(2deg)' }}>
+            <div style={{ width: 240, transform: 'rotate(2deg)' }}>
               <DealCard deal={activeDeal} removing={false} onEdit={() => {}} onDelete={() => {}} />
             </div>
           ) : null}
