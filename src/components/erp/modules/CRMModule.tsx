@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { StickyNote } from 'lucide-react';
 import { useERPList, isSuperUser } from '../../../hooks/useERPApi';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
+import CRMPipeline from './crm/CRMPipeline';
+import CRMDealsPanel from './crm/CRMDealsPanel';
+import CRMNotesPanel from './crm/CRMNotesPanel';
+import { fmtINR, type Deal } from './crm/crmShared';
+
+type PanelTarget = { type: 'customer' | 'lead'; id: number; name: string };
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
@@ -37,11 +44,12 @@ const defAct  = { type:'call', summary:'', occurred_at:'' };
 
 const CRMModule = () => {
   const isAdmin = isSuperUser();
-  const [tab, setTab] = useState<'Customers'|'Leads'|'Activities'>('Customers');
+  const [tab, setTab] = useState<'Customers'|'Leads'|'Activities'|'Pipeline'>('Customers');
 
   const customers  = useERPList<any>('crm/customers/');
   const leads      = useERPList<any>('crm/leads/');
   const activities = useERPList<any>('crm/activities/');
+  const deals       = useERPList<Deal>('crm/deals/');
 
   const [showModal, setShowModal] = useState(false);
   const [editing,   setEditing]   = useState<any>(null);
@@ -49,6 +57,30 @@ const CRMModule = () => {
   const [custF,     setCustF]     = useState({...defCust});
   const [leadF,     setLeadF]     = useState({...defLead});
   const [actF,      setActF]      = useState({...defAct});
+  const [notesTarget, setNotesTarget] = useState<PanelTarget | null>(null);
+  const [dealsTarget, setDealsTarget] = useState<PanelTarget | null>(null);
+
+  // active (non-lost) deal count + value per customer/lead, computed once from the shared deals list
+  const dealsByCustomer = useMemo(() => {
+    const map = new Map<number, { count: number; value: number }>();
+    deals.data.forEach(d => {
+      if (!d.customer || d.stage === 'lost') return;
+      const cur = map.get(d.customer) ?? { count: 0, value: 0 };
+      cur.count += 1; cur.value += Number(d.value || 0);
+      map.set(d.customer, cur);
+    });
+    return map;
+  }, [deals.data]);
+  const dealsByLead = useMemo(() => {
+    const map = new Map<number, { count: number; value: number }>();
+    deals.data.forEach(d => {
+      if (!d.lead || d.stage === 'lost') return;
+      const cur = map.get(d.lead) ?? { count: 0, value: 0 };
+      cur.count += 1; cur.value += Number(d.value || 0);
+      map.set(d.lead, cur);
+    });
+    return map;
+  }, [deals.data]);
 
   const close = () => { setShowModal(false); setEditing(null); };
 
@@ -92,6 +124,26 @@ const CRMModule = () => {
     } catch (err: any) { toast.error(err.message || 'Delete failed'); }
   };
 
+  const dealsCell = (agg: { count: number; value: number } | undefined, onClick: () => void) => (
+    <button type="button" onClick={onClick} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left', fontFamily: "'DM Sans',sans-serif" }}>
+      {agg && agg.count > 0 ? (
+        <>
+          <div style={{ fontSize: 12.5, fontWeight: 700, color: '#141413' }}>{agg.count} deal{agg.count === 1 ? '' : 's'}</div>
+          <div style={{ fontSize: 11.5, color: '#C9883A', fontWeight: 600 }}>{fmtINR(agg.value)}</div>
+        </>
+      ) : (
+        <span style={{ fontSize: 12, color: '#9ca3af' }}>— none —</span>
+      )}
+    </button>
+  );
+
+  const notesButton = (target: PanelTarget) => (
+    <button type="button" title="View notes" onClick={() => setNotesTarget(target)}
+      style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
+      <StickyNote size={13} />
+    </button>
+  );
+
   const custCols = [
     { key:'name',      label:'Name' },
     { key:'company',   label:'Company',  render:(r:any)=>r.company||'—' },
@@ -99,6 +151,8 @@ const CRMModule = () => {
     { key:'phone',     label:'Phone',    render:(r:any)=>r.phone||'—' },
     { key:'industry',  label:'Industry', render:(r:any)=>r.industry||'—' },
     { key:'is_active', label:'Active',   render:(r:any)=>r.is_active?'✅':'❌' },
+    { key:'deals',     label:'Deals',    render:(r:any)=>dealsCell(dealsByCustomer.get(r.id), () => setDealsTarget({ type: 'customer', id: r.id, name: r.name })) },
+    { key:'notes',     label:'Notes',    render:(r:any)=>notesButton({ type: 'customer', id: r.id, name: r.name }) },
   ];
   const leadCols = [
     { key:'name',            label:'Name' },
@@ -107,6 +161,8 @@ const CRMModule = () => {
     { key:'source',          label:'Source',   render:(r:any)=>r.source||'—' },
     { key:'status',          label:'Status',   render:(r:any)=>sbadge(r.status||'new',leadStatusColors) },
     { key:'estimated_value', label:'Value',    render:(r:any)=>r.estimated_value?`$${parseFloat(r.estimated_value).toFixed(2)}`:'—' },
+    { key:'deals',           label:'Deals',    render:(r:any)=>dealsCell(dealsByLead.get(r.id), () => setDealsTarget({ type: 'lead', id: r.id, name: r.name })) },
+    { key:'notes',           label:'Notes',    render:(r:any)=>notesButton({ type: 'lead', id: r.id, name: r.name }) },
   ];
   const actCols = [
     { key:'type',        label:'Type',    render:(r:any)=>r.type||'—' },
@@ -123,7 +179,10 @@ const CRMModule = () => {
         <button style={ts('Customers')}  onClick={()=>setTab('Customers')}>Customers</button>
         <button style={ts('Leads')}      onClick={()=>setTab('Leads')}>Leads</button>
         <button style={ts('Activities')} onClick={()=>setTab('Activities')}>Activities</button>
+        <button style={ts('Pipeline')}   onClick={()=>setTab('Pipeline')}>Pipeline</button>
       </div>
+
+      {tab==='Pipeline' && <CRMPipeline />}
 
       {tab==='Customers' && <ERPTable title="Customers" columns={custCols} data={customers.data} loading={customers.loading} error={customers.error} isAdmin={isAdmin}
         onAdd={()=>{ setCustF({...defCust}); setEditing(null); setShowModal(true); }}
@@ -139,6 +198,13 @@ const CRMModule = () => {
         onAdd={()=>{ setActF({...defAct}); setEditing(null); setShowModal(true); }}
         onEdit={r=>{ setEditing(r); setActF({type:r.type||'call',summary:r.summary||'',occurred_at:r.occurred_at?r.occurred_at.slice(0,16):''}); setShowModal(true); }}
         onDelete={id=>setDelId(id)} />}
+
+      {notesTarget && (
+        <CRMNotesPanel target={notesTarget} onClose={() => setNotesTarget(null)} />
+      )}
+      {dealsTarget && (
+        <CRMDealsPanel target={dealsTarget} onClose={() => setDealsTarget(null)} onChanged={() => deals.reload()} />
+      )}
 
       {showModal && tab==='Customers' && (
         <div style={OVR} onClick={close}>
