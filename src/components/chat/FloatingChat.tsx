@@ -68,7 +68,7 @@ const FloatingChat = () => {
     setMessages(history);
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/chatbot/message/`, {
+      const res = await fetch(`${API_BASE}/chat/message/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
