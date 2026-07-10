@@ -98,14 +98,74 @@ export function useERPDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoading(true);
+    setError(null);
     erpFetch('reports/dashboard/')
       .then(setData)
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
 
-  return { data, loading, error };
+  useEffect(() => { load(); }, [load]);
+
+  return { data, loading, error, reload: load };
+}
+
+export function useERPSalesReport() {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    erpFetch('reports/sales/')
+      .then(setData)
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { data, loading };
+}
+
+export function useERPActivity(refreshMs = 60000) {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(() => {
+    erpFetch('reports/activity/')
+      .then(res => setData(Array.isArray(res) ? res : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    load();
+    if (!refreshMs) return;
+    const iv = setInterval(load, refreshMs);
+    return () => clearInterval(iv);
+  }, [load, refreshMs]);
+
+  return { data, loading, reload: load };
+}
+
+/** Polls the backend health endpoint (root-level, outside /api/v1) to drive a
+ * System Online / Offline badge. */
+export function useSystemStatus(intervalMs = 30000) {
+  const [online, setOnline] = useState<boolean | null>(null);
+  const healthUrl = BASE.replace(/\/api\/v\d+\/?$/, '') + '/health/health/';
+
+  useEffect(() => {
+    let cancelled = false;
+    const check = () => {
+      fetch(healthUrl)
+        .then(r => { if (!cancelled) setOnline(r.ok); })
+        .catch(() => { if (!cancelled) setOnline(false); });
+    };
+    check();
+    const iv = setInterval(check, intervalMs);
+    return () => { cancelled = true; clearInterval(iv); };
+  }, [healthUrl, intervalMs]);
+
+  return online;
 }
 
 // ── Attendance hooks ──────────────────────────────────────────────────────────
