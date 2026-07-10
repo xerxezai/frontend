@@ -25,6 +25,13 @@ const GeneratePayroll      = lazy(() => import('../components/erp/modules/payrol
 const PayrollReports       = lazy(() => import('../components/erp/modules/payroll/PayrollReportsModule'));
 const MyPayslips           = lazy(() => import('../components/erp/modules/payroll/MyPayslipsModule'));
 
+// Added HR feature pages — lazy loaded
+const HRPerformancePage = lazy(() => import('../components/erp/modules/hr/HRPerformancePage'));
+const HRDocumentsPage   = lazy(() => import('../components/erp/modules/hr/HRDocumentsPage'));
+const HROrgChartPage    = lazy(() => import('../components/erp/modules/hr/HROrgChartPage'));
+const HROnboardingPage  = lazy(() => import('../components/erp/modules/hr/HROnboardingPage'));
+const HRExitPage        = lazy(() => import('../components/erp/modules/hr/HRExitPage'));
+
 // Profile & Settings pages
 const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
 const EditProfilePage     = lazy(() => import('../components/erp/profile/EditProfilePage'));
@@ -72,6 +79,14 @@ const ERPPage = () => {
           <Route path="dashboard"          element={<ERPDashboard />} />
           <Route path="crm"                element={<CRMModule />} />
           <Route path="hr"                 element={<HRModule />} />
+          <Route path="hr/employees"       element={<HRModule initialTab="Employees" />} />
+          <Route path="hr/departments"     element={<HRModule initialTab="Departments" />} />
+          <Route path="hr/leave"           element={<HRModule initialTab="Leave Requests" />} />
+          <Route path="hr/performance"     element={<HRPerformancePage />} />
+          <Route path="hr/documents"       element={<HRDocumentsPage />} />
+          <Route path="hr/org-chart"       element={<HROrgChartPage />} />
+          <Route path="hr/onboarding"      element={<HROnboardingPage />} />
+          <Route path="hr/exit"            element={<HRExitPage />} />
           <Route path="inventory"          element={<InventoryModule />} />
           <Route path="sales"              element={<SalesModule />} />
           <Route path="invoicing"          element={<InvoicingModule />} />

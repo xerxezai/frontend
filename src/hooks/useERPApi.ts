@@ -53,6 +53,21 @@ export async function erpFetch(path: string, options: RequestInit = {}) {
   return data;
 }
 
+/** Multipart upload (no JSON Content-Type so the browser sets its own boundary). */
+export async function erpUpload(path: string, formData: FormData, method: string = 'POST') {
+  const token = getToken();
+  const res = await fetch(`${BASE}/${path}`, {
+    method,
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: formData,
+  });
+  if (res.status === 204) return null;
+  const contentType = res.headers.get('content-type') || '';
+  const data = contentType.includes('application/json') ? await res.json() : null;
+  if (!res.ok) throw new Error(data?.detail || JSON.stringify(data) || `HTTP ${res.status}`);
+  return data;
+}
+
 export function useERPList<T>(path: string) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);

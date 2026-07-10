@@ -43,6 +43,21 @@ const NAV: NavItem[] = [
   { to: '/erp/my-payslips',         icon: 'fas fa-file-alt',              label: 'My Payslips' },
 ];
 
+// Expandable HR Overview submenu
+const HR_SUBMENU: { to: string; icon: string; label: string }[] = [
+  { to: '/erp/hr',               icon: 'fas fa-th-large',        label: 'HR Dashboard' },
+  { to: '/erp/hr/employees',     icon: 'fas fa-users',           label: 'Employees' },
+  { to: '/erp/hr/departments',   icon: 'fas fa-building',        label: 'Departments' },
+  { to: '/erp/hr/leave',         icon: 'fas fa-umbrella-beach',  label: 'Leave Requests' },
+  { to: '/erp/attendance',       icon: 'fas fa-calendar-check',  label: 'Attendance' },
+  { to: '/erp/payroll-generate', icon: 'fas fa-money-bill-wave', label: 'Payroll' },
+  { to: '/erp/hr/performance',   icon: 'fas fa-star',            label: 'Performance' },
+  { to: '/erp/hr/documents',     icon: 'fas fa-file-alt',        label: 'Documents' },
+  { to: '/erp/hr/org-chart',     icon: 'fas fa-sitemap',         label: 'Org Chart' },
+  { to: '/erp/hr/onboarding',    icon: 'fas fa-clipboard-check', label: 'Onboarding' },
+  { to: '/erp/hr/exit',          icon: 'fas fa-door-open',       label: 'Exit Management' },
+];
+
 function isAdminUser(): boolean {
   try {
     const stored = localStorage.getItem('auth_tokens');
@@ -81,10 +96,16 @@ const ERPLayout = ({ children }: Props) => {
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
 
+  const currentSub = HR_SUBMENU.find(
+    s => s.to !== '/erp/hr' && (s.to === location.pathname || location.pathname.startsWith(s.to + '/'))
+  );
   const currentNavItem = NAV.find(
     item => 'to' in item && (item.to === location.pathname || location.pathname.startsWith(item.to + '/'))
   );
-  const pageTitle = currentNavItem && 'label' in currentNavItem ? currentNavItem.label : 'Dashboard';
+  const pageTitle = currentSub ? currentSub.label
+    : currentNavItem && 'label' in currentNavItem ? currentNavItem.label : 'Dashboard';
+
+  const [hrOpen, setHrOpen] = useState(() => location.pathname.startsWith('/erp/hr'));
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -154,6 +175,21 @@ const ERPLayout = ({ children }: Props) => {
         }
         .erp-nav-active .erp-nav-chevron {
           opacity: 1;
+        }
+
+        .erp-subnav-item {
+          display: flex; align-items: center; gap: 9px;
+          padding: 8px 14px 8px 30px; margin: 1px 0;
+          border-left: 3px solid transparent;
+          text-decoration: none; color: rgba(255,255,255,0.48);
+          font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+          transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+          white-space: nowrap; overflow: hidden;
+        }
+        .erp-subnav-item:hover { color: #e8a84e; background: rgba(201,136,58,0.06); }
+        .erp-subnav-active {
+          color: #e8a84e !important; background: rgba(201,136,58,0.12) !important;
+          border-left-color: #C9883A !important; font-weight: 700 !important;
         }
 
         .erp-icon-badge {
@@ -356,6 +392,43 @@ const ERPLayout = ({ children }: Props) => {
               );
             }
             if (item.adminOnly && !isAdmin) return null;
+
+            // Expandable HR Overview submenu (only when sidebar is expanded)
+            if (item.to === '/erp/hr' && !collapsed) {
+              const anyChildActive = HR_SUBMENU.some(
+                s => location.pathname === s.to || location.pathname.startsWith(s.to + '/')
+              );
+              return (
+                <div key={item.to}>
+                  <button
+                    onClick={() => setHrOpen(o => !o)}
+                    className={`erp-nav-item erp-nav-slide${anyChildActive ? ' erp-nav-active' : ''}`}
+                    style={{ width: '100%', background: 'none', textAlign: 'left', animationDelay: `${idx * 0.028}s` }}
+                  >
+                    <span className="erp-icon-badge">
+                      <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
+                    </span>
+                    <span style={{ flex: 1 }}>{item.label}</span>
+                    <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: hrOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
+                  </button>
+                  <div style={{ overflow: 'hidden', maxHeight: hrOpen ? HR_SUBMENU.length * 40 + 8 : 0, transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1)' }}>
+                    {HR_SUBMENU.map(s => (
+                      <NavLink
+                        key={s.to}
+                        to={s.to}
+                        end={s.to === '/erp/hr'}
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                      >
+                        <i className={s.icon} style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                        <span>{s.label}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
             return (
               <NavLink
                 key={item.to}

@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { Users, Building2, CalendarMinus } from 'lucide-react';
 import { useERPList, isSuperUser } from '../../../hooks/useERPApi';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
+import { Card3D } from './hr/hrShared';
+
+type HRTab = 'Employees' | 'Departments' | 'Leave Requests';
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
@@ -36,9 +40,9 @@ const defEmp  = { full_name:'',email:'',phone:'',department:'',designation:'',st
 const defDept = { name:'',code:'',description:'' };
 const defLeave = { employee:'',type:'annual',from_date:'',to_date:'',reason:'' };
 
-const HRModule = () => {
+const HRModule = ({ initialTab = 'Employees' }: { initialTab?: HRTab }) => {
   const isAdmin = isSuperUser();
-  const [tab, setTab] = useState<'Employees'|'Departments'|'Leave Requests'>('Employees');
+  const [tab, setTab] = useState<HRTab>(initialTab);
 
   const employees   = useERPList<any>('hr/employees/');
   const departments = useERPList<any>('hr/departments/');
@@ -117,15 +121,58 @@ const HRModule = () => {
     { key:'status',          label:'Status',      render:(r:any)=>sbadge(r.status||'pending',leaveStatusColors) },
   ];
 
-  const ts = (t: string): React.CSSProperties => ({ borderRadius:8,padding:'7px 18px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13,transition:'all 0.15s',background:tab===t?'#C9883A':'transparent',color:tab===t?'#fff':'#6B6B6B',border:tab===t?'none':'1px solid rgba(0,0,0,0.10)' });
+  const activeCount  = employees.data.filter((e:any)=>e.status==='active').length;
+  const pendingLeave = leaves.data.filter((l:any)=>l.status==='pending').length;
+  const stats = [
+    { label:'Total Employees', value:employees.data.length,   accent:'#3b82f6', color:'#3b82f6' },
+    { label:'Departments',     value:departments.data.length, accent:'#8b5cf6', color:'#8b5cf6' },
+    { label:'Active',          value:activeCount,             accent:'#10b981', color:'#10b981' },
+    { label:'Pending Leaves',  value:pendingLeave,            accent:'#C9883A', color:'#C9883A' },
+  ];
+
+  const TAB_META = [
+    { key:'Employees'      as const, label:'Employees',      icon:Users,          count:employees.data.length },
+    { key:'Departments'    as const, label:'Departments',    icon:Building2,      count:departments.data.length },
+    { key:'Leave Requests' as const, label:'Leave Requests', icon:CalendarMinus,  count:leaves.data.length },
+  ];
 
   return (
     <div>
-      <style>{`@keyframes erpModalIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}`}</style>
-      <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap'}}>
-        <button style={ts('Employees')}     onClick={()=>setTab('Employees')}>Employees</button>
-        <button style={ts('Departments')}   onClick={()=>setTab('Departments')}>Departments</button>
-        <button style={ts('Leave Requests')} onClick={()=>setTab('Leave Requests')}>Leave Requests</button>
+      <style>{`@keyframes erpModalIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}@keyframes hrStatUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`}</style>
+
+      {/* stat cards */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:22 }} className="hr-stat-grid">
+        {stats.map((s,i)=>(
+          <div key={s.label} style={{ animation:`hrStatUp 0.5s cubic-bezier(0.22,1,0.36,1) ${i*0.07}s both` }}>
+            <Card3D accent={s.accent} p="18px 20px">
+              <div style={{ fontSize:11, fontWeight:700, color:'#6B6B6B', letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:"'DM Sans',sans-serif", marginBottom:8 }}>{s.label}</div>
+              <div style={{ fontSize:26, fontWeight:900, color:s.color, fontFamily:"'DM Sans',sans-serif", lineHeight:1 }}>{s.value}</div>
+            </Card3D>
+          </div>
+        ))}
+      </div>
+
+      {/* premium segmented tab bar */}
+      <div style={{ display:'inline-flex', flexWrap:'wrap', gap:3, marginBottom:22, background:'#fff', border:'1px solid rgba(0,0,0,0.07)', borderRadius:14, padding:5, boxShadow:'0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.05)' }}>
+        {TAB_META.map(t=>{
+          const active = tab===t.key;
+          return (
+            <button key={t.key} onClick={()=>setTab(t.key)}
+              style={{ display:'flex', alignItems:'center', gap:8, padding:'9px 16px', borderRadius:10, border:'none', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontWeight:700, fontSize:13,
+                background: active ? 'linear-gradient(135deg,#e8a84e,#C9883A)' : 'transparent',
+                color: active ? '#fff' : '#6B6B6B',
+                boxShadow: active ? '0 3px 10px rgba(201,136,58,0.30)' : 'none',
+                transition:'color 0.2s ease, background 0.2s ease' }}
+              onMouseEnter={e=>{ if(!active) e.currentTarget.style.color='#C9883A'; }}
+              onMouseLeave={e=>{ if(!active) e.currentTarget.style.color='#6B6B6B'; }}>
+              <t.icon size={15} />
+              {t.label}
+              <span style={{ fontSize:10.5, fontWeight:800, padding:'1px 7px', borderRadius:999, lineHeight:1.5,
+                background: active ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.06)',
+                color: active ? '#fff' : '#9ca3af' }}>{t.count}</span>
+            </button>
+          );
+        })}
       </div>
 
       {tab==='Employees' && <ERPTable title="Employees" columns={empCols} data={employees.data} loading={employees.loading} error={employees.error} isAdmin={isAdmin}
