@@ -111,7 +111,7 @@ function HeroSection() {
         </p>
         {/* quick stats */}
         <div style={{ display: "flex", gap: "clamp(20px,4vw,48px)", justifyContent: "center", marginTop: 36, flexWrap: "wrap" }}>
-          {[["50+","Engineers"],["12","Countries"],["120+","Projects"],["0","Security Incidents"]].map(([n,l]) => (
+          {[["50+","Engineers"],["5+","Countries"],["50+","Projects"],["0","Security Incidents"]].map(([n,l]) => (
             <div key={l} style={{ textAlign: "center" }}>
               <div style={{ fontSize: "2rem", fontWeight: 900, color: T.gold2, lineHeight: 1, fontFamily: "'DM Sans',sans-serif" }}>{n}</div>
               <div style={{ fontSize: ".62rem", color: T.dim, letterSpacing: ".12em", textTransform: "uppercase", marginTop: 3 }}>{l}</div>

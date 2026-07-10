@@ -280,7 +280,7 @@ const ERPHub = () => {
 
 // ── Cascade content ───────────────────────────────────────────────────────────
 const ERP_CA = ["Finance & Accounting","Human Resources","Supply Chain","CRM & Sales","AI Analytics Engine","Inventory Management","Procurement","Compliance & Audit","Logistics & Dispatch"];
-const ERP_CB = ["40% Cost Reduction","60% Faster Decisions","99.9% Uptime SLA","Zero Migration Risk","8-Week AI Upgrade","Full IP Ownership","$4M+ Client Savings","Enterprise Grade","ISO 27001 Certified"];
+const ERP_CB = ["40% Cost Reduction","60% Faster Decisions","99.9% Uptime SLA","Zero Migration Risk","8-Week AI Upgrade","Full IP Ownership","$500K+ Client Savings","Enterprise Grade","ISO 27001 Aligned"];
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
 const useSEO = () => {

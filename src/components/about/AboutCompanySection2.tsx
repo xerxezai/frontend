@@ -8,7 +8,7 @@ const AboutCompanySection2 = () => {
         <div className="section-title text-center">
           <span className="fade-in">About Our Company</span>
           <h2 className="text-white char-animation">
-            120+ Enterprise Projects <br /> Across 15+ Industries
+            50+ Enterprise Projects <br /> Across 5+ Industries
           </h2>
           <p className="text-white">
             XERXEZ delivers AI-powered ERP, DevSecOps pipelines, and cloud solutions{" "}

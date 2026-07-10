@@ -7,6 +7,7 @@ const steps = [
     title: "Discovery & Analysis",
     description:
       "We audit your current technology stack, pain points, and business goals to build a clear picture of what needs to change and why.",
+    timeline: "Week 1-2",
   },
   {
     number: "02",
@@ -14,6 +15,7 @@ const steps = [
     title: "Architecture & Planning",
     description:
       "Our architects design the solution blueprint — technology choices, integration points, data flows, and a realistic project timeline.",
+    timeline: "Week 2-3",
   },
   {
     number: "03",
@@ -21,6 +23,7 @@ const steps = [
     title: "Development & Testing",
     description:
       "Agile two-week sprints with continuous integration, automated testing, and stakeholder demos keep quality high and surprises low.",
+    timeline: "Week 4-12",
   },
   {
     number: "04",
@@ -28,6 +31,7 @@ const steps = [
     title: "Deployment & Go-Live",
     description:
       "Zero-downtime deployment with blue/green or canary strategies, full monitoring dashboards, rollback plans, and complete handover documentation.",
+    timeline: "Week 12-14",
   },
   {
     number: "05",
@@ -35,6 +39,7 @@ const steps = [
     title: "Support & Optimisation",
     description:
       "SLA-backed 24/7 support, proactive performance tuning, and ongoing feature roadmapping so your investment keeps compounding.",
+    timeline: "Week 14-16",
   },
 ];
 
@@ -184,6 +189,20 @@ const StepCard = ({
           }}
         >
           Step {step.number}
+        </span>
+        <span
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            color: "rgba(201,136,58,0.75)",
+            fontFamily: "'DM Sans', sans-serif",
+            background: "rgba(201,136,58,0.10)",
+            border: "1px solid rgba(201,136,58,0.24)",
+            borderRadius: 20,
+            padding: "3px 10px",
+          }}
+        >
+          {step.timeline}
         </span>
       </div>
 

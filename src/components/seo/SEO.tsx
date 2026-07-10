@@ -12,6 +12,8 @@ interface SEOProps {
   ogImage?: string;
   ogType?: "website" | "article";
   noIndex?: boolean;
+  /** Structured data — one or more schema.org objects rendered as JSON-LD. */
+  jsonLd?: object | object[];
 }
 
 export default function SEO({
@@ -21,14 +23,19 @@ export default function SEO({
   ogImage = DEFAULT_IMG,
   ogType = "website",
   noIndex = false,
+  jsonLd,
 }: SEOProps) {
   const url = `${BASE_URL}${canonical.startsWith("/") ? canonical : `/${canonical}`}`;
+  const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   return (
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
       {noIndex && <meta name="robots" content="noindex,nofollow" />}
+      {schemas.map((s, i) => (
+        <script key={i} type="application/ld+json">{JSON.stringify(s)}</script>
+      ))}
 
       {/* Open Graph */}
       <meta property="og:site_name" content={SITE_NAME} />

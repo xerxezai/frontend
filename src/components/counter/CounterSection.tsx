@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { counterData } from "../../data";
 import CountUp from "../utils/CountUp";
 
@@ -191,6 +192,26 @@ const CounterSection = ({ variant }: Props) => {
                 <StatCard item={item} index={i} barTarget={BAR_TARGETS[i] ?? 80} />
               </div>
             ))}
+          </div>
+
+          {/* CTA */}
+          <div style={{ textAlign: "center", marginTop: 56 }}>
+            <Link
+              to="/contact"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                background: "linear-gradient(135deg,#E8A84E 0%,#C9883A 100%)",
+                color: "#fff", fontWeight: 700, fontSize: 15,
+                padding: "15px 32px", borderRadius: 12, textDecoration: "none",
+                fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.01em",
+                boxShadow: "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.34)",
+                cursor: "pointer", transition: "transform 0.2s ease,box-shadow 0.2s ease",
+              }}
+              onMouseEnter={e => { const a = e.currentTarget; a.style.transform = "translateY(-2px)"; a.style.boxShadow = "0 6px 0 rgba(130,78,18,0.50),0 12px 32px rgba(201,136,58,0.44)"; }}
+              onMouseLeave={e => { const a = e.currentTarget; a.style.transform = ""; a.style.boxShadow = "0 4px 0 rgba(130,78,18,0.50),0 8px 24px rgba(201,136,58,0.34)"; }}
+            >
+              Ready to be our next success story? Book a Demo <i className="far fa-arrow-right" style={{ fontSize: 13 }} />
+            </Link>
           </div>
         </div>
 

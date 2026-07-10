@@ -33,7 +33,7 @@ function useCountUp(target: number, duration = 1400, trigger = false) {
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
       const e = 1 - Math.pow(1 - t, 3);
-      setVal(Math.round(e * target));
+      setVal(e * target);
       if (t < 1) raf.current = requestAnimationFrame(tick);
     };
     raf.current = requestAnimationFrame(tick);
@@ -43,8 +43,8 @@ function useCountUp(target: number, duration = 1400, trigger = false) {
 }
 
 // ── hero stat with count-up ───────────────────────────────────────────────────
-const HeroStat = ({ raw, suffix, label, trigger, delay }: {
-  raw: number; suffix: string; label: string; trigger: boolean; delay: number;
+const HeroStat = ({ raw, suffix, label, trigger, delay, decimals = 0 }: {
+  raw: number; suffix: string; label: string; trigger: boolean; delay: number; decimals?: number;
 }) => {
   const n = useCountUp(raw, 1400, trigger);
   return (
@@ -56,7 +56,7 @@ const HeroStat = ({ raw, suffix, label, trigger, delay }: {
         fontFamily: "'Cormorant Garamond',Garamond,serif",
         fontSize: "clamp(32px,3.5vw,52px)", fontWeight: 700,
         color: "#C9883A", lineHeight: 1,
-      }}>{n}{suffix}</div>
+      }}>{decimals ? n.toFixed(decimals) : Math.round(n)}{suffix}</div>
       <div style={{
         fontFamily: "'DM Sans',sans-serif", fontSize: 11, fontWeight: 600,
         letterSpacing: "0.14em", textTransform: "uppercase",
@@ -369,9 +369,9 @@ const ContactSection2 = () => {
             paddingTop:40, gap:"12px 0",
           }}>
             {[
-              { raw:120, suffix:"+", label:"Enterprise Clients",  delay:300 },
-              { raw:15,  suffix:"+", label:"Countries Served",    delay:380 },
-              { raw:99,  suffix:"%", label:"Platform Uptime",     delay:460 },
+              { raw:50,  suffix:"+", label:"Enterprise Clients",  delay:300 },
+              { raw:5,   suffix:"+", label:"Countries Served",    delay:380 },
+              { raw:99.8,suffix:"%", label:"Platform Uptime",     delay:460, decimals:1 },
               { raw:5,   suffix:" yrs", label:"In Operation",     delay:540 },
             ].map((s,i) => (
               <div key={s.label} style={{
@@ -508,9 +508,9 @@ const ContactSection2 = () => {
                   position:"relative", zIndex:1,
                 }}>
                 {[
-                  { val:"120+", label:"Projects"  },
-                  { val:"15+",  label:"Countries" },
-                  { val:"99%",  label:"Uptime"    },
+                  { val:"50+",   label:"Projects"  },
+                  { val:"5+",    label:"Countries" },
+                  { val:"99.8%", label:"Uptime"    },
                 ].map((s,i) => (
                   <div key={s.label} style={{
                     flex:1, textAlign:"center",
@@ -803,10 +803,26 @@ const ContactSection2 = () => {
                       </button>
                     </div>
 
+                    {/* social proof */}
+                    <div style={{
+                      display:"flex", alignItems:"center", justifyContent:"center",
+                      margin:"18px 0 0",
+                    }}>
+                      <span style={{
+                        display:"inline-flex", alignItems:"center", gap:7,
+                        background:"rgba(201,136,58,0.08)", border:"1px solid rgba(201,136,58,0.20)",
+                        borderRadius:999, padding:"6px 16px",
+                        fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600, color:"#8B7A6A",
+                      }}>
+                        <i className="fas fa-building" style={{ fontSize:10, color:"#C9883A" }} />
+                        Join 50+ enterprises that chose XERXEZ
+                      </span>
+                    </div>
+
                     {/* privacy row */}
                     <div style={{
                       display:"flex", alignItems:"center", justifyContent:"center",
-                      gap:16, margin:"16px 0 0", flexWrap:"wrap",
+                      gap:16, margin:"14px 0 0", flexWrap:"wrap",
                     }}>
                       <span style={{
                         display:"inline-flex", alignItems:"center", gap:5,

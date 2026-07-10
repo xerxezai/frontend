@@ -1,7 +1,7 @@
 ﻿const bento = [
   { value: "50+",   label: "Engineers",           icon: "fas fa-users",           bg: "#C9883A",   color: "#fff", span: 1 },
   { value: "12",    label: "Countries Served",    icon: "fas fa-globe",           bg: "#FFF8EE",  color: "#C9883A", span: 1 },
-  { value: "120+",  label: "Projects Delivered",  icon: "fas fa-check-circle",    bg: "#F5F5F7",  color: "#0A0A0A", span: 1 },
+  { value: "50+",   label: "Projects Delivered",  icon: "fas fa-check-circle",    bg: "#F5F5F7",  color: "#0A0A0A", span: 1 },
   { value: "10+",   label: "Years Experience",    icon: "fas fa-calendar-check",  bg: "#FFF8EE",  color: "#C9883A", span: 1 },
   { value: "98%",   label: "Client Satisfaction", icon: "fas fa-heart",           bg: "#F5F5F7",  color: "#0A0A0A", span: 1 },
   { value: "0",     label: "Security Incidents",  icon: "fas fa-shield-alt",      bg: "#C9883A",  color: "#fff", span: 1 },

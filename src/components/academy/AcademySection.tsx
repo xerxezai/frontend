@@ -12,7 +12,7 @@ const FEATURES = [
 ];
 
 const STATS = [
-  { val: "100+", label: "Courses", wide: true },
+  { val: "10+", label: "Courses", wide: true },
   { val: "500+", label: "Students" },
   { val: "15+",  label: "Instructors" },
   { val: "4.8",  label: "Rating", star: true },
@@ -126,7 +126,7 @@ const AcademySection = () => {
               transform: visible ? "translateY(0)" : "translateY(16px)",
               transition: prefersReduced ? "none" : "opacity 0.5s ease 0.14s, transform 0.5s ease 0.14s",
             }}>
-              Access 100+ courses on AI, MLOps, DevSecOps, and enterprise software.
+              Access 10+ courses on AI, MLOps, DevSecOps, and enterprise software.
               Learn at your own pace with certificates.
             </p>
 

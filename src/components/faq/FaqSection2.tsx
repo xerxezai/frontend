@@ -13,7 +13,7 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
   };
 
   const enterpriseStats = [
-    { value: "120+", label: "Enterprise Deployments", icon: "fas fa-building" },
+    { value: "50+", label: "Enterprise Deployments", icon: "fas fa-building" },
     { value: "99.9%", label: "Uptime SLA Guarantee", icon: "fas fa-shield-alt" },
     { value: "40%", label: "Avg Cost Reduction", icon: "fas fa-chart-line" },
     { value: "8 wks", label: "Typical Go-Live Time", icon: "fas fa-rocket" },
@@ -110,7 +110,7 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
                       Enterprise Credentials
                     </span>
                     <h3 style={{ fontSize: 22, fontWeight: 700, color: "#fff", marginBottom: 28, lineHeight: 1.3 }}>
-                      Trusted by Enterprises Across 15+ Industries
+                      Trusted by Enterprises Across 5+ Industries
                     </h3>
 
                     {/* Stats grid */}

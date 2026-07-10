@@ -30,9 +30,25 @@ const HeaderSection2 = ({ variant }: Props) => {
             <ul className="top-list">
               <li className="top-tagline">
                 <i className="fas fa-rocket"></i>
-                AI-Powered ERP, DevSecOps &amp; Cloud Solutions for Enterprises
+                <strong style={{ color: "#E8A84E", fontWeight: 700 }}>New:</strong>
+                {" "}AI Training Programs — 75+ professionals trained
               </li>
               <li className="top-divider">|</li>
+              <li>
+                <Link
+                  to="/contact"
+                  style={{
+                    fontFamily: "'DM Sans',sans-serif", fontSize: 12, fontWeight: 700,
+                    color: "#E8A84E", textDecoration: "none",
+                    display: "inline-flex", alignItems: "center", gap: 6,
+                    transition: "color 150ms ease",
+                  }}
+                  onMouseOver={e => (e.currentTarget.style.color = "#fff")}
+                  onMouseOut={e => (e.currentTarget.style.color = "#E8A84E")}
+                >
+                  Book a Free Demo Today <i className="far fa-arrow-right" style={{ fontSize: 10 }} />
+                </Link>
+              </li>
             </ul>
             <div className="social-icon">
               <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" target="_blank" rel="noreferrer" title="LinkedIn">
@@ -77,6 +93,26 @@ const HeaderSection2 = ({ variant }: Props) => {
                   onMouseOut={e => (e.currentTarget.style.color = "rgba(255,255,255,0.72)")}
                 >
                   Sign in
+                </Link>
+                <Link to="/contact" className="d-none d-xl-inline-flex" style={{
+                  alignItems: "center",
+                  background: "linear-gradient(135deg, #E8A84E 0%, #C9883A 100%)",
+                  color: "#0a0806",
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 14, fontWeight: 700,
+                  padding: "0 20px",
+                  height: 40,
+                  borderRadius: 8,
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                  marginLeft: 4,
+                  boxShadow: "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.20)",
+                  transition: "opacity 150ms ease",
+                }}
+                  onMouseOver={e => (e.currentTarget.style.opacity = "0.88")}
+                  onMouseOut={e => (e.currentTarget.style.opacity = "1")}
+                >
+                  Book Free Demo
                 </Link>
                 <div className="header__hamburger d-xl-none my-auto">
                   <div

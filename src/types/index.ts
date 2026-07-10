@@ -25,6 +25,8 @@ export interface MenuItem {
   isHomemenu?: boolean;
   img?: string;
   submenu?: MenuItem[];
+  /** Short one-line description rendered under the title in dropdown menus. */
+  desc?: string;
 }
 
 export interface ProjectDataType {

@@ -2,10 +2,15 @@ import { useCustomContext } from "../../context/context";
 import MainMenuSection from "./MainMenuSection";
 import { Link } from "react-router-dom";
 import Image from "../utils/Image";
+import AnnouncementBar, { ANNOUNCE_H } from "../marketing/AnnouncementBar";
 
 interface Props {
   variant?: boolean;
 }
+
+/** Fixed header total height = announcement bar + nav row. Pages using this
+ *  header must offset content by HEADER_TOTAL_H. */
+export const HEADER_TOTAL_H = 72 + ANNOUNCE_H;
 
 const HeaderSection = ({ variant: _variant }: Props) => {
   const { toggleMobileMenu } = useCustomContext();
@@ -17,7 +22,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
         position: "fixed",
         top: 0, left: 0, right: 0,
         zIndex: 9999,
-        height: 72,
+        height: HEADER_TOTAL_H,
         background: "rgba(16,11,6,0.96)",
         borderBottom: "1px solid rgba(201,136,58,0.16)",
         boxShadow: "0 2px 0 rgba(201,136,58,0.14), 0 6px 28px rgba(0,0,0,0.50)",
@@ -25,7 +30,8 @@ const HeaderSection = ({ variant: _variant }: Props) => {
         WebkitBackdropFilter: "blur(20px) saturate(1.4)",
       }}
     >
-      <div className="container" style={{ height: "100%" }}>
+      <AnnouncementBar />
+      <div className="container" style={{ height: 72 }}>
         <div style={{
           height: "100%",
           display: "flex",
@@ -76,7 +82,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
               Sign in
             </Link>
 
-            {/* Get Started */}
+            {/* Book Free Demo */}
             <Link
               to="/contact"
               className="d-none d-xl-inline-flex"
@@ -103,7 +109,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
                 e.currentTarget.style.boxShadow = "0 3px 0 rgba(100,58,10,0.50), 0 6px 18px rgba(201,136,58,0.20)";
               }}
             >
-              Get Started
+              Book Free Demo
             </Link>
 
             {/* Hamburger — mobile */}

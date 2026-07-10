@@ -566,7 +566,7 @@ const AITrainingPage = () => {
               { icon: "fas fa-certificate",     label: "AWS Certified"      },
               { icon: "fas fa-shield-alt",      label: "ISO 27001"          },
               { icon: "fas fa-graduation-cap",  label: "Hands-On Labs"      },
-              { icon: "fas fa-users",           label: "500+ Trained"       },
+              { icon: "fas fa-users",           label: "75+ Trained"       },
               { icon: "fas fa-brain",           label: "OpenAI Partner"     },
             ].map(t => (
               <div key={t.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "rgba(20,20,19,0.52)", fontFamily: "'DM Sans', sans-serif" }}>

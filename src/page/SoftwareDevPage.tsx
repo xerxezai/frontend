@@ -2,15 +2,15 @@ import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
 
 const heroStats = [
-  { val: "200+", label: "Apps Built"          },
-  { val: "98%",  label: "On-Time Delivery"    },
-  { val: "15+",  label: "Industries"          },
+  { val: "50+",  label: "Apps Built"          },
+  { val: "89%",  label: "On-Time Delivery"    },
+  { val: "5+",   label: "Industries"          },
   { val: "5 yr", label: "Avg Partnership"     },
 ];
 
 const config: ServicePageConfig = {
   seoTitle: "Software Development | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ builds enterprise software — custom web apps, APIs, mobile platforms, and microservices — delivered on time, on budget, across 15+ industries.",
+  seoDesc:  "XERXEZ builds enterprise software — custom web apps, APIs, mobile platforms, and microservices — delivered on time, on budget, across 5+ industries.",
   badgeText: "Software Development · Custom Enterprise",
 
   headline: (
@@ -21,12 +21,12 @@ const config: ServicePageConfig = {
       </em>
     </h1>
   ),
-  description: "200+ enterprise applications delivered across 15+ industries, with a 98% on-time delivery record. XERXEZ builds software that solves real business problems — not software that forces your business to adapt to someone else's idea of how things should work.",
+  description: "50+ enterprise applications delivered across 5+ industries, with an 89% on-time delivery record. XERXEZ builds software that solves real business problems — not software that forces your business to adapt to someone else's idea of how things should work.",
 
   heroStats: [
-    { val: "200+", label: "Apps Built"       },
-    { val: "98%",  label: "On-Time Delivery" },
-    { val: "15+",  label: "Industries"       },
+    { val: "50+",  label: "Apps Built"       },
+    { val: "89%",  label: "On-Time Delivery" },
+    { val: "5+",   label: "Industries"       },
   ],
   cascadeA: ["Custom Web Apps","REST & GraphQL API","Microservices","Event-Driven Architecture","UI/UX Design","Quality Assurance","DevOps Integration","Data Engineering","AI Features"],
   cascadeB: ["React · Vue · Next.js","Node.js · FastAPI · Django","PostgreSQL · MongoDB","Redis · Elasticsearch","Docker · Kubernetes","TypeScript · Python · Go","WebSockets · gRPC","Kafka · RabbitMQ","Jest · Playwright · Cypress"],
@@ -90,7 +90,7 @@ const config: ServicePageConfig = {
   faqs: [
     { q: "Do you build with our existing tech stack or recommend a new one?", a: "We start by understanding your team's expertise, existing infrastructure, and long-term roadmap. If your stack is sound, we build with it. If there are strong reasons to change — performance, scalability, talent availability — we'll make that case with data, not preference. You always make the final call." },
     { q: "How do you handle changing requirements mid-project?", a: "We build with agile methodology precisely because requirements evolve. New requirements are added to the backlog, prioritised with your product owner, and scoped into upcoming sprints. We use a change request process that keeps budget and timeline transparent — nothing gets hidden in scope creep." },
-    { q: "What does your 98% on-time delivery record actually mean?", a: "98% of our fixed-scope milestones hit their committed delivery date. We achieve this through accurate discovery, conservative buffer inclusion, and a weekly escalation process that identifies blockers three weeks before they become delays. When we commit a date, we mean it." },
+    { q: "What does your 89% on-time delivery record actually mean?", a: "89% of our fixed-scope milestones hit their committed delivery date. We achieve this through accurate discovery, conservative buffer inclusion, and a weekly escalation process that identifies blockers three weeks before they become delays. When we commit a date, we mean it." },
     { q: "Do you offer IP ownership transfer?", a: "All source code, design assets, documentation, and test suites are transferred to you at project completion. We retain no licence rights. Our contracts are explicit: full IP transfer is a standard clause, not an upgrade." },
     { q: "Can you augment our existing development team rather than take over?", a: "Yes. Team augmentation is one of our most popular engagement models. We embed senior engineers alongside your team, working in your sprints, using your tools, under your technical direction. Minimum engagement: 3 months, scaling up or down on 30 days' notice." },
   ],
@@ -99,7 +99,7 @@ const config: ServicePageConfig = {
     <>Ready to Build <span style={{ color: "#C9883A" }}>Software That Actually Ships?</span></>
   ),
   ctaDesc: "Tell us what you're trying to build. XERXEZ will scope it honestly, build it to spec, and deliver it on time — with the test coverage and documentation to prove it works.",
-  ctaTags: ["Full IP Ownership", "98% On-Time Delivery", "Agile & Transparent"],
+  ctaTags: ["Full IP Ownership", "89% On-Time Delivery", "Agile & Transparent"],
 };
 
 const SoftwareDevPage = () => <ServicePageTemplate config={config} />;

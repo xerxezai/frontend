@@ -98,6 +98,16 @@ const MainMenuSection = () => {
                               {subMenuItem.hasDropdown && (
                                 <i className="fas fa-angle-right"></i>
                               )}
+                              {subMenuItem.desc && (
+                                <span style={{
+                                  display: "block", fontSize: 11, fontWeight: 400,
+                                  color: hovered === key ? "rgba(201,136,58,0.85)" : "rgba(226,232,240,0.45)",
+                                  lineHeight: 1.4, marginTop: 2, whiteSpace: "normal",
+                                  textTransform: "none", letterSpacing: 0,
+                                }}>
+                                  {subMenuItem.desc}
+                                </span>
+                              )}
                             </Link>
                             {subMenuItem.hasDropdown && subMenuItem.submenu && (
                               <ul className="submenu">

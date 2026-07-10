@@ -24,7 +24,7 @@ const CtaSection6 = ({ variant }: Props) => {
               Ready to Transform Your <br /> Enterprise Operations?
             </h2>
             <p style={{ color: "rgba(255,255,255,0.72)", maxWidth: 580, margin: "16px auto 0", fontSize: 16, lineHeight: 1.7 }}>
-              Join 120+ enterprises that trust XERXEZ to deliver AI-powered ERP, DevSecOps pipelines,
+              Join 50+ enterprises that trust XERXEZ to deliver AI-powered ERP, DevSecOps pipelines,
               and cloud infrastructure that scales securely.
             </p>
           </div>

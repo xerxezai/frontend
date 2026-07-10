@@ -127,11 +127,16 @@ export interface XzHeroProps {
   right?: ReactNode;
   /** Optional section id for anchor links */
   id?: string;
+  /** Optional urgency line shown above the headline (e.g. limited slots) */
+  urgencyText?: string;
+  /** Optional trust line shown below the CTAs (e.g. "ISO-ready · NDA Protected · 24h Response") */
+  trustLine?: string;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────
 const XzHeroSection: React.FC<XzHeroProps> = ({
   badgeText, headline, description, ctas, stats, cascadeA, cascadeB, right, id,
+  urgencyText, trustLine,
 }) => {
   const statsRef = useRef<HTMLDivElement>(null);
   const [statsActive, setStatsActive] = useState(false);
@@ -187,6 +192,24 @@ const XzHeroSection: React.FC<XzHeroProps> = ({
             {/* Left: text stack */}
             <div className={right ? "col-xl-6 col-lg-7" : "col-12 col-lg-8"}>
 
+              {/* Urgency line */}
+              {urgencyText && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  style={{ marginBottom: 14 }}
+                >
+                  <span style={{
+                    display: "inline-flex", alignItems: "center", gap: 7,
+                    fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.55)",
+                    fontFamily: "'DM Sans',sans-serif",
+                  }}>
+                    <i className="far fa-clock" style={{ color: OG, fontSize: 11 }} />
+                    {urgencyText}
+                  </span>
+                </motion.div>
+              )}
+
               {/* Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
@@ -233,7 +256,7 @@ const XzHeroSection: React.FC<XzHeroProps> = ({
               <motion.div
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.30 }}
-                style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: stats.length > 0 ? 52 : 0 }}
+                style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: trustLine ? 16 : (stats.length > 0 ? 52 : 0) }}
               >
                 {ctas.map((cta, i) => {
                   const base: React.CSSProperties = {
@@ -251,6 +274,24 @@ const XzHeroSection: React.FC<XzHeroProps> = ({
                     : <a key={i} href={cta.href ?? "#"} style={base}>{cta.label} {icon}</a>;
                 })}
               </motion.div>
+
+              {/* Trust line */}
+              {trustLine && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.36 }}
+                  style={{ marginBottom: stats.length > 0 ? 52 : 0 }}
+                >
+                  <span style={{
+                    display: "inline-flex", alignItems: "center", gap: 7,
+                    fontSize: 12, color: "rgba(255,255,255,0.42)",
+                    fontFamily: "'DM Sans',sans-serif",
+                  }}>
+                    <i className="fas fa-shield-alt" style={{ color: "rgba(201,136,58,0.75)", fontSize: 11 }} />
+                    {trustLine}
+                  </span>
+                </motion.div>
+              )}
 
               {/* Stats strip */}
               {stats.length > 0 && (

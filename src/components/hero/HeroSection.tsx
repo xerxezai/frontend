@@ -4,24 +4,13 @@ import { useEffect, useRef, useState } from "react";
 const OG = "#C9883A";
 const C2 = "#cc785c";
 
-const HOME_CASCADE_A = [
-  "Enterprise AI Platform","Cloud Architecture","DevSecOps Pipelines",
-  "AI-Powered ERP","Intelligent Automation","Data Analytics",
-  "Cybersecurity","ML Operations","Digital Transformation","Quantum Computing",
-];
-const HOME_CASCADE_B = [
-  "Reduced Operational Cost","Zero-Downtime Deployment","Accelerated Innovation",
-  "Compliance & Security","Scalable Infrastructure","Real-Time Insights",
-  "Future-Proof Systems","Intelligent Automation","Enterprise-Grade Security",
-];
-
 const CYCLE_WORDS = [
   "AI-Powered ERP","DevSecOps Pipelines","Cloud Infrastructure",
   "AI Training & Consulting","Quantum Computing","Intelligent Automation",
   "Data Analytics","Cybersecurity","Digital Transformation",
 ];
 
-const FULL_TEXT = "Enterprise AI";
+const FULL_TEXT = "Enterprises";
 const HUB = { cx: 260, cy: 222, r: 44 };
 
 const NET_NODES = [
@@ -32,33 +21,6 @@ const NET_NODES = [
   { id:"ai",    cx:260, cy:408, r:26, label:"AI/ML",     color:"#8B5CF6", glow:"rgba(139,92,246,0.28)"  },
   { id:"dev",   cx:78,  cy:330, r:22, label:"DevSecOps", color:"#D46A1A", glow:"rgba(212,106,26,0.28)"  },
 ];
-
-// ── Dark atmospheric cascade ──────────────────────────────────────────────────
-const DarkCascade = ({ prefersReduced }: { prefersReduced: boolean }) => {
-  if (prefersReduced) return null;
-  const a = [...HOME_CASCADE_A, ...HOME_CASCADE_A];
-  const b = [...HOME_CASCADE_B, ...HOME_CASCADE_B];
-  const t: React.CSSProperties = {
-    fontFamily: "'Cormorant Garamond',Garamond,serif",
-    fontSize: "clamp(14px,1.8vw,22px)",
-    fontWeight: 600, whiteSpace: "nowrap",
-    letterSpacing: "0.01em", lineHeight: 1,
-  };
-  return (
-    <div aria-hidden="true" style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none", zIndex:0 }}>
-      <div style={{ position:"absolute", left:"2%", top:0, bottom:0, overflow:"hidden" }}>
-        <div style={{ display:"flex", flexDirection:"column", gap:28, animation:"xzCreamScrollA 58s linear infinite", willChange:"transform" }}>
-          {a.map((m,i) => <span key={i} style={{ ...t, color:"rgba(201,136,58,0.09)" }}>{m}</span>)}
-        </div>
-      </div>
-      <div className="xz-cream-cascade-b" style={{ position:"absolute", right:"1%", top:0, bottom:0, overflow:"hidden" }}>
-        <div style={{ display:"flex", flexDirection:"column", gap:28, transform:"translateY(-12%)", animation:"xzCreamScrollB 74s linear infinite", willChange:"transform" }}>
-          {b.map((m,i) => <span key={i} style={{ ...t, color:"rgba(204,120,92,0.07)" }}>{m}</span>)}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // ── AI Network Visualization (3D tilt + SVG network) ─────────────────────────
 const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => {
@@ -368,14 +330,11 @@ const HeroSection = () => {
   return (
     <section ref={sectionRef} style={{
       background:"linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)",
-      padding:"24px 0 72px",
-      minHeight:"calc(100vh - 70px)",
+      padding:"24px 0 48px",
+      minHeight:"calc(90vh - 70px)",
       display:"flex", alignItems:"flex-start",
       position:"relative", overflow:"hidden",
     }}>
-
-      {/* Atmospheric cascade */}
-      <DarkCascade prefersReduced={prefersReduced}/>
 
       {/* Dot-grid texture */}
       <div aria-hidden="true" style={{
@@ -464,15 +423,25 @@ const HeroSection = () => {
               <span style={{
                 display:"block",
                 fontFamily:"'Cormorant Garamond',Garamond,serif",
-                fontWeight:400, fontSize:"clamp(36px,4.2vw,56px)",
-                color:"rgba(255,255,255,0.42)", letterSpacing:"-0.01em",
-                lineHeight:1.1, marginBottom:2,
+                fontWeight:600, fontSize:"clamp(28px,3.4vw,46px)",
+                color:"rgba(255,255,255,0.92)", letterSpacing:"-0.01em",
+                lineHeight:1.12, marginBottom:2,
                 animation: prefersReduced?"none":"xzSlideBlur 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s both",
               }}>
-                The Future of
+                AI-Powered ERP, DevSecOps
+              </span>
+              <span style={{
+                display:"block",
+                fontFamily:"'Cormorant Garamond',Garamond,serif",
+                fontWeight:600, fontSize:"clamp(28px,3.4vw,46px)",
+                color:"rgba(255,255,255,0.92)", letterSpacing:"-0.01em",
+                lineHeight:1.12, marginBottom:6,
+                animation: prefersReduced?"none":"xzSlideBlur 0.6s cubic-bezier(0.22,1,0.36,1) 0.2s both",
+              }}>
+                &amp; Cloud Solutions for
               </span>
 
-              {/* Per-letter animated "Enterprise AI" */}
+              {/* Per-letter animated "Enterprises" */}
               <span style={{
                 display:"block",
                 fontFamily:"'Cormorant Garamond',Garamond,serif",
@@ -494,16 +463,6 @@ const HeroSection = () => {
                 ))}
               </span>
 
-              <span style={{
-                display:"block",
-                fontFamily:"'Cormorant Garamond',Garamond,serif",
-                fontWeight:400, fontSize:"clamp(24px,3.2vw,44px)",
-                color:"rgba(255,255,255,0.90)", letterSpacing:"-0.015em", lineHeight:1.14,
-                animation: prefersReduced?"none":"xzFadeUp 0.65s ease 0.8s both",
-              }}>
-                is here —{" "}
-                <em style={{ color:OG, fontStyle:"italic" }}>built for yours.</em>
-              </span>
             </h1>
 
             {/* Cycling services */}
@@ -530,12 +489,65 @@ const HeroSection = () => {
             {/* Description */}
             <p style={{
               fontFamily:"'Inter',sans-serif", fontSize:16, lineHeight:1.68,
-              color:"rgba(255,255,255,0.58)", maxWidth:500, marginBottom:40,
+              color:"rgba(255,255,255,0.58)", maxWidth:500, marginBottom:26,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.1s both",
             }}>
-              XERXEZ delivers intelligent ERP, DevSecOps pipelines, and cloud
-              infrastructure that transform how enterprises operate at scale.
+              XERXEZ helps mid-to-large enterprises cut operational costs by 40%,
+              deploy 60% faster, and achieve 99.9% system uptime — all with one
+              integrated platform.
             </p>
+
+            {/* Product cards */}
+            <div style={{
+              display:"flex", gap:10, flexWrap:"wrap", maxWidth:560, marginBottom:28,
+              animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.18s both",
+            }}>
+              {[
+                {
+                  label:"AI-Powered ERP", sub:"HR, CRM, Payroll & more",
+                  icon:<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke={OG} strokeWidth="1.3"/><path d="M6 2.5v11M2.5 6.5h11" stroke={OG} strokeWidth="1.3"/></svg>,
+                },
+                {
+                  label:"LMA Academy", sub:"10+ AI & tech courses",
+                  icon:<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3l6.2 2.9L8 8.8 1.8 5.9 8 3z" stroke={OG} strokeWidth="1.3" strokeLinejoin="round"/><path d="M4.3 7.4v3.1c0 1.1 1.7 2 3.7 2s3.7-.9 3.7-2V7.4" stroke={OG} strokeWidth="1.3"/></svg>,
+                },
+                {
+                  label:"DevSecOps", sub:"CI/CD & cloud security",
+                  icon:<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2l4.8 1.8v3.4C12.8 10.6 10.7 13 8 14c-2.7-1-4.8-3.4-4.8-6.8V3.8L8 2z" stroke={OG} strokeWidth="1.3" strokeLinejoin="round"/><path d="M6 8l1.5 1.5L10.2 6.5" stroke={OG} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+                },
+              ].map(card => (
+                <div
+                  key={card.label}
+                  style={{
+                    flex:"1 1 150px", minWidth:150,
+                    display:"flex", alignItems:"flex-start", gap:9,
+                    background:"linear-gradient(145deg,#231c0e 0%,#1e1509 100%)",
+                    border:"1px solid rgba(201,136,58,0.28)",
+                    borderRadius:12, padding:"12px 13px",
+                    transition:"border-color 0.2s ease, transform 0.2s ease",
+                    cursor:"default",
+                  }}
+                  onMouseOver={e => { e.currentTarget.style.borderColor="rgba(201,136,58,0.55)"; e.currentTarget.style.transform="translateY(-2px)"; }}
+                  onMouseOut={e => { e.currentTarget.style.borderColor="rgba(201,136,58,0.28)"; e.currentTarget.style.transform="translateY(0)"; }}
+                >
+                  <span style={{
+                    flexShrink:0, width:28, height:28, borderRadius:8,
+                    background:"rgba(201,136,58,0.14)",
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                  }}>
+                    {card.icon}
+                  </span>
+                  <span>
+                    <span style={{ display:"block", fontFamily:"'Inter',sans-serif", fontSize:12.5, fontWeight:600, color:"rgba(255,255,255,0.90)", lineHeight:1.3 }}>
+                      {card.label}
+                    </span>
+                    <span style={{ display:"block", fontFamily:"'Inter',sans-serif", fontSize:11, color:"rgba(255,255,255,0.46)", lineHeight:1.4, marginTop:2 }}>
+                      {card.sub}
+                    </span>
+                  </span>
+                </div>
+              ))}
+            </div>
 
             {/* CTAs */}
             <div style={{
@@ -667,18 +679,20 @@ const HeroSection = () => {
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.4s both",
             }}>
               {[
-                { val:"120+",  label:"Enterprise clients" },
-                { val:"15+",   label:"Countries served"  },
-                { val:"99.8%", label:"Platform uptime"   },
-                { val:"5 yrs", label:"In operation"      },
+                { val:"50+",       label:"Enterprise projects" },
+                { val:"40%",       label:"Avg cost reduction"  },
+                { val:"99.9%",     label:"Uptime SLA"          },
+                { val:"<6 mo",     label:"Avg deployment"      },
+                { val:"5+",        label:"Industries served"   },
+                { val:"ISO 27001", label:"& SOC 2 aligned"     },
               ].map((m,i) => (
                 <div key={m.label} style={{
                   display:"flex", flexDirection:"column", gap:2,
-                  padding:"0 20px",
+                  padding:"0 16px", marginBottom:12,
                   borderLeft: i>0?"1px solid rgba(255,255,255,0.10)":"none",
                 }}>
-                  <span style={{ fontFamily:"'Cormorant Garamond',Garamond,serif", fontSize:22, fontWeight:700, color:"rgba(255,255,255,0.92)", lineHeight:1, letterSpacing:"-0.02em" }}>{m.val}</span>
-                  <span style={{ fontFamily:"'Inter',sans-serif", fontSize:10, fontWeight:500, color:"rgba(255,255,255,0.38)", letterSpacing:"0.04em", textTransform:"uppercase", lineHeight:1 }}>{m.label}</span>
+                  <span style={{ fontFamily:"'Cormorant Garamond',Garamond,serif", fontSize:21, fontWeight:700, color:"rgba(255,255,255,0.92)", lineHeight:1, letterSpacing:"-0.02em", whiteSpace:"nowrap" }}>{m.val}</span>
+                  <span style={{ fontFamily:"'Inter',sans-serif", fontSize:10, fontWeight:500, color:"rgba(255,255,255,0.38)", letterSpacing:"0.04em", textTransform:"uppercase", lineHeight:1, whiteSpace:"nowrap" }}>{m.label}</span>
                 </div>
               ))}
             </div>
@@ -778,18 +792,6 @@ const HeroSection = () => {
         @keyframes xzShimmer {
           0%{transform:translateX(-100%) skewX(-15deg)}
           30%,100%{transform:translateX(220%) skewX(-15deg)}
-        }
-        /* Cascade keyframes */
-        @keyframes xzCreamScrollA {
-          from{transform:translateY(0)}
-          to{transform:translateY(-50%)}
-        }
-        @keyframes xzCreamScrollB {
-          from{transform:translateY(-12%)}
-          to{transform:translateY(-62%)}
-        }
-        @media (max-width:767px) {
-          .xz-cream-cascade-b{display:none!important}
         }
         @media (prefers-reduced-motion:reduce) {
           *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}

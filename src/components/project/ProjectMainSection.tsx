@@ -31,43 +31,43 @@ const FILTERS: { key: FilterKey; label: string; match: string[] }[] = [
 
 // ── Project metadata with outcome stats ────────────────────────────────────
 const projectMeta: Record<string, { desc: string; tags: string[]; stat: string; statLabel: string }> = {
-  "ai-erp-platform":                { desc: "End-to-end AI ERP deployment with automated workflows and real-time business intelligence.",                                                               tags: ["Python", "TensorFlow", "SAP", "Azure"],              stat: "$2M",    statLabel: "First-year savings"    },
+  "ai-erp-platform":                { desc: "End-to-end AI ERP deployment with automated workflows and real-time business intelligence.",                                                               tags: ["Python", "TensorFlow", "SAP", "Azure"],              stat: "40%",    statLabel: "Cost Reduction"        },
   "mlops-pipeline":                  { desc: "Scalable MLOps automation pipeline that cut model deployment cycles from weeks to hours.",                                                                tags: ["Kubernetes", "MLflow", "Python", "AWS"],              stat: "95%",    statLabel: "Faster deployments"    },
   "cloud-infrastructure":            { desc: "Zero-trust cloud architecture achieving 99.9% uptime with continuous compliance monitoring.",                                                             tags: ["Terraform", "AWS", "K8s", "Vault"],                  stat: "99.9%",  statLabel: "Uptime achieved"       },
-  "enterprise-saas":                 { desc: "Multi-tenant SaaS platform serving 500+ enterprise clients at 99.95% availability SLA.",                                                                 tags: ["React", "Node.js", "PostgreSQL", "GCP"],              stat: "500+",   statLabel: "Enterprise clients"    },
-  "ai-training-program":             { desc: "Upskilled 1,200+ corporate professionals in AI/ML fundamentals and applied LLM engineering.",                                                            tags: ["Python", "Jupyter", "LangChain", "OpenAI"],          stat: "1,200+", statLabel: "Engineers trained"     },
-  "digital-transformation":          { desc: "Digital transformation roadmap that reduced operational costs by 38% across a 10,000-person org.",                                                       tags: ["Agile", "TOGAF", "AWS", "Power BI"],                 stat: "38%",    statLabel: "Cost reduction"        },
+  "enterprise-saas":                 { desc: "Multi-tenant SaaS platform delivering enterprise-grade 99.9% uptime for growing organizations.",                                                        tags: ["React", "Node.js", "PostgreSQL", "GCP"],              stat: "99.9%",  statLabel: "Uptime"                },
+  "ai-training-program":             { desc: "Upskilled 75+ corporate professionals in AI/ML fundamentals and applied LLM engineering.",                                                              tags: ["Python", "Jupyter", "LangChain", "OpenAI"],          stat: "75+",    statLabel: "Engineers trained"     },
+  "digital-transformation":          { desc: "Digital transformation roadmap that reduced operational costs by 38% across a large enterprise org.",                                                     tags: ["Agile", "TOGAF", "AWS", "Power BI"],                 stat: "38%",    statLabel: "Cost reduction"        },
   "supply-chain-ai":                 { desc: "AI-driven supply chain optimisation cutting inventory costs and improving fulfilment speed.",                                                             tags: ["PySpark", "Snowflake", "Python", "Azure"],           stat: "28%",    statLabel: "Inventory savings"     },
   "kubernetes-security":             { desc: "Hardened Kubernetes clusters across 3 cloud providers, achieving SOC 2 Type II certification.",                                                          tags: ["K8s", "Falco", "OPA", "AWS"],                        stat: "SOC 2",  statLabel: "Type II certified"     },
   "fraud-detection-mlops":           { desc: "Real-time fraud detection processing 10M+ daily transactions at sub-100ms latency.",                                                                     tags: ["Kafka", "PyTorch", "Flink", "GCP"],                  stat: "10M+",   statLabel: "Daily detections"      },
-  "multi-cloud-finops":              { desc: "FinOps platform delivering $4M+ in annual cloud savings across AWS, Azure, and GCP.",                                                                    tags: ["Terraform", "Python", "Grafana", "Azure"],           stat: "$4M+",   statLabel: "Annual cloud savings"  },
+  "multi-cloud-finops":              { desc: "FinOps platform delivering $500K+ in annual cloud savings across AWS, Azure, and GCP.",                                                                    tags: ["Terraform", "Python", "Grafana", "Azure"],           stat: "$500K+", statLabel: "Annual cloud savings"  },
   "iot-data-platform":               { desc: "IoT data management platform ingesting 2B+ events daily with predictive maintenance.",                                                                   tags: ["MQTT", "TimescaleDB", "React", "Rust"],              stat: "2B+",    statLabel: "Events per day"        },
-  "llm-engineering-bootcamp":        { desc: "Intensive LLM engineering programme graduating 300+ engineers into production-ready AI roles.",                                                          tags: ["Python", "LangChain", "OpenAI", "Pinecone"],         stat: "300+",   statLabel: "Engineers certified"   },
+  "llm-engineering-bootcamp":        { desc: "Intensive LLM engineering programme graduating engineers into production-ready AI roles.",                                                          tags: ["Python", "LangChain", "OpenAI", "Pinecone"],         stat: "75+",    statLabel: "Engineers certified"   },
   "oil-gas-digital-transformation":  { desc: "AI-powered digital transformation for Oil & Gas operations — predictive maintenance, real-time pipeline monitoring, and operational analytics to maximise efficiency and safety.", tags: ["Oil & Gas", "AI", "IoT", "Digital Transformation"], stat: "47%",    statLabel: "Efficiency gain"       },
   "healthcare-management-system":    { desc: "End-to-end healthcare management platform covering patient records, appointment scheduling, billing, and clinical workflows for modern medical facilities.", tags: ["Healthcare", "ERP", "Patient Management", "Cloud"], stat: "99.5%",  statLabel: "Records accuracy"      },
 };
 
 // ── Hero cascade data ─────────────────────────────────────────────────────
 const CASCADE_A = [
-  "$4M+ Annual cloud savings",
+  "$500K+ Annual cloud savings",
   "99.9% Uptime achieved",
-  "$2M First-year ERP savings",
+  "40% First-year ERP cost reduction",
   "38% Cost reduction",
   "10M+ Daily fraud detections",
   "2B+ Events daily",
   "SOC 2 Type II certified",
   "47% Oil & Gas efficiency gain",
-  "500+ Enterprise clients",
+  "50+ Enterprise clients",
 ];
 
 const CASCADE_B = [
-  "1,200+ Engineers trained",
+  "75+ Engineers trained",
   "95% Faster deployments",
-  "300+ LLM engineers certified",
+  "75+ LLM engineers certified",
   "28% Inventory savings",
   "99.5% Healthcare records accuracy",
-  "99.95% SLA guaranteed",
-  "10,000-person org transformed",
+  "99.9% SLA guaranteed",
+  "Large enterprise org transformed",
   "3 cloud providers secured",
 ];
 
@@ -371,7 +371,7 @@ const PortfolioHeroCard: React.FC = () => (
         fontFamily: "'Cormorant Garamond',serif", fontWeight: 700,
         fontSize: 52, lineHeight: 1, color: "#C9883A",
         letterSpacing: "-0.02em",
-      }}>$4M+</span>
+      }}>$500K+</span>
     </div>
     <p style={{
       fontSize: 13, fontWeight: 700, color: "#1A1208",
@@ -389,10 +389,10 @@ const PortfolioHeroCard: React.FC = () => (
     {/* 4 outcome chips */}
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: 18, position: "relative" }}>
       {[
-        { val: "50+",   label: "Projects delivered" },
+        { val: "15+",   label: "Projects delivered" },
         { val: "99.9%", label: "Uptime SLA"         },
-        { val: "1,200+",label: "Engineers trained"  },
-        { val: "38%",   label: "Cost reduction"     },
+        { val: "75+",   label: "Engineers trained"  },
+        { val: "30%",   label: "Cost reduction"     },
       ].map(d => (
         <div key={d.label} style={{
           background: "rgba(255,255,255,0.80)",
@@ -431,6 +431,95 @@ const PortfolioHeroCard: React.FC = () => (
       <span style={{ fontSize: 11, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif" }}>All outcomes independently verified</span>
     </div>
   </div>
+);
+
+// ── Live products (ERP + Academy) ──────────────────────────────────────────
+const LIVE_PRODUCTS = [
+  {
+    key: "erp",
+    icon: "fas fa-layer-group",
+    name: "Xerxez ERP",
+    tagline: "Live AI-Powered ERP",
+    domain: "xerxez.com/erp",
+    to: "/erp/login",
+    cta: "Try Live",
+  },
+  {
+    key: "academy",
+    icon: "fas fa-graduation-cap",
+    name: "Xerxez Academy",
+    tagline: "AI Training Platform",
+    domain: "xerxez.com/lma",
+    to: "/lma/courses",
+    cta: "Explore",
+  },
+];
+
+const LiveProductsSection: React.FC = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 16 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5 }}
+    style={{ marginBottom: 56 }}
+  >
+    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22 }}>
+      <span style={{
+        display: "inline-flex", alignItems: "center", gap: 6,
+        fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
+        color: "#4ade80", fontFamily: "'DM Sans',sans-serif",
+      }}>
+        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 6px rgba(74,222,128,0.75)" }} />
+        Live Now
+      </span>
+      <h3 style={{
+        fontFamily: "'DM Sans',sans-serif", fontWeight: 800, fontSize: 22,
+        color: "#1A1A1A", margin: 0, letterSpacing: "-0.02em",
+      }}>
+        Our Live Products
+      </h3>
+    </div>
+    <div className="row g-4">
+      {LIVE_PRODUCTS.map(p => (
+        <div key={p.key} className="col-lg-6">
+          <Link
+            to={p.to}
+            style={{
+              display: "flex", alignItems: "center", gap: 18,
+              background: "#fff", borderRadius: 16,
+              border: "1px solid rgba(0,0,0,0.055)", borderTop: "3px solid #C9883A",
+              boxShadow: "0 2px 14px rgba(0,0,0,0.05)",
+              padding: "22px 24px", textDecoration: "none",
+              transition: "transform 0.22s ease, box-shadow 0.22s ease",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 16px 40px rgba(0,0,0,0.12)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 14px rgba(0,0,0,0.05)"; }}
+          >
+            <div style={{
+              width: 54, height: 54, borderRadius: 14, flexShrink: 0,
+              background: CG, display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 4px 16px rgba(201,136,58,0.30)",
+            }}>
+              <i className={p.icon} style={{ color: "#fff", fontSize: 22 }} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                <span style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 16, color: "#1A1208" }}>{p.name}</span>
+              </div>
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "#8A7D6E", marginBottom: 2 }}>{p.tagline}</div>
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, color: "#B0A594" }}>{p.domain}</div>
+            </div>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0,
+              color: C, fontWeight: 700, fontSize: 13, fontFamily: "'DM Sans',sans-serif",
+            }}>
+              {p.cta} <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
+            </span>
+          </Link>
+        </div>
+      ))}
+    </div>
+  </motion.div>
 );
 
 // ── Empty state ────────────────────────────────────────────────────────────
@@ -499,7 +588,7 @@ const BottomCTA: React.FC = () => (
         }}>
           See How We Delivered{" "}
           <em style={{ color: OG, fontStyle: "italic", fontFamily: "'Cormorant Garamond',serif", fontWeight: 700 }}>
-            $4M in Savings
+            $500K+ in Savings
           </em>
         </h2>
         <p style={{ fontSize: 15.5, color: "rgba(255,255,255,0.52)", lineHeight: 1.78, fontFamily: "'DM Sans',sans-serif", marginBottom: 36 }}>
@@ -593,9 +682,9 @@ const ProjectMainSection: React.FC = () => {
           { label: "Start a Project", to: "/contact", primary: false },
         ]}
         stats={[
-          { raw: 50,  suffix: "+", label: "Projects Delivered" },
-          { raw: 15,  suffix: "+", label: "Industries Served"  },
-          { raw: 120, suffix: "+", label: "Enterprise Clients" },
+          { raw: 15,  suffix: "+", label: "Projects Delivered" },
+          { raw: 5,   suffix: "+", label: "Industries Served"  },
+          { raw: 50,  suffix: "+", label: "Enterprise Clients" },
         ]}
         cascadeA={CASCADE_A}
         cascadeB={CASCADE_B}
@@ -605,6 +694,8 @@ const ProjectMainSection: React.FC = () => {
       {/* ── Filter + Grid ── */}
       <section id="project-grid" style={{ background: "#F2EFE9", padding: "72px 0 96px" }}>
         <div className="container">
+
+          <LiveProductsSection />
 
           {/* Filter bar */}
           <motion.div

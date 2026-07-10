@@ -2,15 +2,15 @@ import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
 
 const heroStats = [
-  { val: "120+", label: "Clients Served"     },
-  { val: "$50M+",label: "Cost Saved"         },
-  { val: "15+",  label: "Industries"         },
-  { val: "98%",  label: "Client Retention"   },
+  { val: "50+", label: "Clients Served"     },
+  { val: "$10M+",label: "Cost Saved"         },
+  { val: "5+",   label: "Industries"         },
+  { val: "80%",  label: "Client Retention"   },
 ];
 
 const config: ServicePageConfig = {
   seoTitle: "Software Consulting | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ provides enterprise software consulting — technology audits, architecture review, digital transformation, and team augmentation for 120+ organisations globally.",
+  seoDesc:  "XERXEZ provides enterprise software consulting — technology audits, architecture review, digital transformation, and team augmentation for 50+ organisations globally.",
   badgeText: "Software Consulting · Strategic Advisory",
 
   headline: (
@@ -21,12 +21,12 @@ const config: ServicePageConfig = {
       </em>
     </h1>
   ),
-  description: "$50M+ in client cost savings identified and delivered. 120+ organisations advised on technology strategy, architecture, vendor selection, and digital transformation. XERXEZ consulting tells you what you need to hear — not what you want to hear.",
+  description: "$10M+ in client cost savings identified and delivered. 50+ organisations advised on technology strategy, architecture, vendor selection, and digital transformation. XERXEZ consulting tells you what you need to hear — not what you want to hear.",
 
   heroStats: [
-    { val: "120+", label: "Clients Served"  },
-    { val: "$50M+",label: "Cost Saved"      },
-    { val: "98%",  label: "Client Retention"},
+    { val: "50+", label: "Clients Served"  },
+    { val: "$10M+",label: "Cost Saved"      },
+    { val: "80%",  label: "Client Retention"},
   ],
   cascadeA: ["Technology Audit","Architecture Review","Digital Transformation","Vendor Selection","Team Augmentation","Roadmap Planning","Technical Due Diligence","CTO Advisory","Operating Model Design"],
   cascadeB: ["Agile · SAFe · Scrum","Cloud-Native · Serverless","Microservices · DDD","Event-Driven Architecture","API Strategy · OpenAPI","SRE · DevOps · Platform Eng","Data Architecture · Lakehouse","AI/ML Strategy · MLOps","FinOps · Cost Governance"],
@@ -92,14 +92,14 @@ const config: ServicePageConfig = {
     { q: "What does a technology audit typically cover?", a: "A full audit covers: codebase quality (complexity, test coverage, dependency health), architecture (scalability, resilience, security posture), engineering practices (deployment frequency, change failure rate, incident response), team capability, and tooling. We assess against industry benchmarks and your specific growth trajectory." },
     { q: "Can you provide an interim CTO or technical director?", a: "Yes. We provide experienced interim CTOs and VPs of Engineering for organisations between permanent hires, during a period of rapid growth, or while building out the leadership team. Minimum engagement: 3 months. They operate as a full member of your senior leadership team." },
     { q: "How do you ensure your recommendations are actually implemented?", a: "We offer implementation support alongside all advisory engagements — embedding engineers or working alongside your team to execute the highest-priority recommendations. We also build implementation roadmaps that are realistic about your team's capacity, so the plan doesn't sit on a shelf." },
-    { q: "What does 98% client retention actually mean for consulting?", a: "It means 98% of clients who engage us for a defined scope return for a follow-on engagement within 12 months. For us, this is the primary quality metric — client satisfaction surveys are easy to game; repeat business is not." },
+    { q: "What does 80% client retention actually mean for consulting?", a: "It means 80% of clients who engage us for a defined scope return for a follow-on engagement within 12 months. For us, this is the primary quality metric — client satisfaction surveys are easy to game; repeat business is not." },
   ],
 
   ctaTitle: (
     <>Ready for Technology Advice <span style={{ color: "#C9883A" }}>You Can Actually Trust?</span></>
   ),
   ctaDesc: "Whether you need a full technology audit, an architecture review, interim engineering leadership, or a vendor evaluation, XERXEZ gives you honest advice from engineers with no commercial agenda.",
-  ctaTags: ["No Vendor Affiliations", "Engineers Who Build", "98% Client Retention"],
+  ctaTags: ["No Vendor Affiliations", "Engineers Who Build", "80% Client Retention"],
 };
 
 const ConsultingPage = () => <ServicePageTemplate config={config} />;

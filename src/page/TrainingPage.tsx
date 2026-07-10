@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import CustomLayout from "../components/layout/CustomLayout";
+import ReadyCTA from "../components/marketing/ReadyCTA";
 import XzHeroSection from "../components/common/XzHeroSection";
 import SEO from "../components/seo/SEO";
 
@@ -81,14 +82,14 @@ const TRAINING_CASCADE_A = [
   "Prompt Engineering", "Production ML Systems", "Data Engineering at Scale",
 ];
 const TRAINING_CASCADE_B = [
-  "300+ Certified Engineers", "95% Satisfaction Rate", "500+ Professionals Trained",
-  "12+ Active Programs", "60-hour Intensives", "Hands-On Projects Only",
-  "Cohort-Based Learning", "Certificate Recognised", "July 2026 Cohort Open",
+  "75+ Certified Engineers", "95% Satisfaction Rate", "75+ Professionals Trained",
+  "5+ Active Programs", "60-hour Intensives", "Hands-On Projects Only",
+  "Cohort-Based Learning", "Certificate Recognised", "August 2026 Cohort Open",
 ];
 
 const CohortCard = () => {
   const [barW, setBarW] = useState(0);
-  useEffect(() => { const t = setTimeout(() => setBarW(68), 500); return () => clearTimeout(t); }, []);
+  useEffect(() => { const t = setTimeout(() => setBarW(48), 500); return () => clearTimeout(t); }, []);
   return (
     <div style={{
       borderRadius: 20,
@@ -108,7 +109,7 @@ const CohortCard = () => {
           Enrolling Now
         </span>
       </div>
-      <p style={{ fontSize:10, fontWeight:700, letterSpacing:"0.15em", textTransform:"uppercase", color:"#cc785c", fontFamily:"'DM Sans',sans-serif", marginBottom:4 }}>Next Cohort · July 2026</p>
+      <p style={{ fontSize:10, fontWeight:700, letterSpacing:"0.15em", textTransform:"uppercase", color:"#cc785c", fontFamily:"'DM Sans',sans-serif", marginBottom:4 }}>Next Cohort · August 2026</p>
       <h4 style={{ fontSize:20, fontWeight:800, color:"#1A1208", lineHeight:1.18, fontFamily:"'DM Sans',sans-serif", marginBottom:8, letterSpacing:"-0.02em" }}>AI Practitioner<br />Program</h4>
       <p style={{ fontSize:12.5, color:"#5C5047", lineHeight:1.65, fontFamily:"'DM Sans',sans-serif", marginBottom:18 }}>
         Hands-on, certification-backed training for enterprise AI practitioners — live labs, real projects, no filler.
@@ -126,9 +127,9 @@ const CohortCard = () => {
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:7 }}>
           <span style={{ fontSize:11, fontWeight:600, color:"#5C5047", fontFamily:"'DM Sans',sans-serif" }}>Seats Filled</span>
           <span style={{ fontSize:11, fontFamily:"'DM Sans',sans-serif" }}>
-            <span style={{ fontWeight:700, color:"#1A1208" }}>17</span>
+            <span style={{ fontWeight:700, color:"#1A1208" }}>12</span>
             <span style={{ color:"#A09080" }}> / 25 — </span>
-            <span style={{ fontWeight:700, color:"#d64f38" }}>8 left</span>
+            <span style={{ fontWeight:700, color:"#d64f38" }}>13 left</span>
           </span>
         </div>
         <div style={{ height:5, background:"rgba(0,0,0,0.09)", borderRadius:3, overflow:"hidden" }}>
@@ -139,7 +140,7 @@ const CohortCard = () => {
         Reserve Your Seat <i className="far fa-arrow-right" style={{ fontSize:12 }} />
       </Link>
       <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:12 }}>
-        {[{icon:"fas fa-certificate",text:"CPD Accredited"},{icon:"far fa-clock",text:"Closes 30 Jun"}].map(t=>(
+        {[{icon:"fas fa-certificate",text:"CPD Accredited"},{icon:"far fa-clock",text:"Closes 31 July 2026"}].map(t=>(
           <React.Fragment key={t.text}>
             <div style={{ display:"flex", alignItems:"center", gap:5 }}>
               <i className={t.icon} style={{ color:GOLD, fontSize:10 }} />
@@ -296,7 +297,7 @@ const CourseCard = ({ course, index }: { course: ApiCourse; index: number }) => 
             <i className="fas fa-play-circle" style={{ color:GOLD }} /> {course.lessons} lessons
           </span>
         </div>
-        <Link to={`/lma/courses/${course.id}`} style={{
+        <Link to="/lma/student/dashboard" style={{
           display:"inline-flex", alignItems:"center", gap:7,
           background:`linear-gradient(135deg,${AMBER} 0%,${GOLD} 100%)`,
           color:"#fff", fontSize:13, fontWeight:700,
@@ -366,10 +367,10 @@ const CoursesSection = () => {
    SECTION 3 — DARK: Why XERXEZ Training
 ══════════════════════════════════════════════ */
 const features = [
-  { icon:"fas fa-user-tie",    title:"Industry Expert Instructors", desc:"Real-world practitioners with 10+ years of enterprise deployment experience. No academics — engineers who've shipped it in production." },
+  { icon:"fas fa-user-tie",    title:"Industry Expert Instructors", desc:"Real-world practitioners with 5+ years of enterprise deployment experience. No academics — engineers who've shipped it in production." },
   { icon:"fas fa-laptop-code", title:"Hands-On Projects Only",      desc:"Build real enterprise systems during the course, not toy examples. Every lab uses production-equivalent environments." },
-  { icon:"fas fa-certificate", title:"XERXEZ AI Certification",     desc:"Role-specific certificates (AI Engineer, MLOps Practitioner, AI Leader) recognised by 40+ organisations in our network." },
-  { icon:"fas fa-users",       title:"Enterprise Batch Training",   desc:"Custom cohort programs for your entire team — 8 to 500 people — delivered at your pace, in-person or virtually." },
+  { icon:"fas fa-certificate", title:"XERXEZ AI Certification",     desc:"Role-specific certificates (AI Engineer, MLOps Practitioner, AI Leader) that are industry recognised." },
+  { icon:"fas fa-users",       title:"Enterprise Batch Training",   desc:"Custom cohort programs for your entire team — 5 to 100 people — delivered at your pace, in-person or virtually." },
 ];
 
 const FeatureCard = ({ f, index }: { f: typeof features[number]; index: number }) => {
@@ -466,10 +467,10 @@ const WhySection = () => {
         {/* Stats strip */}
         <div style={{ marginTop:72, display:"flex", justifyContent:"center", flexWrap:"wrap", gap:0 }}>
           {[
-            { val:"500+", label:"Professionals Trained" },
+            { val:"75+",  label:"Professionals Trained" },
             { val:"95%",  label:"Satisfaction Rate"     },
-            { val:"12+",  label:"Active Programs"       },
-            { val:"F500", label:"Client Organisations"  },
+            { val:"5+",   label:"Active Programs"       },
+            { val:"15+",  label:"Client Organisations"  },
           ].map((stat, i) => (
             <div key={i} style={{
               textAlign:"center", padding:"28px 48px",
@@ -513,7 +514,7 @@ const CtaSection = () => {
                 <span style={{ color: GOLD }}>We Come to You.</span>
               </h2>
               <p style={{ fontSize:15, color:"rgba(20,20,19,0.52)", lineHeight:1.72, fontFamily:"'DM Sans',sans-serif", marginBottom:36, maxWidth:460 }}>
-                Custom enterprise programs for 8 to 500 people. On-site, virtual, or hybrid — built around your team's exact AI priorities, tools, and knowledge gaps.
+                Custom enterprise programs for 5 to 100 people. On-site, virtual, or hybrid — built around your team's exact AI priorities, tools, and knowledge gaps.
               </p>
               <div style={{ display:"flex", gap:14, flexWrap:"wrap" }}>
                 <Link to="/contact" style={{
@@ -642,12 +643,12 @@ const TrainingPage: React.FC = () => (
       }
       description="Industry-led training for IT teams and enterprises. Learn AI, DevSecOps, Cloud, and ERP — from practitioners who've shipped it in production."
       ctas={[
-        { label:"Browse Courses", href:"#courses", primary:true },
+        { label:"Browse Courses", to:"/lma/student/dashboard", primary:true },
         { label:"Enterprise Training", to:"/contact", primary:false },
       ]}
       stats={[
-        { val:"500+", label:"Trained"      },
-        { val:"12+",  label:"Programs"     },
+        { val:"75+",  label:"Trained"      },
+        { val:"5+",   label:"Programs"     },
         { val:"95%",  label:"Satisfaction" },
       ]}
       cascadeA={TRAINING_CASCADE_A}
@@ -663,6 +664,9 @@ const TrainingPage: React.FC = () => (
 
     {/* 4. LIGHT — Enterprise CTA */}
     <CtaSection />
+
+    {/* 5. DARK — Standard conversion block */}
+    <ReadyCTA />
   </CustomLayout>
 );
 

@@ -39,6 +39,19 @@ const shaderShapes: Record<string, "checks" | "stripes" | "edge"> = {
   "web-mobile-hosting":        "stripes",
 };
 
+// Marketing framing per service: the problem it solves, who it's for, and a
+// measurable benefit + stat pair shown as chips on the card.
+const serviceMeta: Record<string, { problem: string; audience: string; benefit: string; stat: string }> = {
+  "devsecops-mlops-solutions": { problem: "Slow deployments and security vulnerabilities",          audience: "Tech teams shipping products fast",            benefit: "60% faster deployment cycles",  stat: "Zero incidents in 18 mo avg" },
+  "cloud-service-storage":     { problem: "Overpaying for cloud with poor performance",             audience: "Enterprises on AWS, Azure, GCP",               benefit: "40% cloud cost reduction",      stat: "99.99% uptime SLA" },
+  "software-development":      { problem: "Can't find reliable tech partners",                      audience: "Enterprises needing custom solutions",         benefit: "89% on-time delivery rate",     stat: "50+ custom apps delivered" },
+  "ai-training-consulting":    { problem: "Teams not ready for AI adoption",                        audience: "Corporate teams and enterprises",              benefit: "95% satisfaction rate",         stat: "75+ professionals trained" },
+  "quantum-computing":         { problem: "Complex optimisation problems unsolvable classically",   audience: "Research, finance, logistics enterprises",     benefit: "10x faster optimisation",       stat: "128-qubit cloud access" },
+  "mobile-application":        { problem: "Poor mobile experience losing customers",                audience: "Enterprises needing mobile-first solutions",   benefit: "4.2★ avg app store rating", stat: "iOS · Android · Cross-platform" },
+  "web-mobile-hosting":        { problem: "Downtime costing you revenue",                           audience: "Businesses needing reliable hosting",          benefit: "99.9% uptime SLA",              stat: "<100ms response time" },
+  "software-consulting":       { problem: "Technology decisions costing millions",                  audience: "CXOs and technology leaders",                  benefit: "$10M+ saved for clients",       stat: "80% client retention" },
+};
+
 interface Props {
   mainSection?: boolean;
 }
@@ -216,6 +229,8 @@ const ServiceSection3 = ({ mainSection }: Props) => {
       {/* ── Dark hero with shared XzHeroSection ── */}
       {mainSection && (
         <XzHeroSection
+          urgencyText="Limited onboarding slots available this quarter"
+          trustLine="ISO-ready · NDA Protected · 24h Response"
           badgeText="End-to-End Enterprise Solutions"
           headline={
             <h1 style={{
@@ -315,13 +330,21 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                 {/* Left: text + CTAs */}
                 <div style={{ flex: "1 1 420px", zIndex: 1, position: "relative" }}>
                   <div style={{ display: "flex", gap: 8, marginBottom: 26, flexWrap: "wrap" }}>
+                    <span style={{ background: "linear-gradient(135deg,#4ade80 0%,#22c55e 100%)", color: "#052e12", fontSize: 10, fontWeight: 800, padding: "5px 14px", borderRadius: 20, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 3px 0 rgba(20,90,45,0.55),0 5px 12px rgba(74,222,128,0.28)" }}>Most Popular</span>
                     <span style={{ background: "linear-gradient(135deg,#F0CA7A 0%,#d4a33a 100%)", color: "#4A2800", fontSize: 10, fontWeight: 800, padding: "5px 14px", borderRadius: 20, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 3px 0 rgba(120,70,0,0.55),0 5px 12px rgba(240,202,122,0.28)" }}>New</span>
                     <span style={{ background: "rgba(255,255,255,0.09)", color: "#fff", fontSize: 10, fontWeight: 700, padding: "5px 14px", borderRadius: 20, letterSpacing: "0.10em", textTransform: "uppercase", border: "1px solid rgba(255,255,255,0.20)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18),0 2px 6px rgba(0,0,0,0.25)", fontFamily: "'DM Sans',sans-serif" }}>AI Powered</span>
                     <span style={{ background: "rgba(240,202,122,0.10)", color: "#F0CA7A", fontSize: 10, fontWeight: 700, padding: "5px 14px", borderRadius: 20, letterSpacing: "0.10em", textTransform: "uppercase", border: "1px solid rgba(240,202,122,0.30)", boxShadow: "inset 0 1px 0 rgba(240,202,122,0.15)", fontFamily: "'DM Sans',sans-serif" }}>Flagship Service</span>
                   </div>
-                  <h2 style={{ color: "#fff", fontSize: "clamp(28px,3.8vw,46px)", fontWeight: 900, lineHeight: 1.08, marginBottom: 20, fontFamily: "'DM Sans',sans-serif", letterSpacing: "-0.03em", textShadow: "0 2px 24px rgba(240,202,122,0.10)" }}>
+                  <h2 style={{ color: "#fff", fontSize: "clamp(28px,3.8vw,46px)", fontWeight: 900, lineHeight: 1.08, marginBottom: 14, fontFamily: "'DM Sans',sans-serif", letterSpacing: "-0.03em", textShadow: "0 2px 24px rgba(240,202,122,0.10)" }}>
                     AI-Powered<br /><span style={{ color: "#F0CA7A" }}>ERP System</span>
                   </h2>
+                  <p style={{ color: "#F0CA7A", fontSize: 14.5, fontStyle: "italic", lineHeight: 1.6, marginBottom: 8, fontFamily: "'DM Sans',sans-serif" }}>
+                    “Legacy ERP systems are slowing you down.”
+                  </p>
+                  <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 13, lineHeight: 1.6, marginBottom: 14, fontFamily: "'DM Sans',sans-serif" }}>
+                    <span style={{ fontWeight: 700, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.06em", fontSize: 11 }}>For:</span>
+                    {" "}Mid to large manufacturing, logistics &amp; retail enterprises · Deployed in &lt;6 months
+                  </p>
                   <p style={{ color: "rgba(255,255,255,0.68)", fontSize: 15, lineHeight: 1.78, marginBottom: 32, maxWidth: 520, fontFamily: "'DM Sans',sans-serif" }}>
                     Purpose-built or layered onto your existing SAP, Oracle, or Microsoft Dynamics — XERXEZ delivers intelligent ERP that learns, adapts, and scales with your enterprise operations.
                   </p>
@@ -333,14 +356,21 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                       </div>
                     ))}
                   </div>
-                  <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-                    <Link to="/service/ai-powered-erp" style={{ background: "linear-gradient(135deg,#F0CA7A 0%,#d4a33a 100%)", color: "#4A2800", padding: "13px 30px", borderRadius: 10, fontWeight: 800, fontSize: 14, display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.01em", boxShadow: "0 5px 0 rgba(100,60,0,0.55),0 8px 24px rgba(240,202,122,0.22)" }}>
+                  <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 14 }}>
+                    <Link to="/erp/login" style={{ background: "linear-gradient(135deg,#F0CA7A 0%,#d4a33a 100%)", color: "#4A2800", padding: "13px 30px", borderRadius: 10, fontWeight: 800, fontSize: 14, display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.01em", boxShadow: "0 5px 0 rgba(100,60,0,0.55),0 8px 24px rgba(240,202,122,0.22)" }}>
+                      Try It Free <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
+                    </Link>
+                    <Link to="/service/ai-powered-erp" style={{ background: "rgba(255,255,255,0.08)", color: "#fff", padding: "13px 30px", borderRadius: 10, fontWeight: 600, fontSize: 14, display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.01em", border: "1px solid rgba(255,255,255,0.22)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.14),0 4px 16px rgba(0,0,0,0.22)" }}>
                       Explore AI ERP <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
                     </Link>
                     <Link to="/contact" style={{ background: "rgba(255,255,255,0.08)", color: "#fff", padding: "13px 30px", borderRadius: 10, fontWeight: 600, fontSize: 14, display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.01em", border: "1px solid rgba(255,255,255,0.22)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.14),0 4px 16px rgba(0,0,0,0.22)" }}>
                       Request a Demo <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
                     </Link>
                   </div>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 12, color: "rgba(255,255,255,0.42)", fontFamily: "'DM Sans',sans-serif" }}>
+                    <i className="fas fa-check-circle" style={{ color: "rgba(240,202,122,0.75)", fontSize: 11 }} />
+                    Full access · No credit card · Cancel anytime
+                  </span>
                 </div>
 
                 {/* Right: module links */}
@@ -379,7 +409,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                 data-aos-once="true"
               >
                 <div
-                  style={{ position: "relative", height: 300, borderRadius: 18, overflow: "hidden", transition: "transform 0.26s ease,box-shadow 0.26s ease", cursor: "pointer" }}
+                  style={{ position: "relative", height: "100%", minHeight: 400, borderRadius: 18, overflow: "hidden", transition: "transform 0.26s ease,box-shadow 0.26s ease", cursor: "pointer" }}
                   onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-6px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 20px 48px rgba(0,0,0,0.28)"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = ""; (e.currentTarget as HTMLDivElement).style.boxShadow = ""; }}
                 >
@@ -393,24 +423,61 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                       colors={shaderColors[service.slug] ?? ["hsl(20,60%,28%)", "hsl(35,72%,48%)", "hsl(14,55%,34%)", "hsl(42,80%,58%)"]}
                     />
                   </div>
-                  <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", padding: "26px 26px 22px", background: "rgba(12,8,4,0.72)", border: "1px solid rgba(255,255,255,0.10)" }}>
-                    <div style={{ width: 50, height: 50, borderRadius: 13, background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18, fontSize: 19, color: "#ffffff", flexShrink: 0 }}>
+                  {service.slug === "quantum-computing" && (
+                    <span style={{
+                      position: "absolute", top: 14, right: 14, zIndex: 2,
+                      background: "linear-gradient(135deg,#F0CA7A 0%,#d4a33a 100%)", color: "#4A2800",
+                      fontSize: 9, fontWeight: 800, padding: "4px 11px", borderRadius: 20,
+                      letterSpacing: "0.10em", textTransform: "uppercase", fontFamily: "'DM Sans',sans-serif",
+                      boxShadow: "0 3px 0 rgba(120,70,0,0.50),0 4px 10px rgba(240,202,122,0.28)",
+                    }}>New</span>
+                  )}
+                  <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", padding: "24px 24px 20px", background: "rgba(12,8,4,0.78)", border: "1px solid rgba(255,255,255,0.10)" }}>
+                    <div style={{ width: 46, height: 46, borderRadius: 13, background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, fontSize: 18, color: "#ffffff", flexShrink: 0 }}>
                       <i className={faIcons[service.slug] ?? "fas fa-cogs"} />
                     </div>
-                    <h3 style={{ marginBottom: 10, fontSize: 16, lineHeight: 1.3, fontWeight: 700, color: "#ffffff", fontFamily: "'DM Sans',sans-serif" }}>
+                    <h3 style={{ marginBottom: 8, fontSize: 16, lineHeight: 1.3, fontWeight: 700, color: "#ffffff", fontFamily: "'DM Sans',sans-serif" }}>
                       <Link to={`/service/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>{service.title}</Link>
                     </h3>
-                    <p style={{ color: "rgba(255,255,255,0.72)", fontSize: 13, lineHeight: 1.7, marginBottom: 18, flex: 1, fontFamily: "'DM Sans',sans-serif" }}>
+                    {serviceMeta[service.slug] && (
+                      <>
+                        <p style={{ color: "#F0CA7A", fontSize: 12.5, fontStyle: "italic", lineHeight: 1.5, marginBottom: 8, fontFamily: "'DM Sans',sans-serif" }}>
+                          “{serviceMeta[service.slug].problem}”
+                        </p>
+                        <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 11.5, lineHeight: 1.55, marginBottom: 12, fontFamily: "'DM Sans',sans-serif" }}>
+                          <span style={{ fontWeight: 700, color: "rgba(255,255,255,0.72)", textTransform: "uppercase", letterSpacing: "0.06em", fontSize: 10 }}>For:</span>
+                          {" "}{serviceMeta[service.slug].audience}
+                        </p>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(74,222,128,0.12)", border: "1px solid rgba(74,222,128,0.30)", borderRadius: 999, padding: "4px 10px", fontSize: 10.5, fontWeight: 700, color: "#4ade80", fontFamily: "'DM Sans',sans-serif" }}>
+                            <i className="fas fa-chart-line" style={{ fontSize: 9 }} />
+                            {serviceMeta[service.slug].benefit}
+                          </span>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(240,202,122,0.10)", border: "1px solid rgba(240,202,122,0.30)", borderRadius: 999, padding: "4px 10px", fontSize: 10.5, fontWeight: 700, color: "#F0CA7A", fontFamily: "'DM Sans',sans-serif" }}>
+                            {serviceMeta[service.slug].stat}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    <p style={{ color: "rgba(255,255,255,0.68)", fontSize: 12.5, lineHeight: 1.65, marginBottom: 16, flex: 1, fontFamily: "'DM Sans',sans-serif", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" } as React.CSSProperties}>
                       {service.description}
                     </p>
-                    <Link
-                      to={`/service/${service.slug}`}
-                      style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 12, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.04em", textTransform: "uppercase", transition: "gap 0.2s ease" }}
-                      onMouseEnter={e => (e.currentTarget.style.gap = "10px")}
-                      onMouseLeave={e => (e.currentTarget.style.gap = "6px")}
-                    >
-                      More Details <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
-                    </Link>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                      <Link
+                        to={`/service/${service.slug}`}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 12, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.04em", textTransform: "uppercase", transition: "gap 0.2s ease" }}
+                        onMouseEnter={e => (e.currentTarget.style.gap = "10px")}
+                        onMouseLeave={e => (e.currentTarget.style.gap = "6px")}
+                      >
+                        Learn More <i className="far fa-arrow-right" style={{ fontSize: 11 }} />
+                      </Link>
+                      <Link
+                        to="/contact"
+                        style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "linear-gradient(135deg,#F0CA7A 0%,#d4a33a 100%)", color: "#4A2800", fontWeight: 800, fontSize: 11, padding: "8px 14px", borderRadius: 8, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.03em", textTransform: "uppercase", boxShadow: "0 3px 0 rgba(100,60,0,0.45)", flexShrink: 0 }}
+                      >
+                        Get Quote
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>

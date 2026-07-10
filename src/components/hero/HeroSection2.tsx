@@ -21,7 +21,7 @@ const HeroSection2 = () => {
               <h1 className="char-animation">Enterprise AI, Cloud &amp; DevSecOps Experts</h1>
               <p className="hero-text">
                 Over 10 years delivering AI-powered ERP, MLOps pipelines, and cloud
-                infrastructure for enterprises across 15+ industries.
+                infrastructure for enterprises across 5+ industries.
               </p>
 
               <div className="hero-btn fade-in">

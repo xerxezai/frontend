@@ -39,7 +39,7 @@ const ITEMS = [
   },
   {
     icon: "fas fa-building",
-    label: "100+ Clients",
+    label: "50+ Clients",
     sub: "Trusted by enterprises globally",
     color: "#fb923c",
     glow: "rgba(251,146,60,0.30)",
