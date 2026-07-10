@@ -177,18 +177,25 @@ const ERPLayout = ({ children }: Props) => {
           opacity: 1;
         }
 
+        .erp-subnav-panel {
+          background: #FFFFFF;
+          border-radius: 10px;
+          overflow: hidden;
+        }
         .erp-subnav-item {
           display: flex; align-items: center; gap: 9px;
-          padding: 8px 14px 8px 30px; margin: 1px 0;
+          padding: 9px 14px;
           border-left: 3px solid transparent;
-          text-decoration: none; color: rgba(255,255,255,0.48);
+          border-bottom: 1px solid #F3F4F6;
+          text-decoration: none; color: #1a1208; background: #FFFFFF;
           font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
-          transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+          transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
           white-space: nowrap; overflow: hidden;
         }
-        .erp-subnav-item:hover { color: #e8a84e; background: rgba(201,136,58,0.06); }
+        .erp-subnav-item:last-child { border-bottom: none; }
+        .erp-subnav-item:hover { color: #C9883A; background: rgba(201,136,58,0.08); }
         .erp-subnav-active {
-          color: #e8a84e !important; background: rgba(201,136,58,0.12) !important;
+          color: #C9883A !important; background: rgba(201,136,58,0.10) !important;
           border-left-color: #C9883A !important; font-weight: 700 !important;
         }
 
@@ -411,19 +418,26 @@ const ERPLayout = ({ children }: Props) => {
                     <span style={{ flex: 1 }}>{item.label}</span>
                     <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: hrOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
                   </button>
-                  <div style={{ overflow: 'hidden', maxHeight: hrOpen ? HR_SUBMENU.length * 40 + 8 : 0, transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1)' }}>
-                    {HR_SUBMENU.map(s => (
-                      <NavLink
-                        key={s.to}
-                        to={s.to}
-                        end={s.to === '/erp/hr'}
-                        onClick={() => setMobileOpen(false)}
-                        className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
-                      >
-                        <i className={s.icon} style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
-                        <span>{s.label}</span>
-                      </NavLink>
-                    ))}
+                  <div style={{
+                    overflow: 'hidden',
+                    maxHeight: hrOpen ? HR_SUBMENU.length * 44 + 8 : 0,
+                    margin: hrOpen ? '4px 8px 8px' : '0 8px',
+                    transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
+                  }}>
+                    <div className="erp-subnav-panel">
+                      {HR_SUBMENU.map(s => (
+                        <NavLink
+                          key={s.to}
+                          to={s.to}
+                          end={s.to === '/erp/hr'}
+                          onClick={() => setMobileOpen(false)}
+                          className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                        >
+                          <i className={s.icon} style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                          <span>{s.label}</span>
+                        </NavLink>
+                      ))}
+                    </div>
                   </div>
                 </div>
               );
