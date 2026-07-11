@@ -132,22 +132,6 @@ const UrgencyBanner = ({ text, delay }: { text: string; delay: number }) => (
   </div>
 );
 
-// ── testimonial card ───────────────────────────────────────────────────────────
-const TestimonialCard = ({ quote, name, delay }: { quote: string; name: string; delay: number }) => (
-  <div style={{
-    background: "rgba(255,255,255,0.05)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
-    border: "1px solid rgba(255,255,255,0.09)", borderRadius: 14, padding: "16px 18px",
-    animation: `lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
-  }}>
-    <div style={{ display: "flex", gap: 2, marginBottom: 8 }}>
-      {[0, 1, 2, 3, 4].map(i => <i key={i} className="fas fa-star" style={{ color: C.orange, fontSize: 10 }} />)}
-    </div>
-    <p style={{ color: "rgba(255,255,255,0.78)", fontSize: 13, lineHeight: 1.62, fontFamily: FF, marginBottom: 8, fontStyle: "italic" }}>
-      &ldquo;{quote}&rdquo;
-    </p>
-    <p style={{ color: "rgba(255,255,255,0.42)", fontSize: 11.5, fontFamily: FF, margin: 0 }}>— {name}</p>
-  </div>
-);
 
 // ── Bullet — exact ERP copy ───────────────────────────────────────────────────
 const Bullet = ({ icon, text, delay }: { icon: string; text: string; delay: number }) => (
@@ -375,8 +359,8 @@ export default function LMALoginPage() {
 
         {/* ══ LEFT PANEL — marketing panel ════════════════════════════════════ */}
         <div className="lma-left" style={{
-          flex: "0 0 56%", flexDirection: "column", justifyContent: "flex-start",
-          padding: "34px 60px 40px", position: "relative", overflow: "hidden auto",
+          flex: "0 0 56%", flexDirection: "column", justifyContent: "center",
+          padding: "24px 56px", position: "relative", overflow: "hidden auto",
           background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
         }}>
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
@@ -387,12 +371,12 @@ export default function LMALoginPage() {
 
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Logo */}
-            <div style={{ marginBottom: 20, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
-              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 68, width: "auto" }} />
+            <div style={{ marginBottom: 14, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
+              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 52, width: "auto" }} />
             </div>
 
             {/* Chip */}
-            <div style={{ marginBottom: 16, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.10s both" }}>
+            <div style={{ marginBottom: 12, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.10s both" }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(201,136,58,0.13)", border: "1px solid rgba(201,136,58,0.35)", color: "#E5B460", fontSize: 11, fontWeight: 700, padding: "6px 16px", borderRadius: 20, fontFamily: FF, letterSpacing: "0.12em", textTransform: "uppercase" }}>
                 <i className="fas fa-graduation-cap" style={{ fontSize: 9, color: C.orange }} />
                 Enterprise Learning Platform
@@ -400,21 +384,21 @@ export default function LMALoginPage() {
             </div>
 
             {/* Headline */}
-            <h1 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(28px,2.7vw,42px)", lineHeight: 1.1, marginBottom: 14, fontFamily: FF, letterSpacing: "-0.025em", animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.15s both" }}>
+            <h1 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(24px,2.2vw,34px)", lineHeight: 1.1, marginBottom: 10, fontFamily: FF, letterSpacing: "-0.025em", animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.15s both" }}>
               Learn AI Skills That<br />
               <em style={{ color: C.orange, fontStyle: "italic" }}>Companies Pay Millions For</em>
             </h1>
-            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 14, lineHeight: 1.68, maxWidth: 420, marginBottom: 20, fontFamily: FF, animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.20s both" }}>
+            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 13.5, lineHeight: 1.6, maxWidth: 420, marginBottom: 16, fontFamily: FF, animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.20s both" }}>
               Join 100+ professionals already building AI systems with XERXEZ Academy.
             </p>
 
             {/* Social proof */}
-            <div style={{ marginBottom: 24 }}>
+            <div style={{ marginBottom: 18 }}>
               <SocialProofRow text="Join 100+ learners already enrolled" delay={0.28} />
             </div>
 
             {/* Feature bullets */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 22 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 18 }}>
               <Bullet icon="fas fa-user-tie"    text="Learn from practitioners who built real AI systems" delay={0.34} />
               <Bullet icon="fas fa-certificate" text="Get certified — recognized by 40+ enterprises"      delay={0.44} />
               <Bullet icon="fas fa-arrow-trend-up" text="Land AI jobs paying 2x your current salary"      delay={0.54} />
@@ -422,24 +406,17 @@ export default function LMALoginPage() {
             </div>
 
             {/* Urgency banner */}
-            <div style={{ marginBottom: 22 }}>
+            <div style={{ marginBottom: 18 }}>
               <UrgencyBanner text="Limited seats available — Next batch starts July 2026" delay={0.72} />
             </div>
 
             {/* Stat tiles */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 22 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <StatTile val="100+"   label="Students Enrolled"  icon="fas fa-users"      delay={0.78} trigger={statsLive} />
               <StatTile val="5+"     label="Courses Available"  icon="fas fa-book-open"  delay={0.82} trigger={statsLive} />
               <StatTile val="85%"    label="Job Placement Rate" icon="fas fa-briefcase"  delay={0.86} trigger={statsLive} />
               <StatTile val="₹4,999" label="Starting Price"     icon="fas fa-tag"        delay={0.90} trigger={statsLive} />
             </div>
-
-            {/* Testimonial */}
-            <TestimonialCard
-              quote="Got promoted to AI Lead after completing the Full Stack AI Development course."
-              name="Senior Engineer, Leading Tech Company, Bangalore"
-              delay={0.95}
-            />
           </div>
         </div>
 

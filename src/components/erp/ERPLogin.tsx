@@ -106,22 +106,6 @@ const TrustLine = ({ text, delay }: { text: string; delay: number }) => (
   </div>
 );
 
-// ── testimonial card ───────────────────────────────────────────────────────────
-const TestimonialCard = ({ quote, name, delay }: { quote: string; name: string; delay: number }) => (
-  <div style={{
-    background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-    border: '1px solid rgba(255,255,255,0.09)', borderRadius: 14, padding: '16px 18px',
-    animation: `erpFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
-  }}>
-    <div style={{ display: 'flex', gap: 2, marginBottom: 8 }}>
-      {[0, 1, 2, 3, 4].map(i => <i key={i} className="fas fa-star" style={{ color: C.orange, fontSize: 10 }} />)}
-    </div>
-    <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 13, lineHeight: 1.62, fontFamily: "'DM Sans', sans-serif", marginBottom: 8, fontStyle: 'italic' }}>
-      &ldquo;{quote}&rdquo;
-    </p>
-    <p style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", margin: 0 }}>— {name}</p>
-  </div>
-);
 
 const Bullet = ({ icon, text, delay }: { icon: string; text: string; delay: number }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 12, animation: `erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both` }}>
@@ -462,46 +446,41 @@ const ERPLogin = ({ onSuccess }: Props) => {
       <div style={{ minHeight: '100vh', display: 'flex' }}>
 
         {/* ══ LEFT — brand panel ══════════════════════════════════════════ */}
-        <div className="d-none d-lg-flex erp-left" style={{ flex: '0 0 56%', flexDirection: 'column', justifyContent: 'flex-start', padding: '48px 60px 40px', position: 'relative', overflow: 'hidden auto', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
+        <div className="d-none d-lg-flex erp-left" style={{ flex: '0 0 56%', flexDirection: 'column', justifyContent: 'center', padding: '24px 56px', position: 'relative', overflow: 'hidden auto', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
           <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
           <span className="erp-orb-1" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 540, height: 540, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.15) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <span className="erp-orb-2" style={{ position: 'absolute', bottom: '-18%', right: '-4%', width: 440, height: 440, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <span className="erp-orb-3" style={{ position: 'absolute', top: '38%', right: '10%', width: 240, height: 240, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <span className="erp-orb-4" style={{ position: 'absolute', top: '64%', left: '20%', width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.07) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ marginBottom: 16, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both' }}>
+            <div style={{ marginBottom: 12, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(201,136,58,0.13)', border: '1px solid rgba(201,136,58,0.35)', color: '#E5B460', fontSize: 11, fontWeight: 700, padding: '6px 16px', borderRadius: 20, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 <i className="fas fa-bolt" style={{ fontSize: 9, color: C.orange }}></i>
                 Enterprise Operations Platform
               </span>
             </div>
-            <h1 style={{ color: '#fff', fontWeight: 800, fontSize: 'clamp(28px, 2.7vw, 42px)', lineHeight: 1.1, marginBottom: 14, fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.025em', animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both' }}>
+            <h1 style={{ color: '#fff', fontWeight: 800, fontSize: 'clamp(24px, 2.2vw, 34px)', lineHeight: 1.1, marginBottom: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.025em', animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both' }}>
               The AI ERP That<br />
               <em style={{ color: C.orange, fontStyle: 'italic' }}>Replaces 5 Legacy Systems</em>
             </h1>
-            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.68, maxWidth: 420, marginBottom: 26, fontFamily: "'DM Sans', sans-serif", animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.19s both' }}>
+            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13.5, lineHeight: 1.6, maxWidth: 420, marginBottom: 16, fontFamily: "'DM Sans', sans-serif", animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.19s both' }}>
               Trusted by enterprises across India &amp; UAE to automate operations and cut costs by 40%.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 18 }}>
               <Bullet icon="fas fa-brain"      text="AI demand forecasting & anomaly detection"   delay={0.25} />
               <Bullet icon="fas fa-shield-alt" text="ISO 27001 & SOC 2 Type II certified"         delay={0.31} />
               <Bullet icon="fas fa-chart-bar"  text="Role-based dashboards for every department"  delay={0.37} />
               <Bullet icon="fas fa-rocket"     text="Deploy in <6 months, guaranteed"              delay={0.43} />
             </div>
-            <div style={{ marginBottom: 22 }}>
+            <div style={{ marginBottom: 18 }}>
               <TrustLine text="Currently serving 5+ active enterprises" delay={0.49} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 22 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <StatTile val="40%"   label="Cost Reduction"    icon="fas fa-chart-line"     delay={0.55} trigger={statsLive} />
               <StatTile val="60%"   label="Faster Decisions"  icon="fas fa-tachometer-alt" delay={0.59} trigger={statsLive} />
               <StatTile val="99.9%" label="Uptime SLA"        icon="fas fa-server"         delay={0.63} trigger={statsLive} />
               <StatTile val="<6 Mo" label="Deployment"        icon="fas fa-rocket"         delay={0.67} trigger={statsLive} />
             </div>
-            <TestimonialCard
-              quote="Replaced our legacy ERP in 4 months. Best technology decision we ever made."
-              name="Chief Technology Officer, Manufacturing Enterprise, Dubai"
-              delay={0.75}
-            />
           </div>
         </div>
 
