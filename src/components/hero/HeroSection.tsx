@@ -22,9 +22,16 @@ const NET_NODES = [
   { id:"dev",   cx:78,  cy:330, r:22, label:"DevSecOps", color:"#D46A1A", glow:"rgba(212,106,26,0.28)"  },
 ];
 
+// ── Live clock — isolated so its 1s tick only re-renders this tiny span,
+//    not the whole SVG network card ──────────────────────────────────────────
+const LiveClock = () => {
+  const [time, setTime] = useState(() => new Date());
+  useEffect(() => { const id = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(id); }, []);
+  return <>{time.toLocaleTimeString("en-US", { hour12:false })}</>;
+};
+
 // ── AI Network Visualization (3D tilt + SVG network) ─────────────────────────
 const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => {
-  const [time,     setTime    ] = useState(new Date());
   const [mounted,  setMounted ] = useState(false);
   const [counts,   setCounts  ] = useState({ uptime:0, models:0, clients:0 });
   const [flashIdx, setFlashIdx] = useState(-1);
@@ -34,16 +41,15 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
   const flashTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardLeaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => { const id = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(id); }, []);
   useEffect(() => { const t = setTimeout(() => setMounted(true), 120); return () => clearTimeout(t); }, []);
 
   useEffect(() => {
-    if (prefersReduced) { setCounts({ uptime:999, models:247, clients:120 }); return; }
+    if (prefersReduced) { setCounts({ uptime:999, models:50, clients:100 }); return; }
     const start = Date.now(), dur = 2200;
     const id = setInterval(() => {
       const p = Math.min((Date.now() - start) / dur, 1);
       const e = 1 - Math.pow(2, -10 * p);
-      setCounts({ uptime:Math.round(999*e), models:Math.round(247*e), clients:Math.round(120*e) });
+      setCounts({ uptime:Math.round(999*e), models:Math.round(50*e), clients:Math.round(100*e) });
       if (p === 1) clearInterval(id);
     }, 33);
     return () => clearInterval(id);
@@ -84,10 +90,9 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
     cardLeaveTimerRef.current = setTimeout(() => { if (floatRef.current) floatRef.current.style.animationPlayState = "running"; if (cardRef.current) cardRef.current.style.transition = ""; }, 560);
   };
 
-  const timeStr = time.toLocaleTimeString("en-US", { hour12:false });
   const stats = [
     { label:"UPTIME",    val:`${(counts.uptime/10).toFixed(1)}%` },
-    { label:"AI MODELS", val:`${counts.models}` },
+    { label:"AI MODELS", val:`${counts.models}+` },
     { label:"CLIENTS",   val:`${counts.clients}+` },
   ];
 
@@ -121,7 +126,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
               <span style={{ width:6, height:6, borderRadius:"50%", flexShrink:0, background:"#4ade80", boxShadow:"0 0 7px #4ade80,0 0 14px rgba(74,222,128,0.4)", animation: prefersReduced?"none":"xzLivePulse 1.8s ease-in-out infinite" }} />
               <span style={{ fontFamily:"'Courier New',monospace", fontSize:8, fontWeight:700, letterSpacing:"0.12em", color:"#4ade80" }}>LIVE</span>
             </div>
-            <span style={{ fontFamily:"'Courier New',monospace", fontSize:11, color:C2, letterSpacing:"0.05em" }}>{timeStr}</span>
+            <span style={{ fontFamily:"'Courier New',monospace", fontSize:11, color:C2, letterSpacing:"0.05em" }}><LiveClock /></span>
           </div>
         </div>
 
