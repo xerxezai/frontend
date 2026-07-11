@@ -4,28 +4,36 @@ const GOLD = "#C9883A";
 
 export const HOME_FAQS = [
   {
-    q: "How long does ERP deployment take?",
-    a: "Most XERXEZ ERP deployments go live in under 6 months. We use a phased approach — core modules ship in 8–16 weeks, then extensions — so you see value in weeks, not years.",
+    q: "What is XERXEZ?",
+    a: "XERXEZ is an AI-powered enterprise platform with 3 products: ERP system, LMA Academy online courses, and DevSecOps cloud solutions. Serving businesses in UAE, Abu Dhabi and India.",
   },
   {
-    q: "What industries do you serve?",
-    a: "We serve 5+ industries including healthcare, manufacturing, logistics, finance, retail, and government — with solutions tailored to each sector's compliance and workflow requirements.",
+    q: "Is XERXEZ ERP free to try?",
+    a: "Yes! XERXEZ ERP is free to try with full access — no credit card required. Includes HR, Payroll, CRM, Sales, Inventory and more. Start at xerxez.com/erp",
   },
   {
-    q: "Do you provide post-deployment support?",
-    a: "Yes. Every deployment includes 90 days of hypercare support with SLA-backed response times, followed by optional 24/7 managed support packages and ongoing feature roadmapping.",
+    q: "How do I enroll in XERXEZ Academy courses?",
+    a: "Visit xerxez.com/lma, browse courses on AI, MLOps and DevSecOps, and enroll instantly. Get a certificate on completion.",
   },
   {
-    q: "What is your pricing model?",
-    a: "We offer fixed-scope, time-and-materials, and retainer models. Tell us your requirements via the contact page and we'll send a tailored estimate within 24 hours.",
+    q: "Does XERXEZ work for small businesses?",
+    a: "Yes! XERXEZ ERP works for businesses of all sizes — from 5 to 500+ employees. Affordable, scalable and easy to set up in minutes.",
   },
   {
-    q: "Are you ISO certified?",
-    a: "Our security and delivery practices are aligned to ISO 27001 and SOC 2, and every engagement is covered by a strict NDA. Compliance documentation is available on request.",
+    q: "Is XERXEZ available in UAE and Abu Dhabi?",
+    a: "Yes, XERXEZ serves enterprises across UAE, Abu Dhabi, Dubai and India with 24/7 support and remote-first delivery.",
   },
   {
-    q: "Can you upgrade our existing SAP/Oracle ERP?",
-    a: "Yes. XERXEZ layers AI capabilities onto your existing SAP, Oracle, or Microsoft Dynamics system — so you modernise incrementally without a risky big-bang migration.",
+    q: "How much does XERXEZ ERP cost?",
+    a: "XERXEZ offers flexible pricing for all business sizes. Contact us at info@xerxez.com or visit xerxez.com/contact for a custom quote.",
+  },
+  {
+    q: "What courses does XERXEZ Academy offer?",
+    a: "XERXEZ Academy offers AI & ML, MLOps, DevSecOps, Full Stack Development, Cloud Architecture and ERP training courses with industry certificates.",
+  },
+  {
+    q: "How do I contact XERXEZ support?",
+    a: "Email info@xerxez.com, call +971 56 786 7451, or use the live chat on xerxez.com. We respond within 24 hours.",
   },
 ];
 

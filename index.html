@@ -96,6 +96,82 @@
   }
   </script>
 
+  <!-- Structured Data: FAQPage (mirrors the homepage FAQ accordion — enables
+       Google "People Also Ask" rich results). Keep in sync with
+       src/components/marketing/HomeFaq.tsx's HOME_FAQS array. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is XERXEZ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "XERXEZ is an AI-powered enterprise platform with 3 products: ERP system, LMA Academy online courses, and DevSecOps cloud solutions. Serving businesses in UAE, Abu Dhabi and India."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is XERXEZ ERP free to try?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! XERXEZ ERP is free to try with full access — no credit card required. Includes HR, Payroll, CRM, Sales, Inventory and more. Start at xerxez.com/erp"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I enroll in XERXEZ Academy courses?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Visit xerxez.com/lma, browse courses on AI, MLOps and DevSecOps, and enroll instantly. Get a certificate on completion."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does XERXEZ work for small businesses?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! XERXEZ ERP works for businesses of all sizes — from 5 to 500+ employees. Affordable, scalable and easy to set up in minutes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is XERXEZ available in UAE and Abu Dhabi?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, XERXEZ serves enterprises across UAE, Abu Dhabi, Dubai and India with 24/7 support and remote-first delivery."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does XERXEZ ERP cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "XERXEZ offers flexible pricing for all business sizes. Contact us at info@xerxez.com or visit xerxez.com/contact for a custom quote."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What courses does XERXEZ Academy offer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "XERXEZ Academy offers AI & ML, MLOps, DevSecOps, Full Stack Development, Cloud Architecture and ERP training courses with industry certificates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I contact XERXEZ support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Email info@xerxez.com, call +971 56 786 7451, or use the live chat on xerxez.com. We respond within 24 hours."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
