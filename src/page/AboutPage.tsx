@@ -312,9 +312,9 @@ function StorySection() {
 ═══════════════════════════════════════════════════════════ */
 const STATS = [
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>, n: 50, sfx: "+", lbl: "Engineers Worldwide" },
-  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20"/></svg>, n: 5, sfx: "+", lbl: "Countries Served" },
+  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20"/></svg>, n: 15, sfx: "+", lbl: "Countries Served" },
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>, n: 50, sfx: "+", lbl: "Projects Delivered" },
-  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>, n: 10, sfx: "+", lbl: "Years Experience" },
+  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>, n: 5, sfx: "+", lbl: "Years Experience" },
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>, n: 98, sfx: "%", lbl: "Client Satisfaction" },
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>, n: 0, sfx: "", lbl: "Security Incidents" },
 ];
@@ -522,8 +522,8 @@ const AboutPage = () => {
   return (
     <CustomLayout>
       <SEO
-        title="About XERXEZ — AI-Powered Enterprise Platform | Founded 2021"
-        description="XERXEZ is an AI-powered enterprise platform founded in 2021, serving India & UAE with three products: AI-Powered ERP, LMA Academy, and DevSecOps & Cloud solutions."
+        title="About XERXEZ | AI-Powered Enterprise Platform - UAE & India"
+        description="XERXEZ is an AI-powered enterprise platform founded in 2021, serving 15+ countries with ERP, LMA Academy and DevSecOps solutions from UAE and India."
         canonical="/about"
       />
       <style>{`
