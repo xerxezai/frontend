@@ -99,7 +99,7 @@ function HeroSection() {
         {/* pill */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(201,136,58,.09)", border: "1px solid rgba(201,136,58,.22)", borderRadius: 40, padding: "5px 16px", marginBottom: 28, fontSize: ".67rem", fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: T.gold2, fontFamily: "'DM Sans',sans-serif" }}>
           <span style={{ width: 5, height: 5, borderRadius: "50%", background: T.gold, display: "inline-block", animation: "abt-dot 2s ease-in-out infinite" }} />
-          About XERXEZ
+          Founded 2021 · India &amp; UAE
         </div>
         {/* title */}
         <h1 style={{ fontSize: "clamp(2.6rem,9vw,7rem)", fontWeight: 900, lineHeight: .94, letterSpacing: "-.04em", marginBottom: 8, fontFamily: "'DM Sans',sans-serif" }}>
@@ -107,7 +107,7 @@ function HeroSection() {
           <span style={{ display: "block", background: "linear-gradient(125deg,#E8A84E,#C9883A)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>INFRASTRUCTURE</span>
         </h1>
         <p style={{ ...S.bodyText, margin: "22px auto 0", maxWidth: 480, color: T.muted }}>
-          That moves enterprise forward. AI-native ERP, cloud architecture, MLOps, and DevSecOps — owned end-to-end by one team.
+          XERXEZ is an AI-powered enterprise platform built around three products: AI-Powered ERP, LMA Academy, and DevSecOps &amp; Cloud — owned end-to-end by one team.
         </p>
         {/* quick stats */}
         <div style={{ display: "flex", gap: "clamp(20px,4vw,48px)", justifyContent: "center", marginTop: 36, flexWrap: "wrap" }}>
@@ -153,6 +153,98 @@ function MarqueeSection() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   MISSION — statement band
+═══════════════════════════════════════════════════════════ */
+function MissionSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(e => { if (e[0].isIntersecting) { ref.current?.classList.add("abt-on"); obs.disconnect(); } }, { threshold: .15 });
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <section style={{ background: T.dk3, padding: "clamp(60px,9vw,110px) clamp(20px,5vw,80px)", textAlign: "center" }}>
+      <div ref={ref} className="abt-rv" style={{ maxWidth: 760, margin: "0 auto" }}>
+        <div style={{ ...S.secLabel, justifyContent: "center" }}><span style={{ display:"block",width:26,height:1,background:T.gold }}/> Our Mission</div>
+        <p style={{ fontSize: "clamp(1.3rem,2.6vw,1.9rem)", fontWeight: 600, lineHeight: 1.45, color: T.cream, fontFamily: "'DM Sans',sans-serif", letterSpacing: "-.01em" }}>
+          To make enterprise AI adoption <em style={{ color: T.gold2, fontStyle: "normal" }}>simple, secure, and fast</em> — replacing months-long software rollouts with production-ready ERP, training, and cloud systems that teams can trust in weeks, not years.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PRODUCTS — the 3 XERXEZ product lines
+═══════════════════════════════════════════════════════════ */
+const PRODUCTS = [
+  {
+    svg: <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#C9883A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
+    title: "AI-Powered ERP",
+    desc: "HR, CRM, Payroll, Sales, and Inventory — one AI-native platform that forecasts demand and automates workflows. Free to try, no credit card required.",
+    to: "/erp/login",
+    cta: "Try ERP Free",
+  },
+  {
+    svg: <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#C9883A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
+    title: "LMA Academy",
+    desc: "Courses in AI, MLOps, DevSecOps, Full Stack Development, and Cloud Architecture — taught by practitioners, with certificates on completion.",
+    to: "/training",
+    cta: "Explore Academy",
+  },
+  {
+    svg: <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#C9883A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+    title: "DevSecOps & Cloud",
+    desc: "Security-embedded CI/CD pipelines and multi-cloud infrastructure on AWS, Azure, and GCP — zero-trust from day one.",
+    to: "/service/devsecops-mlops-solutions",
+    cta: "Explore DevSecOps",
+  },
+];
+
+function ProductCard({ p, delay }: { p: typeof PRODUCTS[0]; delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(e => { if (e[0].isIntersecting) { ref.current?.classList.add("abt-on"); obs.disconnect(); } }, { threshold: .12 });
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  const tilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    e.currentTarget.style.transform = `perspective(600px) rotateY(${x * 10}deg) rotateX(${y * -10}deg) translateZ(4px)`;
+  };
+  return (
+    <div ref={ref} className="abt-rv abt-val-card" style={{ transitionDelay: `${delay}s`, display: "flex", flexDirection: "column" }}
+      onMouseMove={tilt} onMouseLeave={e => { e.currentTarget.style.transform = ""; }}>
+      <div className="abt-v-icon">{p.svg}</div>
+      <div style={{ fontSize: "1.05rem", fontWeight: 700, color: T.cream, marginBottom: 8, fontFamily: "'DM Sans',sans-serif" }}>{p.title}</div>
+      <div style={{ fontSize: ".84rem", color: T.muted, lineHeight: 1.72, fontFamily: "'DM Sans',sans-serif", flex: 1, marginBottom: 18 }}>{p.desc}</div>
+      <Link to={p.to} style={{ fontSize: ".82rem", fontWeight: 700, color: T.gold2, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}>
+        {p.cta} →
+      </Link>
+    </div>
+  );
+}
+
+function ProductsSection() {
+  return (
+    <section style={{ background: T.dk2, padding: "clamp(60px,9vw,120px) clamp(20px,5vw,80px)" }}>
+      <div style={{ maxWidth: 1160, margin: "0 auto" }}>
+        <div className="abt-rv" style={S.secLabel}><span style={{ display:"block",width:26,height:1,background:T.gold }}/> Our Products</div>
+        <h2 className="abt-rv" style={{ ...S.heading, color: T.cream }}>Three products. One platform.</h2>
+        <p className="abt-rv" style={{ ...S.bodyText, marginTop: 12, maxWidth: 500 }}>
+          Everything an enterprise needs to run operations, upskill teams, and ship securely — built and owned by XERXEZ end-to-end.
+        </p>
+        <div className="abt-vals-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18, marginTop: 50 }}>
+          {PRODUCTS.map((p, i) => <ProductCard key={p.title} p={p} delay={i * .07} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    STORY — 3D rotating CSS cube + narrative text
 ═══════════════════════════════════════════════════════════ */
 const CUBE_FACES = [
@@ -161,7 +253,7 @@ const CUBE_FACES = [
   { cls: "abt-cf-l",  svg: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#E8A84E" strokeWidth="1.5" strokeLinecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>, label: "MLOps",  sub: "Pipeline Automation" },
   { cls: "abt-cf-r",  svg: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#E8A84E" strokeWidth="1.5" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>, label: "DevSecOps", sub: "Zero-Trust Security" },
   { cls: "abt-cf-t",  svg: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#E8A84E" strokeWidth="1.5" strokeLinecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>, label: "ERP",     sub: "Enterprise Software" },
-  { cls: "abt-cf-d",  svg: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#E8A84E" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>, label: "Global", sub: "12 Countries" },
+  { cls: "abt-cf-d",  svg: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#E8A84E" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>, label: "Global", sub: "5+ Countries" },
 ];
 
 function StorySection() {
@@ -198,11 +290,11 @@ function StorySection() {
           </p>
           <p className="abt-rv" style={S.bodyText}>
             Today we're <strong style={{ color: T.cream }}>50+ engineers</strong> serving{" "}
-            <strong style={{ color: T.cream }}>12 countries</strong> — architects, data scientists, and platform engineers united by one refusal: shipping anything we wouldn't trust with our own systems.
+            <strong style={{ color: T.cream }}>5+ countries</strong> — architects, data scientists, and platform engineers united by one refusal: shipping anything we wouldn't trust with our own systems.
           </p>
           {/* mini facts */}
           <div className="abt-rv" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginTop: 26 }}>
-            {[["2015","Year Founded"],["10+","Years Delivering"],["90%+","Renewal Rate"],["ISO 27001","Compliance Ready"]].map(([v,l]) => (
+            {[["2021","Year Founded"],["5+","Years Delivering"],["90%+","Renewal Rate"],["ISO 27001","Compliance Ready"]].map(([v,l]) => (
               <div key={l} style={{ padding: "16px 18px", background: T.glass, border: `1px solid ${T.gb}`, borderRadius: 10 }}>
                 <div style={{ fontSize: "1.4rem", fontWeight: 900, color: T.gold2, lineHeight: 1, fontFamily: "'DM Sans',sans-serif" }}>{v}</div>
                 <div style={{ fontSize: ".65rem", color: T.muted, letterSpacing: ".08em", textTransform: "uppercase", marginTop: 4 }}>{l}</div>
@@ -220,8 +312,8 @@ function StorySection() {
 ═══════════════════════════════════════════════════════════ */
 const STATS = [
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>, n: 50, sfx: "+", lbl: "Engineers Worldwide" },
-  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20"/></svg>, n: 12, sfx: "", lbl: "Countries Served" },
-  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>, n: 120, sfx: "+", lbl: "Projects Delivered" },
+  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20"/></svg>, n: 5, sfx: "+", lbl: "Countries Served" },
+  { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>, n: 50, sfx: "+", lbl: "Projects Delivered" },
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>, n: 10, sfx: "+", lbl: "Years Experience" },
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>, n: 98, sfx: "%", lbl: "Client Satisfaction" },
   { svg: <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9883A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>, n: 0, sfx: "", lbl: "Security Incidents" },
@@ -430,8 +522,8 @@ const AboutPage = () => {
   return (
     <CustomLayout>
       <SEO
-        title="About XERXEZ — Enterprise AI Company | UAE & India"
-        description="Learn about XERXEZ, an enterprise AI company building ERP, MLOps, and cloud solutions. Founded in India & UAE, serving 40+ enterprises globally."
+        title="About XERXEZ — AI-Powered Enterprise Platform | Founded 2021"
+        description="XERXEZ is an AI-powered enterprise platform founded in 2021, serving India & UAE with three products: AI-Powered ERP, LMA Academy, and DevSecOps & Cloud solutions."
         canonical="/about"
       />
       <style>{`
@@ -499,6 +591,8 @@ const AboutPage = () => {
 
       <HeroSection />
       <MarqueeSection />
+      <MissionSection />
+      <ProductsSection />
       <StorySection />
       <StatsSection />
       <ValuesSection />
