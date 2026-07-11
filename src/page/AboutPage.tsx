@@ -91,7 +91,7 @@ function HeroSection() {
   }, []);
 
   return (
-    <section style={{ position: "relative", height: "92vh", minHeight: 580, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", background: T.dk, overflow: "hidden", padding: "0 clamp(20px,5vw,80px)" }}>
+    <section style={{ position: "relative", minHeight: "min(92vh, 860px)", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", background: T.dk, overflow: "hidden", padding: "clamp(150px,20vw,200px) clamp(20px,5vw,80px) 60px" }}>
       <canvas ref={cvRef} aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
       {/* ambient gold glow */}
       <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", width: "70vw", height: "60vh", background: "radial-gradient(ellipse,rgba(201,136,58,.14) 0%,transparent 70%)", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
