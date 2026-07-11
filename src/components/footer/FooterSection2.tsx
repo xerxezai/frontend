@@ -34,7 +34,7 @@ const NAV = [
 
 const SOCIAL = [
   { href: "https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/", icon: "fab fa-linkedin-in", label: "LinkedIn" },
-  { href: "https://github.com/",                                                           icon: "fab fa-github",      label: "GitHub"   },
+  { href: "https://github.com/xerxezai",                                                    icon: "fab fa-github",      label: "GitHub"   },
   { href: "mailto:info@xerxez.com",                                                        icon: "fas fa-envelope",    label: "Email"    },
 ];
 

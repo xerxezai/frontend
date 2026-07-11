@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import XzHeroSection from "../components/common/XzHeroSection";
 import CustomLayout from "../components/layout/CustomLayout";
+import SEO from "../components/seo/SEO";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const OG      = "#C9883A";
@@ -281,22 +282,6 @@ const ERPHub = () => {
 // ── Cascade content ───────────────────────────────────────────────────────────
 const ERP_CA = ["Finance & Accounting","Human Resources","Supply Chain","CRM & Sales","AI Analytics Engine","Inventory Management","Procurement","Compliance & Audit","Logistics & Dispatch"];
 const ERP_CB = ["40% Cost Reduction","60% Faster Decisions","99.9% Uptime SLA","Zero Migration Risk","8-Week AI Upgrade","Full IP Ownership","$500K+ Client Savings","Enterprise Grade","ISO 27001 Aligned"];
-
-// ── SEO ───────────────────────────────────────────────────────────────────────
-const useSEO = () => {
-  useEffect(() => {
-    const p = document.title;
-    document.title = "AI-Powered ERP System | XERXEZ Enterprise Solutions";
-    const up = (n: string, c: string) => {
-      let el = document.querySelector(`meta[name="${n}"]`) as HTMLMetaElement | null;
-      if (!el) { el = document.createElement("meta"); el.setAttribute("name", n); document.head.appendChild(el); }
-      el.setAttribute("content", c);
-    };
-    up("description", "XERXEZ builds AI-powered ERP from scratch or upgrades your existing SAP, Oracle, or Microsoft Dynamics — enterprise-grade, government deployment ready, ISO 27001 and SOC 2 aligned.");
-    up("keywords", "AI ERP, enterprise resource planning, SAP upgrade, Oracle AI, ERP software, XERXEZ, government ERP");
-    return () => { document.title = p; };
-  }, []);
-};
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 1. HERO
@@ -868,9 +853,13 @@ const CTASection = () => (
 // PAGE ROOT
 // ═══════════════════════════════════════════════════════════════════════════════
 const AIERPPage = () => {
-  useSEO();
   return (
     <>
+      <SEO
+        title="XERXEZ AI-Powered ERP | Enterprise ERP Solutions"
+        description="XERXEZ builds AI-powered ERP from scratch or upgrades your existing SAP, Oracle, or Microsoft Dynamics — enterprise-grade, ISO 27001 aligned. Serving India & UAE."
+        canonical="/service/ai-powered-erp"
+      />
       <style>{`
         @keyframes erpCardIn {
           from { opacity:0; transform:translateX(40px); }

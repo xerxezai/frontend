@@ -1,9 +1,11 @@
 import { Helmet } from "react-helmet-async";
 
 const BASE_URL = "https://www.xerxez.com";
-const DEFAULT_IMG = `${BASE_URL}/assets/img/logo/xerxez_logo.png`;
+const DEFAULT_IMG = `${BASE_URL}/assets/img/og-image.png`;
 const SITE_NAME = "XERXEZ";
 const TWITTER_HANDLE = "@xerxez";
+
+const DEFAULT_KEYWORDS = "XERXEZ, xerxez, xerxez solutions, XERXEZ Solutions, xerxez.com, xerxez erp, xerxez academy, xerxez ai";
 
 interface SEOProps {
   title: string;
@@ -12,6 +14,8 @@ interface SEOProps {
   ogImage?: string;
   ogType?: "website" | "article";
   noIndex?: boolean;
+  /** Comma-separated keywords. Defaults to the core XERXEZ brand keyword set. */
+  keywords?: string;
   /** Structured data — one or more schema.org objects rendered as JSON-LD. */
   jsonLd?: object | object[];
 }
@@ -23,6 +27,7 @@ export default function SEO({
   ogImage = DEFAULT_IMG,
   ogType = "website",
   noIndex = false,
+  keywords = DEFAULT_KEYWORDS,
   jsonLd,
 }: SEOProps) {
   const url = `${BASE_URL}${canonical.startsWith("/") ? canonical : `/${canonical}`}`;
@@ -31,6 +36,7 @@ export default function SEO({
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
       <link rel="canonical" href={url} />
       {noIndex && <meta name="robots" content="noindex,nofollow" />}
       {schemas.map((s, i) => (
