@@ -404,7 +404,7 @@ function CTASection() {
         </p>
         <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 34, flexWrap: "wrap" }}>
           <Link to="/contact" style={S.btnP}>Schedule a Call →</Link>
-          <Link to="/portfolio" style={S.btnG}>Explore Our Work</Link>
+          <Link to="/project" style={S.btnG}>Explore Our Work</Link>
         </div>
       </div>
     </section>
