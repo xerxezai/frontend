@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const GOLD = "#C9883A";
 
@@ -32,12 +32,29 @@ export const HOME_FAQS = [
 /** Homepage FAQ accordion. Content mirrors the FAQPage JSON-LD emitted on the homepage. */
 const HomeFaq = () => {
   const [open, setOpen] = useState<number>(0);
+  const headRef = useRef<HTMLDivElement>(null);
+  const [reveal, setReveal] = useState(false);
+
+  useEffect(() => {
+    const el = headRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setReveal(true); obs.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
     <section style={{ background: "#F8F4EE", padding: "96px 0 90px" }}>
       <div className="container" style={{ maxWidth: 820 }}>
         {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: 48 }}>
+        <div ref={headRef} style={{
+          textAlign: "center", marginBottom: 48,
+          opacity: reveal ? 1 : 0, transform: reveal ? "translateY(0)" : "translateY(24px)",
+          transition: "opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)",
+        }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
             <span style={{ width: 32, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD})`, display: "block" }} />
             <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: GOLD, fontFamily: "'DM Sans',sans-serif" }}>
@@ -61,7 +78,7 @@ const HomeFaq = () => {
                 background: "#fff", borderRadius: 14,
                 border: `1px solid ${isOpen ? "rgba(201,136,58,0.35)" : "rgba(201,136,58,0.12)"}`,
                 boxShadow: isOpen ? "0 8px 28px rgba(0,0,0,0.08)" : "0 2px 12px rgba(0,0,0,0.05)",
-                overflow: "hidden", transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                overflow: "hidden", transition: "border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease",
               }}>
                 <button
                   onClick={() => setOpen(isOpen ? -1 : i)}

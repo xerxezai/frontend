@@ -383,7 +383,7 @@ const ContactSection = () => {
           align-items:stretch;
           border-radius:22px;
           overflow:hidden;
-          box-shadow:0 24px 80px rgba(0,0,0,0.14), 0 4px 0 rgba(160,140,110,0.18);
+          box-shadow:0 30px 90px rgba(0,0,0,0.45), 0 0 0 1px rgba(201,136,58,0.14);
         }
         @media (max-width:1199px) { .xz-ct-grid { grid-template-columns:360px 1fr; } }
         @media (max-width:991px)  { .xz-ct-grid { grid-template-columns:1fr; } }
@@ -427,14 +427,21 @@ const ContactSection = () => {
       `}</style>
 
       <section style={{
-        background: "#F8F7F4", padding: "80px 0 92px",
+        background: "linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)", padding: "80px 0 92px",
         position: "relative", overflow: "hidden",
       }}>
         {/* bg dot grid */}
         <div aria-hidden="true" style={{
           position: "absolute", inset: 0, pointerEvents: "none",
-          backgroundImage: "radial-gradient(circle,#d8d3cc 1px,transparent 1px)",
-          backgroundSize: "36px 36px", opacity: 0.28,
+          backgroundImage: "radial-gradient(circle,rgba(255,255,255,0.05) 1px,transparent 1px)",
+          backgroundSize: "36px 36px",
+        }} />
+        {/* ambient glow */}
+        <div aria-hidden="true" style={{
+          position: "absolute", top: "-10%", right: "-6%",
+          width: 600, height: 600, borderRadius: "50%",
+          background: "radial-gradient(circle,rgba(201,136,58,0.10) 0%,transparent 68%)",
+          pointerEvents: "none",
         }} />
 
         <div className="container" style={{ position: "relative", zIndex: 1 }}>
@@ -456,7 +463,7 @@ const ContactSection = () => {
               style={{
                 fontFamily: "'Cormorant Garamond',Garamond,serif",
                 fontWeight: 700, fontSize: "clamp(30px,4vw,52px)",
-                lineHeight: 1.08, letterSpacing: "-0.02em", color: "#141413", margin: 0,
+                lineHeight: 1.08, letterSpacing: "-0.02em", color: "#fff", margin: 0,
               }}>
               Start Your Enterprise{" "}
               <em style={{ color: "#C9883A", fontStyle: "italic" }}>Digital Transformation</em>

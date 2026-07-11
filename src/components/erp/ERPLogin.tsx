@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useERPAuth } from '../../hooks/useERPAuth';
 import apiService from '../../services/api';
@@ -24,9 +24,45 @@ const shadow = {
 
 type Mode = 'login' | 'reg' | 'fp1' | 'fp2' | 'fp3' | 'fp4';
 
-// ── stat tile (left panel) ────────────────────────────────────────────────────
-const StatTile = ({ val, label, icon, color, delay }: {
-  val: string; label: string; icon: string; color: string; delay: number;
+// ── count-up value — parses the leading number out of a stat string and
+//    animates it from 0 once `trigger` flips true; non-numeric strings
+//    (e.g. "<6 Mo") just render as-is ──────────────────────────────────────
+const CountValue = ({ raw, trigger, duration = 1200 }: { raw: string; trigger: boolean; duration?: number }) => {
+  const parsed = useMemo(() => {
+    const m = raw.match(/^([^\d]*)([\d,]+(?:\.\d+)?)(.*)$/);
+    if (!m) return null;
+    const [, prefix, numStr, suffix] = m;
+    return {
+      prefix, suffix,
+      target: parseFloat(numStr.replace(/,/g, '')),
+      decimals: numStr.includes('.') ? numStr.split('.')[1].length : 0,
+      hasComma: numStr.includes(','),
+    };
+  }, [raw]);
+  const [display, setDisplay] = useState(parsed ? `${parsed.prefix}0${parsed.suffix}` : raw);
+  useEffect(() => {
+    if (!parsed || !trigger) return;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = parsed.target * eased;
+      const num = parsed.decimals > 0
+        ? val.toFixed(parsed.decimals)
+        : parsed.hasComma ? Math.round(val).toLocaleString('en-IN') : String(Math.round(val));
+      setDisplay(`${parsed.prefix}${num}${parsed.suffix}`);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [trigger, parsed, duration]);
+  return <>{display}</>;
+};
+
+// ── stat tile (left panel) — orange only, with count-up ───────────────────────
+const StatTile = ({ val, label, icon, delay, trigger }: {
+  val: string; label: string; icon: string; delay: number; trigger: boolean;
 }) => {
   const [hov, setHov] = useState(false);
   return (
@@ -35,7 +71,7 @@ const StatTile = ({ val, label, icon, color, delay }: {
       style={{
         flex: 1, background: 'rgba(255,255,255,0.06)',
         backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-        border: '1px solid rgba(255,255,255,0.08)', borderTop: `2px solid ${color}`,
+        border: '1px solid rgba(255,255,255,0.08)', borderTop: `2px solid ${C.orange}`,
         borderRadius: 14, padding: '16px 14px', cursor: 'default',
         transform: hov ? 'translateY(-5px)' : 'translateY(0)',
         boxShadow: hov ? '0 16px 40px rgba(0,0,0,0.35)' : '0 4px 14px rgba(0,0,0,0.20)',
@@ -43,14 +79,49 @@ const StatTile = ({ val, label, icon, color, delay }: {
         animation: `erpFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
       }}
     >
-      <div style={{ width: 30, height: 30, borderRadius: 8, background: `${color}20`, border: `1px solid ${color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
-        <i className={icon} style={{ color, fontSize: 12 }}></i>
+      <div style={{ width: 30, height: 30, borderRadius: 8, background: `${C.orange}20`, border: `1px solid ${C.orange}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+        <i className={icon} style={{ color: C.orange, fontSize: 12 }}></i>
       </div>
-      <div style={{ color, fontWeight: 800, fontSize: 20, lineHeight: 1, marginBottom: 4, fontFamily: "'DM Sans', sans-serif" }}>{val}</div>
+      <div style={{ color: C.orange, fontWeight: 800, fontSize: 20, lineHeight: 1, marginBottom: 4, fontFamily: "'DM Sans', sans-serif" }}>
+        <CountValue raw={val} trigger={trigger} />
+      </div>
       <div style={{ color: 'rgba(255,255,255,0.50)', fontSize: 11, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.35 }}>{label}</div>
     </div>
   );
 };
+
+// ── trust line (green pulsing dot) ─────────────────────────────────────────────
+const TrustLine = ({ text, delay }: { text: string; delay: number }) => (
+  <div style={{
+    display: 'inline-flex', alignItems: 'center', gap: 9,
+    background: 'rgba(74,222,128,0.10)', border: '1px solid rgba(74,222,128,0.30)',
+    borderRadius: 20, padding: '8px 16px',
+    animation: `erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
+  }}>
+    <span style={{ position: 'relative', width: 8, height: 8, flexShrink: 0 }}>
+      <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#4ade80', animation: 'erpUrgentPing 1.6s ease-in-out infinite' }} />
+      <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#4ade80' }} />
+    </span>
+    <span style={{ color: '#6ee7a0', fontSize: 12.5, fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>{text}</span>
+  </div>
+);
+
+// ── testimonial card ───────────────────────────────────────────────────────────
+const TestimonialCard = ({ quote, name, delay }: { quote: string; name: string; delay: number }) => (
+  <div style={{
+    background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+    border: '1px solid rgba(255,255,255,0.09)', borderRadius: 14, padding: '16px 18px',
+    animation: `erpFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
+  }}>
+    <div style={{ display: 'flex', gap: 2, marginBottom: 8 }}>
+      {[0, 1, 2, 3, 4].map(i => <i key={i} className="fas fa-star" style={{ color: C.orange, fontSize: 10 }} />)}
+    </div>
+    <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 13, lineHeight: 1.62, fontFamily: "'DM Sans', sans-serif", marginBottom: 8, fontStyle: 'italic' }}>
+      &ldquo;{quote}&rdquo;
+    </p>
+    <p style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", margin: 0 }}>— {name}</p>
+  </div>
+);
 
 const Bullet = ({ icon, text, delay }: { icon: string; text: string; delay: number }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 12, animation: `erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both` }}>
@@ -93,6 +164,13 @@ interface Props { onSuccess: () => void; }
 
 const ERPLogin = ({ onSuccess }: Props) => {
   const { login, loading: loginLoading, error: authError } = useERPAuth();
+
+  // fire the left-panel stat count-up once, shortly after mount
+  const [statsLive, setStatsLive] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setStatsLive(true), 550);
+    return () => clearTimeout(t);
+  }, []);
 
   // navigation
   const [mode, setMode] = useState<Mode>('login');
@@ -340,7 +418,10 @@ const ERPLogin = ({ onSuccess }: Props) => {
         @keyframes erp-shake { 0%,100%{transform:translateX(0)} 15%,55%{transform:translateX(-7px)} 35%,75%{transform:translateX(7px)} }
         @keyframes erp-spin { to{transform:rotate(360deg)} }
         @keyframes erpFadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes erpOrbPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.09);opacity:0.82} }
+        @keyframes erpSlideL { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes erpOrbPulse { 0%,100%{transform:scale(1) translate(0,0);opacity:1} 50%{transform:scale(1.09) translate(10px,-8px);opacity:0.82} }
+        @keyframes erpUrgentPing { 0%{transform:scale(1);opacity:0.8} 70%{transform:scale(2.4);opacity:0} 100%{transform:scale(1);opacity:0} }
+        @keyframes erpGradientShift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
         @keyframes erpCardIn { from{opacity:0;transform:translateY(28px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
         @keyframes erp-step-fwd { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
         @keyframes erp-step-bck { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
@@ -357,6 +438,10 @@ const ERPLogin = ({ onSuccess }: Props) => {
         .erp-orb-1{animation:erpOrbPulse 8s ease-in-out infinite}
         .erp-orb-2{animation:erpOrbPulse 10s 2.5s ease-in-out infinite}
         .erp-orb-3{animation:erpOrbPulse 12s 5s ease-in-out infinite}
+        .erp-orb-4{animation:erpOrbPulse 9s 1.5s ease-in-out infinite}
+        .erp-left{background-size:200% 200%!important;animation:erpGradientShift 8s ease-in-out infinite}
+        .erp-left::-webkit-scrollbar{width:6px}
+        .erp-left::-webkit-scrollbar-thumb{background:rgba(201,136,58,0.25);border-radius:3px}
         .erp-step-fwd{animation:erp-step-fwd 0.30s cubic-bezier(0.22,1,0.36,1) both}
         .erp-step-bck{animation:erp-step-bck 0.30s cubic-bezier(0.22,1,0.36,1) both}
         .erp-otp-box:focus{border-color:#C9883A!important;box-shadow:0 0 0 3px rgba(201,136,58,0.18),0 3px 0 rgba(150,95,30,0.35)!important;outline:none}
@@ -368,7 +453,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
           .erp-footer-note{color:rgba(255,255,255,0.22)!important}
         }
         @media(prefers-reduced-motion:reduce){
-          .erp-orb-1,.erp-orb-2,.erp-orb-3{animation:none!important}
+          .erp-orb-1,.erp-orb-2,.erp-orb-3,.erp-orb-4,.erp-left{animation:none!important}
           .erp-login-card{animation:none!important}
           *{transition-duration:0ms!important;animation-duration:0ms!important}
         }
@@ -377,35 +462,46 @@ const ERPLogin = ({ onSuccess }: Props) => {
       <div style={{ minHeight: '100vh', display: 'flex' }}>
 
         {/* ══ LEFT — brand panel ══════════════════════════════════════════ */}
-        <div className="d-none d-lg-flex" style={{ flex: '0 0 56%', flexDirection: 'column', justifyContent: 'flex-start', padding: '56px 60px 48px', position: 'relative', overflow: 'hidden', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+        <div className="d-none d-lg-flex erp-left" style={{ flex: '0 0 56%', flexDirection: 'column', justifyContent: 'flex-start', padding: '48px 60px 40px', position: 'relative', overflow: 'hidden auto', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
           <span className="erp-orb-1" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 540, height: 540, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.15) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <span className="erp-orb-2" style={{ position: 'absolute', bottom: '-18%', right: '-4%', width: 440, height: 440, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <span className="erp-orb-3" style={{ position: 'absolute', top: '38%', right: '10%', width: 240, height: 240, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+          <span className="erp-orb-4" style={{ position: 'absolute', top: '64%', left: '20%', width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.07) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ marginBottom: 18, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both' }}>
+            <div style={{ marginBottom: 16, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(201,136,58,0.13)', border: '1px solid rgba(201,136,58,0.35)', color: '#E5B460', fontSize: 11, fontWeight: 700, padding: '6px 16px', borderRadius: 20, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 <i className="fas fa-bolt" style={{ fontSize: 9, color: C.orange }}></i>
                 Enterprise Operations Platform
               </span>
             </div>
-            <h1 style={{ color: '#fff', fontWeight: 800, fontSize: 'clamp(28px, 2.8vw, 44px)', lineHeight: 1.1, marginBottom: 18, fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.025em', animation: 'erpFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both' }}>
-              AI that runs your<br />
-              <em style={{ color: C.orange, fontStyle: 'italic' }}>entire business</em>
+            <h1 style={{ color: '#fff', fontWeight: 800, fontSize: 'clamp(28px, 2.7vw, 42px)', lineHeight: 1.1, marginBottom: 14, fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.025em', animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both' }}>
+              The AI ERP That<br />
+              <em style={{ color: C.orange, fontStyle: 'italic' }}>Replaces 5 Legacy Systems</em>
             </h1>
-            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14.5, lineHeight: 1.72, maxWidth: 420, marginBottom: 34, fontFamily: "'DM Sans', sans-serif", animation: 'erpFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.19s both' }}>
-              AI-powered ERP with real-time analytics, role dashboards, and automated workflows — built to enterprise and government standards.
+            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.68, maxWidth: 420, marginBottom: 26, fontFamily: "'DM Sans', sans-serif", animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.19s both' }}>
+              Trusted by enterprises across India &amp; UAE to automate operations and cut costs by 40%.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 38 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24 }}>
               <Bullet icon="fas fa-brain"      text="AI demand forecasting & anomaly detection"   delay={0.25} />
-              <Bullet icon="fas fa-shield-alt" text="ISO 27001 & SOC 2 Type II certified"        delay={0.30} />
-              <Bullet icon="fas fa-chart-bar"  text="Role-based dashboards for every department" delay={0.35} />
+              <Bullet icon="fas fa-shield-alt" text="ISO 27001 & SOC 2 Type II certified"         delay={0.31} />
+              <Bullet icon="fas fa-chart-bar"  text="Role-based dashboards for every department"  delay={0.37} />
+              <Bullet icon="fas fa-rocket"     text="Deploy in <6 months, guaranteed"              delay={0.43} />
             </div>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <StatTile val="40%"   label="Cost reduction"   icon="fas fa-chart-line"     color={C.orange} delay={0.41} />
-              <StatTile val="60%"   label="Faster decisions" icon="fas fa-tachometer-alt" color="#10b981"  delay={0.47} />
-              <StatTile val="99.9%" label="Uptime SLA"       icon="fas fa-server"         color="#3b82f6"  delay={0.53} />
+            <div style={{ marginBottom: 22 }}>
+              <TrustLine text="Currently serving 5+ active enterprises" delay={0.49} />
             </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 22 }}>
+              <StatTile val="40%"   label="Cost Reduction"    icon="fas fa-chart-line"     delay={0.55} trigger={statsLive} />
+              <StatTile val="60%"   label="Faster Decisions"  icon="fas fa-tachometer-alt" delay={0.59} trigger={statsLive} />
+              <StatTile val="99.9%" label="Uptime SLA"        icon="fas fa-server"         delay={0.63} trigger={statsLive} />
+              <StatTile val="<6 Mo" label="Deployment"        icon="fas fa-rocket"         delay={0.67} trigger={statsLive} />
+            </div>
+            <TestimonialCard
+              quote="Replaced our legacy ERP in 4 months. Best technology decision we ever made."
+              name="Chief Technology Officer, Manufacturing Enterprise, Dubai"
+              delay={0.75}
+            />
           </div>
         </div>
 
@@ -490,11 +586,9 @@ const ERPLogin = ({ onSuccess }: Props) => {
 
                   <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', margin: '10px 0 8px' }} />
                   <div style={{ textAlign: 'center', marginBottom: 6 }}>
-                    <span style={{ fontSize: 12.5, color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
-                      Don't have an account?{' '}
-                      <button type="button" onClick={() => go('reg', 'fwd')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.orange, fontWeight: 700, fontSize: 12.5, fontFamily: "'DM Sans', sans-serif", padding: 0 }}>
-                        Register
-                      </button>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
+                      <i className="fas fa-shield-alt" style={{ color: C.orange, fontSize: 11 }} />
+                      Access restricted to invited enterprises only
                     </span>
                   </div>
                   <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', margin: '6px 0 8px' }} />

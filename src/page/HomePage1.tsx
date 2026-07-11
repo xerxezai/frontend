@@ -65,13 +65,12 @@ const HomePage1 = () => {
       />
       <HeaderSection />
 
+      {/* Alternating dark / light rhythm, hero to footer: D L D L D L D L D L D L */}
       <div id="sec-hero" style={{ paddingTop: HEADER_TOTAL_H }}><HeroSection /></div>
       <IndustriesBar />
-      <div id="sec-about">
-        <ServiceSection2 />
-        <AcademySection />
-        <BrandSection />
-      </div>
+      <div id="sec-about"><ServiceSection2 /></div>
+      <BrandSection />
+      <AcademySection />
       <HowWeWork />
       <WhyXerxez />
       <TestimonialsSection />

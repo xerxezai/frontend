@@ -281,7 +281,6 @@ const HeroSection = () => {
   );
   const [wordIdx,  setWordIdx ] = useState(0);
   const [fadeIn,   setFadeIn  ] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
   const btnRef = useRef<HTMLAnchorElement>(null);
   const sectionRef  = useRef<HTMLElement>(null);
   const wordTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -298,12 +297,6 @@ const HeroSection = () => {
       wordTimerRef.current = setTimeout(() => { setWordIdx(i => (i+1) % CYCLE_WORDS.length); setFadeIn(true); }, 350);
     }, 2500);
     return () => { clearInterval(id); if (wordTimerRef.current) clearTimeout(wordTimerRef.current); };
-  }, []);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", fn, { passive:true });
-    return () => window.removeEventListener("scroll", fn);
   }, []);
 
   useEffect(() => {
@@ -330,9 +323,9 @@ const HeroSection = () => {
   return (
     <section ref={sectionRef} style={{
       background:"linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)",
-      padding:"24px 0 48px",
-      minHeight:"calc(90vh - 70px)",
-      display:"flex", alignItems:"flex-start",
+      padding:"20px 0 32px",
+      minHeight:"calc(78vh - 70px)",
+      display:"flex", alignItems:"center",
       position:"relative", overflow:"hidden",
     }}>
 
@@ -673,41 +666,23 @@ const HeroSection = () => {
             </p>
 
             {/* Trust metrics */}
-            <div style={{
-              display:"flex", alignItems:"center", gap:0,
-              marginTop:40, flexWrap:"wrap",
+            <div className="xz-trust-grid" style={{
+              marginTop:32,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.4s both",
             }}>
               {[
-                { val:"50+",       label:"Enterprise projects" },
-                { val:"40%",       label:"Avg cost reduction"  },
-                { val:"99.9%",     label:"Uptime SLA"          },
-                { val:"<6 mo",     label:"Avg deployment"      },
-                { val:"5+",        label:"Industries served"   },
-                { val:"ISO 27001", label:"& SOC 2 aligned"     },
-              ].map((m,i) => (
-                <div key={m.label} style={{
-                  display:"flex", flexDirection:"column", gap:2,
-                  padding:"0 16px", marginBottom:12,
-                  borderLeft: i>0?"1px solid rgba(255,255,255,0.10)":"none",
-                }}>
-                  <span style={{ fontFamily:"'Cormorant Garamond',Garamond,serif", fontSize:21, fontWeight:700, color:"rgba(255,255,255,0.92)", lineHeight:1, letterSpacing:"-0.02em", whiteSpace:"nowrap" }}>{m.val}</span>
-                  <span style={{ fontFamily:"'Inter',sans-serif", fontSize:10, fontWeight:500, color:"rgba(255,255,255,0.38)", letterSpacing:"0.04em", textTransform:"uppercase", lineHeight:1, whiteSpace:"nowrap" }}>{m.label}</span>
+                { val:"50+",   label:"Enterprise projects" },
+                { val:"40%",   label:"Avg cost reduction"  },
+                { val:"99.9%", label:"Uptime SLA"          },
+                { val:"<6 mo", label:"Avg deployment"      },
+                { val:"5+",    label:"Industries served"   },
+                { val:"ISO",   label:"27001 & SOC 2"       },
+              ].map((m) => (
+                <div key={m.label} style={{ display:"flex", flexDirection:"column", gap:3 }}>
+                  <span style={{ fontFamily:"'Cormorant Garamond',Garamond,serif", fontSize:20, fontWeight:700, color:"rgba(255,255,255,0.92)", lineHeight:1, letterSpacing:"-0.02em", whiteSpace:"nowrap" }}>{m.val}</span>
+                  <span style={{ fontFamily:"'Inter',sans-serif", fontSize:9.5, fontWeight:500, color:"rgba(255,255,255,0.38)", letterSpacing:"0.03em", textTransform:"uppercase", lineHeight:1.3, whiteSpace:"nowrap" }}>{m.label}</span>
                 </div>
               ))}
-            </div>
-
-            {/* Scroll indicator */}
-            <div style={{
-              display:"flex", alignItems:"center", gap:10, marginTop:36,
-              opacity: scrolled?0:0.42, transition:"opacity 0.4s ease",
-              pointerEvents:"none",
-            }}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"
-                style={{ animation: prefersReduced?"none":"xzBounce 1.6s ease-in-out infinite" }}>
-                <path d="M10 3v14M3.5 10.5l6.5 6.5 6.5-6.5" stroke="rgba(255,255,255,0.60)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span style={{ fontFamily:"'Inter',sans-serif", fontSize:9, fontWeight:600, letterSpacing:"0.2em", textTransform:"uppercase", color:"rgba(255,255,255,0.45)" }}>SCROLL</span>
             </div>
           </div>
 
@@ -792,6 +767,15 @@ const HeroSection = () => {
         @keyframes xzShimmer {
           0%{transform:translateX(-100%) skewX(-15deg)}
           30%,100%{transform:translateX(220%) skewX(-15deg)}
+        }
+        .xz-trust-grid {
+          display:grid;
+          grid-template-columns:repeat(3,auto);
+          column-gap:28px;
+          row-gap:18px;
+        }
+        @media (max-width:575px) {
+          .xz-trust-grid { grid-template-columns:repeat(2,auto); column-gap:22px; }
         }
         @media (prefers-reduced-motion:reduce) {
           *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}

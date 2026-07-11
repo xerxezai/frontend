@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import SEO from "../../components/seo/SEO";
 
@@ -23,9 +23,45 @@ const FF = "'DM Sans', sans-serif";
 
 type Role = "student" | "instructor";
 
-// ── StatTile — exact ERP copy ─────────────────────────────────────────────────
-const StatTile = ({ val, label, icon, color, delay }: {
-  val: string; label: string; icon: string; color: string; delay: number;
+// ── count-up value — parses the leading number out of a stat string and
+//    animates it from 0 once `trigger` flips true; non-numeric strings
+//    (e.g. "<6 Mo") just render as-is ──────────────────────────────────────
+const CountValue = ({ raw, trigger, duration = 1200 }: { raw: string; trigger: boolean; duration?: number }) => {
+  const parsed = useMemo(() => {
+    const m = raw.match(/^([^\d]*)([\d,]+(?:\.\d+)?)(.*)$/);
+    if (!m) return null;
+    const [, prefix, numStr, suffix] = m;
+    return {
+      prefix, suffix,
+      target: parseFloat(numStr.replace(/,/g, "")),
+      decimals: numStr.includes(".") ? numStr.split(".")[1].length : 0,
+      hasComma: numStr.includes(","),
+    };
+  }, [raw]);
+  const [display, setDisplay] = useState(parsed ? `${parsed.prefix}0${parsed.suffix}` : raw);
+  useEffect(() => {
+    if (!parsed || !trigger) return;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = parsed.target * eased;
+      const num = parsed.decimals > 0
+        ? val.toFixed(parsed.decimals)
+        : parsed.hasComma ? Math.round(val).toLocaleString("en-IN") : String(Math.round(val));
+      setDisplay(`${parsed.prefix}${num}${parsed.suffix}`);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [trigger, parsed, duration]);
+  return <>{display}</>;
+};
+
+// ── StatTile — orange only, with count-up ─────────────────────────────────────
+const StatTile = ({ val, label, icon, delay, trigger }: {
+  val: string; label: string; icon: string; delay: number; trigger: boolean;
 }) => {
   const [hov, setHov] = useState(false);
   return (
@@ -35,7 +71,7 @@ const StatTile = ({ val, label, icon, color, delay }: {
         flex: 1,
         background: "rgba(255,255,255,0.06)",
         backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
-        border: "1px solid rgba(255,255,255,0.08)", borderTop: `2px solid ${color}`,
+        border: "1px solid rgba(255,255,255,0.08)", borderTop: `2px solid ${C.orange}`,
         borderRadius: 14, padding: "16px 14px", cursor: "default",
         transform: hov ? "translateY(-5px)" : "translateY(0)",
         boxShadow: hov ? "0 16px 40px rgba(0,0,0,0.35)" : "0 4px 14px rgba(0,0,0,0.20)",
@@ -43,14 +79,75 @@ const StatTile = ({ val, label, icon, color, delay }: {
         animation: `lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
       }}
     >
-      <div style={{ width: 30, height: 30, borderRadius: 8, background: `${color}20`, border: `1px solid ${color}44`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
-        <i className={icon} style={{ color, fontSize: 12 }} />
+      <div style={{ width: 30, height: 30, borderRadius: 8, background: `${C.orange}20`, border: `1px solid ${C.orange}44`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
+        <i className={icon} style={{ color: C.orange, fontSize: 12 }} />
       </div>
-      <div style={{ color, fontWeight: 800, fontSize: 20, lineHeight: 1, marginBottom: 4, fontFamily: FF }}>{val}</div>
+      <div style={{ color: C.orange, fontWeight: 800, fontSize: 20, lineHeight: 1, marginBottom: 4, fontFamily: FF }}>
+        <CountValue raw={val} trigger={trigger} />
+      </div>
       <div style={{ color: "rgba(255,255,255,0.50)", fontSize: 11, fontFamily: FF, lineHeight: 1.35 }}>{label}</div>
     </div>
   );
 };
+
+// ── social proof avatar row ────────────────────────────────────────────────────
+const AVATAR_COLORS = [
+  "linear-gradient(145deg,#e8a84e,#C9883A)",
+  "linear-gradient(145deg,#8b5cf6,#6d28d9)",
+  "linear-gradient(145deg,#3b82f6,#1d4ed8)",
+  "linear-gradient(145deg,#10b981,#047857)",
+  "linear-gradient(145deg,#f472b6,#db2777)",
+];
+const SocialProofRow = ({ text, delay }: { text: string; delay: number }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 12, animation: `lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both` }}>
+    <div style={{ display: "flex" }}>
+      {AVATAR_COLORS.map((grad, i) => (
+        <span key={i} style={{
+          width: 30, height: 30, borderRadius: "50%", background: grad,
+          border: "2px solid #1a1208", marginLeft: i === 0 ? 0 : -9,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.30)",
+        }}>
+          <i className="fas fa-user" style={{ color: "rgba(255,255,255,0.85)", fontSize: 10 }} />
+        </span>
+      ))}
+    </div>
+    <span style={{ color: "rgba(255,255,255,0.62)", fontSize: 13, fontFamily: FF }}>{text}</span>
+  </div>
+);
+
+// ── urgency banner ─────────────────────────────────────────────────────────────
+const UrgencyBanner = ({ text, delay }: { text: string; delay: number }) => (
+  <div style={{
+    display: "inline-flex", alignItems: "center", gap: 9,
+    background: "rgba(201,136,58,0.13)", border: "1px solid rgba(201,136,58,0.35)",
+    borderRadius: 20, padding: "8px 16px",
+    animation: `lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
+  }}>
+    <span style={{ position: "relative", width: 8, height: 8, flexShrink: 0 }}>
+      <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.orange, animation: "lmaUrgentPing 1.6s ease-in-out infinite" }} />
+      <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.orange }} />
+    </span>
+    <span style={{ color: "#E5B460", fontSize: 12.5, fontWeight: 700, fontFamily: FF }}>{text}</span>
+  </div>
+);
+
+// ── testimonial card ───────────────────────────────────────────────────────────
+const TestimonialCard = ({ quote, name, delay }: { quote: string; name: string; delay: number }) => (
+  <div style={{
+    background: "rgba(255,255,255,0.05)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+    border: "1px solid rgba(255,255,255,0.09)", borderRadius: 14, padding: "16px 18px",
+    animation: `lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
+  }}>
+    <div style={{ display: "flex", gap: 2, marginBottom: 8 }}>
+      {[0, 1, 2, 3, 4].map(i => <i key={i} className="fas fa-star" style={{ color: C.orange, fontSize: 10 }} />)}
+    </div>
+    <p style={{ color: "rgba(255,255,255,0.78)", fontSize: 13, lineHeight: 1.62, fontFamily: FF, marginBottom: 8, fontStyle: "italic" }}>
+      &ldquo;{quote}&rdquo;
+    </p>
+    <p style={{ color: "rgba(255,255,255,0.42)", fontSize: 11.5, fontFamily: FF, margin: 0 }}>— {name}</p>
+  </div>
+);
 
 // ── Bullet — exact ERP copy ───────────────────────────────────────────────────
 const Bullet = ({ icon, text, delay }: { icon: string; text: string; delay: number }) => (
@@ -168,6 +265,13 @@ export default function LMALoginPage() {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // fire the left-panel stat count-up once, shortly after mount
+  const [statsLive, setStatsLive] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setStatsLive(true), 550);
+    return () => clearTimeout(t);
+  }, []);
+
   const shake = () => { setShaking(true); setTimeout(() => setShaking(false), 520); };
 
   const go = (s: 1 | 2, dir: "fwd" | "bck") => {
@@ -230,7 +334,10 @@ export default function LMALoginPage() {
 
       <style>{`
         @keyframes lmaFadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes lmaOrbPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.09);opacity:0.82} }
+        @keyframes lmaSlideL   { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes lmaOrbPulse { 0%,100%{transform:scale(1) translate(0,0);opacity:1} 50%{transform:scale(1.09) translate(10px,-8px);opacity:0.82} }
+        @keyframes lmaUrgentPing { 0%{transform:scale(1);opacity:0.8} 70%{transform:scale(2.4);opacity:0} 100%{transform:scale(1);opacity:0} }
+        @keyframes lmaGradientShift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
         @keyframes lmaCardIn   { from{opacity:0;transform:perspective(1200px) translateY(28px) scale(0.97)} to{opacity:1;transform:perspective(1200px) translateY(0) scale(1)} }
         @keyframes lmaStepFwd  { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
         @keyframes lmaStepBck  { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
@@ -244,71 +351,95 @@ export default function LMALoginPage() {
         .lma-orb-1    { animation: lmaOrbPulse 8s ease-in-out infinite; }
         .lma-orb-2    { animation: lmaOrbPulse 10s 2.5s ease-in-out infinite; }
         .lma-orb-3    { animation: lmaOrbPulse 12s 5s ease-in-out infinite; }
+        .lma-orb-4    { animation: lmaOrbPulse 9s 1.5s ease-in-out infinite; }
         .lma-input::placeholder { color: #BBBBBB; }
         .lma-input:focus { outline: none; }
         .lma-right { background: ${C.cream}; }
-        .lma-left  { display: flex; }
+        .lma-left  { display: flex; background-size: 200% 200% !important; animation: lmaGradientShift 8s ease-in-out infinite; }
         .lma-role-btn { transition: border-color 180ms, background 180ms, box-shadow 180ms; }
         .lma-role-btn:hover:not(.lma-role-selected) { border-color: rgba(201,136,58,0.45) !important; background: rgba(201,136,58,0.04) !important; }
+        .lma-left::-webkit-scrollbar { width: 6px; }
+        .lma-left::-webkit-scrollbar-thumb { background: rgba(201,136,58,0.25); border-radius: 3px; }
         @media(max-width:991px) {
           .lma-left  { display: none !important; }
           .lma-right { background: linear-gradient(150deg,#1a1208 0%,#0f0a05 100%) !important; }
           .lma-card  { box-shadow: 0 8px 48px rgba(0,0,0,0.52), 0 2px 8px rgba(0,0,0,0.32) !important; }
         }
         @media(prefers-reduced-motion:reduce) {
-          .lma-orb-1,.lma-orb-2,.lma-orb-3,.lma-card { animation: none !important; }
+          .lma-orb-1,.lma-orb-2,.lma-orb-3,.lma-orb-4,.lma-card,.lma-left { animation: none !important; }
           * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
         }
       `}</style>
 
       <div style={{ minHeight: "100vh", display: "flex", fontFamily: FF }}>
 
-        {/* ══ LEFT PANEL — mirrors ERP layout ════════════════════════════════ */}
+        {/* ══ LEFT PANEL — marketing panel ════════════════════════════════════ */}
         <div className="lma-left" style={{
           flex: "0 0 56%", flexDirection: "column", justifyContent: "flex-start",
-          padding: "34px 60px 48px", position: "relative", overflow: "hidden",
+          padding: "34px 60px 40px", position: "relative", overflow: "hidden auto",
           background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
         }}>
-          <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
+          <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
           <span className="lma-orb-1" style={{ position: "absolute", top: "-10%", left: "-8%", width: 540, height: 540, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.15) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
           <span className="lma-orb-2" style={{ position: "absolute", bottom: "-18%", right: "-4%", width: 440, height: 440, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
           <span className="lma-orb-3" style={{ position: "absolute", top: "38%", right: "10%", width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <span className="lma-orb-4" style={{ position: "absolute", top: "62%", left: "18%", width: 180, height: 180, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.07) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
 
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Logo */}
-            <div style={{ marginBottom: 24, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
-              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 75, width: "auto" }} />
+            <div style={{ marginBottom: 20, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
+              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 68, width: "auto" }} />
             </div>
 
-            {/* Chip — same shape as ERP */}
-            <div style={{ marginBottom: 18, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both" }}>
+            {/* Chip */}
+            <div style={{ marginBottom: 16, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.10s both" }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(201,136,58,0.13)", border: "1px solid rgba(201,136,58,0.35)", color: "#E5B460", fontSize: 11, fontWeight: 700, padding: "6px 16px", borderRadius: 20, fontFamily: FF, letterSpacing: "0.12em", textTransform: "uppercase" }}>
                 <i className="fas fa-graduation-cap" style={{ fontSize: 9, color: C.orange }} />
                 Enterprise Learning Platform
               </span>
             </div>
 
-            {/* Headline — same structure as ERP */}
-            <h1 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(28px,2.8vw,44px)", lineHeight: 1.1, marginBottom: 18, fontFamily: FF, letterSpacing: "-0.025em", animation: "lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both" }}>
-              Learn from the<br />
-              <em style={{ color: C.orange, fontStyle: "italic" }}>world's best</em>
+            {/* Headline */}
+            <h1 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(28px,2.7vw,42px)", lineHeight: 1.1, marginBottom: 14, fontFamily: FF, letterSpacing: "-0.025em", animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.15s both" }}>
+              Learn AI Skills That<br />
+              <em style={{ color: C.orange, fontStyle: "italic" }}>Companies Pay Millions For</em>
             </h1>
-            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 14.5, lineHeight: 1.72, maxWidth: 420, marginBottom: 34, fontFamily: FF, animation: "lmaFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.19s both" }}>
-              AI-powered courses, expert instructors, and industry certificates — built to enterprise and global standards.
+            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 14, lineHeight: 1.68, maxWidth: 420, marginBottom: 20, fontFamily: FF, animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.20s both" }}>
+              Join 100+ professionals already building AI systems with XERXEZ Academy.
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 38 }}>
-              <Bullet icon="fas fa-brain"      text="World-class AI & cloud technology courses"  delay={0.25} />
-              <Bullet icon="fas fa-shield-alt" text="ISO 27001 & certified curriculum"            delay={0.30} />
-              <Bullet icon="fas fa-chart-bar"  text="Expert instructors — built what they teach"  delay={0.35} />
+            {/* Social proof */}
+            <div style={{ marginBottom: 24 }}>
+              <SocialProofRow text="Join 100+ learners already enrolled" delay={0.28} />
             </div>
 
-            {/* Stat tiles — exact ERP StatTile component */}
-            <div style={{ display: "flex", gap: 12 }}>
-              <StatTile val="500+" label="Students enrolled" icon="fas fa-users"      color={C.orange} delay={0.41} />
-              <StatTile val="12+"  label="Active courses"    icon="fas fa-book-open"  color="#10b981"  delay={0.47} />
-              <StatTile val="95%"  label="Satisfaction rate" icon="fas fa-star"       color="#3b82f6"  delay={0.53} />
+            {/* Feature bullets */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 22 }}>
+              <Bullet icon="fas fa-user-tie"    text="Learn from practitioners who built real AI systems" delay={0.34} />
+              <Bullet icon="fas fa-certificate" text="Get certified — recognized by 40+ enterprises"      delay={0.44} />
+              <Bullet icon="fas fa-arrow-trend-up" text="Land AI jobs paying 2x your current salary"      delay={0.54} />
+              <Bullet icon="fas fa-infinity"    text="Lifetime access to course updates"                  delay={0.64} />
             </div>
+
+            {/* Urgency banner */}
+            <div style={{ marginBottom: 22 }}>
+              <UrgencyBanner text="Limited seats available — Next batch starts July 2026" delay={0.72} />
+            </div>
+
+            {/* Stat tiles */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 22 }}>
+              <StatTile val="100+"   label="Students Enrolled"  icon="fas fa-users"      delay={0.78} trigger={statsLive} />
+              <StatTile val="5+"     label="Courses Available"  icon="fas fa-book-open"  delay={0.82} trigger={statsLive} />
+              <StatTile val="85%"    label="Job Placement Rate" icon="fas fa-briefcase"  delay={0.86} trigger={statsLive} />
+              <StatTile val="₹4,999" label="Starting Price"     icon="fas fa-tag"        delay={0.90} trigger={statsLive} />
+            </div>
+
+            {/* Testimonial */}
+            <TestimonialCard
+              quote="Got promoted to AI Lead after completing the Full Stack AI Development course."
+              name="Senior Engineer, Leading Tech Company, Bangalore"
+              delay={0.95}
+            />
           </div>
         </div>
 
@@ -475,6 +606,22 @@ export default function LMALoginPage() {
                           style={{ color: C.orange, fontWeight: 700, fontSize: 12.5, fontFamily: FF, textDecoration: "none" }}
                         >Register</Link>
                       </span>
+                      <div style={{ marginTop: 8 }}>
+                        <Link
+                          to="/lma/become-instructor"
+                          style={{
+                            fontSize: 12.5, color: C.orange, fontWeight: 700,
+                            fontFamily: FF, textDecoration: "none",
+                            display: "inline-flex", alignItems: "center", gap: 5,
+                            transition: "gap 180ms, opacity 180ms",
+                          }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.gap = "8px"; (e.currentTarget as HTMLElement).style.opacity = "0.82"; }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.gap = "5px"; (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                        >
+                          Want to teach? Apply as Instructor
+                          <i className="fas fa-arrow-right" style={{ fontSize: 10 }} />
+                        </Link>
+                      </div>
                     </div>
                   ) : (
                     <div style={{ textAlign: "center", marginBottom: 2 }}>

@@ -281,7 +281,6 @@ const ServiceSection2 = () => {
       position: "relative",
       overflow: "hidden",
     }}>
-
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
 
         {/* ── Section header ── */}
