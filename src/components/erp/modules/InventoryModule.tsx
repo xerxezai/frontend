@@ -32,7 +32,7 @@ function DelDlg({ onCancel, onConfirm }: { onCancel:()=>void; onConfirm:()=>void
   );
 }
 
-const defP = { name:'',category:'',unit:'pcs',cost_price:'',sale_price:'',is_active:'true' };
+const defP = { name:'',code:'',category:'',unit:'pcs',cost_price:'',sale_price:'',is_active:'true',initial_quantity:'',warehouse:'' };
 const defW = { name:'',location:'',is_active:'true' };
 const defM = { product:'',warehouse:'',type:'in',quantity:'',notes:'' };
 
@@ -43,6 +43,7 @@ const InventoryModule = () => {
   const products   = useERPList<any>('inventory/products/');
   const warehouses = useERPList<any>('inventory/warehouses/');
   const movements  = useERPList<any>('inventory/stock-movements/');
+  const categories = useERPList<any>('inventory/categories/');
 
   const [modal,    setModal]    = useState<'none'|'addP'|'editP'|'addW'|'editW'|'addM'>('none');
   const [editing,  setEditing]  = useState<any>(null);
@@ -57,9 +58,19 @@ const InventoryModule = () => {
     e.preventDefault();
     try {
       const body: any = { name: pF.name, unit: pF.unit, is_active: pF.is_active==='true', cost_price: Number(pF.cost_price)||0, sale_price: Number(pF.sale_price)||0 };
+      if (pF.code) body.code = pF.code;
       if (pF.category) body.category = Number(pF.category);
-      if (editing) { await products.update(editing.id, body); toast.success('Product updated'); }
-      else { await products.create(body); toast.success('Product created'); }
+      if (editing) {
+        await products.update(editing.id, body);
+        toast.success('Product updated');
+      } else {
+        const created = await products.create(body);
+        const qty = Number(pF.initial_quantity) || 0;
+        if (qty > 0 && pF.warehouse) {
+          await movements.create({ type:'in', product: created.id, warehouse: Number(pF.warehouse), quantity: qty, occurred_at: new Date().toISOString(), notes: 'Initial stock' });
+        }
+        toast.success('Product created');
+      }
       closeModal();
     } catch (e: any) { toast.error(e.message||'Save failed'); }
   };
@@ -131,7 +142,7 @@ const InventoryModule = () => {
 
       {tab==='Products' && <ERPTable title="Products" columns={pCols} data={products.data} loading={products.loading} error={products.error} isAdmin={isAdmin}
         onAdd={()=>{ setPF({...defP}); setEditing(null); setModal('addP'); }}
-        onEdit={r=>{ setEditing(r); setPF({name:r.name||'',category:String(r.category||''),unit:r.unit||'pcs',cost_price:String(r.cost_price||''),sale_price:String(r.sale_price||''),is_active:String(r.is_active??true)}); setModal('editP'); }}
+        onEdit={r=>{ setEditing(r); setPF({name:r.name||'',code:r.code||'',category:String(r.category||''),unit:r.unit||'pcs',cost_price:String(r.cost_price||''),sale_price:String(r.sale_price||''),is_active:String(r.is_active??true),initial_quantity:'',warehouse:''}); setModal('editP'); }}
         onDelete={id=>setDelId(id)} />}
       {tab==='Warehouses' && <ERPTable title="Warehouses" columns={wCols} data={warehouses.data} loading={warehouses.loading} error={warehouses.error} isAdmin={isAdmin}
         onAdd={()=>{ setWF({...defW}); setEditing(null); setModal('addW'); }}
@@ -152,11 +163,24 @@ const InventoryModule = () => {
             <form onSubmit={saveProduct} style={{display:'flex',flexDirection:'column',gap:14}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
                 <div><label style={lbl}>Name *</label><input value={pF.name} onChange={e=>setPF(f=>({...f,name:e.target.value}))} style={inp} required /></div>
+                <div><label style={lbl}>SKU / Product Code</label><input value={pF.code} onChange={e=>setPF(f=>({...f,code:e.target.value}))} style={inp} placeholder="auto-generated if blank" /></div>
+                <div><label style={lbl}>Category</label>
+                  <select value={pF.category} onChange={e=>setPF(f=>({...f,category:e.target.value}))} style={inp}>
+                    <option value="">— None —</option>
+                    {categories.data.map((c:any)=><option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                </div>
                 <div><label style={lbl}>Unit</label><select value={pF.unit} onChange={e=>setPF(f=>({...f,unit:e.target.value}))} style={inp}><option value="pcs">Pieces</option><option value="kg">Kilogram</option><option value="lt">Litre</option><option value="hr">Hour</option><option value="lic">License</option><option value="sub">Subscription</option></select></div>
-                <div><label style={lbl}>Category ID</label><input type="number" value={pF.category} onChange={e=>setPF(f=>({...f,category:e.target.value}))} style={inp} placeholder="optional" /></div>
                 <div><label style={lbl}>Cost Price</label><input type="number" value={pF.cost_price} onChange={e=>setPF(f=>({...f,cost_price:e.target.value}))} style={inp} step="0.01" min="0" /></div>
                 <div><label style={lbl}>Sale Price</label><input type="number" value={pF.sale_price} onChange={e=>setPF(f=>({...f,sale_price:e.target.value}))} style={inp} step="0.01" min="0" /></div>
                 <div><label style={lbl}>Active</label><select value={pF.is_active} onChange={e=>setPF(f=>({...f,is_active:e.target.value}))} style={inp}><option value="true">Yes</option><option value="false">No</option></select></div>
+                {!editing && <div><label style={lbl}>Initial Quantity</label><input type="number" value={pF.initial_quantity} onChange={e=>setPF(f=>({...f,initial_quantity:e.target.value}))} style={inp} step="0.01" min="0" placeholder="0" /></div>}
+                {!editing && <div><label style={lbl}>Warehouse{Number(pF.initial_quantity)>0?' *':''}</label>
+                  <select value={pF.warehouse} onChange={e=>setPF(f=>({...f,warehouse:e.target.value}))} style={inp} required={Number(pF.initial_quantity)>0}>
+                    <option value="">— Select —</option>
+                    {warehouses.data.map((w:any)=><option key={w.id} value={w.id}>{w.name}</option>)}
+                  </select>
+                </div>}
               </div>
               <div style={{display:'flex',gap:10,marginTop:4}}><button type="button" onClick={closeModal} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing?'Update':'Save'}</button></div>
             </form>
