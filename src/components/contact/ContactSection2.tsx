@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiService from '../../services/api';
 
@@ -202,7 +202,6 @@ const ContactSection2 = () => {
       if (result.success) {
         setSent(true); setForm(EMPTY);
         toast.success("Message sent! We'll get back to you within 24 hours.");
-        setTimeout(() => setSent(false), 6000);
       } else {
         const details = (result as any).details;
         const firstErr = details && typeof details === 'object'
@@ -579,10 +578,45 @@ const ContactSection2 = () => {
                   }}>Message Sent!</h3>
                   <p style={{
                     fontFamily:"'DM Sans',sans-serif", fontSize:15, color:"#6B6B6B",
-                    lineHeight:1.7, maxWidth:360,
+                    lineHeight:1.7, maxWidth:360, marginBottom:32,
                   }}>
-                    Thank you for reaching out. Our team will get back to you within 24 hours with a tailored response.
+                    We&apos;ll contact you within 24 hours.
                   </p>
+                  <div style={{ display:"flex", flexDirection:"column", gap:12, width:"100%", maxWidth:300 }}>
+                    <a
+                      href="https://wa.me/971567867451"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display:"flex", alignItems:"center", justifyContent:"center", gap:9,
+                        background:"#25D366", color:"#fff", textDecoration:"none",
+                        fontFamily:"'DM Sans',sans-serif", fontWeight:700, fontSize:14,
+                        padding:"13px 20px", borderRadius:10,
+                        boxShadow:"0 4px 0 rgba(0,0,0,0.12),0 6px 18px rgba(37,211,102,0.30)",
+                        transition:"opacity 150ms ease",
+                      }}
+                      onMouseOver={e=>(e.currentTarget.style.opacity="0.88")}
+                      onMouseOut={e=>(e.currentTarget.style.opacity="1")}
+                    >
+                      <i className="fab fa-whatsapp" style={{ fontSize:18 }} />
+                      Chat on WhatsApp
+                    </a>
+                    <Link
+                      to="/"
+                      style={{
+                        display:"flex", alignItems:"center", justifyContent:"center", gap:8,
+                        background:"none", color:"#6B6B6B", textDecoration:"none",
+                        fontFamily:"'DM Sans',sans-serif", fontWeight:600, fontSize:14,
+                        padding:"12px 20px", borderRadius:10, border:"1px solid rgba(0,0,0,0.12)",
+                        transition:"color 150ms ease, border-color 150ms ease",
+                      }}
+                      onMouseOver={e=>{ e.currentTarget.style.color="#C9883A"; e.currentTarget.style.borderColor="rgba(201,136,58,0.35)"; }}
+                      onMouseOut={e=>{ e.currentTarget.style.color="#6B6B6B"; e.currentTarget.style.borderColor="rgba(0,0,0,0.12)"; }}
+                    >
+                      <i className="fas fa-arrow-left" style={{ fontSize:12 }} />
+                      Back to Home
+                    </Link>
+                  </div>
                 </div>
               )}
 
