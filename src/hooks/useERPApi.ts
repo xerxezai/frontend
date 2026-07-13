@@ -68,6 +68,27 @@ export async function erpUpload(path: string, formData: FormData, method: string
   return data;
 }
 
+/** Authenticated GET for non-JSON responses (CSV/file exports) — triggers a browser download. */
+export async function erpDownload(path: string, filename: string) {
+  const token = getToken();
+  const res = await fetch(`${BASE}/${path}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) {
+    const data = (res.headers.get('content-type') || '').includes('application/json') ? await res.json() : null;
+    throw new Error(data?.detail || `HTTP ${res.status}`);
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 export function useERPList<T>(path: string) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
