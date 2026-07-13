@@ -11,7 +11,7 @@ const SAVE: React.CSSProperties = { background:'linear-gradient(145deg,#e8a84e 0
 const CNCL: React.CSSProperties = { background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRadius:9,padding:'9px 20px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13 };
 
 const qColors: Record<string,{bg:string,color:string}> = { draft:{bg:'#f1f5f9',color:'#64748b'},sent:{bg:'#dbeafe',color:'#1d4ed8'},accepted:{bg:'#d1fae5',color:'#065f46'},rejected:{bg:'#fee2e2',color:'#991b1b'},expired:{bg:'#fef3c7',color:'#92400e'} };
-const oColors: Record<string,{bg:string,color:string}> = { draft:{bg:'#f1f5f9',color:'#64748b'},confirmed:{bg:'#dbeafe',color:'#1d4ed8'},processing:{bg:'#fef3c7',color:'#92400e'},shipped:{bg:'#ede9fe',color:'#6d28d9'},delivered:{bg:'#d1fae5',color:'#065f46'},cancelled:{bg:'#fee2e2',color:'#991b1b'} };
+const oColors: Record<string,{bg:string,color:string}> = { open:{bg:'#f1f5f9',color:'#64748b'},confirmed:{bg:'#dbeafe',color:'#1d4ed8'},fulfilled:{bg:'#d1fae5',color:'#065f46'},cancelled:{bg:'#fee2e2',color:'#991b1b'} };
 
 const sbadge = (val: string, map: Record<string,{bg:string,color:string}>) => {
   const c = map[val] ?? {bg:'#f1f5f9',color:'#64748b'};
@@ -33,8 +33,18 @@ function DelDlg({ onCancel, onConfirm }: { onCancel:()=>void; onConfirm:()=>void
   );
 }
 
-const defQ = { customer:'',status:'draft',valid_until:'',notes:'' };
-const defO = { customer:'',status:'draft',order_date:'',notes:'' };
+const defQ = { number:'',customer:'',issue_date:'',status:'draft',valid_until:'',notes:'' };
+const defO = { number:'',customer:'',order_date:'',status:'open',notes:'' };
+const today = () => new Date().toISOString().slice(0,10);
+
+/** Next sequential number for a prefix, based on the highest existing "PREFIX-NNN" in the list. */
+const nextNumber = (prefix: string, existing: any[]) => {
+  const max = existing.reduce((m, r) => {
+    const match = /^[A-Z]+-(\d+)$/.exec(r.number || '');
+    return match ? Math.max(m, parseInt(match[1], 10)) : m;
+  }, 0);
+  return `${prefix}-${String(max + 1).padStart(3, '0')}`;
+};
 
 const SalesModule = () => {
   const isAdmin = isSuperUser();
@@ -42,6 +52,7 @@ const SalesModule = () => {
 
   const quotations = useERPList<any>('sales/quotations/');
   const orders     = useERPList<any>('sales/orders/');
+  const customers  = useERPList<any>('crm/customers/');
 
   const [showModal, setShowModal] = useState(false);
   const [editing,   setEditing]   = useState<any>(null);
@@ -53,9 +64,14 @@ const SalesModule = () => {
 
   const saveQuot = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!qF.number.trim())  { toast.error('Quotation number is required.'); return; }
+    if (!qF.issue_date)     { toast.error('Issue date is required.'); return; }
+    if (!qF.customer)       { toast.error('Please select a customer.'); return; }
     try {
-      const body: any = { ...qF };
-      if (qF.customer) body.customer = Number(qF.customer); else delete body.customer;
+      const body: any = {
+        number: qF.number.trim(), issue_date: qF.issue_date, customer: Number(qF.customer),
+        status: qF.status, valid_until: qF.valid_until || null, notes: qF.notes,
+      };
       if (editing) { await quotations.update(editing.id, body); toast.success('Quotation updated'); }
       else { await quotations.create(body); toast.success('Quotation created'); }
       close();
@@ -64,9 +80,14 @@ const SalesModule = () => {
 
   const saveOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!oF.number.trim())  { toast.error('Order number is required.'); return; }
+    if (!oF.order_date)     { toast.error('Order date is required.'); return; }
+    if (!oF.customer)       { toast.error('Please select a customer.'); return; }
     try {
-      const body: any = { ...oF };
-      if (oF.customer) body.customer = Number(oF.customer); else delete body.customer;
+      const body: any = {
+        number: oF.number.trim(), order_date: oF.order_date, customer: Number(oF.customer),
+        status: oF.status, notes: oF.notes,
+      };
       if (editing) { await orders.update(editing.id, body); toast.success('Order updated'); }
       else { await orders.create(body); toast.success('Order created'); }
       close();
@@ -107,12 +128,12 @@ const SalesModule = () => {
       </div>
 
       {tab==='Quotations' && <ERPTable title="Quotations" columns={qCols} data={quotations.data} loading={quotations.loading} error={quotations.error} isAdmin={isAdmin}
-        onAdd={()=>{ setQF({...defQ}); setEditing(null); setShowModal(true); }}
-        onEdit={r=>{ setEditing({...r,_t:'q'}); setQF({customer:String(r.customer||''),status:r.status||'draft',valid_until:r.valid_until||'',notes:r.notes||''}); setShowModal(true); }}
+        onAdd={()=>{ setQF({...defQ, number:nextNumber('QT', quotations.data), issue_date:today()}); setEditing(null); setShowModal(true); }}
+        onEdit={r=>{ setEditing({...r,_t:'q'}); setQF({number:r.number||'',customer:String(r.customer||''),issue_date:r.issue_date||'',status:r.status||'draft',valid_until:r.valid_until||'',notes:r.notes||''}); setShowModal(true); }}
         onDelete={id=>setDelId(id)} />}
       {tab==='Orders' && <ERPTable title="Sales Orders" columns={oCols} data={orders.data} loading={orders.loading} error={orders.error} isAdmin={isAdmin}
-        onAdd={()=>{ setOF({...defO}); setEditing(null); setShowModal(true); }}
-        onEdit={r=>{ setEditing({...r,_t:'o'}); setOF({customer:String(r.customer||''),status:r.status||'draft',order_date:r.order_date||'',notes:r.notes||''}); setShowModal(true); }}
+        onAdd={()=>{ setOF({...defO, number:nextNumber('SO', orders.data), order_date:today()}); setEditing(null); setShowModal(true); }}
+        onEdit={r=>{ setEditing({...r,_t:'o'}); setOF({number:r.number||'',customer:String(r.customer||''),status:r.status||'open',order_date:r.order_date||'',notes:r.notes||''}); setShowModal(true); }}
         onDelete={id=>setDelId(id)} />}
 
       {showModal && tab==='Quotations' && (
@@ -123,7 +144,12 @@ const SalesModule = () => {
               <button onClick={close} style={{background:'none',border:'none',cursor:'pointer',color:'#6B6B6B',fontSize:22}}>&times;</button>
             </div>
             <form onSubmit={saveQuot} style={{display:'flex',flexDirection:'column',gap:14}}>
-              <div><label style={lbl}>Customer ID</label><input type="number" value={qF.customer} onChange={e=>setQF(f=>({...f,customer:e.target.value}))} style={inp} /></div>
+              <div><label style={lbl}>Quotation Number</label><input type="text" value={qF.number} onChange={e=>setQF(f=>({...f,number:e.target.value}))} style={inp} /></div>
+              <div><label style={lbl}>Customer</label><select value={qF.customer} onChange={e=>setQF(f=>({...f,customer:e.target.value}))} style={inp}>
+                <option value="">— Select customer —</option>
+                {customers.data.map((c:any)=><option key={c.id} value={c.id}>{c.name}</option>)}
+              </select></div>
+              <div><label style={lbl}>Issue Date</label><input type="date" value={qF.issue_date} onChange={e=>setQF(f=>({...f,issue_date:e.target.value}))} style={inp} /></div>
               <div><label style={lbl}>Status</label><select value={qF.status} onChange={e=>setQF(f=>({...f,status:e.target.value}))} style={inp}><option value="draft">Draft</option><option value="sent">Sent</option><option value="accepted">Accepted</option><option value="rejected">Rejected</option><option value="expired">Expired</option></select></div>
               <div><label style={lbl}>Valid Until</label><input type="date" value={qF.valid_until} onChange={e=>setQF(f=>({...f,valid_until:e.target.value}))} style={inp} /></div>
               <div><label style={lbl}>Notes</label><textarea value={qF.notes} onChange={e=>setQF(f=>({...f,notes:e.target.value}))} style={{...inp,resize:'vertical',minHeight:80}} /></div>
@@ -141,8 +167,12 @@ const SalesModule = () => {
               <button onClick={close} style={{background:'none',border:'none',cursor:'pointer',color:'#6B6B6B',fontSize:22}}>&times;</button>
             </div>
             <form onSubmit={saveOrder} style={{display:'flex',flexDirection:'column',gap:14}}>
-              <div><label style={lbl}>Customer ID</label><input type="number" value={oF.customer} onChange={e=>setOF(f=>({...f,customer:e.target.value}))} style={inp} /></div>
-              <div><label style={lbl}>Status</label><select value={oF.status} onChange={e=>setOF(f=>({...f,status:e.target.value}))} style={inp}><option value="draft">Draft</option><option value="confirmed">Confirmed</option><option value="processing">Processing</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></div>
+              <div><label style={lbl}>Order Number</label><input type="text" value={oF.number} onChange={e=>setOF(f=>({...f,number:e.target.value}))} style={inp} /></div>
+              <div><label style={lbl}>Customer</label><select value={oF.customer} onChange={e=>setOF(f=>({...f,customer:e.target.value}))} style={inp}>
+                <option value="">— Select customer —</option>
+                {customers.data.map((c:any)=><option key={c.id} value={c.id}>{c.name}</option>)}
+              </select></div>
+              <div><label style={lbl}>Status</label><select value={oF.status} onChange={e=>setOF(f=>({...f,status:e.target.value}))} style={inp}><option value="open">Open</option><option value="confirmed">Confirmed</option><option value="fulfilled">Fulfilled</option><option value="cancelled">Cancelled</option></select></div>
               <div><label style={lbl}>Order Date</label><input type="date" value={oF.order_date} onChange={e=>setOF(f=>({...f,order_date:e.target.value}))} style={inp} /></div>
               <div><label style={lbl}>Notes</label><textarea value={oF.notes} onChange={e=>setOF(f=>({...f,notes:e.target.value}))} style={{...inp,resize:'vertical',minHeight:80}} /></div>
               <div style={{display:'flex',gap:10,marginTop:4}}><button type="button" onClick={close} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing?'Update':'Save'}</button></div>
