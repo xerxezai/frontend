@@ -535,11 +535,6 @@ const menuData = [
     hasDropdown: false,
   },
   {
-    title: "Pricing",
-    link: "/pricing",
-    hasDropdown: false,
-  },
-  {
     title: "Contact Us",
     link: "/contact",
     hasDropdown: false,

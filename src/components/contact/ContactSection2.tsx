@@ -16,13 +16,33 @@ const URGENCY = [
   { value: "urgent",   label: "Urgent — Response within 4 hours"  },
   { value: "critical", label: "Critical — Immediate response"      },
 ];
+const COUNTRIES = ["India", "UAE", "Other"];
+const PLAN_INTEREST = ["Starter", "Professional", "Enterprise", "Not sure"];
+const TEAM_SIZES = ["1-10", "11-50", "51-200", "200+"];
+const BUDGET_CURRENCIES = ["INR", "AED", "USD"];
+const BUDGET_RANGES: Record<string, string[]> = {
+  INR: ["Under ₹15,000/mo", "₹15,000 – ₹35,000/mo", "₹35,000+/mo", "Not sure"],
+  AED: ["Under AED 3,000/mo", "AED 3,000 – 7,000/mo", "AED 7,000+/mo", "Not sure"],
+  USD: ["Under $180/mo", "$180 – $420/mo", "$420+/mo", "Not sure"],
+};
+const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
 
 interface F {
   fullName: string; email: string; phone: string; company: string;
   service: string; urgency: string; subject: string; message: string;
+  country: string; planInterest: string; teamSize: string;
+  budgetCurrency: string; budgetRange: string; hearAboutUs: string;
 }
-const EMPTY: F = { fullName:"", email:"", phone:"", company:"", service:"", urgency:"", subject:"", message:"" };
-const TRACKED: (keyof F)[] = ["fullName","email","phone","company","service","urgency","subject","message"];
+const EMPTY: F = {
+  fullName:"", email:"", phone:"", company:"",
+  service:"", urgency:"", subject:"", message:"",
+  country:"", planInterest:"", teamSize:"",
+  budgetCurrency:"", budgetRange:"", hearAboutUs:"",
+};
+const TRACKED: (keyof F)[] = [
+  "fullName","email","phone","company","service","urgency","subject","message",
+  "country","planInterest","teamSize","budgetCurrency","budgetRange","hearAboutUs",
+];
 
 // ── count-up hook ─────────────────────────────────────────────────────────────
 function useCountUp(target: number, duration = 1400, trigger = false) {
@@ -198,6 +218,9 @@ const ContactSection2 = () => {
         full_name: form.fullName, email: form.email, phone: form.phone,
         company: form.company, service: form.service || 'General Inquiry',
         urgency: form.urgency || 'normal', subject: form.subject, message: form.message,
+        country: form.country, plan_interest: form.planInterest, team_size: form.teamSize,
+        budget_currency: form.budgetCurrency, budget_range: form.budgetRange,
+        hear_about_us: form.hearAboutUs,
       });
       if (result.success) {
         setSent(true); setForm(EMPTY);
@@ -774,6 +797,92 @@ const ContactSection2 = () => {
                               fontVariantNumeric:"tabular-nums",
                             }}>{chars} / 1000</span>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* ③ ERP Requirements */}
+                    <div style={{ marginBottom:18 }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
+                        <div style={{
+                          width:26, height:26, borderRadius:"50%",
+                          background:"linear-gradient(145deg,#e8a84e,#C9883A)",
+                          boxShadow:"0 3px 0 rgba(130,80,20,0.50)",
+                          display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0,
+                        }}>
+                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, color:"#fff" }}>3</span>
+                        </div>
+                        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:700, color:"#141413" }}>
+                          ERP Requirements
+                        </span>
+                        <div style={{ flex:1, height:1, background:"#F0EBE4" }} />
+                      </div>
+                      <div className="row g-3">
+                        <div className="col-md-6">
+                          <label style={lbl}>Country</label>
+                          {fw("country","fas fa-globe",
+                            <select value={form.country} style={selBase("country")} disabled={sending}
+                              onChange={e=>set("country",e.target.value)}
+                              onFocus={()=>setFoc("country")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select country…</option>
+                              {COUNTRIES.map(c=><option key={c} value={c}>{c}</option>)}
+                            </select>
+                          )}
+                        </div>
+                        <div className="col-md-6">
+                          <label style={lbl}>Plan Interest</label>
+                          {fw("planInterest","fas fa-layer-group",
+                            <select value={form.planInterest} style={selBase("planInterest")} disabled={sending}
+                              onChange={e=>set("planInterest",e.target.value)}
+                              onFocus={()=>setFoc("planInterest")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select a plan…</option>
+                              {PLAN_INTEREST.map(p=><option key={p} value={p}>{p}</option>)}
+                            </select>
+                          )}
+                        </div>
+                        <div className="col-md-6">
+                          <label style={lbl}>Team Size</label>
+                          {fw("teamSize","fas fa-users",
+                            <select value={form.teamSize} style={selBase("teamSize")} disabled={sending}
+                              onChange={e=>set("teamSize",e.target.value)}
+                              onFocus={()=>setFoc("teamSize")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select team size…</option>
+                              {TEAM_SIZES.map(t=><option key={t} value={t}>{t} employees</option>)}
+                            </select>
+                          )}
+                        </div>
+                        <div className="col-md-6">
+                          <label style={lbl}>How did you hear about us?</label>
+                          {fw("hearAboutUs","fas fa-bullhorn",
+                            <select value={form.hearAboutUs} style={selBase("hearAboutUs")} disabled={sending}
+                              onChange={e=>set("hearAboutUs",e.target.value)}
+                              onFocus={()=>setFoc("hearAboutUs")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select an option…</option>
+                              {HEAR_ABOUT_US.map(h=><option key={h} value={h}>{h}</option>)}
+                            </select>
+                          )}
+                        </div>
+                        <div className="col-md-6">
+                          <label style={lbl}>Budget Currency</label>
+                          {fw("budgetCurrency","fas fa-coins",
+                            <select value={form.budgetCurrency} style={selBase("budgetCurrency")} disabled={sending}
+                              onChange={e=>{ set("budgetCurrency",e.target.value); set("budgetRange",""); }}
+                              onFocus={()=>setFoc("budgetCurrency")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select currency…</option>
+                              {BUDGET_CURRENCIES.map(c=><option key={c} value={c}>{c}</option>)}
+                            </select>
+                          )}
+                        </div>
+                        <div className="col-md-6">
+                          <label style={lbl}>Budget Range</label>
+                          {fw("budgetRange","fas fa-wallet",
+                            <select value={form.budgetRange} style={selBase("budgetRange")} disabled={sending || !form.budgetCurrency}
+                              onChange={e=>set("budgetRange",e.target.value)}
+                              onFocus={()=>setFoc("budgetRange")} onBlur={()=>setFoc(null)}>
+                              <option value="">{form.budgetCurrency ? "Select a range…" : "Select currency first…"}</option>
+                              {(BUDGET_RANGES[form.budgetCurrency] || []).map(r=><option key={r} value={r}>{r}</option>)}
+                            </select>
+                          )}
                         </div>
                       </div>
                     </div>
