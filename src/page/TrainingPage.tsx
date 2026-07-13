@@ -316,12 +316,16 @@ const CoursesSection = () => {
   const headRef = useReveal(0);
   const [apiCourses, setApiCourses] = useState<ApiCourse[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE}/lma/courses/`)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then(d => { const list = Array.isArray(d) ? d : d.results ?? []; setApiCourses(list.slice(0, 4)); })
-      .catch(() => {})
+      .catch(() => setLoadError(true))
       .finally(() => setLoadingCourses(false));
   }, []);
 
@@ -342,6 +346,20 @@ const CoursesSection = () => {
         {loadingCourses ? (
           <div style={{ display:"flex", justifyContent:"center", padding:"40px 0" }}>
             <div style={{ width:32, height:32, border:`3px solid rgba(201,136,58,0.20)`, borderTop:`3px solid ${GOLD}`, borderRadius:"50%", animation:"tp-spin 0.8s linear infinite" }} />
+          </div>
+        ) : loadError ? (
+          <div style={{ textAlign:"center", padding:"48px 20px" }}>
+            <i className="fas fa-exclamation-circle" style={{ fontSize:26, color:"rgba(201,136,58,0.55)", marginBottom:14, display:"block" }} />
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"rgba(20,20,19,0.55)", margin:0 }}>
+              Couldn&apos;t load courses right now. Please refresh, or browse the full catalog below.
+            </p>
+          </div>
+        ) : apiCourses.length === 0 ? (
+          <div style={{ textAlign:"center", padding:"48px 20px" }}>
+            <i className="fas fa-book-open" style={{ fontSize:26, color:"rgba(201,136,58,0.45)", marginBottom:14, display:"block" }} />
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"rgba(20,20,19,0.55)", margin:0 }}>
+              New courses are on the way — check back soon.
+            </p>
           </div>
         ) : (
           <div className="row g-4 justify-content-center">
