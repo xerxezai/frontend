@@ -96,16 +96,17 @@ export function PricingCard({ plan, currency, billing, compact = false }: {
         )}
         <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
           {isCustom ? (
-            <span style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 700, fontSize: compact ? 30 : 38, color: GOLD, lineHeight: 1 }}>
+            <span style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 800, fontSize: compact ? 28 : 36, color: GOLD, lineHeight: 1 }}>
               {amount}
             </span>
           ) : (
             <span style={{ display: "inline-flex", alignItems: "baseline", gap: 3 }}>
-              {/* Currency symbol rendered in DM Sans — Cormorant Garamond has no ₹ glyph and falls back to a mismatched font. */}
+              {/* Both symbol and digits use DM Sans — Cormorant Garamond has no ₹ glyph (falls back to a
+                  mismatched font) and its "1" reads as a capital "I" at display size (e.g. ₹15,000 → ₹I5,000). */}
               <span style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: compact ? 20 : 24, color: CREAM, lineHeight: 1 }}>
                 {symbol}
               </span>
-              <span style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 700, fontSize: compact ? 30 : 38, color: CREAM, lineHeight: 1 }}>
+              <span style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 800, fontSize: compact ? 28 : 36, color: CREAM, lineHeight: 1 }}>
                 {amount}
               </span>
             </span>

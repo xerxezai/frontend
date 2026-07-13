@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiService from '../../services/api';
 
@@ -127,7 +128,12 @@ const InfoRow = ({ icon, label, value, href, delay }: {
 
 // ── main ─────────────────────────────────────────────────────────────────────
 const ContactSection2 = () => {
-  const [form, setForm]   = useState<F>(EMPTY);
+  const [searchParams] = useSearchParams();
+  const [form, setForm]   = useState<F>(() => {
+    const plan = searchParams.get("plan");
+    if (!plan) return EMPTY;
+    return { ...EMPTY, message: `I am interested in the ${plan} plan for XERXEZ ERP. Please contact me with more details.` };
+  });
   const [foc, setFoc]     = useState<string|null>(null);
   const [sending, setSend] = useState(false);
   const [sent, setSent]   = useState(false);

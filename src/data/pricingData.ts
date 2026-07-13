@@ -26,7 +26,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       "5GB Storage",
     ],
     cta: "Get Started",
-    ctaLink: "/contact",
+    ctaLink: "/contact?plan=Starter&currency=INR",
   },
   {
     name: "Professional",
@@ -45,7 +45,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       "Custom Reports",
     ],
     cta: "Get Started",
-    ctaLink: "/contact",
+    ctaLink: "/contact?plan=Professional&currency=INR",
   },
   {
     name: "Enterprise",
@@ -64,7 +64,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       "On-premise deployment option",
     ],
     cta: "Contact Us",
-    ctaLink: "/contact",
+    ctaLink: "/contact?plan=Enterprise",
   },
 ];
 
