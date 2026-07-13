@@ -21,6 +21,7 @@ export function CurrencyToggle({ currency, onChange }: { currency: Currency; onC
     <div style={{ display: "inline-flex", gap: 3, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 13, padding: 5 }}>
       <button type="button" style={btn(currency === "INR")} onClick={() => onChange("INR")}>🇮🇳 INR (₹)</button>
       <button type="button" style={btn(currency === "AED")} onClick={() => onChange("AED")}>🇦🇪 AED (د.إ)</button>
+      <button type="button" style={btn(currency === "USD")} onClick={() => onChange("USD")}>🌍 USD ($)</button>
     </div>
   );
 }
@@ -51,7 +52,8 @@ export function BillingToggle({ billing, onChange }: { billing: Billing; onChang
 export function PricingCard({ plan, currency, billing, compact = false }: {
   plan: PricingPlan; currency: Currency; billing: Billing; compact?: boolean;
 }) {
-  const { price, suffix, strike } = formatPrice(plan, currency, billing);
+  const { symbol, amount, suffix, strike } = formatPrice(plan, currency, billing);
+  const isCustom = amount === "Custom";
   const isPopular = !!plan.badge;
   const featuresToShow = compact ? plan.features.slice(0, 3) : plan.features;
   const hiddenCount = compact ? plan.features.length - featuresToShow.length : 0;
@@ -93,9 +95,21 @@ export function PricingCard({ plan, currency, billing, compact = false }: {
           </div>
         )}
         <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
-          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 700, fontSize: compact ? 30 : 38, color: price === "Custom" ? GOLD : CREAM, lineHeight: 1 }}>
-            {price}
-          </span>
+          {isCustom ? (
+            <span style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 700, fontSize: compact ? 30 : 38, color: GOLD, lineHeight: 1 }}>
+              {amount}
+            </span>
+          ) : (
+            <span style={{ display: "inline-flex", alignItems: "baseline", gap: 3 }}>
+              {/* Currency symbol rendered in DM Sans — Cormorant Garamond has no ₹ glyph and falls back to a mismatched font. */}
+              <span style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: compact ? 20 : 24, color: CREAM, lineHeight: 1 }}>
+                {symbol}
+              </span>
+              <span style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 700, fontSize: compact ? 30 : 38, color: CREAM, lineHeight: 1 }}>
+                {amount}
+              </span>
+            </span>
+          )}
           {suffix && <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: MUTED }}>{suffix}</span>}
         </div>
       </div>
