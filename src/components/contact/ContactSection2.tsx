@@ -132,7 +132,12 @@ const ContactSection2 = () => {
   const [form, setForm]   = useState<F>(() => {
     const plan = searchParams.get("plan");
     if (!plan) return EMPTY;
-    return { ...EMPTY, message: `I am interested in the ${plan} plan for XERXEZ ERP. Please contact me with more details.` };
+    return {
+      ...EMPTY,
+      service: "AI-Powered ERP",
+      subject: `Enquiry about ${plan} Plan`,
+      message: `I am interested in the ${plan} plan for XERXEZ ERP. Please contact me with more details.`,
+    };
   });
   const [foc, setFoc]     = useState<string|null>(null);
   const [sending, setSend] = useState(false);
