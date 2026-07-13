@@ -9,6 +9,13 @@ import { motion } from "framer-motion";
 import XzHeroSection from "../components/common/XzHeroSection";
 import type { XzHeroStat } from "../components/common/XzHeroSection";
 import CustomLayout from "../components/layout/CustomLayout";
+import {
+  TrustSignalsBar,
+  PainPointsSection,
+  ResultsSection,
+  TestimonialSection,
+  FloatingMobileCTA,
+} from "../components/common/ServicePageAddons";
 
 // ── Brand tokens (identical to AIERPPage) ─────────────────────────────────────
 const OG    = "#C9883A";
@@ -167,6 +174,8 @@ export interface ServiceFAQ      { q: string; a: string; }
 export interface ServicePageConfig {
   seoTitle:   string;
   seoDesc:    string;
+  /** Exact value from ContactSection2's SERVICES list — pre-selects "Service of Interest" on /contact. */
+  serviceName: string;
   badgeText:  string;
   headline:   React.ReactNode;
   description: string;
@@ -189,6 +198,10 @@ export interface ServicePageConfig {
   ctaTitle:   React.ReactNode;
   ctaDesc:    string;
   ctaTags:    string[];
+  /** Optional conversion add-ons — sections only render when data is provided. */
+  painPoints?:  string[];
+  resultStats?: { val: string; label: string }[];
+  testimonial?: { quote: string; author: string };
 }
 
 // ── SEO helper ────────────────────────────────────────────────────────────────
@@ -368,7 +381,7 @@ const FAQSection = ({ title, faqs }: { title: React.ReactNode; faqs: ServiceFAQ[
 };
 
 // 6. CTA (dark — identical to AIERPPage CTASection)
-const CTASection = ({ title, desc, tags }: { title: React.ReactNode; desc: string; tags: string[] }) => (
+const CTASection = ({ title, desc, tags, contactHref }: { title: React.ReactNode; desc: string; tags: string[]; contactHref: string }) => (
   <section style={{ padding: "100px 0", background: DBG, position: "relative", overflow: "hidden" }}>
     <div aria-hidden="true" style={{ position: "absolute", top: -80, left: "10%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.11) 0%,transparent 70%)", pointerEvents: "none" }} />
     <div aria-hidden="true" style={{ position: "absolute", bottom: -100, right: "12%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle,rgba(204,120,92,0.09) 0%,transparent 70%)", pointerEvents: "none" }} />
@@ -406,7 +419,7 @@ const CTASection = ({ title, desc, tags }: { title: React.ReactNode; desc: strin
                 Get a tailored briefing pack with solution architecture, timeline, and cost estimate for your requirements.
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <Link to="/contact" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)", color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 24px", borderRadius: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.28)" }}>
+                <Link to={contactHref} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)", color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 24px", borderRadius: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.28)" }}>
                   Request A Demo <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
                 </Link>
                 <a href="mailto:info@xerxez.com?subject=Enterprise Sales Enquiry" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: CREAM, color: DARK, padding: "13px 24px", borderRadius: 10, fontWeight: 700, fontSize: 15, border: "1px solid rgba(0,0,0,0.10)", textDecoration: "none", fontFamily: "'DM Sans',sans-serif" }}>
@@ -431,6 +444,7 @@ const CTASection = ({ title, desc, tags }: { title: React.ReactNode; desc: strin
 // ════════════════════════════════════════════════════════════════════════════
 const ServicePageTemplate: React.FC<{ config: ServicePageConfig }> = ({ config }) => {
   useSEO(config.seoTitle, config.seoDesc);
+  const contactHref = `/contact?service=${encodeURIComponent(config.serviceName)}`;
   return (
     <CustomLayout>
       <XzHeroSection
@@ -438,7 +452,7 @@ const ServicePageTemplate: React.FC<{ config: ServicePageConfig }> = ({ config }
         headline={config.headline}
         description={config.description}
         ctas={[
-          { label: "Request a Demo",          to: "/contact",                                             primary: true  },
+          { label: "Request a Demo",          to: contactHref,                                             primary: true  },
           { label: "Contact Enterprise Sales", href: "mailto:info@xerxez.com?subject=Enterprise Enquiry", primary: false },
         ]}
         stats={config.heroStats}
@@ -446,12 +460,17 @@ const ServicePageTemplate: React.FC<{ config: ServicePageConfig }> = ({ config }
         cascadeB={config.cascadeB}
         right={config.heroRight}
       />
+      <TrustSignalsBar />
       <TrustBar items={config.trustBar} />
+      {config.painPoints && <PainPointsSection points={config.painPoints} href={contactHref} />}
       <FeaturesSection label={config.featureLabel} title={config.featureTitle} features={config.features} />
       <ProcessSection  label={config.processLabel} title={config.processTitle} steps={config.steps} />
+      <ResultsSection stats={config.resultStats ?? config.heroStats.map(s => ({ val: s.val ?? `${s.raw ?? ""}${s.suffix ?? ""}`, label: s.label }))} />
       <UseCasesSection label={config.useCaseLabel} title={config.useCaseTitle} useCases={config.useCases} />
+      {config.testimonial && <TestimonialSection quote={config.testimonial.quote} author={config.testimonial.author} />}
       <FAQSection title={config.faqTitle} faqs={config.faqs} />
-      <CTASection title={config.ctaTitle} desc={config.ctaDesc} tags={config.ctaTags} />
+      <CTASection title={config.ctaTitle} desc={config.ctaDesc} tags={config.ctaTags} contactHref={contactHref} />
+      <FloatingMobileCTA href={contactHref} />
     </CustomLayout>
   );
 };

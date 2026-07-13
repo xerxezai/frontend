@@ -12,6 +12,7 @@ const heroStats = [
 const config: ServicePageConfig = {
   seoTitle: "Custom Software Development Company India, Dubai & Abu Dhabi — XERXEZ",
   seoDesc:  "Custom enterprise software development by XERXEZ. Web apps, APIs, integrations built for scale. Serving businesses across India, Dubai & Abu Dhabi UAE.",
+  serviceName: "Software Development",
   badgeText: "Software Development · Custom Enterprise",
 
   headline: (
@@ -101,6 +102,17 @@ const config: ServicePageConfig = {
   ),
   ctaDesc: "Tell us what you're trying to build. XERXEZ will scope it honestly, build it to spec, and deliver it on time — with the test coverage and documentation to prove it works.",
   ctaTags: ["Full IP Ownership", "89% On-Time Delivery", "Agile & Transparent"],
+
+  painPoints: [
+    "Watching a fixed-price project blow past its deadline with no clear reason why?",
+    "Getting handed a codebase you don't fully own the rights to?",
+    "Off-the-shelf software forcing your team to change how you actually work?",
+    "A dev agency that disappears the moment the invoice is paid?",
+  ],
+  testimonial: {
+    quote: "XERXEZ delivered our platform on the date they committed to at kickoff — six months later, same date. We've since brought them back for two more projects.",
+    author: "Head of Product, B2B Marketplace",
+  },
 };
 
 const SoftwareDevPage = () => (

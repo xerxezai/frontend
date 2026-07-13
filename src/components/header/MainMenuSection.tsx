@@ -18,8 +18,9 @@ const MainMenuSection = () => {
   const isActive = (link: string) =>
     link === "/" ? pathname === "/" : pathname === link || pathname.startsWith(link + "/");
 
-  const subLinkStyle = (key: string): React.CSSProperties => ({
-    color: hovered === key ? LINK_HOVER : LINK_DEFAULT,
+  const subLinkStyle = (key: string, active: boolean): React.CSSProperties => ({
+    color: active || hovered === key ? LINK_HOVER : LINK_DEFAULT,
+    fontWeight: active ? 700 : 400,
     textDecoration: "none",
     display: "block",
   });
@@ -90,7 +91,7 @@ const MainMenuSection = () => {
                           >
                             <Link
                               to={subMenuItem.link}
-                              style={subLinkStyle(key)}
+                              style={subLinkStyle(key, isActive(subMenuItem.link))}
                               onMouseEnter={() => setHovered(key)}
                               onMouseLeave={() => setHovered(null)}
                             >
@@ -117,7 +118,7 @@ const MainMenuSection = () => {
                                     <li key={nestedKey}>
                                       <Link
                                         to={nestedSubItem.link}
-                                        style={subLinkStyle(nestedKey)}
+                                        style={subLinkStyle(nestedKey, isActive(nestedSubItem.link))}
                                         onMouseEnter={() => setHovered(nestedKey)}
                                         onMouseLeave={() => setHovered(null)}
                                       >

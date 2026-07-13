@@ -220,15 +220,21 @@ const InfoRow = ({ icon, label, value, href, delay }: {
 // ── main ─────────────────────────────────────────────────────────────────────
 const ContactSection2 = () => {
   const [searchParams] = useSearchParams();
+  const urlService = searchParams.get("service");
+  const preselectedService = urlService && SERVICES.includes(urlService) ? urlService : null;
+  const [showServiceBanner, setShowServiceBanner] = useState(!!preselectedService && !searchParams.get("plan"));
   const [form, setForm]   = useState<F>(() => {
     const plan = searchParams.get("plan");
-    if (!plan) return EMPTY;
-    return {
-      ...EMPTY,
-      service: "AI-Powered ERP",
-      planInterest: PLAN_INTEREST.includes(plan) ? plan : "",
-      message: `I am interested in the ${plan} plan for XERXEZ ERP. Please contact me with more details.`,
-    };
+    if (plan) {
+      return {
+        ...EMPTY,
+        service: "AI-Powered ERP",
+        planInterest: PLAN_INTEREST.includes(plan) ? plan : "",
+        message: `I am interested in the ${plan} plan for XERXEZ ERP. Please contact me with more details.`,
+      };
+    }
+    if (preselectedService) return { ...EMPTY, service: preselectedService };
+    return EMPTY;
   });
   const [foc, setFoc]     = useState<string|null>(null);
   const [sending, setSend] = useState(false);
@@ -269,7 +275,10 @@ const ContactSection2 = () => {
     el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
   };
 
-  const set = useCallback((k: keyof F, v: string) => setForm(p => ({...p,[k]:v})), []);
+  const set = useCallback((k: keyof F, v: string) => {
+    setForm(p => ({...p,[k]:v}));
+    if (k === "service") setShowServiceBanner(false);
+  }, []);
   const toggleTopic = useCallback((topic: string) => {
     setForm(p => {
       const cur = p.topicsOfInterest.split(", ").filter(Boolean);
@@ -736,6 +745,20 @@ const ContactSection2 = () => {
 
               {!sent && (
                 <>
+                  {/* pre-selected service banner */}
+                  {showServiceBanner && preselectedService && (
+                    <div style={{
+                      display:"flex", alignItems:"center", gap:10,
+                      background:"rgba(201,136,58,0.12)", border:"1px solid rgba(201,136,58,0.30)",
+                      borderRadius:10, padding:"11px 16px", marginBottom:18,
+                    }}>
+                      <i className="fas fa-check-circle" style={{ color:"#C9883A", fontSize:14, flexShrink:0 }} />
+                      <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:13, color:"#5a5650" }}>
+                        You are enquiring about: <strong style={{ color:"#141413" }}>{preselectedService}</strong>
+                      </span>
+                    </div>
+                  )}
+
                   {/* progress bar */}
                   <div style={{ marginBottom:18 }}>
                     <div style={{
@@ -1027,7 +1050,7 @@ const ContactSection2 = () => {
                       </button>
 
                       {/* secondary clear button */}
-                      <button type="button" onClick={() => setForm(EMPTY)} disabled={sending}
+                      <button type="button" onClick={() => { setForm(EMPTY); setShowServiceBanner(false); }} disabled={sending}
                         style={{
                           height:52, padding:"0 22px",
                           background:"#fafaf8", color:"#7a746e",

@@ -12,6 +12,7 @@ const heroStats = [
 const config: ServicePageConfig = {
   seoTitle: "Quantum Computing Services India, Dubai & Abu Dhabi — XERXEZ",
   seoDesc:  "XERXEZ quantum computing solutions for enterprise innovation in India, Dubai & Abu Dhabi UAE.",
+  serviceName: "Quantum Computing",
   badgeText: "Quantum Computing · Advanced R&D",
 
   headline: (
@@ -101,6 +102,17 @@ const config: ServicePageConfig = {
   ),
   ctaDesc: "We will be honest about what quantum can and cannot do for you today. If your problem is quantum-advantageous, XERXEZ will build the solution. If classical AI is the right tool right now, we will tell you that instead.",
   ctaTags: ["IBM & AWS Quantum Partner", "Post-Quantum Crypto", "Honest Feasibility Assessment"],
+
+  painPoints: [
+    "Not knowing whether your problem is actually quantum-advantageous, or just quantum-hyped?",
+    "Classical solvers timing out on optimisation problems that keep growing?",
+    "Encrypted data today that adversaries could be harvesting to decrypt once quantum computers mature?",
+    "Vendors selling quantum roadmaps with no classical baseline to prove the advantage is real?",
+  ],
+  testimonial: {
+    quote: "XERXEZ told us upfront that half our use cases weren't ready for quantum yet — then delivered a 10x speedup on the one that was. That honesty is why we kept the partnership going.",
+    author: "Director of R&D, Materials Science Firm",
+  },
 };
 
 const QuantumPage = () => (

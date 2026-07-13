@@ -4,6 +4,12 @@ import { motion } from "framer-motion";
 import XzHeroSection from "../components/common/XzHeroSection";
 import CustomLayout from "../components/layout/CustomLayout";
 import SEO from "../components/seo/SEO";
+import {
+  TrustSignalsBar,
+  PainPointsSection,
+  TestimonialSection,
+  FloatingMobileCTA,
+} from "../components/common/ServicePageAddons";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const OG      = "#C9883A";
@@ -283,6 +289,18 @@ const ERPHub = () => {
 const ERP_CA = ["Finance & Accounting","Human Resources","Supply Chain","CRM & Sales","AI Analytics Engine","Inventory Management","Procurement","Compliance & Audit","Logistics & Dispatch"];
 const ERP_CB = ["40% Cost Reduction","60% Faster Decisions","99.9% Uptime SLA","Zero Migration Risk","8-Week AI Upgrade","Full IP Ownership","$500K+ Client Savings","Enterprise Grade","ISO 27001 Aligned"];
 
+const ERP_PAIN_POINTS = [
+  "Running finance, HR, and inventory in three systems that don't talk to each other?",
+  "Waiting days for a report that should take minutes, because someone has to reconcile spreadsheets first?",
+  "Watching a costly SAP or Oracle rollout stall halfway through a migration?",
+  "Making six-figure procurement or staffing decisions on data that's already a week old?",
+];
+const ERP_TESTIMONIAL = {
+  quote: "We had SAP running for a decade and dreaded a rip-and-replace. XERXEZ's AI layer went live in ten weeks with zero downtime — our exec team now sees demand forecasts we never had visibility into before.",
+  author: "CFO, Manufacturing Group",
+};
+const ERP_CONTACT_HREF = `/contact?service=${encodeURIComponent("AI-Powered ERP")}`;
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 1. HERO
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -299,7 +317,7 @@ const Hero = () => (
     }
     description="Build a new AI ERP from scratch, or layer intelligent automation onto your existing SAP, Oracle, or Dynamics — zero migration risk, zero downtime."
     ctas={[
-      { label: "Request a Demo",         to: "/contact",                                                              primary: true  },
+      { label: "Request a Demo",         to: ERP_CONTACT_HREF,                                                       primary: true  },
       { label: "Contact Enterprise Sales", href: "mailto:info@xerxez.com?subject=Enterprise ERP Enquiry",            primary: false },
     ]}
     stats={[
@@ -467,7 +485,7 @@ const ComparisonTable = () => (
 
       <FI delay={0.25}><div className="row g-3 mt-4">
         <div className="col-md-6">
-          <Link to="/contact?type=build" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)", color: "#fff", padding: "14px 24px", borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.30)" }}>
+          <Link to={`${ERP_CONTACT_HREF}&type=build`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)", color: "#fff", padding: "14px 24px", borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.30)" }}>
             Start a Build Consultation <i className="far fa-arrow-right" style={{ fontSize: 13 }} />
           </Link>
         </div>
@@ -829,7 +847,7 @@ const CTASection = () => (
                 Get a tailored briefing pack with architecture recommendations, timeline, and cost estimate for your sector.
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <Link to="/contact" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)", color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 24px", borderRadius: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.28)" }}>
+                <Link to={ERP_CONTACT_HREF} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)", color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 24px", borderRadius: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.28)" }}>
                   Request A Demo <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
                 </Link>
                 <a href="mailto:info@xerxez.com?subject=Enterprise ERP Sales Enquiry" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: CREAM, color: DARK, padding: "13px 24px", borderRadius: 10, fontWeight: 700, fontSize: 15, border: "1px solid rgba(0,0,0,0.10)", textDecoration: "none", fontFamily: "'DM Sans',sans-serif" }}>
@@ -873,14 +891,18 @@ const AIERPPage = () => {
       `}</style>
       <CustomLayout>
         <Hero />
+        <TrustSignalsBar />
+        <PainPointsSection points={ERP_PAIN_POINTS} href={ERP_CONTACT_HREF} />
         <TwoTracks />
         <ComparisonTable />
         <ROISection />
         <Modules />
         <ClientLogos />
         <Process />
+        <TestimonialSection quote={ERP_TESTIMONIAL.quote} author={ERP_TESTIMONIAL.author} />
         <FAQSection />
         <CTASection />
+        <FloatingMobileCTA href={ERP_CONTACT_HREF} />
       </CustomLayout>
     </>
   );

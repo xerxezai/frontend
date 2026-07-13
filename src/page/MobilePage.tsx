@@ -12,6 +12,7 @@ const heroStats = [
 const config: ServicePageConfig = {
   seoTitle: "Mobile App Development India, Dubai & Abu Dhabi UAE — XERXEZ",
   seoDesc:  "Custom mobile application development by XERXEZ. iOS, Android and cross-platform apps for enterprises in India, Dubai & Abu Dhabi.",
+  serviceName: "Mobile Application",
   badgeText: "Mobile Applications · iOS & Android",
 
   headline: (
@@ -101,6 +102,17 @@ const config: ServicePageConfig = {
   ),
   ctaDesc: "Tell us about your mobile product idea or internal tool requirement. XERXEZ will scope it, design it, build it, and get it live — with the 4.8-star quality standard we've maintained across 100+ enterprise apps.",
   ctaTags: ["iOS & Android Native", "App Store Experts", "OWASP Mobile Security"],
+
+  painPoints: [
+    "An app that looks fine in the demo but crashes on real devices in the field?",
+    "App Store rejections eating weeks off your launch timeline?",
+    "Cross-platform code that quietly diverges into two apps to maintain?",
+    "A 2-star average because nobody tested past the happy path?",
+  ],
+  testimonial: {
+    quote: "Our field team's app used to crash weekly out in low-signal areas. XERXEZ rebuilt it offline-first — zero crash reports since launch, and our store rating jumped to 4.8.",
+    author: "Operations Lead, Field Services Company",
+  },
 };
 
 const MobilePage = () => (

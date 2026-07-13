@@ -19,6 +19,8 @@ const CREAM = "#F8F4EE";
 const API_BASE = import.meta.env.VITE_API_BASE_URL
   ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 
+const TRAINING_CONTACT_HREF = `/contact?service=${encodeURIComponent("AI Training & Consulting")}`;
+
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 interface Lesson {
   id: number; title: string; duration: number; order: number; is_free_preview: boolean;
@@ -796,7 +798,7 @@ const AITrainingPage = () => {
               <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: "0 0 10px", fontFamily: "'DM Sans', sans-serif" }}>
                 See how top teams master AI faster with XERXEZ
               </h3>
-              <Link to="/contact" style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}>
+              <Link to={TRAINING_CONTACT_HREF} style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}>
                 Request enterprise training →
               </Link>
             </div>
@@ -825,7 +827,7 @@ const AITrainingPage = () => {
                 <li>Build deep understanding of production AI systems</li>
                 <li>Earn XERXEZ AI certification recognised at 40+ organisations</li>
               </ul>
-              <Link to="/contact" style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}>
+              <Link to={TRAINING_CONTACT_HREF} style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}>
                 Learn more about enterprise plans →
               </Link>
             </div>

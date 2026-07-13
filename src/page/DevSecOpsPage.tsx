@@ -12,6 +12,7 @@ const heroStats = [
 const config: ServicePageConfig = {
   seoTitle: "DevSecOps & MLOps Solutions India, Dubai & Abu Dhabi — XERXEZ",
   seoDesc:  "XERXEZ DevSecOps and MLOps solutions for enterprises in India, Dubai & Abu Dhabi UAE. Automate pipelines, secure deployments and scale ML models.",
+  serviceName: "DevSecOps Pipelines",
   badgeText: "DevSecOps · Secure by Design",
 
   headline: (
@@ -101,6 +102,17 @@ const config: ServicePageConfig = {
   ),
   ctaDesc: "Whether you're starting from scratch or hardening an existing pipeline, XERXEZ delivers DevSecOps infrastructure that your security and compliance teams will sign off on — and your engineering team will actually enjoy using.",
   ctaTags: ["ISO 27001 Ready", "Zero-Trust Architecture", "24hr CVE Patching"],
+
+  painPoints: [
+    "Security scans running so late they block releases nobody can fix in time?",
+    "Manual evidence collection eating a week every time an audit comes around?",
+    "Deployments still needing a human to babysit them at 2am?",
+    "Secrets and credentials scattered across scripts, configs, and Slack messages?",
+  ],
+  testimonial: {
+    quote: "We went from three-week release cycles to two days, with zero security incidents since go-live. The audit evidence used to take a week to assemble — now it's automatic.",
+    author: "IT Director, Logistics Company",
+  },
 };
 
 const DevSecOpsPage = () => (

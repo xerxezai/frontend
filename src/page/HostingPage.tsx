@@ -12,6 +12,7 @@ const heroStats = [
 const config: ServicePageConfig = {
   seoTitle: "Web & Mobile Hosting India, Dubai & Abu Dhabi UAE — XERXEZ",
   seoDesc:  "Reliable, secure web and mobile hosting by XERXEZ. 99.9% uptime guaranteed for enterprises in India, Dubai & Abu Dhabi UAE.",
+  serviceName: "Web & Mobile Hosting",
   badgeText: "Web & Mobile Hosting · Managed Infrastructure",
 
   headline: (
@@ -101,6 +102,17 @@ const config: ServicePageConfig = {
   ),
   ctaDesc: "Move your application to XERXEZ managed hosting and spend your engineering time on product, not infrastructure. 99.9% uptime SLA. Sub-100ms globally. 24/7 support included.",
   ctaTags: ["99.9% Uptime SLA", "Financial Credits Backed", "24/7 Managed Support"],
+
+  painPoints: [
+    "Getting paged at 2am because a traffic spike nobody planned for took the site down?",
+    "An uptime SLA on paper that nobody actually enforces with credits?",
+    "Slow page loads for users outside your primary hosting region?",
+    "A single engineer who's the only one who knows how production infrastructure actually works?",
+  ],
+  testimonial: {
+    quote: "We moved off our old host after a Black Friday outage cost us six figures. XERXEZ's auto-scaling handled this year's traffic spike without a single alert firing.",
+    author: "CTO, E-Commerce Platform",
+  },
 };
 
 const HostingPage = () => (

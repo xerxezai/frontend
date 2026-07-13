@@ -12,6 +12,7 @@ const heroStats = [
 const config: ServicePageConfig = {
   seoTitle: "Cloud Services & Storage Solutions India, Dubai & Abu Dhabi — XERXEZ",
   seoDesc:  "Enterprise cloud infrastructure, storage and migration by XERXEZ. Scalable, secure cloud solutions for businesses in India, Dubai & Abu Dhabi UAE.",
+  serviceName: "Cloud Infrastructure",
   badgeText: "Cloud Infrastructure · Multi-Cloud",
 
   headline: (
@@ -101,6 +102,17 @@ const config: ServicePageConfig = {
   ),
   ctaDesc: "Whether you're migrating from on-premise, consolidating multi-cloud spend, or architecting for your next phase of growth, XERXEZ delivers cloud infrastructure that performs, scales, and costs less than you expect.",
   ctaTags: ["AWS · Azure · GCP Certified", "Zero Vendor Lock-In", "FinOps Practice"],
+
+  painPoints: [
+    "Opening the monthly cloud bill and not recognising half the line items?",
+    "Over-provisioned instances running 24/7 for traffic that only spikes twice a year?",
+    "No real disaster recovery plan beyond \"we have backups somewhere\"?",
+    "Locked into one provider's pricing with no leverage to negotiate or migrate?",
+  ],
+  testimonial: {
+    quote: "XERXEZ cut our AWS bill by 40% in the first quarter without touching performance. Our disaster recovery test — the first we'd ever actually run — completed in under 15 minutes.",
+    author: "Head of Infrastructure, Retail Enterprise",
+  },
 };
 
 const CloudPage = () => (

@@ -12,6 +12,7 @@ const heroStats = [
 const config: ServicePageConfig = {
   seoTitle: "Software Consulting Services India, Dubai & Abu Dhabi UAE — XERXEZ",
   seoDesc:  "Expert software consulting by XERXEZ for enterprise digital transformation across India, Dubai & Abu Dhabi.",
+  serviceName: "Software Consulting",
   badgeText: "Software Consulting · Strategic Advisory",
 
   headline: (
@@ -101,6 +102,17 @@ const config: ServicePageConfig = {
   ),
   ctaDesc: "Whether you need a full technology audit, an architecture review, interim engineering leadership, or a vendor evaluation, XERXEZ gives you honest advice from engineers with no commercial agenda.",
   ctaTags: ["No Vendor Affiliations", "Engineers Who Build", "80% Client Retention"],
+
+  painPoints: [
+    "Getting the same recommendation your vendor happens to sell?",
+    "Paying consultants who've never shipped the architecture they're proposing?",
+    "Watching six-figure technology bets get made with no independent validation?",
+    "Losing engineering velocity to a system nobody on your team fully understands?",
+  ],
+  testimonial: {
+    quote: "XERXEZ's audit found the real bottleneck in six weeks — three vendors before them missed it entirely. Their roadmap paid for itself within the quarter.",
+    author: "VP Engineering, Fintech Platform",
+  },
 };
 
 const ConsultingPage = () => (
