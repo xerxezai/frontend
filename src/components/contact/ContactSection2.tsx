@@ -29,7 +29,15 @@ const CLOUD_PROVIDERS = ["AWS", "Azure", "GCP", "No preference"];
 const YES_NO = ["Yes", "No"];
 const PROJECT_TYPES = ["Web", "Mobile", "Both"];
 const PROJECT_TIMELINES = ["1-3 months", "3-6 months", "6+ months"];
-const TRAINING_MODES = ["Online", "Offline", "Hybrid"];
+const TRAINING_MODES = ["Online (Live Sessions)", "Offline (In-person)", "Hybrid (Online + In-person)", "Self-paced (Recorded)"];
+const TRAINING_TEAM_SIZES = ["1-5 people", "6-15 people", "16-30 people", "30+ people"];
+const TRAINING_DURATIONS = ["1 Day Workshop", "1 Week Bootcamp", "1 Month Program", "3 Month Program", "Custom Duration"];
+const TRAINING_TOPICS = [
+  "Large Language Models (LLMs)", "MLOps & Model Deployment", "Full Stack AI Development",
+  "Prompt Engineering", "Machine Learning Fundamentals", "Computer Vision",
+  "Natural Language Processing (NLP)", "AI for Business Leaders", "Data Engineering & Pipelines",
+  "Generative AI & ChatGPT", "Python for AI/ML", "Cloud AI (AWS/Azure/GCP)",
+];
 
 interface F {
   // common — shown for every service
@@ -44,7 +52,7 @@ interface F {
   // Software Development
   projectType: string; projectTimeline: string; approxBudget: string;
   // AI Training & Consulting
-  trainingTeamSize: string; trainingMode: string; topicsOfInterest: string;
+  trainingTeamSize: string; trainingMode: string; topicsOfInterest: string; trainingDuration: string;
   // legacy fields still sent to the backend for context, no longer user-editable
   urgency: string; subject: string;
 }
@@ -55,14 +63,14 @@ const EMPTY: F = {
   techStack:"", deploymentEnv:"", numDevelopers:"",
   cloudProvider:"", currentInfra:"", migrationNeeded:"",
   projectType:"", projectTimeline:"", approxBudget:"",
-  trainingTeamSize:"", trainingMode:"", topicsOfInterest:"",
+  trainingTeamSize:"", trainingMode:"", topicsOfInterest:"", trainingDuration:"",
   urgency:"", subject:"",
 };
 const COMMON_TRACKED: (keyof F)[] = ["fullName","email","phone","company","service","country","hearAboutUs","message"];
 
 // ── field descriptors for the dynamic per-service section ─────────────────────
 type FieldDef = { key: keyof F; label: string; icon: string; placeholder: string } &
-  ({ type: "text" } | { type: "select"; options: string[] });
+  ({ type: "text" } | { type: "select"; options: string[] } | { type: "multiselect"; options: string[] });
 
 const SERVICE_SECTIONS: Record<string, { label: string; fields: FieldDef[] }> = {
   "AI-Powered ERP": {
@@ -99,9 +107,10 @@ const SERVICE_SECTIONS: Record<string, { label: string; fields: FieldDef[] }> = 
   "AI Training & Consulting": {
     label: "Training Requirements",
     fields: [
-      { key:"trainingTeamSize", label:"Team Size for Training", icon:"fas fa-users", type:"select", options:TEAM_SIZES, placeholder:"Select team size…" },
+      { key:"trainingTeamSize", label:"Team Size for Training", icon:"fas fa-users", type:"select", options:TRAINING_TEAM_SIZES, placeholder:"Select team size…" },
       { key:"trainingMode", label:"Training Mode", icon:"fas fa-chalkboard-teacher", type:"select", options:TRAINING_MODES, placeholder:"Select mode…" },
-      { key:"topicsOfInterest", label:"Topics of Interest", icon:"fas fa-book", type:"text", placeholder:"e.g. LLMs, MLOps, prompt engineering" },
+      { key:"trainingDuration", label:"Training Duration", icon:"fas fa-hourglass-half", type:"select", options:TRAINING_DURATIONS, placeholder:"Select duration…" },
+      { key:"topicsOfInterest", label:"Topics of Interest", icon:"fas fa-book", type:"multiselect", options:TRAINING_TOPICS, placeholder:"Select topics…" },
     ],
   },
 };
@@ -261,6 +270,13 @@ const ContactSection2 = () => {
   };
 
   const set = useCallback((k: keyof F, v: string) => setForm(p => ({...p,[k]:v})), []);
+  const toggleTopic = useCallback((topic: string) => {
+    setForm(p => {
+      const cur = p.topicsOfInterest.split(", ").filter(Boolean);
+      const next = cur.includes(topic) ? cur.filter(t => t !== topic) : [...cur, topic];
+      return { ...p, topicsOfInterest: next.join(", ") };
+    });
+  }, []);
 
   const activeSection = SERVICE_SECTIONS[form.service];
   const tracked = useMemo(() => {
@@ -295,6 +311,7 @@ const ContactSection2 = () => {
         cloud_provider: form.cloudProvider, current_infra: form.currentInfra, migration_needed: form.migrationNeeded,
         project_type: form.projectType, project_timeline: form.projectTimeline, approx_budget: form.approxBudget,
         training_team_size: form.trainingTeamSize, training_mode: form.trainingMode, topics_of_interest: form.topicsOfInterest,
+        training_duration: form.trainingDuration,
       });
       if (result.success) {
         setSent(true); setForm(EMPTY);
@@ -896,9 +913,33 @@ const ContactSection2 = () => {
                         </div>
                         <div className="row g-3">
                           {activeSection.fields.map(f => (
-                            <div className="col-md-6" key={f.key}>
+                            <div className={f.type === "multiselect" ? "col-12" : "col-md-6"} key={f.key}>
                               <label style={lbl}>{f.label}</label>
-                              {fw(f.key, f.icon,
+                              {f.type === "multiselect" ? (
+                                <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+                                  {f.options.map(topic => {
+                                    const selected = form[f.key].split(", ").filter(Boolean).includes(topic);
+                                    return (
+                                      <button type="button" key={topic} disabled={sending}
+                                        onClick={() => toggleTopic(topic)}
+                                        style={{
+                                          display:"flex", alignItems:"center", gap:6,
+                                          padding:"7px 14px", borderRadius:20,
+                                          border:`1.5px solid ${selected ? "#C9883A" : "#E4DFD8"}`,
+                                          background: selected ? "rgba(201,136,58,0.10)" : "#fafaf8",
+                                          color: selected ? "#C9883A" : "#5a5650",
+                                          fontFamily:"'DM Sans',sans-serif", fontSize:12.5, fontWeight:600,
+                                          cursor: sending ? "not-allowed" : "pointer",
+                                          transition:"border-color 0.15s, background 0.15s, color 0.15s",
+                                        }}
+                                      >
+                                        <i className={selected ? "fas fa-check-circle" : "far fa-circle"} style={{ fontSize:11 }} />
+                                        {topic}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              ) : fw(f.key, f.icon,
                                 f.type === "text" ? (
                                   <input type="text" placeholder={f.placeholder}
                                     value={form[f.key]} style={fldBase(f.key)} disabled={sending}
