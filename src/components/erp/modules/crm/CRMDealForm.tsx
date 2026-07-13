@@ -36,6 +36,7 @@ export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustome
         lead: deal.lead ? String(deal.lead) : '',
         value: deal.value ?? '',
         stage: deal.stage,
+        probability: deal.probability != null ? String(deal.probability) : '0',
         expected_close: deal.expected_close ? deal.expected_close.slice(0, 10) : '',
         notes: deal.notes ?? '',
       };
@@ -47,6 +48,7 @@ export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustome
       lead: defaultLeadId ? String(defaultLeadId) : '',
       value: '',
       stage: defaultStage,
+      probability: '0',
       expected_close: '',
       notes: '',
     };
@@ -71,6 +73,7 @@ export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustome
         title: form.title,
         value: form.value || '0',
         stage: form.stage,
+        probability: Math.min(100, Math.max(0, Number(form.probability) || 0)),
         expected_close: form.expected_close || null,
         notes: form.notes,
         customer: form.linkType === 'customer' && form.customer ? Number(form.customer) : null,
@@ -164,11 +167,17 @@ export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustome
             </div>
           </div>
 
-          <div>
-            <label style={lbl}>Stage</label>
-            <select style={inp} value={form.stage} onChange={e => set('stage', e.target.value)}>
-              {STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
-            </select>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div>
+              <label style={lbl}>Stage</label>
+              <select style={inp} value={form.stage} onChange={e => set('stage', e.target.value)}>
+                {STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={lbl}>Probability (%)</label>
+              <input type="number" style={inp} value={form.probability} min="0" max="100" step="5" onChange={e => set('probability', e.target.value)} />
+            </div>
           </div>
 
           <div>

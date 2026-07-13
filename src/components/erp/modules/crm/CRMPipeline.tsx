@@ -4,7 +4,7 @@ import {
   PointerSensor, useSensor, useSensors, closestCenter,
 } from '@dnd-kit/core';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent, Pencil, Trash2 } from 'lucide-react';
+import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent, Pencil, Trash2, Check, X as XIcon } from 'lucide-react';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
 import {
   OG, DARK, FF, BCARD, BHOV, STAGES, stageMeta, fmtINR, initials,
@@ -93,8 +93,9 @@ const DeleteConfirm = ({ dealTitle, onCancel, onConfirm }: { dealTitle: string; 
 );
 
 // ── deal card (Card3D style, left stage border, edit/delete on hover) ────────
-const DealCard = ({ deal, removing, onEdit, onDelete }: {
+const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose }: {
   deal: Deal; removing: boolean; onEdit: () => void; onDelete: () => void;
+  onWin?: () => void; onLose?: () => void;
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: deal.id });
   const [hovered, setHovered] = useState(false);
@@ -162,8 +163,11 @@ const DealCard = ({ deal, removing, onEdit, onDelete }: {
         </span>
       </div>
       <div style={{ fontSize: 13, color: '#6B6B6B', fontFamily: FF, marginBottom: 8 }}>{name}</div>
-      <div style={{ fontSize: 15, fontWeight: 800, color: OG, fontFamily: FF, marginBottom: 8 }}>{fmtINR(deal.value)}</div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}>
+        <span style={{ fontSize: 15, fontWeight: 800, color: OG, fontFamily: FF }}>{fmtINR(deal.value)}</span>
+        <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', fontFamily: FF }}>{deal.probability}% odds</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: (onWin || onLose) ? 10 : 0 }}>
         {deal.expected_close ? (
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#9ca3af', fontFamily: FF }}>
             <Calendar size={11} /> {new Date(deal.expected_close).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
@@ -180,14 +184,28 @@ const DealCard = ({ deal, removing, onEdit, onDelete }: {
           </div>
         )}
       </div>
+      {(onWin || onLose) && (
+        <div onPointerDown={e => e.stopPropagation()} style={{ display: 'flex', gap: 6 }}>
+          {onWin && (
+            <button onClick={onWin} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: 'rgba(16,185,129,0.10)', border: '1px solid rgba(16,185,129,0.28)', borderRadius: 7, padding: '5px', cursor: 'pointer', color: '#10b981', fontFamily: FF, fontWeight: 700, fontSize: 11 }}>
+              <Check size={11} /> Win
+            </button>
+          )}
+          {onLose && (
+            <button onClick={onLose} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 7, padding: '5px', cursor: 'pointer', color: '#ef4444', fontFamily: FF, fontWeight: 700, fontSize: 11 }}>
+              <XIcon size={11} /> Lose
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
 
 // ── kanban column (droppable, colored bg, hover glow) ────────────────────────
-const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete }: {
+const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete, onSetStage }: {
   stage: DealStage; deals: Deal[]; removingIds: Set<number>;
-  onAdd: () => void; onEdit: (d: Deal) => void; onDelete: (d: Deal) => void;
+  onAdd: () => void; onEdit: (d: Deal) => void; onDelete: (d: Deal) => void; onSetStage: (d: Deal, stage: DealStage) => void;
 }) => {
   const meta = stageMeta(stage);
   const { setNodeRef, isOver } = useDroppable({ id: stage });
@@ -240,6 +258,8 @@ const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete }: {
               removing={removingIds.has(d.id)}
               onEdit={() => onEdit(d)}
               onDelete={() => onDelete(d)}
+              onWin={stage !== 'won' ? () => onSetStage(d, 'won') : undefined}
+              onLose={stage !== 'lost' ? () => onSetStage(d, 'lost') : undefined}
             />
           </div>
         ))}
@@ -262,6 +282,8 @@ export default function CRMPipeline() {
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
   const [deletingDeal, setDeletingDeal] = useState<Deal | null>(null);
   const [removingIds, setRemovingIds] = useState<Set<number>>(new Set());
+  const [closeFrom, setCloseFrom] = useState('');
+  const [closeTo, setCloseTo] = useState('');
 
   useEffect(() => { setDeals(dealsList.data); }, [dealsList.data]);
 
@@ -272,13 +294,28 @@ export default function CRMPipeline() {
 
   const byStage = useMemo(() => {
     const map: Record<DealStage, Deal[]> = { new: [], contacted: [], proposal: [], negotiation: [], won: [], lost: [] };
-    deals.forEach(d => { if (map[d.stage]) map[d.stage].push(d); });
+    deals
+      .filter(d => !closeFrom || (d.expected_close && d.expected_close >= closeFrom))
+      .filter(d => !closeTo || (d.expected_close && d.expected_close <= closeTo))
+      .forEach(d => { if (map[d.stage]) map[d.stage].push(d); });
     return map;
-  }, [deals]);
+  }, [deals, closeFrom, closeTo]);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
   const handleDragStart = (e: DragStartEvent) => setActiveId(Number(e.active.id));
+
+  const changeStage = useCallback((deal: Deal, newStage: DealStage) => {
+    if (deal.stage === newStage) return;
+    const prevStage = deal.stage;
+    setDeals(prev => prev.map(d => d.id === deal.id ? { ...d, stage: newStage } : d));
+
+    erpFetch(`crm/deals/${deal.id}/stage/`, { method: 'PATCH', body: JSON.stringify({ stage: newStage }) })
+      .then(() => loadStats())
+      .catch(() => {
+        setDeals(prev => prev.map(d => d.id === deal.id ? { ...d, stage: prevStage } : d));
+      });
+  }, [loadStats]);
 
   const handleDragEnd = (e: DragEndEvent) => {
     setActiveId(null);
@@ -287,16 +324,8 @@ export default function CRMPipeline() {
     const dealId = Number(active.id);
     const newStage = over.id as DealStage;
     const deal = deals.find(d => d.id === dealId);
-    if (!deal || deal.stage === newStage) return;
-
-    const prevStage = deal.stage;
-    setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage: newStage } : d));
-
-    erpFetch(`crm/deals/${dealId}/stage/`, { method: 'PATCH', body: JSON.stringify({ stage: newStage }) })
-      .then(() => loadStats())
-      .catch(() => {
-        setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage: prevStage } : d));
-      });
+    if (!deal) return;
+    changeStage(deal, newStage);
   };
 
   const activeDeal = activeId ? deals.find(d => d.id === activeId) ?? null : null;
@@ -356,6 +385,16 @@ export default function CRMPipeline() {
         />
       </div>
 
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, fontFamily: FF }}>
+        <span style={{ fontSize: 11.5, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Expected close</span>
+        <input type="date" value={closeFrom} onChange={e => setCloseFrom(e.target.value)} style={{ border: '1px solid rgba(0,0,0,0.10)', borderRadius: 8, padding: '6px 10px', fontFamily: FF, fontSize: 12.5, background: '#F8F7F4', outline: 'none' }} />
+        <span style={{ color: '#9ca3af', fontSize: 12 }}>to</span>
+        <input type="date" value={closeTo} onChange={e => setCloseTo(e.target.value)} style={{ border: '1px solid rgba(0,0,0,0.10)', borderRadius: 8, padding: '6px 10px', fontFamily: FF, fontSize: 12.5, background: '#F8F7F4', outline: 'none' }} />
+        {(closeFrom || closeTo) && (
+          <button onClick={() => { setCloseFrom(''); setCloseTo(''); }} style={{ background: 'none', border: 'none', color: OG, cursor: 'pointer', fontSize: 12, fontWeight: 700, fontFamily: FF }}>Clear</button>
+        )}
+      </div>
+
       {/* kanban board */}
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 8, alignItems: 'flex-start' }}>
@@ -368,6 +407,7 @@ export default function CRMPipeline() {
               onAdd={() => setAddPanel(s.key)}
               onEdit={setEditingDeal}
               onDelete={setDeletingDeal}
+              onSetStage={changeStage}
             />
           ))}
         </div>
