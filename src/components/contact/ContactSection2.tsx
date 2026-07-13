@@ -1,22 +1,20 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiService from '../../services/api';
 
 
-// ── services / urgency ───────────────────────────────────────────────────────
+// ── services ─────────────────────────────────────────────────────────────────
 const SERVICES = [
   "AI-Powered ERP", "DevSecOps Pipelines", "Cloud Infrastructure",
   "Software Development", "AI Training & Consulting",
   "Quantum Computing", "Mobile Application",
   "Web & Mobile Hosting", "Software Consulting",
 ];
-const URGENCY = [
-  { value: "normal",   label: "Normal — Response within 24 hours" },
-  { value: "urgent",   label: "Urgent — Response within 4 hours"  },
-  { value: "critical", label: "Critical — Immediate response"      },
-];
 const COUNTRIES = ["India", "UAE", "Other"];
+const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
+
+// ── per-service dynamic field option lists ─────────────────────────────────────
 const PLAN_INTEREST = ["Starter", "Professional", "Enterprise", "Not sure"];
 const TEAM_SIZES = ["1-10", "11-50", "51-200", "200+"];
 const BUDGET_CURRENCIES = ["INR", "AED", "USD"];
@@ -25,24 +23,88 @@ const BUDGET_RANGES: Record<string, string[]> = {
   AED: ["Under AED 3,000/mo", "AED 3,000 – 7,000/mo", "AED 7,000+/mo", "Not sure"],
   USD: ["Under $180/mo", "$180 – $420/mo", "$420+/mo", "Not sure"],
 };
-const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
+const DEPLOYMENT_ENVS = ["Cloud", "On-premise", "Hybrid"];
+const NUM_DEVELOPERS = ["1-5", "6-20", "20+"];
+const CLOUD_PROVIDERS = ["AWS", "Azure", "GCP", "No preference"];
+const YES_NO = ["Yes", "No"];
+const PROJECT_TYPES = ["Web", "Mobile", "Both"];
+const PROJECT_TIMELINES = ["1-3 months", "3-6 months", "6+ months"];
+const TRAINING_MODES = ["Online", "Offline", "Hybrid"];
 
 interface F {
+  // common — shown for every service
   fullName: string; email: string; phone: string; company: string;
-  service: string; urgency: string; subject: string; message: string;
-  country: string; planInterest: string; teamSize: string;
-  budgetCurrency: string; budgetRange: string; hearAboutUs: string;
+  service: string; country: string; hearAboutUs: string; message: string;
+  // AI-Powered ERP
+  planInterest: string; teamSize: string; budgetCurrency: string; budgetRange: string;
+  // DevSecOps Pipelines
+  techStack: string; deploymentEnv: string; numDevelopers: string;
+  // Cloud Infrastructure
+  cloudProvider: string; currentInfra: string; migrationNeeded: string;
+  // Software Development
+  projectType: string; projectTimeline: string; approxBudget: string;
+  // AI Training & Consulting
+  trainingTeamSize: string; trainingMode: string; topicsOfInterest: string;
+  // legacy fields still sent to the backend for context, no longer user-editable
+  urgency: string; subject: string;
 }
 const EMPTY: F = {
   fullName:"", email:"", phone:"", company:"",
-  service:"", urgency:"", subject:"", message:"",
-  country:"", planInterest:"", teamSize:"",
-  budgetCurrency:"", budgetRange:"", hearAboutUs:"",
+  service:"", country:"", hearAboutUs:"", message:"",
+  planInterest:"", teamSize:"", budgetCurrency:"", budgetRange:"",
+  techStack:"", deploymentEnv:"", numDevelopers:"",
+  cloudProvider:"", currentInfra:"", migrationNeeded:"",
+  projectType:"", projectTimeline:"", approxBudget:"",
+  trainingTeamSize:"", trainingMode:"", topicsOfInterest:"",
+  urgency:"", subject:"",
 };
-const TRACKED: (keyof F)[] = [
-  "fullName","email","phone","company","service","urgency","subject","message",
-  "country","planInterest","teamSize","budgetCurrency","budgetRange","hearAboutUs",
-];
+const COMMON_TRACKED: (keyof F)[] = ["fullName","email","phone","company","service","country","hearAboutUs","message"];
+
+// ── field descriptors for the dynamic per-service section ─────────────────────
+type FieldDef = { key: keyof F; label: string; icon: string; placeholder: string } &
+  ({ type: "text" } | { type: "select"; options: string[] });
+
+const SERVICE_SECTIONS: Record<string, { label: string; fields: FieldDef[] }> = {
+  "AI-Powered ERP": {
+    label: "ERP Requirements",
+    fields: [
+      { key:"planInterest", label:"Plan Interest", icon:"fas fa-layer-group", type:"select", options:PLAN_INTEREST, placeholder:"Select a plan…" },
+      { key:"teamSize", label:"Team Size", icon:"fas fa-users", type:"select", options:TEAM_SIZES, placeholder:"Select team size…" },
+    ],
+  },
+  "DevSecOps Pipelines": {
+    label: "DevSecOps Requirements",
+    fields: [
+      { key:"techStack", label:"Current Tech Stack", icon:"fas fa-code", type:"text", placeholder:"e.g. Node.js, Docker, Jenkins" },
+      { key:"deploymentEnv", label:"Deployment Environment", icon:"fas fa-server", type:"select", options:DEPLOYMENT_ENVS, placeholder:"Select environment…" },
+      { key:"numDevelopers", label:"Number of Developers", icon:"fas fa-user-friends", type:"select", options:NUM_DEVELOPERS, placeholder:"Select team size…" },
+    ],
+  },
+  "Cloud Infrastructure": {
+    label: "Cloud Requirements",
+    fields: [
+      { key:"cloudProvider", label:"Cloud Provider Preference", icon:"fas fa-cloud", type:"select", options:CLOUD_PROVIDERS, placeholder:"Select provider…" },
+      { key:"currentInfra", label:"Current Infrastructure", icon:"fas fa-network-wired", type:"text", placeholder:"e.g. On-prem VMware, bare metal" },
+      { key:"migrationNeeded", label:"Migration Needed?", icon:"fas fa-exchange-alt", type:"select", options:YES_NO, placeholder:"Select an option…" },
+    ],
+  },
+  "Software Development": {
+    label: "Project Requirements",
+    fields: [
+      { key:"projectType", label:"Project Type", icon:"fas fa-laptop-code", type:"select", options:PROJECT_TYPES, placeholder:"Select project type…" },
+      { key:"projectTimeline", label:"Project Timeline", icon:"fas fa-calendar-alt", type:"select", options:PROJECT_TIMELINES, placeholder:"Select timeline…" },
+      { key:"approxBudget", label:"Approximate Budget", icon:"fas fa-wallet", type:"text", placeholder:"e.g. $10,000 – $25,000" },
+    ],
+  },
+  "AI Training & Consulting": {
+    label: "Training Requirements",
+    fields: [
+      { key:"trainingTeamSize", label:"Team Size for Training", icon:"fas fa-users", type:"select", options:TEAM_SIZES, placeholder:"Select team size…" },
+      { key:"trainingMode", label:"Training Mode", icon:"fas fa-chalkboard-teacher", type:"select", options:TRAINING_MODES, placeholder:"Select mode…" },
+      { key:"topicsOfInterest", label:"Topics of Interest", icon:"fas fa-book", type:"text", placeholder:"e.g. LLMs, MLOps, prompt engineering" },
+    ],
+  },
+};
 
 // ── count-up hook ─────────────────────────────────────────────────────────────
 function useCountUp(target: number, duration = 1400, trigger = false) {
@@ -155,7 +217,7 @@ const ContactSection2 = () => {
     return {
       ...EMPTY,
       service: "AI-Powered ERP",
-      subject: `Enquiry about ${plan} Plan`,
+      planInterest: PLAN_INTEREST.includes(plan) ? plan : "",
       message: `I am interested in the ${plan} plan for XERXEZ ERP. Please contact me with more details.`,
     };
   });
@@ -200,8 +262,16 @@ const ContactSection2 = () => {
 
   const set = useCallback((k: keyof F, v: string) => setForm(p => ({...p,[k]:v})), []);
 
-  const filled   = TRACKED.filter(k => form[k].trim() !== "").length;
-  const progress = Math.round((filled / TRACKED.length) * 100);
+  const activeSection = SERVICE_SECTIONS[form.service];
+  const tracked = useMemo(() => {
+    const keys = [...COMMON_TRACKED];
+    if (activeSection) keys.push(...activeSection.fields.map(f => f.key));
+    if (form.service === "AI-Powered ERP") keys.push("budgetCurrency", "budgetRange");
+    return keys;
+  }, [activeSection, form.service]);
+
+  const filled   = tracked.filter(k => form[k].trim() !== "").length;
+  const progress = Math.round((filled / tracked.length) * 100);
   const chars    = form.message.length;
 
   const handleSubmit = useCallback(async () => {
@@ -217,10 +287,14 @@ const ContactSection2 = () => {
       const result = await apiService.post('/contact/', {
         full_name: form.fullName, email: form.email, phone: form.phone,
         company: form.company, service: form.service || 'General Inquiry',
-        urgency: form.urgency || 'normal', subject: form.subject, message: form.message,
-        country: form.country, plan_interest: form.planInterest, team_size: form.teamSize,
+        subject: form.service ? `${form.service} Enquiry` : 'General Enquiry',
+        message: form.message, country: form.country, hear_about_us: form.hearAboutUs,
+        plan_interest: form.planInterest, team_size: form.teamSize,
         budget_currency: form.budgetCurrency, budget_range: form.budgetRange,
-        hear_about_us: form.hearAboutUs,
+        tech_stack: form.techStack, deployment_env: form.deploymentEnv, num_developers: form.numDevelopers,
+        cloud_provider: form.cloudProvider, current_infra: form.currentInfra, migration_needed: form.migrationNeeded,
+        project_type: form.projectType, project_timeline: form.projectTimeline, approx_budget: form.approxBudget,
+        training_team_size: form.trainingTeamSize, training_mode: form.trainingMode, topics_of_interest: form.topicsOfInterest,
       });
       if (result.success) {
         setSent(true); setForm(EMPTY);
@@ -757,23 +831,25 @@ const ContactSection2 = () => {
                           )}
                         </div>
                         <div className="col-md-6">
-                          <label style={lbl}>Urgency Level</label>
-                          {fw("urgency","fas fa-bolt",
-                            <select value={form.urgency} style={selBase("urgency")} disabled={sending}
-                              onChange={e=>set("urgency",e.target.value)}
-                              onFocus={()=>setFoc("urgency")} onBlur={()=>setFoc(null)}>
-                              <option value="">Select urgency…</option>
-                              {URGENCY.map(u=><option key={u.value} value={u.value}>{u.label}</option>)}
+                          <label style={lbl}>Country</label>
+                          {fw("country","fas fa-globe",
+                            <select value={form.country} style={selBase("country")} disabled={sending}
+                              onChange={e=>set("country",e.target.value)}
+                              onFocus={()=>setFoc("country")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select country…</option>
+                              {COUNTRIES.map(c=><option key={c} value={c}>{c}</option>)}
                             </select>
                           )}
                         </div>
                         <div className="col-12">
-                          <label style={lbl}>Subject</label>
-                          {fw("subject","fas fa-tag",
-                            <input type="text" placeholder="Brief summary of your enquiry"
-                              value={form.subject} style={fldBase("subject")} disabled={sending}
-                              onChange={e=>set("subject",e.target.value)}
-                              onFocus={()=>setFoc("subject")} onBlur={()=>setFoc(null)} />
+                          <label style={lbl}>How did you hear about us?</label>
+                          {fw("hearAboutUs","fas fa-bullhorn",
+                            <select value={form.hearAboutUs} style={selBase("hearAboutUs")} disabled={sending}
+                              onChange={e=>set("hearAboutUs",e.target.value)}
+                              onFocus={()=>setFoc("hearAboutUs")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select an option…</option>
+                              {HEAR_ABOUT_US.map(h=><option key={h} value={h}>{h}</option>)}
+                            </select>
                           )}
                         </div>
                         <div className="col-12">
@@ -801,91 +877,73 @@ const ContactSection2 = () => {
                       </div>
                     </div>
 
-                    {/* ③ ERP Requirements */}
-                    <div style={{ marginBottom:18 }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
-                        <div style={{
-                          width:26, height:26, borderRadius:"50%",
-                          background:"linear-gradient(145deg,#e8a84e,#C9883A)",
-                          boxShadow:"0 3px 0 rgba(130,80,20,0.50)",
-                          display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0,
-                        }}>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, color:"#fff" }}>3</span>
+                    {/* ③ Dynamic per-service requirements */}
+                    {activeSection && (
+                      <div style={{ marginBottom:18 }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
+                          <div style={{
+                            width:26, height:26, borderRadius:"50%",
+                            background:"linear-gradient(145deg,#e8a84e,#C9883A)",
+                            boxShadow:"0 3px 0 rgba(130,80,20,0.50)",
+                            display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0,
+                          }}>
+                            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, color:"#fff" }}>3</span>
+                          </div>
+                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:700, color:"#141413" }}>
+                            {activeSection.label}
+                          </span>
+                          <div style={{ flex:1, height:1, background:"#F0EBE4" }} />
                         </div>
-                        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:700, color:"#141413" }}>
-                          ERP Requirements
-                        </span>
-                        <div style={{ flex:1, height:1, background:"#F0EBE4" }} />
-                      </div>
-                      <div className="row g-3">
-                        <div className="col-md-6">
-                          <label style={lbl}>Country</label>
-                          {fw("country","fas fa-globe",
-                            <select value={form.country} style={selBase("country")} disabled={sending}
-                              onChange={e=>set("country",e.target.value)}
-                              onFocus={()=>setFoc("country")} onBlur={()=>setFoc(null)}>
-                              <option value="">Select country…</option>
-                              {COUNTRIES.map(c=><option key={c} value={c}>{c}</option>)}
-                            </select>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <label style={lbl}>Plan Interest</label>
-                          {fw("planInterest","fas fa-layer-group",
-                            <select value={form.planInterest} style={selBase("planInterest")} disabled={sending}
-                              onChange={e=>set("planInterest",e.target.value)}
-                              onFocus={()=>setFoc("planInterest")} onBlur={()=>setFoc(null)}>
-                              <option value="">Select a plan…</option>
-                              {PLAN_INTEREST.map(p=><option key={p} value={p}>{p}</option>)}
-                            </select>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <label style={lbl}>Team Size</label>
-                          {fw("teamSize","fas fa-users",
-                            <select value={form.teamSize} style={selBase("teamSize")} disabled={sending}
-                              onChange={e=>set("teamSize",e.target.value)}
-                              onFocus={()=>setFoc("teamSize")} onBlur={()=>setFoc(null)}>
-                              <option value="">Select team size…</option>
-                              {TEAM_SIZES.map(t=><option key={t} value={t}>{t} employees</option>)}
-                            </select>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <label style={lbl}>How did you hear about us?</label>
-                          {fw("hearAboutUs","fas fa-bullhorn",
-                            <select value={form.hearAboutUs} style={selBase("hearAboutUs")} disabled={sending}
-                              onChange={e=>set("hearAboutUs",e.target.value)}
-                              onFocus={()=>setFoc("hearAboutUs")} onBlur={()=>setFoc(null)}>
-                              <option value="">Select an option…</option>
-                              {HEAR_ABOUT_US.map(h=><option key={h} value={h}>{h}</option>)}
-                            </select>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <label style={lbl}>Budget Currency</label>
-                          {fw("budgetCurrency","fas fa-coins",
-                            <select value={form.budgetCurrency} style={selBase("budgetCurrency")} disabled={sending}
-                              onChange={e=>{ set("budgetCurrency",e.target.value); set("budgetRange",""); }}
-                              onFocus={()=>setFoc("budgetCurrency")} onBlur={()=>setFoc(null)}>
-                              <option value="">Select currency…</option>
-                              {BUDGET_CURRENCIES.map(c=><option key={c} value={c}>{c}</option>)}
-                            </select>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <label style={lbl}>Budget Range</label>
-                          {fw("budgetRange","fas fa-wallet",
-                            <select value={form.budgetRange} style={selBase("budgetRange")} disabled={sending || !form.budgetCurrency}
-                              onChange={e=>set("budgetRange",e.target.value)}
-                              onFocus={()=>setFoc("budgetRange")} onBlur={()=>setFoc(null)}>
-                              <option value="">{form.budgetCurrency ? "Select a range…" : "Select currency first…"}</option>
-                              {(BUDGET_RANGES[form.budgetCurrency] || []).map(r=><option key={r} value={r}>{r}</option>)}
-                            </select>
+                        <div className="row g-3">
+                          {activeSection.fields.map(f => (
+                            <div className="col-md-6" key={f.key}>
+                              <label style={lbl}>{f.label}</label>
+                              {fw(f.key, f.icon,
+                                f.type === "text" ? (
+                                  <input type="text" placeholder={f.placeholder}
+                                    value={form[f.key]} style={fldBase(f.key)} disabled={sending}
+                                    onChange={e=>set(f.key,e.target.value)}
+                                    onFocus={()=>setFoc(f.key)} onBlur={()=>setFoc(null)} />
+                                ) : (
+                                  <select value={form[f.key]} style={selBase(f.key)} disabled={sending}
+                                    onChange={e=>set(f.key,e.target.value)}
+                                    onFocus={()=>setFoc(f.key)} onBlur={()=>setFoc(null)}>
+                                    <option value="">{f.placeholder}</option>
+                                    {f.options.map(o=><option key={o} value={o}>{o}</option>)}
+                                  </select>
+                                )
+                              )}
+                            </div>
+                          ))}
+                          {form.service === "AI-Powered ERP" && (
+                            <>
+                              <div className="col-md-6">
+                                <label style={lbl}>Budget Currency</label>
+                                {fw("budgetCurrency","fas fa-coins",
+                                  <select value={form.budgetCurrency} style={selBase("budgetCurrency")} disabled={sending}
+                                    onChange={e=>{ set("budgetCurrency",e.target.value); set("budgetRange",""); }}
+                                    onFocus={()=>setFoc("budgetCurrency")} onBlur={()=>setFoc(null)}>
+                                    <option value="">Select currency…</option>
+                                    {BUDGET_CURRENCIES.map(c=><option key={c} value={c}>{c}</option>)}
+                                  </select>
+                                )}
+                              </div>
+                              <div className="col-md-6">
+                                <label style={lbl}>Budget Range</label>
+                                {fw("budgetRange","fas fa-wallet",
+                                  <select value={form.budgetRange} style={selBase("budgetRange")} disabled={sending || !form.budgetCurrency}
+                                    onChange={e=>set("budgetRange",e.target.value)}
+                                    onFocus={()=>setFoc("budgetRange")} onBlur={()=>setFoc(null)}>
+                                    <option value="">{form.budgetCurrency ? "Select a range…" : "Select currency first…"}</option>
+                                    {(BUDGET_RANGES[form.budgetCurrency] || []).map(r=><option key={r} value={r}>{r}</option>)}
+                                  </select>
+                                )}
+                              </div>
+                            </>
                           )}
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* submit */}
                     <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginTop:4 }}>
