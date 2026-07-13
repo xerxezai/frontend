@@ -3,8 +3,7 @@ import CustomLayout from "../components/layout/CustomLayout";
 import SEO from "../components/seo/SEO";
 import { Link } from "react-router-dom";
 import { PRICING_PLANS, COMPARISON_ROWS } from "../data/pricingData";
-import type { Currency, Billing } from "../data/pricingData";
-import { CurrencyToggle, BillingToggle, PricingCard } from "../components/marketing/PricingCard";
+import { PricingCard } from "../components/marketing/PricingCard";
 
 const GOLD  = "#C9883A";
 const CREAM = "#F0EDE6";
@@ -84,14 +83,11 @@ function PricingFaq() {
 }
 
 const PricingPage = () => {
-  const [currency, setCurrency] = useState<Currency>("INR");
-  const [billing, setBilling] = useState<Billing>("monthly");
-
   return (
     <CustomLayout>
       <SEO
-        title="XERXEZ ERP Pricing — India & UAE | ₹15,000/mo"
-        description="Transparent ERP pricing for India and UAE. Plans from ₹15,000/month or AED 3,000/month. AI-powered ERP for enterprises in India, Dubai, Abu Dhabi."
+        title="XERXEZ ERP Pricing — India & UAE"
+        description="Explore XERXEZ ERP plans for India and UAE. Contact us for a custom quote. AI-powered ERP for enterprises in India, Dubai, Abu Dhabi."
         canonical="/pricing"
         keywords="ERP pricing india, erp software cost UAE, xerxez pricing, ERP software dubai price, best erp india"
       />
@@ -115,10 +111,10 @@ const PricingPage = () => {
               fontSize: "clamp(30px,4vw,48px)", fontWeight: 800, lineHeight: 1.1,
               color: CREAM, fontFamily: "'DM Sans',sans-serif", margin: "0 0 16px",
             }}>
-              Simple, Transparent Pricing
+              Plans Built For Your Business
             </h1>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 15.5, color: MUTED, lineHeight: 1.7, margin: "0 0 22px" }}>
-              AI-powered ERP for enterprises in India, Dubai &amp; Abu Dhabi. Pick a plan, switch currency, and get started in minutes.
+              AI-powered ERP for enterprises in India, Dubai &amp; Abu Dhabi. Contact us for a plan tailored to your needs.
             </p>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
               <StarRating rating={4.5} />
@@ -130,26 +126,15 @@ const PricingPage = () => {
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, marginBottom: 12 }}>
-            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
-              <CurrencyToggle currency={currency} onChange={setCurrency} />
-              <BillingToggle billing={billing} onChange={setBilling} />
-            </div>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: "rgba(240,237,230,0.4)", margin: 0, textAlign: "center" }}>
-              All prices exclusive of taxes.
-              {currency === "AED" && <><br />Based on 8 hours/day | AED 200/hour.</>}
-            </p>
-          </div>
-
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
             gap: 26,
             maxWidth: 1080,
-            margin: "56px auto 0",
+            margin: "20px auto 0",
           }} className="pricing-grid">
             {PRICING_PLANS.map(plan => (
-              <PricingCard key={plan.name} plan={plan} currency={currency} billing={billing} />
+              <PricingCard key={plan.name} plan={plan} />
             ))}
           </div>
         </div>

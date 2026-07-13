@@ -7,7 +7,6 @@ import HeroSection from "../components/hero/HeroSection";
 import HomeFaq, { HOME_FAQS } from "../components/marketing/HomeFaq";
 import HowWeWork from "../components/marketing/HowWeWork";
 import IndustriesBar from "../components/marketing/IndustriesBar";
-import PricingSection from "../components/marketing/PricingSection";
 import TestimonialsSection from "../components/marketing/TestimonialsSection";
 import WhyXerxez from "../components/marketing/WhyXerxez";
 import MobileMenuModal from "../components/modal/MobileMenuModal";
@@ -74,7 +73,6 @@ const HomePage1 = () => {
       <div id="sec-hero" style={{ paddingTop: HEADER_TOTAL_H }}><HeroSection /></div>
       <IndustriesBar />
       <div id="sec-about"><ServiceSection2 /></div>
-      <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 700px" } as React.CSSProperties}><PricingSection /></div>
       <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 700px" } as React.CSSProperties}><BrandSection /></div>
       <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 700px" } as React.CSSProperties}><AcademySection /></div>
       <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 600px" } as React.CSSProperties}><HowWeWork /></div>
