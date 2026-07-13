@@ -68,6 +68,33 @@ export const PRICING_PLANS: PricingPlan[] = [
   },
 ];
 
+export interface ComparisonRow {
+  label: string;
+  /** true/false = checkmark row; string = tiered value shown as text (e.g. storage size). */
+  starter: boolean | string;
+  professional: boolean | string;
+  enterprise: boolean | string;
+}
+
+/** Cumulative per-tier feature matrix — each tier includes everything the one before it has. */
+export const COMPARISON_ROWS: ComparisonRow[] = [
+  { label: "Users",                        starter: "Up to 10", professional: "Up to 50", enterprise: "Unlimited" },
+  { label: "CRM Module",                   starter: true,  professional: true,  enterprise: true },
+  { label: "HR & Attendance",              starter: true,  professional: true,  enterprise: true },
+  { label: "Basic Inventory",              starter: true,  professional: true,  enterprise: true },
+  { label: "Sales & Invoicing",            starter: false, professional: true,  enterprise: true },
+  { label: "Purchases & Logistics",        starter: false, professional: true,  enterprise: true },
+  { label: "Advanced Analytics",           starter: false, professional: true,  enterprise: true },
+  { label: "Custom Reports",               starter: false, professional: true,  enterprise: true },
+  { label: "AI-Powered Insights",          starter: false, professional: false, enterprise: true },
+  { label: "DevSecOps Integration",        starter: false, professional: false, enterprise: true },
+  { label: "Dedicated Account Manager",    starter: false, professional: false, enterprise: true },
+  { label: "Custom Integrations",          starter: false, professional: false, enterprise: true },
+  { label: "On-premise Deployment",        starter: false, professional: false, enterprise: true },
+  { label: "Storage",                      starter: "5GB", professional: "50GB", enterprise: "Unlimited" },
+  { label: "Support",                      starter: "Email", professional: "Priority", enterprise: "24/7" },
+];
+
 export type Currency = "INR" | "AED" | "USD";
 export type Billing = "monthly" | "yearly";
 

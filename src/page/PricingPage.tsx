@@ -1,7 +1,8 @@
 import { useState } from "react";
 import CustomLayout from "../components/layout/CustomLayout";
 import SEO from "../components/seo/SEO";
-import { PRICING_PLANS } from "../data/pricingData";
+import { Link } from "react-router-dom";
+import { PRICING_PLANS, COMPARISON_ROWS } from "../data/pricingData";
 import type { Currency, Billing } from "../data/pricingData";
 import { CurrencyToggle, BillingToggle, PricingCard } from "../components/marketing/PricingCard";
 
@@ -12,7 +13,7 @@ const MUTED = "rgba(240,237,230,0.55)";
 const PRICING_FAQS = [
   {
     q: "Do you support both INR and AED billing?",
-    a: "Yes, we bill in INR for India and AED for UAE clients.",
+    a: "Yes, we bill in INR for India, AED for UAE clients, and USD for international clients.",
   },
   {
     q: "What is included in the 8-hour work day?",
@@ -27,6 +28,15 @@ const PRICING_FAQS = [
     a: "Yes, we offer a 14-day free trial on all plans.",
   },
 ];
+
+function StarRating({ rating }: { rating: number }) {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    const cls = rating >= i ? "fas fa-star" : rating >= i - 0.5 ? "fas fa-star-half-alt" : "fal fa-star";
+    stars.push(<i key={i} className={cls} style={{ color: GOLD, fontSize: 13 }} />);
+  }
+  return <span style={{ display: "inline-flex", gap: 2 }}>{stars}</span>;
+}
 
 function PricingFaq() {
   const [open, setOpen] = useState<number>(0);
@@ -107,9 +117,17 @@ const PricingPage = () => {
             }}>
               Simple, Transparent Pricing
             </h1>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 15.5, color: MUTED, lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 15.5, color: MUTED, lineHeight: 1.7, margin: "0 0 22px" }}>
               AI-powered ERP for enterprises in India, Dubai &amp; Abu Dhabi. Pick a plan, switch currency, and get started in minutes.
             </p>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+              <StarRating rating={4.5} />
+              <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700, color: CREAM }}>4.5</span>
+              <span style={{ width: 1, height: 14, background: "rgba(255,255,255,0.15)" }} />
+              <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: MUTED }}>
+                Trusted by businesses in India, Dubai &amp; Abu Dhabi
+              </span>
+            </div>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, marginBottom: 12 }}>
@@ -134,6 +152,94 @@ const PricingPage = () => {
               <PricingCard key={plan.name} plan={plan} currency={currency} billing={billing} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Feature comparison table */}
+      <section style={{ background: "#0f0a05", padding: "90px 0 100px" }}>
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
+              <span style={{ width: 32, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD})`, display: "block" }} />
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: GOLD, fontFamily: "'DM Sans',sans-serif" }}>
+                Compare Plans
+              </span>
+              <span style={{ width: 32, height: 1, background: `linear-gradient(90deg, ${GOLD}, transparent)`, display: "block" }} />
+            </div>
+            <h2 style={{
+              fontSize: "clamp(24px,3vw,36px)", fontWeight: 800, lineHeight: 1.15,
+              color: CREAM, fontFamily: "'DM Sans',sans-serif", margin: 0,
+            }}>
+              Every Feature, Side By Side
+            </h2>
+          </div>
+
+          <div style={{ maxWidth: 900, margin: "0 auto", overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'DM Sans',sans-serif" }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: "left", padding: "14px 16px", fontSize: 12, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid rgba(255,255,255,0.10)" }}>Feature</th>
+                  {PRICING_PLANS.map(p => (
+                    <th key={p.name} style={{
+                      textAlign: "center", padding: "14px 16px", fontSize: 13.5, fontWeight: 800,
+                      color: p.badge ? GOLD : CREAM, borderBottom: `1px solid ${p.badge ? "rgba(201,136,58,0.4)" : "rgba(255,255,255,0.10)"}`,
+                    }}>
+                      {p.name}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISON_ROWS.map((row, i) => (
+                  <tr key={row.label} style={{ background: i % 2 === 0 ? "rgba(255,255,255,0.02)" : "transparent" }}>
+                    <td style={{ padding: "12px 16px", fontSize: 13, color: "rgba(240,237,230,0.82)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                      {row.label}
+                    </td>
+                    {[row.starter, row.professional, row.enterprise].map((val, ci) => (
+                      <td key={ci} style={{ textAlign: "center", padding: "12px 16px", fontSize: 13, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                        {typeof val === "boolean" ? (
+                          val
+                            ? <i className="fas fa-check" style={{ color: GOLD, fontSize: 14 }} aria-label="Included" />
+                            : <i className="fas fa-times" style={{ color: "rgba(240,237,230,0.25)", fontSize: 14 }} aria-label="Not included" />
+                        ) : (
+                          <span style={{ color: CREAM, fontWeight: 600 }}>{val}</span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Book Free Demo CTA banner */}
+      <section style={{ background: "linear-gradient(135deg,#E8A84E 0%,#C9883A 100%)", padding: "56px 0" }}>
+        <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, flexWrap: "wrap" }}>
+          <div>
+            <h3 style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2.4vw,28px)", color: "#0A0806", margin: "0 0 6px" }}>
+              Not sure which plan fits your team?
+            </h3>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14.5, color: "rgba(10,8,6,0.75)", margin: 0 }}>
+              Book a free demo and we&apos;ll help you pick the right plan.
+            </p>
+          </div>
+          <Link
+            to="/contact"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 8, flexShrink: 0,
+              fontFamily: "'DM Sans',sans-serif", fontWeight: 800, fontSize: 15,
+              background: "#0A0806", color: "#F0EDE6", textDecoration: "none",
+              padding: "14px 28px", borderRadius: 10,
+              boxShadow: "0 4px 0 rgba(0,0,0,0.30),0 8px 24px rgba(0,0,0,0.25)",
+              transition: "opacity 150ms ease",
+            }}
+            onMouseOver={e => (e.currentTarget.style.opacity = "0.85")}
+            onMouseOut={e => (e.currentTarget.style.opacity = "1")}
+          >
+            Book Free Demo <i className="fas fa-arrow-right" style={{ fontSize: 13 }} />
+          </Link>
         </div>
       </section>
 
