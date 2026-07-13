@@ -111,8 +111,8 @@ const InventoryModule = () => {
     { key:'name',       label:'Name' },
     { key:'category',   label:'Category',  render:(r:any)=>r.category||r.category_name||'—' },
     { key:'unit',       label:'Unit' },
-    { key:'cost_price', label:'Cost',      render:(r:any)=>`$${parseFloat(r.cost_price||0).toFixed(2)}` },
-    { key:'sale_price', label:'Price',     render:(r:any)=>`$${parseFloat(r.sale_price||0).toFixed(2)}` },
+    { key:'cost_price', label:'Cost',      render:(r:any)=>`₹${parseFloat(r.cost_price||0).toFixed(2)}` },
+    { key:'sale_price', label:'Price',     render:(r:any)=>`₹${parseFloat(r.sale_price||0).toFixed(2)}` },
     { key:'is_active',  label:'Active',    render:(r:any)=>r.is_active?'✅':'❌' },
   ];
   const wCols = [

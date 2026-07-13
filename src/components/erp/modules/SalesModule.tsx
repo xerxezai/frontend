@@ -86,14 +86,14 @@ const SalesModule = () => {
     { key:'customer_name', label:'Customer',   render:(r:any)=>r.customer_name||r.customer||'—' },
     { key:'valid_until',   label:'Valid Until',render:(r:any)=>r.valid_until||'—' },
     { key:'status',        label:'Status',     render:(r:any)=>sbadge(r.status,qColors) },
-    { key:'total',         label:'Total',      render:(r:any)=>`$${parseFloat(r.total||0).toFixed(2)}` },
+    { key:'total',         label:'Total',      render:(r:any)=>`₹${parseFloat(r.total||0).toFixed(2)}` },
   ];
   const oCols = [
     { key:'number',        label:'Number',  render:(r:any)=>r.number||r.id },
     { key:'customer_name', label:'Customer',render:(r:any)=>r.customer_name||r.customer||'—' },
     { key:'order_date',    label:'Date',    render:(r:any)=>r.order_date||'—' },
     { key:'status',        label:'Status',  render:(r:any)=>sbadge(r.status,oColors) },
-    { key:'total',         label:'Total',   render:(r:any)=>`$${parseFloat(r.total||0).toFixed(2)}` },
+    { key:'total',         label:'Total',   render:(r:any)=>`₹${parseFloat(r.total||0).toFixed(2)}` },
   ];
 
   const ts = (t: string): React.CSSProperties => ({ borderRadius:8,padding:'7px 18px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13,transition:'all 0.15s',background:tab===t?'#C9883A':'transparent',color:tab===t?'#fff':'#6B6B6B',border:tab===t?'none':'1px solid rgba(0,0,0,0.10)' });

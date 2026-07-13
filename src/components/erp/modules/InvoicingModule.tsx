@@ -87,11 +87,11 @@ const InvoicingModule = () => {
     { key:'issue_date',    label:'Issued',   render:(r:any)=>r.issue_date||'—' },
     { key:'due_date',      label:'Due',      render:(r:any)=>r.due_date||'—' },
     { key:'status',        label:'Status',   render:(r:any)=>sbadge(r.status,iColors) },
-    { key:'total',         label:'Total',    render:(r:any)=>`$${parseFloat(r.total||0).toFixed(2)}` },
+    { key:'total',         label:'Total',    render:(r:any)=>`₹${parseFloat(r.total||0).toFixed(2)}` },
   ];
   const pCols = [
     { key:'invoice',       label:'Invoice',  render:(r:any)=>r.invoice_number||r.invoice||'—' },
-    { key:'amount',        label:'Amount',   render:(r:any)=>`$${parseFloat(r.amount||0).toFixed(2)}` },
+    { key:'amount',        label:'Amount',   render:(r:any)=>`₹${parseFloat(r.amount||0).toFixed(2)}` },
     { key:'method',        label:'Method',   render:(r:any)=>r.method||'—' },
     { key:'payment_date',  label:'Date',     render:(r:any)=>r.payment_date||r.paid_at||'—' },
   ];
