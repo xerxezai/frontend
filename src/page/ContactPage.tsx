@@ -6,9 +6,10 @@ import SEO from "../components/seo/SEO";
 const ContactPage = () => (
   <CustomLayout>
     <SEO
-      title="Contact XERXEZ — Book Free Enterprise Consultation | +971 56 786 7451"
-      description="Get in touch with XERXEZ for enterprise AI ERP, DevSecOps, and cloud solutions. India & UAE, remote-first. We respond within 24 hours — free consultation available."
+      title="Contact XERXEZ | Book Free Demo — AI ERP India, Dubai & Abu Dhabi"
+      description="Contact XERXEZ for AI ERP, DevSecOps and cloud solutions. Book a free enterprise demo. Serving India, Dubai & Abu Dhabi UAE."
       canonical="/contact"
+      keywords="contact XERXEZ, book demo ERP India, ERP consultation Dubai, ERP consultation Abu Dhabi, XERXEZ support"
     />
     <ContactSection2 />
     <ContactTrustBar />

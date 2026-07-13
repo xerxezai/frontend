@@ -1,5 +1,6 @@
 import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
+import SEO from "../components/seo/SEO";
 
 const heroStats = [
   { val: "99.9%",    label: "Uptime SLA"       },
@@ -9,8 +10,8 @@ const heroStats = [
 ];
 
 const config: ServicePageConfig = {
-  seoTitle: "Web & Mobile Hosting | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ provides enterprise managed hosting with 99.9% uptime SLA, sub-100ms global response times, auto-scaling, CDN, and 24/7 managed support.",
+  seoTitle: "Web & Mobile Hosting India, Dubai & Abu Dhabi UAE — XERXEZ",
+  seoDesc:  "Reliable, secure web and mobile hosting by XERXEZ. 99.9% uptime guaranteed for enterprises in India, Dubai & Abu Dhabi UAE.",
   badgeText: "Web & Mobile Hosting · Managed Infrastructure",
 
   headline: (
@@ -102,5 +103,15 @@ const config: ServicePageConfig = {
   ctaTags: ["99.9% Uptime SLA", "Financial Credits Backed", "24/7 Managed Support"],
 };
 
-const HostingPage = () => <ServicePageTemplate config={config} />;
+const HostingPage = () => (
+  <>
+    <SEO
+      title="Web & Mobile Hosting India, Dubai & Abu Dhabi UAE — XERXEZ"
+      description="Reliable, secure web and mobile hosting by XERXEZ. 99.9% uptime guaranteed for enterprises in India, Dubai & Abu Dhabi UAE."
+      canonical="/service/web-mobile-hosting"
+      keywords="web hosting India, mobile hosting UAE, web hosting Dubai, hosting Abu Dhabi, enterprise hosting solutions, secure hosting UAE, cloud hosting India UAE"
+    />
+    <ServicePageTemplate config={config} />
+  </>
+);
 export default HostingPage;

@@ -58,10 +58,11 @@ const HomePage1 = () => {
   return (
     <>
       <SEO
-        title="XERXEZ — AI-Powered ERP, DevSecOps & Cloud Solutions for Enterprises"
-        description="XERXEZ helps mid-to-large enterprises cut operational costs by 40%, deploy 60% faster, and achieve 99.9% system uptime. AI ERP, DevSecOps pipelines & cloud infrastructure — India & UAE."
+        title="XERXEZ — Best AI-Powered ERP Software India & UAE | Abu Dhabi Dubai"
+        description="XERXEZ is the best AI ERP software in India & UAE. Replace 5 legacy systems, cut costs 40%, deploy in 6 months. Trusted by enterprises in Abu Dhabi, Dubai & India."
         canonical="/"
-        jsonLd={[ORG_JSONLD, FAQ_JSONLD]}
+        keywords="best erp software in india, best erp software in abu dhabi, best erp software UAE, xerxez erp, AI ERP India, ERP system India, erp software dubai, best erp for small business india, enterprise ERP india UAE, xerxez ai, XERXEZ"
+        jsonLd={[ORG_JSONLD, FAQ_JSONLD]} 
       />
       <HeaderSection />
 

@@ -1,5 +1,6 @@
 import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
+import SEO from "../components/seo/SEO";
 
 const heroStats = [
   { val: "40%",    label: "Cost Reduction"      },
@@ -9,8 +10,8 @@ const heroStats = [
 ];
 
 const config: ServicePageConfig = {
-  seoTitle: "Cloud Infrastructure | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ designs and manages enterprise multi-cloud infrastructure — cost optimisation, 99.99% uptime, auto-scaling, and disaster recovery on AWS, Azure, and GCP.",
+  seoTitle: "Cloud Services & Storage Solutions India, Dubai & Abu Dhabi — XERXEZ",
+  seoDesc:  "Enterprise cloud infrastructure, storage and migration by XERXEZ. Scalable, secure cloud solutions for businesses in India, Dubai & Abu Dhabi UAE.",
   badgeText: "Cloud Infrastructure · Multi-Cloud",
 
   headline: (
@@ -102,5 +103,15 @@ const config: ServicePageConfig = {
   ctaTags: ["AWS · Azure · GCP Certified", "Zero Vendor Lock-In", "FinOps Practice"],
 };
 
-const CloudPage = () => <ServicePageTemplate config={config} />;
+const CloudPage = () => (
+  <>
+    <SEO
+      title="Cloud Services & Storage Solutions India, Dubai & Abu Dhabi — XERXEZ"
+      description="Enterprise cloud infrastructure, storage and migration by XERXEZ. Scalable, secure cloud solutions for businesses in India, Dubai & Abu Dhabi UAE."
+      canonical="/service/cloud-service-storage"
+      keywords="cloud services India, cloud storage UAE, cloud services Abu Dhabi, enterprise cloud solutions, cloud migration India, cloud infrastructure Dubai"
+    />
+    <ServicePageTemplate config={config} />
+  </>
+);
 export default CloudPage;

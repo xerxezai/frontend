@@ -354,9 +354,10 @@ const AITrainingPage = () => {
   return (
     <CustomLayout>
       <SEO
-        title="AI Training & Consulting Services | XERXEZ"
-        description="Expert AI training and consulting for enterprises. Upskill your team in MLOps, LLMs, and cloud AI with XERXEZ's certified courses and workshops."
+        title="AI Training & Consulting India, Dubai & Abu Dhabi | 75+ Trained — XERXEZ"
+        description="XERXEZ AI training programs for enterprises. 75+ professionals trained in AI tools and automation in India, Dubai & Abu Dhabi UAE."
         canonical="/service/ai-training-consulting"
+        keywords="AI training India, AI consulting UAE, AI training Dubai, AI training Abu Dhabi, enterprise AI training, corporate AI training India UAE"
       />
 
       {/* ══ STICKY SCROLL BAR ══════════════════════════════════════════════════ */}

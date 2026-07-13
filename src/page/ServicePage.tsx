@@ -25,9 +25,10 @@ const SERVICES_JSONLD = {
 const ServicePage = () => (
   <CustomLayout>
     <SEO
-      title="Enterprise AI Services — ERP, DevSecOps, Cloud Infrastructure | XERXEZ"
-      description="Explore XERXEZ enterprise services: AI ERP, MLOps pipelines, DevSecOps, cloud infrastructure, and software development. End-to-end solutions for modern enterprises."
+      title="Our Services | AI ERP, DevSecOps, Cloud & More — XERXEZ India & UAE"
+      description="Explore XERXEZ services: AI ERP, DevSecOps, cloud infrastructure, software development, mobile apps, AI training for enterprises in India, Dubai & Abu Dhabi UAE."
       canonical="/service"
+      keywords="AI ERP services India, DevSecOps services UAE, cloud services India, IT services Dubai, IT services Abu Dhabi, AI consulting UAE"
       jsonLd={SERVICES_JSONLD}
     />
     <ServiceSection3 mainSection />

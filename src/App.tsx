@@ -1,7 +1,7 @@
 import { lazy, Suspense, Component } from "react";
 import type { ErrorInfo, ReactNode } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import { HelmetProvider } from "react-helmet-async";
 class PageErrorBoundary extends Component<{ children: ReactNode }, { caught: boolean }> {
   state = { caught: false };
   componentDidCatch(_e: Error, _i: ErrorInfo) { this.setState({ caught: true }); }
@@ -78,7 +78,8 @@ const PortalHub                 = lazy(() => import("./page/PortalHub"));
 
 function App() {
   return (
-    <Router>
+    <HelmetProvider>
+      <Router>
       <PageProgress />
       <ScrollToTop />
       <PageErrorBoundary>
@@ -143,7 +144,9 @@ function App() {
       <BackToTopBtn />
       <FloatingChat />
     </Router>
+    </HelmetProvider>
   );
 }
+
 
 export default App;

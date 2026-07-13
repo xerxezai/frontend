@@ -626,9 +626,10 @@ const MetricRow = ({ icon, headline, sub, bg, border, index }: {
 const TrainingPage: React.FC = () => (
   <CustomLayout>
     <SEO
-      title="AI Training Courses — Full Stack AI & MLOps | XERXEZ Academy"
-      description="Enroll in XERXEZ Academy's AI courses: Full Stack AI, MLOps, DevSecOps, and cloud infrastructure. Hands-on training for enterprises and professionals."
+      title="LMA — Learning Management App | AI Courses India, Dubai & Abu Dhabi — XERXEZ"
+      description="XERXEZ LMA Learning Management Application. Browse AI, ERP and tech courses for professionals in India, Dubai & Abu Dhabi UAE."
       canonical="/training"
+      keywords="lma login, lma courses, learning management app india, AI courses UAE, AI courses Dubai, AI courses Abu Dhabi, enterprise training india UAE"
     />
     {/* 1. DARK — Hero */}
     <XzHeroSection

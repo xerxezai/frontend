@@ -14,6 +14,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [
     react(),
+
     // Health check plugin
     {
       name: 'health-check',
@@ -33,7 +34,7 @@ export default defineConfig({
                 mode: server.config.mode,
               }
             };
-            
+
             res.setHeader('Content-Type', 'application/json');
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.end(JSON.stringify(healthStatus, null, 2));
@@ -45,13 +46,12 @@ export default defineConfig({
     }
   ],
   base: frontendConfig.production.baseUrl,
-  
+
   // Development server configuration
   server: {
     port: frontendConfig.dev.port,
     host: frontendConfig.dev.host,
     open: frontendConfig.dev.openBrowser,
-    // Serve documentation files
     proxy: {
       '/docs': {
         target: `http://localhost:${frontendConfig.dev.port}`,

@@ -1,5 +1,6 @@
 import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
+import SEO from "../components/seo/SEO";
 
 const heroStats = [
   { val: "50+",  label: "Apps Built"          },
@@ -9,8 +10,8 @@ const heroStats = [
 ];
 
 const config: ServicePageConfig = {
-  seoTitle: "Software Development | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ builds enterprise software — custom web apps, APIs, mobile platforms, and microservices — delivered on time, on budget, across 5+ industries.",
+  seoTitle: "Custom Software Development Company India, Dubai & Abu Dhabi — XERXEZ",
+  seoDesc:  "Custom enterprise software development by XERXEZ. Web apps, APIs, integrations built for scale. Serving businesses across India, Dubai & Abu Dhabi UAE.",
   badgeText: "Software Development · Custom Enterprise",
 
   headline: (
@@ -102,5 +103,15 @@ const config: ServicePageConfig = {
   ctaTags: ["Full IP Ownership", "89% On-Time Delivery", "Agile & Transparent"],
 };
 
-const SoftwareDevPage = () => <ServicePageTemplate config={config} />;
+const SoftwareDevPage = () => (
+  <>
+    <SEO
+      title="Custom Software Development Company India, Dubai & Abu Dhabi — XERXEZ"
+      description="Custom enterprise software development by XERXEZ. Web apps, APIs, integrations built for scale. Serving businesses across India, Dubai & Abu Dhabi UAE."
+      canonical="/service/software-development"
+      keywords="software development company India, custom software UAE, software development Dubai, software development Abu Dhabi, enterprise software development"
+    />
+    <ServicePageTemplate config={config} />
+  </>
+);
 export default SoftwareDevPage;

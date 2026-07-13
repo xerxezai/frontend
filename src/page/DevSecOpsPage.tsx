@@ -1,5 +1,6 @@
 import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
+import SEO from "../components/seo/SEO";
 
 const heroStats = [
   { val: "60%",   label: "Faster Deployments"  },
@@ -9,8 +10,8 @@ const heroStats = [
 ];
 
 const config: ServicePageConfig = {
-  seoTitle: "DevSecOps Pipelines | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ builds enterprise DevSecOps pipelines — CI/CD automation, zero-trust security scanning, container orchestration, and GitOps workflows at scale.",
+  seoTitle: "DevSecOps & MLOps Solutions India, Dubai & Abu Dhabi — XERXEZ",
+  seoDesc:  "XERXEZ DevSecOps and MLOps solutions for enterprises in India, Dubai & Abu Dhabi UAE. Automate pipelines, secure deployments and scale ML models.",
   badgeText: "DevSecOps · Secure by Design",
 
   headline: (
@@ -102,5 +103,15 @@ const config: ServicePageConfig = {
   ctaTags: ["ISO 27001 Ready", "Zero-Trust Architecture", "24hr CVE Patching"],
 };
 
-const DevSecOpsPage = () => <ServicePageTemplate config={config} />;
+const DevSecOpsPage = () => (
+  <>
+    <SEO
+      title="DevSecOps & MLOps Solutions India, Dubai & Abu Dhabi — XERXEZ"
+      description="XERXEZ DevSecOps and MLOps solutions for enterprises in India, Dubai & Abu Dhabi UAE. Automate pipelines, secure deployments and scale ML models."
+      canonical="/service/devsecops-mlops-solutions"
+      keywords="DevSecOps India, MLOps UAE, CI CD pipeline India, DevOps services Dubai, DevOps Abu Dhabi, DevSecOps company India"
+    />
+    <ServicePageTemplate config={config} />
+  </>
+);
 export default DevSecOpsPage;

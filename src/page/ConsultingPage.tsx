@@ -1,5 +1,6 @@
 import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
+import SEO from "../components/seo/SEO";
 
 const heroStats = [
   { val: "50+", label: "Clients Served"     },
@@ -9,8 +10,8 @@ const heroStats = [
 ];
 
 const config: ServicePageConfig = {
-  seoTitle: "Software Consulting | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ provides enterprise software consulting — technology audits, architecture review, digital transformation, and team augmentation for 50+ organisations globally.",
+  seoTitle: "Software Consulting Services India, Dubai & Abu Dhabi UAE — XERXEZ",
+  seoDesc:  "Expert software consulting by XERXEZ for enterprise digital transformation across India, Dubai & Abu Dhabi.",
   badgeText: "Software Consulting · Strategic Advisory",
 
   headline: (
@@ -102,5 +103,15 @@ const config: ServicePageConfig = {
   ctaTags: ["No Vendor Affiliations", "Engineers Who Build", "80% Client Retention"],
 };
 
-const ConsultingPage = () => <ServicePageTemplate config={config} />;
+const ConsultingPage = () => (
+  <>
+    <SEO
+      title="Software Consulting Services India, Dubai & Abu Dhabi UAE — XERXEZ"
+      description="Expert software consulting by XERXEZ for enterprise digital transformation across India, Dubai & Abu Dhabi."
+      canonical="/service/software-consulting"
+      keywords="software consulting India, IT consulting UAE, IT consulting Dubai, IT consulting Abu Dhabi, digital transformation India"
+    />
+    <ServicePageTemplate config={config} />
+  </>
+);
 export default ConsultingPage;

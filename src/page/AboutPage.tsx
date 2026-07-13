@@ -522,9 +522,10 @@ const AboutPage = () => {
   return (
     <CustomLayout>
       <SEO
-        title="About XERXEZ | AI-Powered Enterprise Platform - UAE & India"
-        description="XERXEZ is an AI-powered enterprise platform founded in 2021, serving 15+ countries with ERP, LMA Academy and DevSecOps solutions from UAE and India."
+        title="About XERXEZ | AI ERP & Enterprise Tech Company India & UAE"
+        description="Learn about XERXEZ — AI ERP and enterprise technology company serving businesses across India, Dubai & Abu Dhabi UAE. ISO 27001 & SOC 2 certified."
         canonical="/about"
+        keywords="about XERXEZ, XERXEZ company, enterprise tech company India, AI company UAE, IT company Dubai, IT company Abu Dhabi, software company Bangalore"
       />
       <style>{`
         /* ── Keyframes ── */

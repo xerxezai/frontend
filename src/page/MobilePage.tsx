@@ -1,5 +1,6 @@
 import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
+import SEO from "../components/seo/SEO";
 
 const heroStats = [
   { val: "100+", label: "Apps Delivered"   },
@@ -9,8 +10,8 @@ const heroStats = [
 ];
 
 const config: ServicePageConfig = {
-  seoTitle: "Mobile Application Development | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ builds enterprise iOS and Android applications — native and cross-platform — with 4.8 average store rating and under 3-month launch timelines.",
+  seoTitle: "Mobile App Development India, Dubai & Abu Dhabi UAE — XERXEZ",
+  seoDesc:  "Custom mobile application development by XERXEZ. iOS, Android and cross-platform apps for enterprises in India, Dubai & Abu Dhabi.",
   badgeText: "Mobile Applications · iOS & Android",
 
   headline: (
@@ -102,5 +103,15 @@ const config: ServicePageConfig = {
   ctaTags: ["iOS & Android Native", "App Store Experts", "OWASP Mobile Security"],
 };
 
-const MobilePage = () => <ServicePageTemplate config={config} />;
+const MobilePage = () => (
+  <>
+    <SEO
+      title="Mobile App Development India, Dubai & Abu Dhabi UAE — XERXEZ"
+      description="Custom mobile application development by XERXEZ. iOS, Android and cross-platform apps for enterprises in India, Dubai & Abu Dhabi."
+      canonical="/service/mobile-application"
+      keywords="mobile app development India, mobile app UAE, mobile app Dubai, mobile app Abu Dhabi, enterprise mobile apps, iOS Android development India"
+    />
+    <ServicePageTemplate config={config} />
+  </>
+);
 export default MobilePage;

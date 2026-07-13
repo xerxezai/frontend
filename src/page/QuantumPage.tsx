@@ -1,5 +1,6 @@
 import ServicePageTemplate, { ServiceHeroCard } from "./ServicePageTemplate";
 import type { ServicePageConfig } from "./ServicePageTemplate";
+import SEO from "../components/seo/SEO";
 
 const heroStats = [
   { val: "10×",    label: "Optimisation Speedup" },
@@ -9,8 +10,8 @@ const heroStats = [
 ];
 
 const config: ServicePageConfig = {
-  seoTitle: "Quantum Computing | XERXEZ Enterprise Solutions",
-  seoDesc:  "XERXEZ delivers quantum computing solutions — algorithm development, cryptography, optimisation, and hybrid quantum-classical systems for enterprise problems.",
+  seoTitle: "Quantum Computing Services India, Dubai & Abu Dhabi — XERXEZ",
+  seoDesc:  "XERXEZ quantum computing solutions for enterprise innovation in India, Dubai & Abu Dhabi UAE.",
   badgeText: "Quantum Computing · Advanced R&D",
 
   headline: (
@@ -102,5 +103,15 @@ const config: ServicePageConfig = {
   ctaTags: ["IBM & AWS Quantum Partner", "Post-Quantum Crypto", "Honest Feasibility Assessment"],
 };
 
-const QuantumPage = () => <ServicePageTemplate config={config} />;
+const QuantumPage = () => (
+  <>
+    <SEO
+      title="Quantum Computing Services India, Dubai & Abu Dhabi — XERXEZ"
+      description="XERXEZ quantum computing solutions for enterprise innovation in India, Dubai & Abu Dhabi UAE."
+      canonical="/service/quantum-computing"
+      keywords="quantum computing India, quantum computing UAE, quantum computing Dubai, quantum computing Abu Dhabi, enterprise quantum solutions"
+    />
+    <ServicePageTemplate config={config} />
+  </>
+);
 export default QuantumPage;
