@@ -10,7 +10,7 @@ const TeamPage = () => {
           title="Our Team | AI & Enterprise Technology Experts India & UAE — XERXEZ"
           description="Meet the XERXEZ team of AI, ERP, DevSecOps and cloud experts serving enterprises across India, Dubai & Abu Dhabi UAE."
           canonical="/team"
-          keywords="XERXEZ team, AI experts India, ERP consultants UAE, ERP consultants Dubai, ERP experts Abu Dhabi, enterprise tech team India"
+          keywords="XERXEZ team, AI experts India, ERP consultants UAE, ERP consultants Dubai, ERP experts Abu Dhabi, enterprise tech team India, Xerxez Solutions"
         />
         <BreadcrumbSection title="Our Team Members" />
         <TeamMainSection />

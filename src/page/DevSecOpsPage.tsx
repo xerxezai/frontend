@@ -109,7 +109,7 @@ const DevSecOpsPage = () => (
       title="DevSecOps & MLOps Solutions India, Dubai & Abu Dhabi — XERXEZ"
       description="XERXEZ DevSecOps and MLOps solutions for enterprises in India, Dubai & Abu Dhabi UAE. Automate pipelines, secure deployments and scale ML models."
       canonical="/service/devsecops-mlops-solutions"
-      keywords="DevSecOps India, MLOps UAE, CI CD pipeline India, DevOps services Dubai, DevOps Abu Dhabi, DevSecOps company India"
+      keywords="DevSecOps India, MLOps UAE, CI CD pipeline India, DevOps services Dubai, DevOps Abu Dhabi, DevSecOps company India, Xerxez Solutions"
     />
     <ServicePageTemplate config={config} />
   </>

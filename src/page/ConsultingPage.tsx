@@ -109,7 +109,7 @@ const ConsultingPage = () => (
       title="Software Consulting Services India, Dubai & Abu Dhabi UAE — XERXEZ"
       description="Expert software consulting by XERXEZ for enterprise digital transformation across India, Dubai & Abu Dhabi."
       canonical="/service/software-consulting"
-      keywords="software consulting India, IT consulting UAE, IT consulting Dubai, IT consulting Abu Dhabi, digital transformation India"
+      keywords="software consulting India, IT consulting UAE, IT consulting Dubai, IT consulting Abu Dhabi, digital transformation India, Xerxez Solutions"
     />
     <ServicePageTemplate config={config} />
   </>

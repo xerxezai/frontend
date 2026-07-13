@@ -109,7 +109,7 @@ const MobilePage = () => (
       title="Mobile App Development India, Dubai & Abu Dhabi UAE — XERXEZ"
       description="Custom mobile application development by XERXEZ. iOS, Android and cross-platform apps for enterprises in India, Dubai & Abu Dhabi."
       canonical="/service/mobile-application"
-      keywords="mobile app development India, mobile app UAE, mobile app Dubai, mobile app Abu Dhabi, enterprise mobile apps, iOS Android development India"
+      keywords="mobile app development India, mobile app development abu dhabi, mobile app UAE, mobile app Dubai, mobile app Abu Dhabi, enterprise mobile apps, iOS Android development India, Xerxez Solutions"
     />
     <ServicePageTemplate config={config} />
   </>

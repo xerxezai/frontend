@@ -629,7 +629,7 @@ const TrainingPage: React.FC = () => (
       title="LMA — Learning Management App | AI Courses India, Dubai & Abu Dhabi — XERXEZ"
       description="XERXEZ LMA Learning Management Application. Browse AI, ERP and tech courses for professionals in India, Dubai & Abu Dhabi UAE."
       canonical="/training"
-      keywords="lma login, lma courses, learning management app india, AI courses UAE, AI courses Dubai, AI courses Abu Dhabi, enterprise training india UAE"
+      keywords="lma login, lma courses, learning management app india, AI courses UAE, AI courses Dubai, AI courses Abu Dhabi, enterprise training india UAE, Xerxez Solutions"
     />
     {/* 1. DARK — Hero */}
     <XzHeroSection

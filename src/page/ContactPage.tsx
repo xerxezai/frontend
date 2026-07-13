@@ -9,7 +9,7 @@ const ContactPage = () => (
       title="Contact XERXEZ | Book Free Demo — AI ERP India, Dubai & Abu Dhabi"
       description="Contact XERXEZ for AI ERP, DevSecOps and cloud solutions. Book a free enterprise demo. Serving India, Dubai & Abu Dhabi UAE."
       canonical="/contact"
-      keywords="contact XERXEZ, book demo ERP India, ERP consultation Dubai, ERP consultation Abu Dhabi, XERXEZ support"
+      keywords="contact XERXEZ, book demo ERP India, ERP consultation Dubai, ERP consultation Abu Dhabi, XERXEZ support, Xerxez Solutions"
     />
     <ContactSection2 />
     <ContactTrustBar />

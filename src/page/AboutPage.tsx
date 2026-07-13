@@ -525,7 +525,7 @@ const AboutPage = () => {
         title="About XERXEZ | AI ERP & Enterprise Tech Company India & UAE"
         description="Learn about XERXEZ — AI ERP and enterprise technology company serving businesses across India, Dubai & Abu Dhabi UAE. ISO 27001 & SOC 2 certified."
         canonical="/about"
-        keywords="about XERXEZ, XERXEZ company, enterprise tech company India, AI company UAE, IT company Dubai, IT company Abu Dhabi, software company Bangalore"
+        keywords="about XERXEZ, XERXEZ company, enterprise tech company India, AI company UAE, IT company Dubai, IT company Abu Dhabi, software company Bangalore, Xerxez Solutions"
       />
       <style>{`
         /* ── Keyframes ── */

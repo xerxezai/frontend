@@ -28,7 +28,7 @@ const ServicePage = () => (
       title="Our Services | AI ERP, DevSecOps, Cloud & More — XERXEZ India & UAE"
       description="Explore XERXEZ services: AI ERP, DevSecOps, cloud infrastructure, software development, mobile apps, AI training for enterprises in India, Dubai & Abu Dhabi UAE."
       canonical="/service"
-      keywords="AI ERP services India, DevSecOps services UAE, cloud services India, IT services Dubai, IT services Abu Dhabi, AI consulting UAE"
+      keywords="AI ERP services India, DevSecOps services UAE, cloud services India, IT services Dubai, IT services Abu Dhabi, AI consulting UAE, Xerxez Solutions"
       jsonLd={SERVICES_JSONLD}
     />
     <ServiceSection3 mainSection />

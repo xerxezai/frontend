@@ -109,7 +109,7 @@ const SoftwareDevPage = () => (
       title="Custom Software Development Company India, Dubai & Abu Dhabi — XERXEZ"
       description="Custom enterprise software development by XERXEZ. Web apps, APIs, integrations built for scale. Serving businesses across India, Dubai & Abu Dhabi UAE."
       canonical="/service/software-development"
-      keywords="software development company India, custom software UAE, software development Dubai, software development Abu Dhabi, enterprise software development"
+      keywords="software development company India, custom software development company india, custom software UAE, software development Dubai, software development Abu Dhabi, enterprise software development, Xerxez Solutions"
     />
     <ServicePageTemplate config={config} />
   </>

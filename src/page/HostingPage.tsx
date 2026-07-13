@@ -109,7 +109,7 @@ const HostingPage = () => (
       title="Web & Mobile Hosting India, Dubai & Abu Dhabi UAE — XERXEZ"
       description="Reliable, secure web and mobile hosting by XERXEZ. 99.9% uptime guaranteed for enterprises in India, Dubai & Abu Dhabi UAE."
       canonical="/service/web-mobile-hosting"
-      keywords="web hosting India, mobile hosting UAE, web hosting Dubai, hosting Abu Dhabi, enterprise hosting solutions, secure hosting UAE, cloud hosting India UAE"
+      keywords="web hosting India, mobile hosting UAE, web hosting Dubai, hosting Abu Dhabi, enterprise hosting solutions, secure hosting UAE, cloud hosting India UAE, Xerxez Solutions"
     />
     <ServicePageTemplate config={config} />
   </>

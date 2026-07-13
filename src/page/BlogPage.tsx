@@ -10,7 +10,7 @@ const BlogPage = () => (
       title="Blog | AI, ERP & Enterprise Tech Insights — XERXEZ India & UAE"
       description="Latest insights on AI, ERP, DevSecOps and enterprise technology from XERXEZ experts. Covering India, Dubai & Abu Dhabi UAE."
       canonical="/blog"
-      keywords="AI blog India, ERP blog UAE, enterprise tech blog, DevSecOps articles India, tech blog Dubai, tech blog Abu Dhabi"
+      keywords="AI blog India, ERP blog UAE, enterprise tech blog, DevSecOps articles India, tech blog Dubai, tech blog Abu Dhabi, Xerxez Solutions"
     />
     <BreadcrumbSection title="Our Blog & News" />
     <BlogMainSection />

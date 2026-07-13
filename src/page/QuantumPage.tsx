@@ -109,7 +109,7 @@ const QuantumPage = () => (
       title="Quantum Computing Services India, Dubai & Abu Dhabi — XERXEZ"
       description="XERXEZ quantum computing solutions for enterprise innovation in India, Dubai & Abu Dhabi UAE."
       canonical="/service/quantum-computing"
-      keywords="quantum computing India, quantum computing UAE, quantum computing Dubai, quantum computing Abu Dhabi, enterprise quantum solutions"
+      keywords="quantum computing India, quantum computing UAE, quantum computing Dubai, quantum computing Abu Dhabi, enterprise quantum solutions, Xerxez Solutions"
     />
     <ServicePageTemplate config={config} />
   </>

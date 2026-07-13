@@ -859,7 +859,7 @@ const AIERPPage = () => {
         title="Best AI ERP Software in India, Dubai & Abu Dhabi UAE — XERXEZ"
         description="XERXEZ AI ERP is the best ERP software in India, Dubai and Abu Dhabi UAE. Replace 5 legacy systems, cut costs 40%, deploy in 6 months. Book free demo."
         canonical="/service/ai-powered-erp"
-        keywords="best erp software in india, best erp software in abu dhabi, best erp software dubai, AI ERP software india, erp system UAE, erp software dubai, erp software abu dhabi, xerxez erp"
+        keywords="best erp software in india, best erp software in abu dhabi, best erp software dubai, AI ERP software india, AI ERP software abu dhabi, erp system UAE, erp software dubai, erp software abu dhabi, xerxez erp, Xerxez Solutions"
       />
       <style>{`
         @keyframes erpCardIn {

@@ -7,6 +7,7 @@ import HeroSection from "../components/hero/HeroSection";
 import HomeFaq, { HOME_FAQS } from "../components/marketing/HomeFaq";
 import HowWeWork from "../components/marketing/HowWeWork";
 import IndustriesBar from "../components/marketing/IndustriesBar";
+import PricingSection from "../components/marketing/PricingSection";
 import TestimonialsSection from "../components/marketing/TestimonialsSection";
 import WhyXerxez from "../components/marketing/WhyXerxez";
 import MobileMenuModal from "../components/modal/MobileMenuModal";
@@ -61,7 +62,7 @@ const HomePage1 = () => {
         title="XERXEZ — Best AI-Powered ERP Software India & UAE | Abu Dhabi Dubai"
         description="XERXEZ is the best AI ERP software in India & UAE. Replace 5 legacy systems, cut costs 40%, deploy in 6 months. Trusted by enterprises in Abu Dhabi, Dubai & India."
         canonical="/"
-        keywords="best erp software in india, best erp software in abu dhabi, best erp software UAE, xerxez erp, AI ERP India, ERP system India, erp software dubai, best erp for small business india, enterprise ERP india UAE, xerxez ai, XERXEZ"
+        keywords="best erp software in india, best erp software in abu dhabi, best erp software UAE, xerxez erp, AI ERP India, ERP system India, erp software dubai, best erp for small business india, enterprise ERP india UAE, xerxez ai, XERXEZ, Xerxez Solutions"
         jsonLd={[ORG_JSONLD, FAQ_JSONLD]} 
       />
       <HeaderSection />
@@ -73,6 +74,7 @@ const HomePage1 = () => {
       <div id="sec-hero" style={{ paddingTop: HEADER_TOTAL_H }}><HeroSection /></div>
       <IndustriesBar />
       <div id="sec-about"><ServiceSection2 /></div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 700px" } as React.CSSProperties}><PricingSection /></div>
       <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 700px" } as React.CSSProperties}><BrandSection /></div>
       <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 700px" } as React.CSSProperties}><AcademySection /></div>
       <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 600px" } as React.CSSProperties}><HowWeWork /></div>

@@ -109,7 +109,7 @@ const CloudPage = () => (
       title="Cloud Services & Storage Solutions India, Dubai & Abu Dhabi — XERXEZ"
       description="Enterprise cloud infrastructure, storage and migration by XERXEZ. Scalable, secure cloud solutions for businesses in India, Dubai & Abu Dhabi UAE."
       canonical="/service/cloud-service-storage"
-      keywords="cloud services India, cloud storage UAE, cloud services Abu Dhabi, enterprise cloud solutions, cloud migration India, cloud infrastructure Dubai"
+      keywords="cloud services India, cloud storage UAE, cloud services Abu Dhabi, enterprise cloud solutions, cloud migration India, cloud infrastructure Dubai, Xerxez Solutions"
     />
     <ServicePageTemplate config={config} />
   </>
