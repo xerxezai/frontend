@@ -22,6 +22,7 @@ const NAV: NavItem[] = [
   { to: '/erp/crm',       icon: 'fas fa-users',               label: 'CRM' },
   { to: '/erp/hr',        icon: 'fas fa-user-tie',            label: 'HR Overview' },
   { to: '/erp/inventory', icon: 'fas fa-boxes',               label: 'Inventory' },
+  { to: '/erp/procurement', icon: 'fas fa-truck',             label: 'Procurement' },
   { to: '/erp/invoicing', icon: 'fas fa-file-invoice-dollar', label: 'Invoicing' },
   { to: '/erp/logistics', icon: 'fas fa-shipping-fast',       label: 'Logistics' },
   { to: '/erp/accounting',icon: 'fas fa-book',                label: 'Accounting' },
@@ -44,8 +45,16 @@ const NAV: NavItem[] = [
 // Expandable CRM submenu (quick links; Customers/Leads/Activities/Pipeline
 // remain reachable as tabs inside the CRM page itself, not the sidebar)
 const CRM_SUBMENU: { to: string; icon: string; label: string }[] = [
-  { to: '/erp/sales',     icon: 'fas fa-shopping-cart', label: 'Sales' },
-  { to: '/erp/purchases', icon: 'fas fa-truck-loading', label: 'Purchases' },
+  { to: '/erp/sales', icon: 'fas fa-shopping-cart', label: 'Sales' },
+];
+
+// Expandable Procurement submenu
+const PROCUREMENT_SUBMENU: { to: string; icon: string; label: string }[] = [
+  { to: '/erp/procurement',                icon: 'fas fa-th-large',      label: 'Dashboard' },
+  { to: '/erp/procurement/purchase-orders',icon: 'fas fa-file-invoice',  label: 'Purchase Orders' },
+  { to: '/erp/procurement/suppliers',      icon: 'fas fa-industry',      label: 'Suppliers' },
+  { to: '/erp/procurement/goods-receipt',  icon: 'fas fa-dolly',         label: 'Goods Receipt' },
+  { to: '/erp/procurement/bills',          icon: 'fas fa-file-invoice-dollar', label: 'Bills' },
 ];
 
 // Expandable HR Overview submenu
@@ -107,17 +116,22 @@ const ERPLayout = ({ children }: Props) => {
   const currentCrmSub = CRM_SUBMENU.find(
     s => location.pathname === s.to || location.pathname.startsWith(s.to + '/')
   );
+  const currentProcurementSub = PROCUREMENT_SUBMENU.find(
+    s => s.to !== '/erp/procurement' && (s.to === location.pathname || location.pathname.startsWith(s.to + '/'))
+  );
   const currentNavItem = NAV.find(
     item => 'to' in item && (item.to === location.pathname || location.pathname.startsWith(item.to + '/'))
   );
   const pageTitle = currentSub ? currentSub.label
     : currentCrmSub ? currentCrmSub.label
+    : currentProcurementSub ? currentProcurementSub.label
     : currentNavItem && 'label' in currentNavItem ? currentNavItem.label : 'Dashboard';
 
   const [hrOpen, setHrOpen] = useState(() => location.pathname.startsWith('/erp/hr'));
   const [crmOpen, setCrmOpen] = useState(() =>
     ['/erp/sales', '/erp/purchases'].some(p => location.pathname.startsWith(p))
   );
+  const [procurementOpen, setProcurementOpen] = useState(() => location.pathname.startsWith('/erp/procurement'));
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -498,6 +512,47 @@ const ERPLayout = ({ children }: Props) => {
                         <NavLink
                           key={s.to}
                           to={s.to}
+                          onClick={() => setMobileOpen(false)}
+                          className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                        >
+                          <i className={s.icon} style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                          <span>{s.label}</span>
+                        </NavLink>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            // Expandable Procurement submenu (only when sidebar is expanded)
+            if (item.to === '/erp/procurement' && !collapsed) {
+              const anyProcurementChildActive = location.pathname.startsWith('/erp/procurement');
+              return (
+                <div key={item.to}>
+                  <button
+                    onClick={() => setProcurementOpen(o => !o)}
+                    className={`erp-nav-item erp-nav-slide${anyProcurementChildActive ? ' erp-nav-active' : ''}`}
+                    style={{ width: '100%', background: 'none', textAlign: 'left', animationDelay: `${idx * 0.028}s` }}
+                  >
+                    <span className="erp-icon-badge">
+                      <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
+                    </span>
+                    <span style={{ flex: 1 }}>{item.label}</span>
+                    <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: procurementOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
+                  </button>
+                  <div style={{
+                    overflow: 'hidden',
+                    maxHeight: procurementOpen ? PROCUREMENT_SUBMENU.length * 44 + 8 : 0,
+                    margin: procurementOpen ? '4px 8px 8px' : '0 8px',
+                    transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
+                  }}>
+                    <div className="erp-subnav-panel">
+                      {PROCUREMENT_SUBMENU.map(s => (
+                        <NavLink
+                          key={s.to}
+                          to={s.to}
+                          end={s.to === '/erp/procurement'}
                           onClick={() => setMobileOpen(false)}
                           className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
                         >

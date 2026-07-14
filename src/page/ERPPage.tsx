@@ -9,6 +9,7 @@ import InventoryModule from '../components/erp/modules/InventoryModule';
 import SalesModule from '../components/erp/modules/SalesModule';
 import InvoicingModule from '../components/erp/modules/InvoicingModule';
 import PurchasesModule from '../components/erp/modules/PurchasesModule';
+import ProcurementModule from '../components/erp/modules/ProcurementModule';
 import LogisticsModule from '../components/erp/modules/LogisticsModule';
 import AccountingModule from '../components/erp/modules/AccountingModule';
 import MLMModule from '../components/erp/modules/MLMModule';
@@ -91,6 +92,11 @@ const ERPPage = () => {
           <Route path="sales"              element={<SalesModule />} />
           <Route path="invoicing"          element={<InvoicingModule />} />
           <Route path="purchases"          element={<PurchasesModule />} />
+          <Route path="procurement"                    element={<ProcurementModule />} />
+          <Route path="procurement/purchase-orders"    element={<ProcurementModule initialTab="Purchase Orders" />} />
+          <Route path="procurement/suppliers"          element={<ProcurementModule initialTab="Suppliers" />} />
+          <Route path="procurement/goods-receipt"      element={<ProcurementModule initialTab="Goods Receipt" />} />
+          <Route path="procurement/bills"              element={<ProcurementModule initialTab="Bills" />} />
           <Route path="logistics"          element={<LogisticsModule />} />
           <Route path="accounting"         element={<AccountingModule />} />
           <Route path="mlm"                element={<MLMModule />} />
