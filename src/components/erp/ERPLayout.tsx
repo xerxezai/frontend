@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 
 const C = {
   orange:     "#C9883A",
@@ -22,9 +22,7 @@ const NAV: NavItem[] = [
   { to: '/erp/crm',       icon: 'fas fa-users',               label: 'CRM' },
   { to: '/erp/hr',        icon: 'fas fa-user-tie',            label: 'HR Overview' },
   { to: '/erp/inventory', icon: 'fas fa-boxes',               label: 'Inventory' },
-  { to: '/erp/sales',     icon: 'fas fa-shopping-cart',       label: 'Sales' },
   { to: '/erp/invoicing', icon: 'fas fa-file-invoice-dollar', label: 'Invoicing' },
-  { to: '/erp/purchases', icon: 'fas fa-truck-loading',       label: 'Purchases' },
   { to: '/erp/logistics', icon: 'fas fa-shipping-fast',       label: 'Logistics' },
   { to: '/erp/accounting',icon: 'fas fa-book',                label: 'Accounting' },
   { to: '/erp/mlm',       icon: 'fas fa-sitemap',             label: 'MLM' },
@@ -41,6 +39,16 @@ const NAV: NavItem[] = [
   { to: '/erp/payroll-generate',    icon: 'fas fa-cogs',                  label: 'Generate Payroll', adminOnly: true },
   { to: '/erp/payroll-reports',     icon: 'fas fa-chart-bar',             label: 'Payroll Reports',  adminOnly: true },
   { to: '/erp/my-payslips',         icon: 'fas fa-file-alt',              label: 'My Payslips' },
+];
+
+// Expandable CRM submenu
+const CRM_SUBMENU: { to: string; icon: string; label: string }[] = [
+  { to: '/erp/crm',                    icon: 'fas fa-users',        label: 'Customers' },
+  { to: '/erp/crm?tab=leads',          icon: 'fas fa-bullseye',     label: 'Leads' },
+  { to: '/erp/crm?tab=activities',     icon: 'fas fa-stream',       label: 'Activities' },
+  { to: '/erp/crm?tab=pipeline',       icon: 'fas fa-columns',      label: 'Pipeline' },
+  { to: '/erp/sales',                  icon: 'fas fa-shopping-cart',label: 'Sales' },
+  { to: '/erp/purchases',              icon: 'fas fa-truck-loading',label: 'Purchases' },
 ];
 
 // Expandable HR Overview submenu
@@ -96,16 +104,34 @@ const ERPLayout = ({ children }: Props) => {
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
 
+  const crmTabParam = new URLSearchParams(location.search).get('tab');
+
+  // Parses a submenu "to" that may carry a `?tab=` query (used by CRM) into
+  // { pathname, tab } so active-state can compare against location.search too.
+  const parseSubTo = (to: string) => {
+    const [pathname, query] = to.split('?');
+    return { pathname, tab: new URLSearchParams(query || '').get('tab') };
+  };
+  const isCrmSubActive = (to: string) => {
+    const { pathname, tab } = parseSubTo(to);
+    return location.pathname === pathname && crmTabParam === tab;
+  };
+
   const currentSub = HR_SUBMENU.find(
     s => s.to !== '/erp/hr' && (s.to === location.pathname || location.pathname.startsWith(s.to + '/'))
   );
+  const currentCrmSub = CRM_SUBMENU.find(s => isCrmSubActive(s.to));
   const currentNavItem = NAV.find(
     item => 'to' in item && (item.to === location.pathname || location.pathname.startsWith(item.to + '/'))
   );
   const pageTitle = currentSub ? currentSub.label
+    : currentCrmSub ? currentCrmSub.label
     : currentNavItem && 'label' in currentNavItem ? currentNavItem.label : 'Dashboard';
 
   const [hrOpen, setHrOpen] = useState(() => location.pathname.startsWith('/erp/hr'));
+  const [crmOpen, setCrmOpen] = useState(() =>
+    ['/erp/crm', '/erp/sales', '/erp/purchases'].some(p => location.pathname.startsWith(p))
+  );
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -437,6 +463,51 @@ const ERPLayout = ({ children }: Props) => {
                           <span>{s.label}</span>
                         </NavLink>
                       ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            // Expandable CRM submenu (only when sidebar is expanded)
+            if (item.to === '/erp/crm' && !collapsed) {
+              const anyCrmChildActive = CRM_SUBMENU.some(s => isCrmSubActive(s.to)) ||
+                location.pathname.startsWith('/erp/sales') || location.pathname.startsWith('/erp/purchases');
+              return (
+                <div key={item.to}>
+                  <button
+                    onClick={() => setCrmOpen(o => !o)}
+                    className={`erp-nav-item erp-nav-slide${anyCrmChildActive ? ' erp-nav-active' : ''}`}
+                    style={{ width: '100%', background: 'none', textAlign: 'left', animationDelay: `${idx * 0.028}s` }}
+                  >
+                    <span className="erp-icon-badge">
+                      <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
+                    </span>
+                    <span style={{ flex: 1 }}>{item.label}</span>
+                    <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: crmOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
+                  </button>
+                  <div style={{
+                    overflow: 'hidden',
+                    maxHeight: crmOpen ? CRM_SUBMENU.length * 44 + 8 : 0,
+                    margin: crmOpen ? '4px 8px 8px' : '0 8px',
+                    transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
+                  }}>
+                    <div className="erp-subnav-panel">
+                      {CRM_SUBMENU.map(s => {
+                        const active = s.to.startsWith('/erp/crm') ? isCrmSubActive(s.to)
+                          : location.pathname === s.to || location.pathname.startsWith(s.to + '/');
+                        return (
+                          <Link
+                            key={s.to}
+                            to={s.to}
+                            onClick={() => setMobileOpen(false)}
+                            className={`erp-subnav-item${active ? ' erp-subnav-active' : ''}`}
+                          >
+                            <i className={s.icon} style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                            <span>{s.label}</span>
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
