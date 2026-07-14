@@ -114,3 +114,13 @@ export const calcTotals = (items: InvoiceItemRow[]) => {
   const tax = subtotal * GST_RATE;
   return { subtotal, tax, total: subtotal + tax };
 };
+
+export const KpiCard = ({ icon, label, value, accent }: { icon: string; label: string; value: string; accent: string }) => (
+  <Card3D accent={accent} p="16px 18px">
+    <div style={{ width: 34, height: 34, borderRadius: 9, background: `${accent}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+      <i className={icon} style={{ color: accent, fontSize: 13 }} />
+    </div>
+    <div style={{ fontFamily: FF, fontWeight: 800, fontSize: 19, color: '#1A1A1A' }}>{value}</div>
+    <div style={{ fontFamily: FF, fontSize: 11, color: '#6B6B6B', marginTop: 2 }}>{label}</div>
+  </Card3D>
+);

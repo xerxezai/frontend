@@ -1,14 +1,21 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, erpDownload, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, inp, fmtINR, StatusBadge, DelDlg, today, plusDays, nextNumber } from './invoicingShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, fmtINR, KpiCard, StatusBadge, DelDlg, today, plusDays, nextNumber } from './invoicingShared';
 import InvoiceForm, { type InvoiceFormValues } from './InvoiceForm';
 import { downloadInvoicePDF } from './pdf';
 
 const emptyForm = (number: string): InvoiceFormValues => ({
   number, customer: '', issue_date: today(), due_date: plusDays(30), status: 'draft', notes: '', items: [],
 });
+
+interface DashboardData {
+  total_invoiced: string;
+  total_paid: string;
+  outstanding: string;
+  overdue_count: number;
+}
 
 export default function InvoicesPanel() {
   const isAdmin = isSuperUser();
@@ -18,6 +25,12 @@ export default function InvoicesPanel() {
   const [dateTo, setDateTo] = useState('');
 
   const invoices = useERPList<any>('invoicing/invoices/');
+
+  const [dash, setDash] = useState<DashboardData | null>(null);
+  const loadDash = useCallback(() => {
+    erpFetch('invoicing/dashboard/').then(setDash).catch(() => {});
+  }, []);
+  useEffect(() => { loadDash(); }, [loadDash]);
 
   const filtered = useMemo(() => {
     const s = search.trim().toLowerCase();
@@ -34,8 +47,12 @@ export default function InvoicesPanel() {
   const [editing, setEditing] = useState<any>(null);
   const [delId, setDelId] = useState<number | null>(null);
   const [markingPaid, setMarkingPaid] = useState<number | null>(null);
+  const [sending, setSending] = useState<number | null>(null);
+  const [payTarget, setPayTarget] = useState<any>(null);
 
   const close = () => { setShowModal(false); setEditing(null); };
+
+  const refreshAll = () => { invoices.reload(); loadDash(); };
 
   const handleSave = async (f: InvoiceFormValues) => {
     const body: any = {
@@ -54,6 +71,7 @@ export default function InvoicesPanel() {
       if (editing) { await invoices.update(editing.id, body); toast.success('Invoice updated'); }
       else { await invoices.create(body); toast.success('Invoice created'); }
       close();
+      refreshAll();
     } catch (e: any) { toast.error(e.message || 'Save failed'); }
   };
 
@@ -61,19 +79,33 @@ export default function InvoicesPanel() {
     try {
       await invoices.remove(delId!);
       toast.success('Deleted'); setDelId(null);
+      refreshAll();
     } catch (e: any) { toast.error(e.message || 'Delete failed'); }
   };
 
   const markPaid = async (id: number) => {
     setMarkingPaid(id);
     try {
-      await erpFetch(`invoicing/invoices/${id}/mark-paid/`, { method: 'POST' });
+      await erpFetch(`invoicing/invoices/${id}/mark-paid/`, { method: 'PUT' });
       toast.success('Marked as paid');
-      invoices.reload();
+      refreshAll();
     } catch (e: any) {
       toast.error(e.message || 'Could not mark as paid');
     } finally {
       setMarkingPaid(null);
+    }
+  };
+
+  const sendInvoice = async (id: number) => {
+    setSending(id);
+    try {
+      await erpFetch(`invoicing/invoices/${id}/send/`, { method: 'PUT' });
+      toast.success('Invoice sent');
+      refreshAll();
+    } catch (e: any) {
+      toast.error(e.message || 'Could not send invoice');
+    } finally {
+      setSending(null);
     }
   };
 
@@ -93,8 +125,20 @@ export default function InvoicesPanel() {
       key: 'quickActions', label: 'Quick Actions',
       render: (r: any) => (
         <div style={{ display: 'flex', gap: 5 }}>
+          {isAdmin && r.status === 'draft' && (
+            <button title="Send" disabled={sending === r.id} onClick={() => sendInvoice(r.id)}
+              style={{ background:'rgba(59,130,246,0.08)',color:'#1d4ed8',border:'1px solid rgba(59,130,246,0.22)',width:28,height:28,borderRadius:6,cursor: sending === r.id ? 'wait' : 'pointer' }}>
+              <i className={`fas ${sending === r.id ? 'fa-spinner fa-spin' : 'fa-paper-plane'}`} style={{ fontSize: 10 }} />
+            </button>
+          )}
+          {isAdmin && r.status !== 'paid' && r.status !== 'cancelled' && (
+            <button title="Record Payment" onClick={() => setPayTarget(r)}
+              style={{ background:'rgba(201,136,58,0.08)',color:OG,border:'1px solid rgba(201,136,58,0.22)',width:28,height:28,borderRadius:6,cursor:'pointer' }}>
+              <i className="fas fa-hand-holding-dollar" style={{ fontSize: 10 }} />
+            </button>
+          )}
           <button title="Download PDF" onClick={() => downloadInvoicePDF(r)}
-            style={{ background:'rgba(59,130,246,0.08)',color:'#1d4ed8',border:'1px solid rgba(59,130,246,0.22)',width:28,height:28,borderRadius:6,cursor:'pointer' }}>
+            style={{ background:'rgba(107,114,128,0.08)',color:'#374151',border:'1px solid rgba(107,114,128,0.22)',width:28,height:28,borderRadius:6,cursor:'pointer' }}>
             <i className="fas fa-file-pdf" style={{ fontSize: 10 }} />
           </button>
           {isAdmin && r.status !== 'paid' && r.status !== 'cancelled' && (
@@ -111,6 +155,15 @@ export default function InvoicesPanel() {
 
   return (
     <div>
+      {dash && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 18 }}>
+          <KpiCard icon="fas fa-file-invoice" label="Total Invoiced" value={fmtINR(dash.total_invoiced)} accent={OG} />
+          <KpiCard icon="fas fa-circle-check" label="Paid" value={fmtINR(dash.total_paid)} accent="#10b981" />
+          <KpiCard icon="fas fa-hourglass-half" label="Outstanding" value={fmtINR(dash.outstanding)} accent="#f59e0b" />
+          <KpiCard icon="fas fa-triangle-exclamation" label="Overdue" value={String(dash.overdue_count)} accent="#ef4444" />
+        </div>
+      )}
+
       {/* toolbar */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 16, background: '#fff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: 12, padding: '14px 16px' }}>
         <div style={{ flex: '1 1 200px', minWidth: 180 }}>
@@ -159,7 +212,59 @@ export default function InvoicesPanel() {
         />
       )}
 
+      {payTarget && (
+        <QuickPaymentModal invoice={payTarget} onClose={() => setPayTarget(null)} onSaved={() => { setPayTarget(null); refreshAll(); }} />
+      )}
+
       {delId !== null && <DelDlg onCancel={() => setDelId(null)} onConfirm={confirmDel} />}
+    </div>
+  );
+}
+
+function QuickPaymentModal({ invoice, onClose, onSaved }: { invoice: any; onClose: () => void; onSaved: () => void }) {
+  const [amount, setAmount] = useState(String(invoice.balance ?? (Number(invoice.total || 0) - Number(invoice.amount_paid || 0))));
+  const [method, setMethod] = useState('cash');
+  const [reference, setReference] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!amount || Number(amount) <= 0) { toast.error('Amount must be greater than 0.'); return; }
+    setSaving(true);
+    try {
+      await erpFetch('invoicing/payments/', {
+        method: 'POST',
+        body: JSON.stringify({ invoice: invoice.id, amount: Number(amount), method, reference, paid_at: new Date().toISOString() }),
+      });
+      toast.success('Payment recorded');
+      onSaved();
+    } catch (err: any) {
+      toast.error(err.message || 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div style={OVR} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ ...CRD, maxWidth: 420 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+          <h5 style={{ fontFamily: FF, fontWeight: 800, fontSize: 16, color: '#1A1A1A', margin: 0 }}>Record Payment — {invoice.number}</h5>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B6B6B', fontSize: 22 }}>&times;</button>
+        </div>
+        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div><label style={lbl}>Amount *</label><input type="number" value={amount} onChange={e => setAmount(e.target.value)} style={inp} required step="0.01" min="0.01" /></div>
+          <div><label style={lbl}>Method</label><select value={method} onChange={e => setMethod(e.target.value)} style={inp}>
+            <option value="cash">Cash</option><option value="bank">Bank Transfer</option><option value="upi">UPI</option>
+            <option value="card">Card</option><option value="cheque">Cheque</option><option value="online">Online Gateway</option><option value="other">Other</option>
+          </select></div>
+          <div><label style={lbl}>Reference</label><input value={reference} onChange={e => setReference(e.target.value)} style={inp} placeholder="Transaction ID, cheque number…" /></div>
+          <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+            <button type="button" onClick={onClose} style={CNCL}>Cancel</button>
+            <button type="submit" disabled={saving} style={{ ...SAVE, opacity: saving ? 0.7 : 1, cursor: saving ? 'not-allowed' : 'pointer' }}>{saving ? 'Saving…' : 'Record'}</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
