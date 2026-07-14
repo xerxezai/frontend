@@ -64,7 +64,7 @@ export default function BalanceSheetPanel() {
 
         <Card3D accent="#10b981">
           <div style={{ fontFamily: FF, fontWeight: 800, fontSize: 14, color: '#1A1A1A', marginBottom: 6 }}>
-            <i className="fas fa-scale-balanced" style={{ marginRight: 8, color: '#10b981' }} />Equity
+            <i className="fas fa-balance-scale" style={{ marginRight: 8, color: '#10b981' }} />Equity
           </div>
           <Row label="Retained Earnings" value={fmtINR(sheet.equity?.retained_earnings)} />
           <Row label="Total Equity" value={fmtINR(sheet.equity?.total_equity)} bold />
@@ -72,7 +72,7 @@ export default function BalanceSheetPanel() {
       </div>
 
       <div style={{ marginTop: 20, background: WHITE, borderRadius: 12, border: `1px solid ${BORDER}`, padding: '14px 18px', fontFamily: FF, fontSize: 11.5, color: '#6B6B6B' }}>
-        <i className="fas fa-circle-info" style={{ marginRight: 6, color: OG }} />
+        <i className="fas fa-info-circle" style={{ marginRight: 6, color: OG }} />
         This is a simplified single-entity balance sheet derived from real cross-module data (Invoicing, Procurement). Cash &amp; Bank is a proxy from total payments collected, not a true cash-position calculation, and Retained Earnings is a plug figure (Total Assets − Total Liabilities).
       </div>
     </div>

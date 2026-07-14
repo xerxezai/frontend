@@ -95,10 +95,10 @@ export default function TaxReportsPanel() {
             <KpiCard icon="fas fa-sack-dollar" label="Total Revenue" value={fmtINR(report.total_revenue)} accent={OG} />
             <KpiCard icon="fas fa-arrow-down" label="Total Tax Collected" value={fmtINR(report.total_tax_collected)} accent="#1d4ed8" />
             <KpiCard icon="fas fa-arrow-up" label="Total Tax Paid" value={fmtINR(report.total_tax_paid)} accent="#7c3aed" />
-            <KpiCard icon="fas fa-scale-balanced" label="Net Tax" value={fmtINR(report.net_tax)} accent={Number(report.net_tax) >= 0 ? '#10b981' : '#ef4444'} />
+            <KpiCard icon="fas fa-balance-scale" label="Net Tax" value={fmtINR(report.net_tax)} accent={Number(report.net_tax) >= 0 ? '#10b981' : '#ef4444'} />
           </div>
           <div style={{ marginTop: 16, background: WHITE, borderRadius: 12, border: `1px solid ${BORDER}`, padding: '14px 18px', fontFamily: FF, fontSize: 11.5, color: '#6B6B6B' }}>
-            <i className="fas fa-circle-info" style={{ marginRight: 6, color: OG }} />
+            <i className="fas fa-info-circle" style={{ marginRight: 6, color: OG }} />
             Tax collected reflects GST on paid invoices only. Tax paid is estimated as 18% GST backed out of purchase order totals (a simplification, since purchase orders don't track tax separately).
           </div>
         </>
