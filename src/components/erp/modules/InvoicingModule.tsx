@@ -12,8 +12,8 @@ const TAB_LABEL: Record<Tab, string> = {
   CreditNotes: 'Credit Notes', Reports: 'Reports',
 };
 
-const InvoicingModule = () => {
-  const [tab, setTab] = useState<Tab>('Invoices');
+const InvoicingModule = ({ initialTab = 'Invoices' }: { initialTab?: Tab }) => {
+  const [tab, setTab] = useState<Tab>(initialTab);
 
   const ts = (t: Tab): React.CSSProperties => ({
     borderRadius: 8, padding: '7px 18px', cursor: 'pointer',

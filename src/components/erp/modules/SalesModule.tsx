@@ -5,8 +5,8 @@ import SalesDashboard from './sales/SalesDashboard';
 
 type Tab = 'Dashboard' | 'Quotations' | 'Orders';
 
-const SalesModule = () => {
-  const [tab, setTab] = useState<Tab>('Dashboard');
+const SalesModule = ({ initialTab = 'Dashboard' }: { initialTab?: Tab }) => {
+  const [tab, setTab] = useState<Tab>(initialTab);
 
   const ts = (t: Tab): React.CSSProperties => ({
     borderRadius: 8, padding: '7px 18px', cursor: 'pointer',

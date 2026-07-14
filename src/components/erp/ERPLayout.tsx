@@ -13,64 +13,109 @@ const C = {
   border:     "rgba(0,0,0,0.07)",
 };
 
-type NavItem =
-  | { to: string; icon: string; label: string; adminOnly?: boolean }
-  | { group: string };
+type NavItem = { to: string; icon: string; label: string; adminOnly?: boolean };
+type SubNavItem = { to: string; icon: string; label: string; adminOnly?: boolean };
 
 const NAV: NavItem[] = [
-  { to: '/erp/dashboard', icon: 'fas fa-th-large',            label: 'Dashboard' },
-  { to: '/erp/crm',       icon: 'fas fa-users',               label: 'CRM' },
-  { to: '/erp/hr',        icon: 'fas fa-user-tie',            label: 'HR Overview' },
-  { to: '/erp/inventory', icon: 'fas fa-boxes',               label: 'Inventory' },
-  { to: '/erp/procurement', icon: 'fas fa-truck',             label: 'Procurement' },
-  { to: '/erp/invoicing', icon: 'fas fa-file-invoice-dollar', label: 'Invoicing' },
-  { to: '/erp/logistics', icon: 'fas fa-shipping-fast',       label: 'Logistics' },
-  { to: '/erp/accounting',icon: 'fas fa-book',                label: 'Accounting' },
-  { to: '/erp/mlm',       icon: 'fas fa-sitemap',             label: 'MLM' },
-
-  { group: 'HR & PAYROLL' },
-
-  { to: '/erp/attendance',          icon: 'fas fa-clock',                 label: 'Attendance' },
-  { to: '/erp/my-attendance',       icon: 'fas fa-calendar-check',        label: 'My Attendance' },
-  { to: '/erp/leave',               icon: 'fas fa-calendar-minus',        label: 'Leave' },
-  { to: '/erp/all-attendance',      icon: 'fas fa-users-cog',             label: 'All Attendance',   adminOnly: true },
-  { to: '/erp/leave-approvals',     icon: 'fas fa-check-circle',          label: 'Leave Approvals',  adminOnly: true },
-  { to: '/erp/shifts',              icon: 'fas fa-exchange-alt',          label: 'Shifts',           adminOnly: true },
-  { to: '/erp/salary-structures',   icon: 'fas fa-money-bill-wave',       label: 'Salary Setup',     adminOnly: true },
-  { to: '/erp/payroll-generate',    icon: 'fas fa-cogs',                  label: 'Generate Payroll', adminOnly: true },
-  { to: '/erp/payroll-reports',     icon: 'fas fa-chart-bar',             label: 'Payroll Reports',  adminOnly: true },
-  { to: '/erp/my-payslips',         icon: 'fas fa-file-alt',              label: 'My Payslips' },
+  { to: '/erp/dashboard',   icon: 'fas fa-th-large',      label: 'Dashboard' },
+  { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM' },
+  { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales' },
+  { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement' },
+  { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics' },
+  { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting' },
+  { to: '/erp/mlm',         icon: 'fas fa-sitemap',       label: 'MLM' },
+  { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview' },
 ];
 
-// Expandable CRM submenu (quick links; Customers/Leads/Activities/Pipeline
-// remain reachable as tabs inside the CRM page itself, not the sidebar)
-const CRM_SUBMENU: { to: string; icon: string; label: string }[] = [
-  { to: '/erp/sales', icon: 'fas fa-shopping-cart', label: 'Sales' },
+// Expandable CRM submenu — Customers/Leads/Activities/Pipeline are tabs inside
+// the CRM page itself, deep-linked here via a `?tab=` query param.
+const CRM_SUBMENU: SubNavItem[] = [
+  { to: '/erp/crm',                icon: 'fas fa-users',    label: 'Customers' },
+  { to: '/erp/crm?tab=leads',      icon: 'fas fa-bullseye', label: 'Leads' },
+  { to: '/erp/crm?tab=activities', icon: 'fas fa-stream',   label: 'Activities' },
+  { to: '/erp/crm?tab=pipeline',   icon: 'fas fa-columns',  label: 'Pipeline' },
+];
+
+// Expandable Sales submenu
+const SALES_SUBMENU: SubNavItem[] = [
+  { to: '/erp/sales',            icon: 'fas fa-th-large',       label: 'Dashboard' },
+  { to: '/erp/sales/quotations', icon: 'fas fa-file-signature', label: 'Quotations' },
+  { to: '/erp/sales/orders',     icon: 'fas fa-receipt',        label: 'Sales Orders' },
 ];
 
 // Expandable Procurement submenu
-const PROCUREMENT_SUBMENU: { to: string; icon: string; label: string }[] = [
-  { to: '/erp/procurement',                icon: 'fas fa-th-large',      label: 'Dashboard' },
-  { to: '/erp/procurement/purchase-orders',icon: 'fas fa-file-invoice',  label: 'Purchase Orders' },
-  { to: '/erp/procurement/suppliers',      icon: 'fas fa-industry',      label: 'Suppliers' },
-  { to: '/erp/procurement/goods-receipt',  icon: 'fas fa-dolly',         label: 'Goods Receipt' },
-  { to: '/erp/procurement/bills',          icon: 'fas fa-file-invoice-dollar', label: 'Bills' },
+const PROCUREMENT_SUBMENU: SubNavItem[] = [
+  { to: '/erp/procurement',                 icon: 'fas fa-th-large',            label: 'Dashboard' },
+  { to: '/erp/procurement/purchase-orders', icon: 'fas fa-file-invoice',        label: 'Purchase Orders' },
+  { to: '/erp/procurement/suppliers',       icon: 'fas fa-industry',            label: 'Suppliers' },
+  { to: '/erp/procurement/goods-receipt',   icon: 'fas fa-dolly',               label: 'Goods Receipt' },
+  { to: '/erp/procurement/bills',           icon: 'fas fa-file-invoice-dollar', label: 'Bills' },
+  { to: '/erp/inventory',                   icon: 'fas fa-boxes',               label: 'Inventory' },
 ];
 
-// Expandable HR Overview submenu
-const HR_SUBMENU: { to: string; icon: string; label: string }[] = [
-  { to: '/erp/hr',               icon: 'fas fa-th-large',        label: 'HR Dashboard' },
-  { to: '/erp/hr/employees',     icon: 'fas fa-users',           label: 'Employees' },
-  { to: '/erp/hr/departments',   icon: 'fas fa-building',        label: 'Departments' },
-  { to: '/erp/hr/leave',         icon: 'fas fa-umbrella-beach',  label: 'Leave Requests' },
-  { to: '/erp/attendance',       icon: 'fas fa-calendar-check',  label: 'Attendance' },
-  { to: '/erp/payroll-generate', icon: 'fas fa-money-bill-wave', label: 'Payroll' },
-  { to: '/erp/hr/performance',   icon: 'fas fa-star',            label: 'Performance' },
-  { to: '/erp/hr/documents',     icon: 'fas fa-file-alt',        label: 'Documents' },
-  { to: '/erp/hr/org-chart',     icon: 'fas fa-sitemap',         label: 'Org Chart' },
-  { to: '/erp/hr/onboarding',    icon: 'fas fa-clipboard-check', label: 'Onboarding' },
-  { to: '/erp/hr/exit',          icon: 'fas fa-door-open',       label: 'Exit Management' },
+// Expandable Logistics submenu
+const LOGISTICS_SUBMENU: SubNavItem[] = [
+  { to: '/erp/logistics',            icon: 'fas fa-th-large',       label: 'Dashboard' },
+  { to: '/erp/logistics/shipments',  icon: 'fas fa-box',            label: 'Shipments' },
+  { to: '/erp/logistics/deliveries', icon: 'fas fa-truck-loading',  label: 'Deliveries' },
+  { to: '/erp/logistics/tracking',   icon: 'fas fa-map-marker-alt', label: 'Tracking' },
+  { to: '/erp/logistics/warehouses', icon: 'fas fa-warehouse',      label: 'Warehouses' },
 ];
+
+// Expandable Accounting submenu
+const ACCOUNTING_SUBMENU: SubNavItem[] = [
+  { to: '/erp/accounting',               icon: 'fas fa-th-large',            label: 'Dashboard' },
+  { to: '/erp/accounting/invoices',      icon: 'fas fa-file-invoice-dollar', label: 'Invoices' },
+  { to: '/erp/accounting/payments',      icon: 'fas fa-money-check-alt',     label: 'Payments' },
+  { to: '/erp/accounting/expenses',      icon: 'fas fa-receipt',             label: 'Expenses' },
+  { to: '/erp/accounting/tax-reports',   icon: 'fas fa-percent',             label: 'Tax Reports' },
+  { to: '/erp/accounting/balance-sheet', icon: 'fas fa-balance-scale',       label: 'Balance Sheet' },
+];
+
+// Expandable MLM submenu
+const MLM_SUBMENU: SubNavItem[] = [
+  { to: '/erp/mlm',              icon: 'fas fa-th-large',         label: 'Dashboard' },
+  { to: '/erp/mlm/distributors', icon: 'fas fa-user-tag',         label: 'Distributors' },
+  { to: '/erp/mlm/network-tree', icon: 'fas fa-sitemap',          label: 'Network Tree' },
+  { to: '/erp/mlm/commissions',  icon: 'fas fa-percentage',       label: 'Commissions' },
+  { to: '/erp/mlm/payouts',      icon: 'fas fa-hand-holding-usd', label: 'Payouts' },
+  { to: '/erp/mlm/reports',      icon: 'fas fa-chart-line',       label: 'Reports' },
+];
+
+// Expandable HR Overview submenu — also folds in Attendance/Payroll, which
+// previously lived as a separate flat "HR & PAYROLL" group below HR Overview.
+const HR_SUBMENU: SubNavItem[] = [
+  { to: '/erp/hr',                icon: 'fas fa-th-large',        label: 'HR Dashboard' },
+  { to: '/erp/hr/employees',      icon: 'fas fa-users',           label: 'Employees' },
+  { to: '/erp/hr/departments',    icon: 'fas fa-building',        label: 'Departments' },
+  { to: '/erp/hr/leave',          icon: 'fas fa-umbrella-beach',  label: 'Leave Requests' },
+  { to: '/erp/attendance',        icon: 'fas fa-calendar-check',  label: 'Attendance' },
+  { to: '/erp/my-attendance',     icon: 'fas fa-calendar-day',    label: 'My Attendance' },
+  { to: '/erp/leave',             icon: 'fas fa-calendar-minus',  label: 'Leave' },
+  { to: '/erp/all-attendance',    icon: 'fas fa-users-cog',       label: 'All Attendance',   adminOnly: true },
+  { to: '/erp/leave-approvals',   icon: 'fas fa-check-circle',    label: 'Leave Approvals',  adminOnly: true },
+  { to: '/erp/shifts',            icon: 'fas fa-exchange-alt',    label: 'Shifts',           adminOnly: true },
+  { to: '/erp/salary-structures', icon: 'fas fa-money-bill-wave', label: 'Salary Setup',     adminOnly: true },
+  { to: '/erp/payroll-generate',  icon: 'fas fa-cogs',            label: 'Generate Payroll', adminOnly: true },
+  { to: '/erp/payroll-reports',   icon: 'fas fa-chart-bar',       label: 'Payroll Reports',  adminOnly: true },
+  { to: '/erp/my-payslips',       icon: 'fas fa-file-alt',        label: 'My Payslips' },
+  { to: '/erp/hr/performance',    icon: 'fas fa-star',            label: 'Performance' },
+  { to: '/erp/hr/documents',      icon: 'fas fa-file-alt',        label: 'Documents' },
+  { to: '/erp/hr/org-chart',      icon: 'fas fa-sitemap',         label: 'Org Chart' },
+  { to: '/erp/hr/onboarding',     icon: 'fas fa-clipboard-check', label: 'Onboarding' },
+  { to: '/erp/hr/exit',           icon: 'fas fa-door-open',       label: 'Exit Management' },
+];
+
+// Plain (non-query-param) expandable groups — CRM is handled separately since
+// its submenu links use `?tab=` and a split navigate/toggle parent row.
+const EXPANDABLE_SUBMENUS: Record<string, SubNavItem[]> = {
+  '/erp/sales': SALES_SUBMENU,
+  '/erp/procurement': PROCUREMENT_SUBMENU,
+  '/erp/logistics': LOGISTICS_SUBMENU,
+  '/erp/accounting': ACCOUNTING_SUBMENU,
+  '/erp/mlm': MLM_SUBMENU,
+  '/erp/hr': HR_SUBMENU,
+};
 
 function isAdminUser(): boolean {
   try {
@@ -110,28 +155,34 @@ const ERPLayout = ({ children }: Props) => {
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
 
-  const currentSub = HR_SUBMENU.find(
-    s => s.to !== '/erp/hr' && (s.to === location.pathname || location.pathname.startsWith(s.to + '/'))
-  );
   const currentCrmSub = CRM_SUBMENU.find(
     s => location.pathname === s.to || location.pathname.startsWith(s.to + '/')
   );
-  const currentProcurementSub = PROCUREMENT_SUBMENU.find(
-    s => s.to !== '/erp/procurement' && (s.to === location.pathname || location.pathname.startsWith(s.to + '/'))
-  );
+  let currentSub: SubNavItem | undefined;
+  for (const [parentTo, submenu] of Object.entries(EXPANDABLE_SUBMENUS)) {
+    currentSub = submenu.find(
+      s => s.to !== parentTo && (s.to === location.pathname || location.pathname.startsWith(s.to + '/'))
+    );
+    if (currentSub) break;
+  }
   const currentNavItem = NAV.find(
-    item => 'to' in item && (item.to === location.pathname || location.pathname.startsWith(item.to + '/'))
+    item => item.to === location.pathname || location.pathname.startsWith(item.to + '/')
   );
-  const pageTitle = currentSub ? currentSub.label
-    : currentCrmSub ? currentCrmSub.label
-    : currentProcurementSub ? currentProcurementSub.label
-    : currentNavItem && 'label' in currentNavItem ? currentNavItem.label : 'Dashboard';
+  const pageTitle = currentCrmSub ? currentCrmSub.label
+    : currentSub ? currentSub.label
+    : currentNavItem ? currentNavItem.label : 'Dashboard';
 
-  const [hrOpen, setHrOpen] = useState(() => location.pathname.startsWith('/erp/hr'));
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
+    const init: Record<string, boolean> = {};
+    for (const [parentTo, submenu] of Object.entries(EXPANDABLE_SUBMENUS)) {
+      init[parentTo] = location.pathname.startsWith(parentTo)
+        || submenu.some(s => location.pathname === s.to || location.pathname.startsWith(s.to + '/'));
+    }
+    return init;
+  });
   const [crmOpen, setCrmOpen] = useState(() =>
-    ['/erp/sales', '/erp/purchases'].some(p => location.pathname.startsWith(p))
+    ['/erp/sales'].some(p => location.pathname.startsWith(p))
   );
-  const [procurementOpen, setProcurementOpen] = useState(() => location.pathname.startsWith('/erp/procurement'));
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -414,68 +465,13 @@ const ERPLayout = ({ children }: Props) => {
         {/* nav */}
         <nav style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', paddingTop: 10, paddingBottom: 10 }}>
           {NAV.map((item, idx) => {
-            if ('group' in item) {
-              if (collapsed) return (
-                <div key={idx} style={{ height: 1, margin: '8px 0', background: 'rgba(201,136,58,0.18)' }} />
-              );
-              return (
-                <div key={idx} className="erp-nav-group-label">
-                  {item.group}
-                </div>
-              );
-            }
             if (item.adminOnly && !isAdmin) return null;
-
-            // Expandable HR Overview submenu (only when sidebar is expanded)
-            if (item.to === '/erp/hr' && !collapsed) {
-              const anyChildActive = HR_SUBMENU.some(
-                s => location.pathname === s.to || location.pathname.startsWith(s.to + '/')
-              );
-              return (
-                <div key={item.to}>
-                  <button
-                    onClick={() => setHrOpen(o => !o)}
-                    className={`erp-nav-item erp-nav-slide${anyChildActive ? ' erp-nav-active' : ''}`}
-                    style={{ width: '100%', background: 'none', textAlign: 'left', animationDelay: `${idx * 0.028}s` }}
-                  >
-                    <span className="erp-icon-badge">
-                      <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
-                    </span>
-                    <span style={{ flex: 1 }}>{item.label}</span>
-                    <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: hrOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
-                  </button>
-                  <div style={{
-                    overflow: 'hidden',
-                    maxHeight: hrOpen ? HR_SUBMENU.length * 44 + 8 : 0,
-                    margin: hrOpen ? '4px 8px 8px' : '0 8px',
-                    transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
-                  }}>
-                    <div className="erp-subnav-panel">
-                      {HR_SUBMENU.map(s => (
-                        <NavLink
-                          key={s.to}
-                          to={s.to}
-                          end={s.to === '/erp/hr'}
-                          onClick={() => setMobileOpen(false)}
-                          className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
-                        >
-                          <i className={s.icon} style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
-                          <span>{s.label}</span>
-                        </NavLink>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
-            }
 
             // Expandable CRM submenu (only when sidebar is expanded).
             // The row itself navigates straight to /erp/crm; the chevron is a
-            // separate toggle for the Sales/Purchases quick-link panel — CRM's
-            // own Customers/Leads/Activities/Pipeline stay as tabs inside that page.
+            // separate toggle for the Customers/Leads/Activities/Pipeline panel.
             if (item.to === '/erp/crm' && !collapsed) {
-              const crmChildActive = location.pathname.startsWith('/erp/sales') || location.pathname.startsWith('/erp/purchases');
-              const crmRowActive = crmChildActive || location.pathname === '/erp/crm' || location.pathname.startsWith('/erp/crm/');
+              const crmRowActive = location.pathname === '/erp/crm' || location.pathname.startsWith('/erp/crm/');
               return (
                 <div key={item.to}>
                   <div
@@ -525,34 +521,39 @@ const ERPLayout = ({ children }: Props) => {
               );
             }
 
-            // Expandable Procurement submenu (only when sidebar is expanded)
-            if (item.to === '/erp/procurement' && !collapsed) {
-              const anyProcurementChildActive = location.pathname.startsWith('/erp/procurement');
+            // Every other expandable section (Sales/Procurement/Logistics/Accounting/MLM/HR
+            // Overview) shares this one toggle-button + submenu-panel pattern.
+            const submenu = EXPANDABLE_SUBMENUS[item.to];
+            if (submenu && !collapsed) {
+              const visibleSubmenu = submenu.filter(s => !s.adminOnly || isAdmin);
+              const isOpen = openGroups[item.to] ?? false;
+              const anyChildActive = location.pathname.startsWith(item.to)
+                || visibleSubmenu.some(s => location.pathname === s.to || location.pathname.startsWith(s.to + '/'));
               return (
                 <div key={item.to}>
                   <button
-                    onClick={() => setProcurementOpen(o => !o)}
-                    className={`erp-nav-item erp-nav-slide${anyProcurementChildActive ? ' erp-nav-active' : ''}`}
+                    onClick={() => setOpenGroups(g => ({ ...g, [item.to]: !g[item.to] }))}
+                    className={`erp-nav-item erp-nav-slide${anyChildActive ? ' erp-nav-active' : ''}`}
                     style={{ width: '100%', background: 'none', textAlign: 'left', animationDelay: `${idx * 0.028}s` }}
                   >
                     <span className="erp-icon-badge">
                       <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
                     </span>
                     <span style={{ flex: 1 }}>{item.label}</span>
-                    <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: procurementOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
+                    <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
                   </button>
                   <div style={{
                     overflow: 'hidden',
-                    maxHeight: procurementOpen ? PROCUREMENT_SUBMENU.length * 44 + 8 : 0,
-                    margin: procurementOpen ? '4px 8px 8px' : '0 8px',
+                    maxHeight: isOpen ? visibleSubmenu.length * 44 + 8 : 0,
+                    margin: isOpen ? '4px 8px 8px' : '0 8px',
                     transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
                   }}>
                     <div className="erp-subnav-panel">
-                      {PROCUREMENT_SUBMENU.map(s => (
+                      {visibleSubmenu.map(s => (
                         <NavLink
                           key={s.to}
                           to={s.to}
-                          end={s.to === '/erp/procurement'}
+                          end={s.to === item.to}
                           onClick={() => setMobileOpen(false)}
                           className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
                         >

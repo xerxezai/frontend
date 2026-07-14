@@ -90,6 +90,8 @@ const ERPPage = () => {
           <Route path="hr/exit"            element={<HRExitPage />} />
           <Route path="inventory"          element={<InventoryModule />} />
           <Route path="sales"              element={<SalesModule />} />
+          <Route path="sales/quotations"   element={<SalesModule initialTab="Quotations" />} />
+          <Route path="sales/orders"       element={<SalesModule initialTab="Orders" />} />
           <Route path="invoicing"          element={<InvoicingModule />} />
           <Route path="purchases"          element={<PurchasesModule />} />
           <Route path="procurement"                    element={<ProcurementModule />} />
@@ -97,9 +99,23 @@ const ERPPage = () => {
           <Route path="procurement/suppliers"          element={<ProcurementModule initialTab="Suppliers" />} />
           <Route path="procurement/goods-receipt"      element={<ProcurementModule initialTab="Goods Receipt" />} />
           <Route path="procurement/bills"              element={<ProcurementModule initialTab="Bills" />} />
-          <Route path="logistics"          element={<LogisticsModule />} />
-          <Route path="accounting"         element={<AccountingModule />} />
-          <Route path="mlm"                element={<MLMModule />} />
+          <Route path="logistics"                    element={<LogisticsModule />} />
+          <Route path="logistics/shipments"          element={<LogisticsModule initialTab="Shipments" />} />
+          <Route path="logistics/deliveries"         element={<LogisticsModule initialTab="Deliveries" />} />
+          <Route path="logistics/tracking"           element={<LogisticsModule initialTab="Tracking" />} />
+          <Route path="logistics/warehouses"         element={<LogisticsModule initialTab="Warehouses" />} />
+          <Route path="accounting"                  element={<AccountingModule />} />
+          <Route path="accounting/invoices"         element={<AccountingModule initialTab="Invoices" />} />
+          <Route path="accounting/payments"         element={<AccountingModule initialTab="Payments" />} />
+          <Route path="accounting/expenses"         element={<AccountingModule initialTab="Expenses" />} />
+          <Route path="accounting/tax-reports"      element={<AccountingModule initialTab="Tax Reports" />} />
+          <Route path="accounting/balance-sheet"    element={<AccountingModule initialTab="Balance Sheet" />} />
+          <Route path="mlm"                  element={<MLMModule />} />
+          <Route path="mlm/distributors"     element={<MLMModule initialTab="Distributors" />} />
+          <Route path="mlm/network-tree"     element={<MLMModule initialTab="Network Tree" />} />
+          <Route path="mlm/commissions"      element={<MLMModule initialTab="Commissions" />} />
+          <Route path="mlm/payouts"          element={<MLMModule initialTab="Payouts" />} />
+          <Route path="mlm/reports"          element={<MLMModule initialTab="Reports" />} />
 
           {/* HR & Payroll */}
           <Route path="attendance"         element={<AttendanceDashboard />} />
