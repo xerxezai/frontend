@@ -221,7 +221,7 @@ export default function InvoicesPanel() {
   );
 }
 
-function QuickPaymentModal({ invoice, onClose, onSaved }: { invoice: any; onClose: () => void; onSaved: () => void }) {
+export function QuickPaymentModal({ invoice, onClose, onSaved }: { invoice: any; onClose: () => void; onSaved: () => void }) {
   const [amount, setAmount] = useState(String(invoice.balance ?? (Number(invoice.total || 0) - Number(invoice.amount_paid || 0))));
   const [method, setMethod] = useState('cash');
   const [reference, setReference] = useState('');

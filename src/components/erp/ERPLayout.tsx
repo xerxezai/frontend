@@ -41,6 +41,8 @@ const SALES_SUBMENU: SubNavItem[] = [
   { to: '/erp/sales',            icon: 'fas fa-th-large',       label: 'Dashboard' },
   { to: '/erp/sales/quotations', icon: 'fas fa-file-signature', label: 'Quotations' },
   { to: '/erp/sales/orders',     icon: 'fas fa-receipt',        label: 'Sales Orders' },
+  { to: '/erp/sales/invoices',   icon: 'fas fa-file-invoice-dollar', label: 'Invoices' },
+  { to: '/erp/sales/payments',   icon: 'fas fa-money-check-alt',     label: 'Payments' },
 ];
 
 // Expandable Procurement submenu

@@ -17,6 +17,8 @@ import CRMPipeline from '../components/erp/modules/crm/CRMPipeline';
 import SalesDashboard from '../components/erp/modules/sales/SalesDashboard';
 import QuotationsPanel from '../components/erp/modules/sales/QuotationsPanel';
 import OrdersPanel from '../components/erp/modules/sales/OrdersPanel';
+import SalesInvoicesPanel from '../components/erp/modules/sales/SalesInvoicesPanel';
+import SalesPaymentsPanel from '../components/erp/modules/sales/SalesPaymentsPanel';
 
 // Procurement
 import ProcurementDashboard from '../components/erp/modules/procurement/ProcurementDashboard';
@@ -129,6 +131,8 @@ const ERPPage = () => {
           <Route path="sales"              element={<SalesDashboard />} />
           <Route path="sales/quotations"   element={<QuotationsPanel />} />
           <Route path="sales/orders"       element={<OrdersPanel />} />
+          <Route path="sales/invoices"     element={<SalesInvoicesPanel />} />
+          <Route path="sales/payments"     element={<SalesPaymentsPanel />} />
 
           {/* Procurement */}
           <Route path="procurement"                    element={<ProcurementDashboard />} />
