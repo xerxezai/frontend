@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { inp, lbl, SAVE, CNCL, fmtINR, O_STATUS, DelDlg, today, nextNumber } from './salesShared';
+import { FF, inp, lbl, SAVE, CNCL, fmtINR, O_STATUS, DelDlg, today, nextNumber } from './salesShared';
 
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
-const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:480,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
+const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:700,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
 
 const defO = { number: '', customer: '', order_date: '', status: 'open', assignee: '', notes: '' };
+
+interface ItemRow { product: string; quantity: string; unit_price: string; }
+const emptyRow = (): ItemRow => ({ product: '', quantity: '1', unit_price: '0' });
 
 /** The salespeople dropdown mixes regular Users and MLM Distributors — value is encoded as
  * "user:<id>" or "distributor:<id>" so a single <select> can drive either FK on the order. */
@@ -27,25 +30,36 @@ export default function OrdersPanel() {
   const orders = useERPList<any>('sales/orders/');
   const customers = useERPList<any>('crm/customers/');
   const salespeople = useERPList<any>('sales/orders/salespeople/');
+  const products = useERPList<any>('inventory/products/');
 
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [delId, setDelId] = useState<number | null>(null);
   const [oF, setOF] = useState({ ...defO });
+  const [items, setItems] = useState<ItemRow[]>([emptyRow()]);
   const [savingStatus, setSavingStatus] = useState<number | null>(null);
 
+  const grandTotal = items.reduce((s, r) => s + (Number(r.quantity) || 0) * (Number(r.unit_price) || 0), 0);
+
   const close = () => { setShowModal(false); setEditing(null); };
+
+  const addRow = () => setItems(rows => [...rows, emptyRow()]);
+  const removeRow = (i: number) => setItems(rows => rows.filter((_, idx) => idx !== i));
+  const updateRow = (i: number, patch: Partial<ItemRow>) => setItems(rows => rows.map((r, idx) => idx === i ? { ...r, ...patch } : r));
 
   const saveOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!oF.number.trim())  { toast.error('Order number is required.'); return; }
     if (!oF.order_date)     { toast.error('Order date is required.'); return; }
     if (!oF.customer)       { toast.error('Please select a customer.'); return; }
+    const validItems = items.filter(r => r.product && Number(r.quantity) > 0);
+    if (validItems.length === 0) { toast.error('Add at least one line item.'); return; }
     try {
       const { salesperson, distributor } = decodeAssignee(oF.assignee);
       const body: any = {
         number: oF.number.trim(), order_date: oF.order_date, customer: Number(oF.customer),
         status: oF.status, salesperson, distributor, notes: oF.notes,
+        items: validItems.map(r => ({ product: Number(r.product), quantity: Number(r.quantity), unit_price: Number(r.unit_price) })),
       };
       if (editing) { await orders.update(editing.id, body); toast.success('Order updated'); }
       else { await orders.create(body); toast.success('Order created'); }
@@ -115,8 +129,13 @@ export default function OrdersPanel() {
   return (
     <div>
       <ERPTable title="Sales Orders" columns={cols} data={orders.data} loading={orders.loading} error={orders.error} isAdmin={isAdmin}
-        onAdd={() => { setOF({ ...defO, number: nextNumber('SO', orders.data), order_date: today() }); setEditing(null); setShowModal(true); }}
-        onEdit={r => { setEditing(r); setOF({ number: r.number || '', customer: String(r.customer || ''), order_date: r.order_date || '', status: r.status || 'open', assignee: encodeAssignee(r), notes: r.notes || '' }); setShowModal(true); }}
+        onAdd={() => { setOF({ ...defO, number: nextNumber('SO', orders.data), order_date: today() }); setItems([emptyRow()]); setEditing(null); setShowModal(true); }}
+        onEdit={r => {
+          setEditing(r);
+          setOF({ number: r.number || '', customer: String(r.customer || ''), order_date: r.order_date || '', status: r.status || 'open', assignee: encodeAssignee(r), notes: r.notes || '' });
+          setItems(r.items?.length ? r.items.map((it: any) => ({ product: String(it.product || ''), quantity: String(it.quantity), unit_price: String(it.unit_price) })) : [emptyRow()]);
+          setShowModal(true);
+        }}
         onDelete={id => setDelId(id)} />
 
       {showModal && (
@@ -142,6 +161,38 @@ export default function OrdersPanel() {
               </select>
               <p style={{ fontSize: 11.5, color: '#6B6B6B', margin: '4px 0 0' }}>Assigning an MLM distributor and confirming the order auto-generates a pending commission.</p>
               </div>
+
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <label style={{ ...lbl, marginBottom: 0 }}>Line Items *</label>
+                  <button type="button" onClick={addRow} style={{ background: 'none', border: 'none', color: '#C9883A', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12 }}>
+                    <i className="fas fa-plus" style={{ marginRight: 4 }} />Add Item
+                  </button>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {items.map((row, i) => (
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 0.8fr 1fr 1fr auto', gap: 8, alignItems: 'center' }}>
+                      <select value={row.product} onChange={e => updateRow(i, { product: e.target.value })} style={inp}>
+                        <option value="">— Product —</option>
+                        {products.data.map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                      </select>
+                      <input type="number" min="0" step="0.01" value={row.quantity} onChange={e => updateRow(i, { quantity: e.target.value })} style={inp} placeholder="Qty" />
+                      <input type="number" min="0" step="0.01" value={row.unit_price} onChange={e => updateRow(i, { unit_price: e.target.value })} style={inp} placeholder="Unit Price" />
+                      <div style={{ fontFamily: FF, fontSize: 13, fontWeight: 700, color: '#1A1A1A', textAlign: 'right' }}>
+                        {fmtINR((Number(row.quantity) || 0) * (Number(row.unit_price) || 0))}
+                      </div>
+                      <button type="button" onClick={() => removeRow(i)} disabled={items.length === 1}
+                        style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 28, height: 28, borderRadius: 6, cursor: items.length === 1 ? 'not-allowed' : 'pointer', opacity: items.length === 1 ? 0.4 : 1 }}>
+                        <i className="fas fa-trash" style={{ fontSize: 10 }} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ textAlign: 'right', marginTop: 10, fontFamily: FF, fontSize: 14, fontWeight: 800, color: '#C9883A' }}>
+                  Order Total: {fmtINR(grandTotal)}
+                </div>
+              </div>
+
               <div><label style={lbl}>Notes</label><textarea value={oF.notes} onChange={e => setOF(f => ({ ...f, notes: e.target.value }))} style={{ ...inp, resize: 'vertical', minHeight: 80 }} /></div>
               <div style={{ display: 'flex', gap: 10, marginTop: 4 }}><button type="button" onClick={close} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing ? 'Update' : 'Save'}</button></div>
             </form>
