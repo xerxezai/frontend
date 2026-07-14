@@ -3,16 +3,56 @@ import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ERPLogin from '../components/erp/ERPLogin';
 import ERPLayout from '../components/erp/ERPLayout';
 import ERPDashboard from '../components/erp/ERPDashboard';
-import CRMModule from '../components/erp/modules/CRMModule';
-import HRModule from '../components/erp/modules/HRModule';
 import InventoryModule from '../components/erp/modules/InventoryModule';
-import SalesModule from '../components/erp/modules/SalesModule';
 import InvoicingModule from '../components/erp/modules/InvoicingModule';
 import PurchasesModule from '../components/erp/modules/PurchasesModule';
-import ProcurementModule from '../components/erp/modules/ProcurementModule';
-import LogisticsModule from '../components/erp/modules/LogisticsModule';
-import AccountingModule from '../components/erp/modules/AccountingModule';
-import MLMModule from '../components/erp/modules/MLMModule';
+
+// CRM — each sidebar item is its own dedicated page, no shared tab bar
+import CustomersPanel from '../components/erp/modules/crm/CustomersPanel';
+import LeadsPanel from '../components/erp/modules/crm/LeadsPanel';
+import ActivitiesPanel from '../components/erp/modules/crm/ActivitiesPanel';
+import CRMPipeline from '../components/erp/modules/crm/CRMPipeline';
+
+// Sales
+import SalesDashboard from '../components/erp/modules/sales/SalesDashboard';
+import QuotationsPanel from '../components/erp/modules/sales/QuotationsPanel';
+import OrdersPanel from '../components/erp/modules/sales/OrdersPanel';
+
+// Procurement
+import ProcurementDashboard from '../components/erp/modules/procurement/ProcurementDashboard';
+import PurchaseOrdersPanel from '../components/erp/modules/procurement/PurchaseOrdersPanel';
+import SuppliersPanel from '../components/erp/modules/procurement/SuppliersPanel';
+import GoodsReceiptPanel from '../components/erp/modules/procurement/GoodsReceiptPanel';
+import BillsPanel from '../components/erp/modules/procurement/BillsPanel';
+
+// Logistics
+import LogisticsDashboard from '../components/erp/modules/logistics/LogisticsDashboard';
+import ShipmentsPanel from '../components/erp/modules/logistics/ShipmentsPanel';
+import DeliveriesPanel from '../components/erp/modules/logistics/DeliveriesPanel';
+import TrackingPanel from '../components/erp/modules/logistics/TrackingPanel';
+import WarehousesPanel from '../components/erp/modules/logistics/WarehousesPanel';
+
+// Accounting (Invoices/Payments reuse the standalone invoicing panels directly — no inner tabs)
+import AccountingDashboard from '../components/erp/modules/accounting/AccountingDashboard';
+import InvoicesPanel from '../components/erp/modules/invoicing/InvoicesPanel';
+import PaymentsPanel from '../components/erp/modules/invoicing/PaymentsPanel';
+import ExpensesPanel from '../components/erp/modules/accounting/ExpensesPanel';
+import TaxReportsPanel from '../components/erp/modules/accounting/TaxReportsPanel';
+import BalanceSheetPanel from '../components/erp/modules/accounting/BalanceSheetPanel';
+
+// MLM
+import MLMDashboard from '../components/erp/modules/mlm/MLMDashboard';
+import DistributorsPanel from '../components/erp/modules/mlm/DistributorsPanel';
+import NetworkTreePanel from '../components/erp/modules/mlm/NetworkTreePanel';
+import CommissionsPanel from '../components/erp/modules/mlm/CommissionsPanel';
+import PayoutsPanel from '../components/erp/modules/mlm/PayoutsPanel';
+import MLMReportsPanel from '../components/erp/modules/mlm/MLMReportsPanel';
+
+// HR Overview core pages
+import HRDashboard from '../components/erp/modules/hr/HRDashboard';
+import EmployeesPanel from '../components/erp/modules/hr/EmployeesPanel';
+import DepartmentsPanel from '../components/erp/modules/hr/DepartmentsPanel';
+import LeaveRequestsPanel from '../components/erp/modules/hr/LeaveRequestsPanel';
 
 // HR & Payroll modules — lazy loaded
 const AttendanceDashboard  = lazy(() => import('../components/erp/modules/attendance/AttendanceDashboardModule'));
@@ -78,44 +118,59 @@ const ERPPage = () => {
         <Routes>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard"          element={<ERPDashboard />} />
-          <Route path="crm"                element={<CRMModule />} />
-          <Route path="hr"                 element={<HRModule />} />
-          <Route path="hr/employees"       element={<HRModule initialTab="Employees" />} />
-          <Route path="hr/departments"     element={<HRModule initialTab="Departments" />} />
-          <Route path="hr/leave"           element={<HRModule initialTab="Leave Requests" />} />
+
+          {/* CRM */}
+          <Route path="crm"                element={<CustomersPanel />} />
+          <Route path="crm/leads"          element={<LeadsPanel />} />
+          <Route path="crm/activities"     element={<ActivitiesPanel />} />
+          <Route path="crm/pipeline"       element={<CRMPipeline />} />
+
+          {/* Sales */}
+          <Route path="sales"              element={<SalesDashboard />} />
+          <Route path="sales/quotations"   element={<QuotationsPanel />} />
+          <Route path="sales/orders"       element={<OrdersPanel />} />
+
+          {/* Procurement */}
+          <Route path="procurement"                    element={<ProcurementDashboard />} />
+          <Route path="procurement/purchase-orders"    element={<PurchaseOrdersPanel />} />
+          <Route path="procurement/suppliers"          element={<SuppliersPanel />} />
+          <Route path="procurement/goods-receipt"      element={<GoodsReceiptPanel />} />
+          <Route path="procurement/bills"              element={<BillsPanel />} />
+          <Route path="inventory"                      element={<InventoryModule />} />
+
+          {/* Logistics */}
+          <Route path="logistics"                    element={<LogisticsDashboard />} />
+          <Route path="logistics/shipments"          element={<ShipmentsPanel />} />
+          <Route path="logistics/deliveries"         element={<DeliveriesPanel />} />
+          <Route path="logistics/tracking"           element={<TrackingPanel />} />
+          <Route path="logistics/warehouses"         element={<WarehousesPanel />} />
+
+          {/* Accounting */}
+          <Route path="accounting"                  element={<AccountingDashboard />} />
+          <Route path="accounting/invoices"         element={<InvoicesPanel />} />
+          <Route path="accounting/payments"         element={<PaymentsPanel />} />
+          <Route path="accounting/expenses"         element={<ExpensesPanel />} />
+          <Route path="accounting/tax-reports"      element={<TaxReportsPanel />} />
+          <Route path="accounting/balance-sheet"    element={<BalanceSheetPanel />} />
+
+          {/* MLM */}
+          <Route path="mlm"                  element={<MLMDashboard />} />
+          <Route path="mlm/distributors"     element={<DistributorsPanel />} />
+          <Route path="mlm/network-tree"     element={<NetworkTreePanel />} />
+          <Route path="mlm/commissions"      element={<CommissionsPanel />} />
+          <Route path="mlm/payouts"          element={<PayoutsPanel />} />
+          <Route path="mlm/reports"          element={<MLMReportsPanel />} />
+
+          {/* HR Overview */}
+          <Route path="hr"                 element={<HRDashboard />} />
+          <Route path="hr/employees"       element={<EmployeesPanel />} />
+          <Route path="hr/departments"     element={<DepartmentsPanel />} />
+          <Route path="hr/leave"           element={<LeaveRequestsPanel />} />
           <Route path="hr/performance"     element={<HRPerformancePage />} />
           <Route path="hr/documents"       element={<HRDocumentsPage />} />
           <Route path="hr/org-chart"       element={<HROrgChartPage />} />
           <Route path="hr/onboarding"      element={<HROnboardingPage />} />
           <Route path="hr/exit"            element={<HRExitPage />} />
-          <Route path="inventory"          element={<InventoryModule />} />
-          <Route path="sales"              element={<SalesModule />} />
-          <Route path="sales/quotations"   element={<SalesModule initialTab="Quotations" />} />
-          <Route path="sales/orders"       element={<SalesModule initialTab="Orders" />} />
-          <Route path="invoicing"          element={<InvoicingModule />} />
-          <Route path="purchases"          element={<PurchasesModule />} />
-          <Route path="procurement"                    element={<ProcurementModule />} />
-          <Route path="procurement/purchase-orders"    element={<ProcurementModule initialTab="Purchase Orders" />} />
-          <Route path="procurement/suppliers"          element={<ProcurementModule initialTab="Suppliers" />} />
-          <Route path="procurement/goods-receipt"      element={<ProcurementModule initialTab="Goods Receipt" />} />
-          <Route path="procurement/bills"              element={<ProcurementModule initialTab="Bills" />} />
-          <Route path="logistics"                    element={<LogisticsModule />} />
-          <Route path="logistics/shipments"          element={<LogisticsModule initialTab="Shipments" />} />
-          <Route path="logistics/deliveries"         element={<LogisticsModule initialTab="Deliveries" />} />
-          <Route path="logistics/tracking"           element={<LogisticsModule initialTab="Tracking" />} />
-          <Route path="logistics/warehouses"         element={<LogisticsModule initialTab="Warehouses" />} />
-          <Route path="accounting"                  element={<AccountingModule />} />
-          <Route path="accounting/invoices"         element={<AccountingModule initialTab="Invoices" />} />
-          <Route path="accounting/payments"         element={<AccountingModule initialTab="Payments" />} />
-          <Route path="accounting/expenses"         element={<AccountingModule initialTab="Expenses" />} />
-          <Route path="accounting/tax-reports"      element={<AccountingModule initialTab="Tax Reports" />} />
-          <Route path="accounting/balance-sheet"    element={<AccountingModule initialTab="Balance Sheet" />} />
-          <Route path="mlm"                  element={<MLMModule />} />
-          <Route path="mlm/distributors"     element={<MLMModule initialTab="Distributors" />} />
-          <Route path="mlm/network-tree"     element={<MLMModule initialTab="Network Tree" />} />
-          <Route path="mlm/commissions"      element={<MLMModule initialTab="Commissions" />} />
-          <Route path="mlm/payouts"          element={<MLMModule initialTab="Payouts" />} />
-          <Route path="mlm/reports"          element={<MLMModule initialTab="Reports" />} />
 
           {/* HR & Payroll */}
           <Route path="attendance"         element={<AttendanceDashboard />} />
@@ -128,6 +183,10 @@ const ERPPage = () => {
           <Route path="payroll-generate"   element={<GeneratePayroll />} />
           <Route path="payroll-reports"    element={<PayrollReports />} />
           <Route path="my-payslips"        element={<MyPayslips />} />
+
+          {/* Legacy routes — unlinked from the sidebar, kept for direct-URL access */}
+          <Route path="invoicing"          element={<InvoicingModule />} />
+          <Route path="purchases"          element={<PurchasesModule />} />
 
           {/* Profile & Settings */}
           <Route path="profile"             element={<MyProfilePage />} />

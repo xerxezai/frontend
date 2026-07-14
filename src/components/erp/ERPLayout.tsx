@@ -27,13 +27,13 @@ const NAV: NavItem[] = [
   { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview' },
 ];
 
-// Expandable CRM submenu — Customers/Leads/Activities/Pipeline are tabs inside
-// the CRM page itself, deep-linked here via a `?tab=` query param.
+// Expandable CRM submenu — Customers/Leads/Activities/Pipeline are each their
+// own dedicated route/page (no shared internal tab bar).
 const CRM_SUBMENU: SubNavItem[] = [
-  { to: '/erp/crm',                icon: 'fas fa-users',    label: 'Customers' },
-  { to: '/erp/crm?tab=leads',      icon: 'fas fa-bullseye', label: 'Leads' },
-  { to: '/erp/crm?tab=activities', icon: 'fas fa-stream',   label: 'Activities' },
-  { to: '/erp/crm?tab=pipeline',   icon: 'fas fa-columns',  label: 'Pipeline' },
+  { to: '/erp/crm',            icon: 'fas fa-users',    label: 'Customers' },
+  { to: '/erp/crm/leads',      icon: 'fas fa-bullseye', label: 'Leads' },
+  { to: '/erp/crm/activities', icon: 'fas fa-stream',   label: 'Activities' },
+  { to: '/erp/crm/pipeline',   icon: 'fas fa-columns',  label: 'Pipeline' },
 ];
 
 // Expandable Sales submenu
@@ -106,9 +106,8 @@ const HR_SUBMENU: SubNavItem[] = [
   { to: '/erp/hr/exit',           icon: 'fas fa-door-open',       label: 'Exit Management' },
 ];
 
-// Plain (non-query-param) expandable groups — CRM is handled separately since
-// its submenu links use `?tab=` and a split navigate/toggle parent row.
 const EXPANDABLE_SUBMENUS: Record<string, SubNavItem[]> = {
+  '/erp/crm': CRM_SUBMENU,
   '/erp/sales': SALES_SUBMENU,
   '/erp/procurement': PROCUREMENT_SUBMENU,
   '/erp/logistics': LOGISTICS_SUBMENU,
@@ -155,9 +154,6 @@ const ERPLayout = ({ children }: Props) => {
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
 
-  const currentCrmSub = CRM_SUBMENU.find(
-    s => location.pathname === s.to || location.pathname.startsWith(s.to + '/')
-  );
   let currentSub: SubNavItem | undefined;
   for (const [parentTo, submenu] of Object.entries(EXPANDABLE_SUBMENUS)) {
     currentSub = submenu.find(
@@ -168,8 +164,7 @@ const ERPLayout = ({ children }: Props) => {
   const currentNavItem = NAV.find(
     item => item.to === location.pathname || location.pathname.startsWith(item.to + '/')
   );
-  const pageTitle = currentCrmSub ? currentCrmSub.label
-    : currentSub ? currentSub.label
+  const pageTitle = currentSub ? currentSub.label
     : currentNavItem ? currentNavItem.label : 'Dashboard';
 
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
@@ -180,9 +175,6 @@ const ERPLayout = ({ children }: Props) => {
     }
     return init;
   });
-  const [crmOpen, setCrmOpen] = useState(() =>
-    ['/erp/sales'].some(p => location.pathname.startsWith(p))
-  );
 
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
@@ -222,33 +214,36 @@ const ERPLayout = ({ children }: Props) => {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 16px;
-          margin: 2px 0;
+          padding: 12px 16px;
+          margin: 3px 8px;
           border-left: 3px solid transparent;
           border-radius: 10px;
           text-decoration: none;
           color: rgba(255,255,255,0.60);
-          font-size: 13.5px;
-          font-weight: 500;
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.3;
           font-family: 'DM Sans', sans-serif;
-          transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+          transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
           white-space: nowrap;
           overflow: hidden;
+          text-overflow: ellipsis;
+          box-sizing: border-box;
         }
         .erp-nav-item:hover {
-          color: rgba(255,255,255,0.88);
-          background: rgba(201,136,58,0.09);
+          color: rgba(255,255,255,0.92);
+          background: rgba(201,136,58,0.15);
         }
         .erp-nav-active {
-          color: #e8a84e !important;
-          background: rgba(201,136,58,0.14) !important;
-          border-left-color: #C9883A !important;
+          color: #ffffff !important;
+          background: #C9883A !important;
+          border-left-color: #ffffff !important;
           font-weight: 700 !important;
         }
         .erp-nav-chevron {
           margin-left: auto;
           opacity: 0;
-          transition: opacity 0.18s ease;
+          transition: opacity 0.2s ease;
         }
         .erp-nav-active .erp-nav-chevron {
           opacity: 1;
@@ -261,26 +256,28 @@ const ERPLayout = ({ children }: Props) => {
         }
         .erp-subnav-item {
           display: flex; align-items: center; gap: 9px;
-          padding: 9px 14px;
+          padding: 8px 16px 8px 40px;
+          margin: 1px 0;
           border-left: 3px solid transparent;
           border-bottom: 1px solid #F3F4F6;
           text-decoration: none; color: #1a1208; background: #FFFFFF;
-          font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+          font-size: 13px; font-weight: 400; line-height: 1.3; font-family: 'DM Sans', sans-serif;
           transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-          white-space: nowrap; overflow: hidden;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          box-sizing: border-box;
         }
         .erp-subnav-item:last-child { border-bottom: none; }
-        .erp-subnav-item:hover { color: #C9883A; background: rgba(201,136,58,0.08); }
+        .erp-subnav-item:hover { color: #C9883A; background: rgba(201,136,58,0.15); }
         .erp-subnav-active {
-          color: #C9883A !important; background: rgba(201,136,58,0.10) !important;
+          color: #ffffff !important; background: #C9883A !important;
           border-left-color: #C9883A !important; font-weight: 700 !important;
         }
 
         .erp-icon-badge {
-          width: 16px; height: 16px;
+          width: 18px; height: 18px;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
-          font-size: 12px;
+          font-size: 13px;
           color: inherit;
         }
 
@@ -467,61 +464,7 @@ const ERPLayout = ({ children }: Props) => {
           {NAV.map((item, idx) => {
             if (item.adminOnly && !isAdmin) return null;
 
-            // Expandable CRM submenu (only when sidebar is expanded).
-            // The row itself navigates straight to /erp/crm; the chevron is a
-            // separate toggle for the Customers/Leads/Activities/Pipeline panel.
-            if (item.to === '/erp/crm' && !collapsed) {
-              const crmRowActive = location.pathname === '/erp/crm' || location.pathname.startsWith('/erp/crm/');
-              return (
-                <div key={item.to}>
-                  <div
-                    className={`erp-nav-item erp-nav-slide${crmRowActive ? ' erp-nav-active' : ''}`}
-                    style={{ padding: 0, animationDelay: `${idx * 0.028}s` }}
-                  >
-                    <NavLink
-                      to="/erp/crm"
-                      end
-                      onClick={() => setMobileOpen(false)}
-                      style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0 10px 16px', color: 'inherit', textDecoration: 'none' }}
-                    >
-                      <span className="erp-icon-badge">
-                        <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
-                      </span>
-                      <span style={{ flex: 1 }}>{item.label}</span>
-                    </NavLink>
-                    <button
-                      onClick={() => setCrmOpen(o => !o)}
-                      aria-label={crmOpen ? 'Collapse CRM quick links' : 'Expand CRM quick links'}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', display: 'flex', alignItems: 'center', padding: '10px 16px 10px 8px' }}
-                    >
-                      <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: crmOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
-                    </button>
-                  </div>
-                  <div style={{
-                    overflow: 'hidden',
-                    maxHeight: crmOpen ? CRM_SUBMENU.length * 44 + 8 : 0,
-                    margin: crmOpen ? '4px 8px 8px' : '0 8px',
-                    transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
-                  }}>
-                    <div className="erp-subnav-panel">
-                      {CRM_SUBMENU.map(s => (
-                        <NavLink
-                          key={s.to}
-                          to={s.to}
-                          onClick={() => setMobileOpen(false)}
-                          className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
-                        >
-                          <i className={s.icon} style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
-                          <span>{s.label}</span>
-                        </NavLink>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-
-            // Every other expandable section (Sales/Procurement/Logistics/Accounting/MLM/HR
+            // Every expandable section (CRM/Sales/Procurement/Logistics/Accounting/MLM/HR
             // Overview) shares this one toggle-button + submenu-panel pattern.
             const submenu = EXPANDABLE_SUBMENUS[item.to];
             if (submenu && !collapsed) {
