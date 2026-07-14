@@ -357,9 +357,9 @@ const FinanceTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolean
   return (
     <div style={{ animation: 'erpFadeUp 0.4s ease both' }}>
       <div className="erp-cards-grid" style={{ marginBottom: 24 }}>
-        <GradCard label="Total Revenue"   rawValue={parseFloat(data?.finance?.total_revenue || '0') || 0}   prefix="$" decimals={2} icon={DollarSign}      section="finance" index={0} loaded={loaded} />
-        <GradCard label="This Month"      rawValue={parseFloat(data?.finance?.month_revenue || '0') || 0}   prefix="$" decimals={2} icon={TrendingUp}      section="finance" index={1} loaded={loaded} />
-        <GradCard label="Outstanding"     rawValue={parseFloat(data?.finance?.outstanding_invoices || '0') || 0} prefix="$" decimals={2} icon={AlertCircle} section="finance" index={2} loaded={loaded} />
+        <GradCard label="Total Revenue"   rawValue={parseFloat(data?.finance?.total_revenue || '0') || 0}   prefix="₹" decimals={2} icon={DollarSign}      section="finance" index={0} loaded={loaded} />
+        <GradCard label="This Month"      rawValue={parseFloat(data?.finance?.month_revenue || '0') || 0}   prefix="₹" decimals={2} icon={TrendingUp}      section="finance" index={1} loaded={loaded} />
+        <GradCard label="Outstanding"     rawValue={parseFloat(data?.finance?.outstanding_invoices || '0') || 0} prefix="₹" decimals={2} icon={AlertCircle} section="finance" index={2} loaded={loaded} />
         <GradCard label="Overdue Invoices" rawValue={data?.finance?.overdue_invoices ?? null}                                            icon={Clock}          section="finance" index={3} loaded={loaded} />
       </div>
       <div style={{ marginBottom: 24 }}>
@@ -556,9 +556,9 @@ const OverviewTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolea
       <GradCard label="New Leads (Month)"   rawValue={data?.crm?.new_leads_this_month ?? null}  icon={Star}      section="crm" index={2} loaded={loaded} />
 
       <SectionHeading title="Finance" />
-      <GradCard label="Total Revenue"       rawValue={parseFloat(data?.finance?.total_revenue || '0') || 0}       prefix="$" decimals={2} icon={DollarSign}   section="finance" index={3} loaded={loaded} />
-      <GradCard label="This Month"          rawValue={parseFloat(data?.finance?.month_revenue || '0') || 0}       prefix="$" decimals={2} icon={TrendingUp}   section="finance" index={4} loaded={loaded} />
-      <GradCard label="Outstanding"         rawValue={parseFloat(data?.finance?.outstanding_invoices || '0') || 0} prefix="$" decimals={2} icon={AlertCircle} section="finance" index={5} loaded={loaded} />
+      <GradCard label="Total Revenue"       rawValue={parseFloat(data?.finance?.total_revenue || '0') || 0}       prefix="₹" decimals={2} icon={DollarSign}   section="finance" index={3} loaded={loaded} />
+      <GradCard label="This Month"          rawValue={parseFloat(data?.finance?.month_revenue || '0') || 0}       prefix="₹" decimals={2} icon={TrendingUp}   section="finance" index={4} loaded={loaded} />
+      <GradCard label="Outstanding"         rawValue={parseFloat(data?.finance?.outstanding_invoices || '0') || 0} prefix="₹" decimals={2} icon={AlertCircle} section="finance" index={5} loaded={loaded} />
       <GradCard label="Overdue Invoices"    rawValue={data?.finance?.overdue_invoices ?? null}                                              icon={Clock}       section="finance" index={6} loaded={loaded} />
 
       <SectionHeading title="Operations" />
