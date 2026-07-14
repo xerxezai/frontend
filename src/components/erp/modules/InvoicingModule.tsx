@@ -1,8 +1,16 @@
 import { useState } from 'react';
 import InvoicesPanel from './invoicing/InvoicesPanel';
 import PaymentsPanel from './invoicing/PaymentsPanel';
+import RecurringInvoicesPanel from './invoicing/RecurringInvoicesPanel';
+import CreditNotesPanel from './invoicing/CreditNotesPanel';
+import ReportsPanel from './invoicing/ReportsPanel';
 
-type Tab = 'Invoices' | 'Payments';
+type Tab = 'Invoices' | 'Payments' | 'Recurring' | 'CreditNotes' | 'Reports';
+
+const TAB_LABEL: Record<Tab, string> = {
+  Invoices: 'Invoices', Payments: 'Payments', Recurring: 'Recurring Invoices',
+  CreditNotes: 'Credit Notes', Reports: 'Reports',
+};
 
 const InvoicingModule = () => {
   const [tab, setTab] = useState<Tab>('Invoices');
@@ -16,13 +24,17 @@ const InvoicingModule = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-        <button style={ts('Invoices')} onClick={() => setTab('Invoices')}>Invoices</button>
-        <button style={ts('Payments')} onClick={() => setTab('Payments')}>Payments</button>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
+        {(Object.keys(TAB_LABEL) as Tab[]).map(t => (
+          <button key={t} style={ts(t)} onClick={() => setTab(t)}>{TAB_LABEL[t]}</button>
+        ))}
       </div>
 
       {tab === 'Invoices' && <InvoicesPanel />}
       {tab === 'Payments' && <PaymentsPanel />}
+      {tab === 'Recurring' && <RecurringInvoicesPanel />}
+      {tab === 'CreditNotes' && <CreditNotesPanel />}
+      {tab === 'Reports' && <ReportsPanel />}
     </div>
   );
 };
