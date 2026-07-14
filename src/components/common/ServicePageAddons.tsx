@@ -87,7 +87,7 @@ export const PainPointsSection = ({ points, href = "/contact" }: { points: strin
                 padding: "20px 22px", display: "flex", gap: 13, alignItems: "flex-start",
                 boxShadow: "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.05)",
               }}>
-                <i className="fas fa-circle-xmark" style={{ color: "#ef4444", fontSize: 17, marginTop: 2, flexShrink: 0 }} />
+                <i className="fas fa-times-circle" style={{ color: "#ef4444", fontSize: 17, marginTop: 2, flexShrink: 0 }} />
                 <span style={{ color: DARK, fontWeight: 600, fontSize: 14.5, lineHeight: 1.55, fontFamily: "'DM Sans',sans-serif" }}>{p}</span>
               </div>
             </FI>

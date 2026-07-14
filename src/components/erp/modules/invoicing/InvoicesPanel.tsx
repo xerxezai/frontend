@@ -158,7 +158,7 @@ export default function InvoicesPanel() {
       {dash && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 18 }}>
           <KpiCard icon="fas fa-file-invoice" label="Total Invoiced" value={fmtINR(dash.total_invoiced)} accent={OG} />
-          <KpiCard icon="fas fa-circle-check" label="Paid" value={fmtINR(dash.total_paid)} accent="#10b981" />
+          <KpiCard icon="fas fa-check-circle" label="Paid" value={fmtINR(dash.total_paid)} accent="#10b981" />
           <KpiCard icon="fas fa-hourglass-half" label="Outstanding" value={fmtINR(dash.outstanding)} accent="#f59e0b" />
           <KpiCard icon="fas fa-triangle-exclamation" label="Overdue" value={String(dash.overdue_count)} accent="#ef4444" />
         </div>

@@ -98,7 +98,7 @@ export default function QuotationsPanel() {
             <button title="Convert to Sales Order" disabled={converting === r.id}
               onClick={() => convertToOrder(r.id)}
               style={{ background:'rgba(16,185,129,0.08)',color:'#059669',border:'1px solid rgba(16,185,129,0.22)',width:28,height:28,borderRadius:6,cursor: converting === r.id ? 'wait' : 'pointer' }}>
-              <i className={`fas ${converting === r.id ? 'fa-spinner fa-spin' : 'fa-right-left'}`} style={{ fontSize: 10 }} />
+              <i className={`fas ${converting === r.id ? 'fa-spinner fa-spin' : 'fa-exchange-alt'}`} style={{ fontSize: 10 }} />
             </button>
           )}
         </div>

@@ -72,7 +72,7 @@ export default function WarehousesPanel() {
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
         {isAdmin && (
           <button onClick={() => { setTF({ ...defT }); setModal('transfer'); }} style={{ background: 'rgba(201,136,58,0.10)', color: OG, border: '1px solid rgba(201,136,58,0.28)', borderRadius: 9, padding: '9px 16px', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>
-            <i className="fas fa-right-left" style={{ marginRight: 6 }} />Stock Transfer
+            <i className="fas fa-exchange-alt" style={{ marginRight: 6 }} />Stock Transfer
           </button>
         )}
       </div>
