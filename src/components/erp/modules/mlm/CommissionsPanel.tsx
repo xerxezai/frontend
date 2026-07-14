@@ -2,7 +2,9 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, fmtINR, today, COMMISSION_STATUS, StatusBadge } from './mlmShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, fmtINR, today, COMMISSION_STATUS, StatusBadge } from './mlmShared';
+
+const defCommission = { distributor: '', level: '1', amount: '', status: 'pending', notes: '' };
 
 export default function CommissionsPanel() {
   const isAdmin = isSuperUser();
@@ -17,6 +19,10 @@ export default function CommissionsPanel() {
   const [dateTo, setDateTo] = useState('');
   const [busyId, setBusyId] = useState<number | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [cF, setCF] = useState({ ...defCommission });
+  const [saving, setSaving] = useState(false);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -56,6 +62,24 @@ export default function CommissionsPanel() {
   const exportCSV = async () => {
     try { await erpDownload('mlm/commissions/export-csv/', `commissions-${today()}.csv`); }
     catch (err: any) { toast.error(err.message || 'Export failed'); }
+  };
+
+  const closeModal = () => setShowModal(false);
+
+  const saveCommission = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!cF.distributor) { toast.error('Please select a distributor.'); return; }
+    if (!cF.amount || Number(cF.amount) <= 0) { toast.error('Amount must be greater than 0.'); return; }
+    setSaving(true);
+    try {
+      await commissions.create({
+        distributor: Number(cF.distributor), level: Number(cF.level), amount: Number(cF.amount),
+        status: cF.status, notes: cF.notes,
+      } as any);
+      toast.success('Commission added');
+      closeModal();
+    } catch (err: any) { toast.error(err.message || 'Save failed'); }
+    finally { setSaving(false); }
   };
 
   const cols = [
@@ -115,7 +139,47 @@ export default function CommissionsPanel() {
         </div>
       </div>
 
-      <ERPTable title="Commissions" columns={cols} data={filtered} loading={commissions.loading || distributors.loading} error={commissions.error} isAdmin={isAdmin} />
+      <ERPTable title="Commissions" columns={cols} data={filtered} loading={commissions.loading || distributors.loading} error={commissions.error} isAdmin={isAdmin}
+        onAdd={() => { setCF({ ...defCommission }); setShowModal(true); }} />
+
+      {showModal && (
+        <div style={OVR} onClick={closeModal}>
+          <div onClick={e => e.stopPropagation()} style={{ ...CRD, maxWidth: 460 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+              <h5 style={{ fontFamily: FF, fontWeight: 800, fontSize: 16, color: '#1A1A1A', margin: 0 }}>Add Commission</h5>
+              <button onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B6B6B', fontSize: 22 }}>&times;</button>
+            </div>
+            <form onSubmit={saveCommission} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div><label style={lbl}>Distributor *</label>
+                <select value={cF.distributor} onChange={e => setCF(f => ({ ...f, distributor: e.target.value }))} style={inp} required>
+                  <option value="">— Select distributor —</option>
+                  {distributors.data.map((d: any) => <option key={d.id} value={d.id}>{d.distributor_id} — {d.name}</option>)}
+                </select>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div><label style={lbl}>Level</label>
+                  <select value={cF.level} onChange={e => setCF(f => ({ ...f, level: e.target.value }))} style={inp}>
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                    <option value="3">Level 3</option>
+                  </select>
+                </div>
+                <div><label style={lbl}>Amount (₹) *</label><input type="number" value={cF.amount} onChange={e => setCF(f => ({ ...f, amount: e.target.value }))} style={inp} required step="0.01" min="0.01" /></div>
+              </div>
+              <div><label style={lbl}>Status</label>
+                <select value={cF.status} onChange={e => setCF(f => ({ ...f, status: e.target.value }))} style={inp}>
+                  {Object.entries(COMMISSION_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                </select>
+              </div>
+              <div><label style={lbl}>Notes</label><textarea value={cF.notes} onChange={e => setCF(f => ({ ...f, notes: e.target.value }))} style={{ ...inp, resize: 'vertical', minHeight: 70 }} placeholder="Optional — e.g. reason for a manual adjustment" /></div>
+              <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                <button type="button" onClick={closeModal} style={CNCL}>Cancel</button>
+                <button type="submit" disabled={saving} style={{ ...SAVE, opacity: saving ? 0.7 : 1, cursor: saving ? 'wait' : 'pointer' }}>{saving ? 'Saving…' : 'Save'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
