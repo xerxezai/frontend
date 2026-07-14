@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { LayoutDashboard, Users, Target, Activity, LayoutGrid } from 'lucide-react';
 import { useERPList } from '../../../hooks/useERPApi';
 import CRMDashboard from './crm/CRMDashboard';
@@ -11,15 +10,8 @@ import { FF } from './crm/crmShared';
 
 type Tab = 'Dashboard' | 'Customers' | 'Leads' | 'Activities' | 'Pipeline';
 
-const TAB_FROM_PARAM: Record<string, Tab> = {
-  dashboard: 'Dashboard', customers: 'Customers', leads: 'Leads',
-  activities: 'Activities', pipeline: 'Pipeline',
-};
-
 const CRMModule = () => {
-  const [searchParams] = useSearchParams();
-  const initialTab = TAB_FROM_PARAM[searchParams.get('tab') || ''] ?? 'Customers';
-  const [tab, setTab] = useState<Tab>(initialTab);
+  const [tab, setTab] = useState<Tab>('Dashboard');
 
   const customers  = useERPList<any>('crm/customers/');
   const leads      = useERPList<any>('crm/leads/');
