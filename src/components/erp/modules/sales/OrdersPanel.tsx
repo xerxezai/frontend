@@ -7,7 +7,20 @@ import { inp, lbl, SAVE, CNCL, fmtINR, O_STATUS, DelDlg, today, nextNumber } fro
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
 const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:480,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
 
-const defO = { number: '', customer: '', order_date: '', status: 'open', salesperson: '', notes: '' };
+const defO = { number: '', customer: '', order_date: '', status: 'open', assignee: '', notes: '' };
+
+/** The salespeople dropdown mixes regular Users and MLM Distributors — value is encoded as
+ * "user:<id>" or "distributor:<id>" so a single <select> can drive either FK on the order. */
+const encodeAssignee = (r: any): string => {
+  if (r.salesperson) return `user:${r.salesperson}`;
+  if (r.distributor) return `distributor:${r.distributor}`;
+  return '';
+};
+const decodeAssignee = (value: string): { salesperson: number | null; distributor: number | null } => {
+  if (!value) return { salesperson: null, distributor: null };
+  const [type, id] = value.split(':');
+  return { salesperson: type === 'user' ? Number(id) : null, distributor: type === 'distributor' ? Number(id) : null };
+};
 
 export default function OrdersPanel() {
   const isAdmin = isSuperUser();
@@ -29,9 +42,10 @@ export default function OrdersPanel() {
     if (!oF.order_date)     { toast.error('Order date is required.'); return; }
     if (!oF.customer)       { toast.error('Please select a customer.'); return; }
     try {
+      const { salesperson, distributor } = decodeAssignee(oF.assignee);
       const body: any = {
         number: oF.number.trim(), order_date: oF.order_date, customer: Number(oF.customer),
-        status: oF.status, salesperson: oF.salesperson ? Number(oF.salesperson) : null, notes: oF.notes,
+        status: oF.status, salesperson, distributor, notes: oF.notes,
       };
       if (editing) { await orders.update(editing.id, body); toast.success('Order updated'); }
       else { await orders.create(body); toast.success('Order created'); }
@@ -57,9 +71,10 @@ export default function OrdersPanel() {
     }
   };
 
-  const changeSalesperson = async (id: number, salespersonId: string) => {
+  const changeSalesperson = async (id: number, value: string) => {
     try {
-      await orders.update(id, { salesperson: salespersonId ? Number(salespersonId) : null });
+      const { salesperson, distributor } = decodeAssignee(value);
+      await orders.update(id, { salesperson, distributor });
       toast.success('Salesperson assigned');
     } catch (e: any) {
       toast.error(e.message || 'Could not assign salesperson');
@@ -86,12 +101,12 @@ export default function OrdersPanel() {
     {
       key: 'salesperson', label: 'Salesperson',
       render: (r: any) => isAdmin ? (
-        <select value={r.salesperson ?? ''} onChange={e => changeSalesperson(r.id, e.target.value)}
+        <select value={encodeAssignee(r)} onChange={e => changeSalesperson(r.id, e.target.value)}
           style={{ border: '1px solid rgba(0,0,0,0.10)', borderRadius: 6, padding: '3px 6px', background: '#fafaf8', fontFamily: "'DM Sans',sans-serif", fontSize: 11.5 }}>
           <option value="">— Unassigned —</option>
-          {salespeople.data.map((u: any) => <option key={u.id} value={u.id}>{u.name}</option>)}
+          {salespeople.data.map((p: any) => <option key={`${p.type}:${p.id}`} value={`${p.type}:${p.id}`}>{p.type === 'distributor' ? `⬡ ${p.name}` : p.name}</option>)}
         </select>
-      ) : (r.salesperson_name || '—'),
+      ) : (r.distributor_name || r.salesperson_name || '—'),
     },
     { key: 'invoice_number', label: 'Invoice', render: (r: any) => r.invoice_number || '—' },
     { key: 'total', label: 'Total', render: (r: any) => fmtINR(r.total) },
@@ -101,7 +116,7 @@ export default function OrdersPanel() {
     <div>
       <ERPTable title="Sales Orders" columns={cols} data={orders.data} loading={orders.loading} error={orders.error} isAdmin={isAdmin}
         onAdd={() => { setOF({ ...defO, number: nextNumber('SO', orders.data), order_date: today() }); setEditing(null); setShowModal(true); }}
-        onEdit={r => { setEditing(r); setOF({ number: r.number || '', customer: String(r.customer || ''), order_date: r.order_date || '', status: r.status || 'open', salesperson: r.salesperson ? String(r.salesperson) : '', notes: r.notes || '' }); setShowModal(true); }}
+        onEdit={r => { setEditing(r); setOF({ number: r.number || '', customer: String(r.customer || ''), order_date: r.order_date || '', status: r.status || 'open', assignee: encodeAssignee(r), notes: r.notes || '' }); setShowModal(true); }}
         onDelete={id => setDelId(id)} />
 
       {showModal && (
@@ -121,10 +136,12 @@ export default function OrdersPanel() {
               <div><label style={lbl}>Status</label><select value={oF.status} onChange={e => setOF(f => ({ ...f, status: e.target.value }))} style={inp}>
                 {Object.entries(O_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
               </select></div>
-              <div><label style={lbl}>Assign Salesperson</label><select value={oF.salesperson} onChange={e => setOF(f => ({ ...f, salesperson: e.target.value }))} style={inp}>
+              <div><label style={lbl}>Assign Salesperson</label><select value={oF.assignee} onChange={e => setOF(f => ({ ...f, assignee: e.target.value }))} style={inp}>
                 <option value="">— Unassigned —</option>
-                {salespeople.data.map((u: any) => <option key={u.id} value={u.id}>{u.name}</option>)}
-              </select></div>
+                {salespeople.data.map((p: any) => <option key={`${p.type}:${p.id}`} value={`${p.type}:${p.id}`}>{p.type === 'distributor' ? `⬡ ${p.name} (MLM Distributor)` : p.name}</option>)}
+              </select>
+              <p style={{ fontSize: 11.5, color: '#6B6B6B', margin: '4px 0 0' }}>Assigning an MLM distributor and confirming the order auto-generates a pending commission.</p>
+              </div>
               <div><label style={lbl}>Notes</label><textarea value={oF.notes} onChange={e => setOF(f => ({ ...f, notes: e.target.value }))} style={{ ...inp, resize: 'vertical', minHeight: 80 }} /></div>
               <div style={{ display: 'flex', gap: 10, marginTop: 4 }}><button type="button" onClick={close} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing ? 'Update' : 'Save'}</button></div>
             </form>
