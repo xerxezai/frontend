@@ -7,7 +7,7 @@ import { downloadShipmentPDF } from './pdf';
 
 const defShipment = {
   sales_order: '', customer: '', carrier: '', tracking_number: '',
-  origin: '', destination: '', estimated_delivery: '', notes: '',
+  origin: '', origin_warehouse: '', destination: '', estimated_delivery: '', notes: '',
 };
 
 const NEXT_STATUS: Record<string, string> = {
@@ -19,6 +19,7 @@ export default function ShipmentsPanel() {
   const shipments = useERPList<any>('logistics/shipments/');
   const salesOrders = useERPList<any>('sales/orders/');
   const customers = useERPList<any>('crm/customers/');
+  const warehouses = useERPList<any>('inventory/warehouses/');
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -50,7 +51,8 @@ export default function ShipmentsPanel() {
         customer: Number(sF.customer),
         sales_order: sF.sales_order ? Number(sF.sales_order) : null,
         carrier: sF.carrier, tracking_number: sF.tracking_number,
-        origin: sF.origin, destination: sF.destination,
+        origin: sF.origin, origin_warehouse: sF.origin_warehouse ? Number(sF.origin_warehouse) : null,
+        destination: sF.destination,
         estimated_delivery: sF.estimated_delivery || null, notes: sF.notes,
       };
       if (editing) { await shipments.update(editing.id, body); toast.success('Shipment updated'); }
@@ -138,7 +140,7 @@ export default function ShipmentsPanel() {
           setSF({
             sales_order: String(r.sales_order || ''), customer: String(r.customer || ''),
             carrier: r.carrier || '', tracking_number: r.tracking_number || '',
-            origin: r.origin || '', destination: r.destination || '',
+            origin: r.origin || '', origin_warehouse: String(r.origin_warehouse || ''), destination: r.destination || '',
             estimated_delivery: r.estimated_delivery || '', notes: r.notes || '',
           });
           setShowModal(true);
@@ -174,8 +176,17 @@ export default function ShipmentsPanel() {
                 <div><label style={lbl}>Carrier</label><input value={sF.carrier} onChange={e => setSF(f => ({ ...f, carrier: e.target.value }))} style={inp} /></div>
                 <div><label style={lbl}>Tracking Number *</label><input value={sF.tracking_number} onChange={e => setSF(f => ({ ...f, tracking_number: e.target.value }))} style={inp} required /></div>
               </div>
+              <div><label style={lbl}>Origin Warehouse</label>
+                <select value={sF.origin_warehouse} onChange={e => {
+                  const wh = warehouses.data.find((w: any) => String(w.id) === e.target.value);
+                  setSF(f => ({ ...f, origin_warehouse: e.target.value, origin: wh ? wh.name : f.origin }));
+                }} style={inp}>
+                  <option value="">— None (use free-text origin) —</option>
+                  {warehouses.data.map((w: any) => <option key={w.id} value={w.id}>{w.code} — {w.name}</option>)}
+                </select>
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                <div><label style={lbl}>Origin</label><input value={sF.origin} onChange={e => setSF(f => ({ ...f, origin: e.target.value }))} style={inp} /></div>
+                <div><label style={lbl}>Origin</label><input value={sF.origin} onChange={e => setSF(f => ({ ...f, origin: e.target.value, origin_warehouse: '' }))} style={inp} placeholder="Auto-filled from warehouse, or type freely" /></div>
                 <div><label style={lbl}>Destination *</label><input value={sF.destination} onChange={e => setSF(f => ({ ...f, destination: e.target.value }))} style={inp} required /></div>
               </div>
               <div><label style={lbl}>Estimated Delivery</label><input type="date" value={sF.estimated_delivery} onChange={e => setSF(f => ({ ...f, estimated_delivery: e.target.value }))} style={inp} /></div>

@@ -6,13 +6,14 @@ import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, today } from './procurement
 
 interface ItemRow { product: string; quantity_received: string; }
 const emptyRow = (): ItemRow => ({ product: '', quantity_received: '' });
-const defReceipt = { purchase_order: '', received_date: today(), notes: '' };
+const defReceipt = { purchase_order: '', warehouse: '', received_date: today(), notes: '' };
 
 export default function GoodsReceiptPanel() {
   const isAdmin = isSuperUser();
   const receipts = useERPList<any>('procurement/goods-receipts/');
   const purchaseOrders = useERPList<any>('procurement/purchase-orders/');
   const products = useERPList<any>('inventory/products/');
+  const warehouses = useERPList<any>('inventory/warehouses/');
 
   const [showModal, setShowModal] = useState(false);
   const [delId, setDelId] = useState<number | null>(null);
@@ -48,7 +49,8 @@ export default function GoodsReceiptPanel() {
       await erpFetch('procurement/goods-receipts/', {
         method: 'POST',
         body: JSON.stringify({
-          purchase_order: Number(rF.purchase_order), received_date: rF.received_date, notes: rF.notes,
+          purchase_order: Number(rF.purchase_order), warehouse: rF.warehouse ? Number(rF.warehouse) : null,
+          received_date: rF.received_date, notes: rF.notes,
           items: validItems.map(r => ({ product: Number(r.product), quantity_received: Number(r.quantity_received) })),
         }),
       });
@@ -69,6 +71,7 @@ export default function GoodsReceiptPanel() {
     { key: 'receipt_number', label: 'Receipt Number' },
     { key: 'po_number', label: 'PO Number', render: (r: any) => r.po_number || '—' },
     { key: 'supplier_name', label: 'Supplier', render: (r: any) => r.supplier_name || '—' },
+    { key: 'warehouse_name', label: 'Warehouse', render: (r: any) => r.warehouse_name || '—' },
     { key: 'received_date', label: 'Received Date' },
     { key: 'items', label: 'Items', render: (r: any) => r.items?.length ?? 0 },
   ];
@@ -81,7 +84,12 @@ export default function GoodsReceiptPanel() {
       </p>
 
       <ERPTable title="Goods Receipts" columns={cols} data={receipts.data} loading={receipts.loading} error={receipts.error} isAdmin={isAdmin}
-        onAdd={() => { setRF({ ...defReceipt }); setItems([emptyRow()]); setShowModal(true); }}
+        onAdd={() => {
+          const defaultWarehouse = warehouses.data.find((w: any) => w.is_active) || warehouses.data[0];
+          setRF({ ...defReceipt, warehouse: defaultWarehouse ? String(defaultWarehouse.id) : '' });
+          setItems([emptyRow()]);
+          setShowModal(true);
+        }}
         onDelete={id => setDelId(id)} />
 
       {showModal && (
@@ -103,7 +111,15 @@ export default function GoodsReceiptPanel() {
                   <p style={{ fontSize: 11.5, color: '#92400e', marginTop: 6 }}>This PO was already received — a new receipt will add further stock on top of it.</p>
                 )}
               </div>
-              <div><label style={lbl}>Received Date</label><input type="date" value={rF.received_date} onChange={e => setRF(f => ({ ...f, received_date: e.target.value }))} style={inp} /></div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div><label style={lbl}>Receiving Warehouse</label>
+                  <select value={rF.warehouse} onChange={e => setRF(f => ({ ...f, warehouse: e.target.value }))} style={inp}>
+                    <option value="">— Default (first active) —</option>
+                    {warehouses.data.map((w: any) => <option key={w.id} value={w.id}>{w.code} — {w.name}</option>)}
+                  </select>
+                </div>
+                <div><label style={lbl}>Received Date</label><input type="date" value={rF.received_date} onChange={e => setRF(f => ({ ...f, received_date: e.target.value }))} style={inp} /></div>
+              </div>
 
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>

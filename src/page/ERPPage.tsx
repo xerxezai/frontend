@@ -32,7 +32,9 @@ import LogisticsDashboard from '../components/erp/modules/logistics/LogisticsDas
 import ShipmentsPanel from '../components/erp/modules/logistics/ShipmentsPanel';
 import DeliveriesPanel from '../components/erp/modules/logistics/DeliveriesPanel';
 import TrackingPanel from '../components/erp/modules/logistics/TrackingPanel';
-import WarehousesPanel from '../components/erp/modules/logistics/WarehousesPanel';
+// Reuses the Inventory Warehouses panel directly — Logistics no longer manages its own
+// separate warehouse list, so WH001 etc. are visible/editable in exactly one place.
+import WarehousesPanel from '../components/erp/modules/inventory/WarehousesPanel';
 
 // Accounting (Invoices/Payments reuse the standalone invoicing panels directly — no inner tabs)
 import AccountingDashboard from '../components/erp/modules/accounting/AccountingDashboard';

@@ -31,6 +31,7 @@ export default function OrdersPanel() {
   const customers = useERPList<any>('crm/customers/');
   const salespeople = useERPList<any>('sales/orders/salespeople/');
   const products = useERPList<any>('inventory/products/');
+  const invoices = useERPList<any>('invoicing/invoices/');
 
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<any>(null);
@@ -38,6 +39,7 @@ export default function OrdersPanel() {
   const [oF, setOF] = useState({ ...defO });
   const [items, setItems] = useState<ItemRow[]>([emptyRow()]);
   const [savingStatus, setSavingStatus] = useState<number | null>(null);
+  const [generatingInvoice, setGeneratingInvoice] = useState<number | null>(null);
 
   const grandTotal = items.reduce((s, r) => s + (Number(r.quantity) || 0) * (Number(r.unit_price) || 0), 0);
 
@@ -95,6 +97,36 @@ export default function OrdersPanel() {
     }
   };
 
+  const plusDays = (n: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + n);
+    return d.toISOString().slice(0, 10);
+  };
+
+  const generateInvoice = async (order: any) => {
+    setGeneratingInvoice(order.id);
+    try {
+      const orderItems = (order.items || []).length
+        ? order.items.map((it: any) => ({ product: it.product || null, description: it.description, quantity: it.quantity, unit_price: it.unit_price }))
+        : [{ product: null, description: `Sales Order ${order.number}`, quantity: '1', unit_price: order.total }];
+      await erpFetch('invoicing/invoices/', {
+        method: 'POST',
+        body: JSON.stringify({
+          number: nextNumber('INV', invoices.data), customer: order.customer, sales_order: order.id,
+          issue_date: today(), due_date: plusDays(30), status: 'sent',
+          notes: `Auto-generated from ${order.number}`, items: orderItems,
+        }),
+      });
+      toast.success(`Invoice generated for ${order.number}`);
+      orders.reload();
+      invoices.reload();
+    } catch (e: any) {
+      toast.error(e.message || 'Could not generate invoice');
+    } finally {
+      setGeneratingInvoice(null);
+    }
+  };
+
   const cols = [
     { key: 'number', label: 'Number', render: (r: any) => r.number || r.id },
     { key: 'customer_name', label: 'Customer', render: (r: any) => r.customer_name || '—' },
@@ -124,6 +156,17 @@ export default function OrdersPanel() {
     },
     { key: 'invoice_number', label: 'Invoice', render: (r: any) => r.invoice_number || '—' },
     { key: 'total', label: 'Total', render: (r: any) => fmtINR(r.total) },
+    {
+      key: 'quickActions', label: 'Quick Actions',
+      render: (r: any) => (
+        r.invoice_status !== 'fully_invoiced' && Number(r.total) > 0 ? (
+          <button title="Generate Invoice" disabled={generatingInvoice === r.id} onClick={() => generateInvoice(r)}
+            style={{ background: 'rgba(16,185,129,0.08)', color: '#059669', border: '1px solid rgba(16,185,129,0.22)', width: 28, height: 28, borderRadius: 6, cursor: generatingInvoice === r.id ? 'wait' : 'pointer' }}>
+            <i className={`fas ${generatingInvoice === r.id ? 'fa-spinner fa-spin' : 'fa-file-invoice-dollar'}`} style={{ fontSize: 10 }} />
+          </button>
+        ) : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>
+      ),
+    },
   ];
 
   return (

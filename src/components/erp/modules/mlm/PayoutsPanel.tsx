@@ -17,6 +17,7 @@ export default function PayoutsPanel() {
   const [pF, setPF] = useState({ ...defPayout });
   const [filling, setFilling] = useState(false);
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [breakdown, setBreakdown] = useState<{ order: string; amount: number }[]>([]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -34,9 +35,13 @@ export default function PayoutsPanel() {
     setFilling(true);
     try {
       const pending = await erpFetch(`mlm/commissions/?distributor=${pF.distributor}&status=pending`);
-      const list = Array.isArray(pending) ? pending : pending.results ?? [];
+      const list = (Array.isArray(pending) ? pending : pending.results ?? [])
+        // Zero-amount commissions shouldn't exist going forward (see the backend's
+        // zero-total guard), but excluded defensively here too since old data may linger.
+        .filter((c: any) => Number(c.amount || 0) > 0);
       const total = list.reduce((s: number, c: any) => s + Number(c.amount || 0), 0);
       setPF(f => ({ ...f, amount: total.toFixed(2) }));
+      setBreakdown(list.map((c: any) => ({ order: c.order_number || (c.order ? `Order #${c.order}` : 'Manual commission'), amount: Number(c.amount || 0) })));
       toast.success(`Filled from ${list.length} pending commission${list.length === 1 ? '' : 's'}`);
     } catch (err: any) { toast.error(err.message || 'Could not fetch pending commissions'); }
     finally { setFilling(false); }
@@ -106,7 +111,7 @@ export default function PayoutsPanel() {
       </div>
 
       <ERPTable title="Payouts" columns={cols} data={filtered} loading={payouts.loading} error={payouts.error} isAdmin={isAdmin}
-        onAdd={() => { setPF({ ...defPayout }); setShowModal(true); }} />
+        onAdd={() => { setPF({ ...defPayout }); setBreakdown([]); setShowModal(true); }} />
 
       {showModal && (
         <div style={OVR} onClick={close}>
@@ -117,7 +122,7 @@ export default function PayoutsPanel() {
             </div>
             <form onSubmit={savePayout} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div><label style={lbl}>Distributor *</label>
-                <select value={pF.distributor} onChange={e => setPF(f => ({ ...f, distributor: e.target.value }))} style={inp} required>
+                <select value={pF.distributor} onChange={e => { setPF(f => ({ ...f, distributor: e.target.value })); setBreakdown([]); }} style={inp} required>
                   <option value="">— Select distributor —</option>
                   {distributors.data.map((d: any) => <option key={d.id} value={d.id}>{d.distributor_id} — {d.name}</option>)}
                 </select>
@@ -131,6 +136,16 @@ export default function PayoutsPanel() {
                     {filling ? 'Filling…' : 'Fill from pending'}
                   </button>
                 </div>
+                {breakdown.length > 0 && (
+                  <div style={{ marginTop: 8, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 9, padding: '8px 12px' }}>
+                    <div style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Included commissions</div>
+                    {breakdown.map((b, i) => (
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontFamily: FF, fontSize: 12, color: '#1A1A1A', padding: '2px 0' }}>
+                        <span>{b.order}</span><span style={{ fontWeight: 700 }}>{fmtINR(b.amount)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div><label style={lbl}>Date</label><input type="date" value={pF.payout_date} onChange={e => setPF(f => ({ ...f, payout_date: e.target.value }))} style={inp} /></div>

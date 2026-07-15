@@ -47,7 +47,7 @@ function TreeNodeView({ node, query, depth }: { node: TreeNode; query: string; d
           <div style={{ position: 'absolute', left: 8, top: 20, width: 18, height: 1, background: 'rgba(0,0,0,0.10)' }} />
         )}
         <Card3D accent={LEVEL_COLOR[node.level] || OG} p="12px 16px" style={{
-          display: 'inline-flex', alignItems: 'center', gap: 12, minWidth: 260,
+          display: 'inline-flex', alignItems: 'center', gap: 12, minWidth: 340,
           ...(isMatch ? { outline: '2px solid #C9883A', boxShadow: '0 0 0 4px rgba(201,136,58,0.18)', background: '#fffaf1' } : {}),
         }}>
           {hasChildren ? (
@@ -66,6 +66,10 @@ function TreeNodeView({ node, query, depth }: { node: TreeNode; query: string; d
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
             <div style={{ fontFamily: FF, fontWeight: 800, fontSize: 12.5, color: OG }}>{fmtINR(node.total_sales)}</div>
             <div style={{ fontFamily: FF, fontSize: 10, color: '#9ca3af' }}>sales</div>
+          </div>
+          <div style={{ textAlign: 'right', flexShrink: 0, borderLeft: '1px solid rgba(0,0,0,0.08)', paddingLeft: 12 }}>
+            <div style={{ fontFamily: FF, fontWeight: 800, fontSize: 12.5, color: '#059669' }}>{fmtINR(node.total_earnings)}</div>
+            <div style={{ fontFamily: FF, fontSize: 10, color: '#9ca3af' }}>earnings</div>
           </div>
         </Card3D>
         {hasMatchingDescendant && !expanded && (
