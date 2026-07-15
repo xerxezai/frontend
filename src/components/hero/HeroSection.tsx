@@ -5,12 +5,11 @@ const OG = "#C9883A";
 const C2 = "#cc785c";
 
 const CYCLE_WORDS = [
-  "AI-Powered ERP","DevSecOps Pipelines","Cloud Infrastructure",
-  "AI Training & Consulting","Quantum Computing","Intelligent Automation",
-  "Data Analytics","Cybersecurity","Digital Transformation",
+  "Engineering Workflows","Procurement Automation","Document Intelligence",
+  "Digital Transformation","AI-Powered ERP","DevSecOps Pipelines","Cloud Infrastructure",
 ];
 
-const FULL_TEXT = "Enterprises";
+const FULL_TEXT = "Companies";
 const HUB = { cx: 260, cy: 222, r: 44 };
 
 const NET_NODES = [
@@ -400,7 +399,7 @@ const HeroSection = () => {
               display:"inline-flex", alignItems:"center", gap:10,
               background:"rgba(201,136,58,0.10)",
               border:"1.5px solid rgba(201,136,58,0.28)",
-              borderRadius:9999, padding:"7px 16px 7px 10px", marginBottom:36,
+              borderRadius:9999, padding:"7px 16px 7px 10px", marginBottom:12,
               boxShadow:"0 2px 12px rgba(100,60,20,0.22)",
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 0.05s both",
             }}>
@@ -416,6 +415,16 @@ const HeroSection = () => {
               </span>
             </div>
 
+            {/* Secondary badge tag — quieter caption under the main badge */}
+            <div style={{
+              marginBottom:24,
+              animation: prefersReduced?"none":"xzFadeUp 0.5s ease 0.12s both",
+            }}>
+              <span style={{ fontFamily:"'Inter',sans-serif", fontSize:11, fontWeight:500, color:"rgba(255,255,255,0.46)", letterSpacing:"0.02em" }}>
+                Built for UAE Engineering &amp; EPC Firms
+              </span>
+            </div>
+
             {/* Heading */}
             <h1 style={{ marginBottom:0, lineHeight:1.0 }}>
               <span style={{
@@ -426,7 +435,7 @@ const HeroSection = () => {
                 lineHeight:1.12, marginBottom:2,
                 animation: prefersReduced?"none":"xzSlideBlur 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s both",
               }}>
-                AI-Powered ERP, DevSecOps
+                AI-Powered ERP for
               </span>
               <span style={{
                 display:"block",
@@ -436,7 +445,7 @@ const HeroSection = () => {
                 lineHeight:1.12, marginBottom:6,
                 animation: prefersReduced?"none":"xzSlideBlur 0.6s cubic-bezier(0.22,1,0.36,1) 0.2s both",
               }}>
-                &amp; Cloud Solutions for
+                Engineering &amp; Industrial
               </span>
 
               {/* Per-letter animated "Enterprises" */}
@@ -490,9 +499,9 @@ const HeroSection = () => {
               color:"rgba(255,255,255,0.58)", maxWidth:500, marginBottom:26,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.1s both",
             }}>
-              XERXEZ helps mid-to-large enterprises cut operational costs by 40%,
-              deploy 60% faster, and achieve 99.9% system uptime — all with one
-              integrated platform.
+              XERXEZ helps engineering, EPC, and industrial companies in the UAE
+              eliminate manual approvals, Excel dependency, and document chaos —
+              with AI-powered ERP built for how engineering teams actually work.
             </p>
 
             {/* Product cards */}
@@ -502,7 +511,7 @@ const HeroSection = () => {
             }}>
               {[
                 {
-                  label:"AI-Powered ERP", sub:"HR, CRM, Payroll & more",
+                  label:"AI-Powered ERP", sub:"Procurement, Document Control, HR & AI Assistant",
                   icon:<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke={OG} strokeWidth="1.3"/><path d="M6 2.5v11M2.5 6.5h11" stroke={OG} strokeWidth="1.3"/></svg>,
                 },
                 {
@@ -572,7 +581,7 @@ const HeroSection = () => {
                 onMouseOut={ e => { e.currentTarget.style.background=C2;        e.currentTarget.style.transform="translateY(0)"; }}
               >
                 <span style={{ position:"relative", zIndex:1, display:"flex", alignItems:"center", gap:8 }}>
-                  Try ERP Free
+                  See ERP in Action
                   <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
                     <path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -671,6 +680,7 @@ const HeroSection = () => {
             </p>
 
             {/* Trust metrics */}
+            {/* TODO: Danish to confirm actual metrics before production - currently placeholder */}
             <div className="xz-trust-grid" style={{
               marginTop:32,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.4s both",
