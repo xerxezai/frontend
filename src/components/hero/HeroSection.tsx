@@ -676,7 +676,7 @@ const HeroSection = () => {
               marginTop:14, marginBottom:0,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.32s both",
             }}>
-              No credit card required · Free trial available · Setup in minutes
+              Enterprise deployment · Invite-only access · UAE-based support
             </p>
 
             {/* Trust metrics */}
