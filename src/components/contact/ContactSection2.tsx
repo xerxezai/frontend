@@ -13,6 +13,8 @@ const SERVICES = [
 ];
 const COUNTRIES = ["India", "UAE", "Other"];
 const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
+const INDUSTRIES_OPTS = ["Engineering & EPC", "Oil & Gas", "Construction", "Facilities Management", "Manufacturing", "Other"];
+const CURRENT_CHALLENGES = ["Manual approvals & workflows", "Document management", "Procurement bottlenecks", "HR & payroll management", "No visibility on project costs", "Other"];
 
 // ── per-service dynamic field option lists ─────────────────────────────────────
 const PLAN_INTEREST = ["Starter", "Professional", "Enterprise", "Not sure"];
@@ -43,6 +45,7 @@ interface F {
   // common — shown for every service
   fullName: string; email: string; phone: string; company: string;
   service: string; country: string; hearAboutUs: string; message: string;
+  industry: string; currentChallenge: string;
   // AI-Powered ERP
   planInterest: string; teamSize: string; budgetCurrency: string; budgetRange: string;
   // DevSecOps Pipelines
@@ -59,6 +62,7 @@ interface F {
 const EMPTY: F = {
   fullName:"", email:"", phone:"", company:"",
   service:"", country:"", hearAboutUs:"", message:"",
+  industry:"", currentChallenge:"",
   planInterest:"", teamSize:"", budgetCurrency:"", budgetRange:"",
   techStack:"", deploymentEnv:"", numDevelopers:"",
   cloudProvider:"", currentInfra:"", migrationNeeded:"",
@@ -314,6 +318,7 @@ const ContactSection2 = () => {
         company: form.company, service: form.service || 'General Inquiry',
         subject: form.service ? `${form.service} Enquiry` : 'General Enquiry',
         message: form.message, country: form.country, hear_about_us: form.hearAboutUs,
+        industry: form.industry, current_challenge: form.currentChallenge,
         plan_interest: form.planInterest, team_size: form.teamSize,
         budget_currency: form.budgetCurrency, budget_range: form.budgetRange,
         tech_stack: form.techStack, deployment_env: form.deploymentEnv, num_developers: form.numDevelopers,
@@ -859,6 +864,28 @@ const ContactSection2 = () => {
                         <div style={{ flex:1, height:1, background:"#F0EBE4" }} />
                       </div>
                       <div className="row g-3">
+                        <div className="col-md-6">
+                          <label style={lbl}>Industry</label>
+                          {fw("industry","fas fa-industry",
+                            <select value={form.industry} style={selBase("industry")} disabled={sending}
+                              onChange={e=>set("industry",e.target.value)}
+                              onFocus={()=>setFoc("industry")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select your industry…</option>
+                              {INDUSTRIES_OPTS.map(i=><option key={i} value={i}>{i}</option>)}
+                            </select>
+                          )}
+                        </div>
+                        <div className="col-md-6">
+                          <label style={lbl}>Current Challenge</label>
+                          {fw("currentChallenge","fas fa-exclamation-triangle",
+                            <select value={form.currentChallenge} style={selBase("currentChallenge")} disabled={sending}
+                              onChange={e=>set("currentChallenge",e.target.value)}
+                              onFocus={()=>setFoc("currentChallenge")} onBlur={()=>setFoc(null)}>
+                              <option value="">Select your biggest challenge…</option>
+                              {CURRENT_CHALLENGES.map(c=><option key={c} value={c}>{c}</option>)}
+                            </select>
+                          )}
+                        </div>
                         <div className="col-md-6">
                           <label style={lbl}>Service of Interest</label>
                           {fw("service","fas fa-cog",

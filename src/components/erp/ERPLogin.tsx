@@ -464,22 +464,19 @@ const ERPLogin = ({ onSuccess }: Props) => {
               <em style={{ color: C.orange, fontStyle: 'italic' }}>Replaces 5 Legacy Systems</em>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13.5, lineHeight: 1.6, maxWidth: 420, marginBottom: 16, fontFamily: "'DM Sans', sans-serif", animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.19s both' }}>
-              Trusted by enterprises across India &amp; UAE to automate operations and cut costs by 40%.
+              Trusted by enterprises across India &amp; UAE to streamline operations with AI.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 18 }}>
               <Bullet icon="fas fa-brain"      text="AI demand forecasting & anomaly detection"   delay={0.25} />
-              <Bullet icon="fas fa-shield-alt" text="ISO 27001 & SOC 2 Type II certified"         delay={0.31} />
               <Bullet icon="fas fa-chart-bar"  text="Role-based dashboards for every department"  delay={0.37} />
-              <Bullet icon="fas fa-rocket"     text="Deploy in <6 months, guaranteed"              delay={0.43} />
+              <Bullet icon="fas fa-rocket"     text="Deploy in phases, milestone-driven"          delay={0.43} />
             </div>
             <div style={{ marginBottom: 18 }}>
-              <TrustLine text="Currently serving 5+ active enterprises" delay={0.49} />
+              <TrustLine text="Invite-only enterprise access" delay={0.49} />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <StatTile val="40%"   label="Cost Reduction"    icon="fas fa-chart-line"     delay={0.55} trigger={statsLive} />
-              <StatTile val="60%"   label="Faster Decisions"  icon="fas fa-tachometer-alt" delay={0.59} trigger={statsLive} />
-              <StatTile val="99.9%" label="Uptime SLA"        icon="fas fa-server"         delay={0.63} trigger={statsLive} />
-              <StatTile val="<6 Mo" label="Deployment"        icon="fas fa-rocket"         delay={0.67} trigger={statsLive} />
+              <StatTile val="8+"  label="AI Modules"        icon="fas fa-cubes"          delay={0.55} trigger={statsLive} />
+              <StatTile val="UAE" label="Based & Supported" icon="fas fa-map-marker-alt" delay={0.59} trigger={statsLive} />
             </div>
           </div>
         </div>
@@ -557,10 +554,6 @@ const ERPLogin = ({ onSuccess }: Props) => {
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#9B9B9B', fontSize: 11.5, fontFamily: "'DM Sans', sans-serif" }}>
                       <i className="fas fa-lock" style={{ color: '#4ade80', fontSize: 11 }} />AES-256 Encrypted
                     </span>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: C.cream, border: '1px solid rgba(201,136,58,0.20)', borderRadius: 20, padding: '3px 12px' }}>
-                      <i className="fas fa-certificate" style={{ color: C.orange, fontSize: 10 }} />
-                      <span style={{ fontSize: 11, color: C.muted, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>ISO 27001</span>
-                    </div>
                   </div>
 
                   <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', margin: '10px 0 8px' }} />
