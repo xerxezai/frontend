@@ -436,7 +436,7 @@ const ComparisonSection = () => (
 const FAQS = [
   { q: "Can you customize the ERP for our specific workflows?", a: "Yes — every deployment is 100% custom to your processes, compliance requirements and team structure." },
   { q: "How long does industry ERP deployment take?", a: "Typically 4-6 months for full deployment with AI modules active and all staff trained." },
-  { q: "Do you support migration from existing systems?", a: "Yes — we support migration from SAP, Oracle, Microsoft Dynamics and all major ERP platforms with zero downtime." },
+  { q: "Do you support migration from existing systems?", a: "Yes — we support migration from legacy ERP systems and all major platforms with zero downtime." },
   { q: "Is the ERP cloud or on-premise?", a: "Both options available — cloud (AWS/Azure/GCP) or on-premise air-gap deployment for government and defence." },
   { q: "What compliance standards do you support?", a: "ISO 27001, SOC 2, GDPR, industry-specific regulations based on your sector and region." },
 ];

@@ -292,11 +292,11 @@ const ERP_CB = ["Zero Migration Risk","8-Week AI Upgrade","Full IP Ownership","E
 const ERP_PAIN_POINTS = [
   "Running finance, HR, and inventory in three systems that don't talk to each other?",
   "Waiting days for a report that should take minutes, because someone has to reconcile spreadsheets first?",
-  "Watching a costly SAP or Oracle rollout stall halfway through a migration?",
+  "Watching a costly legacy ERP rollout stall halfway through a migration?",
   "Making six-figure procurement or staffing decisions on data that's already a week old?",
 ];
 const ERP_TESTIMONIAL = {
-  quote: "We had SAP running for a decade and dreaded a rip-and-replace. XERXEZ's AI layer went live in ten weeks with zero downtime — our exec team now sees demand forecasts we never had visibility into before.",
+  quote: "We had legacy ERP systems running for a decade and dreaded a rip-and-replace. XERXEZ's AI layer went live in ten weeks with zero downtime — our exec team now sees demand forecasts we never had visibility into before.",
   author: "CFO, Manufacturing Group",
 };
 const ERP_CONTACT_HREF = `/contact?service=${encodeURIComponent("AI-Powered ERP")}`;
@@ -315,7 +315,7 @@ const Hero = () => (
         </em>
       </h1>
     }
-    description="Build a new AI ERP from scratch, or layer intelligent automation onto your existing SAP, Oracle, or Dynamics — zero migration risk, zero downtime."
+    description="Build a new AI ERP from scratch, or layer intelligent automation onto your existing ERP system — zero migration risk, zero downtime."
     ctas={[
       { label: "Request a Demo",         to: ERP_CONTACT_HREF,                                                       primary: true  },
       { label: "Contact Enterprise Sales", href: "mailto:info@xerxez.com?subject=Enterprise ERP Enquiry",            primary: false },
@@ -411,7 +411,7 @@ const TwoTracks = () => (
             accent={C2} accentGrad={C2_G} accentDeep={C2DEEP} accentLight="rgba(204,120,92,0.09)"
             track="Track B" icon="fas fa-layer-group"
             title="We Upgrade Your Existing ERP with AI"
-            desc="Your organisation has already invested in SAP, Oracle, or Microsoft Dynamics. XERXEZ layers an intelligent AI engine on top — zero migration risk, zero downtime."
+            desc="Your organisation has already invested in an existing ERP system. XERXEZ layers an intelligent AI engine on top — zero migration risk, zero downtime."
             bullets={["Compatible with SAP S/4HANA, Oracle ERP Cloud, Microsoft Dynamics 365","AI forecasting & automation added via secure API bridge","Real-time data unification across existing modules and silos","Predictive maintenance, procurement automation, HR analytics","Compliance-safe: no changes to your existing data schema","Live within 8–12 weeks alongside your running production system"]}
             info="<strong>No disruption guarantee:</strong> Our AI layer runs via secure middleware &mdash; your ERP keeps running exactly as today."
             systems={["SAP","Oracle","MS Dynamics","NetSuite","Odoo","Sage"]}
@@ -426,7 +426,7 @@ const TwoTracks = () => (
 // 3. COMPARISON TABLE  — dark
 // ═══════════════════════════════════════════════════════════════════════════════
 const TABLE_ROWS = [
-  { feature: "Starting point",         build: "Greenfield — designed from scratch",        upgrade: "Your existing SAP / Oracle / Dynamics" },
+  { feature: "Starting point",         build: "Greenfield — designed from scratch",        upgrade: "Your existing ERP system" },
   { feature: "Deployment timeline",    build: "4 – 6 months",                             upgrade: "8 – 12 weeks" },
   { feature: "Data migration",         build: "Full migration with cleansing",             upgrade: "No migration — reads existing data" },
   { feature: "Customisation level",    build: "100% custom to your processes",             upgrade: "AI layer adapts to existing setup" },
@@ -643,8 +643,8 @@ const SECTORS = [
 
 const COMPLIANCE = [
   { icon: "fas fa-certificate",     label: "Enterprise Grade Security" },
-  { icon: "fas fa-clipboard-check", label: "SOC 2 Type II"         },
-  { icon: "fas fa-gavel",           label: "GDPR Compliant"        },
+  { icon: "fas fa-clipboard-check", label: "Enterprise Security"   },
+  { icon: "fas fa-gavel",           label: "Data Privacy Ready"    },
   { icon: "fas fa-lock",            label: "AES-256 Encrypted"     },
   { icon: "fas fa-network-wired",   label: "Zero-Trust Architecture"},
   { icon: "fas fa-user-shield",     label: "RBAC & MFA"            },
@@ -744,7 +744,7 @@ const Process = () => (
 // 8. FAQ  — cream
 // ═══════════════════════════════════════════════════════════════════════════════
 const FAQS = [
-  { q: "Can XERXEZ upgrade our SAP system without migration or downtime?", a: "Yes. Our AI layer connects to your SAP system via a secure read/write API middleware. Your existing SAP infrastructure, data schema, and workflows remain completely unchanged. The AI upgrade runs alongside your live system — typically activated within 8-12 weeks with zero operational downtime." },
+  { q: "Can XERXEZ upgrade our existing ERP system without migration or downtime?", a: "Yes. Our AI layer connects to your existing ERP system via a secure read/write API middleware. Your existing infrastructure, data schema, and workflows remain completely unchanged. The AI upgrade runs alongside your live system — typically activated within 8-12 weeks with zero operational downtime." },
   { q: "Is the ERP suitable for government and defence procurement environments?", a: "Designed for it. We support air-gapped on-premise deployments, private government cloud, and hybrid configurations with full data sovereignty. All sensitive data stays within your jurisdiction. We have experience with Ministry-level procurement, compliance auditing, and security accreditation processes." },
   { q: "What differentiates XERXEZ AI ERP from off-the-shelf enterprise software?", a: "Three things: (1) The AI is built in from day one — not bolted on. (2) You own all IP — no licensing fees after delivery. (3) We build to your processes — no forced workflow changes." },
   { q: "What cloud infrastructure do you deploy on?", a: "We are multi-cloud certified on AWS, Microsoft Azure, and Google Cloud Platform. We can deploy on your preferred cloud, on government-approved infrastructure, or on your own on-premise hardware. We do not lock you into any single provider." },
