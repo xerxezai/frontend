@@ -56,6 +56,7 @@ const HostingPage     = lazy(() => import("./page/HostingPage"));
 const ConsultingPage  = lazy(() => import("./page/ConsultingPage"));
 const TrainingPage       = lazy(() => import("./page/TrainingPage"));
 const ERPIndustriesPage      = lazy(() => import("./page/ERPIndustriesPage"));
+const ERPLandingPage         = lazy(() => import("./page/ERPLandingPage"));
 const ERPIndustryDetailPage  = lazy(() => import("./page/ERPIndustryDetailPage"));
 const LandingPage        = lazy(() => import("./page/LandingPage"));
 const PrivacyPolicyPage  = lazy(() => import("./page/PrivacyPolicyPage"));
@@ -110,6 +111,7 @@ function App() {
           <Route path="/service/web-mobile-hosting"        element={<HostingPage />} />
           <Route path="/service/software-consulting"       element={<ConsultingPage />} />
           <Route path="/service/:slug"                     element={<ServiceDetailPage />} />
+          <Route path="/ai-erp"                             element={<ERPLandingPage />} />
           <Route path="/erp-industries"                    element={<ERPIndustriesPage />} />
           <Route path="/erp-industries/:industry"          element={<ERPIndustryDetailPage />} />
           <Route path="/team"                    element={<TeamPage />} />

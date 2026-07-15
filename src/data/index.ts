@@ -515,7 +515,8 @@ const menuData = [
     link: "/service",
     hasDropdown: true,
     submenu: [
-      { title: "AI-Powered ERP",          link: "/service/ai-powered-erp",           hasDropdown: false, desc: "HR, CRM, payroll & finance in one AI platform" },
+      { title: "AI-Powered ERP",          link: "/ai-erp",                           hasDropdown: false, desc: "Built for Engineering, EPC & Industrial teams" },
+      { title: "AI-Powered ERP (Detailed)", link: "/service/ai-powered-erp",           hasDropdown: false, desc: "HR, CRM, payroll & finance in one AI platform" },
       { title: "DevSecOps Pipelines",     link: "/service/devsecops-mlops-solutions", hasDropdown: false, desc: "Secure CI/CD — ship 60% faster" },
       { title: "Cloud Infrastructure",    link: "/service/cloud-service-storage",     hasDropdown: false, desc: "Multi-cloud, cost-optimised, 99.99% SLA" },
       { title: "Software Development",    link: "/service/software-development",      hasDropdown: false, desc: "Custom enterprise apps, on time" },
