@@ -4,7 +4,7 @@ const GOLD = "#C9883A";
 
 const QUOTES = [
   {
-    quote: "XERXEZ deployed our AI-powered ERP in four months. We saw a 40% cost reduction in the first year.",
+    quote: "XERXEZ deployed our AI-powered ERP in four months. We streamlined our operations significantly in the first year.",
     role: "CTO",
     org: "Healthcare Group",
   },
@@ -14,7 +14,7 @@ const QUOTES = [
     org: "Logistics Company",
   },
   {
-    quote: "The MLOps pipeline XERXEZ built handles 10M+ predictions a day at 99.9% uptime. Models ship in hours, not months.",
+    quote: "The MLOps pipeline XERXEZ built handles millions of predictions daily with consistent uptime. Models ship in hours, not months.",
     role: "Data Science Director",
     org: "Retail Enterprise",
   },

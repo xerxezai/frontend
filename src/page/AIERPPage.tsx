@@ -287,7 +287,7 @@ const ERPHub = () => {
 
 // ── Cascade content ───────────────────────────────────────────────────────────
 const ERP_CA = ["Finance & Accounting","Human Resources","Supply Chain","CRM & Sales","AI Analytics Engine","Inventory Management","Procurement","Compliance & Audit","Logistics & Dispatch"];
-const ERP_CB = ["40% Cost Reduction","60% Faster Decisions","99.9% Uptime SLA","Zero Migration Risk","8-Week AI Upgrade","Full IP Ownership","$500K+ Client Savings","Enterprise Grade","ISO 27001 Aligned"];
+const ERP_CB = ["Zero Migration Risk","8-Week AI Upgrade","Full IP Ownership","Enterprise Grade"];
 
 const ERP_PAIN_POINTS = [
   "Running finance, HR, and inventory in three systems that don't talk to each other?",
@@ -321,9 +321,9 @@ const Hero = () => (
       { label: "Contact Enterprise Sales", href: "mailto:info@xerxez.com?subject=Enterprise ERP Enquiry",            primary: false },
     ]}
     stats={[
-      { val: "40%",   label: "Cost Reduction"  },
-      { val: "60%",   label: "Faster Decisions"},
-      { val: "99.9%", label: "Uptime SLA"      },
+      { val: "AI-First", label: "Architecture"      },
+      { val: "UAE",       label: "Based & Supported" },
+      { val: "99.9%",     label: "Frontend Uptime"   },
     ]}
     cascadeA={ERP_CA}
     cascadeB={ERP_CB}
@@ -512,8 +512,8 @@ const ROIBars = () => {
   }, []);
 
   const bars = [
-    { pct: 40, label: "Reduction in operational overhead" },
-    { pct: 60, label: "Faster executive reporting cycles" },
+    { pct: 25, label: "Reduction in operational overhead" },
+    { pct: 40, label: "Faster executive reporting cycles" },
     { pct: 35, label: "Decrease in procurement errors"   },
     { pct: 50, label: "Reduction in manual data entry"   },
   ];
@@ -642,7 +642,7 @@ const SECTORS = [
 ];
 
 const COMPLIANCE = [
-  { icon: "fas fa-certificate",     label: "ISO 27001"             },
+  { icon: "fas fa-certificate",     label: "Enterprise Grade Security" },
   { icon: "fas fa-clipboard-check", label: "SOC 2 Type II"         },
   { icon: "fas fa-gavel",           label: "GDPR Compliant"        },
   { icon: "fas fa-lock",            label: "AES-256 Encrypted"     },
@@ -821,7 +821,7 @@ const CTASection = () => (
               Whether you're building from scratch or upgrading an existing ERP, XERXEZ delivers a solution that meets your exact requirements — on time, on budget, and to the security standards your organisation demands.
             </p>
             <div style={{ display: "flex", gap: 20, marginTop: 36, flexWrap: "wrap" }}>
-              {["ISO 27001 Ready","SOC 2 Type II","Strict NDA"].map((t) => (
+              {["Enterprise Grade Security","Strict NDA"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <i className="fas fa-check-circle" style={{ color: OG, fontSize: 14 }} />
                   <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 13, fontFamily: "'DM Sans',sans-serif" }}>{t}</span>
@@ -875,7 +875,7 @@ const AIERPPage = () => {
     <>
       <SEO
         title="Best AI ERP Software in India, Dubai & Abu Dhabi UAE — XERXEZ"
-        description="XERXEZ AI ERP is the best ERP software in India, Dubai and Abu Dhabi UAE. Replace 5 legacy systems, cut costs 40%, deploy in 6 months. Book free demo."
+        description="XERXEZ AI ERP is the best ERP software in India, Dubai and Abu Dhabi UAE. Replace 5 legacy systems, streamline operations and deploy faster with AI automation. Book free demo."
         canonical="/service/ai-powered-erp"
         keywords="best erp software in india, best erp software in abu dhabi, best erp software dubai, AI ERP software india, AI ERP software abu dhabi, erp system UAE, erp software dubai, erp software abu dhabi, xerxez erp, Xerxez Solutions"
       />

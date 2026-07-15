@@ -42,7 +42,7 @@ const SL = ({ t, dark = false }: { t: string; dark?: boolean }) => (
 
 // ── 1. Trust signals — real numbers only, identical on every service page ────
 const TRUST_SIGNALS = [
-  { icon: "fas fa-diagram-project", val: "50+",   label: "Projects Delivered" },
+  { icon: "fas fa-diagram-project", val: "4+",    label: "Client Projects Delivered" },
   { icon: "fas fa-earth-americas",  val: "5+",     label: "Countries Served" },
   { icon: "fas fa-server",          val: "99.9%",  label: "Frontend Uptime" },
   { icon: "fas fa-user-graduate",   val: "75+",    label: "Professionals Trained" },

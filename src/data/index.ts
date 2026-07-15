@@ -1048,7 +1048,7 @@ const testimonialData = [
     stars: 5,
     quoteImageUrl: "assets/img/testimonial/01.png",
     quoteText:
-      '"XERXEZ delivered an AI-powered ERP that replaced three legacy systems in four months. We saw a 40% cost reduction in the first year."',
+      '"XERXEZ delivered an AI-powered ERP that replaced three legacy systems in four months. We streamlined operations significantly in the first year."',
     clientImageUrl: "assets/img/testimonial/client-info-01.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "CTO",
@@ -1070,7 +1070,7 @@ const testimonialData = [
     stars: 5,
     quoteImageUrl: "assets/img/testimonial/01.png",
     quoteText:
-      '"The MLOps pipeline XERXEZ built handles 10M+ predictions per day at 99.9% uptime. Our data science team can now deploy models in hours, not months."',
+      '"The MLOps pipeline XERXEZ built handles millions of predictions daily with consistent uptime. Our data science team can now deploy models in hours, not months."',
     clientImageUrl: "assets/img/testimonial/client-info-03.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "Data Science Director",
@@ -1081,7 +1081,7 @@ const testimonialData = [
     stars: 5,
     quoteImageUrl: "assets/img/testimonial/01.png",
     quoteText:
-      '"XERXEZ\'s cloud migration reduced our infrastructure costs by 40% while improving performance. Their multi-cloud strategy gave us resilience we didn\'t think possible."',
+      '"XERXEZ\'s cloud migration significantly reduced our infrastructure costs while improving performance. Their multi-cloud strategy gave us resilience we didn\'t think possible."',
     clientImageUrl: "assets/img/testimonial/client-info-01.png",
     variantClientImageUrl: "assets/img/testimonial/testimonial-details-01.png",
     clientName: "Sarah Mitchell",
