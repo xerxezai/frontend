@@ -563,7 +563,7 @@ const HeroSection = () => {
             }}>
               {/* Primary — Try ERP Free */}
               <Link
-                to="/erp/login"
+                to="/contact"
                 ref={btnRef}
                 onClick={onBtnClick}
                 className="xz-btn-shimmer"

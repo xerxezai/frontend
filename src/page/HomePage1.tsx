@@ -29,7 +29,7 @@ const ORG_JSONLD = {
   name: "XERXEZ",
   url: "https://www.xerxez.com",
   logo: "https://www.xerxez.com/assets/img/logo/xerxez_logo.png",
-  description: "AI-Powered ERP, DevSecOps & Cloud Solutions for Enterprises.",
+  description: "AI-Powered ERP for Engineering & Industrial Companies in the UAE.",
   email: "info@xerxez.com",
   telephone: "+971567867451",
   areaServed: ["IN", "AE"],
