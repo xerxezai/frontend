@@ -44,7 +44,7 @@ const SL = ({ t, dark = false }: { t: string; dark?: boolean }) => (
 const TRUST_SIGNALS = [
   { icon: "fas fa-diagram-project", val: "50+",   label: "Projects Delivered" },
   { icon: "fas fa-earth-americas",  val: "5+",     label: "Countries Served" },
-  { icon: "fas fa-server",          val: "99.8%",  label: "Uptime" },
+  { icon: "fas fa-server",          val: "99.9%",  label: "Frontend Uptime" },
   { icon: "fas fa-user-graduate",   val: "75+",    label: "Professionals Trained" },
   { icon: "fas fa-clock",           val: "24h",    label: "Response Time" },
 ];

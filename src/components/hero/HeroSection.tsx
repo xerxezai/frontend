@@ -43,12 +43,12 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
   useEffect(() => { const t = setTimeout(() => setMounted(true), 120); return () => clearTimeout(t); }, []);
 
   useEffect(() => {
-    if (prefersReduced) { setCounts({ uptime:999, models:50, clients:100 }); return; }
+    if (prefersReduced) { setCounts({ uptime:999, models:8, clients:4 }); return; }
     const start = Date.now(), dur = 2200;
     const id = setInterval(() => {
       const p = Math.min((Date.now() - start) / dur, 1);
       const e = 1 - Math.pow(2, -10 * p);
-      setCounts({ uptime:Math.round(999*e), models:Math.round(50*e), clients:Math.round(100*e) });
+      setCounts({ uptime:Math.round(999*e), models:Math.round(8*e), clients:Math.round(4*e) });
       if (p === 1) clearInterval(id);
     }, 33);
     return () => clearInterval(id);
@@ -90,9 +90,9 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
   };
 
   const stats = [
-    { label:"UPTIME",    val:`${(counts.uptime/10).toFixed(1)}%` },
-    { label:"AI MODELS", val:`${counts.models}+` },
-    { label:"CLIENTS",   val:`${counts.clients}+` },
+    { label:"FRONTEND UPTIME",   val:`${(counts.uptime/10).toFixed(1)}%` },
+    { label:"AI MODULES BUILT",  val:`${counts.models}+` },
+    { label:"CLIENT PROJECTS",   val:`${counts.clients}+` },
   ];
 
   return (
