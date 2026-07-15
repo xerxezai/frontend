@@ -1,3 +1,5 @@
+import { Building2 } from "lucide-react";
+
 const aboutCompanyData = [
   {
     id: 1,
@@ -522,6 +524,7 @@ const menuData = [
       { title: "Mobile Application",      link: "/service/mobile-application",        hasDropdown: false, desc: "iOS, Android & cross-platform apps" },
       { title: "Web & Mobile Hosting",    link: "/service/web-mobile-hosting",        hasDropdown: false, desc: "Reliable hosting, <100ms response" },
       { title: "Software Consulting",     link: "/service/software-consulting",       hasDropdown: false, desc: "Honest advice from engineers" },
+      { title: "ERP Industries",          link: "/erp-industries",                    hasDropdown: false, desc: "AI ERP for every sector", icon: Building2 },
     ],
   },
   {
@@ -936,6 +939,31 @@ const services = [
       { question: "Do you provide DDoS protection?", answer: "Yes. All managed hosting plans include network-level DDoS mitigation and a Web Application Firewall (WAF) with OWASP ruleset to protect against application-layer attacks." },
       { question: "Can you migrate our existing hosting to your platform?", answer: "Yes. We handle the full migration — DNS cutover planning, zero-downtime deployment, data migration, and post-cutover monitoring — typically completed over a single maintenance window." },
       { question: "How does pricing work for hosting?", answer: "We offer monthly retainer pricing based on your resource requirements. This includes infrastructure costs, management fees, and support. We provide cost estimates before any commitment." },
+    ],
+  },
+  {
+    id: 10,
+    iconClass: "flaticon-performance",
+    detailImg: "/assets/img/service/service-details-01.jpg",
+    iconBgImg: "/assets/img/service/icon-bg-1.png",
+    title: "ERP Industries",
+    description: "Purpose-built AI ERP modules for Healthcare, Manufacturing, Logistics, Oil & Gas, Construction and more.",
+    detailBody: "XERXEZ ERP Industries delivers pre-configured ERP modules built around the real workflows of your sector — not a generic system stretched to fit. Every deployment ships with industry-specific compliance frameworks, AI forecasting tuned to your operational data, and a module set matched to how your business actually runs, so you go live in months, not years.",
+    slug: "erp-industries",
+    width: 87, height: 84,
+    highlights: ["8 pre-configured industry verticals", "Compliance frameworks built in (ISO 27001, SOC 2, GDPR)", "AI forecasting & anomaly detection", "Deploys in under 6 months", "Cloud or on-premise air-gap deployment", "Full IP ownership, yours forever"],
+    keyFacts: [
+      { icon: "far fa-industry", title: "Pre-configured Modules", desc: "Industry workflows built in from day one — no lengthy discovery phase spent mapping generic ERP modules onto your sector's real processes." },
+      { icon: "far fa-shield-alt", title: "Compliance Ready", desc: "ISO 27001, SOC 2, GDPR, and sector-specific regulations are configured into the platform, not sold as a costly add-on module." },
+      { icon: "far fa-brain", title: "AI-Native Forecasting", desc: "Demand forecasting, anomaly detection, and workflow automation are core to every industry module, trained on your own operational data." },
+      { icon: "far fa-bolt", title: "Fast Deployment", desc: "Because the modules are pre-configured for your sector, most deployments go live in under 6 months — with all staff trained and AI active." },
+    ],
+    faqs: [
+      { question: "Can you customize the ERP for our specific workflows?", answer: "Yes — every deployment is 100% custom to your processes, compliance requirements and team structure, built on top of the pre-configured industry starting point." },
+      { question: "How long does industry ERP deployment take?", answer: "Typically 4-6 months for full deployment with AI modules active and all staff trained." },
+      { question: "Do you support migration from existing systems?", answer: "Yes — we support migration from SAP, Oracle, Microsoft Dynamics and all major ERP platforms with zero downtime." },
+      { question: "Is the ERP cloud or on-premise?", answer: "Both options are available — cloud (AWS/Azure/GCP) or on-premise air-gap deployment for government and defence." },
+      { question: "What compliance standards do you support?", answer: "ISO 27001, SOC 2, GDPR, and industry-specific regulations based on your sector and region." },
     ],
   },
 ];

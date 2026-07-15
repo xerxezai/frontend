@@ -27,6 +27,8 @@ export interface MenuItem {
   submenu?: MenuItem[];
   /** Short one-line description rendered under the title in dropdown menus. */
   desc?: string;
+  /** Optional lucide-react icon rendered before the title in dropdown menus. */
+  icon?: import("lucide-react").LucideIcon;
 }
 
 export interface ProjectDataType {

@@ -15,6 +15,7 @@ const faIcons: Record<string, string> = {
   "quantum-computing":         "fas fa-atom",
   "mobile-application":        "fas fa-mobile-alt",
   "web-mobile-hosting":        "fas fa-server",
+  "erp-industries":            "fas fa-building",
 };
 
 const shaderColors: Record<string, string[]> = {
@@ -26,6 +27,7 @@ const shaderColors: Record<string, string[]> = {
   "quantum-computing":         ["hsl(340,55%,30%)", "hsl(352,68%,52%)", "hsl(334,60%,36%)", "hsl(358,75%,62%)"],
   "mobile-application":        ["hsl(150,55%,20%)", "hsl(144,68%,40%)", "hsl(156,60%,26%)", "hsl(138,74%,50%)"],
   "web-mobile-hosting":        ["hsl(20,60%,28%)",  "hsl(28,72%,48%)",  "hsl(14,55%,34%)",  "hsl(35,78%,58%)"],
+  "erp-industries":            ["hsl(32,65%,24%)",  "hsl(38,78%,46%)",  "hsl(26,60%,30%)",  "hsl(44,82%,56%)"],
 };
 
 const shaderShapes: Record<string, "checks" | "stripes" | "edge"> = {
@@ -37,6 +39,7 @@ const shaderShapes: Record<string, "checks" | "stripes" | "edge"> = {
   "quantum-computing":         "stripes",
   "mobile-application":        "edge",
   "web-mobile-hosting":        "stripes",
+  "erp-industries":            "checks",
 };
 
 // Marketing framing per service: the problem it solves, who it's for, and a
@@ -50,6 +53,7 @@ const serviceMeta: Record<string, { problem: string; audience: string; benefit: 
   "mobile-application":        { problem: "Poor mobile experience losing customers",                audience: "Enterprises needing mobile-first solutions",   benefit: "4.2★ avg app store rating", stat: "iOS · Android · Cross-platform" },
   "web-mobile-hosting":        { problem: "Downtime costing you revenue",                           audience: "Businesses needing reliable hosting",          benefit: "99.9% uptime SLA",              stat: "<100ms response time" },
   "software-consulting":       { problem: "Technology decisions costing millions",                  audience: "CXOs and technology leaders",                  benefit: "$10M+ saved for clients",       stat: "80% client retention" },
+  "erp-industries":            { problem: "Generic ERP that fights your industry's workflow",       audience: "Healthcare, manufacturing, logistics, EPC & more", benefit: "Deploy in under 6 months",     stat: "8 industry verticals" },
 };
 
 interface Props {
@@ -57,6 +61,10 @@ interface Props {
 }
 
 const otherServices = services.filter((s) => s.slug !== "ai-powered-erp");
+
+// ERP Industries has its own dedicated page outside the generic /service/:slug
+// template — every other card follows the default pattern.
+const detailHref = (slug: string) => (slug === "erp-industries" ? "/erp-industries" : `/service/${slug}`);
 
 const erpModules = [
   { icon: "fas fa-chart-bar",           label: "Finance & Accounting",     to: "/service/ai-powered-erp" },
@@ -423,7 +431,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                       colors={shaderColors[service.slug] ?? ["hsl(20,60%,28%)", "hsl(35,72%,48%)", "hsl(14,55%,34%)", "hsl(42,80%,58%)"]}
                     />
                   </div>
-                  {service.slug === "quantum-computing" && (
+                  {(service.slug === "quantum-computing" || service.slug === "erp-industries") && (
                     <span style={{
                       position: "absolute", top: 14, right: 14, zIndex: 2,
                       background: "linear-gradient(135deg,#F0CA7A 0%,#d4a33a 100%)", color: "#4A2800",
@@ -437,7 +445,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                       <i className={faIcons[service.slug] ?? "fas fa-cogs"} />
                     </div>
                     <h3 style={{ marginBottom: 8, fontSize: 16, lineHeight: 1.3, fontWeight: 700, color: "#ffffff", fontFamily: "'DM Sans',sans-serif" }}>
-                      <Link to={`/service/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>{service.title}</Link>
+                      <Link to={detailHref(service.slug)} style={{ color: "inherit", textDecoration: "none" }}>{service.title}</Link>
                     </h3>
                     {serviceMeta[service.slug] && (
                       <>
@@ -464,7 +472,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                     </p>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
                       <Link
-                        to={`/service/${service.slug}`}
+                        to={detailHref(service.slug)}
                         style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 12, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.04em", textTransform: "uppercase", transition: "gap 0.2s ease" }}
                         onMouseEnter={e => (e.currentTarget.style.gap = "10px")}
                         onMouseLeave={e => (e.currentTarget.style.gap = "6px")}

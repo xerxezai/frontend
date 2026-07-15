@@ -21,6 +21,7 @@ const SERVICES = [
   { to: "/service/ai-training-consulting",    label: "AI Training & Consulting"  },
   { to: "/service/quantum-computing",         label: "Quantum Computing"        },
   { to: "/service/mobile-application",        label: "Mobile Application"       },
+  { to: "/erp-industries",                    label: "ERP Industries"           },
 ];
 
 const NAV = [

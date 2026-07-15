@@ -95,6 +95,12 @@ const MainMenuSection = () => {
                               onMouseEnter={() => setHovered(key)}
                               onMouseLeave={() => setHovered(null)}
                             >
+                              {subMenuItem.icon && (
+                                <subMenuItem.icon
+                                  size={13}
+                                  style={{ marginRight: 7, verticalAlign: -2, color: hovered === key || isActive(subMenuItem.link) ? LINK_HOVER : "rgba(226,232,240,0.55)" }}
+                                />
+                              )}
                               {subMenuItem.title}
                               {subMenuItem.hasDropdown && (
                                 <i className="fas fa-angle-right"></i>
