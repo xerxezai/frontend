@@ -3,9 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "Full-Stack", label: "Web, API & Mobile" },
-  { val: "Agile",      label: "2-Week Sprints"    },
-  { val: "Full IP",    label: "Ownership Transfer" },
+  { val: "Full-Stack", label: "Web & Mobile"    },
+  { val: "Agile",      label: "2-Week Sprints"  },
+  { val: "Full IP",    label: "Ownership"       },
 ];
 
 const config: ServicePageConfig = {
@@ -25,9 +25,9 @@ const config: ServicePageConfig = {
   description: "XERXEZ builds custom enterprise software across web, API, and mobile — engineered to solve real business problems, not software that forces your business to adapt to someone else's idea of how things should work.",
 
   heroStats: [
-    { val: "Full-Stack", label: "Web, API & Mobile" },
-    { val: "Agile",      label: "2-Week Sprints"    },
-    { val: "Full IP",    label: "Ownership Transfer" },
+    { val: "Full-Stack", label: "Web & Mobile"    },
+    { val: "Agile",      label: "2-Week Sprints"  },
+    { val: "Full IP",    label: "Ownership"       },
   ],
   cascadeA: ["Custom Web Apps","REST & GraphQL API","Microservices","Event-Driven Architecture","UI/UX Design","Quality Assurance","DevOps Integration","Data Engineering","AI Features"],
   cascadeB: ["React · Vue · Next.js","Node.js · FastAPI · Django","PostgreSQL · MongoDB","Redis · Elasticsearch","Docker · Kubernetes","TypeScript · Python · Go","WebSockets · gRPC","Kafka · RabbitMQ","Jest · Playwright · Cypress"],

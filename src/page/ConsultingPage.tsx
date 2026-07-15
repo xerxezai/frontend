@@ -3,9 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "Engineers",   label: "Not Salespeople"        },
-  { val: "No Vendor Ties", label: "Independent Advice"  },
-  { val: "Interim CTO", label: "& Team Augmentation"    },
+  { val: "Engineers",      label: "Not Salespeople" },
+  { val: "No Vendor Ties", label: "Independent"     },
+  { val: "2 wks",          label: "Team Ramp-Up"    },
 ];
 
 const config: ServicePageConfig = {
@@ -25,9 +25,9 @@ const config: ServicePageConfig = {
   description: "Independent technology strategy, architecture review, vendor selection, and digital transformation advisory. XERXEZ consulting tells you what you need to hear — not what you want to hear.",
 
   heroStats: [
-    { val: "Engineers",      label: "Not Salespeople"     },
-    { val: "No Vendor Ties", label: "Independent Advice"  },
-    { val: "Interim CTO",    label: "& Team Augmentation" },
+    { val: "Engineers",      label: "Not Salespeople" },
+    { val: "No Vendor Ties", label: "Independent"     },
+    { val: "2 wks",          label: "Team Ramp-Up"    },
   ],
   cascadeA: ["Technology Audit","Architecture Review","Digital Transformation","Vendor Selection","Team Augmentation","Roadmap Planning","Technical Due Diligence","CTO Advisory","Operating Model Design"],
   cascadeB: ["Agile · SAFe · Scrum","Cloud-Native · Serverless","Microservices · DDD","Event-Driven Architecture","API Strategy · OpenAPI","SRE · DevOps · Platform Eng","Data Architecture · Lakehouse","AI/ML Strategy · MLOps","FinOps · Cost Governance"],

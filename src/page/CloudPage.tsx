@@ -3,9 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "Multi-Cloud",  label: "AWS · Azure · GCP"  },
-  { val: "FinOps",       label: "Cost Governance"    },
-  { val: "<15 min",      label: "DR Failover Target" },
+  { val: "Multi-Cloud",  label: "Architecture"     },
+  { val: "FinOps",       label: "Cost Governance"  },
+  { val: "<15 min",      label: "DR Failover"      },
 ];
 
 const config: ServicePageConfig = {
@@ -25,9 +25,9 @@ const config: ServicePageConfig = {
   description: "Architecture, migration, and managed operations across AWS, Azure, and Google Cloud. XERXEZ engineers for cost governance, high availability, and fast disaster recovery from the first design review.",
 
   heroStats: [
-    { val: "Multi-Cloud",  label: "AWS · Azure · GCP"  },
-    { val: "FinOps",       label: "Cost Governance"    },
-    { val: "<15 min",      label: "DR Failover Target" },
+    { val: "Multi-Cloud",  label: "Architecture"     },
+    { val: "FinOps",       label: "Cost Governance"  },
+    { val: "<15 min",      label: "DR Failover"      },
   ],
   cascadeA: ["Multi-Cloud Architecture","Auto-Scaling","Cost Optimisation","Disaster Recovery","FinOps","Infrastructure as Code","Edge Computing","Serverless","Data Residency"],
   cascadeB: ["AWS · Azure · GCP","Terraform · Pulumi","Kubernetes · EKS","CloudFront · Akamai","Istio · Linkerd","Prometheus · Grafana","Vault · AWS KMS","Snowflake · BigQuery","CloudFormation · Bicep"],

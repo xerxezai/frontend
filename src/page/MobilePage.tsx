@@ -3,9 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "iOS & Android", label: "Native + Cross-Platform" },
-  { val: "Offline-First", label: "Field-Ready Apps"        },
-  { val: "<3 mo",         label: "Typical Launch Timeline" },
+  { val: "iOS & Android", label: "Platforms"       },
+  { val: "Offline-First", label: "Field-Ready"     },
+  { val: "<3 mo",         label: "Launch Timeline" },
 ];
 
 const config: ServicePageConfig = {
@@ -25,9 +25,9 @@ const config: ServicePageConfig = {
   description: "iOS, Android, and cross-platform — XERXEZ builds mobile applications that perform flawlessly, look distinctive, and launch in under 3 months.",
 
   heroStats: [
-    { val: "iOS & Android", label: "Native + Cross-Platform" },
-    { val: "Offline-First", label: "Field-Ready Apps"        },
-    { val: "<3 mo",         label: "Typical Launch Timeline" },
+    { val: "iOS & Android", label: "Platforms"       },
+    { val: "Offline-First", label: "Field-Ready"     },
+    { val: "<3 mo",         label: "Launch Timeline" },
   ],
   cascadeA: ["Native iOS","Native Android","React Native","Flutter","Cross-Platform","App Store Optimisation","Push Notifications","Offline-First","Biometric Auth"],
   cascadeB: ["Swift · SwiftUI","Kotlin · Jetpack Compose","React Native · Expo","Flutter · Dart","Firebase · Supabase","In-App Purchases","MapKit · Google Maps","Core ML · TensorFlow Lite","TestFlight · Play Console"],

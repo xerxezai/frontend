@@ -81,6 +81,54 @@ const StarRating = ({ rating }: { rating: number }) => (
   </span>
 );
 
+/* ── Academy hero card (right column) — real, honest program facts ─────────── */
+const ACADEMY_HERO_STATS = [
+  { val: "75+",     label: "Trained" },
+  { val: "Hands-On",label: "Real Labs" },
+  { val: "<12 wks", label: "Typical Length" },
+  { val: "Live",    label: "+ Recorded" },
+];
+
+const AcademyHeroCard = () => (
+  <div style={{
+    background: "linear-gradient(160deg,#faf7f3 0%,#e8e0d4 100%)",
+    border: "1px solid rgba(210,195,175,0.6)",
+    boxShadow: "0 6px 0 rgba(155,130,100,0.45),0 12px 32px rgba(0,0,0,0.18),inset 0 1px 0 rgba(255,255,255,0.90)",
+    borderRadius: 20, padding: "28px 24px",
+  }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: 22 }}>
+      <div style={{
+        width: 50, height: 50, borderRadius: 14, flexShrink: 0,
+        background: `linear-gradient(145deg, ${AMBER} 0%, ${GOLD} 100%)`,
+        boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.30)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>
+        <i className="fas fa-graduation-cap" style={{ color: "#fff", fontSize: 21 }} />
+      </div>
+      <div>
+        <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: GOLD, margin: 0, fontFamily: "'DM Sans',sans-serif" }}>XERXEZ Academy</p>
+        <h4 style={{ fontSize: 15, fontWeight: 800, color: "#1A1A1A", margin: 0, fontFamily: "'DM Sans',sans-serif", lineHeight: 1.2 }}>AI Training &amp; Consulting</h4>
+      </div>
+    </div>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9, marginBottom: 16 }}>
+      {ACADEMY_HERO_STATS.map((s, i) => (
+        <div key={i} style={{
+          background: "#fff", border: "1px solid rgba(0,0,0,0.07)",
+          borderTop: `2px solid ${GOLD}`, borderRadius: 12, padding: "13px 13px",
+          boxShadow: "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06)",
+        }}>
+          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700, color: GOLD, lineHeight: 1 }}>{s.val}</div>
+          <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 10, fontWeight: 600, color: "#6B6B6B", marginTop: 5, letterSpacing: "0.06em", textTransform: "uppercase", lineHeight: 1.3 }}>{s.label}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ade80", display: "inline-block", boxShadow: "0 0 8px rgba(74,222,128,0.6)", flexShrink: 0 }} />
+      <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, fontWeight: 600, color: "#6B6B6B" }}>Cohorts open · responds within 24 h</span>
+    </div>
+  </div>
+);
+
 /* ── Lesson row (inside accordion) ────────────────────────────────────────── */
 const LessonRow = ({ lesson }: { lesson: Lesson }) => (
   <div style={{
@@ -407,6 +455,8 @@ const AITrainingPage = () => {
         <div className="at-orb at-orb-3" />
 
         <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <div className="row g-5 align-items-center">
+          <div className="col-lg-7">
 
           {/* Breadcrumb */}
           <div style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", marginBottom: 22, fontFamily: "'DM Sans', sans-serif" }}>
@@ -559,6 +609,14 @@ const AITrainingPage = () => {
               </div>
             </div>
           ) : null}
+          </div>
+
+          <div className="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
+            <div style={{ width: "100%", maxWidth: 340 }}>
+              <AcademyHeroCard />
+            </div>
+          </div>
+          </div>
         </div>
       </section>
 

@@ -3,9 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "Hybrid",       label: "Classical-Quantum" },
-  { val: "Cloud Quantum",label: "IBM · AWS · Google" },
-  { val: "Honest",       label: "Feasibility First" },
+  { val: "Hybrid",        label: "Architecture"  },
+  { val: "Cloud Quantum", label: "Access"        },
+  { val: "Honest",        label: "Feasibility"   },
 ];
 
 const config: ServicePageConfig = {
@@ -25,9 +25,9 @@ const config: ServicePageConfig = {
   description: "Quantum optimisation, simulation, and cryptography for enterprise and government organisations. XERXEZ bridges the gap between quantum research and production deployment — for problems that are genuinely quantum-advantageous today.",
 
   heroStats: [
-    { val: "Hybrid",        label: "Classical-Quantum"  },
-    { val: "Cloud Quantum", label: "IBM · AWS · Google" },
-    { val: "Honest",        label: "Feasibility First"  },
+    { val: "Hybrid",        label: "Architecture"  },
+    { val: "Cloud Quantum", label: "Access"        },
+    { val: "Honest",        label: "Feasibility"   },
   ],
   cascadeA: ["Quantum Algorithms","Post-Quantum Cryptography","Optimisation","Quantum Simulation","Hybrid Quantum-Classical","Variational Circuits","Quantum Machine Learning","Quantum Error Correction","NISQ Computing"],
   cascadeB: ["IBM Quantum · Qiskit","Google Cirq · Braket","D-Wave Advantage","IonQ · Honeywell","PennyLane · Strawberry Fields","QAOA · VQE","Grover's · Shor's","QuTiP · Qibo","Quantum Volume 512"],
