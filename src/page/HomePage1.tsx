@@ -1,4 +1,5 @@
 import AcademySection from "../components/academy/AcademySection";
+import BookDemoSection from "../components/marketing/BookDemoSection";
 import BrandSection from "../components/brand/BrandSection";
 import ContactSection from "../components/contact/ContactSection";
 import FooterSection2 from "../components/footer/FooterSection2";
@@ -81,6 +82,7 @@ const HomePage1 = () => {
       <div id="sec-projects" style={{ contentVisibility: "auto", containIntrinsicSize: "0 900px" } as React.CSSProperties}><ProjectSection /></div>
       <div style={{ contentVisibility: "auto", containIntrinsicSize: "0 700px" } as React.CSSProperties}><HomeFaq /></div>
       <div id="sec-contact" style={{ contentVisibility: "auto", containIntrinsicSize: "0 800px" } as React.CSSProperties}><ContactSection /></div>
+      <BookDemoSection />
 
       <FooterSection2 />
       <MobileMenuModal isOpen={isMenuOpen} toggle={toggleMobileMenu} />

@@ -4,19 +4,19 @@ const GOLD = "#C9883A";
 
 const QUOTES = [
   {
-    quote: "XERXEZ deployed our AI-powered ERP in four months. We streamlined our operations significantly in the first year.",
-    role: "CTO",
-    org: "Healthcare Group",
+    quote: "We finally have full visibility into our procurement approvals and document workflows. No more chasing emails.",
+    role: "Operations Manager",
+    org: "Engineering Company, UAE",
   },
   {
-    quote: "Their DevSecOps team cut our deployment cycle from three weeks to two days. Zero security incidents since go-live.",
-    role: "IT Director",
-    org: "Logistics Company",
+    quote: "The AI assistant alone saved our team hours every week. It actually understands how our processes work.",
+    role: "Project Director",
+    org: "Industrial Company, Abu Dhabi",
   },
   {
-    quote: "The MLOps pipeline XERXEZ built handles millions of predictions daily with consistent uptime. Models ship in hours, not months.",
-    role: "Data Science Director",
-    org: "Retail Enterprise",
+    quote: "Implementation was straightforward and the support team is responsive. Exactly what we needed.",
+    role: "IT Manager",
+    org: "EPC Contractor, UAE",
   },
 ];
 
@@ -142,7 +142,7 @@ const TestimonialsSection = () => {
           <div style={{ display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
             <span style={{ width: 32, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD})`, display: "block" }} />
             <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: GOLD, fontFamily: "'DM Sans',sans-serif" }}>
-              Client Outcomes
+              Client Feedback
             </span>
             <span style={{ width: 32, height: 1, background: `linear-gradient(90deg, ${GOLD}, transparent)`, display: "block" }} />
           </div>
@@ -150,7 +150,7 @@ const TestimonialsSection = () => {
             fontSize: "clamp(28px,3.5vw,48px)", fontWeight: 800, lineHeight: 1.12,
             color: "#141413", fontFamily: "'DM Sans',sans-serif", margin: 0,
           }}>
-            What Enterprise Teams Say
+            What Our Clients Experience
           </h2>
         </div>
 

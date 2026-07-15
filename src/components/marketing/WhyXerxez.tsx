@@ -7,7 +7,7 @@ const ROWS: { feature: string; xerxez: boolean; agency: boolean; big4: boolean }
   { feature: "Fixed-Price Delivery", xerxez: true, agency: false, big4: false },
   { feature: "<6 Month Delivery",    xerxez: true, agency: false, big4: false },
   { feature: "24/7 Support",         xerxez: true, agency: false, big4: true  },
-  { feature: "ISO 27001 Aligned",    xerxez: true, agency: false, big4: true  },
+  { feature: "Enterprise-Grade Security", xerxez: true, agency: false, big4: true  },
   { feature: "Full IP Transfer",     xerxez: true, agency: false, big4: false },
 ];
 

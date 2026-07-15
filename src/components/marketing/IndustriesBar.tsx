@@ -1,22 +1,22 @@
-import { HeartPulse, Factory, Truck, Landmark, ShoppingBag, Building2 } from "lucide-react";
+import { HardHat, Fuel, Building, Factory, Wrench, Landmark } from "lucide-react";
 
 const GOLD = "#C9883A";
 
 const INDUSTRIES = [
-  { icon: HeartPulse,  label: "Healthcare"    },
-  { icon: Factory,     label: "Manufacturing" },
-  { icon: Truck,       label: "Logistics"     },
-  { icon: Landmark,    label: "Finance"       },
-  { icon: ShoppingBag, label: "Retail"        },
-  { icon: Building2,   label: "Government"    },
+  { icon: HardHat,  label: "Engineering & EPC"      },
+  { icon: Fuel,     label: "Oil & Gas"              },
+  { icon: Building, label: "Construction"           },
+  { icon: Factory,  label: "Manufacturing"          },
+  { icon: Wrench,   label: "Facilities Management"  },
+  { icon: Landmark, label: "Government Contractors" },
 ];
 
 const CERTS = [
-  "ISO 27001 Aligned",
-  "SOC 2 Aligned",
-  "GDPR Compliant",
-  "24/7 Support",
+  "AI-Native Platform",
+  "UAE Based & Supported",
   "NDA Protected",
+  "Enterprise Security",
+  "Dedicated Support",
 ];
 
 /** Trust strip shown directly after the homepage hero: industries served + compliance pills. */
