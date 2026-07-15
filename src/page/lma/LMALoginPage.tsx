@@ -386,36 +386,34 @@ export default function LMALoginPage() {
             {/* Headline */}
             <h1 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(24px,2.2vw,34px)", lineHeight: 1.1, marginBottom: 10, fontFamily: FF, letterSpacing: "-0.025em", animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.15s both" }}>
               Learn AI Skills That<br />
-              <em style={{ color: C.orange, fontStyle: "italic" }}>Companies Pay Millions For</em>
+              <em style={{ color: C.orange, fontStyle: "italic" }}>Engineering Teams Actually Use</em>
             </h1>
             <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 13.5, lineHeight: 1.6, maxWidth: 420, marginBottom: 16, fontFamily: FF, animation: "lmaSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.20s both" }}>
-              Join 100+ professionals already building AI systems with XERXEZ Academy.
+              Join professionals building real AI systems with XERXEZ Academy.
             </p>
 
             {/* Social proof */}
             <div style={{ marginBottom: 18 }}>
-              <SocialProofRow text="Join 100+ learners already enrolled" delay={0.28} />
+              <SocialProofRow text="Join our growing community of AI learners" delay={0.28} />
             </div>
 
             {/* Feature bullets */}
             <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 18 }}>
               <Bullet icon="fas fa-user-tie"    text="Learn from practitioners who built real AI systems" delay={0.34} />
-              <Bullet icon="fas fa-certificate" text="Get certified — recognized by 40+ enterprises"      delay={0.44} />
-              <Bullet icon="fas fa-arrow-trend-up" text="Land AI jobs paying 2x your current salary"      delay={0.54} />
+              <Bullet icon="fas fa-certificate" text="Get certified — CPD accredited program"             delay={0.44} />
+              <Bullet icon="fas fa-arrow-trend-up" text="Build production-ready AI skills from day one"   delay={0.54} />
               <Bullet icon="fas fa-infinity"    text="Lifetime access to course updates"                  delay={0.64} />
             </div>
 
             {/* Urgency banner */}
             <div style={{ marginBottom: 18 }}>
-              <UrgencyBanner text="Limited seats available — Next batch starts July 2026" delay={0.72} />
+              <UrgencyBanner text="Limited seats available — Next batch starting soon" delay={0.72} />
             </div>
 
             {/* Stat tiles */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <StatTile val="100+"   label="Students Enrolled"  icon="fas fa-users"      delay={0.78} trigger={statsLive} />
-              <StatTile val="5+"     label="Courses Available"  icon="fas fa-book-open"  delay={0.82} trigger={statsLive} />
-              <StatTile val="85%"    label="Job Placement Rate" icon="fas fa-briefcase"  delay={0.86} trigger={statsLive} />
-              <StatTile val="₹4,999" label="Starting Price"     icon="fas fa-tag"        delay={0.90} trigger={statsLive} />
+              <StatTile val="75+"    label="Professionals Trained" icon="fas fa-users"     delay={0.78} trigger={statsLive} />
+              <StatTile val="5+"     label="Courses Available"     icon="fas fa-book-open" delay={0.82} trigger={statsLive} />
             </div>
           </div>
         </div>
