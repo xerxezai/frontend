@@ -120,3 +120,114 @@ export const INDUSTRIES: IndustryDef[] = [
 
 export const getIndustryBySlug = (slug: string | undefined) =>
   INDUSTRIES.find((i) => i.slug === slug);
+
+export interface IndustryPageContent {
+  painPoints: string[];
+  modules: string[];
+}
+
+const GENERIC_CONTENT: IndustryPageContent = {
+  painPoints: [
+    "Operations managed across disconnected systems",
+    "Manual approval workflows causing delays",
+    "No real-time visibility into costs and resources",
+    "Reporting done manually in Excel",
+  ],
+  modules: [
+    "HR & Payroll Management",
+    "Procurement & Vendor Management",
+    "Document Management",
+    "Finance & Cost Control",
+    "Operations Dashboard",
+    "AI Assistant — natural language queries",
+  ],
+};
+
+export const INDUSTRY_PAGE_CONTENT: Record<string, IndustryPageContent> = {
+  epc: {
+    painPoints: [
+      "Manual procurement approvals taking 3-5 days",
+      "Engineering document version control chaos",
+      "No real-time project cost vs budget visibility",
+      "Vendor communication scattered over email",
+    ],
+    modules: [
+      "AI Procurement — multi-level PO approvals",
+      "Document Control — version-controlled drawings",
+      "Project Cost Control — budget vs actual tracking",
+      "Vendor Management — supplier performance scoring",
+      "HR & Payroll — site staff management",
+      "AI Assistant — natural language reporting",
+    ],
+  },
+  "oil-gas": {
+    painPoints: [
+      "Compliance documents scattered across systems",
+      "Asset maintenance tracked in spreadsheets",
+      "Safety incident reporting delayed",
+      "Field operations disconnected from HQ",
+    ],
+    modules: [
+      "Asset & Maintenance Management",
+      "QHSE — safety and compliance tracking",
+      "Field Operations Dashboard",
+      "Procurement — approved vendor management",
+      "Document Management — compliance control",
+      "AI Assistant — instant compliance queries",
+    ],
+  },
+  construction: {
+    painPoints: [
+      "Subcontractor management over WhatsApp",
+      "Material wastage not monitored",
+      "Project delays not flagged early",
+      "Budget overruns found too late",
+    ],
+    modules: [
+      "Project Management — milestones and tasks",
+      "Material & Equipment tracking",
+      "Subcontractor Management — work orders",
+      "Budget Control — real-time cost monitoring",
+      "HR — labour attendance and payroll",
+      "AI Assistant — project status queries",
+    ],
+  },
+  manufacturing: {
+    painPoints: [
+      "Production planning done in Excel",
+      "Quality defects found after delivery",
+      "Machine downtime not tracked",
+      "Raw material shortages cause stoppages",
+    ],
+    modules: [
+      "Production Planning — work order scheduling",
+      "Quality Control — inspection and defect tracking",
+      "Inventory Management — raw material tracking",
+      "Machine Maintenance — predictive alerts",
+      "Procurement — supplier and PO management",
+      "AI Assistant — production insights",
+    ],
+  },
+  "facility-management": {
+    painPoints: [
+      "Work orders managed over phone and email",
+      "Preventive maintenance schedules missed",
+      "Asset lifecycle not tracked",
+      "Energy costs not monitored",
+    ],
+    modules: [
+      "Work Order Management — digital with mobile access",
+      "Asset Management — full register with history",
+      "Preventive Maintenance — auto-scheduled PMs",
+      "Energy Monitoring — utility cost tracking",
+      "Vendor Management — service contractor management",
+      "AI Assistant — asset and maintenance queries",
+    ],
+  },
+  healthcare: GENERIC_CONTENT,
+  logistics: GENERIC_CONTENT,
+  retail: GENERIC_CONTENT,
+};
+
+export const getIndustryPageContent = (slug: string | undefined): IndustryPageContent =>
+  (slug && INDUSTRY_PAGE_CONTENT[slug]) || GENERIC_CONTENT;

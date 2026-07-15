@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, AlertTriangle, Sparkles, MapPin, Layers } from "lucide-react";
 import CustomLayout from "../components/layout/CustomLayout";
 import SEO from "../components/seo/SEO";
 import ErrorSection from "../components/error/ErrorSection";
-import { INDUSTRIES, getIndustryBySlug } from "../data/erpIndustriesData";
+import { INDUSTRIES, getIndustryBySlug, getIndustryPageContent } from "../data/erpIndustriesData";
 
 const OG    = "#C9883A";
 const DARK  = "#1A1A1A";
@@ -54,6 +54,13 @@ const Card3D = ({
   );
 };
 
+// Why-XERXEZ boxes — identical across all industries
+const WHY_BOXES = [
+  { icon: Sparkles, title: "AI-First", body: "Every module has AI built in, not bolted on" },
+  { icon: MapPin, title: "UAE-Based", body: "Local support team that understands your market" },
+  { icon: Layers, title: "Modular", body: "Start with what you need, expand as you grow" },
+];
+
 const ERPIndustryDetailPage = () => {
   const { industry: slug } = useParams();
   const industry = getIndustryBySlug(slug);
@@ -69,6 +76,7 @@ const ERPIndustryDetailPage = () => {
   const Icon = industry.icon;
   const contactHref = `/contact?service=${encodeURIComponent(`ERP for ${industry.name}`)}`;
   const others = INDUSTRIES.filter((i) => i.slug !== industry.slug).slice(0, 3);
+  const content = getIndustryPageContent(industry.slug);
 
   return (
     <>
@@ -136,23 +144,67 @@ const ERPIndustryDetailPage = () => {
           </div>
         </section>
 
-        {/* ── FEATURES ── */}
-        <section style={{ padding: "100px 0", background: WHITE }}>
+        {/* ── PAIN POINTS ── */}
+        <section style={{ padding: "100px 0", background: DBG, position: "relative", overflow: "hidden" }}>
+          <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.10) 0%,transparent 70%)", pointerEvents: "none" }} />
+          <div className="container" style={{ position: "relative", zIndex: 1 }}>
+            <FI><div className="text-center" style={{ marginBottom: 52 }}>
+              <div style={{ marginBottom: 14 }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(201,136,58,0.12)", color: "#E8A84E", fontSize: 10, fontWeight: 700, padding: "5px 16px", borderRadius: 20, letterSpacing: "0.16em", textTransform: "uppercase", border: "1px solid rgba(201,136,58,0.30)", fontFamily: FF }}>
+                  ✦ The Challenge
+                </span>
+              </div>
+              <h2 style={{ fontWeight: 800, fontSize: "clamp(26px,3.2vw,42px)", color: "#fff", lineHeight: 1.15, fontFamily: FF, letterSpacing: "-0.02em", marginBottom: 14 }}>
+                Sound Familiar?
+              </h2>
+              <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 16, lineHeight: 1.7, fontFamily: FF, maxWidth: 560, marginInline: "auto" }}>
+                These are the challenges we hear from {industry.shortName} companies every day.
+              </p>
+            </div></FI>
+            <div className="row g-4">
+              {content.painPoints.map((p, i) => (
+                <div key={p} className="col-lg-3 col-md-6">
+                  <FI delay={0.08 * i}>
+                    <div style={{
+                      background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+                      borderRadius: 16, padding: "26px 22px", height: "100%",
+                    }}>
+                      <div style={{
+                        width: 40, height: 40, borderRadius: 11,
+                        background: "rgba(239,68,68,0.14)", border: "1px solid rgba(239,68,68,0.30)",
+                        display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18,
+                      }}>
+                        <AlertTriangle size={19} color="#F87171" />
+                      </div>
+                      <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, fontWeight: 600, lineHeight: 1.55, margin: 0, fontFamily: FF }}>{p}</p>
+                    </div>
+                  </FI>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── MODULES GRID ── */}
+        <section style={{ padding: "100px 0", background: CREAM }}>
           <div className="container">
             <FI><div className="text-center" style={{ marginBottom: 52 }}>
               <div style={{ marginBottom: 14 }}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: OGL, color: OG, fontSize: 10, fontWeight: 700, padding: "5px 16px", borderRadius: 20, letterSpacing: "0.16em", textTransform: "uppercase", border: `1px solid ${OGBRD}`, fontFamily: FF }}>
-                  ✦ What's Included
+                  ✦ Modules
                 </span>
               </div>
-              <h2 style={{ fontWeight: 800, fontSize: "clamp(26px,3.2vw,42px)", color: DARK, lineHeight: 1.15, fontFamily: FF, letterSpacing: "-0.02em" }}>
-                Built for {industry.name} Operations
+              <h2 style={{ fontWeight: 800, fontSize: "clamp(26px,3.2vw,42px)", color: DARK, lineHeight: 1.15, fontFamily: FF, letterSpacing: "-0.02em", marginBottom: 14 }}>
+                What's Included
               </h2>
+              <p style={{ color: BODY, fontSize: 16, lineHeight: 1.7, fontFamily: FF, maxWidth: 560, marginInline: "auto" }}>
+                Modules built specifically for {industry.shortName} operations
+              </p>
             </div></FI>
             <div className="row g-4">
-              {industry.features.map((f, i) => (
-                <div key={f} className="col-lg-4 col-md-6">
-                  <FI delay={0.08 * i}>
+              {content.modules.map((m, i) => (
+                <div key={m} className="col-lg-4 col-md-6">
+                  <FI delay={0.06 * i}>
                     <Card3D accent={industry.shelf}>
                       <div style={{
                         width: 44, height: 44, borderRadius: 12,
@@ -162,7 +214,7 @@ const ERPIndustryDetailPage = () => {
                       }}>
                         <Check size={20} color="#fff" />
                       </div>
-                      <p style={{ color: DARK, fontSize: 15.5, fontWeight: 700, lineHeight: 1.5, margin: 0, fontFamily: FF }}>{f}</p>
+                      <p style={{ color: DARK, fontSize: 15.5, fontWeight: 700, lineHeight: 1.5, margin: 0, fontFamily: FF }}>{m}</p>
                     </Card3D>
                   </FI>
                 </div>
@@ -171,8 +223,48 @@ const ERPIndustryDetailPage = () => {
           </div>
         </section>
 
+        {/* ── WHY XERXEZ ── */}
+        <section style={{ padding: "100px 0", background: DBG }}>
+          <div className="container">
+            <FI><div className="text-center" style={{ marginBottom: 52 }}>
+              <div style={{ marginBottom: 14 }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(201,136,58,0.12)", color: "#E8A84E", fontSize: 10, fontWeight: 700, padding: "5px 16px", borderRadius: 20, letterSpacing: "0.16em", textTransform: "uppercase", border: "1px solid rgba(201,136,58,0.30)", fontFamily: FF }}>
+                  ✦ Why XERXEZ
+                </span>
+              </div>
+              <h2 style={{ fontWeight: 800, fontSize: "clamp(26px,3.2vw,42px)", color: "#fff", lineHeight: 1.15, fontFamily: FF, letterSpacing: "-0.02em" }}>
+                Why {industry.shortName} Companies Choose XERXEZ
+              </h2>
+            </div></FI>
+            <div className="row g-4">
+              {WHY_BOXES.map((b, i) => {
+                const BIcon = b.icon;
+                return (
+                  <div key={b.title} className="col-lg-4 col-md-6">
+                    <FI delay={0.08 * i}>
+                      <div style={{
+                        background: "rgba(255,255,255,0.03)", border: "1px solid rgba(201,136,58,0.20)",
+                        borderRadius: 16, padding: "32px 26px", textAlign: "center", height: "100%",
+                      }}>
+                        <div style={{
+                          width: 52, height: 52, borderRadius: 14, background: OG_G, boxShadow: BS,
+                          display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px",
+                        }}>
+                          <BIcon size={24} color="#fff" />
+                        </div>
+                        <h3 style={{ color: "#fff", fontWeight: 800, fontSize: 19, fontFamily: FF, marginBottom: 10 }}>{b.title}</h3>
+                        <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 14.5, lineHeight: 1.6, fontFamily: FF, margin: 0 }}>{b.body}</p>
+                      </div>
+                    </FI>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* ── OTHER INDUSTRIES ── */}
-        <section style={{ padding: "90px 0", background: CREAM }}>
+        <section style={{ padding: "90px 0", background: WHITE }}>
           <div className="container">
             <FI><h2 style={{ fontWeight: 800, fontSize: "clamp(22px,2.6vw,32px)", color: DARK, lineHeight: 1.2, fontFamily: FF, letterSpacing: "-0.02em", marginBottom: 36 }}>
               Explore Other Industries
@@ -199,18 +291,17 @@ const ERPIndustryDetailPage = () => {
           </div>
         </section>
 
-        {/* ── CTA ── */}
-        <section style={{ padding: "90px 0", background: DBG, position: "relative", overflow: "hidden" }}>
-          <div aria-hidden="true" style={{ position: "absolute", top: -80, left: "15%", width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.11) 0%,transparent 70%)", pointerEvents: "none" }} />
+        {/* ── CTA BANNER ── */}
+        <section style={{ padding: "90px 0", background: OG, position: "relative", overflow: "hidden" }}>
           <div className="container" style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
             <FI>
               <h2 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(24px,3vw,38px)", lineHeight: 1.2, marginBottom: 18, fontFamily: FF, letterSpacing: "-0.02em" }}>
-                Ready to Modernise Your {industry.name} Operations?
+                Ready to See It in Action?
               </h2>
-              <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 16, lineHeight: 1.7, fontFamily: FF, maxWidth: 560, marginInline: "auto", marginBottom: 32 }}>
-                Book a free demo and see how a purpose-built ERP handles your workflows, not a generic one stretched to fit.
+              <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, lineHeight: 1.7, fontFamily: FF, maxWidth: 560, marginInline: "auto", marginBottom: 32 }}>
+                Book a free 30-minute demo tailored for {industry.shortName} workflows.
               </p>
-              <Link to={contactHref} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: OG_G, color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 30px", borderRadius: 10, textDecoration: "none", fontFamily: FF, boxShadow: BS }}>
+              <Link to={contactHref} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: DARK, color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 30px", borderRadius: 10, textDecoration: "none", fontFamily: FF, boxShadow: "0 4px 0 rgba(0,0,0,0.35),0 6px 20px rgba(0,0,0,0.25)" }}>
                 Book Free Demo <ArrowRight size={15} />
               </Link>
             </FI>
