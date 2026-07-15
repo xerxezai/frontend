@@ -13,14 +13,14 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
   };
 
   const enterpriseStats = [
-    { value: "50+", label: "Enterprise Deployments", icon: "fas fa-building" },
-    { value: "99.9%", label: "Uptime SLA Guarantee", icon: "fas fa-shield-alt" },
-    { value: "40%", label: "Avg Cost Reduction", icon: "fas fa-chart-line" },
+    { value: "4+", label: "Client Projects Delivered", icon: "fas fa-building" },
+    { value: "8+", label: "AI Modules Built", icon: "fas fa-shield-alt" },
+    { value: "6+", label: "Industries Served", icon: "fas fa-chart-line" },
     { value: "8 wks", label: "Typical Go-Live Time", icon: "fas fa-rocket" },
   ];
 
   const capabilities = [
-    "ISO 27001 & SOC 2 Type II ready",
+    "AI-First Architecture",
     "Multi-cloud: AWS, Azure, GCP",
     "AI-native, not AI-bolted-on",
     "24/7 dedicated support teams",
@@ -110,7 +110,7 @@ const FaqSection2 = ({ variant, reverse, noPaddingBottom }: Props) => {
                       Enterprise Credentials
                     </span>
                     <h3 style={{ fontSize: 22, fontWeight: 700, color: "#fff", marginBottom: 28, lineHeight: 1.3 }}>
-                      Trusted by Enterprises Across 5+ Industries
+                      Trusted by Enterprises Across 6+ Industries
                     </h3>
 
                     {/* Stats grid */}

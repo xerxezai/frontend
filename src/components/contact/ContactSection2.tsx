@@ -641,9 +641,9 @@ const ContactSection2 = () => {
                   position:"relative", zIndex:1,
                 }}>
                 {[
-                  { val:"50+",   label:"Projects"  },
-                  { val:"5+",    label:"Countries" },
-                  { val:"99.8%", label:"Uptime"    },
+                  { val:"4+",    label:"Projects"  },
+                  { val:"UAE",   label:"Based"     },
+                  { val:"99.9%", label:"Uptime"    },
                 ].map((s,i) => (
                   <div key={s.label} style={{
                     flex:1, textAlign:"center",
@@ -1091,7 +1091,7 @@ const ContactSection2 = () => {
                         fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600, color:"#8B7A6A",
                       }}>
                         <i className="fas fa-building" style={{ fontSize:10, color:"#C9883A" }} />
-                        Join 50+ enterprises that chose XERXEZ
+                        Join 4+ enterprises that chose XERXEZ
                       </span>
                     </div>
 

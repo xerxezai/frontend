@@ -7,10 +7,10 @@ const BG  = "linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)";
 const DIV = "rgba(255,255,255,0.07)";
 
 const TRUST = [
-  { val: "50+",   label: "Enterprise\nClients"    },
-  { val: "5+",    label: "Countries\nServed"      },
-  { val: "99.8%", label: "Platform\nUptime"       },
-  { val: "5 yrs", label: "Years in\nOperation"    },
+  { val: "4+",    label: "Client Projects\nDelivered" },
+  { val: "UAE",   label: "Based &\nSupported"         },
+  { val: "99.9%", label: "Frontend\nUptime"           },
+  { val: "5 yrs", label: "Years in\nOperation"        },
 ];
 
 const SERVICES = [

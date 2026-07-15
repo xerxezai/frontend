@@ -680,18 +680,17 @@ const HeroSection = () => {
             </p>
 
             {/* Trust metrics */}
-            {/* TODO: Danish to confirm actual metrics before production - currently placeholder */}
             <div className="xz-trust-grid" style={{
               marginTop:32,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.4s both",
             }}>
               {[
-                { val:"50+",   label:"Enterprise projects" },
-                { val:"40%",   label:"Avg cost reduction"  },
-                { val:"99.9%", label:"Uptime SLA"          },
-                { val:"<6 mo", label:"Avg deployment"      },
-                { val:"5+",    label:"Industries served"   },
-                { val:"ISO",   label:"27001 & SOC 2"       },
+                { val:"4+",    label:"Client projects delivered" },
+                { val:"6+",    label:"Industries served"  },
+                { val:"8+",    label:"AI modules built"          },
+                { val:"99.9%", label:"Frontend uptime"          },
+                { val:"UAE",   label:"Based & supported"   },
+                { val:"AI-First", label:"Architecture"     },
               ].map((m) => (
                 <div key={m.label} style={{ display:"flex", flexDirection:"column", gap:3 }}>
                   <span style={{ fontFamily:"'Cormorant Garamond',Garamond,serif", fontSize:20, fontWeight:700, color:"rgba(255,255,255,0.92)", lineHeight:1, letterSpacing:"-0.02em", whiteSpace:"nowrap" }}>{m.val}</span>

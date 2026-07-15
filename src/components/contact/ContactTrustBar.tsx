@@ -12,8 +12,8 @@ const ITEMS = [
   },
   {
     icon: "fas fa-certificate",
-    label: "ISO 27001 Aligned",
-    sub: "Enterprise security standard",
+    label: "AI-First Architecture",
+    sub: "Built AI-first, not bolted on",
     color: "#C9883A",
     glow: "rgba(201,136,58,0.30)",
     grad: "linear-gradient(145deg,#e8a84e,#C9883A)",
@@ -39,8 +39,8 @@ const ITEMS = [
   },
   {
     icon: "fas fa-building",
-    label: "50+ Clients",
-    sub: "Trusted by enterprises globally",
+    label: "4+ Client Projects Delivered",
+    sub: "Engineering & industrial clients",
     color: "#fb923c",
     glow: "rgba(251,146,60,0.30)",
     grad: "linear-gradient(145deg,#fdba74,#fb923c)",

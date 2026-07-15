@@ -31,7 +31,7 @@ const HeaderSection2 = ({ variant }: Props) => {
               <li className="top-tagline">
                 <i className="fas fa-rocket"></i>
                 <strong style={{ color: "#E8A84E", fontWeight: 700 }}>New:</strong>
-                {" "}AI Training Programs — 75+ professionals trained
+                {" "}AI-Powered ERP now available for Engineering & EPC companies in UAE
               </li>
               <li className="top-divider">|</li>
               <li>
@@ -46,7 +46,7 @@ const HeaderSection2 = ({ variant }: Props) => {
                   onMouseOver={e => (e.currentTarget.style.color = "#fff")}
                   onMouseOut={e => (e.currentTarget.style.color = "#E8A84E")}
                 >
-                  Book a Free Demo Today <i className="far fa-arrow-right" style={{ fontSize: 10 }} />
+                  Request a Demo <i className="far fa-arrow-right" style={{ fontSize: 10 }} />
                 </Link>
               </li>
             </ul>
