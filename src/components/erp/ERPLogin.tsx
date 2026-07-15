@@ -445,8 +445,12 @@ const ERPLogin = ({ onSuccess }: Props) => {
 
       <div style={{ minHeight: '100vh', display: 'flex' }}>
 
-        {/* ══ LEFT — brand panel ══════════════════════════════════════════ */}
-        <div className="d-none d-lg-flex erp-left" style={{ flex: '0 0 56%', flexDirection: 'column', justifyContent: 'center', padding: '24px 56px', position: 'relative', overflow: 'hidden auto', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
+        {/* ══ LEFT — brand panel ══════════════════════════════════════════
+             position:sticky + height:100vh keeps this centred on the visible
+             viewport regardless of how tall the right (form) column's content
+             is — without it, the row stretches to the taller column's height
+             and "center" ends up centring within that taller box instead. */}
+        <div className="d-none d-lg-flex erp-left" style={{ flex: '0 0 56%', flexDirection: 'column', justifyContent: 'center', padding: '24px 56px', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden auto', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
           <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
           <span className="erp-orb-1" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 540, height: 540, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.15) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <span className="erp-orb-2" style={{ position: 'absolute', bottom: '-18%', right: '-4%', width: 440, height: 440, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />

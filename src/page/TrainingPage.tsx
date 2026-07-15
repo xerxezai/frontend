@@ -486,9 +486,9 @@ const WhySection = () => {
         <div style={{ marginTop:72, display:"flex", justifyContent:"center", flexWrap:"wrap", gap:0 }}>
           {[
             { val:"75+",  label:"Professionals Trained" },
-            { val:"95%",  label:"Satisfaction Rate"     },
+            { val:"4+",   label:"Client Projects"       },
             { val:"5+",   label:"Active Programs"       },
-            { val:"15+",  label:"Client Organisations"  },
+            { val:"UAE",  label:"Based & Supported"     },
           ].map((stat, i) => (
             <div key={i} style={{
               textAlign:"center", padding:"28px 48px",
@@ -559,7 +559,7 @@ const CtaSection = () => {
 
               {/* Trust pills */}
               <div style={{ display:"flex", flexWrap:"wrap", gap:10, marginTop:32 }}>
-                {["CPD Accredited","Custom Curriculum","Hands-On Labs","ISO 27001"].map(tag => (
+                {["CPD Accredited","Custom Curriculum","Hands-On Labs"].map(tag => (
                   <span key={tag} style={{
                     fontSize:11, fontWeight:600, color:GOLD,
                     background:"rgba(201,136,58,0.08)",
@@ -575,17 +575,29 @@ const CtaSection = () => {
             </div>
           </div>
 
-          {/* Right — impact metrics */}
+          {/* Right — impact statement */}
           <div className="col-lg-6">
             <div ref={rightRef}>
-              <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
-                {[
-                  { icon:"fas fa-tachometer-alt", headline:"60% faster", sub:"time-to-deploy first AI feature", bg:"linear-gradient(135deg,rgba(201,136,58,0.12) 0%,rgba(201,136,58,0.05) 100%)", border:"rgba(201,136,58,0.22)" },
-                  { icon:"fas fa-chart-line",     headline:"45% less",   sub:"external AI consulting spend in year 1", bg:"linear-gradient(135deg,rgba(63,131,248,0.10) 0%,rgba(63,131,248,0.04) 100%)", border:"rgba(63,131,248,0.18)" },
-                  { icon:"fas fa-rocket",          headline:"3× more",    sub:"AI projects reaching production after training", bg:"linear-gradient(135deg,rgba(74,222,128,0.10) 0%,rgba(74,222,128,0.04) 100%)", border:"rgba(74,222,128,0.18)" },
-                ].map((m, i) => (
-                  <MetricRow key={i} {...m} index={i} />
-                ))}
+              <div style={{
+                display:"flex", alignItems:"center", gap:22,
+                background:"#fff",
+                border:"1px solid rgba(0,0,0,0.08)",
+                borderLeft:`3px solid ${GOLD}`,
+                borderRadius:16, padding:"32px 28px",
+                boxShadow:"0 4px 20px rgba(0,0,0,0.06)",
+              }}>
+                <div style={{
+                  width:56, height:56, borderRadius:15, flexShrink:0,
+                  background:"linear-gradient(135deg,rgba(201,136,58,0.14) 0%,rgba(201,136,58,0.05) 100%)",
+                  border:"1px solid rgba(201,136,58,0.24)",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:22, color:GOLD,
+                }}>
+                  <i className="fas fa-graduation-cap" />
+                </div>
+                <p style={{ fontSize:18, fontWeight:700, color:"#141413", lineHeight:1.5, fontFamily:"'DM Sans',sans-serif", margin:0 }}>
+                  Teams leave with production-ready AI skills, not just theory.
+                </p>
               </div>
             </div>
           </div>
@@ -593,48 +605,6 @@ const CtaSection = () => {
         </div>
       </div>
     </section>
-  );
-};
-
-const MetricRow = ({ icon, headline, sub, bg, border, index }: {
-  icon: string; headline: string; sub: string; bg: string; border: string; index: number
-}) => {
-  const ref = useReveal(index * 110 + 200, 0.12);
-  const [hov, setHov] = useState(false);
-  return (
-    <div
-      ref={ref}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        display:"flex", alignItems:"center", gap:20,
-        background: hov ? "#fff" : "#fff",
-        border:`1px solid ${hov ? "rgba(201,136,58,0.30)" : "rgba(0,0,0,0.08)"}`,
-        borderLeft: `3px solid ${hov ? GOLD : "rgba(201,136,58,0.25)"}`,
-        borderRadius:16, padding:"22px 24px",
-        boxShadow: hov ? "0 12px 32px rgba(0,0,0,0.09)" : "0 2px 12px rgba(0,0,0,0.05)",
-        transition:"border-color 0.25s ease, border-left-color 0.25s ease, box-shadow 0.25s ease",
-        cursor:"default",
-      }}
-    >
-      <div style={{
-        width:50, height:50, borderRadius:13, flexShrink:0,
-        background: bg,
-        border:`1px solid ${border}`,
-        display:"flex", alignItems:"center", justifyContent:"center",
-        fontSize:18, color: GOLD,
-      }}>
-        <i className={icon} />
-      </div>
-      <div>
-        <div style={{ fontSize:26, fontWeight:900, color:"#141413", lineHeight:1, fontFamily:"'DM Sans',sans-serif", marginBottom:4 }}>
-          {headline}
-        </div>
-        <div style={{ fontSize:13, color:"rgba(20,20,19,0.50)", fontFamily:"'DM Sans',sans-serif", lineHeight:1.4 }}>
-          {sub}
-        </div>
-      </div>
-    </div>
   );
 };
 
@@ -668,7 +638,7 @@ const TrainingPage: React.FC = () => (
       stats={[
         { val:"75+",  label:"Trained"      },
         { val:"5+",   label:"Programs"     },
-        { val:"95%",  label:"Satisfaction" },
+        { val:"UAE",  label:"Based"        },
       ]}
       cascadeA={TRAINING_CASCADE_A}
       cascadeB={TRAINING_CASCADE_B}
