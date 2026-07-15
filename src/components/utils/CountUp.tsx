@@ -1,23 +1,26 @@
 ﻿import { useRef, useEffect, useState } from "react";
 
 interface Props {
-  value: number;
+  value?: number;
   className?: string;
   duration?: number;
   threshold?: number;
   suffix?: string;
   startValue?: number;
   onAnimationComplete?: () => void;
+  /** Non-numeric stat (e.g. "UAE") — renders as-is instead of counting up. */
+  staticText?: string;
 }
 
 const CountUp = ({
-  value,
+  value = 0,
   className = "",
   duration = 2000,
   threshold = 0.5,
   suffix = "",
   startValue = 0,
   onAnimationComplete,
+  staticText,
 }: Props) => {
   const [currentValue, setCurrentValue] = useState<number>(startValue);
   const [hasAnimated, setHasAnimated] = useState<boolean>(false);
@@ -78,8 +81,7 @@ const CountUp = ({
 
   return (
     <h2 ref={elementRef} className={className}>
-      {currentValue}
-      {suffix}
+      {staticText ?? <>{currentValue}{suffix}</>}
     </h2>
   );
 };

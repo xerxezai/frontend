@@ -106,7 +106,7 @@ const StatCard = ({
         marginBottom: 8,
         minHeight: 44,
       }}>
-        {visible && <CountUp value={item.variantTargetValue} suffix={item.variantSuffix} />}
+        {visible && <CountUp value={item.variantTargetValue} suffix={item.variantSuffix} staticText={item.variantStaticVal} />}
       </div>
 
       {/* Label */}

@@ -44,16 +44,16 @@ const shaderShapes: Record<string, "checks" | "stripes" | "edge"> = {
 
 // Marketing framing per service: the problem it solves, who it's for, and a
 // measurable benefit + stat pair shown as chips on the card.
-const serviceMeta: Record<string, { problem: string; audience: string; benefit: string; stat: string }> = {
-  "devsecops-mlops-solutions": { problem: "Slow deployments and security vulnerabilities",          audience: "Tech teams shipping products fast",            benefit: "60% faster deployment cycles",  stat: "Zero incidents in 18 mo avg" },
-  "cloud-service-storage":     { problem: "Overpaying for cloud with poor performance",             audience: "Enterprises on AWS, Azure, GCP",               benefit: "40% cloud cost reduction",      stat: "99.99% uptime SLA" },
-  "software-development":      { problem: "Can't find reliable tech partners",                      audience: "Enterprises needing custom solutions",         benefit: "89% on-time delivery rate",     stat: "50+ custom apps delivered" },
-  "ai-training-consulting":    { problem: "Teams not ready for AI adoption",                        audience: "Corporate teams and enterprises",              benefit: "95% satisfaction rate",         stat: "75+ professionals trained" },
-  "quantum-computing":         { problem: "Complex optimisation problems unsolvable classically",   audience: "Research, finance, logistics enterprises",     benefit: "10x faster optimisation",       stat: "128-qubit cloud access" },
-  "mobile-application":        { problem: "Poor mobile experience losing customers",                audience: "Enterprises needing mobile-first solutions",   benefit: "4.2★ avg app store rating", stat: "iOS · Android · Cross-platform" },
-  "web-mobile-hosting":        { problem: "Downtime costing you revenue",                           audience: "Businesses needing reliable hosting",          benefit: "99.9% uptime SLA",              stat: "<100ms response time" },
-  "software-consulting":       { problem: "Technology decisions costing millions",                  audience: "CXOs and technology leaders",                  benefit: "$10M+ saved for clients",       stat: "80% client retention" },
-  "erp-industries":            { problem: "Generic ERP that fights your industry's workflow",       audience: "Healthcare, manufacturing, logistics, EPC & more", benefit: "Deploy in under 6 months",     stat: "8 industry verticals" },
+const serviceMeta: Record<string, { problem: string; audience: string; benefit?: string; stat?: string }> = {
+  "devsecops-mlops-solutions": { problem: "Slow deployments and security vulnerabilities",          audience: "Tech teams shipping products fast",            benefit: "Accelerated deployment cycles" },
+  "cloud-service-storage":     { problem: "Overpaying for cloud with poor performance",             audience: "Enterprises on AWS, Azure, GCP",               benefit: "Optimised cloud costs",         stat: "Enterprise-grade uptime" },
+  "software-development":      { problem: "Can't find reliable tech partners",                      audience: "Enterprises needing custom solutions",         stat: "Custom apps delivered" },
+  "ai-training-consulting":    { problem: "Teams not ready for AI adoption",                        audience: "Corporate teams and enterprises",              stat: "75+ professionals trained" },
+  "quantum-computing":         { problem: "Complex optimisation problems unsolvable classically",   audience: "Research, finance, logistics enterprises",     benefit: "Quantum-speed optimisation",    stat: "128-qubit cloud access" },
+  "mobile-application":        { problem: "Poor mobile experience losing customers",                audience: "Enterprises needing mobile-first solutions",   stat: "iOS · Android · Cross-platform" },
+  "web-mobile-hosting":        { problem: "Downtime costing you revenue",                           audience: "Businesses needing reliable hosting",          benefit: "Enterprise-grade uptime",       stat: "<100ms response time" },
+  "software-consulting":       { problem: "Technology decisions costing millions",                  audience: "CXOs and technology leaders" },
+  "erp-industries":            { problem: "Generic ERP that fights your industry's workflow",       audience: "Healthcare, manufacturing, logistics, EPC & more", benefit: "Phased deployment approach", stat: "8 industry verticals" },
 };
 
 interface Props {
@@ -182,7 +182,7 @@ const ConsultationCard = () => (
     {/* 3 trust chips */}
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginBottom: 18, position: "relative" }}>
       {[
-        { icon: "fas fa-briefcase",   val: "50+",  label: "Projects" },
+        { icon: "fas fa-briefcase",   val: "4+",   label: "Projects" },
         { icon: "far fa-clock",       val: "24h",  label: "Response" },
         { icon: "fas fa-lock",        val: "NDA",  label: "Protected" },
       ].map(d => (
@@ -238,7 +238,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
       {mainSection && (
         <XzHeroSection
           urgencyText="Limited onboarding slots available this quarter"
-          trustLine="ISO-ready · NDA Protected · 24h Response"
+          trustLine="NDA Protected · 24h Response"
           badgeText="End-to-End Enterprise Solutions"
           headline={
             <h1 style={{
@@ -259,7 +259,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
           ]}
           stats={[
             { val: "8+",  label: "Services" },
-            { val: "50+", label: "Projects Delivered" },
+            { val: "4+",  label: "Projects Delivered" },
             { val: "12+", label: "AI Capabilities" },
           ]}
           cascadeA={SVC_CASCADE_A}
@@ -457,13 +457,17 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                           {" "}{serviceMeta[service.slug].audience}
                         </p>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(74,222,128,0.12)", border: "1px solid rgba(74,222,128,0.30)", borderRadius: 999, padding: "4px 10px", fontSize: 10.5, fontWeight: 700, color: "#4ade80", fontFamily: "'DM Sans',sans-serif" }}>
-                            <i className="fas fa-chart-line" style={{ fontSize: 9 }} />
-                            {serviceMeta[service.slug].benefit}
-                          </span>
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(240,202,122,0.10)", border: "1px solid rgba(240,202,122,0.30)", borderRadius: 999, padding: "4px 10px", fontSize: 10.5, fontWeight: 700, color: "#F0CA7A", fontFamily: "'DM Sans',sans-serif" }}>
-                            {serviceMeta[service.slug].stat}
-                          </span>
+                          {serviceMeta[service.slug].benefit && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(74,222,128,0.12)", border: "1px solid rgba(74,222,128,0.30)", borderRadius: 999, padding: "4px 10px", fontSize: 10.5, fontWeight: 700, color: "#4ade80", fontFamily: "'DM Sans',sans-serif" }}>
+                              <i className="fas fa-chart-line" style={{ fontSize: 9 }} />
+                              {serviceMeta[service.slug].benefit}
+                            </span>
+                          )}
+                          {serviceMeta[service.slug].stat && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(240,202,122,0.10)", border: "1px solid rgba(240,202,122,0.30)", borderRadius: 999, padding: "4px 10px", fontSize: 10.5, fontWeight: 700, color: "#F0CA7A", fontFamily: "'DM Sans',sans-serif" }}>
+                              {serviceMeta[service.slug].stat}
+                            </span>
+                          )}
                         </div>
                       </>
                     )}

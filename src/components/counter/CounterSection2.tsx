@@ -24,6 +24,7 @@ const CounterSection2 = () => {
                   duration={1500}
                   value={counter.variantTargetValue}
                   suffix={counter.variantSuffix}
+                  staticText={counter.variantStaticVal}
                 />
                 <p>{counter.variantLabel}</p>
               </div>
