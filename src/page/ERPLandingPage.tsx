@@ -319,6 +319,8 @@ const MODULES = [
   { icon: "fas fa-robot",               label: "AI Assistant" },
   { icon: "fas fa-tasks",               label: "Project Management" },
   { icon: "fas fa-calculator",          label: "Cost Estimation" },
+  { icon: "fas fa-truck",               label: "Logistics & Dispatch" },
+  { icon: "fas fa-chart-bar",           label: "Finance & Accounting" },
 ];
 
 const ModulesSection = () => (
