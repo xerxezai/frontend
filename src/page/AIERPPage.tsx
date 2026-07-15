@@ -7,7 +7,6 @@ import SEO from "../components/seo/SEO";
 import {
   TrustSignalsBar,
   PainPointsSection,
-  TestimonialSection,
   FloatingMobileCTA,
 } from "../components/common/ServicePageAddons";
 
@@ -295,10 +294,6 @@ const ERP_PAIN_POINTS = [
   "Watching a costly legacy ERP rollout stall halfway through a migration?",
   "Making six-figure procurement or staffing decisions on data that's already a week old?",
 ];
-const ERP_TESTIMONIAL = {
-  quote: "We had legacy ERP systems running for a decade and dreaded a rip-and-replace. XERXEZ's AI layer went live in ten weeks with zero downtime — our exec team now sees demand forecasts we never had visibility into before.",
-  author: "CFO, Manufacturing Group",
-};
 const ERP_CONTACT_HREF = `/contact?service=${encodeURIComponent("AI-Powered ERP")}`;
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -502,43 +497,25 @@ const ComparisonTable = () => (
 // ═══════════════════════════════════════════════════════════════════════════════
 // 4. BUSINESS IMPACT / ROI  — cream
 // ═══════════════════════════════════════════════════════════════════════════════
-const ROIBars = () => {
-  const [active, setActive] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setActive(true); obs.disconnect(); } }, { threshold: 0.3 });
-    obs.observe(el); return () => obs.disconnect();
-  }, []);
+const ROI_OUTCOMES = [
+  "Lower operational overhead through unified data and fewer manual reconciliations",
+  "Faster executive reporting with live dashboards replacing spreadsheet exports",
+  "Fewer procurement errors through automated multi-level approval workflows",
+  "Less manual data entry as AI automation takes over repetitive tasks",
+];
 
-  const bars = [
-    { pct: 25, label: "Reduction in operational overhead" },
-    { pct: 40, label: "Faster executive reporting cycles" },
-    { pct: 35, label: "Decrease in procurement errors"   },
-    { pct: 50, label: "Reduction in manual data entry"   },
-  ];
-
-  return (
-    <div ref={ref} style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-      {bars.map((b) => (
-        <div key={b.label}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-            <span style={{ color: BODY, fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans',sans-serif" }}>{b.label}</span>
-            <span style={{ color: OG, fontSize: 14, fontWeight: 800, fontFamily: "'DM Sans',sans-serif" }}>{b.pct}%</span>
-          </div>
-          <div style={{ height: 9, background: "rgba(201,136,58,0.12)", borderRadius: 8, overflow: "hidden" }}>
-            <div style={{
-              width: active ? `${b.pct}%` : "0%", height: "100%",
-              background: OG_G, borderRadius: 8,
-              boxShadow: "0 2px 8px rgba(201,136,58,0.40)",
-              transition: pref ? "none" : "width 1.2s cubic-bezier(0.22,1,0.36,1) 0.3s",
-            }} />
-          </div>
+const ROIBars = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    {ROI_OUTCOMES.map((o) => (
+      <div key={o} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+        <div style={{ width: 26, height: 26, borderRadius: 8, background: OG_G, boxShadow: BS, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
+          <i className="fas fa-check" style={{ color: "#fff", fontSize: 11 }} />
         </div>
-      ))}
-    </div>
-  );
-};
+        <span style={{ color: BODY, fontSize: 15, fontWeight: 600, lineHeight: 1.55, fontFamily: "'DM Sans',sans-serif" }}>{o}</span>
+      </div>
+    ))}
+  </div>
+);
 
 const ROISection = () => (
   <section style={{ padding: "100px 0", background: WHITE }}>
@@ -747,7 +724,7 @@ const FAQS = [
   { q: "Can XERXEZ upgrade our existing ERP system without migration or downtime?", a: "Yes. Our AI layer connects to your existing ERP system via a secure read/write API middleware. Your existing infrastructure, data schema, and workflows remain completely unchanged. The AI upgrade runs alongside your live system — typically activated within 8-12 weeks with zero operational downtime." },
   { q: "Is the ERP suitable for government and defence procurement environments?", a: "Designed for it. We support air-gapped on-premise deployments, private government cloud, and hybrid configurations with full data sovereignty. All sensitive data stays within your jurisdiction. We have experience with Ministry-level procurement, compliance auditing, and security accreditation processes." },
   { q: "What differentiates XERXEZ AI ERP from off-the-shelf enterprise software?", a: "Three things: (1) The AI is built in from day one — not bolted on. (2) You own all IP — no licensing fees after delivery. (3) We build to your processes — no forced workflow changes." },
-  { q: "What cloud infrastructure do you deploy on?", a: "We are multi-cloud certified on AWS, Microsoft Azure, and Google Cloud Platform. We can deploy on your preferred cloud, on government-approved infrastructure, or on your own on-premise hardware. We do not lock you into any single provider." },
+  { q: "What cloud infrastructure do you deploy on?", a: "We have deep operational experience across AWS, Microsoft Azure, and Google Cloud Platform. We can deploy on your preferred cloud, on government-approved infrastructure, or on your own on-premise hardware. We do not lock you into any single provider." },
   { q: "How is data security handled?", a: "AES-256 encryption at rest and in transit, zero-trust network architecture, role-based access control with MFA, full audit trails with tamper-proof log retention, and regular penetration testing by independent security firms." },
   { q: "What ongoing support is provided after go-live?", a: "All deployments include 90 days of hypercare support with 24/7 on-call coverage. After hypercare, we offer SLA-backed managed support with dedicated response times, monthly AI model retraining, security patching, and feature releases." },
 ];
@@ -899,7 +876,6 @@ const AIERPPage = () => {
         <Modules />
         <ClientLogos />
         <Process />
-        <TestimonialSection quote={ERP_TESTIMONIAL.quote} author={ERP_TESTIMONIAL.author} />
         <FAQSection />
         <CTASection />
         <FloatingMobileCTA href={ERP_CONTACT_HREF} />

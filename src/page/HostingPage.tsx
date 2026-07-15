@@ -3,10 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "99.9%",    label: "Uptime SLA"       },
-  { val: "<100 ms",  label: "Response Time"    },
-  { val: "Auto",     label: "Scaling"          },
-  { val: "24/7",     label: "Support"          },
+  { val: "99.9%",       label: "Uptime SLA"     },
+  { val: "Low-Latency", label: "Global CDN"     },
+  { val: "24/7",        label: "Managed Support" },
 ];
 
 const config: ServicePageConfig = {
@@ -23,12 +22,12 @@ const config: ServicePageConfig = {
       </em>
     </h1>
   ),
-  description: "99.9% uptime SLA backed by financial credits. Sub-100ms global response times via our CDN network. Auto-scaling that handles 50× traffic spikes without a pager alert. Managed hosting so your team focuses on product, not infrastructure.",
+  description: "99.9% uptime SLA backed by financial credits. Low-latency delivery via our global CDN network. Auto-scaling that handles sudden traffic spikes without a pager alert. Managed hosting so your team focuses on product, not infrastructure.",
 
   heroStats: [
-    { val: "99.9%",   label: "Uptime SLA"    },
-    { val: "<100 ms", label: "Response Time" },
-    { val: "24/7",    label: "Support"       },
+    { val: "99.9%",       label: "Uptime SLA"      },
+    { val: "Low-Latency", label: "Global CDN"      },
+    { val: "24/7",        label: "Managed Support" },
   ],
   cascadeA: ["Managed Hosting","CDN Integration","SSL & TLS","Auto-Scaling","DDoS Protection","Load Balancing","Edge Computing","Serverless Functions","Database Hosting"],
   cascadeB: ["AWS · Azure · GCP","Cloudflare · Fastly","Nginx · Caddy","Let's Encrypt · DigiCert","Kubernetes · EKS","Redis · PostgreSQL","Terraform · Ansible","Prometheus · Grafana","PagerDuty · OpsGenie"],
@@ -42,11 +41,11 @@ const config: ServicePageConfig = {
   ),
 
   trustBar: [
-    { icon: "fas fa-cloud",       label: "AWS Partner"        },
-    { icon: "fas fa-shield-alt",  label: "Cloudflare Partner" },
-    { icon: "fas fa-lock",        label: "Let's Encrypt"      },
-    { icon: "fas fa-certificate", label: "ISO 27001"          },
-    { icon: "fas fa-award",       label: "SOC 2 Type II"      },
+    { icon: "fas fa-cloud",       label: "Multi-Cloud Hosting"        },
+    { icon: "fas fa-globe",       label: "Global CDN"                 },
+    { icon: "fas fa-lock",        label: "Let's Encrypt"              },
+    { icon: "fas fa-file-invoice-dollar", label: "Financial-Credit Backed SLA" },
+    { icon: "fas fa-headset",     label: "24/7 Monitoring"            },
   ],
 
   featureLabel: "Platform Features",
@@ -55,7 +54,7 @@ const config: ServicePageConfig = {
   ),
   features: [
     { icon: "fas fa-server",        title: "Managed Hosting",          desc: "Fully managed cloud hosting on AWS, Azure, or GCP. We handle OS patching, security updates, database maintenance, and capacity planning — you ship code." },
-    { icon: "fas fa-globe",         title: "Global CDN Integration",   desc: "Cloudflare or Fastly CDN integration serving your assets from 300+ edge locations worldwide. Sub-100ms response times regardless of where your users are." },
+    { icon: "fas fa-globe",         title: "Global CDN Integration",   desc: "Cloudflare or Fastly CDN integration serving your assets from edge locations worldwide, for consistently low-latency delivery wherever your users are." },
     { icon: "fas fa-lock",          title: "SSL & Security",           desc: "Automatic SSL certificate issuance and renewal via Let's Encrypt. HTTPS enforced on all endpoints. DDoS protection, WAF rules, and rate limiting included." },
     { icon: "fas fa-expand-arrows-alt", title: "Auto-Scaling",         desc: "Kubernetes-based horizontal pod autoscaling that responds to real traffic within 30 seconds. Handle flash sales, marketing campaigns, and viral moments without pre-warming." },
     { icon: "fas fa-redo",          title: "Backup & Recovery",        desc: "Automated daily backups with 30-day retention. Point-in-time recovery for databases. One-click restore tested monthly. RTO under 15 minutes guaranteed." },
@@ -90,7 +89,7 @@ const config: ServicePageConfig = {
 
   faqTitle: "Common Hosting Questions",
   faqs: [
-    { q: "What does your 99.9% uptime SLA actually mean in practice?", a: "99.9% uptime allows for approximately 8.7 hours of downtime per year. In practice, our managed hosting has maintained 99.97% uptime across the portfolio over the last 24 months — well above the SLA. The SLA is backed by financial credits: if we miss it, you receive service credits on your next invoice." },
+    { q: "What does your 99.9% uptime SLA actually mean in practice?", a: "99.9% uptime allows for approximately 8.7 hours of downtime per year. The SLA is backed by financial credits: if we miss it, you receive service credits on your next invoice." },
     { q: "Can you migrate us from our current hosting provider without downtime?", a: "Yes. We use a proven zero-downtime migration process: replicate your data to the new environment, run traffic in parallel using DNS traffic splitting, validate performance and error rates, then complete the cutover. The entire migration is reversible until the final DNS change — typically a 4-hour window at off-peak hours." },
     { q: "How do you handle unexpected traffic spikes (e.g., a viral moment or marketing campaign)?", a: "Our Kubernetes-based auto-scaling responds to traffic within 30 seconds and can scale horizontally across multiple availability zones within 2 minutes. For predictable high-traffic events (product launches, sales), we pre-warm capacity in advance and set up manual override controls so your team can scale with a button click." },
     { q: "Is my data physically located in a specific country or region?", a: "Yes, and we make this configurable. For UAE-based clients, all data resides in UAE North or UAE Central Azure regions, or ap-southeast-2 / me-south-1 AWS regions by default. UK GDPR and EU GDPR data residency is also available. We never store regulated data in jurisdictions that create compliance risk without explicit client approval." },
@@ -100,7 +99,7 @@ const config: ServicePageConfig = {
   ctaTitle: (
     <>Ready for Hosting That <span style={{ color: "#C9883A" }}>You Never Think About?</span></>
   ),
-  ctaDesc: "Move your application to XERXEZ managed hosting and spend your engineering time on product, not infrastructure. 99.9% uptime SLA. Sub-100ms globally. 24/7 support included.",
+  ctaDesc: "Move your application to XERXEZ managed hosting and spend your engineering time on product, not infrastructure. 99.9% uptime SLA. Low-latency global delivery. 24/7 support included.",
   ctaTags: ["99.9% Uptime SLA", "Financial Credits Backed", "24/7 Managed Support"],
 
   painPoints: [
@@ -109,10 +108,6 @@ const config: ServicePageConfig = {
     "Slow page loads for users outside your primary hosting region?",
     "A single engineer who's the only one who knows how production infrastructure actually works?",
   ],
-  testimonial: {
-    quote: "We moved off our old host after a Black Friday outage cost us six figures. XERXEZ's auto-scaling handled this year's traffic spike without a single alert firing.",
-    author: "CTO, E-Commerce Platform",
-  },
 };
 
 const HostingPage = () => (

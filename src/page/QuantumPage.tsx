@@ -3,10 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "10×",    label: "Optimisation Speedup" },
-  { val: "128Q",   label: "Qubit Systems"         },
-  { val: "99.9%",  label: "Result Accuracy"       },
-  { val: "6 mo",   label: "First Deployment"      },
+  { val: "Hybrid",       label: "Classical-Quantum" },
+  { val: "Cloud Quantum",label: "IBM · AWS · Google" },
+  { val: "Honest",       label: "Feasibility First" },
 ];
 
 const config: ServicePageConfig = {
@@ -23,12 +22,12 @@ const config: ServicePageConfig = {
       </em>
     </h1>
   ),
-  description: "Quantum optimisation, simulation, and cryptography for enterprise and government organisations. XERXEZ bridges the gap between quantum research and production deployment — delivering 10× optimisation speedups on real operational problems today.",
+  description: "Quantum optimisation, simulation, and cryptography for enterprise and government organisations. XERXEZ bridges the gap between quantum research and production deployment — for problems that are genuinely quantum-advantageous today.",
 
   heroStats: [
-    { val: "10×",   label: "Optimisation Speedup" },
-    { val: "99.9%", label: "Result Accuracy"       },
-    { val: "6 mo",  label: "First Deployment"      },
+    { val: "Hybrid",        label: "Classical-Quantum"  },
+    { val: "Cloud Quantum", label: "IBM · AWS · Google" },
+    { val: "Honest",        label: "Feasibility First"  },
   ],
   cascadeA: ["Quantum Algorithms","Post-Quantum Cryptography","Optimisation","Quantum Simulation","Hybrid Quantum-Classical","Variational Circuits","Quantum Machine Learning","Quantum Error Correction","NISQ Computing"],
   cascadeB: ["IBM Quantum · Qiskit","Google Cirq · Braket","D-Wave Advantage","IonQ · Honeywell","PennyLane · Strawberry Fields","QAOA · VQE","Grover's · Shor's","QuTiP · Qibo","Quantum Volume 512"],
@@ -42,11 +41,11 @@ const config: ServicePageConfig = {
   ),
 
   trustBar: [
-    { icon: "fas fa-atom",        label: "IBM Quantum Partner" },
-    { icon: "fas fa-cloud",       label: "AWS Braket"          },
-    { icon: "fas fa-lock",        label: "Post-Quantum Crypto" },
-    { icon: "fas fa-certificate", label: "ISO 27001"           },
-    { icon: "fas fa-microscope",  label: "Research Network"    },
+    { icon: "fas fa-atom",        label: "Cloud Quantum Access"    },
+    { icon: "fas fa-lock",        label: "Post-Quantum Cryptography" },
+    { icon: "fas fa-code-branch", label: "Hybrid Architecture"     },
+    { icon: "fas fa-balance-scale",label: "Classical Baseline First" },
+    { icon: "fas fa-project-diagram",label: "NISQ Computing"       },
   ],
 
   featureLabel: "Quantum Capabilities",
@@ -56,10 +55,10 @@ const config: ServicePageConfig = {
   features: [
     { icon: "fas fa-project-diagram", title: "Quantum Algorithms",          desc: "Custom algorithm development for your specific problem class — Grover's for search, QAOA for combinatorial optimisation, VQE for molecular simulation." },
     { icon: "fas fa-lock",            title: "Post-Quantum Cryptography",   desc: "Migrate your encryption infrastructure to NIST-approved PQC algorithms (CRYSTALS-Kyber, CRYSTALS-Dilithium) before quantum computers break RSA and ECC." },
-    { icon: "fas fa-route",           title: "Quantum Optimisation",        desc: "Vehicle routing, portfolio optimisation, supply chain scheduling, and resource allocation problems solved 10–1000× faster than classical heuristics." },
+    { icon: "fas fa-route",           title: "Quantum Optimisation",        desc: "Vehicle routing, portfolio optimisation, supply chain scheduling, and resource allocation problems solved with quantum annealing and QAOA where classical heuristics plateau." },
     { icon: "fas fa-atom",            title: "Quantum Simulation",          desc: "Molecular and materials simulation for pharmaceutical, chemical, and materials science organisations — accelerating R&D without physical lab constraints." },
     { icon: "fas fa-code-branch",     title: "Hybrid Classical-Quantum",    desc: "Most enterprise quantum applications today are hybrid. We design classical-quantum architectures that extract quantum advantage on the hard sub-problems while classical systems handle the rest." },
-    { icon: "fas fa-handshake",       title: "Research Partnership",        desc: "Long-term quantum research partnerships with joint IP ownership, access to our quantum hardware relationships, and co-authorship on academic publications." },
+    { icon: "fas fa-handshake",       title: "Research Partnership",        desc: "Long-term quantum research partnerships with joint IP ownership and continued access to our cloud quantum infrastructure as new use cases emerge." },
   ],
 
   processLabel: "Engagement Model",
@@ -101,7 +100,7 @@ const config: ServicePageConfig = {
     <>Ready to <span style={{ color: "#C9883A" }}>Explore Quantum Advantage?</span></>
   ),
   ctaDesc: "We will be honest about what quantum can and cannot do for you today. If your problem is quantum-advantageous, XERXEZ will build the solution. If classical AI is the right tool right now, we will tell you that instead.",
-  ctaTags: ["IBM & AWS Quantum Partner", "Post-Quantum Crypto", "Honest Feasibility Assessment"],
+  ctaTags: ["Cloud Quantum Access", "Post-Quantum Crypto", "Honest Feasibility Assessment"],
 
   painPoints: [
     "Not knowing whether your problem is actually quantum-advantageous, or just quantum-hyped?",
@@ -109,10 +108,6 @@ const config: ServicePageConfig = {
     "Encrypted data today that adversaries could be harvesting to decrypt once quantum computers mature?",
     "Vendors selling quantum roadmaps with no classical baseline to prove the advantage is real?",
   ],
-  testimonial: {
-    quote: "XERXEZ told us upfront that half our use cases weren't ready for quantum yet — then delivered a 10x speedup on the one that was. That honesty is why we kept the partnership going.",
-    author: "Director of R&D, Materials Science Firm",
-  },
 };
 
 const QuantumPage = () => (

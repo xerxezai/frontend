@@ -3,10 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "40%",    label: "Cost Reduction"      },
-  { val: "99.99%", label: "Uptime SLA"          },
-  { val: "3",      label: "Cloud Providers"     },
-  { val: "<15 min",label: "Recovery Time"       },
+  { val: "Multi-Cloud",  label: "AWS · Azure · GCP"  },
+  { val: "FinOps",       label: "Cost Governance"    },
+  { val: "<15 min",      label: "DR Failover Target" },
 ];
 
 const config: ServicePageConfig = {
@@ -23,12 +22,12 @@ const config: ServicePageConfig = {
       </em>
     </h1>
   ),
-  description: "Architecture, migration, and managed operations across AWS, Azure, and Google Cloud. XERXEZ reduces cloud spend by an average of 40% while delivering 99.99% uptime SLAs and sub-15-minute disaster recovery.",
+  description: "Architecture, migration, and managed operations across AWS, Azure, and Google Cloud. XERXEZ engineers for cost governance, high availability, and fast disaster recovery from the first design review.",
 
   heroStats: [
-    { val: "40%",    label: "Cost Reduction" },
-    { val: "99.99%", label: "Uptime SLA"     },
-    { val: "<15 min",label: "Recovery Time"  },
+    { val: "Multi-Cloud",  label: "AWS · Azure · GCP"  },
+    { val: "FinOps",       label: "Cost Governance"    },
+    { val: "<15 min",      label: "DR Failover Target" },
   ],
   cascadeA: ["Multi-Cloud Architecture","Auto-Scaling","Cost Optimisation","Disaster Recovery","FinOps","Infrastructure as Code","Edge Computing","Serverless","Data Residency"],
   cascadeB: ["AWS · Azure · GCP","Terraform · Pulumi","Kubernetes · EKS","CloudFront · Akamai","Istio · Linkerd","Prometheus · Grafana","Vault · AWS KMS","Snowflake · BigQuery","CloudFormation · Bicep"],
@@ -42,11 +41,11 @@ const config: ServicePageConfig = {
   ),
 
   trustBar: [
-    { icon: "fas fa-award",       label: "AWS Partner"    },
-    { icon: "fas fa-award",       label: "Azure Partner"  },
-    { icon: "fas fa-award",       label: "GCP Partner"    },
-    { icon: "fas fa-certificate", label: "ISO 27001"      },
-    { icon: "fas fa-shield-alt",  label: "SOC 2 Type II"  },
+    { icon: "fas fa-cloud",         label: "Multi-Cloud Architecture" },
+    { icon: "fas fa-dollar-sign",   label: "FinOps Practice"          },
+    { icon: "fas fa-code",          label: "Infrastructure as Code"   },
+    { icon: "fas fa-redo",          label: "Zero-Downtime Migrations" },
+    { icon: "fas fa-headset",       label: "24/7 Cloud Operations"    },
   ],
 
   featureLabel: "Platform Capabilities",
@@ -56,7 +55,7 @@ const config: ServicePageConfig = {
   features: [
     { icon: "fas fa-cloud",         title: "Multi-Cloud Architecture",  desc: "Architect resilient, vendor-agnostic infrastructure across AWS, Azure, and GCP. Avoid lock-in while leveraging best-of-breed services from each provider." },
     { icon: "fas fa-expand-arrows-alt", title: "Auto-Scaling & Elasticity", desc: "Intelligent horizontal and vertical scaling that responds to real traffic patterns. Handle 10× traffic spikes without pre-provisioning idle capacity." },
-    { icon: "fas fa-dollar-sign",   title: "Cost Optimisation",         desc: "FinOps practice with reserved instance planning, spot instance automation, right-sizing, and tagging governance. Average client saving: 40% within 90 days." },
+    { icon: "fas fa-dollar-sign",   title: "Cost Optimisation",         desc: "FinOps practice with reserved instance planning, spot instance automation, right-sizing, and tagging governance so every dollar of cloud spend is visible and accountable." },
     { icon: "fas fa-redo",          title: "Disaster Recovery",         desc: "Multi-region active-active and active-passive DR configurations. Automated failover, tested quarterly, with RTO under 15 minutes and RPO under 60 seconds." },
     { icon: "fas fa-shield-alt",    title: "Security & Compliance",     desc: "Cloud security posture management, encryption at rest and in transit, IAM least-privilege enforcement, and continuous compliance scanning against CIS benchmarks." },
     { icon: "fas fa-chart-line",    title: "Performance Monitoring",    desc: "Full-stack observability with Prometheus, Grafana, CloudWatch, and OpenTelemetry. AI-driven anomaly detection flags issues before they impact users." },
@@ -83,17 +82,17 @@ const config: ServicePageConfig = {
     { icon: "fas fa-landmark",        label: "Government & Public Sector",  desc: "Sovereign cloud deployments with data residency guarantees, FedRAMP/GovCloud architecture, and full audit trail for regulatory compliance." },
     { icon: "fas fa-heartbeat",       label: "Healthcare & Life Sciences",  desc: "HIPAA-compliant cloud environments with PHI encryption, access controls, and automated compliance evidence for healthcare workloads." },
     { icon: "fas fa-university",      label: "Financial Services & FinTech", desc: "PCI-DSS, DORA, and Basel III-aligned cloud infrastructure with real-time transaction processing and sub-millisecond latency guarantees." },
-    { icon: "fas fa-shopping-cart",   label: "Retail & E-Commerce",         desc: "Elastic infrastructure that handles Black Friday 50× traffic spikes without pre-warming — pay for what you use, only when you use it." },
-    { icon: "fas fa-film",            label: "Media & Entertainment",        desc: "Global CDN architecture for sub-100ms content delivery to audiences in 190+ countries, with adaptive bitrate streaming support." },
+    { icon: "fas fa-shopping-cart",   label: "Retail & E-Commerce",         desc: "Elastic infrastructure that handles seasonal and flash-sale traffic spikes without pre-warming — pay for what you use, only when you use it." },
+    { icon: "fas fa-film",            label: "Media & Entertainment",        desc: "Global CDN architecture for low-latency content delivery worldwide, with adaptive bitrate streaming support." },
     { icon: "fas fa-industry",        label: "Manufacturing & IoT",         desc: "Edge computing deployments that process sensor data locally, reducing cloud bandwidth costs and latency for real-time OT workloads." },
   ],
 
   faqTitle: "Common Cloud Infrastructure Questions",
   faqs: [
     { q: "Can you migrate our on-premise workloads without downtime?", a: "Yes. We use a proven zero-downtime migration methodology: replicate data to the cloud while the source system stays live, validate in parallel, then cut over during a low-traffic window with automated rollback if anything deviates from expected performance." },
-    { q: "How do you typically reduce cloud costs by 40%?", a: "The biggest gains come from right-sizing over-provisioned instances (typically 30–50% oversized), moving stable workloads to reserved or savings plan pricing, replacing always-on test environments with on-demand automation, and eliminating orphaned resources. We implement FinOps tagging governance so costs are visible and accountable at the team level." },
-    { q: "Are you vendor-agnostic or do you prefer a specific cloud?", a: "We are genuinely vendor-agnostic. We hold certifications on AWS, Azure, and GCP and select the right provider — or mix of providers — based on your workload characteristics, compliance requirements, existing vendor relationships, and data residency requirements. We have no commercial incentive to prefer one over another." },
-    { q: "What's your disaster recovery approach for a 99.99% uptime SLA?", a: "We design active-active multi-region architectures for workloads requiring 99.99% uptime. Read replicas and asynchronous replication handle data consistency, while Route 53 or Azure Traffic Manager routes traffic automatically on health check failure. DR tests are run quarterly and results reported to your team." },
+    { q: "How do you typically reduce cloud costs?", a: "The biggest gains come from right-sizing over-provisioned instances, moving stable workloads to reserved or savings plan pricing, replacing always-on test environments with on-demand automation, and eliminating orphaned resources. We implement FinOps tagging governance so costs are visible and accountable at the team level." },
+    { q: "Are you vendor-agnostic or do you prefer a specific cloud?", a: "We are genuinely vendor-agnostic. We have hands-on operational experience across AWS, Azure, and GCP and select the right provider — or mix of providers — based on your workload characteristics, compliance requirements, existing vendor relationships, and data residency requirements. We have no commercial incentive to prefer one over another." },
+    { q: "What's your disaster recovery approach for high-availability workloads?", a: "We design active-active multi-region architectures for workloads that can't tolerate extended outages. Read replicas and asynchronous replication handle data consistency, while Route 53 or Azure Traffic Manager routes traffic automatically on health check failure. DR tests are run quarterly and results reported to your team." },
     { q: "Do you manage ongoing operations or just design and hand over?", a: "We offer both. Some clients want a hand-off after build, and we provide full documentation, runbooks, and training. Others prefer our 24/7 managed cloud operations service, which includes monitoring, patching, incident response, and proactive capacity planning with a dedicated cloud engineer team." },
   ],
 
@@ -101,7 +100,7 @@ const config: ServicePageConfig = {
     <>Ready to <span style={{ color: "#C9883A" }}>Optimise Your Cloud Estate?</span></>
   ),
   ctaDesc: "Whether you're migrating from on-premise, consolidating multi-cloud spend, or architecting for your next phase of growth, XERXEZ delivers cloud infrastructure that performs, scales, and costs less than you expect.",
-  ctaTags: ["AWS · Azure · GCP Certified", "Zero Vendor Lock-In", "FinOps Practice"],
+  ctaTags: ["Multi-Cloud Expertise", "Zero Vendor Lock-In", "FinOps Practice"],
 
   painPoints: [
     "Opening the monthly cloud bill and not recognising half the line items?",
@@ -109,10 +108,6 @@ const config: ServicePageConfig = {
     "No real disaster recovery plan beyond \"we have backups somewhere\"?",
     "Locked into one provider's pricing with no leverage to negotiate or migrate?",
   ],
-  testimonial: {
-    quote: "XERXEZ cut our AWS bill by 40% in the first quarter without touching performance. Our disaster recovery test — the first we'd ever actually run — completed in under 15 minutes.",
-    author: "Head of Infrastructure, Retail Enterprise",
-  },
 };
 
 const CloudPage = () => (

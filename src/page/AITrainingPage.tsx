@@ -188,7 +188,7 @@ const ModuleRow = ({
 const InstructorItem = ({
   name, designation, courses, learners,
 }: {
-  name: string; designation: string; courses: number; learners: string;
+  name: string; designation: string; courses?: number; learners?: string;
 }) => {
   const [hov, setHov] = useState(false);
   const initials = name.split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase();
@@ -208,9 +208,11 @@ const InstructorItem = ({
       <div>
         <div style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, marginBottom: 2, fontFamily: "'DM Sans', sans-serif" }}>{name}</div>
         <div style={{ fontSize: 12, color: "rgba(20,20,19,0.52)", marginBottom: 3, fontFamily: "'DM Sans', sans-serif" }}>{designation}</div>
-        <div style={{ fontSize: 11, color: "rgba(20,20,19,0.38)", fontFamily: "'DM Sans', sans-serif" }}>
-          {courses} Course{courses !== 1 ? "s" : ""} · {learners} learners
-        </div>
+        {courses != null && learners != null && (
+          <div style={{ fontSize: 11, color: "rgba(20,20,19,0.38)", fontFamily: "'DM Sans', sans-serif" }}>
+            {courses} Course{courses !== 1 ? "s" : ""} · {learners} learners
+          </div>
+        )}
       </div>
     </div>
   );
@@ -565,12 +567,10 @@ const AITrainingPage = () => {
         <div className="container">
           <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
             {[
-              { icon: "fas fa-award",          label: "CPD Accredited"     },
-              { icon: "fas fa-certificate",     label: "AWS Certified"      },
-              { icon: "fas fa-shield-alt",      label: "ISO 27001"          },
               { icon: "fas fa-graduation-cap",  label: "Hands-On Labs"      },
               { icon: "fas fa-users",           label: "75+ Trained"       },
-              { icon: "fas fa-brain",           label: "OpenAI Partner"     },
+              { icon: "fas fa-laptop-code",     label: "Practitioner-Led"  },
+              { icon: "fas fa-cogs",            label: "Production AI Systems" },
             ].map(t => (
               <div key={t.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "rgba(20,20,19,0.52)", fontFamily: "'DM Sans', sans-serif" }}>
                 <i className={t.icon} style={{ color: GOLD, fontSize: 13 }} />
@@ -704,14 +704,10 @@ const AITrainingPage = () => {
                     <InstructorItem
                       name={detail.instructor_name}
                       designation="Senior AI Instructor · XERXEZ Academy"
-                      courses={2}
-                      learners="1,650"
                     />
                     <InstructorItem
                       name="Danish Sheikh"
                       designation="Chief AI Officer · XERXEZ"
-                      courses={2}
-                      learners="500"
                     />
                   </>
                 ) : (
@@ -790,29 +786,6 @@ const AITrainingPage = () => {
         </div>
       </div>
 
-      {/* ══ COMPANY SOCIAL PROOF ══════════════════════════════════════════════ */}
-      <div style={{ background: "#fff", borderTop: "1px solid rgba(0,0,0,0.06)", padding: "40px 0" }}>
-        <div className="container">
-          <div style={{ display: "flex", gap: 40, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
-            <div style={{ textAlign: "center", maxWidth: 400 }}>
-              <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: "0 0 10px", fontFamily: "'DM Sans', sans-serif" }}>
-                See how top teams master AI faster with XERXEZ
-              </h3>
-              <Link to={TRAINING_CONTACT_HREF} style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}>
-                Request enterprise training →
-              </Link>
-            </div>
-            <div style={{ display: "flex", gap: 28, flexWrap: "wrap", alignItems: "center" }}>
-              {["Tata", "Capgemini", "P&G", "L'Oréal", "Danone", "HCL"].map(co => (
-                <span key={co} style={{ fontSize: 14, fontWeight: 700, color: "rgba(20,20,19,0.30)", fontFamily: "'DM Sans', sans-serif" }}>
-                  {co}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* ══ ADVANCE EXPERTISE STRIP ═══════════════════════════════════════════ */}
       <div style={{ background: CREAM, padding: "56px 0" }}>
         <div className="container">
@@ -825,7 +798,7 @@ const AITrainingPage = () => {
                 <li>Learn from practitioners with real production deployments</li>
                 <li>Master models and tools in hands-on labs from day one</li>
                 <li>Build deep understanding of production AI systems</li>
-                <li>Earn XERXEZ AI certification recognised at 40+ organisations</li>
+                <li>Earn a XERXEZ AI certification backed by real, hands-on project work</li>
               </ul>
               <Link to={TRAINING_CONTACT_HREF} style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: "'DM Sans', sans-serif" }}>
                 Learn more about enterprise plans →

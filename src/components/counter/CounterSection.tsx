@@ -3,27 +3,22 @@ import { Link } from "react-router-dom";
 import { counterData } from "../../data";
 import CountUp from "../utils/CountUp";
 
-const BAR_TARGETS = [82, 85, 70, 98];
-
 interface Props {
   variant?: string;
 }
 
-/* ── 3D tilt + bar-reveal stat card ── */
+/* ── 3D tilt + entrance-reveal stat card ── */
 const StatCard = ({
   item,
   index,
-  barTarget,
 }: {
   item: (typeof counterData)[number];
   index: number;
-  barTarget: number;
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [barWidth, setBarWidth] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  /* Scroll-triggered bar + entrance */
+  /* Scroll-triggered entrance */
   useEffect(() => {
     const el = cardRef.current;
     if (!el) return;
@@ -36,7 +31,6 @@ const StatCard = ({
         if (entry.isIntersecting) {
           el.style.opacity = "1";
           el.style.transform = "translateY(0)";
-          setTimeout(() => setBarWidth(barTarget), index * 150 + 300);
           setTimeout(() => setVisible(true), 100);
           obs.disconnect();
         }
@@ -45,7 +39,7 @@ const StatCard = ({
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [index, barTarget]);
+  }, [index]);
 
   /* 3-D tilt */
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -120,28 +114,13 @@ const StatCard = ({
         {item.variantLabel}
       </div>
 
-      {/* Progress bar */}
+      {/* Accent underline */}
       <div style={{
         height: 3, borderRadius: 3,
-        background: "rgba(201,136,58,0.12)",
-        overflow: "hidden",
-      }}>
-        <div style={{
-          height: "100%", borderRadius: 3,
-          background: "linear-gradient(90deg, #C9883A, #E8A84E)",
-          width: `${barWidth}%`,
-          transition: "width 1.5s cubic-bezier(0.22,1,0.5,1)",
-          boxShadow: "0 0 8px rgba(201,136,58,0.38)",
-        }} />
-      </div>
-      <div style={{
-        fontSize: 10, color: "rgba(201,136,58,0.60)",
-        marginTop: 6, textAlign: "right",
-        fontWeight: 700, letterSpacing: "0.08em",
-        fontFamily: "'DM Sans', sans-serif",
-      }}>
-        {barTarget}% milestone
-      </div>
+        background: "linear-gradient(90deg, #C9883A, #E8A84E)",
+        width: "36%",
+        boxShadow: "0 0 8px rgba(201,136,58,0.38)",
+      }} />
     </div>
   );
 };
@@ -189,7 +168,7 @@ const CounterSection = ({ variant }: Props) => {
           <div className="row g-4">
             {counterData.map((item, i) => (
               <div key={item.id} className="col-6 col-lg-3">
-                <StatCard item={item} index={i} barTarget={BAR_TARGETS[i] ?? 80} />
+                <StatCard item={item} index={i} />
               </div>
             ))}
           </div>

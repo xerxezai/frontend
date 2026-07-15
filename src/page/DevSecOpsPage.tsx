@@ -3,10 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "60%",   label: "Faster Deployments"  },
-  { val: "0",     label: "Security Incidents"   },
-  { val: "99.9%", label: "Pipeline Uptime"      },
-  { val: "<2 hr", label: "Incident Response"    },
+  { val: "Zero-Trust",  label: "Architecture"      },
+  { val: "CI/CD",       label: "Full Automation"   },
+  { val: "24hr",        label: "CVE Patch SLA"     },
 ];
 
 const config: ServicePageConfig = {
@@ -26,9 +25,9 @@ const config: ServicePageConfig = {
   description: "Ship faster without compromising security. XERXEZ integrates security at every stage of your CI/CD pipeline — from code commit to production — with automated scanning, zero-trust architecture, and compliance-ready audit trails.",
 
   heroStats: [
-    { val: "60%",   label: "Faster Deployments"  },
-    { val: "99.9%", label: "Pipeline Uptime"      },
-    { val: "<2 hr", label: "Incident Response"    },
+    { val: "Zero-Trust",  label: "Architecture"      },
+    { val: "CI/CD",       label: "Full Automation"   },
+    { val: "24hr",        label: "CVE Patch SLA"     },
   ],
   cascadeA: ["CI/CD Automation","Zero-Trust","Security Scanning","GitOps Workflow","Container Orchestration","Compliance Automation","Infrastructure as Code","Secret Management","Policy Enforcement"],
   cascadeB: ["Jenkins · GitLab CI","SonarQube · Trivy","Falco · Prometheus","HashiCorp Vault","Kubernetes · Helm","Terraform · Ansible","OPA · Conftest","ArgoCD · Flux","SAST · DAST · SCA"],
@@ -42,11 +41,11 @@ const config: ServicePageConfig = {
   ),
 
   trustBar: [
-    { icon: "fas fa-certificate",     label: "ISO 27001"      },
-    { icon: "fas fa-clipboard-check", label: "SOC 2 Type II"  },
-    { icon: "fas fa-gavel",           label: "GDPR Compliant" },
-    { icon: "fas fa-network-wired",   label: "Zero-Trust"     },
-    { icon: "fas fa-shield-alt",      label: "NIST CSF"       },
+    { icon: "fas fa-network-wired",   label: "Zero-Trust Architecture"       },
+    { icon: "fas fa-clipboard-check", label: "Policy-as-Code"                },
+    { icon: "fas fa-stamp",           label: "Automated Compliance Evidence" },
+    { icon: "fas fa-key",             label: "Secrets Management"            },
+    { icon: "fas fa-code-branch",     label: "GitOps Workflow"               },
   ],
 
   featureLabel: "Platform Capabilities",
@@ -57,7 +56,7 @@ const config: ServicePageConfig = {
     { icon: "fas fa-code-branch",      title: "CI/CD Automation",         desc: "End-to-end pipeline automation from code push to production. Multi-branch workflows, parallel stages, canary and blue-green deployments built in from day one." },
     { icon: "fas fa-bug",              title: "Security Scanning",         desc: "Automated SAST, DAST, SCA, container image scanning, and secret detection at every commit. Block vulnerabilities before they reach production." },
     { icon: "fas fa-cubes",            title: "Container Orchestration",   desc: "Kubernetes-native delivery with Helm charts, namespace isolation, RBAC policies, network policies, and pod security standards enforced automatically." },
-    { icon: "fas fa-bell",             title: "Monitoring & Alerting",     desc: "Full-stack observability with Prometheus, Grafana, and OpenTelemetry. Real-time anomaly detection with sub-2-minute alert response SLAs." },
+    { icon: "fas fa-bell",             title: "Monitoring & Alerting",     desc: "Full-stack observability with Prometheus, Grafana, and OpenTelemetry. Real-time anomaly detection wired directly into your on-call and incident response workflow." },
     { icon: "fas fa-clipboard-list",   title: "Compliance Automation",     desc: "Policy-as-code with OPA and Conftest. Automated evidence collection for SOC 2, ISO 27001, and GDPR audits — zero manual effort at audit time." },
     { icon: "fas fa-code",             title: "GitOps Workflow",           desc: "Git as the single source of truth for infrastructure and application state. ArgoCD and Flux ensure your clusters always match your declared intent." },
   ],
@@ -101,7 +100,7 @@ const config: ServicePageConfig = {
     <>Ready to Ship <span style={{ color: "#C9883A" }}>Faster and More Securely?</span></>
   ),
   ctaDesc: "Whether you're starting from scratch or hardening an existing pipeline, XERXEZ delivers DevSecOps infrastructure that your security and compliance teams will sign off on — and your engineering team will actually enjoy using.",
-  ctaTags: ["ISO 27001 Ready", "Zero-Trust Architecture", "24hr CVE Patching"],
+  ctaTags: ["Policy-as-Code", "Zero-Trust Architecture", "24hr CVE Patching"],
 
   painPoints: [
     "Security scans running so late they block releases nobody can fix in time?",
@@ -109,10 +108,6 @@ const config: ServicePageConfig = {
     "Deployments still needing a human to babysit them at 2am?",
     "Secrets and credentials scattered across scripts, configs, and Slack messages?",
   ],
-  testimonial: {
-    quote: "We went from three-week release cycles to two days, with zero security incidents since go-live. The audit evidence used to take a week to assemble — now it's automatic.",
-    author: "IT Director, Logistics Company",
-  },
 };
 
 const DevSecOpsPage = () => (

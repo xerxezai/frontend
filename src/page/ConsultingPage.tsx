@@ -3,10 +3,9 @@ import type { ServicePageConfig } from "./ServicePageTemplate";
 import SEO from "../components/seo/SEO";
 
 const heroStats = [
-  { val: "50+", label: "Clients Served"     },
-  { val: "$10M+",label: "Cost Saved"         },
-  { val: "5+",   label: "Industries"         },
-  { val: "80%",  label: "Client Retention"   },
+  { val: "Engineers",   label: "Not Salespeople"        },
+  { val: "No Vendor Ties", label: "Independent Advice"  },
+  { val: "Interim CTO", label: "& Team Augmentation"    },
 ];
 
 const config: ServicePageConfig = {
@@ -23,12 +22,12 @@ const config: ServicePageConfig = {
       </em>
     </h1>
   ),
-  description: "$10M+ in client cost savings identified and delivered. 50+ organisations advised on technology strategy, architecture, vendor selection, and digital transformation. XERXEZ consulting tells you what you need to hear — not what you want to hear.",
+  description: "Independent technology strategy, architecture review, vendor selection, and digital transformation advisory. XERXEZ consulting tells you what you need to hear — not what you want to hear.",
 
   heroStats: [
-    { val: "50+", label: "Clients Served"  },
-    { val: "$10M+",label: "Cost Saved"      },
-    { val: "80%",  label: "Client Retention"},
+    { val: "Engineers",      label: "Not Salespeople"     },
+    { val: "No Vendor Ties", label: "Independent Advice"  },
+    { val: "Interim CTO",    label: "& Team Augmentation" },
   ],
   cascadeA: ["Technology Audit","Architecture Review","Digital Transformation","Vendor Selection","Team Augmentation","Roadmap Planning","Technical Due Diligence","CTO Advisory","Operating Model Design"],
   cascadeB: ["Agile · SAFe · Scrum","Cloud-Native · Serverless","Microservices · DDD","Event-Driven Architecture","API Strategy · OpenAPI","SRE · DevOps · Platform Eng","Data Architecture · Lakehouse","AI/ML Strategy · MLOps","FinOps · Cost Governance"],
@@ -42,11 +41,11 @@ const config: ServicePageConfig = {
   ),
 
   trustBar: [
-    { icon: "fas fa-certificate",     label: "ISO 27001"       },
-    { icon: "fas fa-cogs",            label: "Agile & SAFe"    },
-    { icon: "fas fa-code-branch",     label: "DevOps Certified" },
-    { icon: "fas fa-cloud",           label: "Cloud-Native"    },
-    { icon: "fas fa-shield-alt",      label: "SOC 2 Aligned"   },
+    { icon: "fas fa-balance-scale",   label: "Independent Advisory"   },
+    { icon: "fas fa-cogs",            label: "Agile & SAFe"           },
+    { icon: "fas fa-cloud",           label: "Cloud-Native"           },
+    { icon: "fas fa-ban",             label: "No Vendor Affiliations" },
+    { icon: "fas fa-code",            label: "Engineers Who Build"    },
   ],
 
   featureLabel: "Consulting Services",
@@ -94,14 +93,14 @@ const config: ServicePageConfig = {
     { q: "What does a technology audit typically cover?", a: "A full audit covers: codebase quality (complexity, test coverage, dependency health), architecture (scalability, resilience, security posture), engineering practices (deployment frequency, change failure rate, incident response), team capability, and tooling. We assess against industry benchmarks and your specific growth trajectory." },
     { q: "Can you provide an interim CTO or technical director?", a: "Yes. We provide experienced interim CTOs and VPs of Engineering for organisations between permanent hires, during a period of rapid growth, or while building out the leadership team. Minimum engagement: 3 months. They operate as a full member of your senior leadership team." },
     { q: "How do you ensure your recommendations are actually implemented?", a: "We offer implementation support alongside all advisory engagements — embedding engineers or working alongside your team to execute the highest-priority recommendations. We also build implementation roadmaps that are realistic about your team's capacity, so the plan doesn't sit on a shelf." },
-    { q: "What does 80% client retention actually mean for consulting?", a: "It means 80% of clients who engage us for a defined scope return for a follow-on engagement within 12 months. For us, this is the primary quality metric — client satisfaction surveys are easy to game; repeat business is not." },
+    { q: "How do you measure whether an engagement actually worked?", a: "Repeat business, not satisfaction surveys. Surveys are easy to game — a client coming back for a follow-on engagement means the first one delivered something they could act on. That's the bar we hold ourselves to." },
   ],
 
   ctaTitle: (
     <>Ready for Technology Advice <span style={{ color: "#C9883A" }}>You Can Actually Trust?</span></>
   ),
   ctaDesc: "Whether you need a full technology audit, an architecture review, interim engineering leadership, or a vendor evaluation, XERXEZ gives you honest advice from engineers with no commercial agenda.",
-  ctaTags: ["No Vendor Affiliations", "Engineers Who Build", "80% Client Retention"],
+  ctaTags: ["No Vendor Affiliations", "Engineers Who Build", "Independent Advisory"],
 
   painPoints: [
     "Getting the same recommendation your vendor happens to sell?",
@@ -109,10 +108,6 @@ const config: ServicePageConfig = {
     "Watching six-figure technology bets get made with no independent validation?",
     "Losing engineering velocity to a system nobody on your team fully understands?",
   ],
-  testimonial: {
-    quote: "XERXEZ's audit found the real bottleneck in six weeks — three vendors before them missed it entirely. Their roadmap paid for itself within the quarter.",
-    author: "VP Engineering, Fintech Platform",
-  },
 };
 
 const ConsultingPage = () => (

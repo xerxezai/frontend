@@ -49,9 +49,9 @@ const serviceMeta: Record<string, { problem: string; audience: string; benefit?:
   "cloud-service-storage":     { problem: "Overpaying for cloud with poor performance",             audience: "Enterprises on AWS, Azure, GCP",               benefit: "Optimised cloud costs",         stat: "Enterprise-grade uptime" },
   "software-development":      { problem: "Can't find reliable tech partners",                      audience: "Enterprises needing custom solutions",         stat: "Custom apps delivered" },
   "ai-training-consulting":    { problem: "Teams not ready for AI adoption",                        audience: "Corporate teams and enterprises",              stat: "75+ professionals trained" },
-  "quantum-computing":         { problem: "Complex optimisation problems unsolvable classically",   audience: "Research, finance, logistics enterprises",     benefit: "Quantum-speed optimisation",    stat: "128-qubit cloud access" },
+  "quantum-computing":         { problem: "Complex optimisation problems unsolvable classically",   audience: "Research, finance, logistics enterprises",     benefit: "Quantum-speed optimisation",    stat: "Cloud quantum access" },
   "mobile-application":        { problem: "Poor mobile experience losing customers",                audience: "Enterprises needing mobile-first solutions",   stat: "iOS · Android · Cross-platform" },
-  "web-mobile-hosting":        { problem: "Downtime costing you revenue",                           audience: "Businesses needing reliable hosting",          benefit: "Enterprise-grade uptime",       stat: "<100ms response time" },
+  "web-mobile-hosting":        { problem: "Downtime costing you revenue",                           audience: "Businesses needing reliable hosting",          benefit: "Enterprise-grade uptime",       stat: "Global CDN delivery" },
   "software-consulting":       { problem: "Technology decisions costing millions",                  audience: "CXOs and technology leaders" },
   "erp-industries":            { problem: "Generic ERP that fights your industry's workflow",       audience: "Healthcare, manufacturing, logistics, EPC & more", benefit: "Phased deployment approach", stat: "8 industry verticals" },
 };
@@ -76,9 +76,9 @@ const erpModules = [
 ];
 
 const erpStats = [
-  { val: "40%",   label: "Operations cost reduction" },
-  { val: "60%",   label: "Faster decision-making" },
-  { val: "99.9%", label: "System uptime SLA" },
+  { val: "AI-First",  label: "Architecture" },
+  { val: "<6 mo",     label: "Typical Deployment" },
+  { val: "99.9%",     label: "System Uptime SLA" },
 ];
 
 // ── Hero cascade content ──────────────────────────────────────────────────
@@ -258,9 +258,9 @@ const ServiceSection3 = ({ mainSection }: Props) => {
             { label: "Book a Demo", to: "/contact", primary: false },
           ]}
           stats={[
-            { val: "8+",  label: "Services" },
-            { val: "4+",  label: "Projects Delivered" },
-            { val: "12+", label: "AI Capabilities" },
+            { val: "8+",       label: "Services" },
+            { val: "4+",       label: "Projects Delivered" },
+            { val: "AI-First", label: "Architecture" },
           ]}
           cascadeA={SVC_CASCADE_A}
           cascadeB={SVC_CASCADE_B}

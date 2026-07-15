@@ -12,8 +12,6 @@ import CustomLayout from "../components/layout/CustomLayout";
 import {
   TrustSignalsBar,
   PainPointsSection,
-  ResultsSection,
-  TestimonialSection,
   FloatingMobileCTA,
 } from "../components/common/ServicePageAddons";
 
@@ -198,10 +196,8 @@ export interface ServicePageConfig {
   ctaTitle:   React.ReactNode;
   ctaDesc:    string;
   ctaTags:    string[];
-  /** Optional conversion add-ons — sections only render when data is provided. */
-  painPoints?:  string[];
-  resultStats?: { val: string; label: string }[];
-  testimonial?: { quote: string; author: string };
+  /** Optional conversion add-on — section only renders when data is provided. */
+  painPoints?: string[];
 }
 
 // ── SEO helper ────────────────────────────────────────────────────────────────
@@ -465,9 +461,7 @@ const ServicePageTemplate: React.FC<{ config: ServicePageConfig }> = ({ config }
       {config.painPoints && <PainPointsSection points={config.painPoints} href={contactHref} />}
       <FeaturesSection label={config.featureLabel} title={config.featureTitle} features={config.features} />
       <ProcessSection  label={config.processLabel} title={config.processTitle} steps={config.steps} />
-      <ResultsSection stats={config.resultStats ?? config.heroStats.map(s => ({ val: s.val ?? `${s.raw ?? ""}${s.suffix ?? ""}`, label: s.label }))} />
       <UseCasesSection label={config.useCaseLabel} title={config.useCaseTitle} useCases={config.useCases} />
-      {config.testimonial && <TestimonialSection quote={config.testimonial.quote} author={config.testimonial.author} />}
       <FAQSection title={config.faqTitle} faqs={config.faqs} />
       <CTASection title={config.ctaTitle} desc={config.ctaDesc} tags={config.ctaTags} contactHref={contactHref} />
       <FloatingMobileCTA href={contactHref} />
