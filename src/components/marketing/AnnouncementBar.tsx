@@ -21,7 +21,7 @@ const AnnouncementBar = () => (
         color: "rgba(255,255,255,0.78)", overflow: "hidden", textOverflow: "ellipsis",
       }}>
         <strong style={{ color: "#E8A84E", fontWeight: 700 }}>New:</strong>
-        {" "}AI Training Programs now available — 75+ professionals trained
+        {" "}AI-Powered ERP now available for Engineering & EPC companies in UAE
       </span>
       <span className="d-none d-md-inline" style={{ color: "rgba(201,136,58,0.40)", fontSize: 12 }}>|</span>
       <Link
@@ -35,7 +35,7 @@ const AnnouncementBar = () => (
         onMouseOver={e => (e.currentTarget.style.color = "#fff")}
         onMouseOut={e => (e.currentTarget.style.color = "#E8A84E")}
       >
-        Book a Free Demo Today <i className="far fa-arrow-right" style={{ fontSize: 10 }} />
+        Request a Demo <i className="far fa-arrow-right" style={{ fontSize: 10 }} />
       </Link>
     </div>
   </div>
