@@ -5,7 +5,69 @@ const DEFAULT_IMG = `${BASE_URL}/assets/img/og-image.png`;
 const SITE_NAME = "XERXEZ";
 const TWITTER_HANDLE = "@xerxez";
 
-const DEFAULT_KEYWORDS = "XERXEZ, xerxez, xerxez solutions, XERXEZ Solutions, xerxez.com, xerxez erp, xerxez academy, xerxez ai";
+const DEFAULT_KEYWORDS = "XERXEZ, xerxez, xerxez solutions, XERXEZ Solutions, xerxez.com, xerxez erp, xerxez academy, xerxez ai, xerxez software, xerxez software solutions, xerxez software company, xerxez software development, xerxez software development company, xerxez software development services, xerxez software development solutions, xerxez software development company in india, xerxez software development company in delhi, xerxez software development company in gurgaon, xerxez software development company in noida, xerxez software development company in mumbai, xerxez software development company in bangalore, xerxez software development company in hyderabad, xerxez software development company in pune, xerxez software development company in chennai, xerxez software development company in kolkata, xerxez software development company in jaipur, xerxez software development company in lucknow, xerxez software development company in chandigarh, xerxez software development company in indore, xerxez software development company in bhopal, xerxez software development company in coimbatore, xerxez software development company in visakhapatnam, xerxez software development company in nagpur, xerxez software development company in vadodara, xerxez software development company in surat, xerxez erp abu dhabi, xerxez erp dubai, xerxez erp uae, xerxez erp saudi arabia, xerxez erp oman, xerxez erp qatar, xerxez erp kuwait, xerxez erp bahrain, xerxez erp middle east, xerxez erp africa, xerxez erp europe, xerxez erp asia, xerxez erp australia, xerxez erp canada, xerxez erp usa, xerxez erp uk, xerxez erp germany, xerxez erp france, xerxez erp italy, xerxez erp spain, xerxez erp netherlands, xerxez erp belgium, xerxez erp switzerland, xerxez erp austria, xerxez erp sweden, xerxez erp norway, xerxez erp denmark, xerxez erp finland, xerxez erp ireland , xerxez UAE, xerxez saudi arabia, xerxez oman, xerxez qatar, xerxez kuwait, xerxez bahrain, xerxez middle east, xerxez africa, xerxez europe, xerxez asia, xerxez australia, xerxez canada, xerxez usa, xerxez uk, xerxez germany, xerxez france, xerxez italy, xerxez spain, xerxez netherlands, xerxez belgium, xerxez switzerland, xerxez austria, xerxez sweden, xerxez norway, xerxez denmark, xerxez finland, xerxez ireland, xerxez software solutions abu dhabi, xerxez software solutions dubai, xerxez software solutions uae, xerxez software solutions saudi arabia, xerxez software solutions oman, xerxez software solutions qatar, xerxez software solutions kuwait, xerxez software solutions bahrain, xerxez software solutions middle east, xerxez software solutions africa, xerxez software solutions europe, xerxez software solutions asia, xerxez software solutions australia, xerxez software solutions canada, xerxez software solutions usa, xerxez software solutions uk, xerxez software solutions germany, xerxez software solutions france, xerxez software solutions italy, xerxez software solutions spain, xerxez software solutions netherlands, xerxez software solutions belgium, xerxez software solutions switzerland, xerxez software solutions austria, xerxez software solutions sweden, xerxez software solutions norway, xerxez software solutions denmark, xerxez software solutions finland, xerxez software solutions ireland , xerxez abu dhabi, xerxez dubai, xerxez uae, xerxez saudi arabia, xerxez oman, xerxez qatar, xerxez kuwait, xerxez bahrain, xerxez middle east, xerxez africa, xerxez europe, xerxez asia, xerxez australia, xerxez canada, xerxez usa, xerxez uk, xerxez germany, xerxez france, xerxez italy, xerxez spain, xerxez netherlands, xerxez belgium, xerxez switzerland, xerxez austria, xerxez sweden, xerxez norway, xerxez denmark, xerxez finland, xerxez ireland";
+
+// ─── Page-specific SEO presets ────────────────────────────────────────────────
+export const PAGE_SEO = {
+  careers: {
+    title: "Careers at XERXEZ — Join Our AI & ERP Team",
+    description:
+      "Join Xerxez and work on cutting-edge AI and ERP products. We are hiring Full Stack AI Trainers and MLOps Engineers. 100% remote positions available worldwide.",
+    canonical: "/careers",
+    keywords:
+      "xerxez careers, xerxez jobs, xerxez hiring, full stack ai trainer jobs, mlops engineer jobs, mlflow jobs, remote ai jobs, django react jobs, ai erp jobs india, xerxez remote jobs",
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "JobPosting",
+        title: "Full Stack AI Trainer",
+        description:
+          "Train and develop AI models, create AI course content for the Xerxez Academy platform, and work with students and instructors.",
+        hiringOrganization: {
+          "@type": "Organization",
+          name: "XERXEZ",
+          sameAs: "https://www.xerxez.com",
+        },
+        jobLocation: {
+          "@type": "Place",
+          address: { "@type": "PostalAddress", addressCountry: "Remote" },
+        },
+        employmentType: "FULL_TIME",
+        workHours: "Flexible",
+        datePosted: "2026-07-14",
+        applicantLocationRequirements: {
+          "@type": "Country",
+          name: "Worldwide",
+        },
+        jobLocationType: "TELECOMMUTE",
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "JobPosting",
+        title: "MLOps Engineer (MLflow)",
+        description:
+          "Build and maintain ML pipelines using MLflow, monitor model performance, and deploy models to production environments.",
+        hiringOrganization: {
+          "@type": "Organization",
+          name: "XERXEZ",
+          sameAs: "https://www.xerxez.com",
+        },
+        jobLocation: {
+          "@type": "Place",
+          address: { "@type": "PostalAddress", addressCountry: "Remote" },
+        },
+        employmentType: "FULL_TIME",
+        workHours: "Flexible",
+        datePosted: "2026-07-14",
+        applicantLocationRequirements: {
+          "@type": "Country",
+          name: "Worldwide",
+        },
+        jobLocationType: "TELECOMMUTE",
+      },
+    ],
+  },
+};
 
 interface SEOProps {
   title: string;
@@ -14,9 +76,7 @@ interface SEOProps {
   ogImage?: string;
   ogType?: "website" | "article";
   noIndex?: boolean;
-  /** Comma-separated keywords. Defaults to the core XERXEZ brand keyword set. */
   keywords?: string;
-  /** Structured data — one or more schema.org objects rendered as JSON-LD. */
   jsonLd?: object | object[];
 }
 
@@ -40,7 +100,9 @@ export default function SEO({
       <link rel="canonical" href={url} />
       {noIndex && <meta name="robots" content="noindex,nofollow" />}
       {schemas.map((s, i) => (
-        <script key={i} type="application/ld+json">{JSON.stringify(s)}</script>
+        <script key={i} type="application/ld+json">
+          {JSON.stringify(s)}
+        </script>
       ))}
 
       {/* Open Graph */}
