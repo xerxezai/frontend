@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
 import { OG, OG_G, DARK, FF, STAGES, type DealStage, type Deal } from './crmShared';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const inp: React.CSSProperties = {
   width: '100%', padding: '9px 12px', borderRadius: 9,
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustomerId = null, defaultLeadId = null, onClose, onSaved }: Props) {
+  const { symbol } = useCurrency();
   const customers = useERPList<any>('crm/customers/');
   const leads = useERPList<any>('crm/leads/');
   const isEdit = !!deal;
@@ -158,7 +160,7 @@ export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustome
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div>
-              <label style={lbl}>Value (₹)</label>
+              <label style={lbl}>Value ({symbol})</label>
               <input type="number" style={inp} value={form.value} placeholder="0" min="0" step="0.01" onChange={e => set('value', e.target.value)} />
             </div>
             <div>

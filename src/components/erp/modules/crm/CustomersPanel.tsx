@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useERPList, erpUpload, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, type Deal } from './crmShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, type Deal } from './crmShared';
 import CustomerProfilePanel from './CustomerProfilePanel';
 
 const TAG_COLORS: Record<string, { bg: string; color: string }> = {
@@ -16,6 +16,7 @@ const defCust = { name: '', company: '', email: '', phone: '', industry: '', sou
 
 export default function CustomersPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const customers = useERPList<any>('crm/customers/');
   const deals = useERPList<Deal>('crm/deals/');
 

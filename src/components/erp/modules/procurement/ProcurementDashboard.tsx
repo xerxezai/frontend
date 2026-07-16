@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { erpFetch } from '../../../../hooks/useERPApi';
-import { OG, FF, WHITE, BORDER, fmtINR, KpiCard, PO_STATUS, StatusBadge } from './procurementShared';
+import { OG, FF, WHITE, BORDER, useFmtCurrency, KpiCard, PO_STATUS, StatusBadge } from './procurementShared';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 interface DashboardData {
   total_orders: number;
@@ -14,6 +15,7 @@ interface DashboardData {
 }
 
 const ChartTooltip = ({ active, payload, label }: any) => {
+  const fmtINR = useFmtCurrency();
   if (!active || !payload?.length) return null;
   return (
     <div style={{ background: WHITE, borderRadius: 10, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.14)', border: `1px solid ${BORDER}`, fontFamily: FF }}>
@@ -30,6 +32,8 @@ const ChartTooltip = ({ active, payload, label }: any) => {
 export default function ProcurementDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const fmtINR = useFmtCurrency();
+  const { symbol } = useCurrency();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -68,7 +72,7 @@ export default function ProcurementDashboard() {
             <BarChart data={data.monthly_spending} margin={{ top: 6, right: 8, left: 4, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
               <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`} />
+              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${symbol}${(v / 1000).toFixed(0)}k`} />
               <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(201,136,58,0.06)' }} />
               <Bar dataKey="total" name="Spend" fill={OG} radius={[4, 4, 0, 0]} isAnimationActive animationDuration={700} />
             </BarChart>

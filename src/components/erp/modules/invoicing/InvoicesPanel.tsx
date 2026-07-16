@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, erpDownload, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, fmtINR, KpiCard, StatusBadge, DelDlg, today, plusDays, nextNumber } from './invoicingShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, useFmtCurrency, KpiCard, StatusBadge, DelDlg, today, plusDays, nextNumber } from './invoicingShared';
 import InvoiceForm, { type InvoiceFormValues } from './InvoiceForm';
 import { downloadInvoicePDF } from './pdf';
 
@@ -19,6 +19,7 @@ interface DashboardData {
 
 export default function InvoicesPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [dateFrom, setDateFrom] = useState('');

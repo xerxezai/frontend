@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { erpFetch } from '../../../../hooks/useERPApi';
-import { OG, FF, WHITE, BORDER, fmtINR, Card3D, stageMeta, activityTypeMeta } from './crmShared';
+import { OG, FF, WHITE, BORDER, useFmtCurrency, Card3D, stageMeta, activityTypeMeta } from './crmShared';
 
 interface DashboardData {
   total_customers: number;
@@ -16,6 +16,7 @@ interface DashboardData {
 }
 
 const ChartTooltip = ({ active, payload, label }: any) => {
+  const fmtINR = useFmtCurrency();
   if (!active || !payload?.length) return null;
   return (
     <div style={{ background: WHITE, borderRadius: 10, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.14)', border: `1px solid ${BORDER}`, fontFamily: FF }}>
@@ -40,6 +41,7 @@ const KpiCard = ({ icon, label, value, accent }: { icon: string; label: string; 
 );
 
 export default function CRMDashboard() {
+  const fmtINR = useFmtCurrency();
   const [data, setData] = useState<DashboardData | null>(null);
   const [todayActivities, setTodayActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

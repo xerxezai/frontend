@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useERPList } from '../../../../hooks/useERPApi';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const C = {
   orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
@@ -97,6 +98,7 @@ function KpiStatCard({ label, val, icon, color, index }: { label: string; val: s
 }
 
 export default function PayrollReportsModule() {
+  const { formatAmount } = useCurrency();
   const now  = new Date();
   const [year, setYear] = useState(String(now.getFullYear()));
   const [month, setMonth] = useState('');
@@ -154,8 +156,8 @@ export default function PayrollReportsModule() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 24 }}>
         {[
           { label: 'Total Records', val: String(rows.length), icon: 'fas fa-file-alt', color: '#3b82f6' },
-          { label: 'Gross Payroll', val: `$${totalGross.toLocaleString(undefined,{minimumFractionDigits:2})}`, icon: 'fas fa-coins', color: '#10b981' },
-          { label: 'Total Deductions', val: `$${totalDeductions.toLocaleString(undefined,{minimumFractionDigits:2})}`, icon: 'fas fa-minus-circle', color: '#ef4444' },
+          { label: 'Gross Payroll', val: formatAmount(totalGross), icon: 'fas fa-coins', color: '#10b981' },
+          { label: 'Total Deductions', val: formatAmount(totalDeductions), icon: 'fas fa-minus-circle', color: '#ef4444' },
           { label: 'Paid Out', val: String(paidCount), icon: 'fas fa-check-circle', color: '#6366f1' },
         ].map((s, i) => (
           <KpiStatCard key={i} label={s.label} val={s.val} icon={s.icon} color={s.color} index={i} />
@@ -174,7 +176,7 @@ export default function PayrollReportsModule() {
             <div style={{ color: C.muted, fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", marginBottom: 14 }}>{year}</div>
             <LineChart data={netTrend} />
             <div style={{ marginTop: 14, fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 20, color: C.orange }}>
-              ${totalNet.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              {formatAmount(totalNet)}
             </div>
             <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: C.muted }}>Total Net Salary</div>
           </div>
@@ -209,9 +211,9 @@ export default function PayrollReportsModule() {
                     <td style={{ padding: '11px 14px', color: C.muted }}>{MONTH_LABELS[r.month-1]}</td>
                     <td style={{ padding: '11px 14px', color: C.muted }}>{r.year}</td>
                     <td style={{ padding: '11px 14px' }}>{r.present_days}/{r.working_days}</td>
-                    <td style={{ padding: '11px 14px', fontWeight: 600 }}>${parseFloat(r.basic).toLocaleString()}</td>
-                    <td style={{ padding: '11px 14px', fontWeight: 600 }}>${parseFloat(r.gross).toLocaleString()}</td>
-                    <td style={{ padding: '11px 14px', fontWeight: 800, color: '#10b981' }}>${parseFloat(r.net_salary).toLocaleString()}</td>
+                    <td style={{ padding: '11px 14px', fontWeight: 600 }}>{formatAmount(r.basic)}</td>
+                    <td style={{ padding: '11px 14px', fontWeight: 600 }}>{formatAmount(r.gross)}</td>
+                    <td style={{ padding: '11px 14px', fontWeight: 800, color: '#10b981' }}>{formatAmount(r.net_salary)}</td>
                     <td style={{ padding: '11px 14px' }}><Badge s={r.status} /></td>
                     <td style={{ padding: '11px 14px', color: C.muted, fontSize: 12 }}>{r.paid_at ? new Date(r.paid_at).toLocaleDateString() : '—'}</td>
                   </tr>

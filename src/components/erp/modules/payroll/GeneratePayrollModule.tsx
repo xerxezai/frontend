@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const C = {
   orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
@@ -89,6 +90,7 @@ function SummaryStatCard({ label, val, icon, color, index }: { label: string; va
 }
 
 export default function GeneratePayrollModule() {
+  const { formatAmount } = useCurrency();
   const now = new Date();
   const [month, setMonth] = useState(String(now.getMonth() + 1).padStart(2, '0'));
   const [year,  setYear]  = useState(String(now.getFullYear()));
@@ -203,8 +205,8 @@ export default function GeneratePayrollModule() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14, marginBottom: 22 }}>
           {[
             { label: 'Total Employees', val: String(rows.length), icon: 'fas fa-users', color: '#3b82f6' },
-            { label: 'Gross Payroll', val: `$${totalGross.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, icon: 'fas fa-dollar-sign', color: '#10b981' },
-            { label: 'Net Payroll', val: `$${totalNet.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, icon: 'fas fa-hand-holding-usd', color: C.orange },
+            { label: 'Gross Payroll', val: formatAmount(totalGross), icon: 'fas fa-dollar-sign', color: '#10b981' },
+            { label: 'Net Payroll', val: formatAmount(totalNet), icon: 'fas fa-hand-holding-usd', color: C.orange },
           ].map((s, i) => (
             <SummaryStatCard key={i} label={s.label} val={s.val} icon={s.icon} color={s.color} index={i} />
           ))}
@@ -243,11 +245,11 @@ export default function GeneratePayrollModule() {
                     <td style={{ padding: '11px 14px', fontWeight: 600, color: C.dark, whiteSpace: 'nowrap' }}>{r.employee_name}</td>
                     <td style={{ padding: '11px 14px', color: C.muted }}>{r.working_days}</td>
                     <td style={{ padding: '11px 14px', color: C.muted }}>{r.present_days}</td>
-                    <td style={{ padding: '11px 14px', fontWeight: 600 }}>${parseFloat(r.basic).toLocaleString()}</td>
-                    <td style={{ padding: '11px 14px', color: '#3b82f6' }}>+${parseFloat(r.allowances).toLocaleString()}</td>
-                    <td style={{ padding: '11px 14px', color: '#ef4444' }}>-${parseFloat(r.deductions).toLocaleString()}</td>
-                    <td style={{ padding: '11px 14px', fontWeight: 700 }}>${parseFloat(r.gross).toLocaleString()}</td>
-                    <td style={{ padding: '11px 14px', fontWeight: 800, color: '#10b981' }}>${parseFloat(r.net_salary).toLocaleString()}</td>
+                    <td style={{ padding: '11px 14px', fontWeight: 600 }}>{formatAmount(r.basic)}</td>
+                    <td style={{ padding: '11px 14px', color: '#3b82f6' }}>+{formatAmount(r.allowances)}</td>
+                    <td style={{ padding: '11px 14px', color: '#ef4444' }}>-{formatAmount(r.deductions)}</td>
+                    <td style={{ padding: '11px 14px', fontWeight: 700 }}>{formatAmount(r.gross)}</td>
+                    <td style={{ padding: '11px 14px', fontWeight: 800, color: '#10b981' }}>{formatAmount(r.net_salary)}</td>
                     <td style={{ padding: '11px 14px' }}><Badge s={r.status} /></td>
                     <td style={{ padding: '11px 14px' }}>
                       <div style={{ display: 'flex', gap: 6 }}>

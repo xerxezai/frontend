@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
-import { FF, WHITE, OG, BORDER, inp, fmtINR, Card3D } from './mlmShared';
+import { FF, WHITE, OG, BORDER, inp, useFmtCurrency, Card3D } from './mlmShared';
 
 interface TreeNode {
   id: number;
@@ -29,6 +29,7 @@ function TreeNodeView({ node, query, depth }: { node: TreeNode; query: string; d
   const isMatch = !!q && (node.name.toLowerCase().includes(q) || node.distributor_id.toLowerCase().includes(q));
   const hasMatchingDescendant = subtreeMatches(node, q) && !isMatch;
   const [expanded, setExpanded] = useState(true);
+  const fmtINR = useFmtCurrency();
 
   // Auto-expand ancestor chain of a search hit whenever the query changes.
   useEffect(() => {

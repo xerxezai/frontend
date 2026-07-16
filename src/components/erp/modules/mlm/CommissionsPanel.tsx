@@ -2,12 +2,15 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, fmtINR, today, COMMISSION_STATUS, StatusBadge } from './mlmShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, useFmtCurrency, today, COMMISSION_STATUS, StatusBadge } from './mlmShared';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const defCommission = { distributor: '', level: '1', amount: '', status: 'pending', notes: '' };
 
 export default function CommissionsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
+  const { symbol } = useCurrency();
   const commissions = useERPList<any>('mlm/commissions/');
   const distributors = useERPList<any>('mlm/distributors/');
 
@@ -164,7 +167,7 @@ export default function CommissionsPanel() {
                     <option value="3">Level 3</option>
                   </select>
                 </div>
-                <div><label style={lbl}>Amount (₹) *</label><input type="number" value={cF.amount} onChange={e => setCF(f => ({ ...f, amount: e.target.value }))} style={inp} required step="0.01" min="0.01" /></div>
+                <div><label style={lbl}>Amount ({symbol}) *</label><input type="number" value={cF.amount} onChange={e => setCF(f => ({ ...f, amount: e.target.value }))} style={inp} required step="0.01" min="0.01" /></div>
               </div>
               <div><label style={lbl}>Status</label>
                 <select value={cF.status} onChange={e => setCF(f => ({ ...f, status: e.target.value }))} style={inp}>

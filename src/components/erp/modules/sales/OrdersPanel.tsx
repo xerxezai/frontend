@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, fmtINR, O_STATUS, DelDlg, today, nextNumber } from './salesShared';
+import { FF, inp, lbl, SAVE, CNCL, useFmtCurrency, O_STATUS, DelDlg, today, nextNumber } from './salesShared';
 
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
 const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:700,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
@@ -27,6 +27,7 @@ const decodeAssignee = (value: string): { salesperson: number | null; distributo
 
 export default function OrdersPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const orders = useERPList<any>('sales/orders/');
   const customers = useERPList<any>('crm/customers/');
   const salespeople = useERPList<any>('sales/orders/salespeople/');

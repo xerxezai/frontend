@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import { toast } from 'react-toastify';
 import ERPTable from '../../ERPTable';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
@@ -35,6 +36,7 @@ const defEmp = { full_name:'',email:'',phone:'',department:'',designation:'',sta
 
 export default function EmployeesPanel() {
   const isAdmin = isSuperUser();
+  const { formatAmount, symbol } = useCurrency();
   const employees   = useERPList<any>('hr/employees/');
   const departments = useERPList<any>('hr/departments/');
   const users       = useERPList<any>('hr/employees/linkable-users/');
@@ -71,7 +73,7 @@ export default function EmployeesPanel() {
     { key:'department_name', label:'Department',  render:(r:any)=>r.department_name||r.department||'—' },
     { key:'designation',     label:'Designation', render:(r:any)=>r.designation||'—' },
     { key:'status',          label:'Status',      render:(r:any)=>sbadge(r.status||'active',empStatusColors) },
-    { key:'salary',          label:'Salary',      render:(r:any)=>r.salary?`$${parseFloat(r.salary).toFixed(2)}`:'—' },
+    { key:'salary',          label:'Salary',      render:(r:any)=>r.salary?formatAmount(r.salary):'—' },
   ];
 
   return (
@@ -109,7 +111,7 @@ export default function EmployeesPanel() {
                 <div><label style={lbl}>Status</label><select value={empF.status} onChange={e=>setEmpF(f=>({...f,status:e.target.value}))} style={inp}><option value="active">Active</option><option value="on_leave">On Leave</option><option value="resigned">Resigned</option><option value="terminated">Terminated</option></select></div>
               </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
-                <div><label style={lbl}>Salary ($)</label><input type="number" value={empF.salary} onChange={e=>setEmpF(f=>({...f,salary:e.target.value}))} style={inp} step="0.01" min="0" /></div>
+                <div><label style={lbl}>Salary ({symbol})</label><input type="number" value={empF.salary} onChange={e=>setEmpF(f=>({...f,salary:e.target.value}))} style={inp} step="0.01" min="0" /></div>
                 <div><label style={lbl}>Date Joined</label><input type="date" value={empF.joined_on} onChange={e=>setEmpF(f=>({...f,joined_on:e.target.value}))} style={inp} /></div>
               </div>
               <div>

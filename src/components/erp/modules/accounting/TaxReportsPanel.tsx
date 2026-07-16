@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch } from '../../../../hooks/useERPApi';
-import { FF, WHITE, BORDER, inp, lbl, fmtINR, KpiCard, OG } from './accountingShared';
+import { FF, WHITE, BORDER, inp, lbl, useFmtCurrency, KpiCard, OG } from './accountingShared';
 import { downloadTaxReportPDF } from './pdf';
 
 type PeriodType = 'monthly' | 'quarterly' | 'yearly';
@@ -10,6 +10,7 @@ const now = new Date();
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export default function TaxReportsPanel() {
+  const fmtINR = useFmtCurrency();
   const [periodType, setPeriodType] = useState<PeriodType>('monthly');
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);

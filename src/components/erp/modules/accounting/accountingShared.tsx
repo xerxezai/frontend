@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens (copied verbatim per-module, see CLAUDE.md) ─────────
 export const OG    = '#C9883A';
@@ -19,6 +20,9 @@ export const OVR: CSSProperties = { position:'fixed',inset:0,zIndex:1050,backgro
 export const CRD: CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:720,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'88vh',overflowY:'auto' };
 
 export const fmtINR = (v: string | number) => `₹${Number(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+/** Currency-aware formatter — respects the ERP navbar's selected currency (AED/INR/USD). */
+export const useFmtCurrency = () => useCurrency().formatAmount;
 export const today = () => new Date().toISOString().slice(0, 10);
 
 export const Card3D = ({

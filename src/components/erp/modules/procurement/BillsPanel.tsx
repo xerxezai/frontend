@@ -2,12 +2,13 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, today, plusDays, BILL_STATUS, BillStatusBadge } from './procurementShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today, plusDays, BILL_STATUS, BillStatusBadge } from './procurementShared';
 
 const defBill = { supplier: '', purchase_order: '', issue_date: today(), due_date: plusDays(30), amount: '', notes: '' };
 
 export default function BillsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const bills = useERPList<any>('procurement/bills/');
   const suppliers = useERPList<any>('procurement/suppliers/');
   const purchaseOrders = useERPList<any>('procurement/purchase-orders/');

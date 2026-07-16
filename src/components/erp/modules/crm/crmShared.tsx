@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens ──────────────────────────────────────────────────────
 export const OG    = '#C9883A';
@@ -159,6 +160,9 @@ export const NOTE_TYPES: { key: CustomerNote['note_type']; label: string; icon: 
 export const noteMeta = (type: string) => NOTE_TYPES.find(n => n.key === type) ?? NOTE_TYPES[4];
 
 export const fmtINR = (v: string | number) => `₹${Number(v || 0).toLocaleString('en-IN')}`;
+
+/** Currency-aware formatter — respects the ERP navbar's selected currency (AED/INR/USD). */
+export const useFmtCurrency = () => useCurrency().formatAmount;
 
 export const timeAgo = (iso: string): string => {
   const seconds = (Date.now() - new Date(iso).getTime()) / 1000;

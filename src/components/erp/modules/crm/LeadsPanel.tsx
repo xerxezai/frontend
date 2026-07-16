@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { StickyNote, ArrowRightLeft } from 'lucide-react';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, leadScoreMeta, sourceMeta, today, type Deal } from './crmShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, leadScoreMeta, sourceMeta, today, type Deal } from './crmShared';
 import CRMNotesPanel from './CRMNotesPanel';
 import CRMDealsPanel from './CRMDealsPanel';
 
@@ -21,6 +21,7 @@ const defLead = { name: '', company: '', email: '', phone: '', source: 'website'
 
 export default function LeadsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const leads = useERPList<any>('crm/leads/');
   const deals = useERPList<Deal>('crm/deals/');
 

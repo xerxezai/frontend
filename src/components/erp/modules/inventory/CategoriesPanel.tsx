@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR } from './inventoryShared';
+import { inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency } from './inventoryShared';
 
 const defCat = { name: '', description: '' };
 
 export default function CategoriesPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const categories = useERPList<any>('inventory/categories/');
 
   const [modal, setModal] = useState<'none' | 'add' | 'edit'>('none');

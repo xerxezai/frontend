@@ -1,5 +1,6 @@
 import { useState, useEffect, type CSSProperties, type ReactNode } from 'react';
 import { X } from 'lucide-react';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens ──────────────────────────────────────────────────────
 export const OG    = '#C9883A';
@@ -120,6 +121,9 @@ export const EmptyState = ({ icon: Icon, message, cta }: { icon: React.ElementTy
 );
 
 export const fmtINR = (v: string | number) => `₹${Number(v || 0).toLocaleString('en-IN')}`;
+
+/** Currency-aware formatter — respects the ERP navbar's selected currency (AED/INR/USD). */
+export const useFmtCurrency = () => useCurrency().formatAmount;
 
 export const timeAgo = (iso: string): string => {
   const seconds = (Date.now() - new Date(iso).getTime()) / 1000;

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useERPList } from '../../../../hooks/useERPApi';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const C = {
   orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
@@ -57,6 +58,7 @@ function objToPairs(obj: Record<string, number> = {}): KVPair[] {
 }
 
 export default function SalaryStructuresModule() {
+  const { formatAmount } = useCurrency();
   const structures = useERPList<any>('hr/salary-structures/');
   const employees  = useERPList<any>('hr/employees/');
 
@@ -147,9 +149,9 @@ export default function SalaryStructuresModule() {
                         onMouseEnter={e => (e.currentTarget.style.background = '#fafaf8')}
                         onMouseLeave={e => (e.currentTarget.style.background = '')}>
                         <td style={{ padding: '11px 16px', fontWeight: 600, color: C.dark }}>{s.employee_name}</td>
-                        <td style={{ padding: '11px 16px', fontWeight: 700, color: '#10b981' }}>${parseFloat(s.basic_salary).toLocaleString()}</td>
-                        <td style={{ padding: '11px 16px', color: '#3b82f6' }}>+${totalA.toLocaleString()}</td>
-                        <td style={{ padding: '11px 16px', color: '#ef4444' }}>-${totalD.toLocaleString()}</td>
+                        <td style={{ padding: '11px 16px', fontWeight: 700, color: '#10b981' }}>{formatAmount(s.basic_salary)}</td>
+                        <td style={{ padding: '11px 16px', color: '#3b82f6' }}>+{formatAmount(totalA)}</td>
+                        <td style={{ padding: '11px 16px', color: '#ef4444' }}>-{formatAmount(totalD)}</td>
                         <td style={{ padding: '11px 16px', color: C.muted }}>{s.effective_date}</td>
                         <td style={{ padding: '11px 16px' }}>
                           <button onClick={() => openEdit(s)}

@@ -7,7 +7,7 @@ import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent, Pencil, Trash2, Check, X as XIcon } from 'lucide-react';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
 import {
-  OG, DARK, FF, BCARD, BHOV, STAGES, stageMeta, fmtINR, initials,
+  OG, DARK, FF, BCARD, BHOV, STAGES, stageMeta, useFmtCurrency, initials,
   type Deal, type DealStage,
 } from './crmShared';
 import CRMDealForm from './CRMDealForm';
@@ -99,6 +99,7 @@ const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose }: {
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: deal.id });
   const [hovered, setHovered] = useState(false);
+  const fmtINR = useFmtCurrency();
   const meta = stageMeta(deal.stage);
   const name = deal.customer_name || deal.lead_name || 'Unassigned';
 
@@ -210,6 +211,7 @@ const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete, onSetStage
   const meta = stageMeta(stage);
   const { setNodeRef, isOver } = useDroppable({ id: stage });
   const [hovered, setHovered] = useState(false);
+  const fmtINR = useFmtCurrency();
   const totalValue = deals.filter(d => !removingIds.has(d.id)).reduce((s, d) => s + Number(d.value || 0), 0);
 
   const glow = isOver
@@ -274,6 +276,7 @@ const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete, onSetStage
 };
 
 export default function CRMPipeline() {
+  const fmtINR = useFmtCurrency();
   const dealsList = useERPList<Deal>('crm/deals/');
   const [deals, setDeals] = useState<Deal[]>([]);
   const [stats, setStats] = useState<PipelineStats | null>(null);

@@ -2,12 +2,15 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, fmtINR, today, PAYOUT_STATUS, StatusBadge } from './mlmShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, useFmtCurrency, today, PAYOUT_STATUS, StatusBadge } from './mlmShared';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const defPayout = { distributor: '', amount: '', payout_date: today(), method: 'bank', reference_number: '' };
 
 export default function PayoutsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
+  const { symbol } = useCurrency();
   const payouts = useERPList<any>('mlm/payouts/');
   const distributors = useERPList<any>('mlm/distributors/');
 
@@ -128,7 +131,7 @@ export default function PayoutsPanel() {
                 </select>
               </div>
               <div>
-                <label style={lbl}>Amount (₹) *</label>
+                <label style={lbl}>Amount ({symbol}) *</label>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <input type="number" value={pF.amount} onChange={e => setPF(f => ({ ...f, amount: e.target.value }))} style={inp} required step="0.01" min="0.01" />
                   <button type="button" onClick={fillFromPending} disabled={filling}

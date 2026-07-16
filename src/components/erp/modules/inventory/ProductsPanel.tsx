@@ -2,12 +2,13 @@ import { useState, useMemo, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { useERPList, erpUpload, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR } from './inventoryShared';
+import { inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency } from './inventoryShared';
 
 const defP = { name:'',code:'',category:'',unit:'pcs',cost_price:'',sale_price:'',is_active:'true',min_stock_level:'0',barcode:'',initial_quantity:'',warehouse:'' };
 
 export default function ProductsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const products   = useERPList<any>('inventory/products/');
   const warehouses  = useERPList<any>('inventory/warehouses/');
   const categories = useERPList<any>('inventory/categories/');

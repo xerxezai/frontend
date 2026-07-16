@@ -2,6 +2,7 @@ import { lazy, Suspense, useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ERPLogin from '../components/erp/ERPLogin';
 import ERPLayout from '../components/erp/ERPLayout';
+import { CurrencyProvider } from '../context/CurrencyContext';
 import ERPDashboard from '../components/erp/ERPDashboard';
 import InventoryModule from '../components/erp/modules/InventoryModule';
 import InvoicingModule from '../components/erp/modules/InvoicingModule';
@@ -117,6 +118,7 @@ const ERPPage = () => {
   }
 
   return (
+    <CurrencyProvider>
     <ERPLayout>
       <Suspense fallback={<ModuleLoader />}>
         <Routes>
@@ -202,6 +204,7 @@ const ERPPage = () => {
         </Routes>
       </Suspense>
     </ERPLayout>
+    </CurrencyProvider>
   );
 };
 

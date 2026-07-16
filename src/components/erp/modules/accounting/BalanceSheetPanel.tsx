@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch } from '../../../../hooks/useERPApi';
-import { FF, WHITE, BORDER, fmtINR, Card3D, OG } from './accountingShared';
+import { FF, WHITE, BORDER, useFmtCurrency, Card3D, OG } from './accountingShared';
 import { downloadBalanceSheetPDF } from './pdf';
 
 const Row = ({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) => (
@@ -12,6 +12,7 @@ const Row = ({ label, value, bold = false }: { label: string; value: string; bol
 );
 
 export default function BalanceSheetPanel() {
+  const fmtINR = useFmtCurrency();
   const [sheet, setSheet] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 

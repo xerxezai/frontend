@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens — copied from crmShared.tsx / hrShared.tsx ──────────
 export const OG    = '#C9883A';
@@ -17,6 +18,9 @@ export const SAVE: CSSProperties = { background:OG_G,color:'#fff',border:'none',
 export const CNCL: CSSProperties = { background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRadius:9,padding:'9px 20px',cursor:'pointer',fontFamily:FF,fontWeight:600,fontSize:13 };
 
 export const fmtINR = (v: string | number) => `₹${Number(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+/** Currency-aware formatter — respects the ERP navbar's selected currency (AED/INR/USD). */
+export const useFmtCurrency = () => useCurrency().formatAmount;
 
 // ── Card3D — copied exactly from AIERPPage.tsx ───────────────────────────────
 export const Card3D = ({
@@ -101,8 +105,9 @@ export interface QuotationItemRow {
 
 export const GST_RATE = 0.18;
 
-export const calcTotals = (items: QuotationItemRow[]) => {
+/** `taxRate` defaults to GST (0.18) for backward compatibility; pass the selected currency's `tax` for VAT/GST-aware totals. */
+export const calcTotals = (items: QuotationItemRow[], taxRate: number = GST_RATE) => {
   const subtotal = items.reduce((s, i) => s + (Number(i.quantity) || 0) * (Number(i.unit_price) || 0), 0);
-  const tax = subtotal * GST_RATE;
+  const tax = subtotal * taxRate;
   return { subtotal, tax, total: subtotal + tax };
 };

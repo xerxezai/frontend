@@ -4,8 +4,9 @@ import { toast } from 'react-toastify';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 import {
   SlidePanel, Skeleton, PageHead, EmptyState, Card3D,
-  OG, DARK, FF, inp, lbl, btnPrimary, btnGhost, fmtINR, initials,
+  OG, DARK, FF, inp, lbl, btnPrimary, btnGhost, useFmtCurrency, initials,
 } from './hrShared';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 interface Exit {
   id: number; employee: number; employee_name: string; employee_code: string;
@@ -20,6 +21,8 @@ const REASONS = [
 const reasonColor: Record<string, string> = { resignation: '#3b82f6', termination: '#ef4444', retirement: '#8b5cf6', contract_end: OG };
 
 export default function HRExitPage() {
+  const fmtINR = useFmtCurrency();
+  const { symbol } = useCurrency();
   const exits = useERPList<Exit>('hr/exit/');
   const employees = useERPList<any>('hr/employees/');
   const [showAdd, setShowAdd] = useState(false);
@@ -137,7 +140,7 @@ export default function HRExitPage() {
               <div><label style={lbl}>Last Working Day *</label><input type="date" style={inp} value={form.last_working_day} onChange={e => setForm(f => ({ ...f, last_working_day: e.target.value }))} /></div>
               <div><label style={lbl}>Notice (days)</label><input type="number" style={inp} value={form.notice_period_days} min="0" onChange={e => setForm(f => ({ ...f, notice_period_days: e.target.value }))} /></div>
             </div>
-            <div><label style={lbl}>Final Settlement (₹)</label><input type="number" style={inp} value={form.final_settlement_amount} min="0" step="0.01" placeholder="0" onChange={e => setForm(f => ({ ...f, final_settlement_amount: e.target.value }))} /></div>
+            <div><label style={lbl}>Final Settlement ({symbol})</label><input type="number" style={inp} value={form.final_settlement_amount} min="0" step="0.01" placeholder="0" onChange={e => setForm(f => ({ ...f, final_settlement_amount: e.target.value }))} /></div>
             <div><label style={lbl}>Notes</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 70 }} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} /></div>
           </div>
         </SlidePanel>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useERPList, isSuperUser } from '../../../hooks/useERPApi';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
+import { useCurrency } from '../../../context/CurrencyContext';
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
@@ -36,6 +37,7 @@ const defPO = { vendor:'',status:'draft',order_date:'',expected_date:'',notes:''
 
 const PurchasesModule = () => {
   const isAdmin = isSuperUser();
+  const { formatAmount } = useCurrency();
   const [tab, setTab] = useState<'Vendors'|'Purchase Orders'>('Vendors');
 
   const vendors = useERPList<any>('purchases/vendors/');
@@ -91,7 +93,7 @@ const PurchasesModule = () => {
     { key:'order_date',   label:'Date',      render:(r:any)=>r.order_date||'—' },
     { key:'expected_date',label:'Expected',  render:(r:any)=>r.expected_date||'—' },
     { key:'status',       label:'Status',    render:(r:any)=>sbadge(r.status,poColors) },
-    { key:'total',        label:'Total',     render:(r:any)=>`₹${parseFloat(r.total||0).toFixed(2)}` },
+    { key:'total',        label:'Total',     render:(r:any)=>formatAmount(r.total||0) },
   ];
 
   const ts = (t: string): React.CSSProperties => ({ borderRadius:8,padding:'7px 18px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13,transition:'all 0.15s',background:tab===t?'#C9883A':'transparent',color:tab===t?'#fff':'#6B6B6B',border:tab===t?'none':'1px solid rgba(0,0,0,0.10)' });

@@ -9,6 +9,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import { useERPDashboard, useERPActivity, useSystemStatus, useERPSalesReport, useERPList } from '../../hooks/useERPApi';
+import { useCurrency } from '../../context/CurrencyContext';
 import ERPTable from './ERPTable';
 
 // ── XERXEZ brand tokens ─────────────────────────────────────────────────────
@@ -224,6 +225,7 @@ const TabBar = ({ active, onChange }: { active: Tab; onChange: (t: Tab) => void 
 
 // ── custom chart tooltip ────────────────────────────────────────────────────
 const ChartTooltip = ({ active, payload, label }: any) => {
+  const { formatAmount } = useCurrency();
   if (!active || !payload?.length) return null;
   return (
     <div style={{
@@ -234,7 +236,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
       <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4 }}>{label}</div>
       {payload.map((p: any) => (
         <div key={p.dataKey} style={{ fontSize: 11.5, color: p.color, fontWeight: 600 }}>
-          {p.name}: {p.dataKey === 'revenue' ? `$${Number(p.value).toLocaleString()}` : p.value}
+          {p.name}: {p.dataKey === 'revenue' ? formatAmount(p.value) : p.value}
         </div>
       ))}
     </div>
@@ -341,6 +343,7 @@ const ActivityFeed = () => {
 // ── Finance tab ──────────────────────────────────────────────────────────────
 const FinanceTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolean; monthlyTrend: any[] }) => {
   const invoices = useERPList<any>('invoicing/invoices/');
+  const { symbol, convertAmount, formatAmount } = useCurrency();
   const cols = [
     { key: 'number',        label: 'Invoice #' },
     { key: 'customer_name', label: 'Customer',  render: (r: any) => r.customer_name || '—' },
@@ -352,14 +355,14 @@ const FinanceTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolean
         </span>
       ) },
     { key: 'issue_date', label: 'Issue Date' },
-    { key: 'total',      label: 'Total', render: (r: any) => `$${Number(r.total || 0).toLocaleString()}` },
+    { key: 'total',      label: 'Total', render: (r: any) => formatAmount(r.total || 0) },
   ];
   return (
     <div style={{ animation: 'erpFadeUp 0.4s ease both' }}>
       <div className="erp-cards-grid" style={{ marginBottom: 24 }}>
-        <GradCard label="Total Revenue"   rawValue={parseFloat(data?.finance?.total_revenue || '0') || 0}   prefix="₹" decimals={2} icon={DollarSign}      section="finance" index={0} loaded={loaded} />
-        <GradCard label="This Month"      rawValue={parseFloat(data?.finance?.month_revenue || '0') || 0}   prefix="₹" decimals={2} icon={TrendingUp}      section="finance" index={1} loaded={loaded} />
-        <GradCard label="Outstanding"     rawValue={parseFloat(data?.finance?.outstanding_invoices || '0') || 0} prefix="₹" decimals={2} icon={AlertCircle} section="finance" index={2} loaded={loaded} />
+        <GradCard label="Total Revenue"   rawValue={convertAmount(data?.finance?.total_revenue || '0')}   prefix={symbol + ' '} decimals={2} icon={DollarSign}      section="finance" index={0} loaded={loaded} />
+        <GradCard label="This Month"      rawValue={convertAmount(data?.finance?.month_revenue || '0')}   prefix={symbol + ' '} decimals={2} icon={TrendingUp}      section="finance" index={1} loaded={loaded} />
+        <GradCard label="Outstanding"     rawValue={convertAmount(data?.finance?.outstanding_invoices || '0')} prefix={symbol + ' '} decimals={2} icon={AlertCircle} section="finance" index={2} loaded={loaded} />
         <GradCard label="Overdue Invoices" rawValue={data?.finance?.overdue_invoices ?? null}                                            icon={Clock}          section="finance" index={3} loaded={loaded} />
       </div>
       <div style={{ marginBottom: 24 }}>
@@ -377,6 +380,7 @@ const FinanceTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolean
 type CrmFilter = 'All' | 'Active' | 'Leads' | 'New';
 const CRMTab = ({ data, loaded }: { data: any; loaded: boolean }) => {
   const leads = useERPList<any>('crm/leads/');
+  const { formatAmount } = useCurrency();
   const [filter, setFilter] = useState<CrmFilter>('All');
 
   const filtered = useMemo(() => {
@@ -405,7 +409,7 @@ const CRMTab = ({ data, loaded }: { data: any; loaded: boolean }) => {
         const c = statusColor[r.status] ?? { bg: 'rgba(107,114,128,0.10)', color: '#6b7280' };
         return <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 999, textTransform: 'capitalize', ...c }}>{r.status}</span>;
       } },
-    { key: 'estimated_value', label: 'Value', render: (r: any) => r.estimated_value ? `$${Number(r.estimated_value).toLocaleString()}` : '—' },
+    { key: 'estimated_value', label: 'Value', render: (r: any) => r.estimated_value ? formatAmount(r.estimated_value) : '—' },
   ];
 
   return (
@@ -547,7 +551,9 @@ const AnalyticsTab = ({ monthlyTrend }: { monthlyTrend: any[] }) => {
 };
 
 // ── Overview tab ─────────────────────────────────────────────────────────────
-const OverviewTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolean; monthlyTrend: any[] }) => (
+const OverviewTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolean; monthlyTrend: any[] }) => {
+  const { symbol, convertAmount } = useCurrency();
+  return (
   <div style={{ animation: 'erpFadeUp 0.4s ease both' }}>
     <div className="erp-cards-grid" style={{ marginBottom: 28 }}>
       <SectionHeading title="CRM" />
@@ -556,17 +562,17 @@ const OverviewTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolea
       <GradCard label="New Leads (Month)"   rawValue={data?.crm?.new_leads_this_month ?? null}  icon={Star}      section="crm" index={2} loaded={loaded} />
 
       <SectionHeading title="Finance" />
-      <GradCard label="Total Revenue"       rawValue={parseFloat(data?.finance?.total_revenue || '0') || 0}       prefix="₹" decimals={2} icon={DollarSign}   section="finance" index={3} loaded={loaded} />
-      <GradCard label="This Month"          rawValue={parseFloat(data?.finance?.month_revenue || '0') || 0}       prefix="₹" decimals={2} icon={TrendingUp}   section="finance" index={4} loaded={loaded} />
-      <GradCard label="Outstanding"         rawValue={parseFloat(data?.finance?.outstanding_invoices || '0') || 0} prefix="₹" decimals={2} icon={AlertCircle} section="finance" index={5} loaded={loaded} />
+      <GradCard label="Total Revenue"       rawValue={convertAmount(data?.finance?.total_revenue || '0')}       prefix={symbol + ' '} decimals={2} icon={DollarSign}   section="finance" index={3} loaded={loaded} />
+      <GradCard label="This Month"          rawValue={convertAmount(data?.finance?.month_revenue || '0')}       prefix={symbol + ' '} decimals={2} icon={TrendingUp}   section="finance" index={4} loaded={loaded} />
+      <GradCard label="Outstanding"         rawValue={convertAmount(data?.finance?.outstanding_invoices || '0')} prefix={symbol + ' '} decimals={2} icon={AlertCircle} section="finance" index={5} loaded={loaded} />
       <GradCard label="Overdue Invoices"    rawValue={data?.finance?.overdue_invoices ?? null}                                              icon={Clock}       section="finance" index={6} loaded={loaded} />
 
       <SectionHeading title="Operations" />
       <GradCard label="Open Orders"         rawValue={data?.sales?.open_orders ?? null}         icon={ShoppingCart} section="operations" index={7}  loaded={loaded} />
       <GradCard label="Active Products"     rawValue={data?.inventory?.total_products ?? null}  icon={Package}      section="operations" index={8}  loaded={loaded} />
       <GradCard label="Pending POs"         rawValue={data?.purchases?.pending_orders ?? null}  icon={Truck}        section="operations" index={9}  loaded={loaded} />
-      <GradCard label="Total Commissions"   rawValue={parseFloat(data?.mlm?.total_commissions || '0') || 0}   prefix="$" decimals={2} icon={Network}     section="operations" index={10} loaded={loaded} />
-      <GradCard label="Pending Commissions" rawValue={parseFloat(data?.mlm?.pending_commissions || '0') || 0} prefix="$" decimals={2} icon={Hourglass}   section="operations" index={11} loaded={loaded} />
+      <GradCard label="Total Commissions"   rawValue={convertAmount(data?.mlm?.total_commissions || '0')}   prefix={symbol + ' '} decimals={2} icon={Network}     section="operations" index={10} loaded={loaded} />
+      <GradCard label="Pending Commissions" rawValue={convertAmount(data?.mlm?.pending_commissions || '0')} prefix={symbol + ' '} decimals={2} icon={Hourglass}   section="operations" index={11} loaded={loaded} />
 
       <SectionHeading title="HR & Payroll" />
       <GradCard label="Active Employees"    rawValue={data?.hr?.total_employees ?? null}         icon={UserCheck} section="hr" index={12} loaded={loaded} />
@@ -578,7 +584,8 @@ const OverviewTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolea
       <ActivityFeed />
     </div>
   </div>
-);
+  );
+};
 
 // ── dashboard ─────────────────────────────────────────────────────────────────
 const ERPDashboard = () => {

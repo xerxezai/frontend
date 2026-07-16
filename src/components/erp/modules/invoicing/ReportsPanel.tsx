@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, erpDownload } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, WHITE, BORDER, fmtINR, KpiCard, StatusBadge } from './invoicingShared';
+import { OG, FF, WHITE, BORDER, useFmtCurrency, KpiCard, StatusBadge } from './invoicingShared';
 
 interface ReportsData {
   total_revenue_month: string;
@@ -14,6 +14,7 @@ interface ReportsData {
 }
 
 export default function ReportsPanel() {
+  const fmtINR = useFmtCurrency();
   const [data, setData] = useState<ReportsData | null>(null);
   const [loading, setLoading] = useState(true);
 

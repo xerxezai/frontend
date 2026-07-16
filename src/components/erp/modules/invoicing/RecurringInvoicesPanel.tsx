@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, today } from './invoicingShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today } from './invoicingShared';
 
 const FREQ_LABEL: Record<string, string> = { weekly: 'Weekly', monthly: 'Monthly', quarterly: 'Quarterly' };
 
@@ -10,6 +10,7 @@ const defR = { customer: '', description: '', amount: '', frequency: 'monthly', 
 
 export default function RecurringInvoicesPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const recurring = useERPList<any>('invoicing/recurring-invoices/');
   const customers = useERPList<any>('crm/customers/');
 

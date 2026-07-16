@@ -2,12 +2,13 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, today, DISTRIBUTOR_STATUS, StatusBadge } from './mlmShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today, DISTRIBUTOR_STATUS, StatusBadge } from './mlmShared';
 
 const defDist = { name: '', email: '', phone: '', sponsor: '', status: 'active', joining_date: today() };
 
 export default function DistributorsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const distributors = useERPList<any>('mlm/distributors/');
 
   const [search, setSearch] = useState('');

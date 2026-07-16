@@ -2,13 +2,14 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, erpUpload, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, today, EXPENSE_STATUS, StatusBadge } from './accountingShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today, EXPENSE_STATUS, StatusBadge } from './accountingShared';
 
 const defExpense = { category: '', amount: '', date: today(), description: '', paid_by: '' };
 
 export default function ExpensesPanel() {
   const isAdmin = isSuperUser();
   const expenses = useERPList<any>('accounting/expenses/');
+  const fmtINR = useFmtCurrency();
 
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');

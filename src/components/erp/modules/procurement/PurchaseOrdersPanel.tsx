@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, today, plusDays, PO_STATUS, StatusBadge } from './procurementShared';
+import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today, plusDays, PO_STATUS, StatusBadge } from './procurementShared';
 import { downloadPurchaseOrderPDF } from './pdf';
 
 interface ItemRow { product: string; quantity: string; unit_price: string; }
@@ -11,6 +11,7 @@ const defPO = { supplier: '', order_date: today(), expected_delivery: '', notes:
 
 export default function PurchaseOrdersPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const pos = useERPList<any>('procurement/purchase-orders/');
   const suppliers = useERPList<any>('procurement/suppliers/');
   const products = useERPList<any>('inventory/products/');

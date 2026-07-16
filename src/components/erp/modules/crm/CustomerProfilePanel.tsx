@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { X, Plus, Calendar, Briefcase, StickyNote as StickyNoteIcon, History } from 'lucide-react';
 import { erpFetch } from '../../../../hooks/useERPApi';
 import {
-  OG, OG_G, DARK, FF, stageMeta, fmtINR, timeAgo, noteMeta, activityTypeMeta,
+  OG, OG_G, DARK, FF, stageMeta, useFmtCurrency, timeAgo, noteMeta, activityTypeMeta,
   NOTE_TYPES, type Deal, type Activity, type CustomerNote,
 } from './crmShared';
 import CRMDealForm from './CRMDealForm';
@@ -23,6 +23,7 @@ interface HistoryData {
 }
 
 export default function CustomerProfilePanel({ customerId, customerName, onClose, onChanged }: Props) {
+  const fmtINR = useFmtCurrency();
   const [tab, setTab] = useState<Tab>('Deals');
   const [data, setData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(true);

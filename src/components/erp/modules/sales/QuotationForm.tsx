@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useERPList } from '../../../../hooks/useERPApi';
-import { OG, inp, lbl, SAVE, CNCL, fmtINR, calcTotals, type QuotationItemRow } from './salesShared';
+import { OG, inp, lbl, SAVE, CNCL, useFmtCurrency, calcTotals, type QuotationItemRow } from './salesShared';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
 const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:720,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'88vh',overflowY:'auto' };
@@ -22,6 +23,8 @@ export default function QuotationForm({ initial, editing, onClose, onSave }: {
 }) {
   const customers = useERPList<any>('crm/customers/');
   const products  = useERPList<any>('inventory/products/');
+  const fmtINR = useFmtCurrency();
+  const { currency } = useCurrency();
   const [f, setF] = useState<QuotationFormValues>(initial);
   const [saving, setSaving] = useState(false);
 
@@ -38,7 +41,7 @@ export default function QuotationForm({ initial, editing, onClose, onSave }: {
     setItem(i, { product: productId, unit_price: prod ? String(prod.sale_price) : f.items[i].unit_price, description: prod?.name ?? f.items[i].description });
   };
 
-  const { subtotal, tax, total } = calcTotals(f.items);
+  const { subtotal, tax, total } = calcTotals(f.items, currency.tax);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,7 +154,7 @@ export default function QuotationForm({ initial, editing, onClose, onSave }: {
               <span>Subtotal</span><span>{fmtINR(subtotal)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'DM Sans,sans-serif', fontSize: 13, color: '#6B6B6B' }}>
-              <span>GST (18%)</span><span>{fmtINR(tax)}</span>
+              <span>{currency.taxLabel || 'Tax'}</span><span>{fmtINR(tax)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'DM Sans,sans-serif', fontSize: 15, fontWeight: 800, color: OG, borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: 6 }}>
               <span>Grand Total</span><span>{fmtINR(total)}</span>

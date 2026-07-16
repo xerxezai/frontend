@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, erpDownload, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, fmtINR, StatusBadge, DelDlg, today, plusDays, nextNumber } from '../invoicing/invoicingShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, useFmtCurrency, StatusBadge, DelDlg, today, plusDays, nextNumber } from '../invoicing/invoicingShared';
 import { QuickPaymentModal } from '../invoicing/InvoicesPanel';
 import { downloadInvoicePDF } from '../invoicing/pdf';
 
@@ -13,6 +13,7 @@ const defF = { order: '', issue_date: today(), due_date: plusDays(30), notes: ''
  * a separate backend module. The full, unscoped list still lives under Accounting. */
 export default function SalesInvoicesPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const invoices = useERPList<any>('invoicing/invoices/');
   const orders = useERPList<any>('sales/orders/');
 

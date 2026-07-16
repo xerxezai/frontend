@@ -4,7 +4,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import { erpFetch } from '../../../../hooks/useERPApi';
-import { OG, FF, WHITE, BORDER, fmtINR, Card3D } from './inventoryShared';
+import { OG, FF, WHITE, BORDER, useFmtCurrency, Card3D } from './inventoryShared';
 
 const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#f59e0b', '#10b981', '#6366f1', '#ec4899', '#64748b'];
 
@@ -18,6 +18,7 @@ interface DashboardData {
 }
 
 const ChartTooltip = ({ active, payload, label }: any) => {
+  const fmtINR = useFmtCurrency();
   if (!active || !payload?.length) return null;
   return (
     <div style={{ background: WHITE, borderRadius: 10, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.14)', border: `1px solid ${BORDER}`, fontFamily: FF }}>
@@ -32,6 +33,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function InventoryDashboard({ refreshKey }: { refreshKey?: number | string } = {}) {
+  const fmtINR = useFmtCurrency();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 

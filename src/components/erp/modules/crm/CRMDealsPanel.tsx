@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, Plus, Calendar, Briefcase } from 'lucide-react';
 import { erpFetch } from '../../../../hooks/useERPApi';
-import { OG, OG_G, DARK, FF, stageMeta, fmtINR, type Deal } from './crmShared';
+import { OG, OG_G, DARK, FF, stageMeta, useFmtCurrency, type Deal } from './crmShared';
 import CRMDealForm from './CRMDealForm';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 }
 
 export default function CRMDealsPanel({ target, onClose, onChanged }: Props) {
+  const fmtINR = useFmtCurrency();
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);

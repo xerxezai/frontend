@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpDownload, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, fmtINR, PAYMENT_METHODS, today } from '../invoicing/invoicingShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, PAYMENT_METHODS, today } from '../invoicing/invoicingShared';
 
 const defP = { invoice: '', amount: '', method: 'cash', paid_at: '', reference: '', notes: '' };
 
@@ -10,6 +10,7 @@ const defP = { invoice: '', amount: '', method: 'cash', paid_at: '', reference: 
  * rationale (thin sales-focused view over the shared invoicing app, not a separate backend). */
 export default function SalesPaymentsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const payments = useERPList<any>('invoicing/payments/');
   const invoices = useERPList<any>('invoicing/invoices/');
 

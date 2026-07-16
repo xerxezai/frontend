@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { toast } from 'react-toastify';
 import { erpFetch, erpDownload } from '../../../../hooks/useERPApi';
-import { OG, FF, WHITE, BORDER, fmtINR, today } from './mlmShared';
+import { OG, FF, WHITE, BORDER, useFmtCurrency, today } from './mlmShared';
 import { downloadMLMReportPDF } from './pdf';
+import { useCurrency } from '../../../../context/CurrencyContext';
 
 type Period = 'monthly' | 'quarterly' | 'yearly';
 
@@ -15,6 +16,7 @@ interface DashboardData {
 }
 
 const ChartTooltip = ({ active, payload, label }: any) => {
+  const fmtINR = useFmtCurrency();
   if (!active || !payload?.length) return null;
   return (
     <div style={{ background: WHITE, borderRadius: 10, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.14)', border: `1px solid ${BORDER}`, fontFamily: FF }}>
@@ -45,6 +47,8 @@ function bucketByPeriod(monthly: { month: string; total: number }[], period: Per
 }
 
 export default function MLMReportsPanel() {
+  const fmtINR = useFmtCurrency();
+  const { symbol } = useCurrency();
   const [period, setPeriod] = useState<Period>('monthly');
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -115,7 +119,7 @@ export default function MLMReportsPanel() {
             <BarChart data={buckets} margin={{ top: 6, right: 8, left: 4, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
               <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`} />
+              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${symbol}${(v / 1000).toFixed(0)}k`} />
               <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(201,136,58,0.06)' }} />
               <Bar dataKey="total" fill={OG} radius={[4, 4, 0, 0]} isAnimationActive animationDuration={700} />
             </BarChart>

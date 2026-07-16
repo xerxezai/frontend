@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useCurrency, CURRENCIES } from '../../context/CurrencyContext';
+
+const CURRENCY_FLAG: Record<string, string> = { AED: '🇦🇪', INR: '🇮🇳', USD: '🇺🇸' };
 
 const C = {
   orange:     "#C9883A",
@@ -138,6 +141,9 @@ const ERPLayout = ({ children }: Props) => {
   const [searchVal, setSearchVal] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
+  const currencyRef = useRef<HTMLDivElement>(null);
+  const { selectedCurrency, setCurrency } = useCurrency();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -151,6 +157,17 @@ const ERPLayout = ({ children }: Props) => {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [profileOpen]);
+
+  useEffect(() => {
+    if (!currencyOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (currencyRef.current && !currencyRef.current.contains(e.target as Node)) {
+        setCurrencyOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [currencyOpen]);
 
   const adminName = localStorage.getItem('xerxez_name') || 'Admin';
   const initial   = adminName.charAt(0).toUpperCase();
@@ -624,6 +641,75 @@ const ERPLayout = ({ children }: Props) => {
                 onChange={e => setSearchVal(e.target.value)}
                 aria-label="Search"
               />
+            </div>
+
+            {/* ── Currency selector ── */}
+            <div ref={currencyRef} style={{ position: 'relative', flexShrink: 0 }}>
+              <button
+                className="erp-topbtn"
+                onClick={() => setCurrencyOpen(o => !o)}
+                aria-expanded={currencyOpen}
+                aria-label="Select currency"
+                style={{
+                  gap: 6,
+                  background: currencyOpen ? 'rgba(201,136,58,0.12)' : '#F8F7F4',
+                  borderColor: currencyOpen ? 'rgba(201,136,58,0.36)' : 'rgba(0,0,0,0.08)',
+                }}
+              >
+                <span style={{ fontSize: 13, lineHeight: 1 }}>{CURRENCY_FLAG[selectedCurrency]}</span>
+                <span style={{ color: C.dark, fontWeight: 700, fontSize: 12.5, fontFamily: "'DM Sans', sans-serif" }}>
+                  {selectedCurrency}
+                </span>
+                <i
+                  className={`fas fa-chevron-${currencyOpen ? 'up' : 'down'}`}
+                  style={{ color: C.muted, fontSize: 8 }}
+                />
+              </button>
+
+              {currencyOpen && (
+                <div style={{
+                  position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                  width: 190,
+                  background: C.white,
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  borderTop: `2px solid ${C.orange}`,
+                  borderRadius: 12,
+                  boxShadow: '0 6px 0 rgba(0,0,0,0.04), 0 20px 48px rgba(0,0,0,0.16)',
+                  overflow: 'hidden',
+                  zIndex: 400,
+                }}>
+                  {Object.values(CURRENCIES).map(cur => (
+                    <button
+                      key={cur.code}
+                      onClick={() => { setCurrency(cur.code); setCurrencyOpen(false); }}
+                      style={{
+                        width: '100%', background: cur.code === selectedCurrency ? 'rgba(201,136,58,0.08)' : 'none',
+                        border: 'none', borderBottom: '1px solid rgba(0,0,0,0.05)',
+                        padding: '10px 14px',
+                        display: 'flex', alignItems: 'center', gap: 10,
+                        cursor: 'pointer', textAlign: 'left',
+                        transition: 'background 0.16s',
+                        minHeight: 44,
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.12)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = cur.code === selectedCurrency ? 'rgba(201,136,58,0.08)' : 'none'; }}
+                    >
+                      <span style={{ fontSize: 15 }}>{CURRENCY_FLAG[cur.code]}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ color: C.dark, fontWeight: 700, fontSize: 12.5, fontFamily: "'DM Sans', sans-serif" }}>
+                          {cur.code} <span style={{ color: C.muted, fontWeight: 500 }}>— {cur.symbol}</span>
+                        </div>
+                        <div style={{ color: C.muted, fontSize: 10.5, fontFamily: "'DM Sans', sans-serif" }}>
+                          {cur.taxLabel || 'No Tax'}
+                        </div>
+                      </div>
+                      {cur.code === selectedCurrency && (
+                        <i className="fas fa-check" style={{ color: C.orange, fontSize: 11 }} />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button className="erp-bell erp-bell-light" aria-label="Notifications">

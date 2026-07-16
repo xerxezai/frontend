@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { OG, FF, inp, fmtINR, Q_STATUS, StatusBadge, DelDlg, today, nextNumber } from './salesShared';
+import { OG, FF, inp, useFmtCurrency, Q_STATUS, StatusBadge, DelDlg, today, nextNumber } from './salesShared';
 import QuotationForm, { type QuotationFormValues } from './QuotationForm';
 import { downloadQuotationPDF, exportQuotationsCSV } from './pdf';
 
@@ -12,6 +12,7 @@ const emptyForm = (number: string): QuotationFormValues => ({
 
 export default function QuotationsPanel() {
   const isAdmin = isSuperUser();
+  const fmtINR = useFmtCurrency();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [dateFrom, setDateFrom] = useState('');
