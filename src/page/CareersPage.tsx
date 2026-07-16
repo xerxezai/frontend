@@ -153,7 +153,101 @@ const EXPERIENCE_LEVELS = ["0-1 years", "1-3 years", "3-5 years", "5+ years"];
 const CAREERS_CASCADE_A = ["AI Training", "MLOps", "Machine Learning", "Enterprise ERP", "Remote First", "Full Stack"];
 const CAREERS_CASCADE_B = ["Python · Django", "React · TypeScript", "MLflow · Docker", "Kubernetes · AWS", "CI/CD", "GCP"];
 
-const Hero = () => (
+const HERO_STATS = [
+  { val: "Remote",   label: "First" },
+  { val: "AI-First", label: "Products" },
+  { val: "2",        label: "Open Roles" },
+];
+
+// ── Floating 3D hero card (right column) — mirrors ServiceHeroCard/AcademyHeroCard ──
+const CareersHeroCard = ({ positions, onApply }: { positions: Position[]; onApply: (title: string) => void }) => {
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    setTilt({ x: py * -8, y: px * 10 });
+  };
+  const onLeave = () => setTilt({ x: 0, y: 0 });
+
+  return (
+    <div
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{
+        background: "linear-gradient(160deg,#faf7f3 0%,#e8e0d4 100%)",
+        border: "1px solid rgba(210,195,175,0.6)",
+        boxShadow: "0 6px 0 rgba(155,130,100,0.45),0 12px 32px rgba(0,0,0,0.18),inset 0 1px 0 rgba(255,255,255,0.90)",
+        borderRadius: 20, padding: "28px 24px",
+        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        transition: "transform 220ms cubic-bezier(0.22,1,0.36,1)",
+        transformStyle: "preserve-3d",
+      }}
+    >
+      {/* header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: 22 }}>
+        <div style={{
+          width: 50, height: 50, borderRadius: 14, flexShrink: 0,
+          background: OG_G, boxShadow: BS,
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <i className="fas fa-user-tie" style={{ color: "#fff", fontSize: 21 }} />
+        </div>
+        <div>
+          <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: OG, margin: 0, fontFamily: FF }}>XERXEZ Careers</p>
+          <h4 style={{ fontSize: 15, fontWeight: 800, color: DARK, margin: 0, fontFamily: FF, lineHeight: 1.2 }}>Now Hiring</h4>
+        </div>
+      </div>
+
+      {/* stat grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 18 }}>
+        {HERO_STATS.map((s, i) => (
+          <div key={i} style={{
+            background: WHITE, border: "1px solid rgba(0,0,0,0.07)",
+            borderTop: `2px solid ${OG}`, borderRadius: 12, padding: "11px 8px", textAlign: "center",
+            boxShadow: BCARD,
+          }}>
+            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 19, fontWeight: 700, color: OG, lineHeight: 1 }}>{s.val}</div>
+            <div style={{ fontFamily: FF, fontSize: 9, fontWeight: 600, color: MUT, marginTop: 4, letterSpacing: "0.05em", textTransform: "uppercase", lineHeight: 1.25 }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* quick-apply role list */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+        {positions.map(job => (
+          <button
+            key={job.id}
+            onClick={() => onApply(job.title)}
+            style={{
+              width: "100%", textAlign: "left", background: WHITE, border: "1px solid rgba(0,0,0,0.08)",
+              borderRadius: 11, padding: "10px 12px", cursor: "pointer",
+              display: "flex", alignItems: "center", gap: 10,
+              transition: "background 0.18s ease, transform 0.18s ease",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = OGL; e.currentTarget.style.transform = "translateX(3px)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = WHITE; e.currentTarget.style.transform = "translateX(0)"; }}
+          >
+            <div style={{ width: 26, height: 26, borderRadius: 8, background: OGL, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <i className="fas fa-briefcase" style={{ color: OG, fontSize: 11 }} />
+            </div>
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: DARK, fontFamily: FF, flex: 1, lineHeight: 1.3 }}>{job.title}</span>
+            <i className="fas fa-arrow-right" style={{ color: OG, fontSize: 11, flexShrink: 0 }} />
+          </button>
+        ))}
+      </div>
+
+      {/* status */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ade80", display: "inline-block", boxShadow: "0 0 8px rgba(74,222,128,0.6)", flexShrink: 0 }} />
+        <span style={{ fontFamily: FF, fontSize: 11, fontWeight: 600, color: MUT }}>Applications open · reply in 3-5 days</span>
+      </div>
+    </div>
+  );
+};
+
+const Hero = ({ positions, onApply }: { positions: Position[]; onApply: (title: string) => void }) => (
   <XzHeroSection
     id="hero"
     badgeText="We're Hiring"
@@ -170,13 +264,10 @@ const Hero = () => (
       { label: "View Open Positions", href: "#positions", primary: true },
       { label: "Apply Now",           href: "#apply-form", primary: false },
     ]}
-    stats={[
-      { val: "Remote", label: "First" },
-      { val: "AI-First", label: "Products" },
-      { val: "2", label: "Open Roles" },
-    ]}
+    stats={HERO_STATS}
     cascadeA={CAREERS_CASCADE_A}
     cascadeB={CAREERS_CASCADE_B}
+    right={<CareersHeroCard positions={positions} onApply={onApply} />}
   />
 );
 
@@ -611,7 +702,7 @@ const CareersPage = () => {
         @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
       `}</style>
       <CustomLayout>
-        <Hero />
+        <Hero positions={positions} onApply={handleApply} />
         <WhyWorkWithUs />
         <OpenPositions positions={positions} onApply={handleApply} />
         <CompanyCulture />
