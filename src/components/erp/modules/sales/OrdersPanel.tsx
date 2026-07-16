@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, useFmtCurrency, O_STATUS, DelDlg, today, nextNumber } from './salesShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, useFmtCurrency, O_STATUS, DelDlg, today, nextNumber, SearchableSelect } from './salesShared';
 
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
 const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:700,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
@@ -41,6 +41,24 @@ export default function OrdersPanel() {
   const [items, setItems] = useState<ItemRow[]>([emptyRow()]);
   const [savingStatus, setSavingStatus] = useState<number | null>(null);
   const [generatingInvoice, setGeneratingInvoice] = useState<number | null>(null);
+
+  const [statusFilter, setStatusFilter] = useState('');
+  const [salespersonFilter, setSalespersonFilter] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+
+  const filtered = useMemo(() => orders.data.filter((r: any) => {
+    if (statusFilter && r.status !== statusFilter) return false;
+    if (salespersonFilter && encodeAssignee(r) !== salespersonFilter) return false;
+    if (dateFrom && (!r.order_date || r.order_date < dateFrom)) return false;
+    if (dateTo && (!r.order_date || r.order_date > dateTo)) return false;
+    return true;
+  }), [orders.data, statusFilter, salespersonFilter, dateFrom, dateTo]);
+
+  const salespersonOptions = useMemo(
+    () => salespeople.data.map((p: any) => ({ value: `${p.type}:${p.id}`, label: p.type === 'distributor' ? `⬡ ${p.name}` : p.name })),
+    [salespeople.data],
+  );
 
   const grandTotal = items.reduce((s, r) => s + (Number(r.quantity) || 0) * (Number(r.unit_price) || 0), 0);
 
@@ -107,9 +125,12 @@ export default function OrdersPanel() {
   const generateInvoice = async (order: any) => {
     setGeneratingInvoice(order.id);
     try {
+      // Use the order's pre-tax subtotal (not its GST-inclusive total) as the fallback
+      // line's unit_price — the invoice applies its own 18% GST on top, so seeding it
+      // with the already-taxed total would double-apply GST.
       const orderItems = (order.items || []).length
         ? order.items.map((it: any) => ({ product: it.product || null, description: it.description, quantity: it.quantity, unit_price: it.unit_price }))
-        : [{ product: null, description: `Sales Order ${order.number}`, quantity: '1', unit_price: order.total }];
+        : [{ product: null, description: `Sales Order ${order.number}`, quantity: '1', unit_price: order.subtotal ?? order.total }];
       await erpFetch('invoicing/invoices/', {
         method: 'POST',
         body: JSON.stringify({
@@ -172,7 +193,33 @@ export default function OrdersPanel() {
 
   return (
     <div>
-      <ERPTable title="Sales Orders" columns={cols} data={orders.data} loading={orders.loading} error={orders.error} isAdmin={isAdmin}
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 16, background: '#fff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: 12, padding: '14px 16px' }}>
+        <div style={{ minWidth: 150 }}>
+          <label style={{ display: 'block', fontSize: 10.5, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontFamily: FF }}>Status</label>
+          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={inp}>
+            <option value="">All Statuses</option>
+            {Object.entries(O_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+          </select>
+        </div>
+        <div style={{ minWidth: 200 }}>
+          <label style={{ display: 'block', fontSize: 10.5, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontFamily: FF }}>Salesperson</label>
+          <SearchableSelect value={salespersonFilter} onChange={setSalespersonFilter} options={salespersonOptions} emptyLabel="All Salespeople" placeholder="Search salesperson…" />
+        </div>
+        <div style={{ minWidth: 140 }}>
+          <label style={{ display: 'block', fontSize: 10.5, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontFamily: FF }}>From</label>
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inp} />
+        </div>
+        <div style={{ minWidth: 140 }}>
+          <label style={{ display: 'block', fontSize: 10.5, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontFamily: FF }}>To</label>
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inp} />
+        </div>
+        {(statusFilter || salespersonFilter || dateFrom || dateTo) && (
+          <button onClick={() => { setStatusFilter(''); setSalespersonFilter(''); setDateFrom(''); setDateTo(''); }}
+            style={{ background: 'none', border: 'none', color: OG, cursor: 'pointer', fontSize: 12, fontWeight: 700, fontFamily: FF, padding: '9px 0' }}>Clear</button>
+        )}
+      </div>
+
+      <ERPTable title="Sales Orders" columns={cols} data={filtered} loading={orders.loading} error={orders.error} isAdmin={isAdmin}
         onAdd={() => { setOF({ ...defO, number: nextNumber('SO', orders.data), order_date: today() }); setItems([emptyRow()]); setEditing(null); setShowModal(true); }}
         onEdit={r => {
           setEditing(r);
@@ -199,10 +246,8 @@ export default function OrdersPanel() {
               <div><label style={lbl}>Status</label><select value={oF.status} onChange={e => setOF(f => ({ ...f, status: e.target.value }))} style={inp}>
                 {Object.entries(O_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
               </select></div>
-              <div><label style={lbl}>Assign Salesperson</label><select value={oF.assignee} onChange={e => setOF(f => ({ ...f, assignee: e.target.value }))} style={inp}>
-                <option value="">— Unassigned —</option>
-                {salespeople.data.map((p: any) => <option key={`${p.type}:${p.id}`} value={`${p.type}:${p.id}`}>{p.type === 'distributor' ? `⬡ ${p.name} (MLM Distributor)` : p.name}</option>)}
-              </select>
+              <div><label style={lbl}>Assign Salesperson</label>
+              <SearchableSelect value={oF.assignee} onChange={v => setOF(f => ({ ...f, assignee: v }))} options={salespersonOptions} emptyLabel="— Unassigned —" placeholder="Search salesperson…" />
               <p style={{ fontSize: 11.5, color: '#6B6B6B', margin: '4px 0 0' }}>Assigning an MLM distributor and confirming the order auto-generates a pending commission.</p>
               </div>
 

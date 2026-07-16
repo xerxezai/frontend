@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useState, useRef, useEffect, type CSSProperties, type ReactNode } from 'react';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens — copied from crmShared.tsx / hrShared.tsx ──────────
@@ -42,6 +42,76 @@ export const Card3D = ({
       onMouseLeave={() => setH(false)}
     >
       {children}
+    </div>
+  );
+};
+
+// ── searchable select — type-to-filter combobox for long option lists (e.g. Salesperson) ──
+export const SearchableSelect = ({
+  value, onChange, options, placeholder = 'Search…', emptyLabel = '— None —', style,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: { value: string; label: string }[];
+  placeholder?: string;
+  emptyLabel?: string;
+  style?: CSSProperties;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const rootRef = useRef<HTMLDivElement>(null);
+  const selected = options.find(o => o.value === value);
+
+  useEffect(() => {
+    const onDocClick = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) { setOpen(false); setQuery(''); }
+    };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, []);
+
+  const filtered = query.trim()
+    ? options.filter(o => o.label.toLowerCase().includes(query.trim().toLowerCase()))
+    : options;
+
+  return (
+    <div ref={rootRef} style={{ position: 'relative', ...style }}>
+      <input
+        value={open ? query : (selected?.label ?? '')}
+        onChange={e => setQuery(e.target.value)}
+        onFocus={() => { setOpen(true); setQuery(''); }}
+        placeholder={selected?.label ?? placeholder}
+        style={inp}
+      />
+      {open && (
+        <div style={{
+          position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 40, marginTop: 4,
+          background: '#fff', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.14)', maxHeight: 220, overflowY: 'auto',
+        }}>
+          <div
+            onClick={() => { onChange(''); setOpen(false); setQuery(''); }}
+            style={{ padding: '8px 12px', cursor: 'pointer', fontFamily: FF, fontSize: 12.5, color: '#9ca3af' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#F8F7F4')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            {emptyLabel}
+          </div>
+          {filtered.length === 0 ? (
+            <div style={{ padding: '8px 12px', fontFamily: FF, fontSize: 12.5, color: '#9ca3af' }}>No matches</div>
+          ) : filtered.map(o => (
+            <div
+              key={o.value}
+              onClick={() => { onChange(o.value); setOpen(false); setQuery(''); }}
+              style={{ padding: '8px 12px', cursor: 'pointer', fontFamily: FF, fontSize: 12.5, color: '#1A1A1A', fontWeight: o.value === value ? 700 : 500, background: o.value === value ? 'rgba(201,136,58,0.08)' : 'transparent' }}
+              onMouseEnter={e => (e.currentTarget.style.background = o.value === value ? 'rgba(201,136,58,0.08)' : '#F8F7F4')}
+              onMouseLeave={e => (e.currentTarget.style.background = o.value === value ? 'rgba(201,136,58,0.08)' : 'transparent')}
+            >
+              {o.label}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
