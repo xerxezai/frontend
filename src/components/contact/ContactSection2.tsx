@@ -511,7 +511,7 @@ const ContactSection2 = () => {
             paddingTop:40, gap:"12px 0",
           }}>
             {[
-              { raw:2,   suffix:"+", label:"Enterprise Clients",  delay:300 },
+              { raw:20,  suffix:"+", label:"Enterprise Clients",  delay:300 },
               { raw:2,   suffix:"+", label:"Countries Served",    delay:380 },
               { raw:99.8,suffix:"%", label:"Platform Uptime",     delay:460, decimals:1 },
               { raw:1,   suffix:"+ yrs", label:"In Operation",    delay:540 },
@@ -1117,7 +1117,7 @@ const ContactSection2 = () => {
                         fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600, color:"#8B7A6A",
                       }}>
                         <i className="fas fa-building" style={{ fontSize:10, color:"#C9883A" }} />
-                        Join 2+ enterprises that chose XERXEZ
+                        Join 20+ enterprises that chose XERXEZ
                       </span>
                     </div>
 

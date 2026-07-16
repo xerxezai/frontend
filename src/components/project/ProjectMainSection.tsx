@@ -57,7 +57,7 @@ const CASCADE_A = [
   "2B+ Events daily",
   "SOC 2 Type II certified",
   "ISO 27001 Aligned Security",
-  "2+ Enterprise clients",
+  "20+ Enterprise clients",
 ];
 
 const CASCADE_B = [
@@ -671,8 +671,8 @@ const ProjectMainSection: React.FC = () => {
         ]}
         stats={[
           { raw: 5,   suffix: "+", label: "Projects Delivered" },
-          { raw: 3,   suffix: "+", label: "Industries Served"  },
-          { raw: 2,   suffix: "+", label: "Enterprise Clients" },
+          { raw: 5,   suffix: "+", label: "Industries Served"  },
+          { raw: 20,  suffix: "+", label: "Enterprise Clients" },
         ]}
         cascadeA={CASCADE_A}
         cascadeB={CASCADE_B}
