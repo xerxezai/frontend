@@ -650,7 +650,7 @@ const ContactSection2 = () => {
                   position:"relative", zIndex:1,
                 }}>
                 {[
-                  { val:"5+",    label:"Projects"  },
+                  { val:"4+",    label:"Projects"  },
                   { val:"UAE",   label:"Based"     },
                   { val:"99.9%", label:"Uptime"    },
                 ].map((s,i) => (

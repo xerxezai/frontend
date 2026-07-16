@@ -383,7 +383,7 @@ const PortfolioHeroCard: React.FC = () => (
     {/* outcome chips */}
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: 18, position: "relative" }}>
       {[
-        { val: "5+",    label: "Projects delivered" },
+        { val: "4+",    label: "Projects delivered" },
         { val: "99.9%", label: "Uptime SLA"         },
         { val: "30%",   label: "Cost reduction", full: true },
       ].map(d => (
@@ -670,8 +670,8 @@ const ProjectMainSection: React.FC = () => {
           { label: "Start a Project", to: "/contact", primary: false },
         ]}
         stats={[
-          { raw: 5,   suffix: "+", label: "Projects Delivered" },
-          { raw: 5,   suffix: "+", label: "Industries Served"  },
+          { raw: 4,   suffix: "+", label: "Projects Delivered" },
+          { raw: 6,   suffix: "+", label: "Industries Served"  },
           { raw: 20,  suffix: "+", label: "Enterprise Clients" },
         ]}
         cascadeA={CASCADE_A}
