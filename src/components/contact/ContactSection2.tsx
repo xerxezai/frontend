@@ -514,7 +514,7 @@ const ContactSection2 = () => {
               { raw:20,  suffix:"+", label:"Enterprise Clients",  delay:300 },
               { raw:2,   suffix:"+", label:"Countries Served",    delay:380 },
               { raw:99.8,suffix:"%", label:"Platform Uptime",     delay:460, decimals:1 },
-              { raw:1,   suffix:"+ yrs", label:"In Operation",    delay:540 },
+              { raw:5,   suffix:"+ yrs", label:"In Operation",    delay:540 },
             ].map((s,i) => (
               <div key={s.label} style={{
                 borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
