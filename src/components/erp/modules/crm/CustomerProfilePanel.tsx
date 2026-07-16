@@ -3,13 +3,18 @@ import { X, Plus, Calendar, Briefcase, StickyNote as StickyNoteIcon, History } f
 import { erpFetch } from '../../../../hooks/useERPApi';
 import {
   OG, OG_G, DARK, FF, stageMeta, useFmtCurrency, timeAgo, noteMeta, activityTypeMeta,
-  NOTE_TYPES, type Deal, type Activity, type CustomerNote,
+  QUICK_ACTIVITY_TYPES, type Deal, type Activity, type CustomerNote,
 } from './crmShared';
 import CRMDealForm from './CRMDealForm';
 
+export interface ProfileTarget {
+  type: 'customer' | 'lead';
+  id: number;
+  name: string;
+}
+
 interface Props {
-  customerId: number;
-  customerName: string;
+  target: ProfileTarget;
   onClose: () => void;
   onChanged?: () => void;
 }
@@ -22,23 +27,27 @@ interface HistoryData {
   notes: CustomerNote[];
 }
 
-export default function CustomerProfilePanel({ customerId, customerName, onClose, onChanged }: Props) {
+export default function CustomerProfilePanel({ target, onClose, onChanged }: Props) {
   const fmtINR = useFmtCurrency();
   const [tab, setTab] = useState<Tab>('Deals');
   const [data, setData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDealForm, setShowDealForm] = useState(false);
-  const [noteType, setNoteType] = useState<CustomerNote['note_type']>('general');
   const [noteContent, setNoteContent] = useState('');
   const [savingNote, setSavingNote] = useState(false);
+  const [activityType, setActivityType] = useState(QUICK_ACTIVITY_TYPES[0].key);
+  const [activitySummary, setActivitySummary] = useState('');
+  const [savingActivity, setSavingActivity] = useState(false);
+
+  const basePath = target.type === 'customer' ? `crm/customers/${target.id}` : `crm/leads/${target.id}`;
 
   const load = useCallback(() => {
     setLoading(true);
-    erpFetch(`crm/customers/${customerId}/history/`)
+    erpFetch(`${basePath}/history/`)
       .then(res => setData({ deals: res.deals ?? [], activities: res.activities ?? [], notes: res.notes ?? [] }))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [customerId]);
+  }, [basePath]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -52,12 +61,30 @@ export default function CustomerProfilePanel({ customerId, customerName, onClose
     if (!noteContent.trim()) return;
     setSavingNote(true);
     try {
-      await erpFetch(`crm/customers/${customerId}/notes/`, { method: 'POST', body: JSON.stringify({ note_type: noteType, content: noteContent }) });
+      await erpFetch(`${basePath}/notes/`, { method: 'POST', body: JSON.stringify({ note_type: 'general', content: noteContent }) });
       setNoteContent('');
       load();
       onChanged?.();
     } catch { /* toast is unnecessary — the form stays filled so the user can retry */ }
     finally { setSavingNote(false); }
+  };
+
+  const addActivity = async () => {
+    if (!activitySummary.trim()) return;
+    setSavingActivity(true);
+    try {
+      await erpFetch('crm/activities/', {
+        method: 'POST',
+        body: JSON.stringify({
+          type: activityType, summary: activitySummary, occurred_at: new Date().toISOString(),
+          ...(target.type === 'customer' ? { customer: target.id } : { lead: target.id }),
+        }),
+      });
+      setActivitySummary('');
+      load();
+      onChanged?.();
+    } catch { /* toast is unnecessary — the form stays filled so the user can retry */ }
+    finally { setSavingActivity(false); }
   };
 
   const totalDealValue = (data?.deals ?? []).filter(d => d.stage !== 'lost').reduce((s, d) => s + Number(d.value || 0), 0);
@@ -84,7 +111,7 @@ export default function CustomerProfilePanel({ customerId, customerName, onClose
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
           <div>
-            <h3 style={{ fontFamily: FF, fontWeight: 800, fontSize: 16, color: DARK, margin: 0 }}>{customerName}</h3>
+            <h3 style={{ fontFamily: FF, fontWeight: 800, fontSize: 16, color: DARK, margin: 0 }}>{target.name}</h3>
             <p style={{ fontFamily: FF, fontSize: 12, color: '#9ca3af', margin: '2px 0 0' }}>{fmtINR(totalDealValue)} active deal value</p>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B6B6B', padding: 4 }}>
@@ -136,8 +163,22 @@ export default function CustomerProfilePanel({ customerId, customerName, onClose
               })}
             </>
           ) : tab === 'Activities' ? (
-            (data?.activities.length ?? 0) === 0 ? (
-              <p style={{ textAlign: 'center', color: '#9ca3af', fontFamily: FF, fontSize: 13.5, padding: '30px 0' }}>No activities logged yet.</p>
+            <>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+                {QUICK_ACTIVITY_TYPES.map(t => (
+                  <button key={t.key} type="button" onClick={() => setActivityType(t.key)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 11px', borderRadius: 999, cursor: 'pointer', fontFamily: FF, fontSize: 11.5, fontWeight: 700, border: activityType === t.key ? `1.5px solid ${t.color}` : '1px solid rgba(0,0,0,0.10)', background: activityType === t.key ? t.bg : '#fff', color: activityType === t.key ? t.color : '#6B6B6B' }}>
+                    <i className={t.icon} style={{ fontSize: 10 }} />{t.label}
+                  </button>
+                ))}
+              </div>
+              <textarea value={activitySummary} onChange={e => setActivitySummary(e.target.value)} placeholder="What happened? What was discussed?" rows={3}
+                style={{ width: '100%', boxSizing: 'border-box', resize: 'vertical', minHeight: 64, padding: '10px 12px', borderRadius: 9, border: '1px solid rgba(0,0,0,0.10)', background: '#F8F7F4', fontFamily: FF, fontSize: 13, outline: 'none', marginBottom: 10 }} />
+              <button onClick={addActivity} disabled={savingActivity} style={{ width: '100%', background: OG_G, color: '#fff', border: 'none', borderRadius: 9, padding: '10px', cursor: savingActivity ? 'not-allowed' : 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 13, opacity: savingActivity ? 0.7 : 1, marginBottom: 18 }}>
+                {savingActivity ? 'Saving…' : 'Log Activity'}
+              </button>
+              {(data?.activities.length ?? 0) === 0 ? (
+              <p style={{ textAlign: 'center', color: '#9ca3af', fontFamily: FF, fontSize: 13.5, padding: '20px 0' }}>No activities logged yet.</p>
             ) : data!.activities.map(a => {
               const meta = activityTypeMeta(a.type);
               return (
@@ -153,17 +194,10 @@ export default function CustomerProfilePanel({ customerId, customerName, onClose
                   </div>
                 </div>
               );
-            })
+            })}
+            </>
           ) : (
             <>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
-                {NOTE_TYPES.map(t => (
-                  <button key={t.key} type="button" onClick={() => setNoteType(t.key)}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 11px', borderRadius: 999, cursor: 'pointer', fontFamily: FF, fontSize: 11.5, fontWeight: 700, border: noteType === t.key ? `1.5px solid ${t.color}` : '1px solid rgba(0,0,0,0.10)', background: noteType === t.key ? t.bg : '#fff', color: noteType === t.key ? t.color : '#6B6B6B' }}>
-                    <i className={t.icon} style={{ fontSize: 10 }} />{t.label}
-                  </button>
-                ))}
-              </div>
               <textarea value={noteContent} onChange={e => setNoteContent(e.target.value)} placeholder="What happened? What was discussed?" rows={3}
                 style={{ width: '100%', boxSizing: 'border-box', resize: 'vertical', minHeight: 64, padding: '10px 12px', borderRadius: 9, border: '1px solid rgba(0,0,0,0.10)', background: '#F8F7F4', fontFamily: FF, fontSize: 13, outline: 'none', marginBottom: 10 }} />
               <button onClick={addNote} disabled={savingNote} style={{ width: '100%', background: OG_G, color: '#fff', border: 'none', borderRadius: 9, padding: '10px', cursor: savingNote ? 'not-allowed' : 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 13, opacity: savingNote ? 0.7 : 1, marginBottom: 18 }}>
@@ -190,7 +224,8 @@ export default function CustomerProfilePanel({ customerId, customerName, onClose
 
       {showDealForm && (
         <CRMDealForm
-          defaultCustomerId={customerId}
+          defaultCustomerId={target.type === 'customer' ? target.id : null}
+          defaultLeadId={target.type === 'lead' ? target.id : null}
           onClose={() => setShowDealForm(false)}
           onSaved={() => { load(); onChanged?.(); }}
         />

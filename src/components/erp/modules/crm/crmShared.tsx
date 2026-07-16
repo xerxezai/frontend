@@ -103,14 +103,20 @@ export const LEAD_SOURCES: { key: string; label: string; icon: string }[] = [
 export const sourceMeta = (key: string) => LEAD_SOURCES.find(s => s.key === key) ?? LEAD_SOURCES[LEAD_SOURCES.length - 1];
 
 export const ACTIVITY_TYPES: { key: string; label: string; icon: string; color: string; bg: string }[] = [
-  { key: 'call',    label: 'Call',    icon: 'fas fa-phone',         color: '#3b82f6', bg: 'rgba(59,130,246,0.10)' },
-  { key: 'meeting', label: 'Meeting', icon: 'fas fa-handshake',     color: '#10b981', bg: 'rgba(16,185,129,0.10)' },
-  { key: 'email',   label: 'Email',   icon: 'fas fa-envelope',      color: '#14b8a6', bg: 'rgba(20,184,166,0.10)' },
-  { key: 'demo',    label: 'Demo',    icon: 'fas fa-desktop',       color: '#8b5cf6', bg: 'rgba(139,92,246,0.10)' },
-  { key: 'task',    label: 'Task',    icon: 'fas fa-check-square',  color: OG,        bg: 'rgba(201,136,58,0.10)' },
-  { key: 'note',    label: 'Note',    icon: 'fas fa-sticky-note',   color: '#6b7280', bg: 'rgba(107,114,128,0.10)' },
+  { key: 'call',      label: 'Call',      icon: 'fas fa-phone',         color: '#3b82f6', bg: 'rgba(59,130,246,0.10)' },
+  { key: 'meeting',   label: 'Meeting',   icon: 'fas fa-handshake',     color: '#10b981', bg: 'rgba(16,185,129,0.10)' },
+  { key: 'email',     label: 'Email',     icon: 'fas fa-envelope',      color: '#14b8a6', bg: 'rgba(20,184,166,0.10)' },
+  { key: 'demo',      label: 'Demo',      icon: 'fas fa-desktop',       color: '#8b5cf6', bg: 'rgba(139,92,246,0.10)' },
+  { key: 'task',      label: 'Task',      icon: 'fas fa-check-square',  color: OG,        bg: 'rgba(201,136,58,0.10)' },
+  { key: 'follow_up', label: 'Follow Up', icon: 'fas fa-bell',          color: OG,        bg: 'rgba(201,136,58,0.10)' },
+  { key: 'note',      label: 'Note',      icon: 'fas fa-sticky-note',   color: '#6b7280', bg: 'rgba(107,114,128,0.10)' },
 ];
 export const activityTypeMeta = (key: string) => ACTIVITY_TYPES.find(a => a.key === key) ?? ACTIVITY_TYPES[ACTIVITY_TYPES.length - 1];
+
+/** Quick-log types offered in the customer profile panel's Activities tab —
+ * a focused subset of ACTIVITY_TYPES (excludes demo/task/note, which are
+ * logged via the full Activities admin screen instead). */
+export const QUICK_ACTIVITY_TYPES = ACTIVITY_TYPES.filter(a => ['call', 'meeting', 'email', 'follow_up'].includes(a.key));
 
 export interface Activity {
   id: number;

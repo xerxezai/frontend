@@ -246,7 +246,7 @@ export default function CustomersPanel() {
       )}
 
       {profileTarget && (
-        <CustomerProfilePanel customerId={profileTarget.id} customerName={profileTarget.name} onClose={() => setProfileTarget(null)} onChanged={() => deals.reload()} />
+        <CustomerProfilePanel target={{ type: 'customer', id: profileTarget.id, name: profileTarget.name }} onClose={() => setProfileTarget(null)} onChanged={() => deals.reload()} />
       )}
 
       {delId !== null && <DelDlg onCancel={() => setDelId(null)} onConfirm={confirmDel} />}

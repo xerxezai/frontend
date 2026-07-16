@@ -3,9 +3,10 @@ import { toast } from 'react-toastify';
 import { StickyNote, ArrowRightLeft } from 'lucide-react';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
-import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, leadScoreMeta, sourceMeta, today, type Deal } from './crmShared';
+import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, leadScoreMeta, sourceMeta, today, type Deal } from './crmShared';
 import CRMNotesPanel from './CRMNotesPanel';
 import CRMDealsPanel from './CRMDealsPanel';
+import CustomerProfilePanel from './CustomerProfilePanel';
 import PhoneInput from '../../../common/PhoneInput';
 
 const statusColors: Record<string, { bg: string; color: string }> = {
@@ -33,6 +34,7 @@ export default function LeadsPanel() {
   const [converting, setConverting] = useState<number | null>(null);
   const [notesTarget, setNotesTarget] = useState<{ type: 'lead'; id: number; name: string } | null>(null);
   const [dealsTarget, setDealsTarget] = useState<{ type: 'lead'; id: number; name: string } | null>(null);
+  const [profileTarget, setProfileTarget] = useState<{ id: number; name: string } | null>(null);
 
   const [scoreFilter, setScoreFilter] = useState('');
   const [sourceFilter, setSourceFilter] = useState('');
@@ -91,7 +93,16 @@ export default function LeadsPanel() {
   const todayStr = today();
 
   const cols = [
-    { key: 'name', label: 'Name' },
+    {
+      key: 'name', label: 'Name', render: (r: any) => (
+        <button type="button" onClick={() => setProfileTarget({ id: r.id, name: r.name })}
+          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: OG, fontWeight: 700, fontFamily: FF, fontSize: 12.5, textDecoration: 'underline', textDecorationColor: 'transparent' }}
+          onMouseEnter={e => (e.currentTarget.style.textDecorationColor = OG)}
+          onMouseLeave={e => (e.currentTarget.style.textDecorationColor = 'transparent')}>
+          {r.name}
+        </button>
+      ),
+    },
     { key: 'company', label: 'Company', render: (r: any) => r.company || '—' },
     { key: 'email', label: 'Email', render: (r: any) => r.email || '—' },
     {
@@ -126,7 +137,7 @@ export default function LeadsPanel() {
       },
     },
     {
-      key: 'actions', label: 'Actions', render: (r: any) => (
+      key: 'quick_actions', label: 'Convert', render: (r: any) => (
         <div style={{ display: 'flex', gap: 5 }}>
           <button title="Notes" onClick={() => setNotesTarget({ type: 'lead', id: r.id, name: r.name })} style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
             <StickyNote size={13} />
@@ -197,6 +208,9 @@ export default function LeadsPanel() {
 
       {notesTarget && <CRMNotesPanel target={notesTarget} onClose={() => setNotesTarget(null)} />}
       {dealsTarget && <CRMDealsPanel target={dealsTarget} onClose={() => setDealsTarget(null)} onChanged={() => deals.reload()} />}
+      {profileTarget && (
+        <CustomerProfilePanel target={{ type: 'lead', id: profileTarget.id, name: profileTarget.name }} onClose={() => setProfileTarget(null)} onChanged={() => { leads.reload(); deals.reload(); }} />
+      )}
       {delId !== null && <DelDlg onCancel={() => setDelId(null)} onConfirm={confirmDel} />}
     </div>
   );
