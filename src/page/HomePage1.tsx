@@ -33,6 +33,11 @@ const ORG_JSONLD = {
   email: "info@xerxez.com",
   telephone: "+971567867451",
   areaServed: ["IN", "AE"],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Abu Dhabi",
+    addressCountry: "AE",
+  },
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+971567867451",
@@ -58,11 +63,11 @@ const HomePage1 = () => {
   return (
     <>
       <SEO
-        title="XERXEZ — Best AI-Powered ERP Software India & UAE | Abu Dhabi Dubai"
-        description="XERXEZ is the best AI ERP software in India & UAE. Replace 5 legacy systems, cut costs 40%, deploy in 6 months. Trusted by enterprises in Abu Dhabi, Dubai & India."
+        title="XERXEZ | #1 AI-Powered ERP for UAE & India Enterprises"
+        description="Transform your enterprise with XERXEZ AI-powered ERP. Built for UAE & India. Serving EPC, Oil & Gas, Construction, Manufacturing & more. Book a free demo today."
         canonical="/"
-        keywords="best erp software in india, best erp software in abu dhabi, best erp software UAE, xerxez erp, AI ERP India, ERP system India, erp software dubai, best erp for small business india, enterprise ERP india UAE, xerxez ai, XERXEZ, Xerxez Solutions"
-        jsonLd={[ORG_JSONLD, FAQ_JSONLD]} 
+        keywords="best erp software in india, best erp software in abu dhabi, best erp software UAE, xerxez erp, AI ERP India, ERP system India, erp software dubai, best erp for small business india, enterprise ERP india UAE, xerxez ai, XERXEZ, Xerxez Solutions, AI ERP UAE, ERP Abu Dhabi, EPC ERP system, construction ERP UAE, manufacturing ERP india, oil gas ERP UAE, healthcare ERP UAE"
+        jsonLd={[ORG_JSONLD, FAQ_JSONLD]}
       />
       <HeaderSection />
 

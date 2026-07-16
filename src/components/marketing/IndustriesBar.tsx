@@ -19,6 +19,14 @@ const CERTS = [
   "Dedicated Support",
 ];
 
+const INDUSTRY_DETAILS = [
+  { icon: HardHat,  h3: "ERP for EPC Companies in UAE",  copy: "Project costing, procurement and contractor workflows built for EPC firms." },
+  { icon: Fuel,     h3: "ERP for Oil & Gas Industry",     copy: "Asset tracking, compliance and maintenance workflows for Oil & Gas operations." },
+  { icon: Building, h3: "ERP for Construction Companies", copy: "Site-level budgeting, procurement and progress tracking for construction firms." },
+  { icon: Factory,  h3: "ERP for Manufacturing",          copy: "Production planning, inventory and quality control for manufacturers." },
+  { icon: Landmark, h3: "ERP for Healthcare UAE",         copy: "Patient records, scheduling and billing for UAE healthcare providers." },
+];
+
 /** Trust strip shown directly after the homepage hero: industries served + compliance pills. */
 const IndustriesBar = () => (
   <section style={{
@@ -27,14 +35,14 @@ const IndustriesBar = () => (
     padding: "40px 0 36px",
   }}>
     <div className="container" style={{ textAlign: "center" }}>
-      <div style={{
+      <h2 style={{
         fontFamily: "'DM Sans',sans-serif", fontSize: 11, fontWeight: 700,
         letterSpacing: "0.16em", textTransform: "uppercase",
-        color: "rgba(20,20,19,0.45)", marginBottom: 20,
+        color: "rgba(20,20,19,0.45)", marginBottom: 20, margin: "0 0 20px",
         animation: "xzIndFadeUp 0.5s ease both",
       }}>
-        Trusted by enterprises across industries
-      </div>
+        Serving UAE & India Enterprises
+      </h2>
 
       {/* Industry pills */}
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginBottom: 22 }}>
@@ -73,6 +81,33 @@ const IndustriesBar = () => (
             <i className="fas fa-check-circle" style={{ color: GOLD, fontSize: 11 }} />
             {c}
           </span>
+        ))}
+      </div>
+
+      {/* Per-industry detail — real, crawlable H3 content (not a duplicate of the pills above) */}
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
+        gap: 18, marginTop: 32, textAlign: "left",
+        animation: "xzIndFadeUp 0.5s ease 0.5s both",
+      }}>
+        {INDUSTRY_DETAILS.map(({ icon: Icon, h3, copy }) => (
+          <div key={h3}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+              <Icon size={15} color={GOLD} strokeWidth={2} />
+              <h3 style={{
+                fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700,
+                color: "#1A1208", margin: 0,
+              }}>
+                {h3}
+              </h3>
+            </div>
+            <p style={{
+              fontFamily: "'DM Sans',sans-serif", fontSize: 12, lineHeight: 1.5,
+              color: "rgba(20,20,19,0.55)", margin: 0,
+            }}>
+              {copy}
+            </p>
+          </div>
         ))}
       </div>
     </div>

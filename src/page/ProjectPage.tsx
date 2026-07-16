@@ -6,10 +6,10 @@ const ProjectPage = () => {
   return (
     <CustomLayout>
         <SEO
-          title="Our Projects | Enterprise AI & ERP Implementations India & UAE — XERXEZ"
-          description="Explore XERXEZ enterprise projects — AI ERP implementations, DevSecOps and cloud solutions across India, Dubai & Abu Dhabi UAE."
+          title="XERXEZ Portfolio | AI ERP Projects UAE & India"
+          description="See XERXEZ enterprise projects and ERP implementations across UAE & India. AI-powered solutions for EPC, Construction & Manufacturing."
           canonical="/project"
-          keywords="XERXEZ projects, ERP implementation India, erp implementation UAE, enterprise projects UAE, AI projects Dubai, AI projects Abu Dhabi, Xerxez Solutions"
+          keywords="XERXEZ projects, ERP implementation India, erp implementation UAE, enterprise projects UAE, AI projects Dubai, AI projects Abu Dhabi, Xerxez Solutions, EPC ERP projects, construction ERP projects, manufacturing ERP projects"
         />
         <ProjectMainSection />
     </CustomLayout>

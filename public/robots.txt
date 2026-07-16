@@ -6,6 +6,8 @@ Disallow: /lma/instructor/
 Disallow: /lma/login
 Disallow: /lma/register
 Disallow: /erp/
+Disallow: /api/
+Disallow: /admin/
 Disallow: /mlm
 Disallow: /health
 Disallow: /documentation

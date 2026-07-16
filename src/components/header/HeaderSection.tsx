@@ -43,7 +43,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             <Link to="/" style={{ display: "inline-block", textDecoration: "none", lineHeight: 0 }}>
               <Image
                 src="/assets/img/logo/xerxez_logo.png"
-                alt="Xerxez Solutions"
+                alt="XERXEZ AI ERP Logo"
                 width={220}
                 height={80}
                 style={{ height: 100, width: "auto", display: "block" }}

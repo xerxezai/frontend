@@ -6,10 +6,10 @@ import SEO from "../components/seo/SEO";
 const ContactPage = () => (
   <CustomLayout>
     <SEO
-      title="Contact XERXEZ | Book Free Demo — AI ERP India, Dubai & Abu Dhabi"
-      description="Contact XERXEZ for AI ERP, DevSecOps and cloud solutions. Book a free enterprise demo. Serving India, Dubai & Abu Dhabi UAE."
+      title="Contact XERXEZ | Book Free ERP Demo | Abu Dhabi & India"
+      description="Contact XERXEZ for AI-powered ERP solutions in UAE & India. Book a free demo for EPC, Construction, Manufacturing ERP. Abu Dhabi office available."
       canonical="/contact"
-      keywords="contact XERXEZ, book demo ERP India, ERP consultation Dubai, ERP consultation Abu Dhabi, XERXEZ support, Xerxez Solutions"
+      keywords="contact XERXEZ, book demo ERP India, ERP consultation Dubai, ERP consultation Abu Dhabi, XERXEZ support, Xerxez Solutions, ERP demo UAE, EPC ERP demo, construction ERP demo, manufacturing ERP demo"
     />
     <ContactSection2 />
     <ContactTrustBar />
