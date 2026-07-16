@@ -33,7 +33,7 @@ const CtaSection6 = ({ variant }: Props) => {
               Request a Demo
               <i className="far fa-arrow-right"></i>
             </Link>
-            <Link to="/service/ai-powered-erp" className="pricing-text">
+            <Link to="/ai-erp" className="pricing-text">
               Explore AI ERP <i className="far fa-arrow-right"></i>
             </Link>
           </div>
