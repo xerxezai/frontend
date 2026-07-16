@@ -49,15 +49,15 @@ const projectMeta: Record<string, { desc: string; tags: string[]; stat: string; 
 
 // ── Hero cascade data ─────────────────────────────────────────────────────
 const CASCADE_A = [
-  "$500K+ Annual cloud savings",
+  "AI-Powered Enterprise ERP",
   "99.9% Uptime achieved",
   "40% First-year ERP cost reduction",
   "38% Cost reduction",
-  "10M+ Daily fraud detections",
+  "Built for UAE & India Markets",
   "2B+ Events daily",
   "SOC 2 Type II certified",
-  "47% Oil & Gas efficiency gain",
-  "50+ Enterprise clients",
+  "ISO 27001 Aligned Security",
+  "2+ Enterprise clients",
 ];
 
 const CASCADE_B = [
@@ -352,7 +352,7 @@ const PortfolioHeroCard: React.FC = () => (
           boxShadow: "0 0 6px rgba(74,222,128,0.75)",
           display: "inline-block", flexShrink: 0,
         }} />
-        Verified Outcomes
+        Live Platform
       </span>
     </div>
 
@@ -365,40 +365,34 @@ const PortfolioHeroCard: React.FC = () => (
       Featured Result
     </p>
 
-    {/* hero stat */}
+    {/* hero heading */}
     <div style={{ marginBottom: 4, position: "relative" }}>
       <span style={{
         fontFamily: "'Cormorant Garamond',serif", fontWeight: 700,
-        fontSize: 52, lineHeight: 1, color: "#C9883A",
-        letterSpacing: "-0.02em",
-      }}>$500K+</span>
+        fontSize: 34, lineHeight: 1.15, color: "#C9883A",
+        letterSpacing: "-0.02em", display: "block",
+      }}>AI-Powered ERP Platform</span>
     </div>
-    <p style={{
-      fontSize: 13, fontWeight: 700, color: "#1A1208",
-      fontFamily: "'DM Sans',sans-serif", marginBottom: 4, position: "relative",
-    }}>
-      Annual cloud savings delivered
-    </p>
     <p style={{
       fontSize: 11.5, color: "#8B7A6A", lineHeight: 1.5,
       fontFamily: "'DM Sans',sans-serif", marginBottom: 18, position: "relative",
     }}>
-      Multi-cloud FinOps · AWS, Azure &amp; GCP
+      Built for enterprises across UAE &amp; India
     </p>
 
-    {/* 4 outcome chips */}
+    {/* outcome chips */}
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: 18, position: "relative" }}>
       {[
-        { val: "15+",   label: "Projects delivered" },
+        { val: "5+",    label: "Projects delivered" },
         { val: "99.9%", label: "Uptime SLA"         },
-        { val: "75+",   label: "Engineers trained"  },
-        { val: "30%",   label: "Cost reduction"     },
+        { val: "30%",   label: "Cost reduction", full: true },
       ].map(d => (
         <div key={d.label} style={{
           background: "rgba(255,255,255,0.80)",
           border: "1px solid rgba(201,136,58,0.14)",
           borderRadius: 11, padding: "10px 12px",
           display: "flex", alignItems: "baseline", gap: 8,
+          gridColumn: d.full ? "1 / -1" : undefined,
         }}>
           <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 20, fontWeight: 700, color: "#C9883A", lineHeight: 1, flexShrink: 0 }}>{d.val}</span>
           <span style={{ fontSize: 10, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif", letterSpacing: "0.04em", lineHeight: 1.3 }}>{d.label}</span>
@@ -424,12 +418,6 @@ const PortfolioHeroCard: React.FC = () => (
     >
       View All Case Studies <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
     </Link>
-
-    {/* strip */}
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, position: "relative" }}>
-      <i className="fas fa-certificate" style={{ color: "#C9883A", fontSize: 10 }} />
-      <span style={{ fontSize: 11, color: "#8B7A6A", fontFamily: "'DM Sans',sans-serif" }}>All outcomes independently verified</span>
-    </div>
   </div>
 );
 
@@ -682,9 +670,9 @@ const ProjectMainSection: React.FC = () => {
           { label: "Start a Project", to: "/contact", primary: false },
         ]}
         stats={[
-          { raw: 15,  suffix: "+", label: "Projects Delivered" },
-          { raw: 5,   suffix: "+", label: "Industries Served"  },
-          { raw: 50,  suffix: "+", label: "Enterprise Clients" },
+          { raw: 5,   suffix: "+", label: "Projects Delivered" },
+          { raw: 3,   suffix: "+", label: "Industries Served"  },
+          { raw: 2,   suffix: "+", label: "Enterprise Clients" },
         ]}
         cascadeA={CASCADE_A}
         cascadeB={CASCADE_B}

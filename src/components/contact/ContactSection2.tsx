@@ -511,10 +511,10 @@ const ContactSection2 = () => {
             paddingTop:40, gap:"12px 0",
           }}>
             {[
-              { raw:50,  suffix:"+", label:"Enterprise Clients",  delay:300 },
-              { raw:5,   suffix:"+", label:"Countries Served",    delay:380 },
+              { raw:2,   suffix:"+", label:"Enterprise Clients",  delay:300 },
+              { raw:2,   suffix:"+", label:"Countries Served",    delay:380 },
               { raw:99.8,suffix:"%", label:"Platform Uptime",     delay:460, decimals:1 },
-              { raw:5,   suffix:" yrs", label:"In Operation",     delay:540 },
+              { raw:1,   suffix:"+ yrs", label:"In Operation",    delay:540 },
             ].map((s,i) => (
               <div key={s.label} style={{
                 borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
@@ -650,7 +650,7 @@ const ContactSection2 = () => {
                   position:"relative", zIndex:1,
                 }}>
                 {[
-                  { val:"4+",    label:"Projects"  },
+                  { val:"5+",    label:"Projects"  },
                   { val:"UAE",   label:"Based"     },
                   { val:"99.9%", label:"Uptime"    },
                 ].map((s,i) => (
@@ -1117,7 +1117,7 @@ const ContactSection2 = () => {
                         fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600, color:"#8B7A6A",
                       }}>
                         <i className="fas fa-building" style={{ fontSize:10, color:"#C9883A" }} />
-                        Join 4+ enterprises that chose XERXEZ
+                        Join 2+ enterprises that chose XERXEZ
                       </span>
                     </div>
 
