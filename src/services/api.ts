@@ -318,6 +318,49 @@ class ApiService {
     }
   }
 
+  /**
+   * Multipart file upload (POST) — for creating a new record with an
+   * attached file (e.g. a career application + resume), as opposed to
+   * `uploadFile`'s PATCH semantics for updating an existing record.
+   */
+  async postFormData<T>(endpoint: string, formData: FormData): Promise<ApiResponse<T> | ApiError> {
+    try {
+      const url = `${this.config.baseUrl}${endpoint}`;
+      const headers: Record<string, string> = {};
+      if (this.authTokens.access) headers.Authorization = `Bearer ${this.authTokens.access}`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: formData,
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          this.clearAuthTokens();
+          window.dispatchEvent(new CustomEvent('auth_expired'));
+        }
+        const errorData = await response.json().catch(() => ({}));
+        return {
+          success: false,
+          message: errorData.message || `HTTP Error: ${response.status}`,
+          status: response.status,
+          details: errorData,
+        };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.message || 'Network or server error',
+        status: 0,
+        details: error,
+      };
+    }
+  }
+
   // ============= AUTHENTICATION METHODS =============
 
   /**

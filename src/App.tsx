@@ -61,6 +61,7 @@ const ERPIndustryDetailPage  = lazy(() => import("./page/ERPIndustryDetailPage")
 const LandingPage        = lazy(() => import("./page/LandingPage"));
 const PrivacyPolicyPage  = lazy(() => import("./page/PrivacyPolicyPage"));
 const TermsPage          = lazy(() => import("./page/TermsPage"));
+const CareersPage        = lazy(() => import("./page/CareersPage"));
 
 // LMA (Learning Management Application)
 const LMABecomeInstructorPage   = lazy(() => import("./page/lma/BecomeInstructorPage"));
@@ -125,6 +126,7 @@ function App() {
           <Route path="/landing"                 element={<LandingPage />} />
           <Route path="/privacy"                 element={<PrivacyPolicyPage />} />
           <Route path="/terms"                   element={<TermsPage />} />
+          <Route path="/careers"                 element={<CareersPage />} />
 
           {/* LMA routes */}
           <Route path="/lma/become-instructor"               element={<LMABecomeInstructorPage />} />

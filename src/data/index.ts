@@ -550,6 +550,11 @@ const menuData = [
     link: "/contact",
     hasDropdown: false,
   },
+  {
+    title: "Careers",
+    link: "/careers",
+    hasDropdown: false,
+  },
 ];
 const pricingPlans = [
   {
