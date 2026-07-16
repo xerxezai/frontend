@@ -2,7 +2,7 @@ import { FF, OG, type DocumentT } from './documentsShared';
 import DocumentCard from './DocumentCard';
 
 export default function DocumentList({
-  documents, loading, error, onView, onDownload, onNewVersion, onApprove, onReject,
+  documents, loading, error, onView, onDownload, onNewVersion, onApprove, onReject, onDelete,
 }: {
   documents: DocumentT[];
   loading: boolean;
@@ -12,6 +12,7 @@ export default function DocumentList({
   onNewVersion: (doc: DocumentT) => void;
   onApprove: (doc: DocumentT) => void;
   onReject: (doc: DocumentT) => void;
+  onDelete: (doc: DocumentT) => void;
 }) {
   if (loading) {
     return (
@@ -54,6 +55,7 @@ export default function DocumentList({
           onNewVersion={() => onNewVersion(doc)}
           onApprove={() => onApprove(doc)}
           onReject={() => onReject(doc)}
+          onDelete={() => onDelete(doc)}
         />
       ))}
     </div>

@@ -4,7 +4,7 @@ import {
 } from './documentsShared';
 
 export default function DocumentCard({
-  doc, onView, onDownload, onNewVersion, onApprove, onReject,
+  doc, onView, onDownload, onNewVersion, onApprove, onReject, onDelete,
 }: {
   doc: DocumentT;
   onView: () => void;
@@ -12,6 +12,7 @@ export default function DocumentCard({
   onNewVersion: () => void;
   onApprove: () => void;
   onReject: () => void;
+  onDelete: () => void;
 }) {
   const { icon, color } = fileIconFor(doc.file_url || doc.file || doc.title);
 
@@ -51,6 +52,9 @@ export default function DocumentCard({
         </button>
         <button onClick={onNewVersion} style={btnStyle('#F8F7F4', '#1A1A1A')}>
           <i className="fas fa-code-branch" style={{ marginRight: 6 }} />New Version
+        </button>
+        <button onClick={onDelete} style={btnStyle('rgba(239,68,68,0.10)', '#ef4444', '1px solid rgba(239,68,68,0.28)')}>
+          <i className="fas fa-trash" style={{ marginRight: 6 }} />Delete
         </button>
       </div>
 

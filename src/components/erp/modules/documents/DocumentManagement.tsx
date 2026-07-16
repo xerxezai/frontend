@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  OG, FF, DARK, CREAM, inp, lbl, SAVE, CNCL, OVR, CRD, KpiCard, CATEGORIES,
+  OG, FF, DARK, CREAM, inp, lbl, SAVE, CNCL, OVR, CRD, KpiCard, CATEGORIES, DelDlg,
   type DocumentT,
 } from './documentsShared';
-import { getDocuments, searchDocuments, approveDocument, rejectDocument, uploadVersion } from './documentApi';
+import { getDocuments, searchDocuments, approveDocument, rejectDocument, uploadVersion, deleteDocument } from './documentApi';
 import DocumentList from './DocumentList';
 import DocumentUpload from './DocumentUpload';
 import DocumentDetail from './DocumentDetail';
@@ -92,6 +92,7 @@ export default function DocumentManagement() {
   const [showUpload, setShowUpload] = useState(false);
   const [viewingDoc, setViewingDoc] = useState<DocumentT | null>(null);
   const [versioningDoc, setVersioningDoc] = useState<DocumentT | null>(null);
+  const [deletingDoc, setDeletingDoc] = useState<DocumentT | null>(null);
 
   const reloadStats = useCallback(() => {
     getDocuments().then(setAllDocs).catch(() => {});
@@ -132,6 +133,14 @@ export default function DocumentManagement() {
 
   const handleReject = async (doc: DocumentT) => {
     await rejectDocument(doc.id);
+    setViewingDoc(null);
+    reloadAll();
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingDoc) return;
+    await deleteDocument(deletingDoc.id);
+    setDeletingDoc(null);
     setViewingDoc(null);
     reloadAll();
   };
@@ -199,6 +208,7 @@ export default function DocumentManagement() {
         onNewVersion={setVersioningDoc}
         onApprove={handleApprove}
         onReject={handleReject}
+        onDelete={setDeletingDoc}
       />
 
       {showUpload && (
@@ -223,6 +233,14 @@ export default function DocumentManagement() {
           doc={versioningDoc}
           onClose={() => setVersioningDoc(null)}
           onUploaded={() => { setVersioningDoc(null); reloadAll(); }}
+        />
+      )}
+
+      {deletingDoc && (
+        <DelDlg
+          label="Are you sure you want to delete this document?"
+          onCancel={() => setDeletingDoc(null)}
+          onConfirm={confirmDelete}
         />
       )}
     </div>
