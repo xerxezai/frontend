@@ -67,6 +67,7 @@ export default function ActivitiesPanel() {
   const [selectedDate, setSelectedDate] = useState('');
 
   const [typeFilter, setTypeFilter] = useState('');
+  const [linkFilter, setLinkFilter] = useState('');
   const [completedFilter, setCompletedFilter] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
@@ -104,13 +105,19 @@ export default function ActivitiesPanel() {
 
   const filtered = useMemo(() => activities.data.filter((a: any) => {
     if (typeFilter && a.type !== typeFilter) return false;
+    if (linkFilter) {
+      const [linkType, linkIdStr] = linkFilter.split(':');
+      const linkId = Number(linkIdStr);
+      if (linkType === 'customer' && a.customer !== linkId) return false;
+      if (linkType === 'lead' && a.lead !== linkId) return false;
+    }
     if (completedFilter && String(a.completed) !== completedFilter) return false;
     const d = a.due_date;
     if (dateFrom && (!d || d < dateFrom)) return false;
     if (dateTo && (!d || d > dateTo)) return false;
     if (view === 'calendar' && selectedDate && d !== selectedDate) return false;
     return true;
-  }), [activities.data, typeFilter, completedFilter, dateFrom, dateTo, view, selectedDate]);
+  }), [activities.data, typeFilter, linkFilter, completedFilter, dateFrom, dateTo, view, selectedDate]);
 
   const todayItems = useMemo(() => activities.data.filter((a: any) => a.due_date === todayStr), [activities.data, todayStr]);
   const overdueItems = useMemo(() => activities.data.filter((a: any) => a.due_date && a.due_date < todayStr && !a.completed), [activities.data, todayStr]);
@@ -122,7 +129,13 @@ export default function ActivitiesPanel() {
         return <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 700, color: m.color, background: m.bg, padding: '3px 10px', borderRadius: 999, fontFamily: FF }}><i className={m.icon} style={{ fontSize: 10 }} />{m.label}</span>;
       },
     },
-    { key: 'summary', label: 'Summary', render: (r: any) => (r.summary || '').substring(0, 60) + (r.summary?.length > 60 ? '…' : '') },
+    {
+      key: 'summary', label: 'Summary', render: (r: any) => {
+        const truncated = (r.summary || '').length > 60;
+        const text = truncated ? `${r.summary.substring(0, 60)}…` : (r.summary || '');
+        return <span title={truncated ? r.summary : undefined} style={{ cursor: truncated ? 'help' : 'default' }}>{text}</span>;
+      },
+    },
     { key: 'customer', label: 'Linked To', render: (r: any) => r.customer ? (customers.data.find((c: any) => c.id === r.customer)?.name ?? '—') : r.lead ? (leads.data.find((l: any) => l.id === r.lead)?.name ?? '—') : '—' },
     {
       key: 'due_date', label: 'Due', render: (r: any) => {
@@ -176,12 +189,25 @@ export default function ActivitiesPanel() {
             <button key={v} onClick={() => setView(v)} style={{ padding: '6px 14px', borderRadius: 7, border: 'none', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12, textTransform: 'capitalize', background: view === v ? OG : 'transparent', color: view === v ? '#fff' : '#6B6B6B' }}>{v}</button>
           ))}
         </div>
-        <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} style={{ ...inp, maxWidth: 150 }}>
+        <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} style={{ ...inp, maxWidth: 150 }} aria-label="Filter by activity type">
           <option value="">All Types</option>
           {ACTIVITY_TYPES.map(t => <option key={t.key} value={t.key}>{t.label}</option>)}
         </select>
-        <select value={completedFilter} onChange={e => setCompletedFilter(e.target.value)} style={{ ...inp, maxWidth: 160 }}>
-          <option value="">All</option><option value="true">Completed</option><option value="false">Not Completed</option>
+        <select value={linkFilter} onChange={e => setLinkFilter(e.target.value)} style={{ ...inp, maxWidth: 190 }} aria-label="Filter by linked customer or lead">
+          <option value="">All Customers/Leads</option>
+          {customers.data.length > 0 && (
+            <optgroup label="Customers">
+              {customers.data.map((c: any) => <option key={`customer:${c.id}`} value={`customer:${c.id}`}>{c.name}</option>)}
+            </optgroup>
+          )}
+          {leads.data.length > 0 && (
+            <optgroup label="Leads">
+              {leads.data.map((l: any) => <option key={`lead:${l.id}`} value={`lead:${l.id}`}>{l.name}</option>)}
+            </optgroup>
+          )}
+        </select>
+        <select value={completedFilter} onChange={e => setCompletedFilter(e.target.value)} style={{ ...inp, maxWidth: 160 }} aria-label="Filter by completion status">
+          <option value="">All Statuses</option><option value="true">Completed</option><option value="false">Not Completed</option>
         </select>
         {view === 'list' && (
           <>
