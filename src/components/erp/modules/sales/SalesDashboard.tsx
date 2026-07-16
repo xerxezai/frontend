@@ -1,12 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-  BarChart, Bar, PieChart, Pie, Cell,
+  BarChart, Bar, PieChart, Pie, Cell, Rectangle,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import { erpFetch } from '../../../../hooks/useERPApi';
 import { OG, FF, WHITE, BORDER, useFmtCurrency, Card3D } from './salesShared';
 
 const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#f59e0b', '#10b981', '#6366f1', '#ec4899', '#64748b'];
+
+/** Recharts still paints a small rounded sliver for a 0-value bar (the `radius`
+ * corners don't fully collapse at zero height), so months with no revenue show
+ * a faint bar even though the value is ₹0. Rendering nothing for value <= 0
+ * keeps the data/tooltip intact but skips the visible shape entirely. */
+const RevenueBarShape = (props: any) => {
+  if (!props.payload || Number(props.payload.revenue) <= 0) return null;
+  return <Rectangle {...props} />;
+};
 
 const ChartTooltip = ({ active, payload, label }: any) => {
   const fmtINR = useFmtCurrency();
@@ -103,7 +112,7 @@ export default function SalesDashboard() {
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
               <Tooltip content={<ChartTooltip />} />
-              <Bar dataKey="revenue" name="Revenue" fill={OG} radius={[6, 6, 0, 0]} isAnimationActive animationDuration={700} />
+              <Bar dataKey="revenue" name="Revenue" fill={OG} radius={[6, 6, 0, 0]} isAnimationActive animationDuration={700} shape={RevenueBarShape} />
             </BarChart>
           </ResponsiveContainer>
         </div>

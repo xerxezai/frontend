@@ -84,8 +84,8 @@ export default function QuotationsPanel() {
     { key: 'number', label: 'Number', render: (r: any) => r.number || r.id },
     { key: 'customer_name', label: 'Customer', render: (r: any) => r.customer_name || '—' },
     { key: 'issue_date', label: 'Issued', render: (r: any) => r.issue_date || '—' },
-    { key: 'valid_until', label: 'Valid Until', render: (r: any) => r.valid_until || '—' },
-    { key: 'status', label: 'Status', render: (r: any) => <StatusBadge val={r.status} map={Q_STATUS} /> },
+    { key: 'valid_until', label: 'Valid Until', headerTitle: 'Valid Until', render: (r: any) => r.valid_until || '—' },
+    { key: 'status', label: 'Status', headerTitle: '', render: (r: any) => <StatusBadge val={r.status} map={Q_STATUS} /> },
     { key: 'total', label: 'Total', render: (r: any) => fmtINR(r.total) },
     {
       key: 'quickActions', label: 'Quick Actions',

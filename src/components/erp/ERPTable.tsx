@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 
-interface Column { key: string; label: string; render?: (row: any) => React.ReactNode; }
+interface Column {
+  key: string;
+  label: string;
+  render?: (row: any) => React.ReactNode;
+  /** Header tooltip text. Defaults to `label` when omitted. Pass '' to suppress the tooltip entirely. */
+  headerTitle?: string;
+}
 
 interface Props {
   title:     string;
@@ -103,7 +109,7 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
             <thead>
               <tr style={{ background: '#fafaf8' }}>
                 {columns.map(c => (
-                  <th key={c.key} style={TH} title={c.label}>{c.label}</th>
+                  <th key={c.key} style={TH} title={c.headerTitle !== undefined ? (c.headerTitle || undefined) : c.label}>{c.label}</th>
                 ))}
                 {showActions && (
                   <th style={{ ...TH, width: 76, minWidth: 76 }}>Actions</th>
