@@ -28,6 +28,9 @@ import SuppliersPanel from '../components/erp/modules/procurement/SuppliersPanel
 import GoodsReceiptPanel from '../components/erp/modules/procurement/GoodsReceiptPanel';
 import BillsPanel from '../components/erp/modules/procurement/BillsPanel';
 
+// Document Management
+import DocumentManagement from '../components/erp/modules/documents/DocumentManagement';
+
 // Logistics
 import LogisticsDashboard from '../components/erp/modules/logistics/LogisticsDashboard';
 import ShipmentsPanel from '../components/erp/modules/logistics/ShipmentsPanel';
@@ -144,6 +147,9 @@ const ERPPage = () => {
           <Route path="procurement/suppliers"          element={<SuppliersPanel />} />
           <Route path="procurement/goods-receipt"      element={<GoodsReceiptPanel />} />
           <Route path="procurement/bills"              element={<BillsPanel />} />
+
+          {/* Document Management */}
+          <Route path="documents" element={<DocumentManagement />} />
           <Route path="inventory"                      element={<InventoryModule />} />
 
           {/* Logistics */}

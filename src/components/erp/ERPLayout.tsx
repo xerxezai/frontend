@@ -24,6 +24,7 @@ const NAV: NavItem[] = [
   { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM' },
   { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales' },
   { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement' },
+  { to: '/erp/documents',   icon: 'fas fa-folder-open',   label: 'Document Management' },
   { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics' },
   { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting' },
   { to: '/erp/mlm',         icon: 'fas fa-sitemap',       label: 'MLM' },
