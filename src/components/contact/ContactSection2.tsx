@@ -18,14 +18,15 @@ const INDUSTRIES_OPTS = ["Engineering & EPC", "Oil & Gas", "Construction", "Faci
 const CURRENT_CHALLENGES = ["Manual approvals & workflows", "Document management", "Procurement bottlenecks", "HR & payroll management", "No visibility on project costs", "Other"];
 
 // ── per-service dynamic field option lists ─────────────────────────────────────
-const PLAN_INTEREST = ["Starter", "Professional", "Enterprise", "Not sure"];
+const PLAN_INTEREST = [
+  "Procurement & Approval Workflows", "Document Management", "HR & Payroll",
+  "Project Cost Control", "Full ERP Suite", "Custom Requirements",
+];
 const TEAM_SIZES = ["1-10", "11-50", "51-200", "200+"];
-const BUDGET_CURRENCIES = ["INR", "AED", "USD"];
-const BUDGET_RANGES: Record<string, string[]> = {
-  INR: ["Under ₹15,000/mo", "₹15,000 – ₹35,000/mo", "₹35,000+/mo", "Not sure"],
-  AED: ["Under AED 3,000/mo", "AED 3,000 – 7,000/mo", "AED 7,000+/mo", "Not sure"],
-  USD: ["Under $180/mo", "$180 – $420/mo", "$420+/mo", "Not sure"],
-};
+const TIMELINE_OPTIONS = [
+  "Immediate (within 1 month)", "Short term (1-3 months)",
+  "Medium term (3-6 months)", "Just exploring for now",
+];
 const DEPLOYMENT_ENVS = ["Cloud", "On-premise", "Hybrid"];
 const NUM_DEVELOPERS = ["1-5", "6-20", "20+"];
 const CLOUD_PROVIDERS = ["AWS", "Azure", "GCP", "No preference"];
@@ -48,7 +49,7 @@ interface F {
   service: string; country: string; hearAboutUs: string; message: string;
   industry: string; currentChallenge: string;
   // AI-Powered ERP
-  planInterest: string; teamSize: string; budgetCurrency: string; budgetRange: string;
+  planInterest: string; teamSize: string; timeline: string;
   // DevSecOps Pipelines
   techStack: string; deploymentEnv: string; numDevelopers: string;
   // Cloud Infrastructure
@@ -64,7 +65,7 @@ const EMPTY: F = {
   fullName:"", email:"", phone:"", company:"",
   service:"", country:"", hearAboutUs:"", message:"",
   industry:"", currentChallenge:"",
-  planInterest:"", teamSize:"", budgetCurrency:"", budgetRange:"",
+  planInterest:"", teamSize:"", timeline:"",
   techStack:"", deploymentEnv:"", numDevelopers:"",
   cloudProvider:"", currentInfra:"", migrationNeeded:"",
   projectType:"", projectTimeline:"", approxBudget:"",
@@ -296,7 +297,7 @@ const ContactSection2 = () => {
   const tracked = useMemo(() => {
     const keys = [...COMMON_TRACKED];
     if (activeSection) keys.push(...activeSection.fields.map(f => f.key));
-    if (form.service === "AI-Powered ERP") keys.push("budgetCurrency", "budgetRange");
+    if (form.service === "AI-Powered ERP") keys.push("timeline");
     return keys;
   }, [activeSection, form.service]);
 
@@ -324,7 +325,7 @@ const ContactSection2 = () => {
         message: form.message, country: form.country, hear_about_us: form.hearAboutUs,
         industry: form.industry, current_challenge: form.currentChallenge,
         plan_interest: form.planInterest, team_size: form.teamSize,
-        budget_currency: form.budgetCurrency, budget_range: form.budgetRange,
+        timeline: form.timeline,
         tech_stack: form.techStack, deployment_env: form.deploymentEnv, num_developers: form.numDevelopers,
         cloud_provider: form.cloudProvider, current_infra: form.currentInfra, migration_needed: form.migrationNeeded,
         project_type: form.projectType, project_timeline: form.projectTimeline, approx_budget: form.approxBudget,
@@ -1006,30 +1007,17 @@ const ContactSection2 = () => {
                             </div>
                           ))}
                           {form.service === "AI-Powered ERP" && (
-                            <>
-                              <div className="col-md-6">
-                                <label style={lbl}>Budget Currency</label>
-                                {fw("budgetCurrency","fas fa-coins",
-                                  <select value={form.budgetCurrency} style={selBase("budgetCurrency")} disabled={sending}
-                                    onChange={e=>{ set("budgetCurrency",e.target.value); set("budgetRange",""); }}
-                                    onFocus={()=>setFoc("budgetCurrency")} onBlur={()=>setFoc(null)}>
-                                    <option value="">Select currency…</option>
-                                    {BUDGET_CURRENCIES.map(c=><option key={c} value={c}>{c}</option>)}
-                                  </select>
-                                )}
-                              </div>
-                              <div className="col-md-6">
-                                <label style={lbl}>Budget Range</label>
-                                {fw("budgetRange","fas fa-wallet",
-                                  <select value={form.budgetRange} style={selBase("budgetRange")} disabled={sending || !form.budgetCurrency}
-                                    onChange={e=>set("budgetRange",e.target.value)}
-                                    onFocus={()=>setFoc("budgetRange")} onBlur={()=>setFoc(null)}>
-                                    <option value="">{form.budgetCurrency ? "Select a range…" : "Select currency first…"}</option>
-                                    {(BUDGET_RANGES[form.budgetCurrency] || []).map(r=><option key={r} value={r}>{r}</option>)}
-                                  </select>
-                                )}
-                              </div>
-                            </>
+                            <div className="col-md-6">
+                              <label style={lbl}>Timeline</label>
+                              {fw("timeline","fas fa-hourglass-half",
+                                <select value={form.timeline} style={selBase("timeline")} disabled={sending}
+                                  onChange={e=>set("timeline",e.target.value)}
+                                  onFocus={()=>setFoc("timeline")} onBlur={()=>setFoc(null)}>
+                                  <option value="">Select timeline…</option>
+                                  {TIMELINE_OPTIONS.map(t=><option key={t} value={t}>{t}</option>)}
+                                </select>
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>
