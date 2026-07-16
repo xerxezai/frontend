@@ -3,6 +3,7 @@ import { useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import { toast } from 'react-toastify';
 import ERPTable from '../../ERPTable';
 import { useCurrency } from '../../../../context/CurrencyContext';
+import PhoneInput from '../../../common/PhoneInput';
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
@@ -98,7 +99,7 @@ export default function EmployeesPanel() {
                 <div><label style={lbl}>Email</label><input type="email" value={empF.email} onChange={e=>setEmpF(f=>({...f,email:e.target.value}))} style={inp} /></div>
               </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
-                <div><label style={lbl}>Phone</label><input value={empF.phone} onChange={e=>setEmpF(f=>({...f,phone:e.target.value}))} style={inp} /></div>
+                <div><label style={lbl}>Phone</label><PhoneInput value={empF.phone} onChange={v=>setEmpF(f=>({...f,phone:v}))} /></div>
                 <div><label style={lbl}>Department</label>
                   <select value={empF.department} onChange={e=>setEmpF(f=>({...f,department:e.target.value}))} style={inp}>
                     <option value="">— Select —</option>

@@ -6,6 +6,7 @@ import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, leadScoreMeta, sourceMeta, today, type Deal } from './crmShared';
 import CRMNotesPanel from './CRMNotesPanel';
 import CRMDealsPanel from './CRMDealsPanel';
+import PhoneInput from '../../../common/PhoneInput';
 
 const statusColors: Record<string, { bg: string; color: string }> = {
   new: { bg: '#dbeafe', color: '#1d4ed8' }, contacted: { bg: '#fef3c7', color: '#92400e' },
@@ -173,6 +174,7 @@ export default function LeadsPanel() {
                 <div><label style={lbl}>Company</label><input value={leadF.company} onChange={e => setLeadF(f => ({ ...f, company: e.target.value }))} style={inp} /></div>
               </div>
               <div><label style={lbl}>Email</label><input type="email" value={leadF.email} onChange={e => setLeadF(f => ({ ...f, email: e.target.value }))} style={inp} /></div>
+              <div><label style={lbl}>Phone</label><PhoneInput value={leadF.phone} onChange={v => setLeadF(f => ({ ...f, phone: v }))} /></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div><label style={lbl}>Source</label><select value={leadF.source} onChange={e => setLeadF(f => ({ ...f, source: e.target.value }))} style={inp}>
                   <option value="website">Website</option><option value="referral">Referral</option><option value="outbound">Outbound</option>

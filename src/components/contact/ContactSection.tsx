@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef, memo } from "react";
 import { toast } from "react-toastify";
 import apiService from '../../services/api';
+import PhoneInput, { isValidPhone } from '../common/PhoneInput';
 
 interface ContactInfo {
   name: string; email: string; phone: string;
@@ -144,7 +145,7 @@ const ContactFormPanel = memo(() => {
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       toast.error("Please enter a valid email address."); return;
     }
-    if (!form.phone.trim()) { toast.error("Please enter your phone number."); return; }
+    if (!isValidPhone(form.phone)) { toast.error("Please enter a valid phone number with country code"); return; }
     if (!form.subject.trim()) { toast.error("Please enter a subject."); return; }
     if (!form.message.trim() || form.message.trim().length < 10) {
       toast.error("Please write a message (min 10 characters)."); return;
@@ -221,14 +222,7 @@ const ContactFormPanel = memo(() => {
           {/* Phone */}
           <div className="col-sm-6">
             <label style={LBL}>Phone Number *</label>
-            <div className="xz-ct-wrap">
-              <span className="xz-ct-icon">
-                <span className="xz-ct-badge-box"><i className="fas fa-phone-alt" /></span>
-              </span>
-              <input type="tel" className="xz-ct-field" placeholder="+1 234 567 8900"
-                value={form.phone} disabled={sending}
-                onChange={e => set("phone", e.target.value)} />
-            </div>
+            <PhoneInput value={form.phone} disabled={sending} onChange={v => set("phone", v)} />
           </div>
 
           {/* Subject */}

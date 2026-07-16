@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiService from '../../services/api';
+import PhoneInput, { isValidPhone } from '../common/PhoneInput';
 
 
 // ── services ─────────────────────────────────────────────────────────────────
@@ -310,6 +311,9 @@ const ContactSection2 = () => {
     }
     if (!form.message.trim() || form.message.trim().length < 10) {
       toast.error("Message must be at least 10 characters."); return;
+    }
+    if (form.phone.trim() && !isValidPhone(form.phone)) {
+      toast.error("Please enter a valid phone number with country code"); return;
     }
     setSend(true);
     try {
@@ -828,12 +832,7 @@ const ContactSection2 = () => {
                         </div>
                         <div className="col-md-6">
                           <label style={lbl}>Phone Number</label>
-                          {fw("phone","fas fa-phone-alt",
-                            <input type="tel" placeholder="+971 50 000 0000"
-                              value={form.phone} style={fldBase("phone")} disabled={sending}
-                              onChange={e=>set("phone",e.target.value)}
-                              onFocus={()=>setFoc("phone")} onBlur={()=>setFoc(null)} />
-                          )}
+                          <PhoneInput value={form.phone} disabled={sending} onChange={v=>set("phone",v)} />
                         </div>
                         <div className="col-md-6">
                           <label style={lbl}>Company Name</label>

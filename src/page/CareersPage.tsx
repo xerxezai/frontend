@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import CustomLayout from "../components/layout/CustomLayout";
 import SEO, { PAGE_SEO } from "../components/seo/SEO";
 import XzHeroSection from "../components/common/XzHeroSection";
+import PhoneInput, { isValidPhone } from "../components/common/PhoneInput";
 import apiService from "../services/api";
 
 // ── Brand tokens (verbatim — see AIERPPage.tsx) ───────────────────────────────
@@ -487,6 +488,7 @@ const ApplicationForm = ({ positions, prefillPosition }: { positions: Position[]
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Enter a valid email address.";
     if (!form.position) next.position = "Select the position you're applying for.";
     if (!form.experience) next.experience = "Select your experience level.";
+    if (form.phone.trim() && !isValidPhone(form.phone)) next.phone = "Please enter a valid phone number with country code";
     if (!resume) next.resume = "Attach your resume (PDF only).";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -570,7 +572,8 @@ const ApplicationForm = ({ positions, prefillPosition }: { positions: Position[]
         </div>
         <div className="col-md-6">
           <label style={labelStyle}>Phone</label>
-          <input style={inputStyle} value={form.phone} onChange={e => set("phone", e.target.value)} placeholder="+971 5X XXX XXXX" />
+          <PhoneInput value={form.phone} onChange={v => set("phone", v)} hasError={!!errors.phone} />
+          {errors.phone && <span style={{ color: "#ef4444", fontSize: 12, fontFamily: FF }}>{errors.phone}</span>}
         </div>
         <div className="col-md-6">
           <label style={labelStyle}>Position *</label>

@@ -4,6 +4,7 @@ import { useERPList, erpUpload, erpDownload, isSuperUser } from '../../../../hoo
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, type Deal } from './crmShared';
 import CustomerProfilePanel from './CustomerProfilePanel';
+import PhoneInput from '../../../common/PhoneInput';
 
 const TAG_COLORS: Record<string, { bg: string; color: string }> = {
   VIP: { bg: 'rgba(201,136,58,0.14)', color: OG },
@@ -194,7 +195,7 @@ export default function CustomersPanel() {
                 <div><label style={lbl}>Name *</label><input value={custF.name} onChange={e => setCustF(f => ({ ...f, name: e.target.value }))} style={inp} required /></div>
                 <div><label style={lbl}>Company</label><input value={custF.company} onChange={e => setCustF(f => ({ ...f, company: e.target.value }))} style={inp} /></div>
                 <div><label style={lbl}>Email</label><input type="email" value={custF.email} onChange={e => setCustF(f => ({ ...f, email: e.target.value }))} style={inp} /></div>
-                <div><label style={lbl}>Phone</label><input value={custF.phone} onChange={e => setCustF(f => ({ ...f, phone: e.target.value }))} style={inp} /></div>
+                <div><label style={lbl}>Phone</label><PhoneInput value={custF.phone} onChange={v => setCustF(f => ({ ...f, phone: v }))} /></div>
                 <div><label style={lbl}>Industry</label><input value={custF.industry} onChange={e => setCustF(f => ({ ...f, industry: e.target.value }))} style={inp} /></div>
                 <div><label style={lbl}>Source</label><select value={custF.source} onChange={e => setCustF(f => ({ ...f, source: e.target.value }))} style={inp}>
                   <option value="">— None —</option>
