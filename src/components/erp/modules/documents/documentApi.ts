@@ -1,5 +1,5 @@
 import { erpFetch, erpUpload } from '../../../../hooks/useERPApi';
-import type { DocumentT, DocumentVersionT } from './documentsShared';
+import type { DocumentT, DocumentVersionT, DocumentCommentT, DocumentAuditEntryT } from './documentsShared';
 
 export function getDocuments(category?: string, search?: string): Promise<DocumentT[]> {
   const params = new URLSearchParams();
@@ -46,4 +46,32 @@ export function searchDocuments(query: string, category?: string): Promise<Docum
   if (query) params.set('q', query);
   if (category) params.set('category', category);
   return erpFetch(`documents/search/?${params.toString()}`);
+}
+
+export function submitForReview(id: number): Promise<DocumentT> {
+  return erpFetch(`documents/${id}/submit-for-review/`, { method: 'POST', body: JSON.stringify({}) });
+}
+
+export function trackDownload(id: number): Promise<{ status: string }> {
+  return erpFetch(`documents/${id}/track-download/`, { method: 'POST', body: JSON.stringify({}) });
+}
+
+export function getComments(id: number): Promise<DocumentCommentT[]> {
+  return erpFetch(`documents/${id}/comments/`);
+}
+
+export function addComment(id: number, comment: string): Promise<DocumentCommentT> {
+  return erpFetch(`documents/${id}/comments/`, { method: 'POST', body: JSON.stringify({ comment }) });
+}
+
+export function deleteComment(id: number, commentId: number): Promise<null> {
+  return erpFetch(`documents/${id}/comments/${commentId}/`, { method: 'DELETE' });
+}
+
+export function getAuditTrail(id: number): Promise<DocumentAuditEntryT[]> {
+  return erpFetch(`documents/${id}/audit-trail/`);
+}
+
+export function generateShareLink(id: number): Promise<{ share_token: string; share_url: string }> {
+  return erpFetch(`documents/${id}/generate-share-link/`, { method: 'POST', body: JSON.stringify({}) });
 }

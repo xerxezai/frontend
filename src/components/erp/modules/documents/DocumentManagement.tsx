@@ -1,14 +1,54 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import {
   OG, FF, DARK, CREAM, inp, lbl, SAVE, CNCL, OVR, CRD, KpiCard, CATEGORIES, DelDlg,
   type DocumentT,
 } from './documentsShared';
-import { getDocuments, searchDocuments, approveDocument, rejectDocument, uploadVersion, deleteDocument } from './documentApi';
+import {
+  getDocuments, searchDocuments, getDocument, approveDocument, rejectDocument, uploadVersion,
+  deleteDocument, submitForReview, trackDownload,
+} from './documentApi';
 import DocumentList from './DocumentList';
 import DocumentUpload from './DocumentUpload';
 import DocumentDetail from './DocumentDetail';
+import EditDocumentModal from './EditDocumentModal';
+import ShareLinkModal from './ShareLinkModal';
+import CommentsPanel from './CommentsPanel';
+import BulkUploadModal from './BulkUploadModal';
+
+const SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest first' },
+  { value: 'oldest', label: 'Oldest first' },
+  { value: 'name_asc', label: 'Name A-Z' },
+  { value: 'name_desc', label: 'Name Z-A' },
+  { value: 'expiring', label: 'Expiring soon' },
+] as const;
+type SortKey = typeof SORT_OPTIONS[number]['value'];
+
+function sortDocuments(docs: DocumentT[], sort: SortKey): DocumentT[] {
+  const copy = [...docs];
+  switch (sort) {
+    case 'oldest':
+      return copy.sort((a, b) => a.created_at.localeCompare(b.created_at));
+    case 'name_asc':
+      return copy.sort((a, b) => a.title.localeCompare(b.title));
+    case 'name_desc':
+      return copy.sort((a, b) => b.title.localeCompare(a.title));
+    case 'expiring':
+      return copy.sort((a, b) => {
+        if (!a.expiry_date && !b.expiry_date) return 0;
+        if (!a.expiry_date) return 1;
+        if (!b.expiry_date) return -1;
+        return a.expiry_date.localeCompare(b.expiry_date);
+      });
+    case 'newest':
+    default:
+      return copy.sort((a, b) => b.created_at.localeCompare(a.created_at));
+  }
+}
 
 async function downloadFile(doc: DocumentT) {
+  trackDownload(doc.id).catch(() => {});
   if (!doc.file_url) return;
   try {
     const res = await fetch(doc.file_url);
@@ -88,10 +128,16 @@ export default function DocumentManagement() {
   const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState('all');
   const [query, setQuery] = useState('');
+  const [sort, setSort] = useState<SortKey>('newest');
+  const [view, setView] = useState<'grid' | 'list'>('grid');
 
   const [showUpload, setShowUpload] = useState(false);
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
   const [viewingDoc, setViewingDoc] = useState<DocumentT | null>(null);
   const [versioningDoc, setVersioningDoc] = useState<DocumentT | null>(null);
+  const [editingDoc, setEditingDoc] = useState<DocumentT | null>(null);
+  const [sharingDoc, setSharingDoc] = useState<DocumentT | null>(null);
+  const [commentingDoc, setCommentingDoc] = useState<DocumentT | null>(null);
   const [deletingDoc, setDeletingDoc] = useState<DocumentT | null>(null);
 
   const reloadStats = useCallback(() => {
@@ -118,31 +164,70 @@ export default function DocumentManagement() {
 
   const reloadAll = useCallback(() => { reloadStats(); reloadDisplay(); }, [reloadStats, reloadDisplay]);
 
-  const stats = {
-    total: allDocs.length,
-    pending: allDocs.filter(d => d.status === 'under_review').length,
-    approved: allDocs.filter(d => d.status === 'approved').length,
-    rejected: allDocs.filter(d => d.status === 'rejected').length,
+  const sortedDocs = useMemo(() => sortDocuments(displayDocs, sort), [displayDocs, sort]);
+
+  const stats = useMemo(() => {
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    const in30 = new Date(now); in30.setDate(in30.getDate() + 30);
+    const expiringSoon = allDocs.filter(d => {
+      if (!d.expiry_date) return false;
+      const exp = new Date(d.expiry_date);
+      return exp >= now && exp <= in30;
+    }).length;
+    return {
+      total: allDocs.length,
+      pending: allDocs.filter(d => d.status === 'under_review').length,
+      approved: allDocs.filter(d => d.status === 'approved').length,
+      rejected: allDocs.filter(d => d.status === 'rejected').length,
+      expiringSoon,
+    };
+  }, [allDocs]);
+
+  const handleView = async (doc: DocumentT) => {
+    try {
+      const fresh = await getDocument(doc.id);
+      setViewingDoc(fresh);
+      reloadStats();
+    } catch {
+      setViewingDoc(doc);
+    }
   };
 
   const handleApprove = async (doc: DocumentT) => {
     await approveDocument(doc.id);
+    toast.success('Document approved');
     setViewingDoc(null);
     reloadAll();
   };
 
   const handleReject = async (doc: DocumentT) => {
     await rejectDocument(doc.id);
+    toast.success('Document rejected');
     setViewingDoc(null);
     reloadAll();
   };
 
+  const handleSubmitForReview = async (doc: DocumentT) => {
+    try {
+      await submitForReview(doc.id);
+      toast.success('Submitted for review');
+      reloadAll();
+    } catch (e: any) {
+      toast.error(e.message || 'Could not submit for review.');
+    }
+  };
+
   const confirmDelete = async () => {
     if (!deletingDoc) return;
-    await deleteDocument(deletingDoc.id);
-    setDeletingDoc(null);
-    setViewingDoc(null);
-    reloadAll();
+    try {
+      await deleteDocument(deletingDoc.id);
+      toast.success('Document deleted');
+      setDeletingDoc(null);
+      setViewingDoc(null);
+      reloadAll();
+    } catch (e: any) {
+      toast.error(e.message || 'Delete failed.');
+    }
   };
 
   return (
@@ -152,12 +237,20 @@ export default function DocumentManagement() {
           <h4 style={{ fontWeight: 800, fontSize: 20, color: DARK, margin: 0 }}>Document Management</h4>
           <p style={{ fontSize: 13, color: '#6B6B6B', margin: '4px 0 0' }}>Upload, version, review and approve project documents.</p>
         </div>
-        <button
-          onClick={() => setShowUpload(true)}
-          style={{ background: `linear-gradient(145deg,#e8a84e 0%,${OG} 100%)`, color: '#fff', border: 'none', borderRadius: 10, padding: '11px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-        >
-          <i className="fas fa-plus" />Upload Document
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            onClick={() => setShowBulkUpload(true)}
+            style={{ background: '#fff', color: OG, border: '1px solid rgba(201,136,58,0.30)', borderRadius: 10, padding: '11px 18px', fontFamily: FF, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+          >
+            <i className="fas fa-layer-group" />Bulk Upload
+          </button>
+          <button
+            onClick={() => setShowUpload(true)}
+            style={{ background: `linear-gradient(145deg,#e8a84e 0%,${OG} 100%)`, color: '#fff', border: 'none', borderRadius: 10, padding: '11px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+          >
+            <i className="fas fa-plus" />Upload Document
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))', gap: 14, marginBottom: 22 }}>
@@ -165,6 +258,7 @@ export default function DocumentManagement() {
         <KpiCard icon="fas fa-hourglass-half" label="Pending Approval" value={stats.pending} accent="#e65100" />
         <KpiCard icon="fas fa-check-circle" label="Approved" value={stats.approved} accent="#2e7d32" />
         <KpiCard icon="fas fa-times-circle" label="Rejected" value={stats.rejected} accent="#c62828" />
+        <KpiCard icon="fas fa-clock" label="Expiring Soon" value={stats.expiringSoon} accent="#c2410c" />
       </div>
 
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 16 }}>
@@ -176,6 +270,16 @@ export default function DocumentManagement() {
             placeholder="Search documents by title or description…"
             style={{ ...inp, paddingLeft: 34, background: CREAM }}
           />
+        </div>
+        <select value={sort} onChange={e => setSort(e.target.value as SortKey)} style={{ ...inp, maxWidth: 180 }}>
+          {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+        <div style={{ display: 'flex', gap: 3, background: '#fff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 9, padding: 3 }}>
+          {(['grid', 'list'] as const).map(v => (
+            <button key={v} onClick={() => setView(v)} style={{ padding: '8px 14px', borderRadius: 7, border: 'none', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12, textTransform: 'capitalize', background: view === v ? OG : 'transparent', color: view === v ? '#fff' : '#6B6B6B' }}>
+              <i className={v === 'grid' ? 'fas fa-th-large' : 'fas fa-list'} style={{ marginRight: 6 }} />{v}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -200,21 +304,33 @@ export default function DocumentManagement() {
       </div>
 
       <DocumentList
-        documents={displayDocs}
+        documents={sortedDocs}
         loading={loading}
         error={error}
-        onView={setViewingDoc}
+        view={view}
+        onView={handleView}
         onDownload={downloadFile}
         onNewVersion={setVersioningDoc}
         onApprove={handleApprove}
         onReject={handleReject}
         onDelete={setDeletingDoc}
+        onEdit={setEditingDoc}
+        onShare={setSharingDoc}
+        onComments={setCommentingDoc}
+        onSubmitForReview={handleSubmitForReview}
       />
 
       {showUpload && (
         <DocumentUpload
           onClose={() => setShowUpload(false)}
           onUploaded={() => { setShowUpload(false); reloadAll(); }}
+        />
+      )}
+
+      {showBulkUpload && (
+        <BulkUploadModal
+          onClose={() => setShowBulkUpload(false)}
+          onUploaded={reloadAll}
         />
       )}
 
@@ -236,9 +352,25 @@ export default function DocumentManagement() {
         />
       )}
 
+      {editingDoc && (
+        <EditDocumentModal
+          doc={editingDoc}
+          onClose={() => setEditingDoc(null)}
+          onSaved={() => { setEditingDoc(null); toast.success('Document updated'); reloadAll(); }}
+        />
+      )}
+
+      {sharingDoc && (
+        <ShareLinkModal doc={sharingDoc} onClose={() => setSharingDoc(null)} />
+      )}
+
+      {commentingDoc && (
+        <CommentsPanel doc={commentingDoc} onClose={() => setCommentingDoc(null)} onChanged={reloadAll} />
+      )}
+
       {deletingDoc && (
         <DelDlg
-          label="Are you sure you want to delete this document?"
+          label={`Are you sure you want to delete "${deletingDoc.title}"? This cannot be undone.`}
           onCancel={() => setDeletingDoc(null)}
           onConfirm={confirmDelete}
         />

@@ -100,6 +100,9 @@ export interface DocumentT {
   version: string;
   status: string;
   status_display: string;
+  expiry_date: string | null;
+  views_count: number;
+  comments_count: number;
   uploaded_by: number | null;
   uploaded_by_name: string;
   approved_by: number | null;
@@ -107,6 +110,26 @@ export interface DocumentT {
   created_at: string;
   updated_at: string;
   versions?: DocumentVersionT[];
+}
+
+export interface DocumentCommentT {
+  id: number;
+  document: number;
+  user: number | null;
+  user_name: string;
+  comment: string;
+  created_at: string;
+}
+
+export interface DocumentAuditEntryT {
+  id: number;
+  document: number;
+  user: number | null;
+  user_name: string;
+  action: string;
+  action_display: string;
+  notes: string;
+  created_at: string;
 }
 
 export const CATEGORIES: { value: string; label: string }[] = [
@@ -161,3 +184,32 @@ export function fmtDate(iso?: string | null): string {
   if (!iso) return '—';
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
+
+export function fmtDateTime(iso?: string | null): string {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+/** Expiry status for a document's expiry_date — drives the card's expiry badge. */
+export function expiryMeta(expiryDate?: string | null): { label: string; bg: string; color: string } | null {
+  if (!expiryDate) return null;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const expiry = new Date(expiryDate); expiry.setHours(0, 0, 0, 0);
+  const daysLeft = Math.round((expiry.getTime() - today.getTime()) / 86400000);
+  if (daysLeft < 0) return { label: 'Expired', bg: '#fee2e2', color: '#991b1b' };
+  if (daysLeft <= 30) return { label: 'Expiring Soon', bg: '#ffedd5', color: '#c2410c' };
+  return { label: `Valid until ${fmtDate(expiryDate)}`, bg: '#dcfce7', color: '#15803d' };
+}
+
+export const AUDIT_ACTION_META: Record<string, { icon: string; color: string }> = {
+  uploaded:    { icon: 'fas fa-upload',        color: '#2563eb' },
+  viewed:      { icon: 'fas fa-eye',           color: '#6b7280' },
+  downloaded:  { icon: 'fas fa-download',      color: '#0891b2' },
+  approved:    { icon: 'fas fa-check-circle',  color: '#16a34a' },
+  rejected:    { icon: 'fas fa-times-circle',  color: '#dc2626' },
+  deleted:     { icon: 'fas fa-trash',         color: '#991b1b' },
+  commented:   { icon: 'fas fa-comment',       color: OG },
+  new_version: { icon: 'fas fa-code-branch',   color: '#7c3aed' },
+  shared:      { icon: 'fas fa-link',          color: '#0d9488' },
+  edited:      { icon: 'fas fa-pen',           color: OG },
+};

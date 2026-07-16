@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, CATEGORIES } from './documentsShared';
 import { uploadDocument } from './documentApi';
 
@@ -33,6 +34,7 @@ export default function DocumentUpload({ onClose, onUploaded }: { onClose: () =>
       formData.append('description', description);
       formData.append('file', file);
       await uploadDocument(formData);
+      toast.success('Document uploaded successfully');
       onUploaded();
     } catch (e: any) {
       setError(e.message || 'Upload failed.');

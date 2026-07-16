@@ -1,10 +1,10 @@
 import {
-  OG, FF, Card3D, CategoryBadge, DocStatusBadge, fileIconFor, fmtDate,
+  OG, FF, Card3D, CategoryBadge, DocStatusBadge, fileIconFor, fmtDate, expiryMeta,
   type DocumentT,
 } from './documentsShared';
 
 export default function DocumentCard({
-  doc, onView, onDownload, onNewVersion, onApprove, onReject, onDelete,
+  doc, onView, onDownload, onNewVersion, onApprove, onReject, onDelete, onEdit, onShare, onComments, onSubmitForReview,
 }: {
   doc: DocumentT;
   onView: () => void;
@@ -13,8 +13,13 @@ export default function DocumentCard({
   onApprove: () => void;
   onReject: () => void;
   onDelete: () => void;
+  onEdit: () => void;
+  onShare: () => void;
+  onComments: () => void;
+  onSubmitForReview: () => void;
 }) {
   const { icon, color } = fileIconFor(doc.file_url || doc.file || doc.title);
+  const expiry = expiryMeta(doc.expiry_date);
 
   return (
     <Card3D accent={OG} p="18px 18px 16px">
@@ -35,6 +40,11 @@ export default function DocumentCard({
               {doc.version}
             </span>
             <DocStatusBadge status={doc.status} />
+            {expiry && (
+              <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: expiry.bg, color: expiry.color, fontFamily: FF }}>
+                {expiry.label}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -53,10 +63,30 @@ export default function DocumentCard({
         <button onClick={onNewVersion} style={btnStyle('#F8F7F4', '#1A1A1A')}>
           <i className="fas fa-code-branch" style={{ marginRight: 6 }} />New Version
         </button>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+        <button onClick={onEdit} style={btnStyle('rgba(201,136,58,0.10)', OG, '1px solid rgba(201,136,58,0.28)')}>
+          <i className="fas fa-pen" style={{ marginRight: 6 }} />Edit
+        </button>
         <button onClick={onDelete} style={btnStyle('rgba(239,68,68,0.10)', '#ef4444', '1px solid rgba(239,68,68,0.28)')}>
           <i className="fas fa-trash" style={{ marginRight: 6 }} />Delete
         </button>
+        <button onClick={onShare} style={btnStyle('#F8F7F4', '#6b7280')}>
+          <i className="fas fa-link" style={{ marginRight: 6 }} />Share
+        </button>
+        <button onClick={onComments} style={btnStyle('#F8F7F4', '#6b7280')}>
+          <i className="fas fa-comment" style={{ marginRight: 6 }} />Comments{doc.comments_count > 0 ? ` (${doc.comments_count})` : ''}
+        </button>
       </div>
+
+      {doc.status === 'draft' && (
+        <div style={{ marginTop: 8 }}>
+          <button onClick={onSubmitForReview} style={{ ...btnStyle('rgba(37,99,235,0.10)', '#1d4ed8', '1px solid rgba(37,99,235,0.28)'), width: '100%' }}>
+            <i className="fas fa-paper-plane" style={{ marginRight: 6 }} />Submit for Review
+          </button>
+        </div>
+      )}
 
       {doc.status === 'under_review' && (
         <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
