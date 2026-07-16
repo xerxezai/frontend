@@ -103,10 +103,10 @@ const scrollToId = (id: string) => {
 // CONTENT
 // ═══════════════════════════════════════════════════════════════════════════
 const WHY_US = [
-  { icon: "🚀", title: "Fast Growth",            desc: "Work on cutting-edge AI and ERP products" },
-  { icon: "🌍", title: "Remote First",           desc: "Work from anywhere in the world" },
-  { icon: "📚", title: "Learning & Development",  desc: "Continuous upskilling opportunities" },
-  { icon: "💰", title: "Performance Bonus",       desc: "Rewarded for your contributions" },
+  { icon: "🚀", title: "Fast Growth",            desc: "Ship real features on our AI-powered ERP and Academy platform — not legacy maintenance work." },
+  { icon: "🌍", title: "Remote First",           desc: "No office required. Work from anywhere, with a team that's built async collaboration in from day one." },
+  { icon: "📚", title: "Learning & Development",  desc: "Hands-on access to the AI tools, courses, and mentorship you need to keep leveling up." },
+  { icon: "💰", title: "Performance Bonus",       desc: "Compensation tied to real impact — ship meaningful work and get rewarded for it." },
 ];
 
 interface Position {
@@ -134,16 +134,16 @@ const FALLBACK_POSITIONS: Position[] = [
 ];
 
 const CULTURE = [
-  { icon: "🤝", title: "Collaborative",   desc: "We work as one team across all time zones" },
-  { icon: "💡", title: "Innovative",      desc: "We build AI-first solutions for real businesses" },
-  { icon: "🎯", title: "Impact-Driven",   desc: "Every feature we build serves real users" },
+  { icon: "🤝", title: "Collaborative",   desc: "Async-first by default, with regular syncs that keep everyone aligned no matter which time zone they're in." },
+  { icon: "💡", title: "Innovative",      desc: "Every module we ship has AI built in from day one — not bolted on after the fact." },
+  { icon: "🎯", title: "Impact-Driven",   desc: "We build for the engineers, HR teams, and operators who use our ERP daily — not for a demo." },
 ];
 
 const BENEFITS = [
-  { icon: "🏠", title: "Remote Work",              desc: "Work from anywhere, no commute" },
-  { icon: "⏰", title: "Flexible Hours",            desc: "Own your schedule and work-life balance" },
-  { icon: "📖", title: "Learning & Development",    desc: "Access to courses, tools, and training" },
-  { icon: "🏆", title: "Performance Bonus",         desc: "Extra rewards for exceptional work" },
+  { icon: "🏠", title: "Remote Work",              desc: "Fully remote — set up your workspace wherever you do your best work." },
+  { icon: "⏰", title: "Flexible Hours",            desc: "A few core overlap hours for syncs; structure the rest of your day around what works for you." },
+  { icon: "📖", title: "Learning & Development",    desc: "A learning budget plus direct access to the tools and courses you need to grow." },
+  { icon: "🏆", title: "Performance Bonus",         desc: "Merit-based bonuses when your work moves the needle — not a fixed annual formality." },
 ];
 
 const EXPERIENCE_LEVELS = ["0-1 years", "1-3 years", "3-5 years", "5+ years"];
