@@ -4,7 +4,7 @@ import {
   PointerSensor, useSensor, useSensors, closestCenter,
 } from '@dnd-kit/core';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent, Pencil, Trash2, Check, X as XIcon } from 'lucide-react';
+import { Plus, GripVertical, Calendar, TrendingUp, Trophy, XCircle, Percent, Pencil, Trash2, Check, X as XIcon, RotateCcw } from 'lucide-react';
 import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
 import {
   OG, DARK, FF, BCARD, BHOV, STAGES, stageMeta, useFmtCurrency, initials,
@@ -93,9 +93,9 @@ const DeleteConfirm = ({ dealTitle, onCancel, onConfirm }: { dealTitle: string; 
 );
 
 // ── deal card (Card3D style, left stage border, edit/delete on hover) ────────
-const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose }: {
+const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose, onReopen }: {
   deal: Deal; removing: boolean; onEdit: () => void; onDelete: () => void;
-  onWin?: () => void; onLose?: () => void;
+  onWin?: () => void; onLose?: () => void; onReopen?: () => void;
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: deal.id });
   const [hovered, setHovered] = useState(false);
@@ -168,7 +168,7 @@ const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose }: {
         <span style={{ fontSize: 15, fontWeight: 800, color: OG, fontFamily: FF }}>{fmtINR(deal.value)}</span>
         <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', fontFamily: FF }}>{deal.probability}% odds</span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: (onWin || onLose) ? 10 : 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: (onWin || onLose || onReopen) ? 10 : 0 }}>
         {deal.expected_close ? (
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#9ca3af', fontFamily: FF }}>
             <Calendar size={11} /> {new Date(deal.expected_close).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
@@ -185,7 +185,13 @@ const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose }: {
           </div>
         )}
       </div>
-      {(onWin || onLose) && (
+      {onReopen ? (
+        <div onPointerDown={e => e.stopPropagation()} style={{ display: 'flex', gap: 6 }}>
+          <button onClick={onReopen} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: 'rgba(107,114,128,0.10)', border: '1px solid rgba(107,114,128,0.28)', borderRadius: 7, padding: '5px', cursor: 'pointer', color: '#6b7280', fontFamily: FF, fontWeight: 700, fontSize: 11 }}>
+            <RotateCcw size={11} /> Reopen
+          </button>
+        </div>
+      ) : (onWin || onLose) && (
         <div onPointerDown={e => e.stopPropagation()} style={{ display: 'flex', gap: 6 }}>
           {onWin && (
             <button onClick={onWin} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: 'rgba(16,185,129,0.10)', border: '1px solid rgba(16,185,129,0.28)', borderRadius: 7, padding: '5px', cursor: 'pointer', color: '#10b981', fontFamily: FF, fontWeight: 700, fontSize: 11 }}>
@@ -260,8 +266,9 @@ const Column = ({ stage, deals, removingIds, onAdd, onEdit, onDelete, onSetStage
               removing={removingIds.has(d.id)}
               onEdit={() => onEdit(d)}
               onDelete={() => onDelete(d)}
-              onWin={stage !== 'won' ? () => onSetStage(d, 'won') : undefined}
-              onLose={stage !== 'lost' ? () => onSetStage(d, 'lost') : undefined}
+              onWin={stage === 'won' || stage === 'lost' ? undefined : () => onSetStage(d, 'won')}
+              onLose={stage === 'won' || stage === 'lost' ? undefined : () => onSetStage(d, 'lost')}
+              onReopen={stage === 'won' || stage === 'lost' ? () => onSetStage(d, 'negotiation') : undefined}
             />
           </div>
         ))}
