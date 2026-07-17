@@ -15,6 +15,11 @@ const SERVICES = [
 const COUNTRIES = ["India", "UAE", "Other"];
 const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
 const INDUSTRIES_OPTS = ["Engineering & EPC", "Oil & Gas", "Construction", "Facilities Management", "Manufacturing", "Other"];
+const ERP_MODULES = [
+  "Dashboard & Analytics", "CRM", "Sales", "Procurement", "Logistics",
+  "Accounting", "MLM / Network", "HR & Payroll",
+  "Document Management", "Project Management", "Asset Management", "QHSE",
+];
 const CURRENT_CHALLENGES = ["Manual approvals & workflows", "Document management", "Procurement bottlenecks", "HR & payroll management", "No visibility on project costs", "Other"];
 
 // ── per-service dynamic field option lists ─────────────────────────────────────
@@ -49,7 +54,7 @@ interface F {
   service: string; country: string; hearAboutUs: string; message: string;
   industry: string; currentChallenge: string;
   // AI-Powered ERP
-  planInterest: string; teamSize: string; timeline: string;
+  planInterest: string; teamSize: string; timeline: string; erpModules: string;
   // DevSecOps Pipelines
   techStack: string; deploymentEnv: string; numDevelopers: string;
   // Cloud Infrastructure
@@ -65,7 +70,7 @@ const EMPTY: F = {
   fullName:"", email:"", phone:"", company:"",
   service:"", country:"", hearAboutUs:"", message:"",
   industry:"", currentChallenge:"",
-  planInterest:"", teamSize:"", timeline:"",
+  planInterest:"", teamSize:"", timeline:"", erpModules:"",
   techStack:"", deploymentEnv:"", numDevelopers:"",
   cloudProvider:"", currentInfra:"", migrationNeeded:"",
   projectType:"", projectTimeline:"", approxBudget:"",
@@ -84,6 +89,7 @@ const SERVICE_SECTIONS: Record<string, { label: string; fields: FieldDef[] }> = 
     fields: [
       { key:"planInterest", label:"Plan Interest", icon:"fas fa-layer-group", type:"select", options:PLAN_INTEREST, placeholder:"Select a plan…" },
       { key:"teamSize", label:"Team Size", icon:"fas fa-users", type:"select", options:TEAM_SIZES, placeholder:"Select team size…" },
+      { key:"erpModules", label:"ERP Modules of Interest", icon:"fas fa-th-large", type:"multiselect", options:ERP_MODULES, placeholder:"Select modules…" },
     ],
   },
   "DevSecOps Pipelines": {
@@ -285,11 +291,13 @@ const ContactSection2 = () => {
     setForm(p => ({...p,[k]:v}));
     if (k === "service") setShowServiceBanner(false);
   }, []);
-  const toggleTopic = useCallback((topic: string) => {
+  // Generic chip-toggle for any multiselect field (training topics, ERP modules, …) —
+  // values are stored as a ", "-joined string to match the backend CharFields.
+  const toggleMulti = useCallback((key: keyof F, value: string) => {
     setForm(p => {
-      const cur = p.topicsOfInterest.split(", ").filter(Boolean);
-      const next = cur.includes(topic) ? cur.filter(t => t !== topic) : [...cur, topic];
-      return { ...p, topicsOfInterest: next.join(", ") };
+      const cur = p[key].split(", ").filter(Boolean);
+      const next = cur.includes(value) ? cur.filter(t => t !== value) : [...cur, value];
+      return { ...p, [key]: next.join(", ") };
     });
   }, []);
 
@@ -325,7 +333,7 @@ const ContactSection2 = () => {
         message: form.message, country: form.country, hear_about_us: form.hearAboutUs,
         industry: form.industry, current_challenge: form.currentChallenge,
         plan_interest: form.planInterest, team_size: form.teamSize,
-        timeline: form.timeline,
+        timeline: form.timeline, erp_modules: form.erpModules,
         tech_stack: form.techStack, deployment_env: form.deploymentEnv, num_developers: form.numDevelopers,
         cloud_provider: form.cloudProvider, current_infra: form.currentInfra, migration_needed: form.migrationNeeded,
         project_type: form.projectType, project_timeline: form.projectTimeline, approx_budget: form.approxBudget,
@@ -971,7 +979,7 @@ const ContactSection2 = () => {
                                     const selected = form[f.key].split(", ").filter(Boolean).includes(topic);
                                     return (
                                       <button type="button" key={topic} disabled={sending}
-                                        onClick={() => toggleTopic(topic)}
+                                        onClick={() => toggleMulti(f.key, topic)}
                                         style={{
                                           display:"flex", alignItems:"center", gap:6,
                                           padding:"7px 14px", borderRadius:20,
