@@ -4,7 +4,9 @@ import { useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPAp
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, StarRating, StarRatingInput } from './procurementShared';
 
-const defSupplier = { name: '', email: '', phone: '', address: '', city: '', country: '', payment_terms: '', rating: 0, is_active: 'true' };
+const defSupplier = { name: '', email: '', phone: '', address: '', city: '', country: '', gstin: '', payment_terms: '', rating: 0, is_active: 'true' };
+
+const GSTIN_RE = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/;
 
 export default function SuppliersPanel() {
   const isAdmin = isSuperUser();
@@ -32,8 +34,12 @@ export default function SuppliersPanel() {
   const saveSupplier = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!sF.name.trim()) { toast.error('Supplier name is required.'); return; }
+    if (sF.gstin.trim() && !GSTIN_RE.test(sF.gstin.trim().toUpperCase())) {
+      toast.error('GSTIN must be 15 characters in the format 29ABCDE1234F1Z5.');
+      return;
+    }
     try {
-      const body = { ...sF, rating: Number(sF.rating), is_active: sF.is_active === 'true' };
+      const body = { ...sF, gstin: sF.gstin.trim().toUpperCase(), rating: Number(sF.rating), is_active: sF.is_active === 'true' };
       if (editing) { await suppliers.update(editing.id, body); toast.success('Supplier updated'); }
       else { await suppliers.create(body); toast.success('Supplier created'); }
       close();
@@ -55,6 +61,7 @@ export default function SuppliersPanel() {
     { key: 'email', label: 'Email', render: (r: any) => r.email || '—' },
     { key: 'phone', label: 'Phone', render: (r: any) => r.phone || '—' },
     { key: 'city', label: 'City', render: (r: any) => r.city || '—' },
+    { key: 'gstin', label: 'GSTIN', render: (r: any) => r.gstin || '—' },
     { key: 'payment_terms', label: 'Payment Terms', render: (r: any) => r.payment_terms || '—' },
     { key: 'rating', label: 'Rating', render: (r: any) => <StarRating value={r.rating || 0} /> },
     { key: 'is_active', label: 'Active', render: (r: any) => r.is_active ? '✅' : '❌' },
@@ -81,7 +88,7 @@ export default function SuppliersPanel() {
 
       <ERPTable title="Suppliers" columns={cols} data={filtered} loading={suppliers.loading} error={suppliers.error} isAdmin={isAdmin}
         onAdd={() => { setSF({ ...defSupplier }); setEditing(null); setShowModal(true); }}
-        onEdit={r => { setEditing(r); setSF({ name: r.name || '', email: r.email || '', phone: r.phone || '', address: r.address || '', city: r.city || '', country: r.country || '', payment_terms: r.payment_terms || '', rating: r.rating || 0, is_active: String(r.is_active ?? true) }); setShowModal(true); }}
+        onEdit={r => { setEditing(r); setSF({ name: r.name || '', email: r.email || '', phone: r.phone || '', address: r.address || '', city: r.city || '', country: r.country || '', gstin: r.gstin || '', payment_terms: r.payment_terms || '', rating: r.rating || 0, is_active: String(r.is_active ?? true) }); setShowModal(true); }}
         onDelete={id => setDelId(id)} />
 
       {showModal && (
@@ -105,6 +112,17 @@ export default function SuppliersPanel() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div><label style={lbl}>Payment Terms</label><input value={sF.payment_terms} onChange={e => setSF(f => ({ ...f, payment_terms: e.target.value }))} style={inp} placeholder="e.g. Net 30" /></div>
                 <div><label style={lbl}>Active</label><select value={sF.is_active} onChange={e => setSF(f => ({ ...f, is_active: e.target.value }))} style={inp}><option value="true">Yes</option><option value="false">No</option></select></div>
+              </div>
+              <div>
+                <label style={lbl}>GSTIN</label>
+                <input
+                  value={sF.gstin}
+                  onChange={e => setSF(f => ({ ...f, gstin: e.target.value.toUpperCase() }))}
+                  style={{ ...inp, textTransform: 'uppercase' }}
+                  maxLength={15}
+                  placeholder="e.g. 29ABCDE1234F1Z5"
+                  title="15-character GST Identification Number, e.g. 29ABCDE1234F1Z5"
+                />
               </div>
               <div><label style={lbl}>Rating</label><StarRatingInput value={Number(sF.rating)} onChange={n => setSF(f => ({ ...f, rating: n }))} /></div>
               <div style={{ display: 'flex', gap: 10, marginTop: 4 }}><button type="button" onClick={close} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing ? 'Update' : 'Save'}</button></div>

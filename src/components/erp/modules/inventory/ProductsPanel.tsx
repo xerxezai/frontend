@@ -193,7 +193,17 @@ export default function ProductsPanel() {
                 <div>
                   <label style={lbl}>Product Image</label>
                   <input ref={fileInputRef} type="file" accept="image/*" onChange={e => setImageFile(e.target.files?.[0] ?? null)} style={{ ...inp, padding: '6px 10px' }} />
-                  {editing?.image && !imageFile && <div style={{ marginTop: 6 }}><img src={editing.image} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} /></div>}
+                  {!imageFile && (
+                    <div style={{ marginTop: 6 }}>
+                      {editing?.image ? (
+                        <img src={editing.image} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />
+                      ) : (
+                        <div style={{ width: 40, height: 40, borderRadius: 8, background: '#F0EBE4', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="No image uploaded">
+                          <i className="fas fa-image" style={{ fontSize: 14, color: '#b8b2ab' }} />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
                 {!editing && <div><label style={lbl}>Initial Quantity</label><input type="number" value={pF.initial_quantity} onChange={e => setPF(f => ({ ...f, initial_quantity: e.target.value }))} style={inp} step="0.01" min="0" placeholder="0" /></div>}
                 {!editing && <div><label style={lbl}>Warehouse{Number(pF.initial_quantity) > 0 ? ' *' : ''}</label>

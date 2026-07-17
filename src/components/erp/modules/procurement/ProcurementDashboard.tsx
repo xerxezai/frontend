@@ -59,7 +59,7 @@ export default function ProcurementDashboard() {
         <KpiCard icon="fas fa-file-invoice" label="Total Purchase Orders" value={String(data.total_orders)} accent={OG} />
         <KpiCard icon="fas fa-hourglass-half" label="Pending Orders" value={String(data.pending_orders)} accent="#1d4ed8" />
         <KpiCard icon="fas fa-sack-dollar" label="Total Spent This Month" value={fmtINR(data.total_spent_this_month)} accent="#10b981" />
-        <KpiCard icon="fas fa-triangle-exclamation" label="Overdue Bills" value={String(data.overdue_bills)} accent="#ef4444" />
+        <KpiCard icon="fas fa-exclamation-triangle" label="Overdue Bills" value={String(data.overdue_bills)} accent="#ef4444" />
       </div>
 
       <div style={{ background: WHITE, borderRadius: 14, border: `1px solid ${BORDER}`, padding: '20px 22px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)', marginBottom: 22 }}>

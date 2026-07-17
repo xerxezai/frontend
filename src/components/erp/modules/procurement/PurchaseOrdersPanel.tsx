@@ -83,6 +83,7 @@ export default function PurchaseOrdersPanel() {
   };
 
   const generateBill = async (po: any) => {
+    if (po.has_bill) { toast.warning('A bill already exists for this PO'); return; }
     setBusyId(po.id);
     try {
       await erpFetch('procurement/bills/', {
@@ -90,6 +91,7 @@ export default function PurchaseOrdersPanel() {
         body: JSON.stringify({ supplier: po.supplier, purchase_order: po.id, issue_date: today(), due_date: plusDays(30), amount: po.total, notes: `Auto-generated from ${po.po_number}` }),
       });
       toast.success(`Bill generated for ${po.po_number}`);
+      pos.reload();
     } catch (err: any) { toast.error(err.message || 'Could not generate bill'); }
     finally { setBusyId(null); }
   };
@@ -131,10 +133,16 @@ export default function PurchaseOrdersPanel() {
               <i className={`fas ${busyId === r.id ? 'fa-spinner fa-spin' : 'fa-dolly'}`} style={{ fontSize: 10 }} />
             </button>
           )}
-          <button title="Generate Bill" disabled={busyId === r.id} onClick={() => generateBill(r)}
-            style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
-            <i className="fas fa-file-invoice-dollar" style={{ fontSize: 10 }} />
-          </button>
+          {r.has_bill ? (
+            <span title="Bill already generated for this PO" style={{ background: '#f1f5f9', color: '#9ca3af', border: '1px solid rgba(0,0,0,0.08)', width: 28, height: 28, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <i className="fas fa-check" style={{ fontSize: 10 }} />
+            </span>
+          ) : (
+            <button title="Generate Bill" disabled={busyId === r.id} onClick={() => generateBill(r)}
+              style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
+              <i className={`fas ${busyId === r.id ? 'fa-spinner fa-spin' : 'fa-file-invoice-dollar'}`} style={{ fontSize: 10 }} />
+            </button>
+          )}
           <button title="Download PDF" onClick={() => downloadPDF(r)}
             style={{ background: 'rgba(107,114,128,0.08)', color: '#374151', border: '1px solid rgba(107,114,128,0.22)', width: 28, height: 28, borderRadius: 6, cursor: 'pointer' }}>
             <i className="fas fa-file-pdf" style={{ fontSize: 10 }} />
@@ -203,7 +211,11 @@ export default function PurchaseOrdersPanel() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {items.map((row, i) => (
                     <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 0.8fr 1fr 1fr auto', gap: 8, alignItems: 'center' }}>
-                      <select value={row.product} onChange={e => updateRow(i, { product: e.target.value })} style={inp}>
+                      <select value={row.product} onChange={e => {
+                        const productId = e.target.value;
+                        const prod = products.data.find((p: any) => String(p.id) === productId);
+                        updateRow(i, { product: productId, unit_price: prod ? String(prod.cost_price) : row.unit_price });
+                      }} style={inp}>
                         <option value="">— Product —</option>
                         {products.data.map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
                       </select>
