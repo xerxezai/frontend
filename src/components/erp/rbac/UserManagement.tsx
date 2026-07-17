@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useState, useEffect, useCallback, useMemo, type CSSProperties, type ReactNode } from 'react';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
 import { rbacApi } from './rbacApi';
@@ -144,41 +144,6 @@ function DeactivateConfirm({ userName, onCancel, onConfirm }: { userName: string
   );
 }
 
-function BulkDeleteConfirm({ count, onCancel, onConfirm, deleting }: { count: number; onCancel: () => void; onConfirm: () => void; deleting: boolean }) {
-  return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={deleting ? undefined : onCancel}>
-      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 400, width: '100%', borderTop: '2px solid #ef4444', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
-        <h6 style={{ fontWeight: 800, marginBottom: 8, color: '#1A1A1A' }}>
-          Are you sure you want to delete {count} user{count === 1 ? '' : 's'}?
-        </h6>
-        <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>This cannot be undone.</p>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button onClick={onCancel} disabled={deleting} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px', cursor: deleting ? 'not-allowed' : 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13, opacity: deleting ? 0.6 : 1 }}>
-            Cancel
-          </button>
-          <button onClick={onConfirm} disabled={deleting} style={{ flex: 1, background: '#ef4444', border: '1px solid #ef4444', borderRadius: 9, padding: '9px', cursor: deleting ? 'wait' : 'pointer', color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 13, opacity: deleting ? 0.75 : 1 }}>
-            {deleting ? 'Deleting…' : 'Confirm Delete'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/** Native checkboxes can't express "indeterminate" via a prop — it has to be set on the DOM
- * node directly, hence the ref effect. Used for the header's Select All / Deselect All box. */
-function HeaderCheckbox({ checked, indeterminate, onChange }: { checked: boolean; indeterminate: boolean; onChange: () => void }) {
-  const ref = useRef<HTMLInputElement>(null);
-  useEffect(() => { if (ref.current) ref.current.indeterminate = indeterminate; }, [indeterminate]);
-  return (
-    <input
-      ref={ref} type="checkbox" checked={checked} onChange={onChange}
-      aria-label="Select all users"
-      style={{ width: 18, height: 18, cursor: 'pointer', accentColor: OG }}
-    />
-  );
-}
-
 export default function UserManagement() {
   const [tab, setTab] = useState<'users' | 'requests'>('users');
   const [users, setUsers] = useState<any[]>([]);
@@ -189,8 +154,7 @@ export default function UserManagement() {
   const [editing, setEditing] = useState<any>(null);
   const [deactivating, setDeactivating] = useState<any>(null);
   const [busyRequestId, setBusyRequestId] = useState<number | null>(null);
-  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
-  const [showBulkConfirm, setShowBulkConfirm] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const currentUserId = useMemo(() => getCurrentUserId(), []);
 
@@ -234,43 +198,27 @@ export default function UserManagement() {
     finally { setBusyRequestId(null); }
   };
 
-  // Super Admins can never be bulk-deleted, and nobody can bulk-delete their own account.
+  // Note: the User object has no top-level `role` field (only `is_superuser` and
+  // per-module `module_access[].role`), so Super Admin protection is keyed off
+  // `is_superuser` rather than `u.role === 'super_admin'`.
   const isSelectable = useCallback((u: any) => !u.is_superuser && u.id !== currentUserId, [currentUserId]);
   const selectableUsers = useMemo(() => users.filter(isSelectable), [users, isSelectable]);
+  const allSelected = selectableUsers.length > 0 && selectableUsers.every(u => selectedIds.includes(u.id));
 
-  const toggleOne = (id: number) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  };
-
-  const allSelected = selectableUsers.length > 0 && selectableUsers.every(u => selectedIds.has(u.id));
-  const someSelected = selectedIds.size > 0 && !allSelected;
-
-  const toggleAll = () => {
-    setSelectedIds(allSelected ? new Set() : new Set(selectableUsers.map(u => u.id)));
-  };
-
-  const clearSelection = () => setSelectedIds(new Set());
-
-  const confirmBulkDelete = async () => {
-    const ids = Array.from(selectedIds);
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`Delete ${selectedIds.length} user${selectedIds.length === 1 ? '' : 's'}? This cannot be undone.`)) return;
     setBulkDeleting(true);
-    const results = await Promise.allSettled(ids.map(id => rbacApi.deactivateUser(id)));
-    const succeeded = results.filter(r => r.status === 'fulfilled').length;
-    const failed = results.length - succeeded;
-    setBulkDeleting(false);
-    setShowBulkConfirm(false);
-    clearSelection();
-    loadUsers();
-    if (failed === 0) {
-      toast.success(`${succeeded} user${succeeded === 1 ? '' : 's'} deleted successfully`);
-    } else if (succeeded === 0) {
-      toast.error(`Could not delete ${failed} user${failed === 1 ? '' : 's'}`);
-    } else {
-      toast.warning(`${succeeded} user${succeeded === 1 ? '' : 's'} deleted, ${failed} failed`);
+    try {
+      for (const id of selectedIds) {
+        await rbacApi.deactivateUser(id);
+      }
+      toast.success(`${selectedIds.length} user${selectedIds.length === 1 ? '' : 's'} deleted successfully`);
+    } catch (e: any) {
+      toast.error(e.message || 'Some users could not be deleted');
+    } finally {
+      setBulkDeleting(false);
+      setSelectedIds([]);
+      loadUsers();
     }
   };
 
@@ -357,28 +305,29 @@ export default function UserManagement() {
             </button>
           </div>
 
-          {selectedIds.size > 0 && (
+          {selectedIds.length > 0 && (
             <div style={{
+              background: '#fff3e0', border: '1px solid #C9883A', borderRadius: 8,
+              padding: '12px 20px', marginBottom: 16,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10,
-              background: '#fff', border: '1px solid rgba(201,136,58,0.30)', borderRadius: 12,
-              padding: '12px 16px', marginBottom: 12,
-              boxShadow: '0 6px 20px rgba(201,136,58,0.14), 0 2px 6px rgba(0,0,0,0.06)',
             }}>
-              <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 13, color: '#1A1A1A' }}>
-                {selectedIds.size} user{selectedIds.size === 1 ? '' : 's'} selected
+              <span style={{ fontFamily: FF, fontWeight: 600, fontSize: 13, color: '#1A1A1A' }}>
+                {selectedIds.length} user{selectedIds.length === 1 ? '' : 's'} selected
               </span>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button
-                  onClick={clearSelection}
-                  style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 8, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}
+                  onClick={handleBulkDelete}
+                  disabled={bulkDeleting}
+                  style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: bulkDeleting ? 'wait' : 'pointer', fontFamily: FF, fontWeight: 700, opacity: bulkDeleting ? 0.7 : 1 }}
                 >
-                  Cancel
+                  {bulkDeleting ? 'Deleting…' : 'Delete Selected'}
                 </button>
                 <button
-                  onClick={() => setShowBulkConfirm(true)}
-                  style={{ background: '#ef4444', border: '1px solid #ef4444', borderRadius: 8, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', gap: 6 }}
+                  onClick={() => setSelectedIds([])}
+                  disabled={bulkDeleting}
+                  style={{ background: '#6b7280', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: bulkDeleting ? 'not-allowed' : 'pointer', fontFamily: FF, fontWeight: 700, opacity: bulkDeleting ? 0.7 : 1 }}
                 >
-                  <i className="fas fa-trash" style={{ fontSize: 10 }} /> Delete Selected
+                  Cancel
                 </button>
               </div>
             </div>
@@ -407,7 +356,19 @@ export default function UserManagement() {
                 <thead>
                   <tr style={{ background: '#fafaf8' }}>
                     <th style={{ ...TH, width: 44, minWidth: 44, textAlign: 'center' }}>
-                      <HeaderCheckbox checked={allSelected} indeterminate={someSelected} onChange={toggleAll} />
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedIds(users.filter(isSelectable).map(u => u.id));
+                          } else {
+                            setSelectedIds([]);
+                          }
+                        }}
+                        aria-label="Select all users"
+                        style={{ width: 18, height: 18, cursor: 'pointer', accentColor: OG }}
+                      />
                     </th>
                     {userCols.map(c => <th key={c.key} style={TH}>{c.label}</th>)}
                     <th style={{ ...TH, width: 76, minWidth: 76 }}>Actions</th>
@@ -416,7 +377,7 @@ export default function UserManagement() {
                 <tbody>
                   {users.map(u => {
                     const selectable = isSelectable(u);
-                    const selected = selectedIds.has(u.id);
+                    const selected = selectedIds.includes(u.id);
                     const disabledReason = u.is_superuser ? 'Cannot delete Super Admin' : u.id === currentUserId ? 'You cannot delete yourself' : undefined;
                     return (
                       <tr key={u.id} style={{ background: selected ? 'rgba(201,136,58,0.08)' : undefined }}>
@@ -426,7 +387,16 @@ export default function UserManagement() {
                             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, cursor: selectable ? 'pointer' : 'not-allowed' }}
                           >
                             <input
-                              type="checkbox" checked={selected} disabled={!selectable} onChange={() => toggleOne(u.id)}
+                              type="checkbox"
+                              disabled={!selectable}
+                              checked={selected}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedIds([...selectedIds, u.id]);
+                                } else {
+                                  setSelectedIds(selectedIds.filter(id => id !== u.id));
+                                }
+                              }}
                               aria-label={`Select ${u.full_name}`}
                               style={{ width: 18, height: 18, cursor: selectable ? 'pointer' : 'not-allowed', accentColor: OG }}
                             />
@@ -462,13 +432,6 @@ export default function UserManagement() {
       {showCreate && <CreateUserModal onClose={() => setShowCreate(false)} onSuccess={loadUsers} />}
       {editing && <EditAccessModal user={editing} onClose={() => setEditing(null)} onSaved={loadUsers} />}
       {deactivating && <DeactivateConfirm userName={deactivating.full_name} onCancel={() => setDeactivating(null)} onConfirm={confirmDeactivate} />}
-      {showBulkConfirm && (
-        <BulkDeleteConfirm
-          count={selectedIds.size} deleting={bulkDeleting}
-          onCancel={() => setShowBulkConfirm(false)}
-          onConfirm={confirmBulkDelete}
-        />
-      )}
     </div>
   );
 }
