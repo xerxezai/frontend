@@ -1,12 +1,40 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, type CSSProperties, type ReactNode } from 'react';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
 import { rbacApi } from './rbacApi';
 import CreateUserModal from './CreateUserModal';
 
+/** Decodes the JWT access token and returns the logged-in user's id, if any —
+ * same decode approach as isSuperUser()/isAdminUser() elsewhere in the ERP. */
+function getCurrentUserId(): number | null {
+  try {
+    const stored = localStorage.getItem('auth_tokens');
+    if (stored) {
+      const payload = JSON.parse(atob(JSON.parse(stored).access.split('.')[1]));
+      return payload.user_id ?? null;
+    }
+  } catch { /* fall through */ }
+  return null;
+}
+
 const FF = "'DM Sans',sans-serif";
 const OG = '#C9883A';
 const BORDER = 'rgba(0,0,0,0.08)';
+
+// Matches ERPTable.tsx's TH/TD exactly, so the bespoke Users table (needed for the
+// checkbox column ERPTable doesn't support) still looks identical to every other list.
+const TH: CSSProperties = {
+  fontSize: 10, letterSpacing: '0.6px', padding: '10px 10px',
+  textTransform: 'uppercase', fontWeight: 700, color: '#6B6B6B',
+  borderBottom: '1px solid rgba(0,0,0,0.07)', whiteSpace: 'nowrap',
+  overflow: 'hidden', textOverflow: 'ellipsis',
+};
+const TD: CSSProperties = {
+  padding: '9px 10px', verticalAlign: 'middle', color: '#333',
+  borderBottom: '1px solid rgba(0,0,0,0.05)',
+  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+  fontSize: 12.5,
+};
 
 const ROLE_BADGE: Record<string, { label: string; bg: string; color: string }> = {
   super_admin:  { label: 'Super Admin',  bg: '#fee2e2', color: '#991b1b' },
@@ -116,6 +144,41 @@ function DeactivateConfirm({ userName, onCancel, onConfirm }: { userName: string
   );
 }
 
+function BulkDeleteConfirm({ count, onCancel, onConfirm, deleting }: { count: number; onCancel: () => void; onConfirm: () => void; deleting: boolean }) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={deleting ? undefined : onCancel}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 400, width: '100%', borderTop: '2px solid #ef4444', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight: 800, marginBottom: 8, color: '#1A1A1A' }}>
+          Are you sure you want to delete {count} user{count === 1 ? '' : 's'}?
+        </h6>
+        <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>This cannot be undone.</p>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onCancel} disabled={deleting} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px', cursor: deleting ? 'not-allowed' : 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13, opacity: deleting ? 0.6 : 1 }}>
+            Cancel
+          </button>
+          <button onClick={onConfirm} disabled={deleting} style={{ flex: 1, background: '#ef4444', border: '1px solid #ef4444', borderRadius: 9, padding: '9px', cursor: deleting ? 'wait' : 'pointer', color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 13, opacity: deleting ? 0.75 : 1 }}>
+            {deleting ? 'Deleting…' : 'Confirm Delete'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Native checkboxes can't express "indeterminate" via a prop — it has to be set on the DOM
+ * node directly, hence the ref effect. Used for the header's Select All / Deselect All box. */
+function HeaderCheckbox({ checked, indeterminate, onChange }: { checked: boolean; indeterminate: boolean; onChange: () => void }) {
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => { if (ref.current) ref.current.indeterminate = indeterminate; }, [indeterminate]);
+  return (
+    <input
+      ref={ref} type="checkbox" checked={checked} onChange={onChange}
+      aria-label="Select all users"
+      style={{ width: 18, height: 18, cursor: 'pointer', accentColor: OG }}
+    />
+  );
+}
+
 export default function UserManagement() {
   const [tab, setTab] = useState<'users' | 'requests'>('users');
   const [users, setUsers] = useState<any[]>([]);
@@ -126,6 +189,10 @@ export default function UserManagement() {
   const [editing, setEditing] = useState<any>(null);
   const [deactivating, setDeactivating] = useState<any>(null);
   const [busyRequestId, setBusyRequestId] = useState<number | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [showBulkConfirm, setShowBulkConfirm] = useState(false);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const currentUserId = useMemo(() => getCurrentUserId(), []);
 
   const loadUsers = useCallback(() => {
     setUsersLoading(true);
@@ -167,7 +234,47 @@ export default function UserManagement() {
     finally { setBusyRequestId(null); }
   };
 
-  const userCols = [
+  // Super Admins can never be bulk-deleted, and nobody can bulk-delete their own account.
+  const isSelectable = useCallback((u: any) => !u.is_superuser && u.id !== currentUserId, [currentUserId]);
+  const selectableUsers = useMemo(() => users.filter(isSelectable), [users, isSelectable]);
+
+  const toggleOne = (id: number) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const allSelected = selectableUsers.length > 0 && selectableUsers.every(u => selectedIds.has(u.id));
+  const someSelected = selectedIds.size > 0 && !allSelected;
+
+  const toggleAll = () => {
+    setSelectedIds(allSelected ? new Set() : new Set(selectableUsers.map(u => u.id)));
+  };
+
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const confirmBulkDelete = async () => {
+    const ids = Array.from(selectedIds);
+    setBulkDeleting(true);
+    const results = await Promise.allSettled(ids.map(id => rbacApi.deactivateUser(id)));
+    const succeeded = results.filter(r => r.status === 'fulfilled').length;
+    const failed = results.length - succeeded;
+    setBulkDeleting(false);
+    setShowBulkConfirm(false);
+    clearSelection();
+    loadUsers();
+    if (failed === 0) {
+      toast.success(`${succeeded} user${succeeded === 1 ? '' : 's'} deleted successfully`);
+    } else if (succeeded === 0) {
+      toast.error(`Could not delete ${failed} user${failed === 1 ? '' : 's'}`);
+    } else {
+      toast.warning(`${succeeded} user${succeeded === 1 ? '' : 's'} deleted, ${failed} failed`);
+    }
+  };
+
+  const userCols: { key: string; label: string; width?: number; render?: (row: any) => ReactNode }[] = [
     { key: 'full_name', label: 'Name', width: 160 },
     { key: 'username', label: 'Username' },
     { key: 'email', label: 'Email', width: 180 },
@@ -239,12 +346,115 @@ export default function UserManagement() {
       </div>
 
       {tab === 'users' ? (
-        <ERPTable
-          title="Users" columns={userCols} data={users} loading={usersLoading} error={null} isAdmin
-          onAdd={() => setShowCreate(true)}
-          onEdit={r => setEditing(r)}
-          onDelete={id => setDeactivating(users.find(u => u.id === id))}
-        />
+        <div>
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <h5 className="fw-bold mb-0" style={{ color: '#1a1a2e', fontSize: 15 }}>Users</h5>
+            <button
+              onClick={() => setShowCreate(true)}
+              style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 14px', fontFamily: FF, fontWeight: 700, fontSize: 12, boxShadow: '0 3px 0 rgba(150,95,30,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+            >
+              <i className="fas fa-plus" style={{ fontSize: 10 }}></i> Add New
+            </button>
+          </div>
+
+          {selectedIds.size > 0 && (
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10,
+              background: '#fff', border: '1px solid rgba(201,136,58,0.30)', borderRadius: 12,
+              padding: '12px 16px', marginBottom: 12,
+              boxShadow: '0 6px 20px rgba(201,136,58,0.14), 0 2px 6px rgba(0,0,0,0.06)',
+            }}>
+              <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 13, color: '#1A1A1A' }}>
+                {selectedIds.size} user{selectedIds.size === 1 ? '' : 's'} selected
+              </span>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  onClick={clearSelection}
+                  style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 8, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowBulkConfirm(true)}
+                  style={{ background: '#ef4444', border: '1px solid #ef4444', borderRadius: 8, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', gap: 6 }}
+                >
+                  <i className="fas fa-trash" style={{ fontSize: 10 }} /> Delete Selected
+                </button>
+              </div>
+            </div>
+          )}
+
+          {usersLoading ? (
+            <div className="d-flex flex-column align-items-center justify-content-center py-5 gap-3 text-muted">
+              <div className="spinner-border" style={{ color: OG }} role="status"></div>
+              <p>Loading Users…</p>
+            </div>
+          ) : users.length === 0 ? (
+            <div className="erp-table-card" style={{
+              textAlign: 'center', padding: '64px 24px', background: '#fff', borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`,
+              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+            }}>
+              <p className="mb-0" style={{ color: '#6B6B6B', fontFamily: FF, fontSize: 13.5, fontWeight: 600 }}>No users found.</p>
+            </div>
+          ) : (
+            <div className="erp-table-card" style={{
+              background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`,
+              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+              overflowX: 'auto',
+            }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
+                <thead>
+                  <tr style={{ background: '#fafaf8' }}>
+                    <th style={{ ...TH, width: 44, minWidth: 44, textAlign: 'center' }}>
+                      <HeaderCheckbox checked={allSelected} indeterminate={someSelected} onChange={toggleAll} />
+                    </th>
+                    {userCols.map(c => <th key={c.key} style={TH}>{c.label}</th>)}
+                    <th style={{ ...TH, width: 76, minWidth: 76 }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map(u => {
+                    const selectable = isSelectable(u);
+                    const selected = selectedIds.has(u.id);
+                    const disabledReason = u.is_superuser ? 'Cannot delete Super Admin' : u.id === currentUserId ? 'You cannot delete yourself' : undefined;
+                    return (
+                      <tr key={u.id} style={{ background: selected ? 'rgba(201,136,58,0.08)' : undefined }}>
+                        <td style={{ ...TD, textAlign: 'center', overflow: 'visible' }}>
+                          <label
+                            title={disabledReason}
+                            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, cursor: selectable ? 'pointer' : 'not-allowed' }}
+                          >
+                            <input
+                              type="checkbox" checked={selected} disabled={!selectable} onChange={() => toggleOne(u.id)}
+                              aria-label={`Select ${u.full_name}`}
+                              style={{ width: 18, height: 18, cursor: selectable ? 'pointer' : 'not-allowed', accentColor: OG }}
+                            />
+                          </label>
+                        </td>
+                        {userCols.map(c => (
+                          <td key={c.key} style={TD}>{c.render ? c.render(u) : (u as any)[c.key] ?? '—'}</td>
+                        ))}
+                        <td style={{ ...TD, width: 76 }}>
+                          <div style={{ display: 'flex', gap: 5 }}>
+                            <button title="Edit" onClick={() => setEditing(u)}
+                              style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
+                              <i className="fas fa-pen" style={{ fontSize: 10 }}></i>
+                            </button>
+                            <button title="Deactivate" onClick={() => setDeactivating(u)}
+                              style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
+                              <i className="fas fa-trash" style={{ fontSize: 10 }}></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       ) : (
         <ERPTable title="Access Requests" columns={requestCols} data={requests} loading={requestsLoading} error={null} isAdmin={false} />
       )}
@@ -252,6 +462,13 @@ export default function UserManagement() {
       {showCreate && <CreateUserModal onClose={() => setShowCreate(false)} onSuccess={loadUsers} />}
       {editing && <EditAccessModal user={editing} onClose={() => setEditing(null)} onSaved={loadUsers} />}
       {deactivating && <DeactivateConfirm userName={deactivating.full_name} onCancel={() => setDeactivating(null)} onConfirm={confirmDeactivate} />}
+      {showBulkConfirm && (
+        <BulkDeleteConfirm
+          count={selectedIds.size} deleting={bulkDeleting}
+          onCancel={() => setShowBulkConfirm(false)}
+          onConfirm={confirmBulkDelete}
+        />
+      )}
     </div>
   );
 }
