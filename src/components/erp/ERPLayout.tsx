@@ -211,7 +211,14 @@ const ERPLayout = ({ children }: Props) => {
   const adminName = localStorage.getItem('xerxez_name') || 'Admin';
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
-  const { hasAccess, isSuperAdmin, isLoading: accessLoading } = useAccess();
+  const { hasAccess, isSuperAdmin, userRole, isLoading: accessLoading } = useAccess();
+  // Real RBAC role from my-access/ — the legacy xerxez_role localStorage value lies
+  // (it derives from an old profile field that shows every admin-ish user as super_admin).
+  const ROLE_LABELS: Record<string, string> = {
+    super_admin: 'Super Admin', module_admin: 'Module Admin',
+    regular_user: 'Regular User', read_only: 'Read Only', no_access: 'User',
+  };
+  const roleLabel = accessLoading ? '' : (ROLE_LABELS[userRole] ?? 'User');
   const [showAccessRequest, setShowAccessRequest] = useState(false);
 
   let currentSub: SubNavItem | undefined;
@@ -857,7 +864,7 @@ const ERPLayout = ({ children }: Props) => {
                 {/* name + role — hidden on small screens */}
                 <div className="d-none d-md-block" style={{ textAlign: 'left' }}>
                   <div style={{ color: C.dark, fontWeight: 700, fontSize: 12.5, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.2, whiteSpace: 'nowrap' }}>{adminName}</div>
-                  <div style={{ color: C.muted, fontSize: 10.5, fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap' }}>{isAdmin ? 'super_admin' : 'user'}</div>
+                  <div style={{ color: C.muted, fontSize: 10.5, fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap' }}>{roleLabel}</div>
                 </div>
                 <i
                   className={`fas fa-chevron-${profileOpen ? 'up' : 'down'}`}
@@ -906,7 +913,7 @@ const ERPLayout = ({ children }: Props) => {
                         fontFamily: "'DM Sans', sans-serif",
                       }}>
                         <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#4ade80', display: 'inline-block', boxShadow: '0 0 5px rgba(74,222,128,0.75)', flexShrink: 0 }} />
-                        {isAdmin ? 'Super Admin' : 'User'}
+                        {roleLabel || 'User'}
                       </span>
                     </div>
                   </div>
