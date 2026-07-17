@@ -321,6 +321,9 @@ const MODULES = [
   { icon: "fas fa-calculator",          label: "Cost Estimation" },
   { icon: "fas fa-truck",               label: "Logistics & Dispatch" },
   { icon: "fas fa-chart-bar",           label: "Finance & Accounting" },
+  { icon: "fas fa-tools",                label: "Asset Management" },
+  { icon: "fas fa-shield-alt",           label: "QHSE" },
+  { icon: "fas fa-exclamation-triangle", label: "Risk Register" },
 ];
 
 const ModulesSection = () => (
@@ -330,7 +333,7 @@ const ModulesSection = () => (
       <FI><div className="text-center" style={{ marginBottom: 52 }}>
         <SL t="Modules" dark />
         <h2 style={{ fontWeight: 800, fontSize: "clamp(26px,3.2vw,42px)", color: "#fff", lineHeight: 1.15, fontFamily: FF, letterSpacing: "-0.02em" }}>
-          8+ AI Modules Ready to Deploy
+           13+ AI Modules Ready to Deploy
         </h2>
       </div></FI>
       <div className="row g-3">
@@ -360,7 +363,7 @@ const ModulesSection = () => (
 // ═══════════════════════════════════════════════════════════════════════════════
 const TRUST_STATS = [
   { val: "4+",       label: "Client Projects Delivered" },
-  { val: "8+",       label: "AI Modules Built" },
+  { val: "13+",      label: "AI Modules Built" },
   { val: "UAE",      label: "Based & Supported" },
   { val: "AI-First", label: "Architecture" },
 ];
