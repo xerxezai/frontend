@@ -53,7 +53,7 @@ export default function CommissionsPanel() {
       if (dateFrom && date < dateFrom) return false;
       if (dateTo && date > dateTo) return false;
       if (!q) return true;
-      return [c.distributor_name, c.order_number].some((v: any) => (v || '').toLowerCase().includes(q));
+      return [c.distributor_name, c.order_number, c.order_customer_name].some((v: any) => (v || '').toLowerCase().includes(q));
     });
   }, [commissions.data, search, distributorFilter, levelFilter, statusFilter, dateFrom, dateTo]);
 
@@ -126,9 +126,11 @@ export default function CommissionsPanel() {
     { key: 'id', label: 'Commission ID', render: (r: any) => `#${r.id}` },
     { key: 'distributor_name', label: 'Distributor', render: (r: any) => r.distributor_name || '—' },
     { key: 'order_number', label: 'Order', render: (r: any) => r.order_number || '—' },
+    { key: 'order_customer_name', label: 'Customer', width: 140, render: (r: any) => r.order_customer_name || '—' },
+    { key: 'order_amount', label: 'Sale Amount', render: (r: any) => r.order_amount != null ? fmtINR(r.order_amount) : '—' },
     { key: 'level', label: 'Level', render: (r: any) => `Level ${r.level}` },
-    { key: 'rate', label: 'Rate', render: (r: any) => `${r.rate}%` },
-    { key: 'amount', label: 'Amount', render: (r: any) => fmtINR(r.amount) },
+    { key: 'rate', label: 'Commission %', render: (r: any) => `${r.rate}%` },
+    { key: 'amount', label: 'Commission Amount', render: (r: any) => fmtINR(r.amount) },
     { key: 'status', label: 'Status', render: (r: any) => <StatusBadge status={r.status} map={COMMISSION_STATUS} /> },
     { key: 'created_date', label: 'Date', render: (r: any) => r.created_date ? new Date(r.created_date).toLocaleDateString() : '—' },
     {
