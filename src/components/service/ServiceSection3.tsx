@@ -354,7 +354,7 @@ const ServiceSection3 = ({ mainSection }: Props) => {
                     {" "}Mid to large manufacturing, logistics &amp; retail enterprises · Deployed in &lt;6 months
                   </p>
                   <p style={{ color: "rgba(255,255,255,0.68)", fontSize: 15, lineHeight: 1.78, marginBottom: 32, maxWidth: 520, fontFamily: "'DM Sans',sans-serif" }}>
-                    Purpose-built or layered onto your existing SAP, Oracle, or Microsoft Dynamics — XERXEZ delivers intelligent ERP that learns, adapts, and scales with your enterprise operations.
+                    Purpose-built or layered onto your existing legacy ERP systems — XERXEZ delivers intelligent ERP that learns, adapts, and scales with your enterprise operations.
                   </p>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 36 }}>
                     {erpStats.map((stat) => (
