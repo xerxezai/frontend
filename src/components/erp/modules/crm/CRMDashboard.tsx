@@ -77,7 +77,7 @@ export default function CRMDashboard() {
 
       {data.overdue_activities > 0 && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 12, padding: '13px 18px' }}>
-          <i className="fas fa-triangle-exclamation" style={{ color: '#991b1b', fontSize: 16 }} />
+          <i className="fas fa-exclamation-triangle" style={{ color: '#991b1b', fontSize: 16 }} />
           <div style={{ fontFamily: FF, fontSize: 13, color: '#7f1d1d' }}>
             <strong>{data.overdue_activities} overdue activit{data.overdue_activities > 1 ? 'ies' : 'y'}</strong> — check the Activities tab.
           </div>

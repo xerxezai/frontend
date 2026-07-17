@@ -69,7 +69,7 @@ export default function InventoryDashboard({ refreshKey }: { refreshKey?: number
           background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)',
           borderRadius: 12, padding: '13px 18px',
         }}>
-          <i className="fas fa-triangle-exclamation" style={{ color: '#991b1b', fontSize: 16 }} />
+          <i className="fas fa-exclamation-triangle" style={{ color: '#991b1b', fontSize: 16 }} />
           <div style={{ fontFamily: FF, fontSize: 13, color: '#7f1d1d' }}>
             <strong>Reorder alert:</strong> {data.low_stock_count} product{data.low_stock_count > 1 ? 's are' : ' is'} below minimum stock level —{' '}
             {data.low_stock_items.slice(0, 6).map(p => p.name).join(', ')}{data.low_stock_items.length > 6 ? `, +${data.low_stock_items.length - 6} more` : ''}

@@ -141,7 +141,7 @@ export default function ActivitiesPanel() {
       key: 'due_date', label: 'Due', render: (r: any) => {
         if (!r.due_date) return '—';
         const overdue = r.due_date < todayStr && !r.completed;
-        return <span style={{ color: overdue ? '#ef4444' : '#141413', fontWeight: overdue ? 700 : 500, fontSize: 12, fontFamily: FF }}>{overdue && <i className="fas fa-triangle-exclamation" style={{ marginRight: 4 }} />}{new Date(r.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>;
+        return <span style={{ color: overdue ? '#ef4444' : '#141413', fontWeight: overdue ? 700 : 500, fontSize: 12, fontFamily: FF }}>{overdue && <i className="fas fa-exclamation-triangle" style={{ marginRight: 4 }} />}{new Date(r.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>;
       },
     },
     { key: 'occurred_at', label: 'Logged', render: (r: any) => r.occurred_at ? new Date(r.occurred_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : '—' },
@@ -158,7 +158,7 @@ export default function ActivitiesPanel() {
     <div>
       {overdueItems.length > 0 && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 12, padding: '12px 16px' }}>
-          <i className="fas fa-triangle-exclamation" style={{ color: '#991b1b', fontSize: 15 }} />
+          <i className="fas fa-exclamation-triangle" style={{ color: '#991b1b', fontSize: 15 }} />
           <div style={{ fontFamily: FF, fontSize: 12.5, color: '#7f1d1d' }}>
             <strong>{overdueItems.length} overdue activit{overdueItems.length > 1 ? 'ies' : 'y'}:</strong> {overdueItems.slice(0, 5).map((a: any) => a.summary).join(', ')}{overdueItems.length > 5 ? `, +${overdueItems.length - 5} more` : ''}
           </div>

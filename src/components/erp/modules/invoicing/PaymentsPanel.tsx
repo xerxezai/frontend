@@ -101,7 +101,7 @@ export default function PaymentsPanel() {
     <div>
       {dash && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 18 }}>
-          <KpiCard icon="fas fa-calendar-days" label="This Month" value={fmtINR(dash.total_paid_this_month)} accent={OG} />
+          <KpiCard icon="fas fa-calendar-alt" label="This Month" value={fmtINR(dash.total_paid_this_month)} accent={OG} />
           <KpiCard icon="fas fa-infinity" label="All Time" value={fmtINR(dash.total_paid)} accent="#10b981" />
           <KpiCard icon="fas fa-hourglass-half" label="Pending" value={fmtINR(dash.outstanding)} accent="#f59e0b" />
         </div>

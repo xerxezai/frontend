@@ -63,7 +63,7 @@ export default function AccountingDashboard() {
         <KpiCard icon="fas fa-receipt" label="Total Expenses" value={fmtINR(data.total_expenses_this_month)} accent="#7c3aed" />
         <KpiCard icon="fas fa-chart-line" label="Net Profit" value={fmtINR(data.net_profit_this_month)} accent="#10b981" />
         <KpiCard icon="fas fa-percent" label="Tax Collected" value={fmtINR(data.tax_collected_this_month)} accent="#1d4ed8" />
-        <KpiCard icon="fas fa-triangle-exclamation" label="Overdue Invoices" value={String(data.overdue_invoices_count)} accent="#ef4444" />
+        <KpiCard icon="fas fa-exclamation-triangle" label="Overdue Invoices" value={String(data.overdue_invoices_count)} accent="#ef4444" />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 18, marginBottom: 22 }}>

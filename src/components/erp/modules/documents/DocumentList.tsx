@@ -34,7 +34,7 @@ export default function DocumentList({
   if (error) {
     return (
       <div style={{ textAlign: 'center', padding: '50px 0', fontFamily: FF, color: '#991b1b' }}>
-        <i className="fas fa-triangle-exclamation" style={{ fontSize: 22, marginBottom: 10, display: 'block' }} />
+        <i className="fas fa-exclamation-triangle" style={{ fontSize: 22, marginBottom: 10, display: 'block' }} />
         {error}
       </div>
     );

@@ -87,7 +87,7 @@ export default function DocumentUpload({ onClose, onUploaded }: { onClose: () =>
             }}
           >
             <input ref={inputRef} type="file" accept={ACCEPT} style={{ display: 'none' }} onChange={e => handleFiles(e.target.files)} />
-            <i className={file ? 'fas fa-file-circle-check' : 'fas fa-cloud-arrow-up'} style={{ color: OG, fontSize: 22, marginBottom: 8, display: 'block' }} />
+            <i className={file ? 'fas fa-check-circle' : 'fas fa-cloud-upload-alt'} style={{ color: OG, fontSize: 22, marginBottom: 8, display: 'block' }} />
             <div style={{ fontFamily: FF, fontSize: 13, fontWeight: 700, color: '#1A1A1A' }}>
               {file ? file.name : 'Click or drag a file here'}
             </div>

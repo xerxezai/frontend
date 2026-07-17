@@ -121,7 +121,7 @@ export default function LeadsPanel() {
       key: 'follow_up_date', label: 'Follow-up', render: (r: any) => {
         if (!r.follow_up_date) return '—';
         const overdue = r.follow_up_date < todayStr && !['won', 'lost'].includes(r.status);
-        return <span style={{ fontSize: 12, fontWeight: overdue ? 700 : 500, color: overdue ? '#ef4444' : '#141413', fontFamily: FF }}>{overdue && <i className="fas fa-triangle-exclamation" style={{ marginRight: 4 }} />}{new Date(r.follow_up_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>;
+        return <span style={{ fontSize: 12, fontWeight: overdue ? 700 : 500, color: overdue ? '#ef4444' : '#141413', fontFamily: FF }}>{overdue && <i className="fas fa-exclamation-triangle" style={{ marginRight: 4 }} />}{new Date(r.follow_up_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>;
       },
     },
     { key: 'status', label: 'Status', render: (r: any) => <StatusBadge val={r.status || 'new'} /> },

@@ -83,7 +83,7 @@ export default function BulkUploadModal({ onClose, onUploaded }: { onClose: () =
             }}
           >
             <input id="bulk-upload-input" type="file" multiple accept={ACCEPT} style={{ display: 'none' }} onChange={e => addFiles(e.target.files)} />
-            <i className="fas fa-cloud-arrow-up" style={{ color: OG, fontSize: 20, marginBottom: 8, display: 'block' }} />
+            <i className="fas fa-cloud-upload-alt" style={{ color: OG, fontSize: 20, marginBottom: 8, display: 'block' }} />
             <div style={{ fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: '#1A1A1A' }}>Click or drag multiple files here</div>
             <div style={{ fontFamily: FF, fontSize: 11, color: '#6B6B6B', marginTop: 4 }}>PDF, Word, Excel, image or DWG</div>
           </div>
@@ -100,7 +100,7 @@ export default function BulkUploadModal({ onClose, onUploaded }: { onClose: () =
                 )}
                 {r.status === 'uploading' && <i className="fas fa-circle-notch fa-spin" style={{ color: OG, fontSize: 12 }} />}
                 {r.status === 'done' && <i className="fas fa-check-circle" style={{ color: '#16a34a', fontSize: 12 }} />}
-                {r.status === 'error' && <i className="fas fa-triangle-exclamation" style={{ color: '#ef4444', fontSize: 12 }} title={r.error} />}
+                {r.status === 'error' && <i className="fas fa-exclamation-triangle" style={{ color: '#ef4444', fontSize: 12 }} title={r.error} />}
               </div>
             ))}
           </div>

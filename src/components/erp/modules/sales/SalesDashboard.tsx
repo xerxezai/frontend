@@ -89,7 +89,7 @@ export default function SalesDashboard() {
           background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.30)',
           borderRadius: 12, padding: '13px 18px',
         }}>
-          <i className="fas fa-triangle-exclamation" style={{ color: '#b45309', fontSize: 16 }} />
+          <i className="fas fa-exclamation-triangle" style={{ color: '#b45309', fontSize: 16 }} />
           <div style={{ fontFamily: FF, fontSize: 13, color: '#7c4a03' }}>
             <strong>{expiring.length} quotation{expiring.length > 1 ? 's' : ''}</strong> expiring within 3 days:{' '}
             {expiring.map((q: any) => q.number).join(', ')}

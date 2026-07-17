@@ -401,7 +401,7 @@ export default function LMALoginPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 18 }}>
               <Bullet icon="fas fa-user-tie"    text="Learn from practitioners who built real AI systems" delay={0.34} />
               <Bullet icon="fas fa-certificate" text="Get certified — CPD accredited program"             delay={0.44} />
-              <Bullet icon="fas fa-arrow-trend-up" text="Build production-ready AI skills from day one"   delay={0.54} />
+              <Bullet icon="fas fa-chart-line" text="Build production-ready AI skills from day one"   delay={0.54} />
               <Bullet icon="fas fa-infinity"    text="Lifetime access to course updates"                  delay={0.64} />
             </div>
 

@@ -48,7 +48,7 @@ export default function BalanceSheetPanel() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 18 }}>
         <Card3D accent="#1d4ed8">
           <div style={{ fontFamily: FF, fontWeight: 800, fontSize: 14, color: '#1A1A1A', marginBottom: 6 }}>
-            <i className="fas fa-building-columns" style={{ marginRight: 8, color: '#1d4ed8' }} />Assets
+            <i className="fas fa-university" style={{ marginRight: 8, color: '#1d4ed8' }} />Assets
           </div>
           <Row label="Accounts Receivable" value={fmtINR(sheet.assets?.accounts_receivable)} />
           <Row label="Cash & Bank" value={fmtINR(sheet.assets?.cash_and_bank)} />
