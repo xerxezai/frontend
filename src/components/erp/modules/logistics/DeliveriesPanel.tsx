@@ -21,7 +21,7 @@ export default function DeliveriesPanel() {
     const q = search.trim().toLowerCase();
     if (!q) return deliveries.data;
     return deliveries.data.filter((d: any) =>
-      [d.shipment_tracking_number, d.delivered_by].some(v => (v || '').toLowerCase().includes(q))
+      [d.shipment_number, d.tracking_number, d.customer_name, d.carrier, d.delivered_by].some(v => (v || '').toLowerCase().includes(q))
     );
   }, [deliveries.data, search]);
 
@@ -44,7 +44,10 @@ export default function DeliveriesPanel() {
   };
 
   const cols = [
-    { key: 'shipment_tracking_number', label: 'Shipment Tracking #', render: (r: any) => r.shipment_tracking_number || '—' },
+    { key: 'shipment_number', label: 'Shipment #', render: (r: any) => r.shipment_number || '—' },
+    { key: 'tracking_number', label: 'Tracking #', render: (r: any) => r.tracking_number || '—' },
+    { key: 'customer_name', label: 'Customer', render: (r: any) => r.customer_name || '—' },
+    { key: 'carrier', label: 'Carrier', render: (r: any) => r.carrier || '—' },
     { key: 'delivery_date', label: 'Delivery Date', render: (r: any) => r.delivery_date || '—' },
     { key: 'delivered_by', label: 'Delivered By', render: (r: any) => r.delivered_by || '—' },
     { key: 'status', label: 'Status', render: (r: any) => <StatusBadge status={r.status} map={DELIVERY_STATUS} /> },

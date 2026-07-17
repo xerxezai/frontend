@@ -6,6 +6,14 @@ interface Column {
   render?: (row: any) => React.ReactNode;
   /** Header tooltip text. Defaults to `label` when omitted. Pass '' to suppress the tooltip entirely. */
   headerTitle?: string;
+  /** Fixed column width in px. Without this, table-layout:fixed sizes the column off the
+   * header label's natural width, which starves columns whose data is longer than their
+   * label (e.g. a "Carrier" header next to "Blue Dart" data) — set this for those columns. */
+  width?: number;
+  /** Hover-tooltip text for this cell. Columns without a custom `render` already get the raw
+   * value as a tooltip automatically; `render` columns need this to opt into one, since their
+   * rendered output isn't necessarily plain text. */
+  cellTitle?: (row: any) => string | undefined;
 }
 
 interface Props {
@@ -106,6 +114,10 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
           }}
         >
           <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', fontSize: 12.5 }}>
+            <colgroup>
+              {columns.map(c => <col key={c.key} style={c.width ? { width: c.width } : undefined} />)}
+              {showActions && <col style={{ width: 76 }} />}
+            </colgroup>
             <thead>
               <tr style={{ background: '#fafaf8' }}>
                 {columns.map(c => (
@@ -124,8 +136,9 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
                   {columns.map(c => {
                     const rawVal = row[c.key];
                     const plainText = !c.render && rawVal != null ? String(rawVal) : undefined;
+                    const tooltip = c.cellTitle ? c.cellTitle(row) : plainText;
                     return (
-                      <td key={c.key} style={TD} title={plainText}>
+                      <td key={c.key} style={c.width ? { ...TD, maxWidth: c.width } : TD} title={tooltip}>
                         {c.render ? c.render(row) : (rawVal ?? '—')}
                       </td>
                     );

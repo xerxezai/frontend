@@ -92,8 +92,12 @@ export default function ShipmentsPanel() {
     { key: 'shipment_number', label: 'Shipment #' },
     { key: 'tracking_number', label: 'Tracking #', render: (r: any) => r.tracking_number || '—' },
     { key: 'customer_name', label: 'Customer', render: (r: any) => r.customer_name || '—' },
-    { key: 'carrier', label: 'Carrier', render: (r: any) => r.carrier || '—' },
-    { key: 'route', label: 'Origin → Destination', render: (r: any) => `${r.origin || '—'} → ${r.destination || '—'}` },
+    { key: 'carrier', label: 'Carrier', width: 130, render: (r: any) => r.carrier || '—', cellTitle: (r: any) => r.carrier || undefined },
+    {
+      key: 'route', label: 'Origin → Destination', width: 260,
+      render: (r: any) => `${r.origin || '—'} → ${r.destination || '—'}`,
+      cellTitle: (r: any) => `${r.origin || '—'} → ${r.destination || '—'}`,
+    },
     { key: 'status', label: 'Status', render: (r: any) => <StatusBadge status={r.status} map={SHIPMENT_STATUS} /> },
     { key: 'estimated_delivery', label: 'Est. Delivery', render: (r: any) => r.estimated_delivery || '—' },
     {
