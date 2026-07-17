@@ -1,11 +1,19 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, useFmtCurrency, today, COMMISSION_STATUS, StatusBadge } from './mlmShared';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
-const defCommission = { distributor: '', level: '1', amount: '', status: 'pending', notes: '' };
+const defCommission = { distributor: '', level: '1', rate: '', sales_order: '', amount: '', status: 'pending', notes: '' };
+
+/** amount = sale value x commission % — recomputed whenever the linked order or rate changes. */
+function computeAmount(order: any, rate: string): string {
+  if (!order) return '';
+  const pct = Number(rate);
+  if (!Number.isFinite(pct)) return '';
+  return ((Number(order.total) || 0) * (pct / 100)).toFixed(2);
+}
 
 export default function CommissionsPanel() {
   const isAdmin = isSuperUser();
@@ -13,6 +21,14 @@ export default function CommissionsPanel() {
   const { symbol } = useCurrency();
   const commissions = useERPList<any>('mlm/commissions/');
   const distributors = useERPList<any>('mlm/distributors/');
+  const salesOrders = useERPList<any>('sales/orders/');
+  const [levelRates, setLevelRates] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    erpFetch('mlm/settings/')
+      .then((s: any) => setLevelRates({ '1': s.level1_rate, '2': s.level2_rate, '3': s.level3_rate }))
+      .catch(() => {});
+  }, []);
 
   const [search, setSearch] = useState('');
   const [distributorFilter, setDistributorFilter] = useState('all');
@@ -76,13 +92,34 @@ export default function CommissionsPanel() {
     setSaving(true);
     try {
       await commissions.create({
-        distributor: Number(cF.distributor), level: Number(cF.level), amount: Number(cF.amount),
-        status: cF.status, notes: cF.notes,
+        distributor: Number(cF.distributor), level: Number(cF.level),
+        rate: cF.rate ? Number(cF.rate) : undefined,
+        order: cF.sales_order ? Number(cF.sales_order) : null,
+        amount: Number(cF.amount), status: cF.status, notes: cF.notes,
       } as any);
       toast.success('Commission added');
       closeModal();
     } catch (err: any) { toast.error(err.message || 'Save failed'); }
     finally { setSaving(false); }
+  };
+
+  const linkedOrder = useMemo(
+    () => salesOrders.data.find((o: any) => String(o.id) === cF.sales_order) || null,
+    [salesOrders.data, cF.sales_order],
+  );
+
+  const pickLevel = (level: string) => {
+    const rate = levelRates[level] ?? cF.rate;
+    setCF(f => ({ ...f, level, rate, amount: computeAmount(linkedOrder, rate) || f.amount }));
+  };
+
+  const pickOrder = (orderId: string) => {
+    const order = salesOrders.data.find((o: any) => String(o.id) === orderId) || null;
+    setCF(f => ({ ...f, sales_order: orderId, amount: computeAmount(order, f.rate) || f.amount }));
+  };
+
+  const pickRate = (rate: string) => {
+    setCF(f => ({ ...f, rate, amount: computeAmount(linkedOrder, rate) || f.amount }));
   };
 
   const cols = [
@@ -143,7 +180,7 @@ export default function CommissionsPanel() {
       </div>
 
       <ERPTable title="Commissions" columns={cols} data={filtered} loading={commissions.loading || distributors.loading} error={commissions.error} isAdmin={isAdmin}
-        onAdd={() => { setCF({ ...defCommission }); setShowModal(true); }} />
+        onAdd={() => { setCF({ ...defCommission, rate: levelRates['1'] ?? '' }); setShowModal(true); }} />
 
       {showModal && (
         <div style={OVR} onClick={closeModal}>
@@ -159,15 +196,36 @@ export default function CommissionsPanel() {
                   {distributors.data.map((d: any) => <option key={d.id} value={d.id}>{d.distributor_id} — {d.name}</option>)}
                 </select>
               </div>
+              <div><label style={lbl}>Sales Order</label>
+                <select value={cF.sales_order} onChange={e => pickOrder(e.target.value)} style={inp}>
+                  <option value="">— None (manual commission, not tied to a sale) —</option>
+                  {salesOrders.data.map((o: any) => <option key={o.id} value={o.id}>{o.number} — {o.customer_name} ({fmtINR(o.total)})</option>)}
+                </select>
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div><label style={lbl}>Level</label>
-                  <select value={cF.level} onChange={e => setCF(f => ({ ...f, level: e.target.value }))} style={inp}>
+                  <select value={cF.level} onChange={e => pickLevel(e.target.value)} style={inp}>
                     <option value="1">Level 1</option>
                     <option value="2">Level 2</option>
                     <option value="3">Level 3</option>
                   </select>
                 </div>
-                <div><label style={lbl}>Amount ({symbol}) *</label><input type="number" value={cF.amount} onChange={e => setCF(f => ({ ...f, amount: e.target.value }))} style={inp} required step="0.01" min="0.01" /></div>
+                <div><label style={lbl}>Commission %</label>
+                  <input type="number" value={cF.rate} onChange={e => pickRate(e.target.value)} style={inp} step="0.01" min="0" max="100" placeholder="e.g. 10" />
+                </div>
+              </div>
+              <div>
+                <label style={lbl}>Amount ({symbol}) *</label>
+                <input
+                  type="number" value={cF.amount} onChange={e => setCF(f => ({ ...f, amount: e.target.value }))}
+                  style={{ ...inp, background: linkedOrder ? '#F0EBE4' : inp.background, color: linkedOrder ? '#6B6B6B' : undefined }}
+                  required step="0.01" min="0.01" readOnly={!!linkedOrder}
+                />
+                {linkedOrder && (
+                  <div style={{ fontFamily: FF, fontSize: 10.5, color: '#6B6B6B', marginTop: 4 }}>
+                    Auto-calculated: {fmtINR(linkedOrder.total)} sale × {cF.rate || 0}% — locked while a sales order is linked.
+                  </div>
+                )}
               </div>
               <div><label style={lbl}>Status</label>
                 <select value={cF.status} onChange={e => setCF(f => ({ ...f, status: e.target.value }))} style={inp}>
