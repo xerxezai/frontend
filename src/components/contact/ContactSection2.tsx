@@ -23,9 +23,10 @@ const ERP_MODULES = [
 const CURRENT_CHALLENGES = ["Manual approvals & workflows", "Document management", "Procurement bottlenecks", "HR & payroll management", "No visibility on project costs", "Other"];
 
 // ── per-service dynamic field option lists ─────────────────────────────────────
+// Actual pricing plans (matches src/data/pricingData.ts tiers — the pricing page CTAs
+// deep-link here with ?plan=<tier>). Module choices live in the ERP_MODULES chips instead.
 const PLAN_INTEREST = [
-  "Procurement & Approval Workflows", "Document Management", "HR & Payroll",
-  "Project Cost Control", "Full ERP Suite", "Custom Requirements",
+  "Starter", "Professional", "Enterprise", "Custom Requirements",
 ];
 const TEAM_SIZES = ["1-10", "11-50", "51-200", "200+"];
 const TIMELINE_OPTIONS = [
