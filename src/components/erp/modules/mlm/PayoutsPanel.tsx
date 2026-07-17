@@ -79,6 +79,7 @@ export default function PayoutsPanel() {
   const cols = [
     { key: 'id', label: 'Payout ID', render: (r: any) => `#${r.id}` },
     { key: 'distributor_name', label: 'Distributor', render: (r: any) => r.distributor_name || '—' },
+    { key: 'commission', label: 'Commission', render: (r: any) => r.commission ? `#${r.commission}${r.commission_order_number ? ` (${r.commission_order_number})` : ''}` : '—' },
     { key: 'amount', label: 'Amount', render: (r: any) => fmtINR(r.amount) },
     { key: 'payout_date', label: 'Date' },
     { key: 'method', label: 'Method', render: (r: any) => (r.method || '').toUpperCase() },
@@ -87,9 +88,9 @@ export default function PayoutsPanel() {
     {
       key: 'quickActions', label: 'Actions',
       render: (r: any) => r.status !== 'completed' ? (
-        <button title="Process Payout" disabled={busyId === r.id} onClick={() => processPayout(r)}
+        <button title="Pay — advances this payout toward Paid" disabled={busyId === r.id} onClick={() => processPayout(r)}
           style={{ background: 'rgba(29,78,216,0.08)', color: '#1d4ed8', border: '1px solid rgba(29,78,216,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
-          <i className={`fas ${busyId === r.id ? 'fa-spinner fa-spin' : 'fa-arrow-right'}`} style={{ fontSize: 10 }} />
+          <i className={`fas ${busyId === r.id ? 'fa-spinner fa-spin' : 'fa-hand-holding-usd'}`} style={{ fontSize: 10 }} />
         </button>
       ) : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>,
     },

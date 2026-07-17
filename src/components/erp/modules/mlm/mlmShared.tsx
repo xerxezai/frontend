@@ -69,14 +69,15 @@ export function DelDlg({ onCancel, onConfirm }: { onCancel: () => void; onConfir
 }
 
 export const COMMISSION_STATUS: Record<string, { label: string; bg: string; color: string }> = {
-  pending: { label: 'Pending', bg: '#fef3c7', color: '#92400e' },
-  paid:    { label: 'Paid',    bg: '#d1fae5', color: '#065f46' },
+  pending:  { label: 'Pending',  bg: '#fef3c7', color: '#92400e' },
+  approved: { label: 'Approved', bg: '#dbeafe', color: '#1d4ed8' },
+  paid:     { label: 'Paid',     bg: '#d1fae5', color: '#065f46' },
 };
 
 export const PAYOUT_STATUS: Record<string, { label: string; bg: string; color: string }> = {
-  pending:    { label: 'Pending',    bg: '#fef3c7', color: '#92400e' },
-  processing: { label: 'Processing', bg: '#dbeafe', color: '#1d4ed8' },
-  completed:  { label: 'Completed',  bg: '#d1fae5', color: '#065f46' },
+  pending:    { label: 'Pending Payment', bg: '#fef3c7', color: '#92400e' },
+  processing: { label: 'Processing',      bg: '#dbeafe', color: '#1d4ed8' },
+  completed:  { label: 'Paid',            bg: '#d1fae5', color: '#065f46' },
 };
 
 export const DISTRIBUTOR_STATUS: Record<string, { label: string; bg: string; color: string }> = {

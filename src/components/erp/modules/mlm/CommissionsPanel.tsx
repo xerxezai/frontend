@@ -59,23 +59,23 @@ export default function CommissionsPanel() {
 
   const pendingIds = useMemo(() => filtered.filter((c: any) => c.status === 'pending').map((c: any) => c.id), [filtered]);
 
-  const markPaid = async (ids: number[]) => {
+  const approve = async (ids: number[]) => {
     if (ids.length === 0) return;
     try {
       await erpFetch('mlm/commissions/bulk-approve/', { method: 'POST', body: JSON.stringify({ ids }) });
-      toast.success(ids.length > 1 ? `${ids.length} commissions marked paid` : 'Commission marked paid');
+      toast.success(ids.length > 1 ? `${ids.length} commissions approved — payouts created` : 'Commission approved — payout created');
       commissions.reload();
-    } catch (err: any) { toast.error(err.message || 'Could not mark paid'); }
+    } catch (err: any) { toast.error(err.message || 'Could not approve'); }
   };
 
   const bulkApprove = async () => {
     setBulkBusy(true);
-    try { await markPaid(pendingIds); } finally { setBulkBusy(false); }
+    try { await approve(pendingIds); } finally { setBulkBusy(false); }
   };
 
-  const markOne = async (id: number) => {
+  const approveOne = async (id: number) => {
     setBusyId(id);
-    try { await markPaid([id]); } finally { setBusyId(null); }
+    try { await approve([id]); } finally { setBusyId(null); }
   };
 
   const exportCSV = async () => {
@@ -136,7 +136,7 @@ export default function CommissionsPanel() {
     {
       key: 'quickActions', label: 'Actions',
       render: (r: any) => r.status === 'pending' ? (
-        <button title="Mark Paid" disabled={busyId === r.id} onClick={() => markOne(r.id)}
+        <button title="Approve — creates a pending payout" disabled={busyId === r.id} onClick={() => approveOne(r.id)}
           style={{ background: 'rgba(16,185,129,0.08)', color: '#059669', border: '1px solid rgba(16,185,129,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
           <i className={`fas ${busyId === r.id ? 'fa-spinner fa-spin' : 'fa-check-circle'}`} style={{ fontSize: 10 }} />
         </button>
