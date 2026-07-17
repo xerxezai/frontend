@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCurrency, CURRENCIES } from '../../context/CurrencyContext';
+import { useAccess } from '../../context/AccessContext';
+import MyAccessRequest from './rbac/MyAccessRequest';
 
 const CURRENCY_FLAG: Record<string, string> = { AED: '🇦🇪', INR: '🇮🇳', USD: '🇺🇸' };
 
@@ -16,20 +18,23 @@ const C = {
   border:     "rgba(0,0,0,0.07)",
 };
 
-type NavItem = { to: string; icon: string; label: string; adminOnly?: boolean };
+type NavItem = { to: string; icon: string; label: string; adminOnly?: boolean; rbacModule?: string };
 type SubNavItem = { to: string; icon: string; label: string; adminOnly?: boolean };
 type NavDivider = { divider: true; label: string };
 type NavEntry = NavItem | NavDivider;
 
+// rbacModule set only on the 8 RBAC-controlled modules (Rule 1) — used to hide a sidebar
+// entry entirely when the logged-in user has no access to it. The 4 EPC modules below
+// intentionally carry no rbacModule: they're always visible to every logged-in user (Rule 2).
 const NAV: NavEntry[] = [
   { to: '/erp/dashboard',   icon: 'fas fa-th-large',      label: 'Dashboard' },
-  { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM' },
-  { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales' },
-  { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement' },
-  { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics' },
-  { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting' },
-  { to: '/erp/mlm',         icon: 'fas fa-sitemap',       label: 'MLM' },
-  { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview' },
+  { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM',         rbacModule: 'crm' },
+  { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales',       rbacModule: 'sales' },
+  { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement', rbacModule: 'procurement' },
+  { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics',   rbacModule: 'logistics' },
+  { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting',  rbacModule: 'accounting' },
+  { to: '/erp/mlm',         icon: 'fas fa-sitemap',       label: 'MLM',         rbacModule: 'mlm' },
+  { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview', rbacModule: 'hr' },
   { divider: true, label: 'EPC Modules' },
   { to: '/erp/documents',   icon: 'fas fa-folder-open',   label: 'Document Management' },
   { to: '/erp/projects',    icon: 'fas fa-project-diagram', label: 'Project Management' },
@@ -206,6 +211,8 @@ const ERPLayout = ({ children }: Props) => {
   const adminName = localStorage.getItem('xerxez_name') || 'Admin';
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
+  const { hasAccess, isSuperAdmin, isLoading: accessLoading } = useAccess();
+  const [showAccessRequest, setShowAccessRequest] = useState(false);
 
   let currentSub: SubNavItem | undefined;
   for (const [parentTo, submenu] of Object.entries(EXPANDABLE_SUBMENUS)) {
@@ -534,6 +541,7 @@ const ERPLayout = ({ children }: Props) => {
               );
             }
             if (item.adminOnly && !isAdmin) return null;
+            if (item.rbacModule && !accessLoading && !hasAccess(item.rbacModule)) return null;
 
             // Every expandable section (CRM/Sales/Procurement/Logistics/Accounting/MLM/HR
             // Overview) shares this one toggle-button + submenu-panel pattern.
@@ -604,6 +612,50 @@ const ERPLayout = ({ children }: Props) => {
             );
           })}
         </nav>
+
+        {/* RBAC: User Management (super admins only) / Request Module Access (everyone else) */}
+        {!accessLoading && (
+          isSuperAdmin ? (
+            <div style={{ padding: '10px 10px 0', flexShrink: 0 }}>
+              {!collapsed && (
+                <div style={{
+                  fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.35)',
+                  padding: '6px 8px 8px', textTransform: 'uppercase', letterSpacing: '0.12em',
+                  fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  Admin
+                </div>
+              )}
+              <NavLink
+                to="/erp/users"
+                title="User Management"
+                onClick={() => setMobileOpen(false)}
+                className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+              >
+                <span className="erp-icon-badge">
+                  <i className="fas fa-users-cog" style={{ color: 'inherit', fontSize: 13 }}></i>
+                </span>
+                {!collapsed && <span style={{ flex: 1 }}>User Management</span>}
+              </NavLink>
+            </div>
+          ) : (
+            <div style={{ padding: '10px 10px 0', flexShrink: 0 }}>
+              <button
+                onClick={() => setShowAccessRequest(true)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  width: '100%', justifyContent: collapsed ? 'center' : 'flex-start',
+                  background: 'none', border: 'none', cursor: 'pointer', color: C.orange,
+                  padding: '9px 13px', fontSize: 13.5, fontWeight: 600,
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                <i className="fas fa-key" style={{ fontSize: 13, flexShrink: 0 }}></i>
+                {!collapsed && <span>Request Module Access</span>}
+              </button>
+            </div>
+          )
+        )}
 
         {/* switch to academy */}
         <div style={{ padding: '10px 10px 0', flexShrink: 0, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
@@ -927,6 +979,8 @@ const ERPLayout = ({ children }: Props) => {
         </div>
 
       </div>
+
+      {showAccessRequest && <MyAccessRequest onClose={() => setShowAccessRequest(false)} />}
     </div>
   );
 };

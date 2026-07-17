@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ERPLogin from '../components/erp/ERPLogin';
 import ERPLayout from '../components/erp/ERPLayout';
 import { CurrencyProvider } from '../context/CurrencyContext';
+import { AccessProvider, useAccess } from '../context/AccessContext';
 import ERPDashboard from '../components/erp/ERPDashboard';
 import InventoryModule from '../components/erp/modules/InventoryModule';
 import InvoicingModule from '../components/erp/modules/InvoicingModule';
@@ -95,6 +96,10 @@ const RiskRegister      = lazy(() => import('../components/erp/modules/qhse/Risk
 const SafetyChecklist   = lazy(() => import('../components/erp/modules/qhse/SafetyChecklist'));
 const ComplianceTracker = lazy(() => import('../components/erp/modules/qhse/ComplianceTracker'));
 
+// RBAC — lazy loaded
+const UserManagement = lazy(() => import('../components/erp/rbac/UserManagement'));
+const AccessDenied   = lazy(() => import('../components/erp/rbac/AccessDenied'));
+
 // Profile & Settings pages
 const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
 const EditProfilePage     = lazy(() => import('../components/erp/profile/EditProfilePage'));
@@ -106,6 +111,17 @@ const ModuleLoader = () => (
     <div className="spinner-border" style={{ color: '#C9883A' }} role="status"></div>
   </div>
 );
+
+/** Gates one of the 8 RBAC-controlled modules (never the EPC modules — hasAccess() already
+ * always returns true for those). Renders the module's own loading/access-denied state while
+ * AccessContext's initial my-access/ fetch is in flight, so a slow network never flashes
+ * "Access Denied" before the real answer comes back. */
+const ProtectedModuleRoute = ({ module, children }: { module: string; children: React.ReactNode }) => {
+  const { hasAccess, isLoading } = useAccess();
+  if (isLoading) return <ModuleLoader />;
+  if (!hasAccess(module)) return <AccessDenied module={module} />;
+  return <>{children}</>;
+};
 
 const ERPPage = () => {
   const navigate = useNavigate();
@@ -135,6 +151,7 @@ const ERPPage = () => {
   }
 
   return (
+    <AccessProvider>
     <CurrencyProvider>
     <ERPLayout>
       <Suspense fallback={<ModuleLoader />}>
@@ -142,63 +159,71 @@ const ERPPage = () => {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard"          element={<ERPDashboard />} />
 
-          {/* CRM */}
-          <Route path="crm"                element={<CustomersPanel />} />
-          <Route path="crm/leads"          element={<LeadsPanel />} />
-          <Route path="crm/activities"     element={<ActivitiesPanel />} />
-          <Route path="crm/pipeline"       element={<CRMPipeline />} />
+          {/* CRM — one of the 8 RBAC-controlled modules; every route below requires 'crm' access. */}
+          <Route path="crm"                element={<ProtectedModuleRoute module="crm"><CustomersPanel /></ProtectedModuleRoute>} />
+          <Route path="crm/leads"          element={<ProtectedModuleRoute module="crm"><LeadsPanel /></ProtectedModuleRoute>} />
+          <Route path="crm/activities"     element={<ProtectedModuleRoute module="crm"><ActivitiesPanel /></ProtectedModuleRoute>} />
+          <Route path="crm/pipeline"       element={<ProtectedModuleRoute module="crm"><CRMPipeline /></ProtectedModuleRoute>} />
 
-          {/* Sales */}
-          <Route path="sales"              element={<SalesDashboard />} />
-          <Route path="sales/quotations"   element={<QuotationsPanel />} />
-          <Route path="sales/orders"       element={<OrdersPanel />} />
-          <Route path="sales/invoices"     element={<SalesInvoicesPanel />} />
-          <Route path="sales/payments"     element={<SalesPaymentsPanel />} />
+          {/* Sales — RBAC-controlled. */}
+          <Route path="sales"              element={<ProtectedModuleRoute module="sales"><SalesDashboard /></ProtectedModuleRoute>} />
+          <Route path="sales/quotations"   element={<ProtectedModuleRoute module="sales"><QuotationsPanel /></ProtectedModuleRoute>} />
+          <Route path="sales/orders"       element={<ProtectedModuleRoute module="sales"><OrdersPanel /></ProtectedModuleRoute>} />
+          <Route path="sales/invoices"     element={<ProtectedModuleRoute module="sales"><SalesInvoicesPanel /></ProtectedModuleRoute>} />
+          <Route path="sales/payments"     element={<ProtectedModuleRoute module="sales"><SalesPaymentsPanel /></ProtectedModuleRoute>} />
 
-          {/* Procurement */}
-          <Route path="procurement"                    element={<ProcurementDashboard />} />
-          <Route path="procurement/purchase-orders"    element={<PurchaseOrdersPanel />} />
-          <Route path="procurement/suppliers"          element={<SuppliersPanel />} />
-          <Route path="procurement/goods-receipt"      element={<GoodsReceiptPanel />} />
-          <Route path="procurement/bills"              element={<BillsPanel />} />
+          {/* Procurement — RBAC-controlled (Inventory lives under the Procurement submenu). */}
+          <Route path="procurement"                    element={<ProtectedModuleRoute module="procurement"><ProcurementDashboard /></ProtectedModuleRoute>} />
+          <Route path="procurement/purchase-orders"    element={<ProtectedModuleRoute module="procurement"><PurchaseOrdersPanel /></ProtectedModuleRoute>} />
+          <Route path="procurement/suppliers"          element={<ProtectedModuleRoute module="procurement"><SuppliersPanel /></ProtectedModuleRoute>} />
+          <Route path="procurement/goods-receipt"      element={<ProtectedModuleRoute module="procurement"><GoodsReceiptPanel /></ProtectedModuleRoute>} />
+          <Route path="procurement/bills"              element={<ProtectedModuleRoute module="procurement"><BillsPanel /></ProtectedModuleRoute>} />
+          <Route path="inventory"                      element={<ProtectedModuleRoute module="procurement"><InventoryModule /></ProtectedModuleRoute>} />
 
-          {/* Document Management */}
+          {/* Document Management — EPC module, never gated (Rule 2). */}
           <Route path="documents" element={<DocumentManagement />} />
-          <Route path="inventory"                      element={<InventoryModule />} />
 
-          {/* Logistics */}
-          <Route path="logistics"                    element={<LogisticsDashboard />} />
-          <Route path="logistics/shipments"          element={<ShipmentsPanel />} />
-          <Route path="logistics/deliveries"         element={<DeliveriesPanel />} />
-          <Route path="logistics/tracking"           element={<TrackingPanel />} />
-          <Route path="logistics/warehouses"         element={<WarehousesPanel />} />
+          {/* Logistics — RBAC-controlled. */}
+          <Route path="logistics"                    element={<ProtectedModuleRoute module="logistics"><LogisticsDashboard /></ProtectedModuleRoute>} />
+          <Route path="logistics/shipments"          element={<ProtectedModuleRoute module="logistics"><ShipmentsPanel /></ProtectedModuleRoute>} />
+          <Route path="logistics/deliveries"         element={<ProtectedModuleRoute module="logistics"><DeliveriesPanel /></ProtectedModuleRoute>} />
+          <Route path="logistics/tracking"           element={<ProtectedModuleRoute module="logistics"><TrackingPanel /></ProtectedModuleRoute>} />
+          <Route path="logistics/warehouses"         element={<ProtectedModuleRoute module="logistics"><WarehousesPanel /></ProtectedModuleRoute>} />
 
-          {/* Accounting */}
-          <Route path="accounting"                  element={<AccountingDashboard />} />
-          <Route path="accounting/invoices"         element={<InvoicesPanel />} />
-          <Route path="accounting/payments"         element={<PaymentsPanel />} />
-          <Route path="accounting/expenses"         element={<ExpensesPanel />} />
-          <Route path="accounting/tax-reports"      element={<TaxReportsPanel />} />
-          <Route path="accounting/balance-sheet"    element={<BalanceSheetPanel />} />
+          {/* Accounting — RBAC-controlled. */}
+          <Route path="accounting"                  element={<ProtectedModuleRoute module="accounting"><AccountingDashboard /></ProtectedModuleRoute>} />
+          <Route path="accounting/invoices"         element={<ProtectedModuleRoute module="accounting"><InvoicesPanel /></ProtectedModuleRoute>} />
+          <Route path="accounting/payments"         element={<ProtectedModuleRoute module="accounting"><PaymentsPanel /></ProtectedModuleRoute>} />
+          <Route path="accounting/expenses"         element={<ProtectedModuleRoute module="accounting"><ExpensesPanel /></ProtectedModuleRoute>} />
+          <Route path="accounting/tax-reports"      element={<ProtectedModuleRoute module="accounting"><TaxReportsPanel /></ProtectedModuleRoute>} />
+          <Route path="accounting/balance-sheet"    element={<ProtectedModuleRoute module="accounting"><BalanceSheetPanel /></ProtectedModuleRoute>} />
 
-          {/* MLM */}
-          <Route path="mlm"                  element={<MLMDashboard />} />
-          <Route path="mlm/distributors"     element={<DistributorsPanel />} />
-          <Route path="mlm/network-tree"     element={<NetworkTreePanel />} />
-          <Route path="mlm/commissions"      element={<CommissionsPanel />} />
-          <Route path="mlm/payouts"          element={<PayoutsPanel />} />
-          <Route path="mlm/reports"          element={<MLMReportsPanel />} />
+          {/* MLM — RBAC-controlled. */}
+          <Route path="mlm"                  element={<ProtectedModuleRoute module="mlm"><MLMDashboard /></ProtectedModuleRoute>} />
+          <Route path="mlm/distributors"     element={<ProtectedModuleRoute module="mlm"><DistributorsPanel /></ProtectedModuleRoute>} />
+          <Route path="mlm/network-tree"     element={<ProtectedModuleRoute module="mlm"><NetworkTreePanel /></ProtectedModuleRoute>} />
+          <Route path="mlm/commissions"      element={<ProtectedModuleRoute module="mlm"><CommissionsPanel /></ProtectedModuleRoute>} />
+          <Route path="mlm/payouts"          element={<ProtectedModuleRoute module="mlm"><PayoutsPanel /></ProtectedModuleRoute>} />
+          <Route path="mlm/reports"          element={<ProtectedModuleRoute module="mlm"><MLMReportsPanel /></ProtectedModuleRoute>} />
 
-          {/* HR Overview */}
-          <Route path="hr"                 element={<HRDashboard />} />
-          <Route path="hr/employees"       element={<EmployeesPanel />} />
-          <Route path="hr/departments"     element={<DepartmentsPanel />} />
-          <Route path="hr/leave"           element={<LeaveRequestsPanel />} />
-          <Route path="hr/performance"     element={<HRPerformancePage />} />
-          <Route path="hr/documents"       element={<HRDocumentsPage />} />
-          <Route path="hr/org-chart"       element={<HROrgChartPage />} />
-          <Route path="hr/onboarding"      element={<HROnboardingPage />} />
-          <Route path="hr/exit"            element={<HRExitPage />} />
+          {/* HR Overview — RBAC-controlled. The separate "HR & Payroll" routes below
+              (attendance/leave/payslips) are NOT wrapped here: several are self-service pages
+              any employee must be able to reach regardless of HR module access, and the
+              admin-only ones already have their own isAdminUser() gate in the sidebar —
+              layering RBAC on top risked locking staff out of their own attendance/payslips. */}
+          <Route path="hr"                 element={<ProtectedModuleRoute module="hr"><HRDashboard /></ProtectedModuleRoute>} />
+          <Route path="hr/employees"       element={<ProtectedModuleRoute module="hr"><EmployeesPanel /></ProtectedModuleRoute>} />
+          <Route path="hr/departments"     element={<ProtectedModuleRoute module="hr"><DepartmentsPanel /></ProtectedModuleRoute>} />
+          <Route path="hr/leave"           element={<ProtectedModuleRoute module="hr"><LeaveRequestsPanel /></ProtectedModuleRoute>} />
+          <Route path="hr/performance"     element={<ProtectedModuleRoute module="hr"><HRPerformancePage /></ProtectedModuleRoute>} />
+          <Route path="hr/documents"       element={<ProtectedModuleRoute module="hr"><HRDocumentsPage /></ProtectedModuleRoute>} />
+          <Route path="hr/org-chart"       element={<ProtectedModuleRoute module="hr"><HROrgChartPage /></ProtectedModuleRoute>} />
+          <Route path="hr/onboarding"      element={<ProtectedModuleRoute module="hr"><HROnboardingPage /></ProtectedModuleRoute>} />
+          <Route path="hr/exit"            element={<ProtectedModuleRoute module="hr"><HRExitPage /></ProtectedModuleRoute>} />
+
+          {/* RBAC — User Management (super admin only, enforced by the backend; the sidebar
+              also only shows this link to super admins). */}
+          <Route path="users"              element={<UserManagement />} />
 
           {/* EPC Modules */}
           <Route path="projects"           element={<ProjectDashboard />} />
@@ -241,6 +266,7 @@ const ERPPage = () => {
       </Suspense>
     </ERPLayout>
     </CurrencyProvider>
+    </AccessProvider>
   );
 };
 
