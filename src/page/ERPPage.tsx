@@ -181,7 +181,7 @@ const ERPPage = () => {
           <Route path="inventory"                      element={<ProtectedModuleRoute module="procurement"><InventoryModule /></ProtectedModuleRoute>} />
 
           {/* Document Management — EPC module, never gated (Rule 2). */}
-          <Route path="documents" element={<DocumentManagement />} />
+          <Route path="documents" element={<ProtectedModuleRoute module="document_management"><DocumentManagement /></ProtectedModuleRoute>} />
 
           {/* Logistics — RBAC-controlled. */}
           <Route path="logistics"                    element={<ProtectedModuleRoute module="logistics"><LogisticsDashboard /></ProtectedModuleRoute>} />
@@ -226,20 +226,20 @@ const ERPPage = () => {
           <Route path="users"              element={<UserManagement />} />
 
           {/* EPC Modules */}
-          <Route path="projects"           element={<ProjectDashboard />} />
-          <Route path="projects/list"      element={<ProjectList />} />
-          <Route path="projects/:id"       element={<ProjectDetail />} />
-          <Route path="projects/:id/tasks" element={<ProjectDetail />} />
-          <Route path="projects/:id/gantt" element={<ProjectDetail />} />
-          <Route path="assets"             element={<AssetDashboard />} />
-          <Route path="assets/list"        element={<AssetList />} />
-          <Route path="assets/:id"         element={<AssetDetail />} />
-          <Route path="qhse"               element={<QHSEDashboard />} />
-          <Route path="qhse/incidents"     element={<IncidentList />} />
-          <Route path="qhse/inspections"   element={<InspectionList />} />
-          <Route path="qhse/risks"         element={<RiskRegister />} />
-          <Route path="qhse/checklists"    element={<SafetyChecklist />} />
-          <Route path="qhse/compliance"    element={<ComplianceTracker />} />
+          <Route path="projects"           element={<ProtectedModuleRoute module="project_management"><ProjectDashboard /></ProtectedModuleRoute>} />
+          <Route path="projects/list"      element={<ProtectedModuleRoute module="project_management"><ProjectList /></ProtectedModuleRoute>} />
+          <Route path="projects/:id"       element={<ProtectedModuleRoute module="project_management"><ProjectDetail /></ProtectedModuleRoute>} />
+          <Route path="projects/:id/tasks" element={<ProtectedModuleRoute module="project_management"><ProjectDetail /></ProtectedModuleRoute>} />
+          <Route path="projects/:id/gantt" element={<ProtectedModuleRoute module="project_management"><ProjectDetail /></ProtectedModuleRoute>} />
+          <Route path="assets"             element={<ProtectedModuleRoute module="asset_management"><AssetDashboard /></ProtectedModuleRoute>} />
+          <Route path="assets/list"        element={<ProtectedModuleRoute module="asset_management"><AssetList /></ProtectedModuleRoute>} />
+          <Route path="assets/:id"         element={<ProtectedModuleRoute module="asset_management"><AssetDetail /></ProtectedModuleRoute>} />
+          <Route path="qhse"               element={<ProtectedModuleRoute module="qhse"><QHSEDashboard /></ProtectedModuleRoute>} />
+          <Route path="qhse/incidents"     element={<ProtectedModuleRoute module="qhse"><IncidentList /></ProtectedModuleRoute>} />
+          <Route path="qhse/inspections"   element={<ProtectedModuleRoute module="qhse"><InspectionList /></ProtectedModuleRoute>} />
+          <Route path="qhse/risks"         element={<ProtectedModuleRoute module="qhse"><RiskRegister /></ProtectedModuleRoute>} />
+          <Route path="qhse/checklists"    element={<ProtectedModuleRoute module="qhse"><SafetyChecklist /></ProtectedModuleRoute>} />
+          <Route path="qhse/compliance"    element={<ProtectedModuleRoute module="qhse"><ComplianceTracker /></ProtectedModuleRoute>} />
 
           {/* HR & Payroll */}
           <Route path="attendance"         element={<AttendanceDashboard />} />

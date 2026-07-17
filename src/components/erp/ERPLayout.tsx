@@ -23,9 +23,9 @@ type SubNavItem = { to: string; icon: string; label: string; adminOnly?: boolean
 type NavDivider = { divider: true; label: string };
 type NavEntry = NavItem | NavDivider;
 
-// rbacModule set only on the 8 RBAC-controlled modules (Rule 1) — used to hide a sidebar
-// entry entirely when the logged-in user has no access to it. The 4 EPC modules below
-// intentionally carry no rbacModule: they're always visible to every logged-in user (Rule 2).
+// rbacModule is used to hide a sidebar entry entirely when the logged-in user has no
+// access to it. The 4 EPC modules are restricted to Super Admins only (their hasAccess
+// check in AccessContext returns isSuperAdmin).
 const NAV: NavEntry[] = [
   { to: '/erp/dashboard',   icon: 'fas fa-th-large',      label: 'Dashboard' },
   { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM',         rbacModule: 'crm' },
@@ -36,10 +36,10 @@ const NAV: NavEntry[] = [
   { to: '/erp/mlm',         icon: 'fas fa-sitemap',       label: 'MLM',         rbacModule: 'mlm' },
   { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview', rbacModule: 'hr' },
   { divider: true, label: 'EPC Modules' },
-  { to: '/erp/documents',   icon: 'fas fa-folder-open',   label: 'Document Management' },
-  { to: '/erp/projects',    icon: 'fas fa-project-diagram', label: 'Project Management' },
-  { to: '/erp/assets',      icon: 'fas fa-toolbox',       label: 'Asset Management' },
-  { to: '/erp/qhse',        icon: 'fas fa-hard-hat',      label: 'QHSE' },
+  { to: '/erp/documents',   icon: 'fas fa-folder-open',   label: 'Document Management', rbacModule: 'document_management' },
+  { to: '/erp/projects',    icon: 'fas fa-project-diagram', label: 'Project Management', rbacModule: 'project_management' },
+  { to: '/erp/assets',      icon: 'fas fa-toolbox',       label: 'Asset Management',    rbacModule: 'asset_management' },
+  { to: '/erp/qhse',        icon: 'fas fa-hard-hat',      label: 'QHSE',                rbacModule: 'qhse' },
 ];
 
 // Expandable CRM submenu — Customers/Leads/Activities/Pipeline are each their
@@ -523,6 +523,9 @@ const ERPLayout = ({ children }: Props) => {
         <nav style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', paddingTop: 10, paddingBottom: 10 }}>
           {NAV.map((item, idx) => {
             if ('divider' in item) {
+              // The EPC Modules divider only makes sense when the EPC items below it
+              // render — which is Super Admins only.
+              if (item.label === 'EPC Modules' && !accessLoading && !isSuperAdmin) return null;
               return (
                 <div key={`divider-${item.label}`} style={{
                   margin: collapsed ? '14px 10px 6px' : '18px 16px 8px',

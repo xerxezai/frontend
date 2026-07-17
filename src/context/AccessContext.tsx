@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { erpFetch } from '../hooks/useERPApi';
 
-/** Always visible to every logged-in user — no access control on these ever. */
+/** EPC modules are visible to Super Admins only. */
 const EPC_MODULES = ['document_management', 'project_management', 'asset_management', 'qhse'];
 
 interface ModuleAccess {
@@ -54,7 +54,8 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => { fetchAccess(); }, []);
 
   const hasAccess = (module: string): boolean => {
-    if (EPC_MODULES.includes(module)) return true;
+    // EPC modules only for super admin
+    if (EPC_MODULES.includes(module)) return isSuperAdmin;
     if (isSuperAdmin) return true;
     return accessibleModules.some(m => m.name === module);
   };
