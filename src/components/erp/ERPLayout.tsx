@@ -698,7 +698,8 @@ const ERPLayout = ({ children }: Props) => {
                       <span style={{ fontSize: 15 }}>{CURRENCY_FLAG[cur.code]}</span>
                       <div style={{ flex: 1 }}>
                         <div style={{ color: C.dark, fontWeight: 700, fontSize: 12.5, fontFamily: "'DM Sans', sans-serif" }}>
-                          {cur.code} <span style={{ color: C.muted, fontWeight: 500 }}>— {cur.symbol}</span>
+                          {cur.code}
+                          {cur.symbol !== cur.code && <span style={{ color: C.muted, fontWeight: 500 }}> — {cur.symbol}</span>}
                         </div>
                         <div style={{ color: C.muted, fontSize: 10.5, fontFamily: "'DM Sans', sans-serif" }}>
                           {cur.taxLabel || 'No Tax'}

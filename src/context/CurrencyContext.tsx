@@ -10,7 +10,7 @@ export interface CurrencyDef {
 }
 
 export const CURRENCIES: Record<string, CurrencyDef> = {
-  AED: { code: "AED", symbol: "د.إ", tax: 0.05, taxLabel: "VAT 5%", rate: 1 },
+  AED: { code: "AED", symbol: "AED", tax: 0.05, taxLabel: "VAT 5%", rate: 1 },
   INR: { code: "INR", symbol: "₹", tax: 0.18, taxLabel: "GST 18%", rate: 22.5 },
   USD: { code: "USD", symbol: "$", tax: 0, taxLabel: "", rate: 0.27 },
 };
@@ -49,7 +49,7 @@ interface CurrencyContextValue {
   setCurrency: (code: string) => void;
   symbol: string;
   taxLabel: string;
-  /** Converts (from INR base) + formats with the currency symbol, e.g. "د.إ 5,000.00". */
+  /** Converts (from INR base) + formats with the currency symbol, e.g. "AED 5,000.00". */
   formatAmount: (amount: number | string) => string;
   /** Converts + splits into amount / tax / total, each pre-formatted. */
   formatWithTax: (amount: number | string) => FormatWithTaxResult;

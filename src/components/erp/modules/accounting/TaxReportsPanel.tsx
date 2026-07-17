@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch } from '../../../../hooks/useERPApi';
+import { useCurrency } from '../../../../context/CurrencyContext';
 import { FF, WHITE, BORDER, inp, lbl, useFmtCurrency, KpiCard, OG } from './accountingShared';
 import { downloadTaxReportPDF } from './pdf';
 
@@ -11,6 +12,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 
 export default function TaxReportsPanel() {
   const fmtINR = useFmtCurrency();
+  const { selectedCurrency } = useCurrency();
   const [periodType, setPeriodType] = useState<PeriodType>('monthly');
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -89,8 +91,20 @@ export default function TaxReportsPanel() {
         <div className="alert alert-danger">Could not load the tax report.</div>
       ) : (
         <>
+          {selectedCurrency !== 'INR' && (
+            <div style={{
+              display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 14,
+              background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a',
+              borderRadius: 10, padding: '11px 14px', fontFamily: FF, fontSize: 12, lineHeight: 1.5,
+            }}>
+              <i className="fas fa-exclamation-triangle" style={{ marginTop: 2, flexShrink: 0 }} />
+              <div>
+                Tax jurisdiction is set to <strong>India (GST @ 18%)</strong> — these figures are the real GST computation, only converted for display into <strong>{selectedCurrency}</strong>. They are not a {selectedCurrency} tax computation and should not be used for UAE VAT filing.
+              </div>
+            </div>
+          )}
           <div style={{ fontFamily: FF, fontSize: 12.5, color: '#6B6B6B', marginBottom: 14 }}>
-            Showing GST summary for period <strong style={{ color: '#1A1A1A' }}>{report.period}</strong>
+            Showing India GST summary for period <strong style={{ color: '#1A1A1A' }}>{report.period}</strong>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
             <KpiCard icon="fas fa-sack-dollar" label="Total Revenue" value={fmtINR(report.total_revenue)} accent={OG} />
