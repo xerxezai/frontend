@@ -18,17 +18,23 @@ const C = {
 
 type NavItem = { to: string; icon: string; label: string; adminOnly?: boolean };
 type SubNavItem = { to: string; icon: string; label: string; adminOnly?: boolean };
+type NavDivider = { divider: true; label: string };
+type NavEntry = NavItem | NavDivider;
 
-const NAV: NavItem[] = [
+const NAV: NavEntry[] = [
   { to: '/erp/dashboard',   icon: 'fas fa-th-large',      label: 'Dashboard' },
   { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM' },
   { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales' },
   { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement' },
-  { to: '/erp/documents',   icon: 'fas fa-folder-open',   label: 'Document Management' },
   { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics' },
   { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting' },
   { to: '/erp/mlm',         icon: 'fas fa-sitemap',       label: 'MLM' },
   { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview' },
+  { divider: true, label: 'EPC Modules' },
+  { to: '/erp/documents',   icon: 'fas fa-folder-open',   label: 'Document Management' },
+  { to: '/erp/projects',    icon: 'fas fa-project-diagram', label: 'Project Management' },
+  { to: '/erp/assets',      icon: 'fas fa-toolbox',       label: 'Asset Management' },
+  { to: '/erp/qhse',        icon: 'fas fa-hard-hat',      label: 'QHSE' },
 ];
 
 // Expandable CRM submenu — Customers/Leads/Activities/Pipeline are each their
@@ -112,6 +118,30 @@ const HR_SUBMENU: SubNavItem[] = [
   { to: '/erp/hr/exit',           icon: 'fas fa-door-open',       label: 'Exit Management' },
 ];
 
+// Expandable Project Management submenu — Detail/Tasks/Gantt are per-project routes
+// reached from the list, not their own sidebar entries.
+const PROJECTS_SUBMENU: SubNavItem[] = [
+  { to: '/erp/projects',      icon: 'fas fa-th-large',        label: 'Dashboard' },
+  { to: '/erp/projects/list', icon: 'fas fa-list',            label: 'All Projects' },
+];
+
+// Expandable Asset Management submenu — Detail (incl. QR code) is a per-asset route
+// reached from the list, not its own sidebar entry.
+const ASSETS_SUBMENU: SubNavItem[] = [
+  { to: '/erp/assets',      icon: 'fas fa-th-large', label: 'Dashboard' },
+  { to: '/erp/assets/list', icon: 'fas fa-list',     label: 'All Assets' },
+];
+
+// Expandable QHSE submenu
+const QHSE_SUBMENU: SubNavItem[] = [
+  { to: '/erp/qhse',             icon: 'fas fa-th-large',        label: 'Dashboard' },
+  { to: '/erp/qhse/incidents',   icon: 'fas fa-exclamation-circle', label: 'Incidents' },
+  { to: '/erp/qhse/inspections', icon: 'fas fa-clipboard-list',  label: 'Inspections' },
+  { to: '/erp/qhse/risks',       icon: 'fas fa-shield-alt',      label: 'Risk Register' },
+  { to: '/erp/qhse/checklists',  icon: 'fas fa-tasks',           label: 'Safety Checklists' },
+  { to: '/erp/qhse/compliance',  icon: 'fas fa-file-signature',  label: 'Compliance' },
+];
+
 const EXPANDABLE_SUBMENUS: Record<string, SubNavItem[]> = {
   '/erp/crm': CRM_SUBMENU,
   '/erp/sales': SALES_SUBMENU,
@@ -120,6 +150,9 @@ const EXPANDABLE_SUBMENUS: Record<string, SubNavItem[]> = {
   '/erp/accounting': ACCOUNTING_SUBMENU,
   '/erp/mlm': MLM_SUBMENU,
   '/erp/hr': HR_SUBMENU,
+  '/erp/projects': PROJECTS_SUBMENU,
+  '/erp/assets': ASSETS_SUBMENU,
+  '/erp/qhse': QHSE_SUBMENU,
 };
 
 function isAdminUser(): boolean {
@@ -182,7 +215,7 @@ const ERPLayout = ({ children }: Props) => {
     if (currentSub) break;
   }
   const currentNavItem = NAV.find(
-    item => item.to === location.pathname || location.pathname.startsWith(item.to + '/')
+    (item): item is NavItem => !('divider' in item) && (item.to === location.pathname || location.pathname.startsWith(item.to + '/'))
   );
   const pageTitle = currentSub ? currentSub.label
     : currentNavItem ? currentNavItem.label : 'Dashboard';
@@ -482,6 +515,24 @@ const ERPLayout = ({ children }: Props) => {
         {/* nav */}
         <nav style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', paddingTop: 10, paddingBottom: 10 }}>
           {NAV.map((item, idx) => {
+            if ('divider' in item) {
+              return (
+                <div key={`divider-${item.label}`} style={{
+                  margin: collapsed ? '14px 10px 6px' : '18px 16px 8px',
+                  paddingTop: 14,
+                  borderTop: '1px solid rgba(255,255,255,0.07)',
+                }}>
+                  {!collapsed && (
+                    <span style={{
+                      fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.35)', fontFamily: "'DM Sans', sans-serif",
+                    }}>
+                      {item.label}
+                    </span>
+                  )}
+                </div>
+              );
+            }
             if (item.adminOnly && !isAdmin) return null;
 
             // Every expandable section (CRM/Sales/Procurement/Logistics/Accounting/MLM/HR

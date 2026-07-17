@@ -81,6 +81,20 @@ const HROrgChartPage    = lazy(() => import('../components/erp/modules/hr/HROrgC
 const HROnboardingPage  = lazy(() => import('../components/erp/modules/hr/HROnboardingPage'));
 const HRExitPage        = lazy(() => import('../components/erp/modules/hr/HRExitPage'));
 
+// EPC modules — lazy loaded
+const ProjectDashboard  = lazy(() => import('../components/erp/modules/projects/ProjectDashboard'));
+const ProjectList       = lazy(() => import('../components/erp/modules/projects/ProjectList'));
+const ProjectDetail     = lazy(() => import('../components/erp/modules/projects/ProjectDetail'));
+const AssetDashboard    = lazy(() => import('../components/erp/modules/assets/AssetDashboard'));
+const AssetList         = lazy(() => import('../components/erp/modules/assets/AssetList'));
+const AssetDetail       = lazy(() => import('../components/erp/modules/assets/AssetDetail'));
+const QHSEDashboard     = lazy(() => import('../components/erp/modules/qhse/QHSEDashboard'));
+const IncidentList      = lazy(() => import('../components/erp/modules/qhse/IncidentList'));
+const InspectionList    = lazy(() => import('../components/erp/modules/qhse/InspectionList'));
+const RiskRegister      = lazy(() => import('../components/erp/modules/qhse/RiskRegister'));
+const SafetyChecklist   = lazy(() => import('../components/erp/modules/qhse/SafetyChecklist'));
+const ComplianceTracker = lazy(() => import('../components/erp/modules/qhse/ComplianceTracker'));
+
 // Profile & Settings pages
 const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
 const EditProfilePage     = lazy(() => import('../components/erp/profile/EditProfilePage'));
@@ -185,6 +199,22 @@ const ERPPage = () => {
           <Route path="hr/org-chart"       element={<HROrgChartPage />} />
           <Route path="hr/onboarding"      element={<HROnboardingPage />} />
           <Route path="hr/exit"            element={<HRExitPage />} />
+
+          {/* EPC Modules */}
+          <Route path="projects"           element={<ProjectDashboard />} />
+          <Route path="projects/list"      element={<ProjectList />} />
+          <Route path="projects/:id"       element={<ProjectDetail />} />
+          <Route path="projects/:id/tasks" element={<ProjectDetail />} />
+          <Route path="projects/:id/gantt" element={<ProjectDetail />} />
+          <Route path="assets"             element={<AssetDashboard />} />
+          <Route path="assets/list"        element={<AssetList />} />
+          <Route path="assets/:id"         element={<AssetDetail />} />
+          <Route path="qhse"               element={<QHSEDashboard />} />
+          <Route path="qhse/incidents"     element={<IncidentList />} />
+          <Route path="qhse/inspections"   element={<InspectionList />} />
+          <Route path="qhse/risks"         element={<RiskRegister />} />
+          <Route path="qhse/checklists"    element={<SafetyChecklist />} />
+          <Route path="qhse/compliance"    element={<ComplianceTracker />} />
 
           {/* HR & Payroll */}
           <Route path="attendance"         element={<AttendanceDashboard />} />
