@@ -73,6 +73,9 @@ const erpModules = [
   { icon: "fas fa-handshake",           label: "CRM & Sales",              to: "/service/ai-powered-erp" },
   { icon: "fas fa-file-invoice-dollar", label: "Invoicing & Purchases",    to: "/service/ai-powered-erp" },
   { icon: "fas fa-brain",               label: "AI Analytics & Forecasting", to: "/service/ai-powered-erp" },
+  { icon: "fas fa-project-diagram",     label: "Project Management",       to: "/service/ai-powered-erp" },
+  { icon: "fas fa-toolbox",             label: "Asset Management",         to: "/service/ai-powered-erp" },
+  { icon: "fas fa-hard-hat",            label: "QHSE",                     to: "/service/ai-powered-erp" },
 ];
 
 const erpStats = [
