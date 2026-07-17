@@ -81,7 +81,9 @@ function EditAccessModal({ user, onClose, onSaved }: { user: any; onClose: () =>
     if (role !== 'super_admin' && modules.length === 0) { toast.error('Assign at least one module.'); return; }
     setSaving(true);
     try {
-      await rbacApi.updateUser(user.id, { role, modules: role === 'super_admin' ? ALL_MODULES.map(m => m.name) : modules });
+      const payload = { role, modules: role === 'super_admin' ? ALL_MODULES.map(m => m.name) : modules };
+      console.log('[UserManagement] PUT rbac/users/%s/ payload:', user.id, payload);
+      await rbacApi.updateUser(user.id, payload);
       toast.success('Access updated');
       onSaved(); onClose();
     } catch (e: any) { toast.error(e.message || 'Update failed'); }
