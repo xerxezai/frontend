@@ -2,7 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCurrency, CURRENCIES } from '../../context/CurrencyContext';
 import { useAccess } from '../../context/AccessContext';
+import { useCompany } from '../../context/CompanyContext';
 import MyAccessRequest from './rbac/MyAccessRequest';
+import CompanySwitcher from './company/CompanySwitcher';
 
 const CURRENCY_FLAG: Record<string, string> = { AED: '🇦🇪', INR: '🇮🇳', USD: '🇺🇸' };
 
@@ -212,6 +214,7 @@ const ERPLayout = ({ children }: Props) => {
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
   const { hasAccess, isSuperAdmin, userRole, isLoading: accessLoading } = useAccess();
+  const { isPlatformAdmin, currentCompany } = useCompany();
   // Real RBAC role from my-access/ — the legacy xerxez_role localStorage value lies
   // (it derives from an old profile field that shows every admin-ish user as super_admin).
   const ROLE_LABELS: Record<string, string> = {
@@ -636,6 +639,19 @@ const ERPLayout = ({ children }: Props) => {
                   Admin
                 </div>
               )}
+              {isPlatformAdmin && (
+                <NavLink
+                  to="/erp/companies"
+                  title="Companies"
+                  onClick={() => setMobileOpen(false)}
+                  className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                >
+                  <span className="erp-icon-badge">
+                    <i className="fas fa-building" style={{ color: 'inherit', fontSize: 13 }}></i>
+                  </span>
+                  {!collapsed && <span style={{ flex: 1 }}>Companies</span>}
+                </NavLink>
+              )}
               <NavLink
                 to="/erp/users"
                 title="User Management"
@@ -756,6 +772,9 @@ const ERPLayout = ({ children }: Props) => {
                 aria-label="Search"
               />
             </div>
+
+            {/* ── Company Switcher (platform admin only, no-op/hidden for everyone else) ── */}
+            <CompanySwitcher />
 
             {/* ── Currency selector ── */}
             <div ref={currencyRef} style={{ position: 'relative', flexShrink: 0 }}>
@@ -982,6 +1001,18 @@ const ERPLayout = ({ children }: Props) => {
             </div>
           </div>
         </header>
+
+        {isPlatformAdmin && currentCompany && (
+          <div style={{
+            background: 'rgba(201,136,58,0.10)', borderBottom: '1px solid rgba(201,136,58,0.25)',
+            padding: '8px 28px', display: 'flex', alignItems: 'center', gap: 8,
+          }}>
+            <i className="fas fa-eye" style={{ color: C.orange, fontSize: 12 }} />
+            <span style={{ color: '#8B5E1A', fontSize: 12.5, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>
+              You are viewing <strong>{currentCompany.name}</strong>'s data
+            </span>
+          </div>
+        )}
 
         {/* content */}
         <div style={{ flex: 1, padding: '24px 28px', background: '#F8F7F4' }}>

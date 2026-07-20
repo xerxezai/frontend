@@ -4,6 +4,7 @@ import ERPLogin from '../components/erp/ERPLogin';
 import ERPLayout from '../components/erp/ERPLayout';
 import { CurrencyProvider } from '../context/CurrencyContext';
 import { AccessProvider, useAccess } from '../context/AccessContext';
+import { CompanyProvider } from '../context/CompanyContext';
 import ERPDashboard from '../components/erp/ERPDashboard';
 import InventoryModule from '../components/erp/modules/InventoryModule';
 import InvoicingModule from '../components/erp/modules/InvoicingModule';
@@ -100,6 +101,10 @@ const ComplianceTracker = lazy(() => import('../components/erp/modules/qhse/Comp
 const UserManagement = lazy(() => import('../components/erp/rbac/UserManagement'));
 const AccessDenied   = lazy(() => import('../components/erp/rbac/AccessDenied'));
 
+// Multi-tenant company management — lazy loaded, platform admin only
+const CompanyManagement = lazy(() => import('../components/erp/company/CompanyManagement'));
+const CompanyDetail     = lazy(() => import('../components/erp/company/CompanyDetail'));
+
 // Profile & Settings pages
 const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
 const EditProfilePage     = lazy(() => import('../components/erp/profile/EditProfilePage'));
@@ -151,6 +156,7 @@ const ERPPage = () => {
   }
 
   return (
+    <CompanyProvider>
     <AccessProvider>
     <CurrencyProvider>
     <ERPLayout>
@@ -225,6 +231,11 @@ const ERPPage = () => {
               also only shows this link to super admins). */}
           <Route path="users"              element={<UserManagement />} />
 
+          {/* Multi-tenant company management (platform admin only, enforced by the backend
+              and — for the sidebar link's visibility — by isPlatformAdmin client-side). */}
+          <Route path="companies"          element={<CompanyManagement />} />
+          <Route path="companies/:id"      element={<CompanyDetail />} />
+
           {/* EPC Modules */}
           <Route path="projects"           element={<ProtectedModuleRoute module="project_management"><ProjectDashboard /></ProtectedModuleRoute>} />
           <Route path="projects/list"      element={<ProtectedModuleRoute module="project_management"><ProjectList /></ProtectedModuleRoute>} />
@@ -267,6 +278,7 @@ const ERPPage = () => {
     </ERPLayout>
     </CurrencyProvider>
     </AccessProvider>
+    </CompanyProvider>
   );
 };
 

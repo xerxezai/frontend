@@ -29,13 +29,22 @@ function clearAllTokens() {
   );
 }
 
+/** Platform admin's "active company" selection (Company Switcher) — there's no server
+ * session for this (see backend apps.companies.utils docstring), so it's carried as a
+ * header on every request instead, same as auth/role state already lives client-side. */
+function getActiveCompanyId(): string | null {
+  return localStorage.getItem('xerxez_active_company_id');
+}
+
 export async function erpFetch(path: string, options: RequestInit = {}) {
   const token = getToken();
+  const activeCompanyId = getActiveCompanyId();
   const res = await fetch(`${BASE}/${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(activeCompanyId ? { 'X-Active-Company-Id': activeCompanyId } : {}),
       ...(options.headers || {}),
     },
   });
