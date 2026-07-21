@@ -63,7 +63,7 @@ const HomePage1 = () => {
   return (
     <>
       <SEO
-        title="XERXEZ | #1 AI-Powered ERP for UAE & India Enterprises"
+        title="XERXEZ | AI-Powered ERP for UAE & India Enterprises"
         description="Transform your enterprise with XERXEZ AI-powered ERP. Built for UAE & India. Serving EPC, Oil & Gas, Construction, Manufacturing & more. Book a free demo today."
         canonical="/"
         keywords="best erp software in india, best erp software in abu dhabi, best erp software UAE, xerxez erp, AI ERP India, ERP system India, erp software dubai, best erp for small business india, enterprise ERP india UAE, xerxez ai, XERXEZ, Xerxez Solutions, AI ERP UAE, ERP Abu Dhabi, EPC ERP system, construction ERP UAE, manufacturing ERP india, oil gas ERP UAE, healthcare ERP UAE"

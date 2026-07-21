@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ERPLogin from '../components/erp/ERPLogin';
 import ERPLayout from '../components/erp/ERPLayout';
@@ -128,7 +128,23 @@ const ProtectedModuleRoute = ({ module, children }: { module: string; children: 
   return <>{children}</>;
 };
 
+/** index.html declares one global favicon for the whole SPA (marketing site, ERP, LMA
+ * all share it — there's no per-route favicon mechanism). The ERP wants the browser's
+ * own default tab icon instead, without touching that shared tag for every other page,
+ * so this swaps the <link rel="icon"> href to a blank data URI for as long as any /erp/*
+ * route is mounted, and restores the original XERXEZ logo on unmount. */
+function useDefaultBrowserFavicon() {
+  useEffect(() => {
+    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!link) return;
+    const original = link.href;
+    link.href = 'data:,';
+    return () => { link.href = original; };
+  }, []);
+}
+
 const ERPPage = () => {
+  useDefaultBrowserFavicon();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => !!localStorage.getItem('xerxez_token')
