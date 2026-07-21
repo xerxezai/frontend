@@ -72,7 +72,70 @@ const inputBox: React.CSSProperties = { width: '100%', padding: '10px 14px', bor
 
 // ── Tab 1 — Applications ──────────────────────────────────────────────────
 
-function ApplicationModal({ app, onClose, onSaved }: { app: any; onClose: () => void; onSaved: () => void }) {
+function ApprovePasswordModal({ app, onClose, onApproved }: { app: any; onClose: () => void; onApproved: () => void }) {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const submit = async () => {
+    if (password.length < 8) { setError('Password must be at least 8 characters.'); return; }
+    if (password !== confirmPassword) { setError('Passwords must match.'); return; }
+    setError('');
+    setSaving(true);
+    try {
+      await partnersApi.approvePartner(app.id, password);
+      toast.success(`${app.full_name} approved — welcome email sent.`);
+      onApproved();
+    } catch (e: any) {
+      setError(e.message || 'Could not approve partner');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div style={modalOverlay} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ ...modalBox, maxWidth: 440 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+          <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>Approve Partner &amp; Set Password</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#666' }}>&times;</button>
+        </div>
+
+        <div style={{ marginBottom: 14 }}>
+          <label style={fieldLabel}>Partner</label>
+          <input value={app.full_name} readOnly style={{ ...inputBox, background: '#f5f5f5', color: '#666', cursor: 'default' }} />
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={fieldLabel}>Email</label>
+          <input value={app.email} readOnly style={{ ...inputBox, background: '#f5f5f5', color: '#666', cursor: 'default' }} />
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={fieldLabel}>Password *</label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Set login password" disabled={saving} style={inputBox} />
+        </div>
+        <div style={{ marginBottom: 8 }}>
+          <label style={fieldLabel}>Confirm Password *</label>
+          <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm password" disabled={saving} style={inputBox}
+            onKeyDown={e => e.key === 'Enter' && submit()} />
+        </div>
+
+        {error && <p role="alert" style={{ color: '#ef4444', fontSize: 13, fontFamily: FF, margin: '8px 0 0' }}>{error}</p>}
+
+        <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+          <button onClick={onClose} disabled={saving} style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#475569', fontWeight: 700, fontSize: 13 }}>
+            Cancel
+          </button>
+          <button onClick={submit} disabled={saving} style={{ flex: 1.6, background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#16a34a', fontWeight: 700, fontSize: 13 }}>
+            {saving ? 'Approving…' : 'Approve & Create Login →'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ApplicationModal({ app, onClose, onSaved, onApproveClick }: { app: any; onClose: () => void; onSaved: () => void; onApproveClick: (app: any) => void }) {
   const [notes, setNotes] = useState(app.notes || '');
   const [saving, setSaving] = useState(false);
 
@@ -83,15 +146,6 @@ function ApplicationModal({ app, onClose, onSaved }: { app: any; onClose: () => 
     </div>
   );
 
-  const approve = async () => {
-    setSaving(true);
-    try {
-      await partnersApi.approvePartner(app.id);
-      toast.success(`${app.full_name} approved — welcome email sent.`);
-      onSaved(); onClose();
-    } catch (e: any) { toast.error(e.message || 'Could not approve partner'); }
-    finally { setSaving(false); }
-  };
   const reject = async () => {
     setSaving(true);
     try {
@@ -149,7 +203,7 @@ function ApplicationModal({ app, onClose, onSaved }: { app: any; onClose: () => 
             </button>
           )}
           {app.status !== 'approved' && (
-            <button onClick={approve} disabled={saving} style={{ flex: 1, background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#16a34a', fontWeight: 700, fontSize: 13 }}>
+            <button onClick={() => onApproveClick(app)} disabled={saving} style={{ flex: 1, background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#16a34a', fontWeight: 700, fontSize: 13 }}>
               Approve
             </button>
           )}
@@ -168,6 +222,7 @@ function ApplicationsTab() {
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState('pending');
   const [selected, setSelected] = useState<any>(null);
+  const [approveTarget, setApproveTarget] = useState<any>(null);
 
   const load = useCallback(() => {
     setLoading(true); setError(null);
@@ -212,7 +267,21 @@ function ApplicationsTab() {
         </select>
       </div>
       <ERPTable title="Applications" columns={columns} data={apps} loading={loading} error={error} isAdmin onEdit={(row: any) => setSelected(row)} />
-      {selected && <ApplicationModal app={selected} onClose={() => setSelected(null)} onSaved={load} />}
+      {selected && (
+        <ApplicationModal
+          app={selected}
+          onClose={() => setSelected(null)}
+          onSaved={load}
+          onApproveClick={(app) => { setSelected(null); setApproveTarget(app); }}
+        />
+      )}
+      {approveTarget && (
+        <ApprovePasswordModal
+          app={approveTarget}
+          onClose={() => setApproveTarget(null)}
+          onApproved={() => { setApproveTarget(null); load(); }}
+        />
+      )}
     </div>
   );
 }

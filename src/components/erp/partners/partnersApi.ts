@@ -11,7 +11,7 @@ export const partnersApi = {
   },
   getPartner: (id: number) => erpFetch(`partners/admin/partners/${id}/`),
   updatePartner: (id: number, data: any) => erpFetch(`partners/admin/partners/${id}/`, { method: 'PUT', body: JSON.stringify(data) }),
-  approvePartner: (id: number) => erpFetch(`partners/admin/partners/${id}/approve/`, { method: 'PUT' }),
+  approvePartner: (id: number, password: string) => erpFetch(`partners/admin/partners/${id}/approve/`, { method: 'PUT', body: JSON.stringify({ password }) }),
   rejectPartner: (id: number, notes?: string) => erpFetch(`partners/admin/partners/${id}/reject/`, { method: 'PUT', body: JSON.stringify(notes !== undefined ? { notes } : {}) }),
 
   // Tab 3 — All Deals
