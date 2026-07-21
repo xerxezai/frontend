@@ -18,18 +18,21 @@ const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", 
 const INDUSTRIES_OPTS = ["Engineering & EPC", "Oil & Gas", "Construction", "Facilities Management", "Manufacturing", "Other"];
 const ERP_MODULES = [
   "Dashboard & Analytics", "CRM", "Sales", "Procurement", "Logistics",
-  "Accounting", "MLM / Network", "HR & Payroll",
-  "Document Management", "Project Management", "Asset Management", "QHSE",
+  "Accounting", "HR & Payroll", "Document Management", "Project Management",
+  "Asset Management", "QHSE", "MLM / Network",
 ];
 const CURRENT_CHALLENGES = ["Manual approvals & workflows", "Document management", "Procurement bottlenecks", "HR & payroll management", "No visibility on project costs", "Other"];
 
 // ── per-service dynamic field option lists ─────────────────────────────────────
-// Actual pricing plans (matches src/data/pricingData.ts tiers — the pricing page CTAs
-// deep-link here with ?plan=<tier>). Module choices live in the ERP_MODULES chips instead.
+// NOTE: these three tier labels no longer match src/data/pricingData.ts's PRICING_PLANS
+// tier name ("Starter") — the pricing page's "Get Started" buttons deep-link here with
+// ?plan=Starter/Professional/Enterprise, so that deep-link no longer pre-selects a plan
+// for the renamed first tier. Rename PRICING_PLANS[0].name to "Basic" (and its ctaLink)
+// too if full consistency across the site is wanted.
 const PLAN_INTEREST = [
-  "Starter", "Professional", "Enterprise", "Custom Requirements",
+  "Basic (10–50 employees)", "Professional (50–200 employees)", "Enterprise (200+ employees)",
 ];
-const TEAM_SIZES = ["1-10", "11-50", "51-200", "200+"];
+const TEAM_SIZES = ["1-10 employees", "10-50 employees", "50-200 employees", "200+ employees"];
 const TIMELINE_OPTIONS = [
   "Immediate (within 1 month)", "Short term (1-3 months)",
   "Medium term (3-6 months)", "Just exploring for now",

@@ -22,25 +22,6 @@ const Badge = ({ value }: { value: string }) => {
   );
 };
 
-// 1-2 modules -> 10% (blue), 3-5 (or more, short of the full suite) -> 20% (orange),
-// Full ERP Suite selected -> 30% (green), regardless of what else is checked alongside it.
-function commissionTier(modules: string[]): { pct: string; label: string; bg: string; color: string } {
-  if (modules.includes('Full ERP Suite (All Modules)')) return { pct: '30%', label: 'Qualifies for 30% commission', bg: '#d1fae5', color: '#065f46' };
-  if (modules.length >= 3) return { pct: '20%', label: 'Qualifies for 20% commission', bg: '#fff3e0', color: '#e65100' };
-  if (modules.length >= 1) return { pct: '10%', label: 'Qualifies for 10% commission', bg: '#dbeafe', color: '#1d4ed8' };
-  return { pct: '—', label: 'No modules selected', bg: '#f1f5f9', color: '#64748b' };
-}
-
-const CommissionBadge = ({ modules }: { modules: string[] }) => {
-  const t = commissionTier(modules || []);
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 11px', borderRadius: 20, fontSize: 11, fontWeight: 800, background: t.bg, color: t.color, fontFamily: FF, whiteSpace: 'nowrap' }}>
-      <i className="fas fa-percentage" style={{ fontSize: 9 }} />
-      {t.pct}
-    </span>
-  );
-};
-
 const StatCard = ({ label, value, color }: { label: string; value: number; color: string }) => (
   <div style={{
     background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${color}`,
@@ -78,8 +59,6 @@ function DetailModal({ app, onClose, onSaved }: { app: any; onClose: () => void;
     </div>
   );
 
-  const tier = commissionTier(app.modules || []);
-
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, overflow: 'auto', padding: 20 }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 600, maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', fontFamily: FF }}>
@@ -88,9 +67,6 @@ function DetailModal({ app, onClose, onSaved }: { app: any; onClose: () => void;
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>{app.full_name}</h3>
             <div style={{ marginTop: 6, display: 'flex', gap: 6 }}>
               <Badge value={app.status} />
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '2px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: tier.bg, color: tier.color, fontFamily: FF }}>
-                {tier.label}
-              </span>
             </div>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#666' }}>&times;</button>
@@ -190,7 +166,6 @@ export default function PartnerApplications() {
         </div>
       ),
     },
-    { key: 'commission', label: 'Commission', render: (r: any) => <CommissionBadge modules={r.modules || []} /> },
     { key: 'years_experience', label: 'Experience' },
     { key: 'estimated_deals', label: 'Deals/Month' },
     { key: 'status', label: 'Status', render: (r: any) => <Badge value={r.status} /> },

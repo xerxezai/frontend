@@ -26,11 +26,11 @@ const COUNTRIES = [
   "Venezuela","Vietnam","Yemen","Zambia","Zimbabwe","Other",
 ];
 const LANGUAGES = ["English", "Arabic", "Hindi", "French", "Spanish", "Other"];
+// Matches ContactSection2.tsx's ERP_MODULES list/order exactly (the 12 XERXEZ modules).
 const MODULES = [
-  "HR & Payroll", "CRM (Customer Management)", "Sales Management",
-  "Procurement & Purchase Orders", "Document Management", "Logistics & Shipments",
-  "Accounting & Finance", "Project Management", "Asset Management",
-  "QHSE (Safety & Compliance)", "Full ERP Suite (All Modules)",
+  "Dashboard & Analytics", "CRM", "Sales", "Procurement", "Logistics",
+  "Accounting", "HR & Payroll", "Document Management", "Project Management",
+  "Asset Management", "QHSE", "MLM / Network",
 ];
 const YEARS_EXPERIENCE = ["Less than 1 year", "1-3 years", "3-5 years", "5-10 years", "10+ years"];
 const ESTIMATED_DEALS = ["1-2 deals", "3-5 deals", "5-10 deals", "10+ deals"];
@@ -374,9 +374,9 @@ const PartnerApplicationForm = () => {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 14 }}>
             {[
-              { tier: "1-2 Modules Sold", pct: "10%" },
-              { tier: "3-5 Modules Sold", pct: "20%" },
-              { tier: "Full ERP Suite (All Modules)", pct: "30%" },
+              { tier: "Basic package", pct: "10%" },
+              { tier: "Professional package", pct: "20%" },
+              { tier: "Enterprise package", pct: "30%" },
             ].map(row => (
               <div key={row.tier} style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -396,7 +396,7 @@ const PartnerApplicationForm = () => {
               "Full product training provided",
               "Demo support from XERXEZ team",
               "Marketing materials provided",
-              "Higher modules sold = Higher commission earned",
+              "Higher package sold = Higher commission earned",
             ].map(line => (
               <li key={line} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#5a5650" }}>
                 <i className="fas fa-check" style={{ color: "#C9883A", fontSize: 10, marginTop: 4, flexShrink: 0 }} />
@@ -408,8 +408,8 @@ const PartnerApplicationForm = () => {
         <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: sending ? "not-allowed" : "pointer", fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "#5a5650" }}>
           <input type="checkbox" checked={form.agreedToNda} disabled={sending} onChange={e => set("agreedToNda", e.target.checked)}
             style={{ accentColor: "#C9883A", width: 16, height: 16, marginTop: 1, flexShrink: 0 }} />
-          I agree to maintain confidentiality about XERXEZ products, pricing, and client information. I understand the commission
-          structure is 10% for 1-2 modules, 20% for 3-5 modules, and 30% for the full ERP suite. <span style={{ color: "#ef4444" }}>*</span>
+          I agree to maintain confidentiality about XERXEZ products, pricing, and client information. I understand commission is
+          10% for Basic, 20% for Professional, and 30% for Enterprise package. <span style={{ color: "#ef4444" }}>*</span>
         </label>
       </div>
 
