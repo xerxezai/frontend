@@ -26,11 +26,11 @@ const COUNTRIES = [
   "Venezuela","Vietnam","Yemen","Zambia","Zimbabwe","Other",
 ];
 const LANGUAGES = ["English", "Arabic", "Hindi", "French", "Spanish", "Other"];
-// Matches ContactSection2.tsx's ERP_MODULES list/order exactly (the 12 XERXEZ modules).
-const MODULES = [
-  "Dashboard & Analytics", "CRM", "Sales", "Procurement", "Logistics",
-  "Accounting", "HR & Payroll", "Document Management", "Project Management",
-  "Asset Management", "QHSE", "MLM / Network",
+// Matches ContactSection2.tsx's PLAN_INCLUDES / pricingData.ts's PRICING_PLANS exactly.
+const PACKAGES = [
+  { name: "Basic", includes: "Dashboard & Analytics, HR & Payroll, CRM, Sales, Accounting", pct: "10%" },
+  { name: "Professional", includes: "Everything in Basic + Procurement, Logistics, Document Management", pct: "20%" },
+  { name: "Enterprise", includes: "Everything in Professional + Project Management, Asset Management, QHSE, MLM / Network", pct: "30%" },
 ];
 const YEARS_EXPERIENCE = ["Less than 1 year", "1-3 years", "3-5 years", "5-10 years", "10+ years"];
 const ESTIMATED_DEALS = ["1-2 deals", "3-5 deals", "5-10 deals", "10+ deals"];
@@ -38,13 +38,13 @@ const ESTIMATED_DEALS = ["1-2 deals", "3-5 deals", "5-10 deals", "10+ deals"];
 interface PF {
   fullName: string; email: string; phone: string; linkedin: string;
   country: string; city: string; targetMarket: string; languages: string[];
-  profession: string; yearsExperience: string; modules: string[]; estimatedDeals: string;
+  profession: string; yearsExperience: string; packages: string[]; estimatedDeals: string;
   networkDescription: string; agreedToNda: boolean;
 }
 const EMPTY: PF = {
   fullName: "", email: "", phone: "", linkedin: "",
   country: "", city: "", targetMarket: "", languages: [],
-  profession: "", yearsExperience: "", modules: [], estimatedDeals: "",
+  profession: "", yearsExperience: "", packages: [], estimatedDeals: "",
   networkDescription: "", agreedToNda: false,
 };
 
@@ -61,7 +61,7 @@ const PartnerApplicationForm = () => {
 
   const set = <K extends keyof PF>(k: K, v: PF[K]) => setForm(f => ({ ...f, [k]: v }));
   const toggleLanguage = (v: string) => set("languages", form.languages.includes(v) ? form.languages.filter(x => x !== v) : [...form.languages, v]);
-  const toggleModule = (v: string) => set("modules", form.modules.includes(v) ? form.modules.filter(x => x !== v) : [...form.modules, v]);
+  const togglePackage = (v: string) => set("packages", form.packages.includes(v) ? form.packages.filter(x => x !== v) : [...form.packages, v]);
 
   const fldBase = (name: string): React.CSSProperties => ({
     width: "100%", boxSizing: "border-box" as const,
@@ -133,7 +133,7 @@ const PartnerApplicationForm = () => {
     if (form.languages.length === 0) { toast.error("Select at least one language."); return; }
     if (!form.profession.trim()) { toast.error("Please enter your current profession."); return; }
     if (!form.yearsExperience) { toast.error("Please select your years of B2B sales experience."); return; }
-    if (form.modules.length === 0) { toast.error("Select at least one module."); return; }
+    if (form.packages.length === 0) { toast.error("Select at least one package."); return; }
     if (!form.estimatedDeals) { toast.error("Please select your estimated deals per month."); return; }
     if (form.networkDescription.trim().length < 100) { toast.error("Please describe your network in at least 100 characters."); return; }
     if (!form.agreedToNda) { toast.error("Please agree to maintain confidentiality to apply."); return; }
@@ -147,7 +147,7 @@ const PartnerApplicationForm = () => {
           full_name: form.fullName, email: form.email, phone: form.phone, linkedin_url: form.linkedin,
           country: form.country, city: form.city, target_market: form.targetMarket, languages: form.languages,
           current_profession: form.profession, years_experience: form.yearsExperience,
-          modules: form.modules, estimated_deals: form.estimatedDeals,
+          modules: form.packages, estimated_deals: form.estimatedDeals,
           network_description: form.networkDescription, agreed_to_nda: form.agreedToNda,
         }),
       });
@@ -315,14 +315,36 @@ const PartnerApplicationForm = () => {
             )}
           </div>
           <div className="col-12">
-            <label style={lbl}>Which XERXEZ Modules Can You Sell? <span style={{ color: "#ef4444" }}>*</span></label>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8, padding: 14, background: "#fafaf8", border: "1.5px solid #E4DFD8", borderRadius: 10 }}>
-              {MODULES.map(m => (
-                <label key={m} style={{ display: "flex", alignItems: "center", gap: 8, cursor: sending ? "not-allowed" : "pointer", fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 500, color: "#5a5650" }}>
-                  <input type="checkbox" checked={form.modules.includes(m)} disabled={sending} onChange={() => toggleModule(m)} style={{ accentColor: "#C9883A", width: 15, height: 15 }} />
-                  {m}
-                </label>
-              ))}
+            <label style={lbl}>Which package will you sell? <span style={{ color: "#ef4444" }}>*</span></label>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+              {PACKAGES.map(p => {
+                const selected = form.packages.includes(p.name);
+                return (
+                  <button type="button" key={p.name} disabled={sending} onClick={() => togglePackage(p.name)}
+                    style={{
+                      textAlign: "left", cursor: sending ? "not-allowed" : "pointer",
+                      border: `2px solid ${selected ? "#C9883A" : "#E4DFD8"}`,
+                      borderRadius: 12, padding: "16px 18px",
+                      background: selected ? "rgba(201,136,58,0.08)" : "#fafaf8",
+                      boxShadow: selected ? "0 0 0 3px rgba(201,136,58,0.12)" : "none",
+                      transition: "border-color 0.15s, background 0.15s, box-shadow 0.15s",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                      <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14.5, fontWeight: 800, color: selected ? "#C9883A" : "#141413" }}>
+                        {p.name}
+                      </span>
+                      <i className={selected ? "fas fa-check-circle" : "far fa-circle"} style={{ color: selected ? "#C9883A" : "#c7c2ba", fontSize: 16 }} />
+                    </div>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: "#6B6B6B", lineHeight: 1.5, margin: "0 0 10px" }}>
+                      {p.includes}
+                    </p>
+                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700, color: "#C9883A" }}>
+                      Commission: {p.pct} of deal value
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
           <div className="col-md-6">
