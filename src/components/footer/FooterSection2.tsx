@@ -25,12 +25,14 @@ const SERVICES = [
 ];
 
 const NAV = [
-  { to: "/",         label: "Home"     },
-  { to: "/about",    label: "About Us" },
-  { to: "/service",  label: "Services" },
-  { to: "/training", label: "Training" },
-  { to: "/project",  label: "Projects" },
-  { to: "/contact",  label: "Contact"  },
+  { to: "/",              label: "Home"             },
+  { to: "/about",         label: "About Us"         },
+  { to: "/service",       label: "Services"         },
+  { to: "/training",      label: "Training"         },
+  { to: "/project",       label: "Projects"         },
+  { to: "/contact",       label: "Contact"          },
+  { to: "/partner",       label: "Partner Portal"   },
+  { to: "/contact#partner", label: "Become a Partner" },
 ];
 
 const SOCIAL = [
