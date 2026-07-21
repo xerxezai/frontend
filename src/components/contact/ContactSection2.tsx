@@ -26,9 +26,12 @@ const CURRENT_CHALLENGES = ["Manual approvals & workflows", "Document management
 // ── per-service dynamic field option lists ─────────────────────────────────────
 // Tier names match src/data/pricingData.ts's PRICING_PLANS (Basic/Professional/Enterprise);
 // the pricing page's "Get Started" buttons deep-link here with ?plan=Basic/Professional/Enterprise.
-const PLAN_INTEREST = [
-  "Basic (10–50 employees)", "Professional (50–200 employees)", "Enterprise (200+ employees)",
-];
+const PLAN_INTEREST = ["Basic", "Professional", "Enterprise"];
+const PLAN_INCLUDES: Record<string, string> = {
+  Basic: "Includes: Dashboard & Analytics, HR & Payroll, CRM, Sales, Accounting",
+  Professional: "Includes: Everything in Basic + Procurement, Logistics, Document Management",
+  Enterprise: "Includes: Everything in Professional + Project Management, Asset Management, QHSE, MLM / Network",
+};
 const TEAM_SIZES = ["1-10 employees", "10-50 employees", "50-200 employees", "200+ employees"];
 const TIMELINE_OPTIONS = [
   "Immediate (within 1 month)", "Short term (1-3 months)",
@@ -1022,6 +1025,14 @@ const ContactSection2 = () => {
                                     {f.options.map(o=><option key={o} value={o}>{o}</option>)}
                                   </select>
                                 )
+                              )}
+                              {f.key === "planInterest" && form.planInterest && (
+                                <div style={{
+                                  fontFamily:"'DM Sans',sans-serif", fontSize:11.5, color:"#9b9690",
+                                  marginTop:6, lineHeight:1.5,
+                                }}>
+                                  {PLAN_INCLUDES[form.planInterest]}
+                                </div>
                               )}
                             </div>
                           ))}
