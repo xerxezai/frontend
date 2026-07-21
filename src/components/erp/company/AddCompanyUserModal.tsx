@@ -22,7 +22,8 @@ const ALL_MODULES = [
 const AddCompanyUserModal = ({ companyId, onClose, onSuccess }: { companyId: number; onClose?: () => void; onSuccess?: () => void }) => {
   const [form, setForm] = useState({
     full_name: '', username: '', email: '', password: '', confirm_password: '',
-    role: '', modules: [] as string[],
+    // Dashboard defaults to checked — see CreateUserModal.tsx for why.
+    role: '', modules: ['dashboard'] as string[],
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

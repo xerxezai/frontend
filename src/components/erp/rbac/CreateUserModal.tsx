@@ -25,7 +25,9 @@ const ALL_MODULES = [
 const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSuccess?: () => void }) => {
   const [form, setForm] = useState({
     full_name: '', username: '', email: '', password: '', confirm_password: '',
-    company: '', role: '', modules: [] as string[],
+    // Dashboard defaults to checked — it's the landing page every user sees after
+    // login, so there's rarely a reason to grant a user access without it.
+    company: '', role: '', modules: ['dashboard'] as string[],
   });
   const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
