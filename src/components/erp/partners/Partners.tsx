@@ -83,6 +83,37 @@ const modalBox: React.CSSProperties = { background: '#fff', borderRadius: 16, pa
 const fieldLabel: React.CSSProperties = { display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 };
 const inputBox: React.CSSProperties = { width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)', fontSize: 13.5, outline: 'none', boxSizing: 'border-box', fontFamily: FF };
 
+function SearchBox({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
+  return (
+    <div style={{ position: 'relative', flex: '1 1 220px', minWidth: 180, maxWidth: 320 }}>
+      <i className="fas fa-search" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9b9690', fontSize: 12 }} />
+      <input
+        value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
+        style={{ ...inputBox, paddingLeft: 34, width: '100%' }}
+      />
+    </div>
+  );
+}
+
+function DelDlg({ title, message, onCancel, onConfirm, deleting }: { title: string; message: string; onCancel: () => void; onConfirm: () => void; deleting?: boolean }) {
+  return (
+    <div style={{ ...modalOverlay, zIndex: 10050 }} onClick={onCancel}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 380, width: '100%', borderTop: '2px solid #ef4444', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight: 800, marginBottom: 8, color: '#1A1A1A' }}>{title}</h6>
+        <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>{message}</p>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onCancel} disabled={deleting} style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 9, padding: '9px', cursor: deleting ? 'wait' : 'pointer', color: '#475569', fontFamily: FF, fontWeight: 700, fontSize: 13 }}>
+            Cancel
+          </button>
+          <button onClick={onConfirm} disabled={deleting} style={{ flex: 1, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: '9px', cursor: deleting ? 'wait' : 'pointer', color: '#ef4444', fontFamily: FF, fontWeight: 700, fontSize: 13 }}>
+            {deleting ? 'Deleting…' : 'Delete'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Tab 1 — Applications ──────────────────────────────────────────────────
 
 function ApprovePasswordModal({ app, onClose, onApproved }: { app: any; onClose: () => void; onApproved: () => void }) {
@@ -168,6 +199,15 @@ function ApplicationModal({ app, onClose, onSaved, onApproveClick }: { app: any;
     } catch (e: any) { toast.error(e.message || 'Could not reject application'); }
     finally { setSaving(false); }
   };
+  const setStatus = async (status: string, successMsg: string) => {
+    setSaving(true);
+    try {
+      await partnersApi.updatePartner(app.id, { status });
+      toast.success(successMsg);
+      onSaved(); onClose();
+    } catch (e: any) { toast.error(e.message || 'Could not update partner'); }
+    finally { setSaving(false); }
+  };
   const saveNotes = async () => {
     setSaving(true);
     try {
@@ -209,15 +249,25 @@ function ApplicationModal({ app, onClose, onSaved, onApproveClick }: { app: any;
           <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3} placeholder="Internal notes about this application…" style={{ ...inputBox, resize: 'vertical' }} />
         </div>
 
-        <div style={{ display: 'flex', gap: 10 }}>
-          {app.status !== 'rejected' && (
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          {app.status === 'pending' && (
             <button onClick={reject} disabled={saving} style={{ flex: 1, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#ef4444', fontWeight: 700, fontSize: 13 }}>
               Reject
             </button>
           )}
-          {app.status !== 'approved' && (
+          {(app.status === 'pending' || app.status === 'rejected') && (
             <button onClick={() => onApproveClick(app)} disabled={saving} style={{ flex: 1, background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#16a34a', fontWeight: 700, fontSize: 13 }}>
               Approve
+            </button>
+          )}
+          {app.status === 'suspended' && (
+            <button onClick={() => setStatus('approved', 'Partner reactivated')} disabled={saving} style={{ flex: 1, background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#16a34a', fontWeight: 700, fontSize: 13 }}>
+              Reactivate
+            </button>
+          )}
+          {app.status === 'approved' && (
+            <button onClick={() => setStatus('suspended', 'Partner suspended')} disabled={saving} style={{ flex: 1, background: 'rgba(230,81,0,0.10)', border: '1px solid rgba(230,81,0,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#e65100', fontWeight: 700, fontSize: 13 }}>
+              Suspend
             </button>
           )}
           <button onClick={saveNotes} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', border: 'none', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13 }}>
@@ -234,8 +284,11 @@ function ApplicationsTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState('pending');
+  const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<any>(null);
   const [approveTarget, setApproveTarget] = useState<any>(null);
+  const [delTarget, setDelTarget] = useState<any>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(() => {
     setLoading(true); setError(null);
@@ -246,6 +299,25 @@ function ApplicationsTab() {
   }, [statusFilter]);
 
   useEffect(() => { load(); }, [load]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return apps;
+    return apps.filter((a: any) =>
+      a.full_name?.toLowerCase().includes(q) || a.email?.toLowerCase().includes(q) || a.country?.toLowerCase().includes(q)
+    );
+  }, [apps, search]);
+
+  const confirmDelete = async () => {
+    setDeleting(true);
+    try {
+      await partnersApi.deletePartner(delTarget.id);
+      toast.success('Application deleted');
+      setDelTarget(null);
+      load();
+    } catch (e: any) { toast.error(e.message || 'Could not delete application'); }
+    finally { setDeleting(false); }
+  };
 
   const columns = [
     { key: 'full_name', label: 'Name', render: (r: any) => <span style={{ fontWeight: 700, color: OG }}>{r.full_name}</span> },
@@ -275,11 +347,17 @@ function ApplicationsTab() {
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...inputBox, width: 'auto', minWidth: 170, cursor: 'pointer' }}>
           <option value="">All Applications</option>
           <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
           <option value="rejected">Rejected</option>
           <option value="suspended">Suspended</option>
         </select>
+        <SearchBox value={search} onChange={setSearch} placeholder="Search name, email, country…" />
       </div>
-      <ERPTable title="Applications" columns={columns} data={apps} loading={loading} error={error} isAdmin onEdit={(row: any) => setSelected(row)} />
+      <ERPTable
+        title="Applications" columns={columns} data={filtered} loading={loading} error={error} isAdmin
+        onEdit={(row: any) => setSelected(row)}
+        onDelete={(id: number) => setDelTarget(apps.find((a: any) => a.id === id))}
+      />
       {selected && (
         <ApplicationModal
           app={selected}
@@ -295,25 +373,141 @@ function ApplicationsTab() {
           onApproved={() => { setApproveTarget(null); load(); }}
         />
       )}
+      {delTarget && (
+        <DelDlg
+          title="Delete Partner Record?"
+          message={delTarget.status === 'approved'
+            ? `This will permanently delete ${delTarget.full_name}'s partner record, their login access, and any deals they've submitted. This cannot be undone.`
+            : `This will permanently delete ${delTarget.full_name}'s application. This cannot be undone.`}
+          deleting={deleting}
+          onCancel={() => setDelTarget(null)}
+          onConfirm={confirmDelete}
+        />
+      )}
     </div>
   );
 }
 
 // ── Tab 2 — Active Partners ───────────────────────────────────────────────
 
+function ManagePartnerModal({ partner, onClose, onSaved, onViewDeals }: { partner: any; onClose: () => void; onSaved: () => void; onViewDeals: () => void }) {
+  const fmtAed = useAedFormatter();
+  const [commissionTier, setCommissionTier] = useState(partner.commission_tier);
+  const [saving, setSaving] = useState(false);
+
+  const row = (label: string, value: any) => (
+    <div style={{ marginBottom: 12 }}>
+      <div style={{ fontSize: 10.5, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3, fontFamily: FF }}>{label}</div>
+      <div style={{ fontSize: 13.5, color: '#1A1A1A', fontFamily: FF }}>{value || '—'}</div>
+    </div>
+  );
+
+  const saveTier = async () => {
+    setSaving(true);
+    try {
+      await partnersApi.updatePartner(partner.id, { commission_tier: commissionTier });
+      toast.success('Commission tier updated');
+      onSaved(); onClose();
+    } catch (e: any) { toast.error(e.message || 'Could not update partner'); }
+    finally { setSaving(false); }
+  };
+  const suspend = async () => {
+    setSaving(true);
+    try {
+      await partnersApi.updatePartner(partner.id, { status: 'suspended' });
+      toast.success('Partner suspended');
+      onSaved(); onClose();
+    } catch (e: any) { toast.error(e.message || 'Could not suspend partner'); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div style={modalOverlay} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={modalBox}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+          <div>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>{partner.full_name}</h3>
+            <div style={{ marginTop: 6, display: 'flex', gap: 6, alignItems: 'center' }}>
+              <span style={{ fontFamily: FF, fontSize: 12, color: '#9b9690' }}>{partner.partner_code}</span>
+              <Badge value={partner.status} map={PARTNER_STATUS_BADGE} />
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#666' }}>&times;</button>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
+          {row('Email', partner.email)}
+          {row('Phone', partner.phone)}
+          {row('Location', `${partner.city}, ${partner.country}`)}
+          {row('Total Deals', partner.total_deals)}
+          {row('Commission Earned', fmtAed(partner.total_commission_earned))}
+          {row('Commission Paid', fmtAed(partner.total_commission_paid))}
+        </div>
+
+        <div style={{ marginTop: 16, marginBottom: 20 }}>
+          <label style={fieldLabel}>Commission Tier</label>
+          <select value={commissionTier} onChange={e => setCommissionTier(e.target.value)} style={{ ...inputBox, cursor: 'pointer' }}>
+            <option value="basic">Basic</option>
+            <option value="professional">Professional</option>
+            <option value="enterprise">Enterprise</option>
+          </select>
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button onClick={onViewDeals} disabled={saving} style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#475569', fontWeight: 700, fontSize: 13 }}>
+            View Their Deals →
+          </button>
+          <button onClick={suspend} disabled={saving} style={{ flex: 1, background: 'rgba(230,81,0,0.10)', border: '1px solid rgba(230,81,0,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#e65100', fontWeight: 700, fontSize: 13 }}>
+            Suspend
+          </button>
+          <button onClick={saveTier} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', border: 'none', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13 }}>
+            {saving ? 'Saving…' : 'Save Tier'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ActivePartnersTab({ onViewDeals }: { onViewDeals: (partnerId: number) => void }) {
   const fmtAed = useAedFormatter();
   const [partners, setPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState<any>(null);
+  const [delTarget, setDelTarget] = useState<any>(null);
+  const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
+  const load = useCallback(() => {
     setLoading(true); setError(null);
     partnersApi.getPartners({ status: 'approved' })
       .then((res: any) => setPartners(Array.isArray(res) ? res : []))
       .catch((e: any) => { setError(e.message || 'Could not load partners'); toast.error(e.message || 'Could not load partners'); })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return partners;
+    return partners.filter((p: any) =>
+      p.full_name?.toLowerCase().includes(q) || p.email?.toLowerCase().includes(q) ||
+      p.partner_code?.toLowerCase().includes(q) || p.country?.toLowerCase().includes(q)
+    );
+  }, [partners, search]);
+
+  const confirmDelete = async () => {
+    setDeleting(true);
+    try {
+      await partnersApi.deletePartner(delTarget.id);
+      toast.success('Partner deleted');
+      setDelTarget(null);
+      load();
+    } catch (e: any) { toast.error(e.message || 'Could not delete partner'); }
+    finally { setDeleting(false); }
+  };
 
   const columns = [
     { key: 'partner_code', label: 'Code', render: (r: any) => <span style={{ fontWeight: 700, color: OG }}>{r.partner_code}</span> },
@@ -329,8 +523,32 @@ function ActivePartnersTab({ onViewDeals }: { onViewDeals: (partnerId: number) =
 
   return (
     <div>
-      <ERPTable title="Active Partners" columns={columns} data={partners} loading={loading} error={error} isAdmin onEdit={(row: any) => onViewDeals(row.id)} />
-      <p style={{ fontFamily: FF, fontSize: 12, color: '#9b9690', marginTop: 10 }}>Click a partner to view their deals in the All Deals tab.</p>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+        <SearchBox value={search} onChange={setSearch} placeholder="Search name, email, code, country…" />
+      </div>
+      <ERPTable
+        title="Active Partners" columns={columns} data={filtered} loading={loading} error={error} isAdmin
+        onEdit={(row: any) => setSelected(row)}
+        onDelete={(id: number) => setDelTarget(partners.find((p: any) => p.id === id))}
+      />
+      <p style={{ fontFamily: FF, fontSize: 12, color: '#9b9690', marginTop: 10 }}>Click the pencil icon to manage a partner's tier, suspend them, or jump to their deals.</p>
+      {selected && (
+        <ManagePartnerModal
+          partner={selected}
+          onClose={() => setSelected(null)}
+          onSaved={load}
+          onViewDeals={() => { setSelected(null); onViewDeals(selected.id); }}
+        />
+      )}
+      {delTarget && (
+        <DelDlg
+          title="Delete Partner?"
+          message={`This will permanently delete ${delTarget.full_name}'s partner record, their login access, and any deals they've submitted. This cannot be undone.`}
+          deleting={deleting}
+          onCancel={() => setDelTarget(null)}
+          onConfirm={confirmDelete}
+        />
+      )}
     </div>
   );
 }
@@ -441,7 +659,10 @@ function AllDealsTab({ partnerFilter, onClearPartnerFilter }: { partnerFilter: n
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState('');
   const [packageFilter, setPackageFilter] = useState('');
+  const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<any>(null);
+  const [delTarget, setDelTarget] = useState<any>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(() => {
     setLoading(true); setError(null);
@@ -452,6 +673,25 @@ function AllDealsTab({ partnerFilter, onClearPartnerFilter }: { partnerFilter: n
   }, [statusFilter, packageFilter, partnerFilter]);
 
   useEffect(() => { load(); }, [load]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return deals;
+    return deals.filter((d: any) =>
+      d.deal_number?.toLowerCase().includes(q) || d.client_company?.toLowerCase().includes(q) || d.partner_name?.toLowerCase().includes(q)
+    );
+  }, [deals, search]);
+
+  const confirmDelete = async () => {
+    setDeleting(true);
+    try {
+      await partnersApi.deleteDeal(delTarget.id);
+      toast.success('Deal deleted');
+      setDelTarget(null);
+      load();
+    } catch (e: any) { toast.error(e.message || 'Could not delete deal'); }
+    finally { setDeleting(false); }
+  };
 
   const stats = useMemo(() => ({
     total: deals.length,
@@ -495,10 +735,24 @@ function AllDealsTab({ partnerFilter, onClearPartnerFilter }: { partnerFilter: n
             Filtered by partner &times;
           </button>
         )}
+        <SearchBox value={search} onChange={setSearch} placeholder="Search deal #, client, partner…" />
       </div>
 
-      <ERPTable title="All Deals" columns={columns} data={deals} loading={loading} error={error} isAdmin onEdit={(row: any) => setSelected(row)} />
+      <ERPTable
+        title="All Deals" columns={columns} data={filtered} loading={loading} error={error} isAdmin
+        onEdit={(row: any) => setSelected(row)}
+        onDelete={(id: number) => setDelTarget(deals.find((d: any) => d.id === id))}
+      />
       {selected && <DealModal deal={selected} onClose={() => setSelected(null)} onSaved={load} />}
+      {delTarget && (
+        <DelDlg
+          title="Delete Deal?"
+          message={`This will permanently delete deal ${delTarget.deal_number} for ${delTarget.client_company}. This cannot be undone.`}
+          deleting={deleting}
+          onCancel={() => setDelTarget(null)}
+          onConfirm={confirmDelete}
+        />
+      )}
     </div>
   );
 }

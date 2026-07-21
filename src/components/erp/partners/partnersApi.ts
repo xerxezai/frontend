@@ -13,6 +13,7 @@ export const partnersApi = {
   updatePartner: (id: number, data: any) => erpFetch(`partners/admin/partners/${id}/`, { method: 'PUT', body: JSON.stringify(data) }),
   approvePartner: (id: number, password: string) => erpFetch(`partners/admin/partners/${id}/approve/`, { method: 'PUT', body: JSON.stringify({ password }) }),
   rejectPartner: (id: number, notes?: string) => erpFetch(`partners/admin/partners/${id}/reject/`, { method: 'PUT', body: JSON.stringify(notes !== undefined ? { notes } : {}) }),
+  deletePartner: (id: number) => erpFetch(`partners/admin/partners/${id}/`, { method: 'DELETE' }),
 
   // Tab 3 — All Deals
   getDeals: (params?: { status?: string; partner?: number | string; package?: string }) => {
@@ -24,4 +25,5 @@ export const partnersApi = {
     return erpFetch(`partners/admin/deals/${suffix}`);
   },
   updateDeal: (id: number, data: any) => erpFetch(`partners/admin/deals/${id}/`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteDeal: (id: number) => erpFetch(`partners/admin/deals/${id}/`, { method: 'DELETE' }),
 };
