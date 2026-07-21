@@ -105,6 +105,9 @@ const AccessDenied   = lazy(() => import('../components/erp/rbac/AccessDenied'))
 const CompanyManagement = lazy(() => import('../components/erp/company/CompanyManagement'));
 const CompanyDetail     = lazy(() => import('../components/erp/company/CompanyDetail'));
 
+// Partner applications — lazy loaded, super admin only
+const PartnerApplications = lazy(() => import('../components/erp/partners/PartnerApplications'));
+
 // Profile & Settings pages
 const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
 const EditProfilePage     = lazy(() => import('../components/erp/profile/EditProfilePage'));
@@ -251,6 +254,7 @@ const ERPPage = () => {
               and — for the sidebar link's visibility — by isPlatformAdmin client-side). */}
           <Route path="companies"          element={<CompanyManagement />} />
           <Route path="companies/:id"      element={<CompanyDetail />} />
+          <Route path="partners"           element={<PartnerApplications />} />
 
           {/* EPC Modules */}
           <Route path="projects"           element={<ProtectedModuleRoute module="project_management"><ProjectDashboard /></ProtectedModuleRoute>} />

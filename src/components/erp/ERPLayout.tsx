@@ -652,6 +652,19 @@ const ERPLayout = ({ children }: Props) => {
                   {!collapsed && <span style={{ flex: 1 }}>Companies</span>}
                 </NavLink>
               )}
+              {isSuperAdmin && (
+                <NavLink
+                  to="/erp/partners"
+                  title="Partner Applications"
+                  onClick={() => setMobileOpen(false)}
+                  className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                >
+                  <span className="erp-icon-badge">
+                    <i className="fas fa-handshake" style={{ color: 'inherit', fontSize: 13 }}></i>
+                  </span>
+                  {!collapsed && <span style={{ flex: 1 }}>Partner Applications</span>}
+                </NavLink>
+              )}
               <NavLink
                 to="/erp/users"
                 title="User Management"

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiService from '../../services/api';
 import PhoneInput, { isValidPhone } from '../common/PhoneInput';
+import PartnerApplicationForm from './PartnerApplicationForm';
 
 
 // ── services ─────────────────────────────────────────────────────────────────
@@ -236,6 +237,7 @@ const ContactSection2 = () => {
   const urlService = searchParams.get("service");
   const preselectedService = urlService && SERVICES.includes(urlService) ? urlService : null;
   const [showServiceBanner, setShowServiceBanner] = useState(!!preselectedService && !searchParams.get("plan"));
+  const [activeTab, setActiveTab] = useState<"contact" | "partner">("contact");
   const [form, setForm]   = useState<F>(() => {
     const plan = searchParams.get("plan");
     if (plan) {
@@ -692,6 +694,35 @@ const ContactSection2 = () => {
                 padding:"28px 36px 32px",
               }}
             >
+              {/* tab bar */}
+              <div style={{ display: "flex", gap: 4, marginBottom: 22, borderBottom: "1px solid #F0EBE4" }}>
+                {([
+                  { key: "contact" as const, label: "Get in Touch" },
+                  { key: "partner" as const, label: "Become a Partner" },
+                ]).map(t => (
+                  <button
+                    key={t.key} type="button"
+                    onClick={() => setActiveTab(t.key)}
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      padding: "0 4px 12px", marginRight: 24,
+                      fontFamily: "'DM Sans',sans-serif", fontSize: 14, fontWeight: 700,
+                      color: activeTab === t.key ? "#C9883A" : "#9b9690",
+                      borderBottom: activeTab === t.key ? "2.5px solid #C9883A" : "2.5px solid transparent",
+                      transition: "color 180ms ease, border-color 180ms ease",
+                    }}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+
+              {activeTab === "partner" ? (
+                <div style={{ animation: "xzCtFadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both" }}>
+                  <PartnerApplicationForm />
+                </div>
+              ) : (
+              <>
               {/* SUCCESS */}
               {sent && (
                 <div style={{
@@ -1143,6 +1174,8 @@ const ContactSection2 = () => {
 
                   </form>
                 </>
+              )}
+              </>
               )}
             </div>
 
