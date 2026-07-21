@@ -106,9 +106,6 @@ const SubmitDeal = () => {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 30, fontWeight: 700, color: '#141413', marginBottom: 20 }}>
-        Submit a Deal
-      </h1>
 
       <div style={cardStyle}>
         {sectionHeader(1, 'Client Information')}

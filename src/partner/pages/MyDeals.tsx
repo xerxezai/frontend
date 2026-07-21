@@ -79,9 +79,6 @@ const MyDeals = () => {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 30, fontWeight: 700, color: '#141413', marginBottom: 20 }}>
-        My Deals
-      </h1>
 
       <div style={cardStyle}>
         {loading ? (

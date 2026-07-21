@@ -24,12 +24,22 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
     width: 240, height: '100%', background: '#1a1208', display: 'flex', flexDirection: 'column',
     borderRight: '1px solid rgba(255,255,255,0.06)',
   }}>
+    <style>{`
+      @keyframes prtlNavIn { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: translateX(0); } }
+      .prtl-nav-item { animation: prtlNavIn 0.38s cubic-bezier(0.22,1,0.36,1) both; }
+      .prtl-nav-item:not(.prtl-nav-active):hover { background: rgba(255,255,255,0.06) !important; color: #fff !important; }
+      @media (prefers-reduced-motion: reduce) { .prtl-nav-item { animation: none !important; } }
+    `}</style>
+
     <div style={{ padding: '24px 22px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
       <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700, color: '#fff', letterSpacing: '0.02em' }}>
         XERXEZ
       </div>
-      <div style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: OG, marginTop: 2 }}>
-        Partner Portal
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 3 }}>
+        <span style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: OG, whiteSpace: 'nowrap' }}>
+          Partner Portal
+        </span>
+        <span style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(201,136,58,0.35), transparent)' }} />
       </div>
     </div>
 
@@ -51,11 +61,12 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
     )}
 
     <nav style={{ flex: 1, padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 3, overflowY: 'auto' }}>
-      {NAV_ITEMS.map(item => (
+      {NAV_ITEMS.map((item, i) => (
         <NavLink
           key={item.to}
           to={item.to}
           onClick={onNavigate}
+          className={({ isActive }) => `prtl-nav-item${isActive ? ' prtl-nav-active' : ''}`}
           style={({ isActive }) => ({
             display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', borderRadius: 10,
             fontFamily: FF, fontSize: 13.5, fontWeight: 600, textDecoration: 'none',
@@ -64,9 +75,12 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
             boxShadow: isActive ? '0 3px 10px rgba(201,136,58,0.35)' : 'none',
             transition: 'background 0.15s, color 0.15s',
             minHeight: 44,
+            animationDelay: `${i * 0.05}s`,
           })}
         >
-          <i className={item.icon} style={{ width: 16, fontSize: 14, textAlign: 'center' }} />
+          <span style={{ width: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <i className={item.icon} style={{ fontSize: 14 }} />
+          </span>
           {item.label}
         </NavLink>
       ))}
@@ -81,10 +95,12 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
           fontFamily: FF, fontSize: 13.5, fontWeight: 600, color: 'rgba(255,255,255,0.62)',
           background: 'transparent', border: 'none', cursor: 'pointer', minHeight: 44,
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#fff'; }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.10)'; e.currentTarget.style.color = 'rgba(248,113,113,0.9)'; }}
         onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.62)'; }}
       >
-        <i className="fas fa-sign-out-alt" style={{ width: 16, fontSize: 14, textAlign: 'center' }} />
+        <span style={{ width: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <i className="fas fa-sign-out-alt" style={{ fontSize: 14 }} />
+        </span>
         Logout
       </button>
     </div>

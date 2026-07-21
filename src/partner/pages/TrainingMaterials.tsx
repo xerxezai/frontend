@@ -110,9 +110,6 @@ const TrainingMaterials = () => {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 30, fontWeight: 700, color: '#141413', marginBottom: 20 }}>
-        Training Materials
-      </h1>
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px 0', fontFamily: FF, color: '#9b9690' }}>Loading…</div>
       ) : (

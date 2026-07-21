@@ -31,9 +31,6 @@ const CommissionTracker = () => {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 30, fontWeight: 700, color: '#141413', marginBottom: 20 }}>
-        Commission Tracker
-      </h1>
 
       <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 22 }}>
         <SummaryCard label="Total Earned" value={formatAmount(stats?.total_commission_earned)} color="#16a34a" />
