@@ -25,7 +25,7 @@ const PartnerApp = () => {
   }
 
   return (
-    <PartnerLayout>
+    <PartnerLayout onLogout={() => setAuthed(false)}>
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route index element={<Navigate to="dashboard" replace />} />

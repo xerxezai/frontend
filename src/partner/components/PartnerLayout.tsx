@@ -12,7 +12,7 @@ const PAGE_TITLE: Record<string, string> = {
   commission: 'Commission Tracker', training: 'Training Materials', profile: 'My Profile',
 };
 
-function LayoutInner({ children }: { children: ReactNode }) {
+function LayoutInner({ children, onLogout }: { children: ReactNode; onLogout: () => void }) {
   const { partner } = usePartner();
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
 
   const doLogout = () => {
     partnerLogout();
+    onLogout();
     navigate('/partner', { replace: true });
   };
 
@@ -117,10 +118,10 @@ function LayoutInner({ children }: { children: ReactNode }) {
   );
 }
 
-const PartnerLayout = ({ children }: { children: ReactNode }) => (
+const PartnerLayout = ({ children, onLogout }: { children: ReactNode; onLogout: () => void }) => (
   <PartnerProvider>
     <CurrencyProvider>
-      <LayoutInner>{children}</LayoutInner>
+      <LayoutInner onLogout={onLogout}>{children}</LayoutInner>
     </CurrencyProvider>
   </PartnerProvider>
 );
