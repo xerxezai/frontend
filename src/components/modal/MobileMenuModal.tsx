@@ -1,4 +1,5 @@
 ﻿import MobileMenu from "../header/MobileMenu";
+import { SIGNIN_OPTIONS } from "../header/SignInDropdown";
 import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
@@ -37,6 +38,34 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                 AI-powered ERP, DevSecOps, Cloud &amp; <br /> Software solutions for enterprises.
               </p>
               <MobileMenu />
+              <div style={{ margin: "20px 0" }}>
+                <h3 className="offcanvas-title" style={{ fontSize: 16, marginBottom: 10 }}>Sign In</h3>
+                {SIGNIN_OPTIONS.map(opt => (
+                  <Link
+                    key={opt.to}
+                    to={opt.to}
+                    onClick={toggle}
+                    style={{
+                      display: "flex", alignItems: "flex-start", gap: 12,
+                      padding: "10px 0", textDecoration: "none",
+                      borderBottom: "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  >
+                    <span style={{
+                      width: 32, height: 32, borderRadius: 8, flexShrink: 0, marginTop: 2,
+                      background: "rgba(201,136,58,0.15)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "#C9883A", fontSize: 14,
+                    }}>
+                      <i className={opt.icon} />
+                    </span>
+                    <span>
+                      <span style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#fff" }}>{opt.label}</span>
+                      <span style={{ display: "block", fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>{opt.subtitle}</span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
               <div className="social-icon d-flex align-items-center">
                 <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" target="_blank" rel="noreferrer">
                   <i className="fab fa-linkedin-in"></i>

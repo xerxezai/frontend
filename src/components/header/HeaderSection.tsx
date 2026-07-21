@@ -1,5 +1,6 @@
 import { useCustomContext } from "../../context/context";
 import MainMenuSection from "./MainMenuSection";
+import SignInDropdown from "./SignInDropdown";
 import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 import AnnouncementBar, { ANNOUNCE_H } from "../marketing/AnnouncementBar";
@@ -65,22 +66,7 @@ const HeaderSection = ({ variant: _variant }: Props) => {
             gap: 8,
           }}>
             {/* Sign in */}
-            <Link
-              to="/erp"
-              className="d-none d-xl-inline-flex"
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 14, fontWeight: 500,
-                color: "rgba(255,255,255,0.72)",
-                textDecoration: "none",
-                padding: "8px 12px",
-                transition: "color 150ms ease",
-              }}
-              onMouseOver={e => (e.currentTarget.style.color = "#C9883A")}
-              onMouseOut={e => (e.currentTarget.style.color = "rgba(255,255,255,0.72)")}
-            >
-              Sign in
-            </Link>
+            <SignInDropdown className="d-none d-xl-inline-flex" />
 
             {/* Book Free Demo */}
             <Link

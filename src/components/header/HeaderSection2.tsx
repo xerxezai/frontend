@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { useCustomContext } from "../../context/context";
 import MainMenuSection from "./MainMenuSection";
+import SignInDropdown from "./SignInDropdown";
 import { Link } from "react-router-dom";
 import Image from "../utils/Image";
 
@@ -80,20 +81,7 @@ const HeaderSection2 = ({ variant }: Props) => {
                 <div className="mean__menu-wrapper d-none d-xl-block">
                   <MainMenuSection />
                 </div>
-                <Link to="/erp" className="d-none d-xl-inline-flex" style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  color: "rgba(255,255,255,0.72)",
-                  textDecoration: "none",
-                  padding: "8px 16px",
-                  transition: "color 150ms ease",
-                }}
-                  onMouseOver={e => (e.currentTarget.style.color = "#C9883A")}
-                  onMouseOut={e => (e.currentTarget.style.color = "rgba(255,255,255,0.72)")}
-                >
-                  Sign in
-                </Link>
+                <SignInDropdown className="d-none d-xl-inline-flex" />
                 <Link to="/contact" className="d-none d-xl-inline-flex" style={{
                   alignItems: "center",
                   background: "linear-gradient(135deg, #E8A84E 0%, #C9883A 100%)",
