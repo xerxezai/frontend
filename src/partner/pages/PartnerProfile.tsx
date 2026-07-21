@@ -1,4 +1,5 @@
 import { usePartner } from '../context/PartnerContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { OG, FF } from '../constants';
 
 const cardStyle: React.CSSProperties = {
@@ -10,6 +11,7 @@ const TIER_LABEL: Record<string, string> = { basic: 'Basic', professional: 'Prof
 
 const PartnerProfile = () => {
   const { partner, loading } = usePartner();
+  const { formatAmount } = useCurrency();
 
   if (loading || !partner) {
     return <div style={{ textAlign: 'center', padding: '80px 0', fontFamily: FF, color: '#9b9690' }}>Loading profile…</div>;
@@ -72,8 +74,8 @@ const PartnerProfile = () => {
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           {[
             { label: 'Total Deals', value: partner.total_deals, color: OG },
-            { label: 'Commission Earned', value: `AED ${Number(partner.total_commission_earned).toLocaleString()}`, color: '#16a34a' },
-            { label: 'Commission Paid', value: `AED ${Number(partner.total_commission_paid).toLocaleString()}`, color: '#1d4ed8' },
+            { label: 'Commission Earned', value: formatAmount(partner.total_commission_earned), color: '#16a34a' },
+            { label: 'Commission Paid', value: formatAmount(partner.total_commission_paid), color: '#1d4ed8' },
           ].map(s => (
             <div key={s.label} style={{ flex: '1 1 160px', background: '#fafaf8', border: '1px solid #F0EBE4', borderRadius: 10, padding: '14px 18px' }}>
               <div style={{ fontFamily: FF, fontSize: 20, fontWeight: 800, color: s.color }}>{s.value}</div>

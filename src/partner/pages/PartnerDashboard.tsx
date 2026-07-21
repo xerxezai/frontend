@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { partnerApi, type DashboardStats, type Deal } from '../api/partnerApi';
 import DealCard from '../components/DealCard';
+import { useCurrency } from '../context/CurrencyContext';
 import { OG, FF } from '../constants';
 
 const cardStyle: React.CSSProperties = {
@@ -21,6 +22,7 @@ const StatCard = ({ label, value, color, icon }: { label: string; value: string 
 );
 
 const PartnerDashboard = () => {
+  const { formatAmount } = useCurrency();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,9 +59,9 @@ const PartnerDashboard = () => {
         <StatCard label="Deals Pending" value={stats?.pending_deals ?? 0} color="#e65100" icon="fas fa-hourglass-half" />
       </div>
       <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
-        <StatCard label="Commission Earned" value={`AED ${Number(stats?.total_commission_earned ?? 0).toLocaleString()}`} color="#16a34a" icon="fas fa-coins" />
-        <StatCard label="Commission Pending" value={`AED ${Number(stats?.total_commission_pending ?? 0).toLocaleString()}`} color="#e65100" icon="fas fa-hourglass-half" />
-        <StatCard label="Commission Paid" value={`AED ${Number(stats?.total_commission_paid ?? 0).toLocaleString()}`} color="#1d4ed8" icon="fas fa-check-circle" />
+        <StatCard label="Commission Earned" value={formatAmount(stats?.total_commission_earned)} color="#16a34a" icon="fas fa-coins" />
+        <StatCard label="Commission Pending" value={formatAmount(stats?.total_commission_pending)} color="#e65100" icon="fas fa-hourglass-half" />
+        <StatCard label="Commission Paid" value={formatAmount(stats?.total_commission_paid)} color="#1d4ed8" icon="fas fa-check-circle" />
       </div>
 
       <div style={cardStyle}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { partnerApi, type Deal, type DashboardStats } from '../api/partnerApi';
+import { useCurrency } from '../context/CurrencyContext';
 import { COMMISSION_STATUS_BADGE, OG, FF } from '../constants';
 
 const cardStyle: React.CSSProperties = {
@@ -11,11 +12,12 @@ const cardStyle: React.CSSProperties = {
 const SummaryCard = ({ label, value, color }: { label: string; value: string; color: string }) => (
   <div style={{ ...cardStyle, padding: '18px 22px', borderTopColor: color, flex: '1 1 220px' }}>
     <div style={{ fontFamily: FF, fontSize: 11, fontWeight: 700, color: '#9b9690', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>{label}</div>
-    <div style={{ fontSize: 26, fontWeight: 800, color, fontFamily: FF }}>AED {value}</div>
+    <div style={{ fontSize: 26, fontWeight: 800, color, fontFamily: FF }}>{value}</div>
   </div>
 );
 
 const CommissionTracker = () => {
+  const { formatAmount } = useCurrency();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,9 +36,9 @@ const CommissionTracker = () => {
       </h1>
 
       <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 22 }}>
-        <SummaryCard label="Total Earned" value={Number(stats?.total_commission_earned ?? 0).toLocaleString()} color="#16a34a" />
-        <SummaryCard label="Pending Payment" value={Number(stats?.total_commission_pending ?? 0).toLocaleString()} color="#e65100" />
-        <SummaryCard label="Total Paid" value={Number(stats?.total_commission_paid ?? 0).toLocaleString()} color="#1d4ed8" />
+        <SummaryCard label="Total Earned" value={formatAmount(stats?.total_commission_earned)} color="#16a34a" />
+        <SummaryCard label="Pending Payment" value={formatAmount(stats?.total_commission_pending)} color="#e65100" />
+        <SummaryCard label="Total Paid" value={formatAmount(stats?.total_commission_paid)} color="#1d4ed8" />
       </div>
 
       <div style={cardStyle}>
@@ -64,9 +66,9 @@ const CommissionTracker = () => {
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED', fontWeight: 700, color: OG, whiteSpace: 'nowrap' }}>{d.deal_number}</td>
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED', fontWeight: 600, color: '#141413' }}>{d.client_company}</td>
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED', textTransform: 'capitalize' }}>{d.package}</td>
-                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>AED {Number(d.deal_value).toLocaleString()}</td>
+                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>{formatAmount(d.deal_value)}</td>
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>{d.commission_rate}%</td>
-                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED', fontWeight: 700, color: '#16a34a' }}>AED {Number(d.commission_amount).toLocaleString()}</td>
+                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED', fontWeight: 700, color: '#16a34a' }}>{formatAmount(d.commission_amount)}</td>
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>
                         <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: cs.bg, color: cs.color }}>{cs.label}</span>
                       </td>

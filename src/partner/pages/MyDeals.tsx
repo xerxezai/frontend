@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { partnerApi, type Deal } from '../api/partnerApi';
+import { useCurrency } from '../context/CurrencyContext';
 import { DEAL_STATUS_BADGE, OG, FF } from '../constants';
 
 const PACKAGE_LABEL: Record<string, string> = { basic: 'Basic', professional: 'Professional', enterprise: 'Enterprise' };
@@ -15,6 +16,7 @@ const cardStyle: React.CSSProperties = {
 };
 
 function DealModal({ deal, onClose }: { deal: Deal; onClose: () => void }) {
+  const { formatAmount } = useCurrency();
   const s = DEAL_STATUS_BADGE[deal.status] ?? { label: deal.status, bg: '#f1f5f9', color: '#64748b' };
   const row = (label: string, value: React.ReactNode) => (
     <div style={{ marginBottom: 12 }}>
@@ -46,8 +48,8 @@ function DealModal({ deal, onClose }: { deal: Deal; onClose: () => void }) {
           {row('Package', PACKAGE_LABEL[deal.package] || deal.package)}
           {row('Employees', deal.num_employees)}
           {row('Current System', SYSTEM_LABEL[deal.current_system] || deal.current_system)}
-          {row('Deal Value', deal.deal_value ? `AED ${Number(deal.deal_value).toLocaleString()}` : 'Not set yet')}
-          {row('Commission', deal.commission_amount ? `AED ${Number(deal.commission_amount).toLocaleString()} (${deal.commission_rate}%)` : 'Not confirmed yet')}
+          {row('Deal Value', deal.deal_value ? formatAmount(deal.deal_value) : 'Not set yet')}
+          {row('Commission', deal.commission_amount ? `${formatAmount(deal.commission_amount)} (${deal.commission_rate}%)` : 'Not confirmed yet')}
           {row('Submitted', new Date(deal.submitted_at).toLocaleString())}
           {row('Last Updated', new Date(deal.updated_at).toLocaleString())}
         </div>
@@ -63,6 +65,7 @@ function DealModal({ deal, onClose }: { deal: Deal; onClose: () => void }) {
 }
 
 const MyDeals = () => {
+  const { formatAmount } = useCurrency();
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Deal | null>(null);
@@ -109,8 +112,8 @@ const MyDeals = () => {
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>
                         <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: s.bg, color: s.color, whiteSpace: 'nowrap' }}>{s.label}</span>
                       </td>
-                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>{d.deal_value ? `AED ${Number(d.deal_value).toLocaleString()}` : '—'}</td>
-                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>{d.commission_amount ? `AED ${Number(d.commission_amount).toLocaleString()}` : '—'}</td>
+                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>{d.deal_value ? formatAmount(d.deal_value) : '—'}</td>
+                      <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>{d.commission_amount ? formatAmount(d.commission_amount) : '—'}</td>
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED', whiteSpace: 'nowrap' }}>{new Date(d.submitted_at).toLocaleDateString()}</td>
                       <td style={{ padding: '11px 14px', borderBottom: '1px solid #F5F2ED' }}>
                         <button type="button" onClick={e => { e.stopPropagation(); setSelected(d); }} style={{

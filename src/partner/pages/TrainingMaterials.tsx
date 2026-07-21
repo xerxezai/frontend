@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { partnerApi, type TrainingMaterial } from '../api/partnerApi';
+import { useCurrency } from '../context/CurrencyContext';
 import { PACKAGES, OG, FF } from '../constants';
 
 const cardStyle: React.CSSProperties = {
@@ -34,6 +35,7 @@ const MaterialCard = ({ m }: { m: TrainingMaterial }) => (
 );
 
 function CommissionCalcCard() {
+  const { currency } = useCurrency();
   const [value, setValue] = useState('');
   const [pkg, setPkg] = useState('basic');
   const pct = PACKAGES.find(p => p.value === pkg)?.pct || 0;
@@ -45,7 +47,7 @@ function CommissionCalcCard() {
       <h3 style={{ fontFamily: FF, fontSize: 15, fontWeight: 700, color: '#141413', marginBottom: 12 }}>Commission Calculator</h3>
       <div style={{ marginBottom: 10 }}>
         <label style={{ display: 'block', fontSize: 10.5, fontWeight: 700, color: '#9b9690', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5, fontFamily: FF }}>
-          Deal Value (AED)
+          Deal Value ({currency.code})
         </label>
         <input
           type="number" value={value} onChange={e => setValue(e.target.value)} placeholder="50000"
@@ -68,7 +70,7 @@ function CommissionCalcCard() {
           Estimated Commission
         </div>
         <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, fontWeight: 700, color: OG }}>
-          AED {amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+          {currency.symbol} {amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
         </div>
       </div>
     </div>

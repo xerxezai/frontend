@@ -1,4 +1,5 @@
 import type { Deal } from '../api/partnerApi';
+import { useCurrency } from '../context/CurrencyContext';
 import { DEAL_STATUS_BADGE, FF, OG } from '../constants';
 
 const PACKAGE_LABEL: Record<string, string> = { basic: 'Basic', professional: 'Professional', enterprise: 'Enterprise' };
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const DealCard = ({ deal, onClick }: Props) => {
+  const { formatAmount } = useCurrency();
   const s = DEAL_STATUS_BADGE[deal.status] ?? { label: deal.status, bg: '#f1f5f9', color: '#64748b' };
   return (
     <div
@@ -33,7 +35,7 @@ const DealCard = ({ deal, onClick }: Props) => {
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
         <span style={{ fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: deal.deal_value ? '#141413' : '#c7c2ba' }}>
-          {deal.deal_value ? `AED ${Number(deal.deal_value).toLocaleString()}` : '—'}
+          {deal.deal_value ? formatAmount(deal.deal_value) : '—'}
         </span>
         <span style={{
           display: 'inline-block', padding: '3px 11px', borderRadius: 20, fontSize: 11, fontWeight: 700,

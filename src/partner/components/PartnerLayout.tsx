@@ -1,7 +1,9 @@
 import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PartnerSidebar from './PartnerSidebar';
+import CurrencySwitcher from './CurrencySwitcher';
 import { PartnerProvider, usePartner } from '../context/PartnerContext';
+import { CurrencyProvider } from '../context/CurrencyContext';
 import { partnerLogout } from '../api/partnerApi';
 import { CREAM, FF } from '../constants';
 
@@ -59,14 +61,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
           <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 18, fontWeight: 700, color: '#fff' }}>
             XERXEZ Partner
           </span>
-          {partner?.commission_tier ? (
-            <span style={{
-              fontFamily: FF, fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20,
-              background: 'rgba(201,136,58,0.18)', color: '#C9883A', textTransform: 'capitalize',
-            }}>
-              {TIER_LABEL[partner.commission_tier] || partner.commission_tier}
-            </span>
-          ) : <span style={{ width: 44 }} />}
+          <CurrencySwitcher dark />
         </div>
 
         {/* desktop header */}
@@ -74,6 +69,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
           display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 14,
           padding: '16px 32px', borderBottom: '1px solid rgba(0,0,0,0.06)', background: '#fff',
         }}>
+          <CurrencySwitcher />
           {partner && (
             <>
               <span style={{ fontFamily: FF, fontSize: 13, fontWeight: 700, color: '#141413' }}>{partner.full_name}</span>
@@ -99,7 +95,9 @@ function LayoutInner({ children }: { children: ReactNode }) {
 
 const PartnerLayout = ({ children }: { children: ReactNode }) => (
   <PartnerProvider>
-    <LayoutInner>{children}</LayoutInner>
+    <CurrencyProvider>
+      <LayoutInner>{children}</LayoutInner>
+    </CurrencyProvider>
   </PartnerProvider>
 );
 
