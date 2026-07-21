@@ -2,9 +2,22 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
 import { partnersApi } from './partnersApi';
+import { useCurrency } from '../../../context/CurrencyContext';
 
 const FF = "'DM Sans',sans-serif";
 const OG = '#C9883A';
+const CUR_LOCALE: Record<string, string> = { AED: 'en-AE', INR: 'en-IN', USD: 'en-US' };
+
+/** Partner Portal amounts are stored/entered in AED (unlike the rest of the ERP, which is
+ * INR-based) — so this converts directly via the selected currency's AED-based rate rather
+ * than useCurrency()'s formatAmount/convertAmount, which assume an INR-stored source. */
+function useAedFormatter() {
+  const { currency } = useCurrency();
+  return (amount: number | string | null | undefined) => {
+    const converted = Number(amount || 0) * currency.rate;
+    return `${currency.symbol} ${converted.toLocaleString(CUR_LOCALE[currency.code], { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+}
 
 const PARTNER_STATUS_BADGE: Record<string, { label: string; bg: string; color: string }> = {
   pending:   { label: 'Pending',   bg: '#fff3e0', color: '#e65100' },
@@ -289,6 +302,7 @@ function ApplicationsTab() {
 // ── Tab 2 — Active Partners ───────────────────────────────────────────────
 
 function ActivePartnersTab({ onViewDeals }: { onViewDeals: (partnerId: number) => void }) {
+  const fmtAed = useAedFormatter();
   const [partners, setPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -308,8 +322,8 @@ function ActivePartnersTab({ onViewDeals }: { onViewDeals: (partnerId: number) =
     { key: 'country', label: 'Country' },
     { key: 'commission_tier', label: 'Tier', render: (r: any) => <span style={{ textTransform: 'capitalize' }}>{r.commission_tier}</span> },
     { key: 'total_deals', label: 'Deals' },
-    { key: 'total_commission_earned', label: 'Earned', render: (r: any) => `AED ${Number(r.total_commission_earned).toLocaleString()}` },
-    { key: 'total_commission_paid', label: 'Paid', render: (r: any) => `AED ${Number(r.total_commission_paid).toLocaleString()}` },
+    { key: 'total_commission_earned', label: 'Earned', render: (r: any) => fmtAed(r.total_commission_earned) },
+    { key: 'total_commission_paid', label: 'Paid', render: (r: any) => fmtAed(r.total_commission_paid) },
     { key: 'joined_at', label: 'Approved', render: (r: any) => r.approved_at ? new Date(r.approved_at).toLocaleDateString() : '—' },
   ];
 
@@ -421,6 +435,7 @@ function DealModal({ deal, onClose, onSaved }: { deal: any; onClose: () => void;
 }
 
 function AllDealsTab({ partnerFilter, onClearPartnerFilter }: { partnerFilter: number | null; onClearPartnerFilter: () => void }) {
+  const fmtAed = useAedFormatter();
   const [deals, setDeals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -450,8 +465,8 @@ function AllDealsTab({ partnerFilter, onClearPartnerFilter }: { partnerFilter: n
     { key: 'partner_name', label: 'Partner', render: (r: any) => `${r.partner_name} (${r.partner_code})` },
     { key: 'package', label: 'Package', render: (r: any) => <span style={{ textTransform: 'capitalize' }}>{r.package}</span> },
     { key: 'status', label: 'Status', render: (r: any) => <Badge value={r.status} map={DEAL_STATUS_BADGE} /> },
-    { key: 'deal_value', label: 'Value', render: (r: any) => r.deal_value ? `AED ${Number(r.deal_value).toLocaleString()}` : '—' },
-    { key: 'commission_amount', label: 'Commission', render: (r: any) => r.commission_amount ? `AED ${Number(r.commission_amount).toLocaleString()}` : '—' },
+    { key: 'deal_value', label: 'Value', render: (r: any) => r.deal_value ? fmtAed(r.deal_value) : '—' },
+    { key: 'commission_amount', label: 'Commission', render: (r: any) => r.commission_amount ? fmtAed(r.commission_amount) : '—' },
     { key: 'commission_status', label: 'Comm. Status', render: (r: any) => <Badge value={r.commission_status} map={COMMISSION_STATUS_BADGE} /> },
     { key: 'submitted_at', label: 'Date', render: (r: any) => new Date(r.submitted_at).toLocaleDateString() },
   ];
@@ -461,7 +476,7 @@ function AllDealsTab({ partnerFilter, onClearPartnerFilter }: { partnerFilter: n
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
         <StatCard label="Total Deals" value={stats.total} color={OG} />
         <StatCard label="Won" value={stats.won} color="#16a34a" />
-        <StatCard label="Pipeline Value" value={`AED ${stats.pipelineValue.toLocaleString()}`} color="#1d4ed8" />
+        <StatCard label="Pipeline Value" value={fmtAed(stats.pipelineValue)} color="#1d4ed8" />
       </div>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
