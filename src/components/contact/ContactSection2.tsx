@@ -703,9 +703,6 @@ const ContactSection2 = () => {
 
               {activeTab === "partner" ? (
                 <div style={{ animation: "xzCtFadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both" }}>
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#9b9690", margin: "0 0 18px" }}>
-                    Already a partner? <Link to="/partner" style={{ color: "#C9883A", fontWeight: 700, textDecoration: "none" }}>Login to your portal →</Link>
-                  </p>
                   <PartnerApplicationForm />
                 </div>
               ) : (

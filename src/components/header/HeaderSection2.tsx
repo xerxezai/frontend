@@ -94,22 +94,6 @@ const HeaderSection2 = ({ variant }: Props) => {
                 >
                   Sign in
                 </Link>
-                <Link to="/partner" className="d-none d-xl-inline-flex" style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  color: "rgba(255,255,255,0.7)",
-                  textDecoration: "none",
-                  padding: "6px 12px",
-                  borderRadius: 6,
-                  border: "1px solid rgba(255,255,255,0.2)",
-                  transition: "color 150ms ease, border-color 150ms ease",
-                }}
-                  onMouseOver={e => { e.currentTarget.style.color = "#C9883A"; e.currentTarget.style.borderColor = "rgba(201,136,58,0.5)"; }}
-                  onMouseOut={e => { e.currentTarget.style.color = "rgba(255,255,255,0.7)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; }}
-                >
-                  Partner Login
-                </Link>
                 <Link to="/contact" className="d-none d-xl-inline-flex" style={{
                   alignItems: "center",
                   background: "linear-gradient(135deg, #E8A84E 0%, #C9883A 100%)",
