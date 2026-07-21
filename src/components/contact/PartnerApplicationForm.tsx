@@ -135,7 +135,7 @@ const PartnerApplicationForm = () => {
     if (!form.yearsExperience) { toast.error("Please select your years of B2B sales experience."); return; }
     if (form.packages.length === 0) { toast.error("Select at least one package."); return; }
     if (!form.estimatedDeals) { toast.error("Please select your estimated deals per month."); return; }
-    if (form.networkDescription.trim().length < 100) { toast.error("Please describe your network in at least 100 characters."); return; }
+    if (form.networkDescription.trim().length < 20) { toast.error("Please describe your network in at least 20 characters."); return; }
     if (!form.agreedToNda) { toast.error("Please agree to maintain confidentiality to apply."); return; }
 
     setSending(true);
@@ -376,8 +376,8 @@ const PartnerApplicationForm = () => {
             onFocus={() => setFoc("networkDescription")} onBlur={() => setFoc(null)} />
         </div>
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 5 }}>
-          <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, color: form.networkDescription.trim().length >= 100 ? "#22c55e" : "#b8b2ab" }}>
-            {form.networkDescription.trim().length} / 100 min
+          <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, color: form.networkDescription.trim().length >= 20 ? "#22c55e" : "#b8b2ab" }}>
+            {form.networkDescription.trim().length} / 20 min
           </span>
         </div>
       </div>
