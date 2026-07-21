@@ -466,9 +466,26 @@ const PartnerApplicationForm = () => {
           <>Apply to Become a Partner <i className="fas fa-arrow-right" style={{ fontSize: 13 }} /></>
         )}
       </button>
-      <p style={{ textAlign: "center", fontFamily: "'DM Sans',sans-serif", fontSize: 11.5, color: "#b8b2ab", margin: "12px 0 0" }}>
-        We review all applications within 48 hours and will contact you via email.
-      </p>
+      <div style={{
+        background: "#fafaf8", border: "1px solid #F0EBE4", borderRadius: 10,
+        padding: "14px 18px", marginTop: 14,
+      }}>
+        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, fontWeight: 700, color: "#5a5650", margin: "0 0 8px" }}>
+          What happens next?
+        </p>
+        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 6 }}>
+          {[
+            "We review your application within 24–48 hours",
+            "If approved, you will receive an email with your Partner Portal login credentials",
+            "Login to your Partner Portal to access training, submit leads and track your commissions",
+          ].map(line => (
+            <li key={line} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: "#9b9690", lineHeight: 1.5 }}>
+              <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#c7c2ba", marginTop: 6, flexShrink: 0 }} />
+              {line}
+            </li>
+          ))}
+        </ul>
+      </div>
     </form>
   );
 };
