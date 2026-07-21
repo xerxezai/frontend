@@ -310,27 +310,6 @@ const ContactFormPanel = memo(() => {
 const ContactSection = () => {
   const [statsVisible, setStatsVisible] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
-  const formCardRef = useRef<HTMLDivElement>(null);
-  const tiltRaf = useRef<number>(0);
-
-  // RAF-throttled tilt — prevents synchronous style recalc on every mousemove
-  const onTiltMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    cancelAnimationFrame(tiltRaf.current);
-    const cx = e.clientX, cy = e.clientY;
-    tiltRaf.current = requestAnimationFrame(() => {
-      const el = formCardRef.current; if (!el) return;
-      const r = el.getBoundingClientRect();
-      const x = ((cx - r.left) / r.width - 0.5) * 10;
-      const y = ((cy - r.top) / r.height - 0.5) * -6;
-      el.style.transform = `perspective(900px) rotateX(${y}deg) rotateY(${x}deg)`;
-    });
-  }, []);
-
-  const onTiltLeave = useCallback(() => {
-    cancelAnimationFrame(tiltRaf.current);
-    const el = formCardRef.current; if (!el) return;
-    el.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
-  }, []);
 
   useEffect(() => {
     const el = statsRef.current; if (!el) return;
@@ -577,19 +556,13 @@ const ContactSection = () => {
               </div>
             </div>
 
-            {/* ══ RIGHT — form panel with RAF-throttled 3D tilt ══ */}
+            {/* ══ RIGHT — form panel ══ */}
             <div
               data-aos="fade-left" data-aos-duration="800" data-aos-delay="100" data-aos-once="true"
-              ref={formCardRef}
-              onMouseMove={onTiltMove}
-              onMouseLeave={onTiltLeave}
               style={{
                 background: "#ffffff",
                 borderTop: "3px solid #C9883A",
                 padding: "48px 44px",
-                transformStyle: "preserve-3d",
-                transition: "transform 0.12s linear",
-                willChange: "transform",
               }}
             >
               <ContactFormPanel />

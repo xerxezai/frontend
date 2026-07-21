@@ -258,7 +258,6 @@ const ContactSection2 = () => {
   const [heroVis, setHeroVis] = useState(false);
   const [, setCardHL] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLDivElement>(null);
 
   // Pre-warm Railway on mount using health endpoint — keeps /contact/ clean in network tab
   useEffect(() => {
@@ -276,19 +275,6 @@ const ContactSection2 = () => {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
-
-  // 3D tilt on form card
-  const onTilt = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = formRef.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width  - 0.5) * 8;
-    const y = ((e.clientY - r.top)  / r.height - 0.5) * -5;
-    el.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg)`;
-  };
-  const onTiltOut = () => {
-    const el = formRef.current; if (!el) return;
-    el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
-  };
 
   const set = useCallback((k: keyof F, v: string) => {
     setForm(p => ({...p,[k]:v}));
@@ -555,15 +541,7 @@ const ContactSection2 = () => {
           {/* main card */}
           <div
             data-aos="fade-up" data-aos-duration="800" data-aos-once="true"
-            ref={formRef}
-            onMouseMove={onTilt}
-            onMouseLeave={onTiltOut}
             className="xz-ct2-wrap"
-            style={{
-              transformStyle:"preserve-3d",
-              transition:"transform 0.12s linear",
-              willChange:"transform",
-            }}
           >
 
             {/* ── LEFT — dark info panel ───────────────────────────────── */}
