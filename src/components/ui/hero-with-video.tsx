@@ -193,8 +193,8 @@ const NavbarHero: React.FC<NavbarHeroProps> = ({
                   </button>
                   {openDropdown === "d-pricing" && (
                     <ul style={dropdownPanel}>
-                      <li><a href="#" className="xzuvh-ditem" style={dropdownItem}>Starter</a></li>
-                      <li><a href="#" className="xzuvh-ditem" style={dropdownItem}>Pro</a></li>
+                      <li><a href="#" className="xzuvh-ditem" style={dropdownItem}>Basic</a></li>
+                      <li><a href="#" className="xzuvh-ditem" style={dropdownItem}>Professional</a></li>
                       <li><a href="#" className="xzuvh-ditem" style={dropdownItem}>Enterprise</a></li>
                     </ul>
                   )}
@@ -293,7 +293,8 @@ const NavbarHero: React.FC<NavbarHeroProps> = ({
                     </button>
                     {openDropdown === "m-pricing" && (
                       <ul style={{ marginLeft: 12, paddingLeft: 12, borderLeft: `2px solid ${C.border}`, listStyle: "none" }}>
-                        <li><a href="#" className="xzuvh-ditem" style={{ ...dropdownItem, fontSize: 13 }}>Starter</a></li>
+                        <li><a href="#" className="xzuvh-ditem" style={{ ...dropdownItem, fontSize: 13 }}>Basic</a></li>
+                        <li><a href="#" className="xzuvh-ditem" style={{ ...dropdownItem, fontSize: 13 }}>Professional</a></li>
                         <li><a href="#" className="xzuvh-ditem" style={{ ...dropdownItem, fontSize: 13 }}>Enterprise</a></li>
                       </ul>
                     )}

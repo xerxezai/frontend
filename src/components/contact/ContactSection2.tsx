@@ -24,11 +24,8 @@ const ERP_MODULES = [
 const CURRENT_CHALLENGES = ["Manual approvals & workflows", "Document management", "Procurement bottlenecks", "HR & payroll management", "No visibility on project costs", "Other"];
 
 // ── per-service dynamic field option lists ─────────────────────────────────────
-// NOTE: these three tier labels no longer match src/data/pricingData.ts's PRICING_PLANS
-// tier name ("Starter") — the pricing page's "Get Started" buttons deep-link here with
-// ?plan=Starter/Professional/Enterprise, so that deep-link no longer pre-selects a plan
-// for the renamed first tier. Rename PRICING_PLANS[0].name to "Basic" (and its ctaLink)
-// too if full consistency across the site is wanted.
+// Tier names match src/data/pricingData.ts's PRICING_PLANS (Basic/Professional/Enterprise);
+// the pricing page's "Get Started" buttons deep-link here with ?plan=Basic/Professional/Enterprise.
 const PLAN_INTEREST = [
   "Basic (10–50 employees)", "Professional (50–200 employees)", "Enterprise (200+ employees)",
 ];
@@ -244,10 +241,11 @@ const ContactSection2 = () => {
   const [form, setForm]   = useState<F>(() => {
     const plan = searchParams.get("plan");
     if (plan) {
+      const matchedPlan = PLAN_INTEREST.find(p => p.startsWith(plan)) || "";
       return {
         ...EMPTY,
         service: "AI-Powered ERP",
-        planInterest: PLAN_INTEREST.includes(plan) ? plan : "",
+        planInterest: matchedPlan,
         message: `I am interested in the ${plan} plan for XERXEZ ERP. Please contact me with more details.`,
       };
     }

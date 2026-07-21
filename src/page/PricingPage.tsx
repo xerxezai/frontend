@@ -180,7 +180,7 @@ const PricingPage = () => {
                     <td style={{ padding: "12px 16px", fontSize: 13, color: "rgba(240,237,230,0.82)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                       {row.label}
                     </td>
-                    {[row.starter, row.professional, row.enterprise].map((val, ci) => (
+                    {[row.basic, row.professional, row.enterprise].map((val, ci) => (
                       <td key={ci} style={{ textAlign: "center", padding: "12px 16px", fontSize: 13, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                         {typeof val === "boolean" ? (
                           val
