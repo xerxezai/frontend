@@ -4,6 +4,10 @@ export const rbacApi = {
   getMyAccess: () => erpFetch('rbac/my-access/'),
   getModules: () => erpFetch('rbac/modules/'),
   getUsers: () => erpFetch('rbac/users/'),
+  // Companies live under apps.companies, not apps.rbac, but this call is only ever made
+  // from CreateUserModal (itself gated to platform admins), which is the same audience
+  // apps.companies.views.CompanyListView already restricts to — no separate endpoint needed.
+  getCompanies: () => erpFetch('companies/'),
   createUser: (data: any) => erpFetch('rbac/users/create/', { method: 'POST', body: JSON.stringify(data) }),
   updateUser: (id: number, data: any) => erpFetch(`rbac/users/${id}/`, { method: 'PUT', body: JSON.stringify(data) }),
   deactivateUser: (id: number) => erpFetch(`rbac/users/${id}/`, { method: 'DELETE' }),

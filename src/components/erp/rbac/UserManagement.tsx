@@ -37,10 +37,11 @@ const TD: CSSProperties = {
 };
 
 const ROLE_BADGE: Record<string, { label: string; bg: string; color: string }> = {
-  super_admin:  { label: 'Super Admin',  bg: '#fee2e2', color: '#991b1b' },
-  module_admin: { label: 'Module Admin', bg: '#dbeafe', color: '#1d4ed8' },
-  regular_user: { label: 'Regular User', bg: '#d1fae5', color: '#065f46' },
-  read_only:    { label: 'Read Only',    bg: '#f1f5f9', color: '#64748b' },
+  super_admin:   { label: 'Super Admin',   bg: '#fee2e2', color: '#991b1b' },
+  company_admin: { label: 'Company Admin', bg: '#fde68a', color: '#92400e' },
+  module_admin:  { label: 'Module Admin',  bg: '#dbeafe', color: '#1d4ed8' },
+  regular_user:  { label: 'Regular User',  bg: '#d1fae5', color: '#065f46' },
+  read_only:     { label: 'Read Only',     bg: '#f1f5f9', color: '#64748b' },
 };
 
 const STATUS_BADGE: Record<string, { label: string; bg: string; color: string }> = {

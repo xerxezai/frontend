@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { rbacApi } from './rbacApi';
 
+// Super Admin removed deliberately — it can no longer be granted through this form or its
+// API (both the frontend and backend block it now); use the Django admin panel instead.
 const ROLES = [
-  { value: 'super_admin', label: 'Super Admin' },
+  { value: 'company_admin', label: 'Company Admin' },
   { value: 'module_admin', label: 'Module Admin' },
   { value: 'regular_user', label: 'Regular User' },
   { value: 'read_only', label: 'Read Only' },
@@ -23,10 +25,17 @@ const ALL_MODULES = [
 const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSuccess?: () => void }) => {
   const [form, setForm] = useState({
     full_name: '', username: '', email: '', password: '', confirm_password: '',
-    role: '', modules: [] as string[],
+    company: '', role: '', modules: [] as string[],
   });
+  const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    rbacApi.getCompanies()
+      .then((res: any) => setCompanies(Array.isArray(res) ? res : []))
+      .catch(() => setCompanies([]));
+  }, []);
 
   const set = (k: string, v: any) => setForm(f => ({ ...f, [k]: v }));
 
@@ -39,11 +48,15 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
       setError('Please fill all required fields');
       return;
     }
+    if (!form.company) {
+      setError('Please select a company');
+      return;
+    }
     if (form.password !== form.confirm_password) {
       setError('Passwords do not match');
       return;
     }
-    if (form.role !== 'super_admin' && form.modules.length === 0) {
+    if (form.role !== 'company_admin' && form.modules.length === 0) {
       setError('Assign at least one module for this role');
       return;
     }
@@ -52,7 +65,8 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
     try {
       await rbacApi.createUser({
         full_name: form.full_name, username: form.username, email: form.email, password: form.password,
-        role: form.role, modules: form.role === 'super_admin' ? ALL_MODULES.map(m => m.name) : form.modules,
+        role: form.role, company_id: form.company,
+        modules: form.role === 'company_admin' ? ALL_MODULES.map(m => m.name) : form.modules,
       });
       toast.success('User created');
       onSuccess?.();
@@ -115,6 +129,14 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
         </div>
 
         <div style={{ marginBottom: 14 }}>
+          <label style={labelStyle}>Company *</label>
+          <select value={form.company} onChange={e => set('company', e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
+            <option value="">Select company...</option>
+            {companies.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
+
+        <div style={{ marginBottom: 14 }}>
           <label style={labelStyle}>Role *</label>
           <select value={form.role} onChange={e => set('role', e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
             <option value="">Select role...</option>
@@ -122,7 +144,7 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
           </select>
         </div>
 
-        {form.role && form.role !== 'super_admin' && (
+        {form.role && form.role !== 'company_admin' && (
           <div style={{ marginBottom: 20 }}>
             <label style={labelStyle}>Assign Modules *</label>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, padding: 14, background: '#f8f7f4', borderRadius: 8 }}>
@@ -136,12 +158,12 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
           </div>
         )}
 
-        {form.role === 'super_admin' && (
+        {form.role === 'company_admin' && (
           <div style={{
             background: 'rgba(201,136,58,0.08)', border: '1px solid rgba(201,136,58,0.25)', borderRadius: 8,
             padding: 12, marginBottom: 20, fontSize: 13, color: '#8B5E1A',
           }}>
-            Super Admin has access to all modules automatically.
+            Company Admin has access to all modules within this company automatically.
           </div>
         )}
 
