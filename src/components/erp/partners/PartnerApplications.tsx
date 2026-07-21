@@ -22,6 +22,25 @@ const Badge = ({ value }: { value: string }) => {
   );
 };
 
+// 1-2 modules -> 10% (blue), 3-5 (or more, short of the full suite) -> 20% (orange),
+// Full ERP Suite selected -> 30% (green), regardless of what else is checked alongside it.
+function commissionTier(modules: string[]): { pct: string; label: string; bg: string; color: string } {
+  if (modules.includes('Full ERP Suite (All Modules)')) return { pct: '30%', label: 'Qualifies for 30% commission', bg: '#d1fae5', color: '#065f46' };
+  if (modules.length >= 3) return { pct: '20%', label: 'Qualifies for 20% commission', bg: '#fff3e0', color: '#e65100' };
+  if (modules.length >= 1) return { pct: '10%', label: 'Qualifies for 10% commission', bg: '#dbeafe', color: '#1d4ed8' };
+  return { pct: '—', label: 'No modules selected', bg: '#f1f5f9', color: '#64748b' };
+}
+
+const CommissionBadge = ({ modules }: { modules: string[] }) => {
+  const t = commissionTier(modules || []);
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 11px', borderRadius: 20, fontSize: 11, fontWeight: 800, background: t.bg, color: t.color, fontFamily: FF, whiteSpace: 'nowrap' }}>
+      <i className="fas fa-percentage" style={{ fontSize: 9 }} />
+      {t.pct}
+    </span>
+  );
+};
+
 const StatCard = ({ label, value, color }: { label: string; value: number; color: string }) => (
   <div style={{
     background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${color}`,
@@ -59,13 +78,20 @@ function DetailModal({ app, onClose, onSaved }: { app: any; onClose: () => void;
     </div>
   );
 
+  const tier = commissionTier(app.modules || []);
+
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, overflow: 'auto', padding: 20 }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 600, maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', fontFamily: FF }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
           <div>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>{app.full_name}</h3>
-            <div style={{ marginTop: 6 }}><Badge value={app.status} /></div>
+            <div style={{ marginTop: 6, display: 'flex', gap: 6 }}>
+              <Badge value={app.status} />
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '2px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: tier.bg, color: tier.color, fontFamily: FF }}>
+                {tier.label}
+              </span>
+            </div>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#666' }}>&times;</button>
         </div>
@@ -75,12 +101,13 @@ function DetailModal({ app, onClose, onSaved }: { app: any; onClose: () => void;
           {row('Phone', app.phone)}
           {row('LinkedIn', app.linkedin_url)}
           {row('Location', `${app.city}, ${app.country}`)}
+          {row('Target Market', app.target_market)}
           {row('Languages', (app.languages || []).join(', '))}
           {row('Profession', app.current_profession)}
           {row('Experience', app.years_experience)}
           {row('Deals/Month', app.estimated_deals)}
         </div>
-        {row('Industries', (app.industries || []).join(', '))}
+        {row('Modules They Can Sell', (app.modules || []).join(', '))}
         {row('Network Description', app.network_description)}
         {app.reviewed_by_name && row('Reviewed By', `${app.reviewed_by_name} on ${app.reviewed_at ? new Date(app.reviewed_at).toLocaleString() : ''}`)}
 
@@ -146,8 +173,24 @@ export default function PartnerApplications() {
 
   const columns = [
     { key: 'full_name', label: 'Name', render: (r: any) => <span style={{ fontWeight: 700, color: OG }}>{r.full_name}</span> },
+    { key: 'email', label: 'Email' },
     { key: 'country', label: 'Country', render: (r: any) => `${r.city}, ${r.country}` },
-    { key: 'industries', label: 'Industries', width: 200, render: (r: any) => (r.industries || []).join(', ') },
+    { key: 'target_market', label: 'Target Market' },
+    {
+      key: 'modules', label: 'Modules', width: 220,
+      render: (r: any) => (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+          {(r.modules || []).length === 0
+            ? <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>
+            : (r.modules || []).map((m: string) => (
+              <span key={m} style={{ fontFamily: FF, fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 10, background: '#F0EBE4', color: '#6B6B6B', whiteSpace: 'nowrap' }}>
+                {m}
+              </span>
+            ))}
+        </div>
+      ),
+    },
+    { key: 'commission', label: 'Commission', render: (r: any) => <CommissionBadge modules={r.modules || []} /> },
     { key: 'years_experience', label: 'Experience' },
     { key: 'estimated_deals', label: 'Deals/Month' },
     { key: 'status', label: 'Status', render: (r: any) => <Badge value={r.status} /> },

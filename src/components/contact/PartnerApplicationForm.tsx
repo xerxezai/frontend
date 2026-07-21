@@ -26,23 +26,25 @@ const COUNTRIES = [
   "Venezuela","Vietnam","Yemen","Zambia","Zimbabwe","Other",
 ];
 const LANGUAGES = ["English", "Arabic", "Hindi", "French", "Spanish", "Other"];
-const INDUSTRIES = [
-  "Engineering & EPC", "Oil & Gas", "Construction", "Manufacturing",
-  "Facilities Management", "Healthcare", "Logistics", "Retail", "Other",
+const MODULES = [
+  "HR & Payroll", "CRM (Customer Management)", "Sales Management",
+  "Procurement & Purchase Orders", "Document Management", "Logistics & Shipments",
+  "Accounting & Finance", "Project Management", "Asset Management",
+  "QHSE (Safety & Compliance)", "Full ERP Suite (All Modules)",
 ];
 const YEARS_EXPERIENCE = ["Less than 1 year", "1-3 years", "3-5 years", "5-10 years", "10+ years"];
 const ESTIMATED_DEALS = ["1-2 deals", "3-5 deals", "5-10 deals", "10+ deals"];
 
 interface PF {
   fullName: string; email: string; phone: string; linkedin: string;
-  country: string; city: string; languages: string[];
-  profession: string; yearsExperience: string; industries: string[]; estimatedDeals: string;
+  country: string; city: string; targetMarket: string; languages: string[];
+  profession: string; yearsExperience: string; modules: string[]; estimatedDeals: string;
   networkDescription: string; agreedToNda: boolean;
 }
 const EMPTY: PF = {
   fullName: "", email: "", phone: "", linkedin: "",
-  country: "", city: "", languages: [],
-  profession: "", yearsExperience: "", industries: [], estimatedDeals: "",
+  country: "", city: "", targetMarket: "", languages: [],
+  profession: "", yearsExperience: "", modules: [], estimatedDeals: "",
   networkDescription: "", agreedToNda: false,
 };
 
@@ -59,7 +61,7 @@ const PartnerApplicationForm = () => {
 
   const set = <K extends keyof PF>(k: K, v: PF[K]) => setForm(f => ({ ...f, [k]: v }));
   const toggleLanguage = (v: string) => set("languages", form.languages.includes(v) ? form.languages.filter(x => x !== v) : [...form.languages, v]);
-  const toggleIndustry = (v: string) => set("industries", form.industries.includes(v) ? form.industries.filter(x => x !== v) : [...form.industries, v]);
+  const toggleModule = (v: string) => set("modules", form.modules.includes(v) ? form.modules.filter(x => x !== v) : [...form.modules, v]);
 
   const fldBase = (name: string): React.CSSProperties => ({
     width: "100%", boxSizing: "border-box" as const,
@@ -127,10 +129,11 @@ const PartnerApplicationForm = () => {
     if (!form.phone.trim() || !isValidPhone(form.phone)) { toast.error("Please enter a valid phone number with country code."); return; }
     if (!form.country) { toast.error("Please select your country."); return; }
     if (!form.city.trim()) { toast.error("Please enter your city."); return; }
+    if (!form.targetMarket.trim()) { toast.error("Please enter which market/country you will sell in."); return; }
     if (form.languages.length === 0) { toast.error("Select at least one language."); return; }
     if (!form.profession.trim()) { toast.error("Please enter your current profession."); return; }
     if (!form.yearsExperience) { toast.error("Please select your years of B2B sales experience."); return; }
-    if (form.industries.length === 0) { toast.error("Select at least one industry."); return; }
+    if (form.modules.length === 0) { toast.error("Select at least one module."); return; }
     if (!form.estimatedDeals) { toast.error("Please select your estimated deals per month."); return; }
     if (form.networkDescription.trim().length < 100) { toast.error("Please describe your network in at least 100 characters."); return; }
     if (!form.agreedToNda) { toast.error("Please agree to maintain confidentiality to apply."); return; }
@@ -142,9 +145,9 @@ const PartnerApplicationForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           full_name: form.fullName, email: form.email, phone: form.phone, linkedin_url: form.linkedin,
-          country: form.country, city: form.city, languages: form.languages,
+          country: form.country, city: form.city, target_market: form.targetMarket, languages: form.languages,
           current_profession: form.profession, years_experience: form.yearsExperience,
-          industries: form.industries, estimated_deals: form.estimatedDeals,
+          modules: form.modules, estimated_deals: form.estimatedDeals,
           network_description: form.networkDescription, agreed_to_nda: form.agreedToNda,
         }),
       });
@@ -270,6 +273,13 @@ const PartnerApplicationForm = () => {
             )}
           </div>
           <div className="col-12">
+            <label style={lbl}>Which market/country will you sell in? <span style={{ color: "#ef4444" }}>*</span></label>
+            {fw("targetMarket", "fas fa-map-marked-alt",
+              <input type="text" placeholder="e.g. Saudi Arabia, Egypt, India, UK…" value={form.targetMarket} style={fldBase("targetMarket")} disabled={sending}
+                onChange={e => set("targetMarket", e.target.value)} onFocus={() => setFoc("targetMarket")} onBlur={() => setFoc(null)} />
+            )}
+          </div>
+          <div className="col-12">
             <label style={lbl}>Languages Spoken <span style={{ color: "#ef4444" }}>*</span></label>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {LANGUAGES.map(l => (
@@ -305,12 +315,12 @@ const PartnerApplicationForm = () => {
             )}
           </div>
           <div className="col-12">
-            <label style={lbl}>Industries You Have Connections In <span style={{ color: "#ef4444" }}>*</span></label>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 8, padding: 14, background: "#fafaf8", border: "1.5px solid #E4DFD8", borderRadius: 10 }}>
-              {INDUSTRIES.map(i => (
-                <label key={i} style={{ display: "flex", alignItems: "center", gap: 8, cursor: sending ? "not-allowed" : "pointer", fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 500, color: "#5a5650" }}>
-                  <input type="checkbox" checked={form.industries.includes(i)} disabled={sending} onChange={() => toggleIndustry(i)} style={{ accentColor: "#C9883A", width: 15, height: 15 }} />
-                  {i}
+            <label style={lbl}>Which XERXEZ Modules Can You Sell? <span style={{ color: "#ef4444" }}>*</span></label>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8, padding: 14, background: "#fafaf8", border: "1.5px solid #E4DFD8", borderRadius: 10 }}>
+              {MODULES.map(m => (
+                <label key={m} style={{ display: "flex", alignItems: "center", gap: 8, cursor: sending ? "not-allowed" : "pointer", fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 500, color: "#5a5650" }}>
+                  <input type="checkbox" checked={form.modules.includes(m)} disabled={sending} onChange={() => toggleModule(m)} style={{ accentColor: "#C9883A", width: 15, height: 15 }} />
+                  {m}
                 </label>
               ))}
             </div>
@@ -336,7 +346,7 @@ const PartnerApplicationForm = () => {
           <span style={{ position: "absolute", left: 10, top: 13, pointerEvents: "none", zIndex: 1 }}>
             <InputBadge icon="fas fa-comment-alt" active={foc === "networkDescription"} />
           </span>
-          <textarea rows={5} placeholder="Tell us about your professional network, your experience selling software/technology, and why you think XERXEZ is a good fit for your market…"
+          <textarea rows={5} placeholder="Tell us about your professional network, which companies you can approach for HR/Sales/Procurement software, and why you want to partner with XERXEZ…"
             value={form.networkDescription}
             style={{ ...fldBase("networkDescription"), padding: "9px 14px 9px 44px", resize: "vertical" as const, minHeight: 100 }}
             disabled={sending}
@@ -357,17 +367,36 @@ const PartnerApplicationForm = () => {
           background: "rgba(201,136,58,0.08)", border: "1.5px solid rgba(201,136,58,0.30)",
           borderRadius: 12, padding: "16px 20px", marginBottom: 14,
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
             <i className="fas fa-hand-holding-usd" style={{ color: "#C9883A", fontSize: 16 }} />
-            <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, fontWeight: 700, color: "#141413" }}>Commission Structure</span>
+            <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, fontWeight: 700, color: "#141413" }}>Commission Structure (Confirmed)</span>
           </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 14 }}>
+            {[
+              { tier: "1-2 Modules Sold", pct: "10%" },
+              { tier: "3-5 Modules Sold", pct: "20%" },
+              { tier: "Full ERP Suite (All Modules)", pct: "30%" },
+            ].map(row => (
+              <div key={row.tier} style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "#fff", border: "1px solid rgba(201,136,58,0.20)", borderRadius: 8,
+                padding: "9px 14px",
+              }}>
+                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, fontWeight: 600, color: "#5a5650" }}>{row.tier}</span>
+                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 15, fontWeight: 800, color: "#C9883A" }}>{row.pct} commission</span>
+              </div>
+            ))}
+          </div>
+
           <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
             {[
-              "15% commission on every deal",
               "Paid within 30 days of client payment",
               "No cap on earnings",
-              "Full sales support from XERXEZ team",
-              "Product training provided",
+              "Full product training provided",
+              "Demo support from XERXEZ team",
+              "Marketing materials provided",
+              "Higher modules sold = Higher commission earned",
             ].map(line => (
               <li key={line} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#5a5650" }}>
                 <i className="fas fa-check" style={{ color: "#C9883A", fontSize: 10, marginTop: 4, flexShrink: 0 }} />
@@ -379,7 +408,8 @@ const PartnerApplicationForm = () => {
         <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: sending ? "not-allowed" : "pointer", fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "#5a5650" }}>
           <input type="checkbox" checked={form.agreedToNda} disabled={sending} onChange={e => set("agreedToNda", e.target.checked)}
             style={{ accentColor: "#C9883A", width: 16, height: 16, marginTop: 1, flexShrink: 0 }} />
-          I agree to maintain confidentiality about XERXEZ products and pricing <span style={{ color: "#ef4444" }}>*</span>
+          I agree to maintain confidentiality about XERXEZ products, pricing, and client information. I understand the commission
+          structure is 10% for 1-2 modules, 20% for 3-5 modules, and 30% for the full ERP suite. <span style={{ color: "#ef4444" }}>*</span>
         </label>
       </div>
 
