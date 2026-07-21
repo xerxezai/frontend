@@ -106,7 +106,7 @@ const CompanyManagement = lazy(() => import('../components/erp/company/CompanyMa
 const CompanyDetail     = lazy(() => import('../components/erp/company/CompanyDetail'));
 
 // Partner applications — lazy loaded, super admin only
-const PartnerApplications = lazy(() => import('../components/erp/partners/PartnerApplications'));
+const Partners = lazy(() => import('../components/erp/partners/Partners'));
 
 // Profile & Settings pages
 const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
@@ -238,7 +238,7 @@ const ERPPage = () => {
               and — for the sidebar link's visibility — by isPlatformAdmin client-side). */}
           <Route path="companies"          element={<CompanyManagement />} />
           <Route path="companies/:id"      element={<CompanyDetail />} />
-          <Route path="partners"           element={<PartnerApplications />} />
+          <Route path="partners"           element={<Partners />} />
 
           {/* EPC Modules */}
           <Route path="projects"           element={<ProtectedModuleRoute module="project_management"><ProjectDashboard /></ProtectedModuleRoute>} />

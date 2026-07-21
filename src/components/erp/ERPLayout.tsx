@@ -655,14 +655,14 @@ const ERPLayout = ({ children }: Props) => {
               {isSuperAdmin && (
                 <NavLink
                   to="/erp/partners"
-                  title="Partner Applications"
+                  title="Partners"
                   onClick={() => setMobileOpen(false)}
                   className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
                 >
                   <span className="erp-icon-badge">
                     <i className="fas fa-handshake" style={{ color: 'inherit', fontSize: 13 }}></i>
                   </span>
-                  {!collapsed && <span style={{ flex: 1 }}>Partner Applications</span>}
+                  {!collapsed && <span style={{ flex: 1 }}>Partners</span>}
                 </NavLink>
               )}
               <NavLink

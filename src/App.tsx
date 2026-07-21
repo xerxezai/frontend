@@ -79,7 +79,7 @@ const LMAProgressPage           = lazy(() => import("./page/lma/LMAProgressPage"
 const LMAContinueLearningPage   = lazy(() => import("./page/lma/LMAContinueLearningPage"));
 const LMAProfilePage            = lazy(() => import("./page/lma/LMAProfilePage"));
 const PortalHub                 = lazy(() => import("./page/PortalHub"));
-const PartnerPortal             = lazy(() => import("./page/PartnerPortal"));
+const PartnerApp                = lazy(() => import("./partner/PartnerApp"));
 
 function App() {
   return (
@@ -122,7 +122,7 @@ function App() {
           <Route path="/health"                  element={<HealthPage />} />
           <Route path="/mlm"                     element={<MLMPage />} />
           <Route path="/home"                    element={<PortalHub />} />
-          <Route path="/partner-portal"          element={<PartnerPortal />} />
+          <Route path="/partner/*"               element={<PartnerApp />} />
           <Route path="/erp/*"                   element={<ERPPage />} />
           <Route path="/training"                element={<TrainingPage />} />
           <Route path="/landing"                 element={<LandingPage />} />

@@ -240,7 +240,9 @@ const ContactSection2 = () => {
   const urlService = searchParams.get("service");
   const preselectedService = urlService && SERVICES.includes(urlService) ? urlService : null;
   const [showServiceBanner, setShowServiceBanner] = useState(!!preselectedService && !searchParams.get("plan"));
-  const [activeTab, setActiveTab] = useState<"contact" | "partner">("contact");
+  const [activeTab, setActiveTab] = useState<"contact" | "partner">(
+    typeof window !== "undefined" && window.location.hash === "#partner" ? "partner" : "contact"
+  );
   const [form, setForm]   = useState<F>(() => {
     const plan = searchParams.get("plan");
     if (plan) {
