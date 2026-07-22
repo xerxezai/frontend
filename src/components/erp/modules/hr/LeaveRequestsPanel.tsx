@@ -3,7 +3,7 @@ import {
   Search, Plus, Eye, Check, X as XIcon, Clock, CheckCircle2, XCircle, Ban,
   Palmtree, Stethoscope, AlertTriangle, Baby, Wallet, FileQuestion, Calendar,
 } from 'lucide-react';
-import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
+import { useERPList, erpFetch, isSuperUser } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
 import { toast } from 'react-toastify';
 import { Card3D, FF, OG, DARK, WHITE, Skeleton, EmptyState, SlidePanel, initials } from './hrShared';
@@ -151,8 +151,17 @@ const defLeave = { employee:'', type:'annual', from_date:'', to_date:'', reason:
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
 
 export default function LeaveRequestsPanel() {
-  const { canWrite } = useAccess();
-  const isAdmin = canWrite('hr');
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  // Super Admin / Company Admin / HR Manager manage everyone's leave; a regular employee
+  // can still file their own request (self-service, see myEmployee below) but can't pick
+  // who it's for, and can't approve/reject — the backend enforces both regardless of this
+  // flag, this just keeps the UI honest about what will actually be allowed.
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
+  const [myEmployee, setMyEmployee] = useState<any>(null);
+  useEffect(() => {
+    if (isAdmin) return;
+    erpFetch('hr/employees/me/').then(setMyEmployee).catch(() => setMyEmployee(null));
+  }, [isAdmin]);
   const employees = useERPList<any>('hr/employees/');
   const employeeById = useMemo(() => Object.fromEntries(employees.data.map((e: any) => [e.id, e])), [employees.data]);
   const activeEmployees = employees.data.filter((e: any) => e.status === 'active');
@@ -193,7 +202,7 @@ export default function LeaveRequestsPanel() {
   const [actionBusy, setActionBusy] = useState(false);
 
   const close = () => { setShowModal(false); setEditing(null); };
-  const openAdd = () => { setLeaveF({ ...defLeave }); setEditing(null); setShowModal(true); };
+  const openAdd = () => { setLeaveF({ ...defLeave, employee: isAdmin ? '' : String(myEmployee?.id ?? '') }); setEditing(null); setShowModal(true); };
 
   useEffect(() => {
     if (!showModal || !leaveF.employee || !leaveF.type) { setBalance(null); return; }
@@ -260,13 +269,13 @@ export default function LeaveRequestsPanel() {
       <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:12, flexWrap:'wrap', marginBottom:20 }}>
         <div>
           <h2 style={{ fontSize:20, fontWeight:900, color:DARK, margin:0, fontFamily:FF, letterSpacing:'-0.01em' }}>Leave Requests</h2>
-          <p style={{ color:MUTED, fontSize:13, margin:'4px 0 0', fontFamily:FF }}>Review, approve and track time-off requests</p>
+          <p style={{ color:MUTED, fontSize:13, margin:'4px 0 0', fontFamily:FF }}>
+            {isAdmin ? 'Review, approve and track time-off requests' : 'Your submitted leave requests'}
+          </p>
         </div>
-        {isAdmin && (
-          <button onClick={openAdd} style={{ ...SAVE, display:'flex', alignItems:'center', gap:6, padding:'10px 18px' }}>
-            <Plus size={14} />Add Leave Request
-          </button>
-        )}
+        <button onClick={openAdd} style={{ ...SAVE, display:'flex', alignItems:'center', gap:6, padding:'10px 18px' }}>
+          <Plus size={14} />Add Leave Request
+        </button>
       </div>
 
       {/* Stat cards */}
@@ -395,13 +404,22 @@ export default function LeaveRequestsPanel() {
               <button onClick={close} style={{background:'none',border:'none',cursor:'pointer',color:'#6B6B6B',fontSize:22}}>&times;</button>
             </div>
             <form onSubmit={saveLeave} style={{display:'flex',flexDirection:'column',gap:14}}>
-              <div>
-                <label style={lbl}>Employee *</label>
-                <select value={leaveF.employee} onChange={e=>setLeaveF(f=>({...f,employee:e.target.value}))} style={inp} required>
-                  <option value="">— Select Employee —</option>
-                  {activeEmployees.map((emp: any) => <option key={emp.id} value={emp.id}>{emp.full_name} ({emp.code})</option>)}
-                </select>
-              </div>
+              {isAdmin ? (
+                <div>
+                  <label style={lbl}>Employee *</label>
+                  <select value={leaveF.employee} onChange={e=>setLeaveF(f=>({...f,employee:e.target.value}))} style={inp} required>
+                    <option value="">— Select Employee —</option>
+                    {activeEmployees.map((emp: any) => <option key={emp.id} value={emp.id}>{emp.full_name} ({emp.code})</option>)}
+                  </select>
+                </div>
+              ) : (
+                <div>
+                  <label style={lbl}>Employee</label>
+                  <div style={{ ...inp, display:'flex', alignItems:'center', color: myEmployee ? DARK : '#ef4444', fontWeight:700 }}>
+                    {myEmployee ? `${myEmployee.full_name} (${myEmployee.code})` : 'No employee profile linked to your account'}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <label style={lbl}>Leave Type *</label>

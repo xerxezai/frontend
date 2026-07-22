@@ -22,6 +22,10 @@ interface AccessContextType {
   hasAccess: (module: string) => boolean;
   isReadOnly: (module: string) => boolean;
   canWrite: (module: string) => boolean;
+  /** "HR Manager" — module_admin scoped to the hr module specifically. Used (alongside
+   * isSuperAdmin/isCompanyAdmin) to gate full company-wide visibility of Attendance/Leave/
+   * Payroll data, as opposed to a regular employee who only sees their own records. */
+  isHRManager: boolean;
   isLoading: boolean;
   refreshAccess: () => void;
 }
@@ -37,6 +41,7 @@ const AccessContext = createContext<AccessContextType>({
   hasAccess: () => false,
   isReadOnly: () => false,
   canWrite: () => false,
+  isHRManager: false,
   isLoading: true,
   refreshAccess: () => {},
 });
@@ -50,6 +55,7 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
   const [currentUsers, setCurrentUsers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const isCompanyAdmin = userRole === 'company_admin';
+  const isHRManager = accessibleModules.some(m => m.name === 'hr' && m.role === 'module_admin');
 
   const fetchAccess = async () => {
     setIsLoading(true);
@@ -111,7 +117,7 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AccessContext.Provider value={{
       userRole, isSuperAdmin, isCompanyAdmin, accessibleModules, companyName, maxUsers, currentUsers,
-      hasAccess, isReadOnly, canWrite, isLoading,
+      hasAccess, isReadOnly, canWrite, isHRManager, isLoading,
       refreshAccess: fetchAccess,
     }}>
       {children}

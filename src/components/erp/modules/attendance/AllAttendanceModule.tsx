@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 
 const C = {
   orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
@@ -129,7 +130,9 @@ function ManualAttendanceModal({ onClose, onSuccess }: { onClose: () => void; on
 }
 
 export default function AllAttendanceModule() {
-  const isAdmin = isSuperUser();
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  // Add Manual Attendance is Admin/HR Manager only.
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
   const employees = useERPList<any>('hr/employees/');
   const departments = useERPList<any>('hr/departments/');
 

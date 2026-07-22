@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { isSuperUser } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import LeaveRequestsPanel from './LeaveRequestsPanel';
 import LeaveApprovalsModule from '../attendance/LeaveApprovalsModule';
 import LeaveBalanceTab from './LeaveBalanceTab';
@@ -9,7 +10,8 @@ const C = { orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, 
 type Tab = 'requests' | 'approvals' | 'balance';
 
 export default function LeaveManagementHubModule() {
-  const isAdmin = isSuperUser();
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
   const [tab, setTab] = useState<Tab>('requests');
 
   const tabs: { key: Tab; label: string; adminOnly?: boolean }[] = [

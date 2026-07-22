@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { isSuperUser } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import SalaryStructuresModule from './SalaryStructuresModule';
 import GeneratePayrollModule from './GeneratePayrollModule';
 import PayrollReportsModule from './PayrollReportsModule';
@@ -10,7 +11,8 @@ const C = { orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, 
 type Tab = 'salary' | 'generate' | 'reports' | 'payslips';
 
 export default function PayrollHubModule() {
-  const isAdmin = isSuperUser();
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
   const [tab, setTab] = useState<Tab>(isAdmin ? 'salary' : 'payslips');
 
   const tabs: { key: Tab; label: string; adminOnly?: boolean }[] = [

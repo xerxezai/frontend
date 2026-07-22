@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { isSuperUser } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import AttendanceDashboardModule from './AttendanceDashboardModule';
 import AllAttendanceModule from './AllAttendanceModule';
 import AttendanceReportTab from './AttendanceReportTab';
@@ -9,7 +10,10 @@ const C = { orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, 
 type Tab = 'my' | 'all' | 'report';
 
 export default function AttendanceHubModule() {
-  const isAdmin = isSuperUser();
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  // Super Admin / Company Admin / HR Manager see every employee's attendance; everyone
+  // else only ever sees their own — All Attendance is hidden for them entirely.
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
   const [tab, setTab] = useState<Tab>('my');
 
   const tabs: { key: Tab; label: string; adminOnly?: boolean }[] = [

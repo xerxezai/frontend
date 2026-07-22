@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 
 const C = { orange: '#C9883A', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B', border: 'rgba(0,0,0,0.07)' };
 
@@ -12,13 +13,31 @@ const CAPPED_TYPES = [
 ];
 
 export default function LeaveBalanceTab() {
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
+
   const employees = useERPList<any>('hr/employees/');
-  const activeEmployees = employees.data.filter((e: any) => e.status === 'active');
+  const [myEmployee, setMyEmployee] = useState<any>(null);
+  const [myEmployeeFetched, setMyEmployeeFetched] = useState(false);
+  useEffect(() => {
+    if (isAdmin) return;
+    erpFetch('hr/employees/me/')
+      .then(setMyEmployee)
+      .catch(() => setMyEmployee(null))
+      .finally(() => setMyEmployeeFetched(true));
+  }, [isAdmin]);
+
+  // Admins see every active employee's balance; a regular employee only ever sees their own.
+  const activeEmployees = isAdmin
+    ? employees.data.filter((e: any) => e.status === 'active')
+    : (myEmployee ? [myEmployee] : []);
+  const employeesLoading = isAdmin ? employees.loading : !myEmployeeFetched;
+
   const [balances, setBalances] = useState<Record<number, Record<string, any>>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (employees.loading) return;
+    if (employeesLoading) return;
     if (activeEmployees.length === 0) { setLoading(false); return; }
     setLoading(true);
     const lookups = activeEmployees.flatMap((emp: any) =>
@@ -38,13 +57,15 @@ export default function LeaveBalanceTab() {
       setLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employees.loading, activeEmployees.length]);
+  }, [employeesLoading, activeEmployees.length]);
 
-  if (employees.loading || loading) {
+  if (employeesLoading || loading) {
     return <div style={{ padding: 48, textAlign: 'center' }}><div className="spinner-border" style={{ color: C.orange }} /></div>;
   }
   if (activeEmployees.length === 0) {
-    return <div style={{ padding: 48, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>No active employees.</div>;
+    return <div style={{ padding: 48, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
+      {isAdmin ? 'No active employees.' : 'No employee profile linked to your account.'}
+    </div>;
   }
 
   return (
