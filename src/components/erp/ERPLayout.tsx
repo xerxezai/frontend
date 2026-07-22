@@ -219,7 +219,7 @@ const ERPLayout = ({ children }: Props) => {
   // Real RBAC role from my-access/ — the legacy xerxez_role localStorage value lies
   // (it derives from an old profile field that shows every admin-ish user as super_admin).
   const ROLE_LABELS: Record<string, string> = {
-    super_admin: 'Super Admin', module_admin: 'Module Admin',
+    super_admin: 'Super Admin', company_admin: 'Company Admin', module_admin: 'Module Admin',
     regular_user: 'Regular User', read_only: 'Read Only', no_access: 'User',
   };
   const roleLabel = accessLoading ? '' : (ROLE_LABELS[userRole] ?? 'User');
