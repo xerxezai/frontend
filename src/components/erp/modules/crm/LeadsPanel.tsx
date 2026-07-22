@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { StickyNote, ArrowRightLeft } from 'lucide-react';
-import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, leadScoreMeta, sourceMeta, today, type Deal } from './crmShared';
 import CRMNotesPanel from './CRMNotesPanel';
@@ -22,7 +23,8 @@ const StatusBadge = ({ val }: { val: string }) => {
 const defLead = { name: '', company: '', email: '', phone: '', source: 'website', score: 'warm', status: 'new', estimated_value: '', follow_up_date: '' };
 
 export default function LeadsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('crm');
   const fmtINR = useFmtCurrency();
   const leads = useERPList<any>('crm/leads/');
   const deals = useERPList<Deal>('crm/deals/');

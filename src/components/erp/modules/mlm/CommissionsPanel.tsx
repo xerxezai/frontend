@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList, erpDownload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, useFmtCurrency, today, COMMISSION_STATUS, StatusBadge } from './mlmShared';
 import { useCurrency } from '../../../../context/CurrencyContext';
@@ -16,7 +17,8 @@ function computeAmount(order: any, rate: string): string {
 }
 
 export default function CommissionsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('mlm');
   const fmtINR = useFmtCurrency();
   const { symbol } = useCurrency();
   const commissions = useERPList<any>('mlm/commissions/');

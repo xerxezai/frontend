@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, useFmtCurrency, O_STATUS, DelDlg, today, nextNumber, SearchableSelect } from './salesShared';
 
@@ -26,7 +27,8 @@ const decodeAssignee = (value: string): { salesperson: number | null; distributo
 };
 
 export default function OrdersPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('sales');
   const fmtINR = useFmtCurrency();
   const orders = useERPList<any>('sales/orders/');
   const customers = useERPList<any>('crm/customers/');

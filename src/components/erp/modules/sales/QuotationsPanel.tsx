@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, useFmtCurrency, Q_STATUS, StatusBadge, DelDlg, today, nextNumber } from './salesShared';
 import QuotationForm, { type QuotationFormValues } from './QuotationForm';
@@ -11,7 +12,8 @@ const emptyForm = (number: string): QuotationFormValues => ({
 });
 
 export default function QuotationsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('sales');
   const fmtINR = useFmtCurrency();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');

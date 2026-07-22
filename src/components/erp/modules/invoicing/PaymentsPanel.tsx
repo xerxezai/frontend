@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, erpDownload, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, erpDownload, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, KpiCard, PAYMENT_METHODS, today } from './invoicingShared';
 
@@ -13,7 +14,8 @@ interface DashboardData {
 }
 
 export default function PaymentsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('accounting');
   const fmtINR = useFmtCurrency();
   const payments = useERPList<any>('invoicing/payments/');
   const invoices = useERPList<any>('invoicing/invoices/');

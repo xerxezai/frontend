@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, erpDownload, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, erpDownload, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, useFmtCurrency, StatusBadge, DelDlg, today, plusDays, nextNumber } from '../invoicing/invoicingShared';
 import { QuickPaymentModal } from '../invoicing/InvoicesPanel';
@@ -12,7 +13,8 @@ const defF = { order: '', issue_date: today(), due_date: plusDays(30), notes: ''
  * shared invoicing app (Invoice already carries a nullable sales_order FK), rather than
  * a separate backend module. The full, unscoped list still lives under Accounting. */
 export default function SalesInvoicesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('sales');
   const fmtINR = useFmtCurrency();
   const invoices = useERPList<any>('invoicing/invoices/');
   const orders = useERPList<any>('sales/orders/');

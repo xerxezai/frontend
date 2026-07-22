@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency } from './inventoryShared';
 
 const defCat = { name: '', description: '' };
 
 export default function CategoriesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('procurement');
   const fmtINR = useFmtCurrency();
   const categories = useERPList<any>('inventory/categories/');
 

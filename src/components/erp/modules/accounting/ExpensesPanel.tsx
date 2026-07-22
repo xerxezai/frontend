@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, erpUpload, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, erpUpload, useERPList, erpDownload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today, EXPENSE_STATUS, StatusBadge } from './accountingShared';
 
 const defExpense = { category: '', amount: '', date: today(), description: '', paid_by: '' };
 
 export default function ExpensesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('accounting');
   const expenses = useERPList<any>('accounting/expenses/');
   const fmtINR = useFmtCurrency();
 

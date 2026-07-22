@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, ACTIVITY_TYPES, activityTypeMeta, today } from './crmShared';
 
@@ -54,7 +55,8 @@ function MonthCalendar({ activities, selectedDate, onSelectDate }: { activities:
 }
 
 export default function ActivitiesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('crm');
   const activities = useERPList<any>('crm/activities/');
   const customers = useERPList<any>('crm/customers/');
   const leads = useERPList<any>('crm/leads/');

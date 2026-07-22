@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, today, DELIVERY_STATUS, StatusBadge } from './logisticsShared';
 
 const defDelivery = { shipment: '', delivery_date: today(), delivered_by: '', notes: '', status: 'delivered' };
 
 export default function DeliveriesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('logistics');
   const deliveries = useERPList<any>('logistics/deliveries/');
   const shipments = useERPList<any>('logistics/shipments/');
 

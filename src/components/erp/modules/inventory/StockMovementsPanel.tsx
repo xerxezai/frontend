@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, MOVEMENT_TYPES, MovementBadge, nowISO } from './inventoryShared';
 
 const defM = { product: '', warehouse: '', type: 'in', quantity: '', reason: '', notes: '' };
 
 export default function StockMovementsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('procurement');
   const movements = useERPList<any>('inventory/stock-movements/');
   const products = useERPList<any>('inventory/products/');
   const warehouses = useERPList<any>('inventory/warehouses/');

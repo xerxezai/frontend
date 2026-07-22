@@ -3,7 +3,8 @@ import {
   Search, Plus, Eye, Check, X as XIcon, Clock, CheckCircle2, XCircle, Ban,
   Palmtree, Stethoscope, AlertTriangle, Baby, Wallet, FileQuestion, Calendar,
 } from 'lucide-react';
-import { useERPList, erpFetch, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import { toast } from 'react-toastify';
 import { Card3D, FF, OG, DARK, WHITE, Skeleton, EmptyState, SlidePanel, initials } from './hrShared';
 
@@ -150,7 +151,8 @@ const defLeave = { employee:'', type:'annual', from_date:'', to_date:'', reason:
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
 
 export default function LeaveRequestsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('hr');
   const employees = useERPList<any>('hr/employees/');
   const employeeById = useMemo(() => Object.fromEntries(employees.data.map((e: any) => [e.id, e])), [employees.data]);
   const activeEmployees = employees.data.filter((e: any) => e.status === 'active');

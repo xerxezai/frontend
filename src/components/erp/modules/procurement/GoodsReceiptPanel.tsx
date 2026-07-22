@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, today } from './procurementShared';
 
@@ -9,7 +10,8 @@ const emptyRow = (): ItemRow => ({ product: '', quantity_received: '' });
 const defReceipt = { purchase_order: '', warehouse: '', received_date: today(), notes: '' };
 
 export default function GoodsReceiptPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('procurement');
   const receipts = useERPList<any>('procurement/goods-receipts/');
   const purchaseOrders = useERPList<any>('procurement/purchase-orders/');
   const products = useERPList<any>('inventory/products/');

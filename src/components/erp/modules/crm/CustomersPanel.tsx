@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useERPList, erpUpload, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList, erpUpload, erpDownload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, type Deal } from './crmShared';
 import CustomerProfilePanel from './CustomerProfilePanel';
@@ -16,7 +17,8 @@ const tagColor = (t: string) => TAG_COLORS[t] ?? { bg: 'rgba(139,92,246,0.12)', 
 const defCust = { name: '', company: '', email: '', phone: '', industry: '', source: '', city: '', country: '', tags: '', is_active: 'true' };
 
 export default function CustomersPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('crm');
   const fmtINR = useFmtCurrency();
   const customers = useERPList<any>('crm/customers/');
   const deals = useERPList<Deal>('crm/deals/');

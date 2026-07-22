@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, nextNumber, today } from './invoicingShared';
 
@@ -13,7 +14,8 @@ const CN_STATUS: Record<string, { label: string; bg: string; color: string }> = 
 const defCN = { number: '', invoice: '', amount: '', reason: '', date: today() };
 
 export default function CreditNotesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('accounting');
   const fmtINR = useFmtCurrency();
   const creditNotes = useERPList<any>('invoicing/credit-notes/');
   const invoices = useERPList<any>('invoicing/invoices/');

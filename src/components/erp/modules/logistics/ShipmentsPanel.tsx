@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList, erpDownload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, today, SHIPMENT_STATUS, StatusBadge } from './logisticsShared';
 import { downloadShipmentPDF } from './pdf';
@@ -15,7 +16,8 @@ const NEXT_STATUS: Record<string, string> = {
 };
 
 export default function ShipmentsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('logistics');
   const shipments = useERPList<any>('logistics/shipments/');
   const salesOrders = useERPList<any>('sales/orders/');
   const customers = useERPList<any>('crm/customers/');

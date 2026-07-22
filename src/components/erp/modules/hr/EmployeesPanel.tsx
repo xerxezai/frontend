@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Camera, User } from 'lucide-react';
-import { useERPList, erpUpload, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList, erpUpload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import { toast } from 'react-toastify';
 import ERPTable from '../../ERPTable';
 import { useCurrency } from '../../../../context/CurrencyContext';
@@ -40,7 +41,8 @@ const defEmp = {
 };
 
 export default function EmployeesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('hr');
   const { formatAmount, symbol, selectedCurrency } = useCurrency();
   const employees   = useERPList<any>('hr/employees/');
   const departments = useERPList<any>('hr/departments/');

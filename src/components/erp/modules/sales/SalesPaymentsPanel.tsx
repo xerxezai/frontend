@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpDownload, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpDownload, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, PAYMENT_METHODS, today } from '../invoicing/invoicingShared';
 
@@ -9,7 +10,8 @@ const defP = { invoice: '', amount: '', method: 'cash', paid_at: '', reference: 
 /** Payments scoped to invoices raised against Sales Orders — see SalesInvoicesPanel for the
  * rationale (thin sales-focused view over the shared invoicing app, not a separate backend). */
 export default function SalesPaymentsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('sales');
   const fmtINR = useFmtCurrency();
   const payments = useERPList<any>('invoicing/payments/');
   const invoices = useERPList<any>('invoicing/invoices/');

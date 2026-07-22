@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList, erpDownload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, today } from './logisticsShared';
 
 const defWarehouse = { name: '', location: '', capacity: '0', manager: '', is_active: 'true' };
 
 export default function WarehousesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('logistics');
   const warehouses = useERPList<any>('logistics/warehouses/');
 
   const [search, setSearch] = useState('');

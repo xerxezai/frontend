@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { OG, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency } from './inventoryShared';
 
@@ -8,7 +9,8 @@ const defW = { name: '', code: '', location: '', capacity: '0', is_active: 'true
 const defT = { product: '', from_warehouse: '', to_warehouse: '', quantity: '', notes: '' };
 
 export default function WarehousesPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('procurement');
   const fmtINR = useFmtCurrency();
   const warehouses = useERPList<any>('inventory/warehouses/');
   const products = useERPList<any>('inventory/products/');

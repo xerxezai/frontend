@@ -4,7 +4,8 @@ import {
   ShieldCheck, Package, Building2, Wrench, Scale, GraduationCap,
   Search, Pencil, Trash2, Plus, UserCog,
 } from 'lucide-react';
-import { useERPList, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import { toast } from 'react-toastify';
 import { Card3D, FF, OG, DARK, WHITE, Skeleton, EmptyState } from './hrShared';
 
@@ -50,7 +51,8 @@ const defDept = { name:'', code:'', description:'', color:'#c8a84b', head:'' };
 type FilterMode = 'all' | 'with' | 'empty';
 
 export default function DepartmentsPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('hr');
   const departments = useERPList<any>('hr/departments/');
   const employees   = useERPList<any>('hr/employees/');
   const activeEmployees = employees.data.filter((e: any) => e.status === 'active');

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { erpFetch, useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
+import { erpFetch, useERPList, erpDownload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today, plusDays, PO_STATUS, StatusBadge } from './procurementShared';
 import { downloadPurchaseOrderPDF } from './pdf';
@@ -10,7 +11,8 @@ const emptyRow = (): ItemRow => ({ product: '', quantity: '1', unit_price: '0' }
 const defPO = { supplier: '', order_date: today(), expected_delivery: '', notes: '' };
 
 export default function PurchaseOrdersPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('procurement');
   const fmtINR = useFmtCurrency();
   const pos = useERPList<any>('procurement/purchase-orders/');
   const suppliers = useERPList<any>('procurement/suppliers/');

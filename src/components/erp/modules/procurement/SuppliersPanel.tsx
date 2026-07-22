@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useERPList, erpDownload, isSuperUser } from '../../../../hooks/useERPApi';
+import { useERPList, erpDownload } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, StarRating, StarRatingInput } from './procurementShared';
 
@@ -9,7 +10,8 @@ const defSupplier = { name: '', email: '', phone: '', address: '', city: '', cou
 const GSTIN_RE = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/;
 
 export default function SuppliersPanel() {
-  const isAdmin = isSuperUser();
+  const { canWrite } = useAccess();
+  const isAdmin = canWrite('procurement');
   const suppliers = useERPList<any>('procurement/suppliers/');
 
   const [search, setSearch] = useState('');
