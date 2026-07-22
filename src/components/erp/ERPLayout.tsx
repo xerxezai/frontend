@@ -811,29 +811,31 @@ const ERPLayout = ({ children }: Props) => {
           </div>
         )}
 
-        {/* switch to academy */}
-        <div style={{ padding: '10px 10px 0', flexShrink: 0, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <button
-            onClick={() => navigate('/home')}
-            aria-label="Switch to Academy"
-            style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              width: '100%', justifyContent: collapsed ? 'center' : 'flex-start',
-              background: 'rgba(201,136,58,0.07)',
-              border: '1px solid rgba(201,136,58,0.16)',
-              borderRadius: 10, padding: '9px 13px',
-              cursor: 'pointer', color: C.orange,
-              fontSize: 13.5, fontWeight: 600,
-              fontFamily: "'DM Sans', sans-serif",
-              transition: 'background 0.2s, border-color 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.14)'; e.currentTarget.style.borderColor = 'rgba(201,136,58,0.32)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.07)'; e.currentTarget.style.borderColor = 'rgba(201,136,58,0.16)'; }}
-          >
-            <i className="fas fa-graduation-cap" style={{ fontSize: 13, flexShrink: 0 }}></i>
-            {!collapsed && <span>Switch to Academy</span>}
-          </button>
-        </div>
+        {/* switch to academy — Super Admin only */}
+        {isSuperAdmin && (
+          <div style={{ padding: '10px 10px 0', flexShrink: 0, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <button
+              onClick={() => navigate('/home')}
+              aria-label="Switch to Academy"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                width: '100%', justifyContent: collapsed ? 'center' : 'flex-start',
+                background: 'rgba(201,136,58,0.07)',
+                border: '1px solid rgba(201,136,58,0.16)',
+                borderRadius: 10, padding: '9px 13px',
+                cursor: 'pointer', color: C.orange,
+                fontSize: 13.5, fontWeight: 600,
+                fontFamily: "'DM Sans', sans-serif",
+                transition: 'background 0.2s, border-color 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.14)'; e.currentTarget.style.borderColor = 'rgba(201,136,58,0.32)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.07)'; e.currentTarget.style.borderColor = 'rgba(201,136,58,0.16)'; }}
+            >
+              <i className="fas fa-graduation-cap" style={{ fontSize: 13, flexShrink: 0 }}></i>
+              {!collapsed && <span>Switch to Academy</span>}
+            </button>
+          </div>
+        )}
 
         {/* logout */}
         <div style={{ padding: 10, flexShrink: 0 }}>
