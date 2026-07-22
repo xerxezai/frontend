@@ -189,8 +189,11 @@ const PartnersPage = () => (
   <CustomLayout>
     <SEO
       title="Partner Program — Earn Up to 30% Commission | XERXEZ"
-      description="Join the XERXEZ Partner Program and earn 10-30% commission selling AI-Powered ERP to Engineering and EPC companies in UAE. Apply today."
+      description="Join the XERXEZ Partner Program and earn 10-30% commission selling AI-Powered ERP to Engineering and EPC companies in UAE & India. Apply today."
       canonical="/partners"
+      keywords="ERP partner program UAE India, Sell ERP earn commission, XERXEZ partner program, ERP reseller opportunity, 30% commission ERP sales"
+      ogTitle="Earn 30% Commission Selling XERXEZ ERP"
+      ogDescription="Join the XERXEZ Partner Program and earn up to 30% commission selling AI-powered ERP to Engineering and EPC companies in UAE and India"
     />
     <style>{`
       @keyframes xzPtFadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }

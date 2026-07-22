@@ -426,8 +426,8 @@ const CTASection = () => (
 const ERPLandingPage = () => (
   <>
     <SEO
-      title="AI-Powered ERP for Engineering & EPC Companies in UAE — XERXEZ"
-      description="XERXEZ ERP eliminates manual approvals, document chaos, and procurement bottlenecks for Engineering, EPC, Oil & Gas, and Construction companies in the UAE."
+      title="AI-Powered ERP for Engineering & EPC Companies in UAE & India — XERXEZ"
+      description="XERXEZ ERP eliminates manual approvals, document chaos, and procurement bottlenecks for Engineering, EPC, Oil & Gas, and Construction companies in the UAE & India."
       canonical="/ai-erp"
       keywords="AI ERP UAE, Engineering ERP, EPC ERP software, Oil and Gas ERP, Construction ERP UAE, XERXEZ ERP"
     />
