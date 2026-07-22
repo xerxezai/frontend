@@ -135,12 +135,32 @@ function EditAccessModal({ user, onClose, onSaved }: { user: any; onClose: () =>
 function DeactivateConfirm({ userName, onCancel, onConfirm }: { userName: string; onCancel: () => void; onConfirm: () => void }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onCancel}>
-      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 380, width: '100%', borderTop: '2px solid #ef4444', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 380, width: '100%', borderTop: '2px solid #f59e0b', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
         <h6 style={{ fontWeight: 800, marginBottom: 8, color: '#1A1A1A' }}>Deactivate {userName}?</h6>
-        <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>They will lose access to the ERP immediately. This can be reversed by reactivating them later.</p>
+        <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>They will lose access to the ERP immediately, but stay in this list as Inactive. This can be reversed by reactivating them later.</p>
         <div style={{ display: 'flex', gap: 10 }}>
           <button onClick={onCancel} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
-          <button onClick={onConfirm} style={{ flex: 1, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: '9px', cursor: 'pointer', color: '#ef4444', fontFamily: FF, fontWeight: 700, fontSize: 13 }}>Deactivate</button>
+          <button onClick={onConfirm} style={{ flex: 1, background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.32)', borderRadius: 9, padding: '9px', cursor: 'pointer', color: '#92400e', fontFamily: FF, fontWeight: 700, fontSize: 13 }}>Deactivate</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PermanentDeleteConfirm({ userName, onCancel, onConfirm, busy }: { userName: string; onCancel: () => void; onConfirm: () => void; busy?: boolean }) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onCancel}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 400, width: '100%', borderTop: '2px solid #ef4444', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight: 800, marginBottom: 8, color: '#1A1A1A' }}>Permanently delete {userName}?</h6>
+        <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>
+          This <strong>cannot be undone</strong>. Their account is removed entirely, along with anything only they created (e.g. blog posts, time entries).
+          If they own protected records (QHSE incidents, risk register entries, project management roles), this will be blocked until those are reassigned — use Deactivate instead in that case.
+        </p>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onCancel} disabled={busy} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
+          <button onClick={onConfirm} disabled={busy} style={{ flex: 1, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: '9px', cursor: busy ? 'wait' : 'pointer', color: '#ef4444', fontFamily: FF, fontWeight: 700, fontSize: 13 }}>
+            {busy ? 'Deleting…' : 'Permanently Delete'}
+          </button>
         </div>
       </div>
     </div>
@@ -156,9 +176,12 @@ export default function UserManagement() {
   const [showCreate, setShowCreate] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [deactivating, setDeactivating] = useState<any>(null);
+  const [permanentDeleting, setPermanentDeleting] = useState<any>(null);
+  const [permanentDeleteBusy, setPermanentDeleteBusy] = useState(false);
   const [busyRequestId, setBusyRequestId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [bulkDeactivating, setBulkDeactivating] = useState(false);
+  const [bulkPermanentDeleting, setBulkPermanentDeleting] = useState(false);
   const currentUserId = useMemo(() => getCurrentUserId(), []);
 
   const loadUsers = useCallback(() => {
@@ -191,6 +214,18 @@ export default function UserManagement() {
     } catch (e: any) { toast.error(e.message || 'Could not deactivate user'); }
   };
 
+  const confirmPermanentDelete = async () => {
+    if (!permanentDeleting) return;
+    setPermanentDeleteBusy(true);
+    try {
+      await rbacApi.permanentDeleteUser(permanentDeleting.id);
+      toast.success('User permanently deleted');
+      setPermanentDeleting(null);
+      loadUsers();
+    } catch (e: any) { toast.error(e.message || 'Could not delete user'); }
+    finally { setPermanentDeleteBusy(false); }
+  };
+
   const actOnRequest = async (id: number, action: 'approve' | 'reject') => {
     setBusyRequestId(id);
     try {
@@ -208,18 +243,37 @@ export default function UserManagement() {
   const selectableUsers = useMemo(() => users.filter(isSelectable), [users, isSelectable]);
   const allSelected = selectableUsers.length > 0 && selectableUsers.every(u => selectedIds.includes(u.id));
 
-  const handleBulkDelete = async () => {
-    if (!window.confirm(`Delete ${selectedIds.length} user${selectedIds.length === 1 ? '' : 's'}? This cannot be undone.`)) return;
-    setBulkDeleting(true);
+  const handleBulkDeactivate = async () => {
+    if (!window.confirm(`Deactivate ${selectedIds.length} user${selectedIds.length === 1 ? '' : 's'}? They'll lose ERP access but stay in this list as Inactive.`)) return;
+    setBulkDeactivating(true);
     try {
       for (const id of selectedIds) {
         await rbacApi.deactivateUser(id);
       }
-      toast.success(`${selectedIds.length} user${selectedIds.length === 1 ? '' : 's'} deleted successfully`);
+      toast.success(`${selectedIds.length} user${selectedIds.length === 1 ? '' : 's'} deactivated`);
     } catch (e: any) {
-      toast.error(e.message || 'Some users could not be deleted');
+      toast.error(e.message || 'Some users could not be deactivated');
     } finally {
-      setBulkDeleting(false);
+      setBulkDeactivating(false);
+      setSelectedIds([]);
+      loadUsers();
+    }
+  };
+
+  const handleBulkPermanentDelete = async () => {
+    if (!window.confirm(`Permanently delete ${selectedIds.length} user${selectedIds.length === 1 ? '' : 's'}? This cannot be undone.`)) return;
+    setBulkPermanentDeleting(true);
+    let failed = 0;
+    try {
+      for (const id of selectedIds) {
+        try { await rbacApi.permanentDeleteUser(id); }
+        catch { failed += 1; }
+      }
+      const succeeded = selectedIds.length - failed;
+      if (succeeded > 0) toast.success(`${succeeded} user${succeeded === 1 ? '' : 's'} permanently deleted`);
+      if (failed > 0) toast.error(`${failed} user${failed === 1 ? '' : 's'} could not be deleted (they may own protected records) — deactivate them instead`);
+    } finally {
+      setBulkPermanentDeleting(false);
       setSelectedIds([]);
       loadUsers();
     }
@@ -317,18 +371,25 @@ export default function UserManagement() {
               <span style={{ fontFamily: FF, fontWeight: 600, fontSize: 13, color: '#1A1A1A' }}>
                 {selectedIds.length} user{selectedIds.length === 1 ? '' : 's'} selected
               </span>
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <button
-                  onClick={handleBulkDelete}
-                  disabled={bulkDeleting}
-                  style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: bulkDeleting ? 'wait' : 'pointer', fontFamily: FF, fontWeight: 700, opacity: bulkDeleting ? 0.7 : 1 }}
+                  onClick={handleBulkDeactivate}
+                  disabled={bulkDeactivating || bulkPermanentDeleting}
+                  style={{ background: '#f59e0b', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: bulkDeactivating ? 'wait' : 'pointer', fontFamily: FF, fontWeight: 700, opacity: bulkDeactivating || bulkPermanentDeleting ? 0.7 : 1 }}
                 >
-                  {bulkDeleting ? 'Deleting…' : 'Delete Selected'}
+                  {bulkDeactivating ? 'Deactivating…' : 'Deactivate Selected'}
+                </button>
+                <button
+                  onClick={handleBulkPermanentDelete}
+                  disabled={bulkDeactivating || bulkPermanentDeleting}
+                  style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: bulkPermanentDeleting ? 'wait' : 'pointer', fontFamily: FF, fontWeight: 700, opacity: bulkDeactivating || bulkPermanentDeleting ? 0.7 : 1 }}
+                >
+                  {bulkPermanentDeleting ? 'Deleting…' : 'Delete Permanently'}
                 </button>
                 <button
                   onClick={() => setSelectedIds([])}
-                  disabled={bulkDeleting}
-                  style={{ background: '#6b7280', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: bulkDeleting ? 'not-allowed' : 'pointer', fontFamily: FF, fontWeight: 700, opacity: bulkDeleting ? 0.7 : 1 }}
+                  disabled={bulkDeactivating || bulkPermanentDeleting}
+                  style={{ background: '#6b7280', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: (bulkDeactivating || bulkPermanentDeleting) ? 'not-allowed' : 'pointer', fontFamily: FF, fontWeight: 700, opacity: bulkDeactivating || bulkPermanentDeleting ? 0.7 : 1 }}
                 >
                   Cancel
                 </button>
@@ -374,7 +435,7 @@ export default function UserManagement() {
                       />
                     </th>
                     {userCols.map(c => <th key={c.key} style={TH}>{c.label}</th>)}
-                    <th style={{ ...TH, width: 76, minWidth: 76 }}>Actions</th>
+                    <th style={{ ...TH, width: 110, minWidth: 110 }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -408,14 +469,18 @@ export default function UserManagement() {
                         {userCols.map(c => (
                           <td key={c.key} style={TD}>{c.render ? c.render(u) : (u as any)[c.key] ?? '—'}</td>
                         ))}
-                        <td style={{ ...TD, width: 76 }}>
+                        <td style={{ ...TD, width: 110 }}>
                           <div style={{ display: 'flex', gap: 5 }}>
                             <button title="Edit" onClick={() => setEditing(u)}
                               style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
                               <i className="fas fa-pen" style={{ fontSize: 10 }}></i>
                             </button>
-                            <button title="Deactivate" onClick={() => setDeactivating(u)}
-                              style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
+                            <button title="Deactivate — disables access but keeps them in this list" onClick={() => setDeactivating(u)}
+                              style={{ background: 'rgba(245,158,11,0.10)', color: '#92400e', border: '1px solid rgba(245,158,11,0.28)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
+                              <i className="fas fa-user-slash" style={{ fontSize: 10 }}></i>
+                            </button>
+                            <button title={disabledReason || 'Permanently delete — cannot be undone'} disabled={!selectable} onClick={() => setPermanentDeleting(u)}
+                              style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: selectable ? 'pointer' : 'not-allowed', flexShrink: 0, opacity: selectable ? 1 : 0.4 }}>
                               <i className="fas fa-trash" style={{ fontSize: 10 }}></i>
                             </button>
                           </div>
@@ -435,6 +500,14 @@ export default function UserManagement() {
       {showCreate && <CreateUserModal onClose={() => setShowCreate(false)} onSuccess={loadUsers} />}
       {editing && <EditAccessModal user={editing} onClose={() => setEditing(null)} onSaved={loadUsers} />}
       {deactivating && <DeactivateConfirm userName={deactivating.full_name} onCancel={() => setDeactivating(null)} onConfirm={confirmDeactivate} />}
+      {permanentDeleting && (
+        <PermanentDeleteConfirm
+          userName={permanentDeleting.full_name}
+          busy={permanentDeleteBusy}
+          onCancel={() => setPermanentDeleting(null)}
+          onConfirm={confirmPermanentDelete}
+        />
+      )}
     </div>
   );
 }
