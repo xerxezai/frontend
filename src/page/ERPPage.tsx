@@ -62,19 +62,17 @@ import MLMReportsPanel from '../components/erp/modules/mlm/MLMReportsPanel';
 import HRDashboard from '../components/erp/modules/hr/HRDashboard';
 import EmployeesPanel from '../components/erp/modules/hr/EmployeesPanel';
 import DepartmentsPanel from '../components/erp/modules/hr/DepartmentsPanel';
-import LeaveRequestsPanel from '../components/erp/modules/hr/LeaveRequestsPanel';
 
 // HR & Payroll modules — lazy loaded
-const AttendanceDashboard  = lazy(() => import('../components/erp/modules/attendance/AttendanceDashboardModule'));
-const MyAttendance         = lazy(() => import('../components/erp/modules/attendance/MyAttendanceModule'));
-const LeaveManagement      = lazy(() => import('../components/erp/modules/attendance/LeaveManagementModule'));
-const AllAttendance        = lazy(() => import('../components/erp/modules/attendance/AllAttendanceModule'));
-const LeaveApprovals       = lazy(() => import('../components/erp/modules/attendance/LeaveApprovalsModule'));
-const ShiftManagement      = lazy(() => import('../components/erp/modules/attendance/ShiftManagementModule'));
-const SalaryStructures     = lazy(() => import('../components/erp/modules/payroll/SalaryStructuresModule'));
-const GeneratePayroll      = lazy(() => import('../components/erp/modules/payroll/GeneratePayrollModule'));
-const PayrollReports       = lazy(() => import('../components/erp/modules/payroll/PayrollReportsModule'));
-const MyPayslips           = lazy(() => import('../components/erp/modules/payroll/MyPayslipsModule'));
+// Attendance, Leave and Payroll are each a single hub page with tabs inside — the tabs
+// still render the original, unmodified per-feature components (AttendanceDashboardModule,
+// AllAttendanceModule, LeaveRequestsPanel, LeaveApprovalsModule, SalaryStructuresModule,
+// GeneratePayrollModule, PayrollReportsModule, MyPayslipsModule) so none of that existing,
+// working code was touched — only how it's *reached* changed.
+const AttendanceHub    = lazy(() => import('../components/erp/modules/attendance/AttendanceHubModule'));
+const LeaveManagementHub = lazy(() => import('../components/erp/modules/hr/LeaveManagementHubModule'));
+const PayrollHub       = lazy(() => import('../components/erp/modules/payroll/PayrollHubModule'));
+const ShiftManagement  = lazy(() => import('../components/erp/modules/attendance/ShiftManagementModule'));
 
 // Added HR feature pages — lazy loaded
 const HRPerformancePage = lazy(() => import('../components/erp/modules/hr/HRPerformancePage'));
@@ -82,6 +80,8 @@ const HRDocumentsPage   = lazy(() => import('../components/erp/modules/hr/HRDocu
 const HROrgChartPage    = lazy(() => import('../components/erp/modules/hr/HROrgChartPage'));
 const HROnboardingPage  = lazy(() => import('../components/erp/modules/hr/HROnboardingPage'));
 const HRExitPage        = lazy(() => import('../components/erp/modules/hr/HRExitPage'));
+const HolidaysModule    = lazy(() => import('../components/erp/modules/hr/HolidaysModule'));
+const OvertimeModule    = lazy(() => import('../components/erp/modules/hr/OvertimeModule'));
 
 // EPC modules — lazy loaded
 const ProjectDashboard  = lazy(() => import('../components/erp/modules/projects/ProjectDashboard'));
@@ -225,7 +225,9 @@ const ERPPage = () => {
           <Route path="hr"                 element={<ProtectedModuleRoute module="hr"><HRDashboard /></ProtectedModuleRoute>} />
           <Route path="hr/employees"       element={<ProtectedModuleRoute module="hr"><EmployeesPanel /></ProtectedModuleRoute>} />
           <Route path="hr/departments"     element={<ProtectedModuleRoute module="hr"><DepartmentsPanel /></ProtectedModuleRoute>} />
-          <Route path="hr/leave"           element={<ProtectedModuleRoute module="hr"><LeaveRequestsPanel /></ProtectedModuleRoute>} />
+          <Route path="hr/leave"           element={<ProtectedModuleRoute module="hr"><LeaveManagementHub /></ProtectedModuleRoute>} />
+          <Route path="hr/overtime"        element={<ProtectedModuleRoute module="hr"><OvertimeModule /></ProtectedModuleRoute>} />
+          <Route path="hr/holidays"        element={<ProtectedModuleRoute module="hr"><HolidaysModule /></ProtectedModuleRoute>} />
           <Route path="hr/performance"     element={<ProtectedModuleRoute module="hr"><HRPerformancePage /></ProtectedModuleRoute>} />
           <Route path="hr/documents"       element={<ProtectedModuleRoute module="hr"><HRDocumentsPage /></ProtectedModuleRoute>} />
           <Route path="hr/org-chart"       element={<ProtectedModuleRoute module="hr"><HROrgChartPage /></ProtectedModuleRoute>} />
@@ -263,17 +265,12 @@ const ERPPage = () => {
           <Route path="qhse/checklists"    element={<ProtectedModuleRoute module="qhse"><SafetyChecklist /></ProtectedModuleRoute>} />
           <Route path="qhse/compliance"    element={<ProtectedModuleRoute module="qhse"><ComplianceTracker /></ProtectedModuleRoute>} />
 
-          {/* HR & Payroll */}
-          <Route path="attendance"         element={<AttendanceDashboard />} />
-          <Route path="my-attendance"      element={<MyAttendance />} />
-          <Route path="leave"              element={<LeaveManagement />} />
-          <Route path="all-attendance"     element={<AllAttendance />} />
-          <Route path="leave-approvals"    element={<LeaveApprovals />} />
+          {/* HR & Payroll — Attendance/Leave Management/Payroll are each one hub page with
+              tabs; the old separate My Attendance/All Attendance/Leave/Leave Approvals/
+              Salary Setup/Generate Payroll/My Payslips routes are gone, folded into tabs. */}
+          <Route path="attendance"         element={<AttendanceHub />} />
           <Route path="shifts"             element={<ShiftManagement />} />
-          <Route path="salary-structures"  element={<SalaryStructures />} />
-          <Route path="payroll-generate"   element={<GeneratePayroll />} />
-          <Route path="payroll-reports"    element={<PayrollReports />} />
-          <Route path="my-payslips"        element={<MyPayslips />} />
+          <Route path="payroll-reports"    element={<PayrollHub />} />
 
           {/* Legacy routes — unlinked from the sidebar, kept for direct-URL access */}
           <Route path="invoicing"          element={<InvoicingModule />} />

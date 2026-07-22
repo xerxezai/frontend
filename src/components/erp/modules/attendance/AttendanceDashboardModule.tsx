@@ -269,7 +269,6 @@ export default function AttendanceDashboardModule() {
   const [actionOk, setActionOk] = useState('');
 
   const [weekStats, setWeekStats] = useState<any>(null);
-  const [monthSummary, setMonthSummary] = useState<any>(null);
   const [view, setView] = useState<'list' | 'calendar'>('list');
   const [calYear, setCalYear] = useState(now.getFullYear());
   const [calMonth, setCalMonth] = useState(now.getMonth() + 1);
@@ -278,7 +277,6 @@ export default function AttendanceDashboardModule() {
 
   const refreshStats = useCallback(() => {
     erpFetch('hr/attendance/my-week-stats/').then(setWeekStats).catch(() => {});
-    erpFetch('hr/attendance/my-month-summary/').then(setMonthSummary).catch(() => {});
   }, []);
 
   useEffect(() => { refreshStats(); }, [refreshStats]);
@@ -321,7 +319,6 @@ export default function AttendanceDashboardModule() {
   const firstName = employeeName.split(' ')[0];
 
   const w = weekStats || { present: 0, late: 0, half_day: 0, absent: 0, hours: 0 };
-  const m = monthSummary || { working_days: 0, present: 0, absent: 0, half_day: 0, hours: 0, percentage: 0 };
 
   return (
     <div>
@@ -544,43 +541,6 @@ export default function AttendanceDashboardModule() {
         </div>
       )}
 
-      {/* Monthly summary */}
-      <div style={{
-        background: C.white, borderRadius: 14, border: `1px solid ${C.border}`,
-        boxShadow: '0 1px 4px rgba(0,0,0,0.05)', padding: '20px 22px',
-        animation: 'attFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.24s both',
-      }}>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 14, color: C.dark, marginBottom: 4 }}>Monthly Summary</div>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11.5, color: C.muted, marginBottom: 18 }}>{MONTH_NAMES[now.getMonth()]} {now.getFullYear()}</div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 16, marginBottom: 20 }}>
-          {[
-            ['Working Days', m.working_days, C.dark],
-            ['Present', m.present, '#10b981'],
-            ['Absent', m.absent, '#ef4444'],
-            ['Half Day', m.half_day, '#f97316'],
-            ['Hours Worked', `${m.hours}h`, C.orange],
-          ].map(([label, val, color]) => (
-            <div key={label as string}>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 20, fontWeight: 800, color: color as string }}>{val}</div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: C.muted, marginTop: 2 }}>{label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, color: C.dark }}>Attendance Percentage</span>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 800, color: m.percentage >= 90 ? '#10b981' : m.percentage >= 75 ? '#f59e0b' : '#ef4444' }}>{m.percentage}%</span>
-          </div>
-          <div style={{ width: '100%', height: 8, borderRadius: 4, background: '#f1f5f9', overflow: 'hidden' }}>
-            <div style={{
-              width: `${Math.min(m.percentage, 100)}%`, height: '100%', borderRadius: 4, transition: 'width 400ms ease',
-              background: m.percentage >= 90 ? '#10b981' : m.percentage >= 75 ? '#f59e0b' : '#ef4444',
-            }} />
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

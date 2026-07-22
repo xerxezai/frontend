@@ -171,6 +171,18 @@ const HRDashboard = () => {
       .finally(() => setPayrollLoading(false));
   }, [curMonth, curYear]);
 
+  // ── Upcoming holidays widget ────────────────────────────────────────────────
+  const [upcomingHolidays, setUpcomingHolidays] = useState<any[]>([]);
+  const [holidaysLoading, setHolidaysLoading] = useState(true);
+
+  useEffect(() => {
+    setHolidaysLoading(true);
+    erpFetch('hr/holidays/upcoming/?limit=5')
+      .then((res: any) => setUpcomingHolidays(Array.isArray(res) ? res : []))
+      .catch(() => setUpcomingHolidays([]))
+      .finally(() => setHolidaysLoading(false));
+  }, []);
+
   const totalPayroll = payrollRaw.reduce((sum: number, p: any) => sum + Number(p.net_salary || 0), 0);
   const paidCount    = payrollRaw.filter((p: any) => p.status === 'paid').length;
   const pendingPayrollCount = Math.max(activeCount - paidCount, 0);
@@ -197,7 +209,10 @@ const HRDashboard = () => {
         @keyframes hrStatUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
         .hr-stat-grid{grid-template-columns:repeat(4,1fr)}
         .hr-charts-grid{grid-template-columns:1.3fr 1fr}
-        .hr-lists-grid{grid-template-columns:1fr 1fr}
+        .hr-lists-grid{grid-template-columns:1fr 1fr 1fr}
+        @media (max-width:1150px){
+          .hr-lists-grid{grid-template-columns:1fr 1fr}
+        }
         @media (max-width:900px){
           .hr-charts-grid{grid-template-columns:1fr}
           .hr-lists-grid{grid-template-columns:1fr}
@@ -280,7 +295,7 @@ const HRDashboard = () => {
           <SectionHead
             title={`Pending Leave Requests${pendingLeaves.length ? ` (${pendingLeaves.length})` : ''}`}
             subtitle="Review and action requests awaiting a decision"
-            action={<Link to="/erp/leave-approvals" style={{ fontFamily: FF, fontSize: 12, fontWeight: 700, color: OG, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>View all<ArrowRight size={13} /></Link>}
+            action={<Link to="/erp/hr/leave" style={{ fontFamily: FF, fontSize: 12, fontWeight: 700, color: OG, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>View all<ArrowRight size={13} /></Link>}
           />
           {actionError && (
             <div style={{ margin: '14px 20px 0', padding: '10px 14px', borderRadius: 10, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.22)', color: '#991b1b', fontFamily: FF, fontSize: 12.5 }}>
@@ -405,6 +420,32 @@ const HRDashboard = () => {
             </div>
           )}
         </SectionCard>
+
+        <SectionCard>
+          <SectionHead title="Upcoming Holidays" action={<Link to="/erp/hr/holidays" style={{ fontFamily: FF, fontSize: 12, fontWeight: 700, color: OG, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>View all<ArrowRight size={13} /></Link>} />
+          {holidaysLoading ? (
+            <div style={{ padding: 20 }}><Skeleton h={180} /></div>
+          ) : upcomingHolidays.length === 0 ? (
+            <EmptyState icon={CalendarCheck} message="No upcoming holidays." />
+          ) : (
+            <div>
+              {upcomingHolidays.map((h: any) => (
+                <div key={h.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px', borderBottom: `1px solid ${BORDER}` }}>
+                  <span style={{ width: 32, height: 32, borderRadius: 9, background: `${OG}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <CalendarCheck size={14} color={OG} />
+                  </span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 13, color: DARK, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.name}</div>
+                    <div style={{ fontFamily: FF, fontSize: 11.5, color: MUTED, marginTop: 2, textTransform: 'capitalize' }}>{h.holiday_type} holiday</div>
+                  </div>
+                  <span style={{ fontFamily: FF, fontSize: 12, fontWeight: 700, color: OG, flexShrink: 0 }}>
+                    {new Date(h.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </SectionCard>
       </div>
 
       {/* Section 6: Payroll summary */}
@@ -423,7 +464,7 @@ const HRDashboard = () => {
               </div>
             </div>
             <Link
-              to="/erp/payroll-generate"
+              to="/erp/payroll-reports"
               style={{
                 fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: '#fff', textDecoration: 'none',
                 background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', borderRadius: 9, padding: '9px 16px',
