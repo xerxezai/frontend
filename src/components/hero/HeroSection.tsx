@@ -681,7 +681,7 @@ const HeroSection = () => {
 
             {/* Partner Program link */}
             <div style={{
-              textAlign: 'center',
+              textAlign: 'left',
               padding: '20px 0',
               borderTop: '1px solid rgba(255,255,255,0.08)',
               marginTop: 24,
