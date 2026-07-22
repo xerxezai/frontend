@@ -31,8 +31,6 @@ const NAV = [
   { to: "/training",      label: "Training"         },
   { to: "/project",       label: "Projects"         },
   { to: "/contact",       label: "Contact"          },
-  { to: "/partners",      label: "Partner Program"  },
-  { to: "/partner",       label: "Partner Login"    },
   { to: "/contact#partner", label: "Become a Partner" },
 ];
 

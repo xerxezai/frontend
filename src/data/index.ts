@@ -555,11 +555,6 @@ const menuData = [
     link: "/careers",
     hasDropdown: false,
   },
-  {
-    title: "Partners",
-    link: "/partners",
-    hasDropdown: false,
-  },
 ];
 const pricingPlans = [
   {
