@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { useAttendanceTodayStatus, useMyAttendance } from '../../../../hooks/useERPApi';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { useAttendanceTodayStatus, useMyAttendance, erpFetch } from '../../../../hooks/useERPApi';
 
 const C = {
   orange:     '#C9883A',
@@ -41,7 +41,6 @@ function ParticleHero() {
       if (!ctx) return;
       ctx.clearRect(0, 0, W, H);
 
-      // connections
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const dx = pts[i].x - pts[j].x;
@@ -58,7 +57,6 @@ function ParticleHero() {
         }
       }
 
-      // nodes
       pts.forEach(p => {
         ctx.beginPath();
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.5);
@@ -83,13 +81,25 @@ function ParticleHero() {
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: 'absolute', inset: 0,
-        width: '100%', height: '100%',
-        pointerEvents: 'none',
-      }}
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
     />
   );
+}
+
+// ── live clock ────────────────────────────────────────────────────────────────
+function useNow() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+}
+
+function greetingFor(hour: number) {
+  if (hour < 12) return 'Good Morning';
+  if (hour < 17) return 'Good Afternoon';
+  return 'Good Evening';
 }
 
 // ── Count-up ──────────────────────────────────────────────────────────────────
@@ -111,8 +121,8 @@ function useCountUp(target: number, duration = 900) {
 }
 
 // ── Stat mini-card ────────────────────────────────────────────────────────────
-interface MiniCardProps { label: string; value: number; icon: string; color: string; idx: number; }
-const MiniCard = ({ label, value, icon, color, idx }: MiniCardProps) => {
+interface MiniCardProps { label: string; value: number; icon: string; color: string; idx: number; suffix?: string; }
+const MiniCard = ({ label, value, icon, color, idx, suffix }: MiniCardProps) => {
   const [hovered, setHovered] = useState(false);
   const counted = useCountUp(value);
   return (
@@ -145,7 +155,7 @@ const MiniCard = ({ label, value, icon, color, idx }: MiniCardProps) => {
         <i className={icon} style={{ color: '#fff', fontSize: 15 }}></i>
       </div>
       <div style={{ fontSize: 22, fontWeight: 700, color: C.dark, fontFamily: "'DM Sans', sans-serif", lineHeight: 1 }}>
-        {counted}
+        {counted}{suffix || ''}
       </div>
       <div style={{ fontSize: 11.5, color: C.muted, fontFamily: "'DM Sans', sans-serif", marginTop: 3 }}>
         {label}
@@ -154,11 +164,11 @@ const MiniCard = ({ label, value, icon, color, idx }: MiniCardProps) => {
   );
 };
 
-// ── Status badge ─────────────────────────────────────────────────────────────
+// ── Status badge + colors ────────────────────────────────────────────────────
 const STATUS_COLORS: Record<string, string> = {
   present:  '#10b981',
-  late:     '#f59e0b',
-  half_day: '#6366f1',
+  late:     '#eab308',
+  half_day: '#f97316',
   absent:   '#ef4444',
 };
 
@@ -176,19 +186,117 @@ const Badge = ({ s }: { s: string }) => (
   </span>
 );
 
+const fmtDay = (iso: string) => new Date(iso).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const fmtTime = (iso?: string | null) => iso ? new Date(iso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '—';
+
+// ── Attendance calendar ──────────────────────────────────────────────────────
+const CAL_COLORS: Record<string, string> = {
+  present: '#10b981', late: '#eab308', half_day: '#f97316', absent: '#ef4444', weekend: '#9ca3af', future: '#e5e7eb',
+};
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+function AttendanceCalendar({ year, month, days, loading, onPrev, onNext }: {
+  year: number; month: number; days: { date: string; status: string }[]; loading: boolean; onPrev: () => void; onNext: () => void;
+}) {
+  const firstDow = new Date(year, month - 1, 1).getDay();
+  const leadingBlanks = (firstDow + 6) % 7; // Monday-first grid
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <button onClick={onPrev} style={{ background: C.cream, border: `1px solid ${C.border}`, borderRadius: 8, width: 32, height: 32, cursor: 'pointer', color: C.dark }}>
+          <i className="fas fa-chevron-left" style={{ fontSize: 11 }} />
+        </button>
+        <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 15, color: C.dark }}>{MONTH_NAMES[month - 1]} {year}</span>
+        <button onClick={onNext} style={{ background: C.cream, border: `1px solid ${C.border}`, borderRadius: 8, width: 32, height: 32, cursor: 'pointer', color: C.dark }}>
+          <i className="fas fa-chevron-right" style={{ fontSize: 11 }} />
+        </button>
+      </div>
+
+      {loading ? (
+        <div style={{ padding: 48, textAlign: 'center' }}><div className="spinner-border" style={{ color: C.orange }} /></div>
+      ) : (
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 6, marginBottom: 6 }}>
+            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
+              <div key={d} style={{ textAlign: 'center', fontSize: 10, fontWeight: 700, color: C.muted, fontFamily: "'DM Sans', sans-serif", textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d}</div>
+            ))}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 6 }}>
+            {Array.from({ length: leadingBlanks }).map((_, i) => <div key={`b${i}`} />)}
+            {days.map(d => {
+              const dayNum = new Date(d.date).getDate();
+              const color = CAL_COLORS[d.status] || '#e5e7eb';
+              const isFuture = d.status === 'future';
+              return (
+                <div
+                  key={d.date}
+                  title={`${d.date}: ${d.status.replace('_', ' ')}`}
+                  style={{
+                    aspectRatio: '1', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: isFuture ? '#fff' : `${color}1c`,
+                    border: `1.5px solid ${isFuture ? '#e5e7eb' : color}`,
+                    color: isFuture ? C.muted : color,
+                    fontSize: 12.5, fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+                  }}
+                >
+                  {dayNum}
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 18, paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
+            {[['present', 'Present'], ['late', 'Late'], ['half_day', 'Half Day'], ['absent', 'Absent'], ['weekend', 'Weekend'], ['future', 'Future']].map(([key, label]) => (
+              <span key={key} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
+                <span style={{ width: 10, height: 10, borderRadius: 3, background: key === 'future' ? '#fff' : `${CAL_COLORS[key]}1c`, border: `1.5px solid ${key === 'future' ? '#e5e7eb' : CAL_COLORS[key]}` }} />
+                {label}
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function AttendanceDashboardModule() {
   const today = useAttendanceTodayStatus();
   const records = useMyAttendance();
+  const now = useNow();
   const [actionLoading, setActionLoading] = useState(false);
   const [actionErr, setActionErr] = useState('');
   const [actionOk, setActionOk] = useState('');
 
-  const thisWeek = records.data.slice(0, 7);
-  const present  = thisWeek.filter(r => r.status === 'present').length;
-  const late     = thisWeek.filter(r => r.status === 'late').length;
-  const halfDay  = thisWeek.filter(r => r.status === 'half_day').length;
-  const absent   = thisWeek.filter(r => r.status === 'absent').length;
+  const [weekStats, setWeekStats] = useState<any>(null);
+  const [monthSummary, setMonthSummary] = useState<any>(null);
+  const [view, setView] = useState<'list' | 'calendar'>('list');
+  const [calYear, setCalYear] = useState(now.getFullYear());
+  const [calMonth, setCalMonth] = useState(now.getMonth() + 1);
+  const [calendarDays, setCalendarDays] = useState<{ date: string; status: string }[]>([]);
+  const [calendarLoading, setCalendarLoading] = useState(false);
+
+  const refreshStats = useCallback(() => {
+    erpFetch('hr/attendance/my-week-stats/').then(setWeekStats).catch(() => {});
+    erpFetch('hr/attendance/my-month-summary/').then(setMonthSummary).catch(() => {});
+  }, []);
+
+  useEffect(() => { refreshStats(); }, [refreshStats]);
+
+  useEffect(() => {
+    if (view !== 'calendar') return;
+    setCalendarLoading(true);
+    erpFetch(`hr/attendance/my-calendar/?year=${calYear}&month=${calMonth}`)
+      .then((res: any) => setCalendarDays(Array.isArray(res) ? res : []))
+      .catch(() => setCalendarDays([]))
+      .finally(() => setCalendarLoading(false));
+  }, [view, calYear, calMonth]);
+
+  const shiftCalendar = (delta: number) => {
+    let m = calMonth + delta, y = calYear;
+    if (m < 1) { m = 12; y -= 1; } else if (m > 12) { m = 1; y += 1; }
+    setCalMonth(m); setCalYear(y);
+  };
 
   const handle = async (action: 'in' | 'out') => {
     setActionLoading(true);
@@ -198,6 +306,7 @@ export default function AttendanceDashboardModule() {
       if (action === 'in') await today.clockIn();
       else await today.clockOut();
       setActionOk(action === 'in' ? 'Clocked in successfully!' : 'Clocked out successfully!');
+      refreshStats();
     } catch (e: any) {
       setActionErr(e.message);
     } finally {
@@ -208,6 +317,11 @@ export default function AttendanceDashboardModule() {
   const todayData = today.data;
   const isClockedIn  = todayData?.clocked_in ?? false;
   const isClockedOut = todayData?.clocked_out ?? false;
+  const employeeName = localStorage.getItem('xerxez_name') || 'there';
+  const firstName = employeeName.split(' ')[0];
+
+  const w = weekStats || { present: 0, late: 0, half_day: 0, absent: 0, hours: 0 };
+  const m = monthSummary || { working_days: 0, present: 0, absent: 0, half_day: 0, hours: 0, percentage: 0 };
 
   return (
     <div>
@@ -217,8 +331,8 @@ export default function AttendanceDashboardModule() {
           to   { opacity:1; transform:translateY(0); }
         }
         @keyframes attPulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(201,136,58,0.35), 0 4px 20px rgba(201,136,58,0.25); }
-          50%     { box-shadow: 0 0 0 12px rgba(201,136,58,0), 0 4px 20px rgba(201,136,58,0.25); }
+          0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.45), 0 4px 20px rgba(16,185,129,0.25); }
+          50%     { box-shadow: 0 0 0 10px rgba(16,185,129,0), 0 4px 20px rgba(16,185,129,0.25); }
         }
         .att-clock-btn {
           border: none; cursor: pointer;
@@ -228,14 +342,14 @@ export default function AttendanceDashboardModule() {
           display: inline-flex; align-items: center; gap: 9px;
         }
         .att-clock-btn:hover:not(:disabled) { transform: translateY(-2px); }
-        .att-clock-btn:disabled { opacity: 0.55; cursor: default; }
+        .att-clock-btn:disabled { opacity: 0.4; cursor: default; }
         .att-mini-grid {
           display: grid;
-          grid-template-columns: repeat(4,1fr);
+          grid-template-columns: repeat(5,1fr);
           gap: 14px;
         }
-        @media(max-width:900px) { .att-mini-grid { grid-template-columns: repeat(2,1fr); } }
-        @media(max-width:480px) { .att-mini-grid { grid-template-columns: 1fr 1fr; } }
+        @media(max-width:1000px) { .att-mini-grid { grid-template-columns: repeat(3,1fr); } }
+        @media(max-width:600px) { .att-mini-grid { grid-template-columns: 1fr 1fr; } }
         @media(prefers-reduced-motion:reduce) { .att-clock-btn,.att-mini-grid * { transition:none!important; animation:none!important; } }
       `}</style>
 
@@ -252,81 +366,55 @@ export default function AttendanceDashboardModule() {
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-                <div style={{
-                  width: 32, height: 32, borderRadius: 9,
-                  background: C.orangeGrad,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 3px 0 rgba(150,95,30,0.5)',
-                }}>
-                  <i className="fas fa-clock" style={{ color: '#fff', fontSize: 13 }}></i>
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <span style={{
+                  width: 10, height: 10, borderRadius: '50%', flexShrink: 0,
+                  background: isClockedIn && !isClockedOut ? '#10b981' : '#ef4444',
+                  boxShadow: isClockedIn && !isClockedOut ? '0 0 0 4px rgba(16,185,129,0.22)' : '0 0 0 4px rgba(239,68,68,0.18)',
+                  animation: isClockedIn && !isClockedOut ? 'attPulse 2s infinite' : 'none',
+                }} />
                 <span style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11, fontFamily: "'DM Sans', sans-serif", fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
-                  Attendance
+                  {isClockedIn && !isClockedOut ? 'Clocked In' : isClockedOut ? 'Shift Complete' : 'Not Clocked In'}
                 </span>
               </div>
               <h2 style={{ color: '#fff', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 26, margin: 0, letterSpacing: '-0.02em' }}>
-                Today's Dashboard
+                {greetingFor(now.getHours())}, {firstName}
               </h2>
               <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, fontFamily: "'DM Sans', sans-serif", margin: '6px 0 0' }}>
-                {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
+                {now.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
               </p>
             </div>
 
-            {/* Status pill */}
-            {todayData && (
-              <div style={{
-                background: isClockedIn && !isClockedOut
-                  ? 'rgba(16,185,129,0.15)' : isClockedOut
-                  ? 'rgba(99,102,241,0.15)' : 'rgba(255,255,255,0.08)',
-                border: isClockedIn && !isClockedOut
-                  ? '1px solid rgba(16,185,129,0.35)' : isClockedOut
-                  ? '1px solid rgba(99,102,241,0.35)' : '1px solid rgba(255,255,255,0.12)',
-                borderRadius: 30, padding: '8px 18px',
-                display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0,
-              }}>
-                <span style={{
-                  width: 8, height: 8, borderRadius: '50%',
-                  background: isClockedIn && !isClockedOut ? '#10b981' : isClockedOut ? '#6366f1' : '#6B6B6B',
-                  animation: isClockedIn && !isClockedOut ? 'attPulse 2s infinite' : 'none',
-                  display: 'block',
-                }} />
-                <span style={{ color: '#fff', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13 }}>
-                  {isClockedOut ? 'Shift Complete' : isClockedIn ? 'Currently In' : 'Not Clocked In'}
-                </span>
+            {/* Live clock */}
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <div style={{ color: '#e8a84e', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 34, letterSpacing: '-0.01em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+                {now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
               </div>
-            )}
+              <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, fontFamily: "'DM Sans', sans-serif", marginTop: 2 }}>Live time</div>
+            </div>
           </div>
 
           {/* Time info row */}
-          {todayData && (isClockedIn || isClockedOut) && (
-            <div style={{ display: 'flex', gap: 20, marginTop: 20, flexWrap: 'wrap' }}>
-              {todayData.check_in && (
-                <div>
-                  <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Clock In</div>
-                  <div style={{ color: '#e8a84e', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 18 }}>
-                    {new Date(todayData.check_in).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
-                  </div>
-                </div>
-              )}
-              {todayData.check_out && (
-                <div>
-                  <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Clock Out</div>
-                  <div style={{ color: '#a78bfa', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 18 }}>
-                    {new Date(todayData.check_out).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
-                  </div>
-                </div>
-              )}
-              {todayData.hours && (
-                <div>
-                  <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Hours</div>
-                  <div style={{ color: '#34d399', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 18 }}>
-                    {parseFloat(todayData.hours).toFixed(2)}h
-                  </div>
-                </div>
-              )}
+          <div style={{ display: 'flex', gap: 28, marginTop: 24, flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Clock In</div>
+              <div style={{ color: '#e8a84e', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 20 }}>
+                {fmtTime(todayData?.check_in)}
+              </div>
             </div>
-          )}
+            <div>
+              <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Clock Out</div>
+              <div style={{ color: '#a78bfa', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 20 }}>
+                {fmtTime(todayData?.check_out)}
+              </div>
+            </div>
+            <div>
+              <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Hours Worked Today</div>
+              <div style={{ color: '#34d399', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 26 }}>
+                {todayData?.hours ? parseFloat(todayData.hours).toFixed(2) : '0.00'}h
+              </div>
+            </div>
+          </div>
 
           {/* Action buttons */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 22, flexWrap: 'wrap' }}>
@@ -335,10 +423,9 @@ export default function AttendanceDashboardModule() {
               onClick={() => handle('in')}
               disabled={actionLoading || isClockedIn}
               style={{
-                background: isClockedIn ? 'rgba(255,255,255,0.06)' : C.orangeGrad,
+                background: isClockedIn ? 'rgba(255,255,255,0.06)' : '#10b981',
                 color: isClockedIn ? 'rgba(255,255,255,0.28)' : '#fff',
-                boxShadow: isClockedIn ? 'none' : '0 3px 0 rgba(150,95,30,0.5), 0 6px 20px rgba(201,136,58,0.28)',
-                animation: !isClockedIn && !isClockedOut ? 'attPulse 2s infinite' : 'none',
+                boxShadow: isClockedIn ? 'none' : '0 3px 0 rgba(5,120,80,0.6), 0 6px 20px rgba(16,185,129,0.32)',
               }}
             >
               {actionLoading ? <span className="spinner-border spinner-border-sm" /> : <i className="fas fa-sign-in-alt" />}
@@ -349,9 +436,9 @@ export default function AttendanceDashboardModule() {
               onClick={() => handle('out')}
               disabled={actionLoading || !isClockedIn || isClockedOut}
               style={{
-                background: isClockedIn && !isClockedOut ? 'rgba(99,102,241,0.85)' : 'rgba(255,255,255,0.06)',
+                background: isClockedIn && !isClockedOut ? '#ef4444' : 'rgba(255,255,255,0.06)',
                 color: isClockedIn && !isClockedOut ? '#fff' : 'rgba(255,255,255,0.28)',
-                boxShadow: isClockedIn && !isClockedOut ? '0 3px 12px rgba(99,102,241,0.35)' : 'none',
+                boxShadow: isClockedIn && !isClockedOut ? '0 3px 0 rgba(153,27,27,0.6), 0 6px 20px rgba(239,68,68,0.30)' : 'none',
               }}
             >
               {actionLoading ? <span className="spinner-border spinner-border-sm" /> : <i className="fas fa-sign-out-alt" />}
@@ -374,58 +461,125 @@ export default function AttendanceDashboardModule() {
 
       {/* Mini stat cards — week summary */}
       <div className="att-mini-grid" style={{ marginBottom: 28 }}>
-        <MiniCard label="Present This Week" value={present} icon="fas fa-check"       color="#10b981" idx={0} />
-        <MiniCard label="Late Arrivals"      value={late}    icon="fas fa-hourglass"   color="#f59e0b" idx={1} />
-        <MiniCard label="Half Days"          value={halfDay} icon="fas fa-adjust"       color="#6366f1" idx={2} />
-        <MiniCard label="Absent"             value={absent}  icon="fas fa-times-circle" color="#ef4444" idx={3} />
+        <MiniCard label="Present This Week" value={w.present}  icon="fas fa-check"        color="#10b981" idx={0} />
+        <MiniCard label="Late Arrivals"     value={w.late}     icon="fas fa-hourglass"    color="#eab308" idx={1} />
+        <MiniCard label="Half Days"         value={w.half_day} icon="fas fa-adjust"       color="#f97316" idx={2} />
+        <MiniCard label="Absent"            value={w.absent}   icon="fas fa-times-circle" color="#ef4444" idx={3} />
+        <MiniCard label="Hours This Week"   value={w.hours}    icon="fas fa-clock"        color={C.orange} idx={4} suffix="h" />
       </div>
 
-      {/* Recent records */}
-      <div style={{
-        background: C.white, borderRadius: 14,
-        border: `1px solid ${C.border}`,
-        boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-        animation: 'attFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.18s both',
-        overflow: 'hidden',
-      }}>
-        <div style={{ padding: '16px 20px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 14, color: C.dark }}>Recent Attendance</span>
-          <span style={{ fontSize: 11, color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>Last 10 days</span>
+      {/* View toggle */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+        <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 14, color: C.dark }}>
+          {view === 'list' ? 'Recent Attendance' : 'Attendance Calendar'}
+        </span>
+        <div style={{ display: 'flex', gap: 4, background: C.white, borderRadius: 10, padding: 4, border: `1px solid ${C.border}` }}>
+          {(['list', 'calendar'] as const).map(v => (
+            <button key={v} onClick={() => setView(v)} style={{
+              border: 'none', borderRadius: 7, padding: '7px 16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 12.5,
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+              background: view === v ? C.orangeGrad : 'transparent',
+              color: view === v ? '#fff' : C.muted,
+            }}>
+              <i className={v === 'list' ? 'fas fa-list' : 'fas fa-calendar-alt'} style={{ fontSize: 11 }} />
+              {v === 'list' ? 'List View' : 'Calendar View'}
+            </button>
+          ))}
         </div>
-        {records.loading ? (
-          <div style={{ padding: 32, textAlign: 'center' }}>
-            <div className="spinner-border" style={{ color: C.orange, width: 24, height: 24 }} />
-          </div>
-        ) : records.data.length === 0 ? (
-          <div style={{ padding: 48, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif", fontSize: 14 }}>
-            No attendance records yet.
-          </div>
-        ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
-              <thead>
-                <tr style={{ background: '#fafaf9' }}>
-                  {['Date', 'Clock In', 'Clock Out', 'Hours', 'Status'].map(h => (
-                    <th key={h} style={{ padding: '10px 16px', textAlign: 'left', color: C.muted, fontWeight: 700, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `1px solid ${C.border}` }}>
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {records.data.slice(0, 10).map((r: any) => (
-                  <tr key={r.id} style={{ borderBottom: `1px solid ${C.border}` }}>
-                    <td style={{ padding: '11px 16px', color: C.dark, fontWeight: 600 }}>{r.date}</td>
-                    <td style={{ padding: '11px 16px', color: C.muted }}>{r.check_in ? new Date(r.check_in).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '—'}</td>
-                    <td style={{ padding: '11px 16px', color: C.muted }}>{r.check_out ? new Date(r.check_out).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '—'}</td>
-                    <td style={{ padding: '11px 16px', color: C.muted }}>{r.hours ? `${parseFloat(r.hours).toFixed(2)}h` : '—'}</td>
-                    <td style={{ padding: '11px 16px' }}><Badge s={r.status || 'present'} /></td>
+      </div>
+
+      {view === 'list' ? (
+        <div style={{
+          background: C.white, borderRadius: 14,
+          border: `1px solid ${C.border}`,
+          boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+          animation: 'attFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.18s both',
+          overflow: 'hidden', marginBottom: 24,
+        }}>
+          {records.loading ? (
+            <div style={{ padding: 32, textAlign: 'center' }}>
+              <div className="spinner-border" style={{ color: C.orange, width: 24, height: 24 }} />
+            </div>
+          ) : records.data.length === 0 ? (
+            <div style={{ padding: 48, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif", fontSize: 14 }}>
+              No attendance records yet.
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
+                <thead>
+                  <tr style={{ background: '#fafaf9' }}>
+                    {['Date', 'Clock In', 'Clock Out', 'Hours', 'Status'].map(h => (
+                      <th key={h} style={{ padding: '10px 16px', textAlign: 'left', color: C.muted, fontWeight: 700, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `1px solid ${C.border}` }}>
+                        {h}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {records.data.slice(0, 30).map((r: any) => (
+                    <tr key={r.id} style={{ borderBottom: `1px solid ${C.border}`, background: `${STATUS_COLORS[r.status] ?? C.muted}0a` }}>
+                      <td style={{ padding: '11px 16px', color: C.dark, fontWeight: 600, whiteSpace: 'nowrap' }}>{fmtDay(r.date)}</td>
+                      <td style={{ padding: '11px 16px', color: C.muted }}>{fmtTime(r.check_in)}</td>
+                      <td style={{ padding: '11px 16px', color: C.muted }}>{fmtTime(r.check_out)}</td>
+                      <td style={{ padding: '11px 16px', color: C.muted }}>{r.hours ? `${parseFloat(r.hours).toFixed(2)}h` : '—'}</td>
+                      <td style={{ padding: '11px 16px' }}><Badge s={r.status || 'present'} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <div style={{ padding: '10px 20px', borderTop: `1px solid ${C.border}`, fontSize: 11, color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
+            Last 30 days
           </div>
-        )}
+        </div>
+      ) : (
+        <div style={{
+          background: C.white, borderRadius: 14, border: `1px solid ${C.border}`,
+          boxShadow: '0 1px 4px rgba(0,0,0,0.05)', padding: '20px 22px', marginBottom: 24,
+          animation: 'attFadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.18s both',
+        }}>
+          <AttendanceCalendar year={calYear} month={calMonth} days={calendarDays} loading={calendarLoading} onPrev={() => shiftCalendar(-1)} onNext={() => shiftCalendar(1)} />
+        </div>
+      )}
+
+      {/* Monthly summary */}
+      <div style={{
+        background: C.white, borderRadius: 14, border: `1px solid ${C.border}`,
+        boxShadow: '0 1px 4px rgba(0,0,0,0.05)', padding: '20px 22px',
+        animation: 'attFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.24s both',
+      }}>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 14, color: C.dark, marginBottom: 4 }}>Monthly Summary</div>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11.5, color: C.muted, marginBottom: 18 }}>{MONTH_NAMES[now.getMonth()]} {now.getFullYear()}</div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 16, marginBottom: 20 }}>
+          {[
+            ['Working Days', m.working_days, C.dark],
+            ['Present', m.present, '#10b981'],
+            ['Absent', m.absent, '#ef4444'],
+            ['Half Day', m.half_day, '#f97316'],
+            ['Hours Worked', `${m.hours}h`, C.orange],
+          ].map(([label, val, color]) => (
+            <div key={label as string}>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 20, fontWeight: 800, color: color as string }}>{val}</div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: C.muted, marginTop: 2 }}>{label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, color: C.dark }}>Attendance Percentage</span>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 800, color: m.percentage >= 90 ? '#10b981' : m.percentage >= 75 ? '#f59e0b' : '#ef4444' }}>{m.percentage}%</span>
+          </div>
+          <div style={{ width: '100%', height: 8, borderRadius: 4, background: '#f1f5f9', overflow: 'hidden' }}>
+            <div style={{
+              width: `${Math.min(m.percentage, 100)}%`, height: '100%', borderRadius: 4, transition: 'width 400ms ease',
+              background: m.percentage >= 90 ? '#10b981' : m.percentage >= 75 ? '#f59e0b' : '#ef4444',
+            }} />
+          </div>
+        </div>
       </div>
     </div>
   );
