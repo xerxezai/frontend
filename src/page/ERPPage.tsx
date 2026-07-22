@@ -107,6 +107,7 @@ const CompanyDetail     = lazy(() => import('../components/erp/company/CompanyDe
 
 // Partner applications — lazy loaded, super admin only
 const Partners = lazy(() => import('../components/erp/partners/Partners'));
+const Inquiries = lazy(() => import('../components/erp/inquiries/Inquiries'));
 
 // Profile & Settings pages
 const MyProfilePage       = lazy(() => import('../components/erp/profile/MyProfilePage'));
@@ -239,6 +240,7 @@ const ERPPage = () => {
           <Route path="companies"          element={<CompanyManagement />} />
           <Route path="companies/:id"      element={<CompanyDetail />} />
           <Route path="partners"           element={<Partners />} />
+          <Route path="inquiries"          element={<Inquiries />} />
 
           {/* EPC Modules */}
           <Route path="projects"           element={<ProtectedModuleRoute module="project_management"><ProjectDashboard /></ProtectedModuleRoute>} />

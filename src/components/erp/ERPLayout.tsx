@@ -5,6 +5,7 @@ import { useAccess } from '../../context/AccessContext';
 import { useCompany } from '../../context/CompanyContext';
 import MyAccessRequest from './rbac/MyAccessRequest';
 import CompanySwitcher from './company/CompanySwitcher';
+import { inquiryApi } from './inquiries/inquiryApi';
 
 const CURRENCY_FLAG: Record<string, string> = { AED: '🇦🇪', INR: '🇮🇳', USD: '🇺🇸' };
 
@@ -223,6 +224,12 @@ const ERPLayout = ({ children }: Props) => {
   };
   const roleLabel = accessLoading ? '' : (ROLE_LABELS[userRole] ?? 'User');
   const [showAccessRequest, setShowAccessRequest] = useState(false);
+  const [newInquiriesCount, setNewInquiriesCount] = useState(0);
+
+  useEffect(() => {
+    if (!isSuperAdmin) return;
+    inquiryApi.stats().then(s => setNewInquiriesCount(s.new)).catch(() => {});
+  }, [isSuperAdmin]);
 
   let currentSub: SubNavItem | undefined;
   for (const [parentTo, submenu] of Object.entries(EXPANDABLE_SUBMENUS)) {
@@ -663,6 +670,29 @@ const ERPLayout = ({ children }: Props) => {
                     <i className="fas fa-handshake" style={{ color: 'inherit', fontSize: 13 }}></i>
                   </span>
                   {!collapsed && <span style={{ flex: 1 }}>Partners</span>}
+                </NavLink>
+              )}
+              {isSuperAdmin && (
+                <NavLink
+                  to="/erp/inquiries"
+                  title="Inquiries"
+                  onClick={() => setMobileOpen(false)}
+                  className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                >
+                  <span className="erp-icon-badge">
+                    <i className="fas fa-envelope" style={{ color: 'inherit', fontSize: 13 }}></i>
+                  </span>
+                  {!collapsed && <span style={{ flex: 1 }}>Inquiries</span>}
+                  {newInquiriesCount > 0 && (
+                    <span style={{
+                      background: '#C9883A', color: '#fff', fontSize: 10, fontWeight: 800,
+                      minWidth: 18, height: 18, borderRadius: 9, padding: '0 5px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}>
+                      {newInquiriesCount > 99 ? '99+' : newInquiriesCount}
+                    </span>
+                  )}
                 </NavLink>
               )}
               <NavLink

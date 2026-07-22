@@ -8,9 +8,11 @@ import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
-import { useERPDashboard, useERPActivity, useSystemStatus, useERPSalesReport, useERPList } from '../../hooks/useERPApi';
+import { useERPDashboard, useERPActivity, useSystemStatus, useERPSalesReport, useERPList, isSuperUser } from '../../hooks/useERPApi';
 import { useCurrency } from '../../context/CurrencyContext';
 import ERPTable from './ERPTable';
+import { Link } from 'react-router-dom';
+import { inquiryApi, type Inquiry } from './inquiries/inquiryApi';
 
 // ── XERXEZ brand tokens ─────────────────────────────────────────────────────
 const GOLD  = '#C9883A';
@@ -340,6 +342,72 @@ const ActivityFeed = () => {
   );
 };
 
+// ── Recent Inquiries widget (super admin only) ──────────────────────────────
+const RECENT_INQUIRY_STATUS_COLOR: Record<string, string> = {
+  new: '#e65100', reviewed: '#1d4ed8', replied: '#16a34a', closed: '#64748b',
+};
+const RecentInquiriesWidget = () => {
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    inquiryApi.list({ status: 'new' })
+      .then(data => setInquiries(data.slice(0, 3)))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: shadow.card, padding: '22px 22px 18px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <ActivityIcon size={15} color={GOLD} />
+          <h3 style={{ fontSize: 14.5, fontWeight: 800, color: C.text, margin: 0, fontFamily: FF }}>Recent Inquiries</h3>
+        </div>
+        <Link to="/erp/inquiries" style={{ fontSize: 12, fontWeight: 700, color: GOLD, fontFamily: FF, textDecoration: 'none' }}>
+          View All →
+        </Link>
+      </div>
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[0, 1, 2].map(i => (
+            <div key={i} style={{ height: 44, borderRadius: 8, background: 'rgba(0,0,0,0.05)', animation: 'erpShimmer 1.5s ease-in-out infinite' }} />
+          ))}
+        </div>
+      ) : inquiries.length === 0 ? (
+        <p style={{ fontSize: 13, color: C.muted, fontFamily: FF, textAlign: 'center', padding: '18px 0' }}>No new inquiries.</p>
+      ) : (
+        <div>
+          {inquiries.map((iq, i) => (
+            <div
+              key={iq.id}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
+                padding: '10px 8px', borderBottom: i < inquiries.length - 1 ? `1px solid ${C.border}` : 'none',
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <p style={{ fontSize: 13, color: C.text, margin: 0, fontFamily: FF, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {iq.full_name}{iq.company ? ` — ${iq.company}` : ''}
+                </p>
+                <p style={{ fontSize: 11.5, color: C.muted, margin: '2px 0 0', fontFamily: FF, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {iq.service || 'General Inquiry'} · {new Date(iq.created_at).toLocaleDateString()}
+                </p>
+              </div>
+              <span style={{
+                fontSize: 9.5, fontWeight: 800, color: '#fff', background: RECENT_INQUIRY_STATUS_COLOR[iq.status] || '#9ca3af',
+                padding: '2px 9px', borderRadius: 999, flexShrink: 0, letterSpacing: '0.04em', textTransform: 'uppercase', fontFamily: FF,
+              }}>
+                {iq.status}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 // ── Finance tab ──────────────────────────────────────────────────────────────
 const FinanceTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolean; monthlyTrend: any[] }) => {
   const invoices = useERPList<any>('invoicing/invoices/');
@@ -583,6 +651,12 @@ const OverviewTab = ({ data, loaded, monthlyTrend }: { data: any; loaded: boolea
       <PerformanceChart data={monthlyTrend} />
       <ActivityFeed />
     </div>
+
+    {isSuperUser() && (
+      <div style={{ marginTop: 20 }}>
+        <RecentInquiriesWidget />
+      </div>
+    )}
   </div>
   );
 };
