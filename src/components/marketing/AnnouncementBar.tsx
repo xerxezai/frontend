@@ -21,7 +21,7 @@ const AnnouncementBar = () => (
         color: "rgba(255,255,255,0.78)", overflow: "hidden", textOverflow: "ellipsis",
       }}>
         <strong style={{ color: "#E8A84E", fontWeight: 700 }}>New:</strong>
-        {" "}AI-Powered ERP now available for Engineering & EPC companies in UAE
+        {" "}AI-Powered ERP now available for Engineering & EPC companies in UAE & India
       </span>
       <span className="d-none d-md-inline" style={{ color: "rgba(201,136,58,0.40)", fontSize: 12 }}>|</span>
       <Link

@@ -32,7 +32,7 @@ const HeaderSection2 = ({ variant }: Props) => {
               <li className="top-tagline">
                 <i className="fas fa-rocket"></i>
                 <strong style={{ color: "#E8A84E", fontWeight: 700 }}>New:</strong>
-                {" "}AI-Powered ERP now available for Engineering & EPC companies in UAE
+                {" "}AI-Powered ERP now available for Engineering & EPC companies in UAE & India
               </li>
               <li className="top-divider">|</li>
               <li>

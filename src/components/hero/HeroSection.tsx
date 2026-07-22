@@ -5,8 +5,8 @@ const OG = "#C9883A";
 const C2 = "#cc785c";
 
 const CYCLE_WORDS = [
-  "Engineering Workflows","Procurement Automation","Document Intelligence",
-  "Digital Transformation","AI-Powered ERP","DevSecOps Pipelines","Cloud Infrastructure",
+  "HR & Payroll","Project Management","Procurement",
+  "QHSE Compliance","CRM & Sales","Asset Management",
 ];
 
 const FULL_TEXT = "Companies";
@@ -43,12 +43,12 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
   useEffect(() => { const t = setTimeout(() => setMounted(true), 120); return () => clearTimeout(t); }, []);
 
   useEffect(() => {
-    if (prefersReduced) { setCounts({ uptime:999, models:8, clients:4 }); return; }
+    if (prefersReduced) { setCounts({ uptime:999, models:12, clients:4 }); return; }
     const start = Date.now(), dur = 2200;
     const id = setInterval(() => {
       const p = Math.min((Date.now() - start) / dur, 1);
       const e = 1 - Math.pow(2, -10 * p);
-      setCounts({ uptime:Math.round(999*e), models:Math.round(8*e), clients:Math.round(4*e) });
+      setCounts({ uptime:Math.round(999*e), models:Math.round(12*e), clients:Math.round(4*e) });
       if (p === 1) clearInterval(id);
     }, 33);
     return () => clearInterval(id);
@@ -91,7 +91,7 @@ const RADAIVisualization = ({ prefersReduced }: { prefersReduced: boolean }) => 
 
   const stats = [
     { label:"FRONTEND UPTIME",   val:`${(counts.uptime/10).toFixed(1)}%` },
-    { label:"AI MODULES BUILT",  val:`${counts.models}+` },
+    { label:"ERP MODULES",  val:`${counts.models}+` },
     { label:"CLIENT PROJECTS",   val:`${counts.clients}+` },
   ];
 
@@ -421,7 +421,7 @@ const HeroSection = () => {
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 0.12s both",
             }}>
               <span style={{ fontFamily:"'Inter',sans-serif", fontSize:11, fontWeight:500, color:"rgba(255,255,255,0.46)", letterSpacing:"0.02em" }}>
-                Built for UAE Engineering &amp; EPC Firms
+                Built for Engineering &amp; EPC Firms in UAE &amp; India
               </span>
             </div>
 
@@ -499,7 +499,7 @@ const HeroSection = () => {
               color:"rgba(255,255,255,0.58)", maxWidth:500, marginBottom:26,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.1s both",
             }}>
-              XERXEZ helps engineering, EPC, and industrial companies in the UAE
+              XERXEZ helps engineering, EPC, and industrial companies in UAE & India
               eliminate manual approvals, Excel dependency, and document chaos —
               with AI-powered ERP built for how engineering teams actually work.
             </p>
@@ -511,7 +511,7 @@ const HeroSection = () => {
             }}>
               {[
                 {
-                  label:"AI-Powered ERP", sub:"Procurement, Document Control, HR & AI Assistant",
+                  label:"AI-Powered ERP", sub:"HR & Payroll, CRM, Sales, Procurement, Logistics, Accounting, + 6 more modules",
                   icon:<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke={OG} strokeWidth="1.3"/><path d="M6 2.5v11M2.5 6.5h11" stroke={OG} strokeWidth="1.3"/></svg>,
                 },
                 {
@@ -676,7 +676,7 @@ const HeroSection = () => {
               marginTop:14, marginBottom:0,
               animation: prefersReduced?"none":"xzFadeUp 0.5s ease 1.32s both",
             }}>
-              Enterprise deployment · Invite-only access · UAE-based support
+              Enterprise deployment · UAE & India based · 24/7 support
             </p>
 
             {/* Partner Program link */}
@@ -713,9 +713,9 @@ const HeroSection = () => {
               {[
                 { val:"4+",    label:"Client projects delivered" },
                 { val:"6+",    label:"Industries served"  },
-                { val:"8+",    label:"AI modules built"          },
+                { val:"12+",   label:"ERP modules"          },
                 { val:"99.9%", label:"Frontend uptime"          },
-                { val:"UAE",   label:"Based & supported"   },
+                { val:"UAE & India", label:"Based"   },
                 { val:"AI-First", label:"Architecture"     },
               ].map((m) => (
                 <div key={m.label} style={{ display:"flex", flexDirection:"column", gap:3 }}>

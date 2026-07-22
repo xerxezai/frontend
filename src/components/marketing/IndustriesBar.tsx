@@ -13,7 +13,7 @@ const INDUSTRIES = [
 
 const CERTS = [
   "AI-Native Platform",
-  "UAE Based & Supported",
+  "UAE & India Based",
   "NDA Protected",
   "Enterprise Security",
   "Dedicated Support",
