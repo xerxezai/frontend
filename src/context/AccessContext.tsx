@@ -14,7 +14,11 @@ interface ModuleAccess {
 interface AccessContextType {
   userRole: string;
   isSuperAdmin: boolean;
+  isCompanyAdmin: boolean;
   accessibleModules: ModuleAccess[];
+  companyName: string;
+  maxUsers: number;
+  currentUsers: number;
   hasAccess: (module: string) => boolean;
   isReadOnly: (module: string) => boolean;
   canWrite: (module: string) => boolean;
@@ -25,7 +29,11 @@ interface AccessContextType {
 const AccessContext = createContext<AccessContextType>({
   userRole: '',
   isSuperAdmin: false,
+  isCompanyAdmin: false,
   accessibleModules: [],
+  companyName: '',
+  maxUsers: 0,
+  currentUsers: 0,
   hasAccess: () => false,
   isReadOnly: () => false,
   canWrite: () => false,
@@ -37,7 +45,11 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
   const [userRole, setUserRole] = useState('');
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [accessibleModules, setModules] = useState<ModuleAccess[]>([]);
+  const [companyName, setCompanyName] = useState('');
+  const [maxUsers, setMaxUsers] = useState(0);
+  const [currentUsers, setCurrentUsers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const isCompanyAdmin = userRole === 'company_admin';
 
   const fetchAccess = async () => {
     setIsLoading(true);
@@ -52,6 +64,15 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
         const allModules = ['dashboard', 'crm', 'sales', 'procurement', 'logistics', 'accounting', 'mlm', 'hr']
           .map(name => ({ name, role: 'company_admin', display_name: name, icon: '' }));
         setModules(allModules);
+
+        try {
+          const stats = await erpFetch('my-company/stats/');
+          setCompanyName(stats.company_name || '');
+          setMaxUsers(stats.max_users || 0);
+          setCurrentUsers(stats.current_users || 0);
+        } catch {
+          // Non-fatal — the sidebar/page just won't show the usage bar until this succeeds.
+        }
       } else {
         setModules(data.modules || []);
       }
@@ -89,7 +110,8 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AccessContext.Provider value={{
-      userRole, isSuperAdmin, accessibleModules, hasAccess, isReadOnly, canWrite, isLoading,
+      userRole, isSuperAdmin, isCompanyAdmin, accessibleModules, companyName, maxUsers, currentUsers,
+      hasAccess, isReadOnly, canWrite, isLoading,
       refreshAccess: fetchAccess,
     }}>
       {children}

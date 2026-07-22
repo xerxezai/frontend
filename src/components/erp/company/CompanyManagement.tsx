@@ -24,6 +24,21 @@ const Badge = ({ value }: { value: string }) => {
   );
 };
 
+const limitColor = (pct: number) => (pct >= 90 ? '#ef4444' : pct >= 70 ? '#f59e0b' : '#10b981');
+
+const UserLimitBar = ({ current, max }: { current: number; max: number }) => {
+  const pct = max > 0 ? Math.min((current / max) * 100, 100) : 0;
+  const color = limitColor(pct);
+  return (
+    <div style={{ minWidth: 100 }}>
+      <div style={{ fontFamily: FF, fontSize: 11.5, fontWeight: 700, color: '#1A1A1A', marginBottom: 4 }}>{current} / {max}</div>
+      <div style={{ width: '100%', height: 5, borderRadius: 3, background: '#f1f5f9', overflow: 'hidden' }}>
+        <div style={{ width: `${pct}%`, height: '100%', background: color, borderRadius: 3, transition: 'width 300ms ease' }} />
+      </div>
+    </div>
+  );
+};
+
 export default function CompanyManagement() {
   const navigate = useNavigate();
   const [companies, setCompanies] = useState<any[]>([]);
@@ -57,7 +72,7 @@ export default function CompanyManagement() {
     { key: 'name', label: 'Company', render: (r: any) => <span style={{ fontWeight: 700, color: OG }}>{r.name}</span> },
     { key: 'industry', label: 'Industry', render: (r: any) => r.industry || '—' },
     { key: 'country', label: 'Location', render: (r: any) => [r.city, r.country].filter(Boolean).join(', ') || '—' },
-    { key: 'user_count', label: 'Users', render: (r: any) => r.user_count ?? 0 },
+    { key: 'user_count', label: 'User Limit', render: (r: any) => <UserLimitBar current={r.user_count ?? 0} max={r.max_users ?? 0} /> },
     { key: 'plan', label: 'Plan', render: (r: any) => <span style={{ textTransform: 'capitalize' }}>{r.plan}</span> },
     { key: 'status', label: 'Status', render: (r: any) => <Badge value={r.status} /> },
   ];

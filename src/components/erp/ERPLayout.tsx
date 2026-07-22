@@ -214,7 +214,7 @@ const ERPLayout = ({ children }: Props) => {
   const adminName = localStorage.getItem('xerxez_name') || 'Admin';
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
-  const { hasAccess, isSuperAdmin, userRole, isLoading: accessLoading } = useAccess();
+  const { hasAccess, isSuperAdmin, isCompanyAdmin, userRole, isLoading: accessLoading } = useAccess();
   const { isPlatformAdmin, currentCompany } = useCompany();
   // Real RBAC role from my-access/ — the legacy xerxez_role localStorage value lies
   // (it derives from an old profile field that shows every admin-ish user as super_admin).
@@ -783,6 +783,32 @@ const ERPLayout = ({ children }: Props) => {
               </button>
             </div>
           )
+        )}
+
+        {/* Company Admin — self-service company user management */}
+        {isCompanyAdmin && (
+          <div style={{ padding: '10px 10px 0', flexShrink: 0 }}>
+            {!collapsed && (
+              <div style={{
+                fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.35)',
+                padding: '6px 8px 8px', textTransform: 'uppercase', letterSpacing: '0.12em',
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
+                Company Admin
+              </div>
+            )}
+            <NavLink
+              to="/erp/my-company/users"
+              title="My Company Users"
+              onClick={() => setMobileOpen(false)}
+              className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+            >
+              <span className="erp-icon-badge">
+                <i className="fas fa-users" style={{ color: 'inherit', fontSize: 13 }}></i>
+              </span>
+              {!collapsed && <span style={{ flex: 1 }}>My Company Users</span>}
+            </NavLink>
+          </div>
         )}
 
         {/* switch to academy */}

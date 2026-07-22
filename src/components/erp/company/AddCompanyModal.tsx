@@ -10,7 +10,7 @@ const PLANS = [
 
 const AddCompanyModal = ({ onClose, onSuccess }: { onClose?: () => void; onSuccess?: () => void }) => {
   const [form, setForm] = useState({
-    name: '', industry: '', country: 'UAE', city: '', phone: '', email: '', plan: 'trial',
+    name: '', industry: '', country: 'UAE', city: '', phone: '', email: '', plan: 'trial', max_users: 10,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -57,6 +57,16 @@ const AddCompanyModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
         <div style={{ marginBottom: 14 }}>
           <label style={labelStyle}>Company Name *</label>
           <input value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Trojan General Contracting" style={inputStyle} />
+        </div>
+
+        <div style={{ marginBottom: 14 }}>
+          <label style={labelStyle}>Maximum Users Allowed *</label>
+          <input
+            type="number" min={1} max={500} value={form.max_users}
+            onChange={e => set('max_users', Math.max(1, Math.min(500, Number(e.target.value) || 1)))}
+            placeholder="e.g. 10" style={inputStyle}
+          />
+          <p style={{ fontSize: 11.5, color: '#9ca3af', margin: '5px 0 0' }}>Set the maximum number of users this company can have.</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>

@@ -30,6 +30,36 @@ const Badge = ({ map, value }: { map: Record<string, { label: string; bg: string
   );
 };
 
+const limitColor = (pct: number) => (pct >= 90 ? '#ef4444' : pct >= 70 ? '#f59e0b' : '#10b981');
+
+function EditLimitModal({ current, onClose, onSave }: { current: number; onClose: () => void; onSave: (v: number) => Promise<void> }) {
+  const [value, setValue] = useState(current);
+  const [saving, setSaving] = useState(false);
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, padding: 28, width: '100%', maxWidth: 380, boxShadow: '0 20px 60px rgba(0,0,0,0.3)', fontFamily: FF }}>
+        <h3 style={{ margin: '0 0 18px', fontSize: 16, fontWeight: 800 }}>Edit User Limit</h3>
+        <label style={{ display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 }}>Maximum Users Allowed</label>
+        <input
+          type="number" min={1} max={500} value={value}
+          onChange={e => setValue(Math.max(1, Math.min(500, Number(e.target.value) || 1)))}
+          style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)', fontSize: 14, outline: 'none', boxSizing: 'border-box', marginBottom: 18 }}
+        />
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onClose} disabled={saving} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: 10, cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
+          <button
+            onClick={async () => { setSaving(true); await onSave(value); setSaving(false); }}
+            disabled={saving}
+            style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none', borderRadius: 9, padding: 10, cursor: saving ? 'wait' : 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 13, opacity: saving ? 0.75 : 1 }}
+          >
+            {saving ? 'Saving…' : 'Save'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CompanyDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -40,6 +70,7 @@ export default function CompanyDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAddUser, setShowAddUser] = useState(false);
+  const [showEditLimit, setShowEditLimit] = useState(false);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -51,6 +82,17 @@ export default function CompanyDetail() {
   }, [companyId]);
 
   useEffect(() => { load(); }, [load]);
+
+  const saveLimit = async (value: number) => {
+    try {
+      await companiesApi.updateCompany(companyId, { max_users: value });
+      toast.success('User limit updated');
+      setShowEditLimit(false);
+      load();
+    } catch (e: any) {
+      toast.error(e.message || 'Could not update user limit');
+    }
+  };
 
   const userCols = [
     { key: 'full_name', label: 'Name' },
@@ -96,7 +138,27 @@ export default function CompanyDetail() {
           <div><div style={{ color: '#9ca3af', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Phone</div>{company.phone || '—'}</div>
           <div><div style={{ color: '#9ca3af', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Email</div>{company.email || '—'}</div>
           <div><div style={{ color: '#9ca3af', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Plan</div><span style={{ textTransform: 'capitalize' }}>{company.plan}</span></div>
-          <div><div style={{ color: '#9ca3af', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Users</div>{users.length}</div>
+        </div>
+
+        <div style={{ marginTop: 20, paddingTop: 18, borderTop: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ flex: '1 1 220px', minWidth: 200 }}>
+            <div style={{ color: '#9ca3af', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6, fontFamily: FF }}>
+              User Limit: {company.user_count ?? users.length} / {company.max_users} users used
+            </div>
+            <div style={{ width: '100%', maxWidth: 320, height: 7, borderRadius: 4, background: '#f1f5f9', overflow: 'hidden' }}>
+              <div style={{
+                width: `${company.max_users > 0 ? Math.min(((company.user_count ?? users.length) / company.max_users) * 100, 100) : 0}%`,
+                height: '100%', borderRadius: 4, transition: 'width 300ms ease',
+                background: limitColor(company.max_users > 0 ? ((company.user_count ?? users.length) / company.max_users) * 100 : 0),
+              }} />
+            </div>
+          </div>
+          <button
+            onClick={() => setShowEditLimit(true)}
+            style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12.5, color: OG, whiteSpace: 'nowrap' }}
+          >
+            Edit Limit
+          </button>
         </div>
       </div>
 
@@ -116,6 +178,10 @@ export default function CompanyDetail() {
           onClose={() => setShowAddUser(false)}
           onSuccess={() => { setShowAddUser(false); load(); toast.success('User added'); }}
         />
+      )}
+
+      {showEditLimit && (
+        <EditLimitModal current={company.max_users} onClose={() => setShowEditLimit(false)} onSave={saveLimit} />
       )}
     </div>
   );

@@ -104,6 +104,7 @@ const AccessDenied   = lazy(() => import('../components/erp/rbac/AccessDenied'))
 // Multi-tenant company management — lazy loaded, platform admin only
 const CompanyManagement = lazy(() => import('../components/erp/company/CompanyManagement'));
 const CompanyDetail     = lazy(() => import('../components/erp/company/CompanyDetail'));
+const MyCompanyUsers    = lazy(() => import('../components/erp/company/MyCompanyUsers'));
 
 // Partner applications — lazy loaded, super admin only
 const Partners = lazy(() => import('../components/erp/partners/Partners'));
@@ -241,6 +242,10 @@ const ERPPage = () => {
           <Route path="companies/:id"      element={<CompanyDetail />} />
           <Route path="partners"           element={<Partners />} />
           <Route path="inquiries"          element={<Inquiries />} />
+
+          {/* Company Admin self-service — enforced by the backend (my-company/* endpoints)
+              and, for the page itself, by isCompanyAdmin inside MyCompanyUsers. */}
+          <Route path="my-company/users"   element={<MyCompanyUsers />} />
 
           {/* EPC Modules */}
           <Route path="projects"           element={<ProtectedModuleRoute module="project_management"><ProjectDashboard /></ProtectedModuleRoute>} />
