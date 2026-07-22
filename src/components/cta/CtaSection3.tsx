@@ -31,7 +31,7 @@ const CtaSection3 = () => {
                     </div>
                     <div className="content">
                       <p className="text-white">Mail Us</p>
-                      <h5 className="text-white">info@xerxez.com</h5>
+                      <h5 className="text-white">xerxez.in@gmail.com</h5>
                     </div>
                   </div>
                 </div>

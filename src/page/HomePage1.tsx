@@ -30,7 +30,7 @@ const ORG_JSONLD = {
   url: "https://www.xerxez.com",
   logo: "https://www.xerxez.com/assets/img/logo/xerxez_logo.png",
   description: "AI-Powered ERP for Engineering & Industrial Companies in the UAE.",
-  email: "info@xerxez.com",
+  email: "xerxez.in@gmail.com",
   telephone: "+971567867451",
   areaServed: ["IN", "AE"],
   address: {
@@ -42,7 +42,7 @@ const ORG_JSONLD = {
     "@type": "ContactPoint",
     telephone: "+971567867451",
     contactType: "sales",
-    email: "info@xerxez.com",
+    email: "xerxez.in@gmail.com",
     availableLanguage: "en",
   },
   sameAs: ["https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/"],

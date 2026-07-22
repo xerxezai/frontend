@@ -549,7 +549,7 @@ const ApplicationForm = ({ positions, prefillPosition }: { positions: Position[]
         </p>
         <p style={{ color: MUT, fontSize: 13.5, marginTop: 18, fontFamily: FF }}>
           Or email your resume directly to{" "}
-          <a href="mailto:info@xerxez.com" style={{ color: OG, fontWeight: 700, textDecoration: "none" }}>info@xerxez.com</a>
+          <a href="mailto:xerxez.in@gmail.com" style={{ color: OG, fontWeight: 700, textDecoration: "none" }}>xerxez.in@gmail.com</a>
         </p>
       </div>
     );
@@ -645,7 +645,7 @@ const ApplicationForm = ({ positions, prefillPosition }: { positions: Position[]
         </button>
         <p style={{ color: MUT, fontSize: 13, fontFamily: FF, textAlign: "center" }}>
           Or email your resume directly to{" "}
-          <a href="mailto:info@xerxez.com" style={{ color: OG, fontWeight: 700, textDecoration: "none" }}>info@xerxez.com</a>
+          <a href="mailto:xerxez.in@gmail.com" style={{ color: OG, fontWeight: 700, textDecoration: "none" }}>xerxez.in@gmail.com</a>
         </p>
       </div>
     </form>

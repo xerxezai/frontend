@@ -119,9 +119,9 @@ const FooterSection = () => {
                   </li>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
                     <Mail size={16} color={NAV.icon} style={{ flexShrink: 0 }} />
-                    <a href="mailto:info@xerxez.com"
+                    <a href="mailto:xerxez.in@gmail.com"
                       style={{ color: NAV.link, textDecoration: "none", fontSize: 14 }}
-                      {...linkHover}>info@xerxez.com</a>
+                      {...linkHover}>xerxez.in@gmail.com</a>
                   </li>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
                     <Globe size={16} color={NAV.icon} style={{ flexShrink: 0 }} />

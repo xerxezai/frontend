@@ -156,9 +156,9 @@ const FooterSection3 = () => {
                   </li>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                     <Mail size={16} color={N.icon} style={{ flexShrink: 0 }} />
-                    <a href="mailto:info@xerxez.com"
+                    <a href="mailto:xerxez.in@gmail.com"
                       style={{ color: N.link, textDecoration: "none", fontSize: 14 }}
-                      {...hov}>info@xerxez.com</a>
+                      {...hov}>xerxez.in@gmail.com</a>
                   </li>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                     <Globe size={16} color={N.icon} style={{ flexShrink: 0 }} />

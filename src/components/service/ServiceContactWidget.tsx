@@ -13,8 +13,8 @@
           <div className="content">
             <h5>Mail Us</h5>
             <p>
-              <a href="mailto:info@xerxez.com" className="link">
-                info@xerxez.com
+              <a href="mailto:xerxez.in@gmail.com" className="link">
+                xerxez.in@gmail.com
               </a>
             </p>
           </div>

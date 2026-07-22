@@ -87,7 +87,7 @@ const MobileMenuModal = ({ isOpen, toggle }: MobileMenuModalProps) => {
                   </li>
                   <li>
                     <span>Email:</span>
-                    <a href="mailto:info@xerxez.com">info@xerxez.com</a>
+                    <a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a>
                   </li>
                 </ul>
               </div>
