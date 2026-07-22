@@ -561,7 +561,7 @@ const pricingPlans = [
     id: 1,
     iconClass: "flaticon-search",
     iconBgClass: "",
-    planName: "Starter",
+    planName: "Basic",
     monthlyPrice: 999,
     yearlyPrice: 9999,
     description: "Ideal for startups and SMBs beginning their digital transformation journey.",

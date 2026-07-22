@@ -7,6 +7,7 @@ import SubmitDeal from './pages/SubmitDeal';
 import MyDeals from './pages/MyDeals';
 import CommissionTracker from './pages/CommissionTracker';
 import TrainingMaterials from './pages/TrainingMaterials';
+import MarketingMaterials from './pages/MarketingMaterials';
 import PartnerProfile from './pages/PartnerProfile';
 import { isPartnerLoggedIn } from './api/partnerApi';
 import { CREAM, FF } from './constants';
@@ -34,6 +35,7 @@ const PartnerApp = () => {
           <Route path="deals" element={<MyDeals />} />
           <Route path="commission" element={<CommissionTracker />} />
           <Route path="training" element={<TrainingMaterials />} />
+          <Route path="marketing" element={<MarketingMaterials />} />
           <Route path="profile" element={<PartnerProfile />} />
           <Route path="*" element={<Navigate to="dashboard" replace />} />
         </Routes>

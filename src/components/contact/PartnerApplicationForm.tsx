@@ -477,7 +477,7 @@ const PartnerApplicationForm = () => {
           {[
             "We review your application within 24–48 hours",
             "If approved, you will receive an email with your Partner Portal login credentials",
-            "Login to your Partner Portal to access training, submit leads and track your commissions",
+            "Login to your Partner Portal at xerxez.com/partner to access training, submit leads and track your commissions",
           ].map(line => (
             <li key={line} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: "#9b9690", lineHeight: 1.5 }}>
               <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#c7c2ba", marginTop: 6, flexShrink: 0 }} />

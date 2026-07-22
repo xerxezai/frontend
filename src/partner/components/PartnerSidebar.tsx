@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: '/partner/deals', label: 'My Deals', icon: 'fas fa-list-ul' },
   { to: '/partner/commission', label: 'Commission', icon: 'fas fa-hand-holding-usd' },
   { to: '/partner/training', label: 'Training Materials', icon: 'fas fa-graduation-cap' },
+  { to: '/partner/marketing', label: 'Marketing Materials', icon: 'fas fa-bullhorn' },
   { to: '/partner/profile', label: 'My Profile', icon: 'fas fa-user' },
 ];
 

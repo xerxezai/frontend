@@ -9,7 +9,7 @@ import { OG, CREAM, FF } from '../constants';
 
 const PAGE_TITLE: Record<string, string> = {
   dashboard: 'Dashboard', 'submit-deal': 'Submit a Deal', deals: 'My Deals',
-  commission: 'Commission Tracker', training: 'Training Materials', profile: 'My Profile',
+  commission: 'Commission Tracker', training: 'Training Materials', marketing: 'Marketing Materials', profile: 'My Profile',
 };
 
 function LayoutInner({ children, onLogout }: { children: ReactNode; onLogout: () => void }) {
