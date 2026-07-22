@@ -679,6 +679,32 @@ const HeroSection = () => {
               Enterprise deployment · Invite-only access · UAE-based support
             </p>
 
+            {/* Partner Program link */}
+            <div style={{
+              textAlign: 'center',
+              padding: '20px 0',
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+              marginTop: 24,
+            }}>
+              <span style={{
+                color: 'rgba(255,255,255,0.55)',
+                fontSize: 14,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
+                Are you a salesperson?
+              </span>
+              <Link to="/partners" style={{
+                color: '#C9883A',
+                fontSize: 14,
+                fontWeight: 600,
+                textDecoration: 'none',
+                marginLeft: 8,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
+                Learn about our Partner Program →
+              </Link>
+            </div>
+
             {/* Trust metrics */}
             <div className="xz-trust-grid" style={{
               marginTop:32,
