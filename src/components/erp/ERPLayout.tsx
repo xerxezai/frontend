@@ -253,6 +253,11 @@ const ERPLayout = ({ children }: Props) => {
     return init;
   });
 
+  const ADMIN_GROUP_PATHS = ['/erp/companies', '/erp/partners', '/erp/inquiries', '/erp/users'];
+  const [adminGroupOpen, setAdminGroupOpen] = useState(() =>
+    ADMIN_GROUP_PATHS.some(p => location.pathname === p || location.pathname.startsWith(p + '/'))
+  );
+
   const handleLogout = () => {
     ['auth_tokens', 'xerxez_token', 'xerxez_role', 'xerxez_name'].forEach(k =>
       localStorage.removeItem(k)
@@ -637,75 +642,129 @@ const ERPLayout = ({ children }: Props) => {
         {!accessLoading && (
           isSuperAdmin ? (
             <div style={{ padding: '10px 10px 0', flexShrink: 0 }}>
-              {!collapsed && (
-                <div style={{
-                  fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.35)',
-                  padding: '6px 8px 8px', textTransform: 'uppercase', letterSpacing: '0.12em',
-                  fontFamily: "'DM Sans', sans-serif",
-                }}>
-                  Admin
-                </div>
-              )}
-              {isPlatformAdmin && (
-                <NavLink
-                  to="/erp/companies"
-                  title="Companies"
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
-                >
-                  <span className="erp-icon-badge">
-                    <i className="fas fa-building" style={{ color: 'inherit', fontSize: 13 }}></i>
-                  </span>
-                  {!collapsed && <span style={{ flex: 1 }}>Companies</span>}
-                </NavLink>
-              )}
-              {isSuperAdmin && (
-                <NavLink
-                  to="/erp/partners"
-                  title="Partners"
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
-                >
-                  <span className="erp-icon-badge">
-                    <i className="fas fa-handshake" style={{ color: 'inherit', fontSize: 13 }}></i>
-                  </span>
-                  {!collapsed && <span style={{ flex: 1 }}>Partners</span>}
-                </NavLink>
-              )}
-              {isSuperAdmin && (
-                <NavLink
-                  to="/erp/inquiries"
-                  title="Inquiries"
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
-                >
-                  <span className="erp-icon-badge">
-                    <i className="fas fa-envelope" style={{ color: 'inherit', fontSize: 13 }}></i>
-                  </span>
-                  {!collapsed && <span style={{ flex: 1 }}>Inquiries</span>}
-                  {newInquiriesCount > 0 && (
-                    <span style={{
-                      background: '#C9883A', color: '#fff', fontSize: 10, fontWeight: 800,
-                      minWidth: 18, height: 18, borderRadius: 9, padding: '0 5px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}>
-                      {newInquiriesCount > 99 ? '99+' : newInquiriesCount}
-                    </span>
+              {collapsed ? (
+                <>
+                  {isPlatformAdmin && (
+                    <NavLink
+                      to="/erp/companies"
+                      title="Companies"
+                      onClick={() => setMobileOpen(false)}
+                      className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                    >
+                      <span className="erp-icon-badge">
+                        <i className="fas fa-building" style={{ color: 'inherit', fontSize: 13 }}></i>
+                      </span>
+                    </NavLink>
                   )}
-                </NavLink>
+                  <NavLink
+                    to="/erp/partners"
+                    title="Partners"
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                  >
+                    <span className="erp-icon-badge">
+                      <i className="fas fa-handshake" style={{ color: 'inherit', fontSize: 13 }}></i>
+                    </span>
+                  </NavLink>
+                  <NavLink
+                    to="/erp/inquiries"
+                    title="Inquiries"
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                  >
+                    <span className="erp-icon-badge">
+                      <i className="fas fa-envelope" style={{ color: 'inherit', fontSize: 13 }}></i>
+                    </span>
+                  </NavLink>
+                  <NavLink
+                    to="/erp/users"
+                    title="User Management"
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                  >
+                    <span className="erp-icon-badge">
+                      <i className="fas fa-users-cog" style={{ color: 'inherit', fontSize: 13 }}></i>
+                    </span>
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setAdminGroupOpen(o => !o)}
+                    className={`erp-nav-item erp-nav-slide${ADMIN_GROUP_PATHS.some(p => location.pathname === p || location.pathname.startsWith(p + '/')) ? ' erp-nav-active' : ''}`}
+                    style={{ width: '100%', background: 'none', textAlign: 'left' }}
+                  >
+                    <span className="erp-icon-badge">
+                      <i className="fas fa-user-shield" style={{ color: 'inherit', fontSize: 13 }}></i>
+                    </span>
+                    <span style={{ flex: 1 }}>Admin</span>
+                    {newInquiriesCount > 0 && !adminGroupOpen && (
+                      <span style={{
+                        background: '#C9883A', color: '#fff', fontSize: 10, fontWeight: 800,
+                        minWidth: 18, height: 18, borderRadius: 9, padding: '0 5px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                        fontFamily: "'DM Sans', sans-serif",
+                      }}>
+                        {newInquiriesCount > 99 ? '99+' : newInquiriesCount}
+                      </span>
+                    )}
+                    <i className="fas fa-chevron-down" style={{ fontSize: 10, marginLeft: 6, transition: 'transform 0.3s ease', transform: adminGroupOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
+                  </button>
+                  <div style={{
+                    overflow: 'hidden',
+                    maxHeight: adminGroupOpen ? (isPlatformAdmin ? 4 : 3) * 44 + 8 : 0,
+                    margin: adminGroupOpen ? '4px 8px 8px' : '0 8px',
+                    transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
+                  }}>
+                    <div className="erp-subnav-panel">
+                      {isPlatformAdmin && (
+                        <NavLink
+                          to="/erp/companies"
+                          onClick={() => setMobileOpen(false)}
+                          className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                        >
+                          <i className="fas fa-building" style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                          <span>Companies</span>
+                        </NavLink>
+                      )}
+                      <NavLink
+                        to="/erp/partners"
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                      >
+                        <i className="fas fa-handshake" style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                        <span>Partners</span>
+                      </NavLink>
+                      <NavLink
+                        to="/erp/inquiries"
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                      >
+                        <i className="fas fa-envelope" style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                        <span style={{ flex: 1 }}>Inquiries</span>
+                        {newInquiriesCount > 0 && (
+                          <span style={{
+                            background: '#C9883A', color: '#fff', fontSize: 10, fontWeight: 800,
+                            minWidth: 18, height: 18, borderRadius: 9, padding: '0 5px',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                            fontFamily: "'DM Sans', sans-serif",
+                          }}>
+                            {newInquiriesCount > 99 ? '99+' : newInquiriesCount}
+                          </span>
+                        )}
+                      </NavLink>
+                      <NavLink
+                        to="/erp/users"
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                      >
+                        <i className="fas fa-users-cog" style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                        <span>User Management</span>
+                      </NavLink>
+                    </div>
+                  </div>
+                </>
               )}
-              <NavLink
-                to="/erp/users"
-                title="User Management"
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
-              >
-                <span className="erp-icon-badge">
-                  <i className="fas fa-users-cog" style={{ color: 'inherit', fontSize: 13 }}></i>
-                </span>
-                {!collapsed && <span style={{ flex: 1 }}>User Management</span>}
-              </NavLink>
             </div>
           ) : (
             <div style={{ padding: '10px 10px 0', flexShrink: 0 }}>
