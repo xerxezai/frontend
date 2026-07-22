@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import {
-  CalendarCheck, ClipboardList, Building2, UserPlus, PartyPopper, Wallet,
+  CalendarCheck, ClipboardList, Building2, UserPlus, PartyPopper, Gift, Wallet,
   ArrowRight, Check, X as XIcon,
 } from 'lucide-react';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
@@ -134,17 +134,26 @@ const HRDashboard = () => {
     [employees.data],
   );
 
-  // ── Section 5: work anniversaries this month (no DOB field tracked yet — see note below) ──
+  // ── Section 5: birthdays + work anniversaries this month ───────────────────
   const upcomingEvents = useMemo(() => {
     const now = new Date();
-    return employees.data
+    const anniversaries = employees.data
       .filter((e: any) => e.joined_on)
       .map((e: any) => {
         const joined = new Date(e.joined_on);
-        return { name: e.full_name, day: joined.getDate(), month: joined.getMonth(), years: now.getFullYear() - joined.getFullYear() };
+        return { type: 'anniversary' as const, name: e.full_name, day: joined.getDate(), month: joined.getMonth(), years: now.getFullYear() - joined.getFullYear() };
       })
-      .filter((e: any) => e.month === now.getMonth() && e.years >= 1)
-      .sort((a: any, b: any) => a.day - b.day);
+      .filter(e => e.month === now.getMonth() && e.years >= 1);
+
+    const birthdays = employees.data
+      .filter((e: any) => e.date_of_birth)
+      .map((e: any) => {
+        const dob = new Date(e.date_of_birth);
+        return { type: 'birthday' as const, name: e.full_name, day: dob.getDate(), month: dob.getMonth(), years: 0 };
+      })
+      .filter(e => e.month === now.getMonth());
+
+    return [...birthdays, ...anniversaries].sort((a, b) => a.day - b.day);
   }, [employees.data]);
 
   // ── Section 6: this month's payroll ─────────────────────────────────────────
@@ -370,21 +379,23 @@ const HRDashboard = () => {
         </SectionCard>
 
         <SectionCard>
-          <SectionHead title="Upcoming Events This Month" subtitle="Work anniversaries" />
+          <SectionHead title="Upcoming Events This Month" subtitle="Birthdays & work anniversaries" />
           {employees.loading ? (
             <div style={{ padding: 20 }}><Skeleton h={180} /></div>
           ) : upcomingEvents.length === 0 ? (
             <EmptyState icon={PartyPopper} message="No upcoming events this month." />
           ) : (
             <div>
-              {upcomingEvents.map((ev: any, i: number) => (
+              {upcomingEvents.map((ev, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px', borderBottom: `1px solid ${BORDER}` }}>
                   <span style={{ width: 32, height: 32, borderRadius: 9, background: `${OG}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <PartyPopper size={14} color={OG} />
+                    {ev.type === 'birthday' ? <Gift size={14} color={OG} /> : <PartyPopper size={14} color={OG} />}
                   </span>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 13, color: DARK, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ev.name}</div>
-                    <div style={{ fontFamily: FF, fontSize: 11.5, color: MUTED, marginTop: 2 }}>{ev.years} year{ev.years === 1 ? '' : 's'} with XERXEZ</div>
+                    <div style={{ fontFamily: FF, fontSize: 11.5, color: MUTED, marginTop: 2 }}>
+                      {ev.type === 'birthday' ? 'Birthday' : `${ev.years} year${ev.years === 1 ? '' : 's'} with XERXEZ`}
+                    </div>
                   </div>
                   <span style={{ fontFamily: FF, fontSize: 12, fontWeight: 700, color: OG, flexShrink: 0 }}>
                     {new Date(2000, ev.month, ev.day).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
