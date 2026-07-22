@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { inquiryApi, type Inquiry } from './inquiryApi';
-import { FF, OG, STATUS_BADGE, PRIORITY_BADGE, Badge } from './Inquiries';
+import { FF, OG, STATUS_BADGE, PRIORITY_BADGE, Badge } from './inquiryShared';
 
 interface Props {
   inquiry: Inquiry;

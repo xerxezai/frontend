@@ -352,7 +352,7 @@ const RecentInquiriesWidget = () => {
 
   useEffect(() => {
     inquiryApi.list({ status: 'new' })
-      .then(data => setInquiries(data.slice(0, 3)))
+      .then((data: any) => setInquiries(Array.isArray(data) ? data.slice(0, 3) : []))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);

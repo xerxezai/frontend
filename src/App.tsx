@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 class PageErrorBoundary extends Component<{ children: ReactNode }, { caught: boolean }> {
   state = { caught: false };
-  componentDidCatch(_e: Error, _i: ErrorInfo) { this.setState({ caught: true }); }
+  componentDidCatch(e: Error, i: ErrorInfo) { console.error('PageErrorBoundary caught:', e, i.componentStack); this.setState({ caught: true }); }
   static getDerivedStateFromError() { return { caught: true }; }
   render() {
     if (this.state.caught) {

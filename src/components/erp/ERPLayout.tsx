@@ -228,7 +228,7 @@ const ERPLayout = ({ children }: Props) => {
 
   useEffect(() => {
     if (!isSuperAdmin) return;
-    inquiryApi.stats().then(s => setNewInquiriesCount(s.new)).catch(() => {});
+    inquiryApi.stats().then(s => setNewInquiriesCount(s?.new ?? 0)).catch(() => {});
   }, [isSuperAdmin]);
 
   let currentSub: SubNavItem | undefined;

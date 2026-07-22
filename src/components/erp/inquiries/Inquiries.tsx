@@ -2,21 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { inquiryApi, type Inquiry, type InquiryStats } from './inquiryApi';
 import InquiryDetail from './InquiryDetail';
+import { FF, OG, STATUS_BADGE, PRIORITY_BADGE, Badge } from './inquiryShared';
 
-export const FF = "'DM Sans',sans-serif";
-export const OG = '#C9883A';
-
-export const STATUS_BADGE: Record<string, { label: string; bg: string; color: string }> = {
-  new:      { label: 'New',      bg: '#fff3e0', color: '#e65100' },
-  reviewed: { label: 'Reviewed', bg: '#dbeafe', color: '#1d4ed8' },
-  replied:  { label: 'Replied',  bg: '#d1fae5', color: '#065f46' },
-  closed:   { label: 'Closed',   bg: '#f1f5f9', color: '#64748b' },
-};
-export const PRIORITY_BADGE: Record<string, { label: string; bg: string; color: string }> = {
-  high:   { label: 'High',   bg: '#fee2e2', color: '#991b1b' },
-  medium: { label: 'Medium', bg: '#fff3e0', color: '#e65100' },
-  low:    { label: 'Low',    bg: '#d1fae5', color: '#065f46' },
-};
 const SERVICES = [
   'AI-Powered ERP', 'DevSecOps Pipelines', 'Cloud Infrastructure', 'Software Development',
   'AI Training & Consulting', 'Become a Partner', 'Other',
@@ -35,15 +22,6 @@ const TD: React.CSSProperties = {
 const inputBox: React.CSSProperties = {
   padding: '9px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)',
   fontSize: 13, fontFamily: FF, outline: 'none', boxSizing: 'border-box',
-};
-
-export const Badge = ({ value, map }: { value: string; map: Record<string, { label: string; bg: string; color: string }> }) => {
-  const m = map[value] ?? { label: value || '—', bg: '#f1f5f9', color: '#64748b' };
-  return (
-    <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: m.bg, color: m.color, fontFamily: FF, whiteSpace: 'nowrap' }}>
-      {m.label}
-    </span>
-  );
 };
 
 const StatCard = ({ label, value, color }: { label: string; value: number; color: string }) => (
@@ -95,7 +73,7 @@ export default function Inquiries() {
       service: filters.service || undefined, date_from: filters.date_from || undefined,
       date_to: filters.date_to || undefined, search: filters.search || undefined,
     })
-      .then(setInquiries)
+      .then((res: any) => setInquiries(Array.isArray(res) ? res : []))
       .catch((e: any) => { setError(e.message || 'Could not load inquiries'); toast.error(e.message || 'Could not load inquiries'); })
       .finally(() => setLoading(false));
   }, [filters]);
@@ -222,7 +200,16 @@ export default function Inquiries() {
           <p>Loading inquiries…</p>
         </div>
       ) : error ? (
-        <div className="alert alert-danger">{error}</div>
+        <div style={{ padding: 40, textAlign: 'center' }}>
+          <i className="fas fa-exclamation-circle" style={{ fontSize: 40, color: '#ef4444', marginBottom: 16, display: 'block' }} />
+          <p style={{ color: '#ef4444', fontSize: 16, marginBottom: 16, fontFamily: FF }}>{error}</p>
+          <button
+            onClick={load}
+            style={{ background: OG, color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontFamily: FF }}
+          >
+            Try Again
+          </button>
+        </div>
       ) : inquiries.length === 0 ? (
         <div style={{
           textAlign: 'center', padding: '64px 24px', background: '#fff', borderRadius: 16,
