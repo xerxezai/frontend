@@ -469,6 +469,12 @@ function ExitDetailView({ exitRecord, isAdmin, assignableUsers, formatAmount, on
         {isAdmin && (
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={onOpenInterview} style={{ ...btnGhost, padding: '9px 16px' }}>Exit Interview</button>
+            {!exitRecord.settlement_paid && (
+              <button onClick={async () => { try { await erpFetch(`hr/exit/${exitRecord.id}/recalculate/`, { method: 'POST', body: '{}' }); toast.success('Settlement recalculated'); onRefresh(); } catch (e: any) { toast.error(e.message || 'Failed to recalculate'); } }}
+                style={{ ...btnGhost, padding: '9px 16px' }} title="Refresh the settlement figures and employee status from current data">
+                Recalculate
+              </button>
+            )}
             {!exitRecord.settlement_paid && <button onClick={onOpenMarkPaid} style={{ ...btnPrimary, display: 'flex', alignItems: 'center', gap: 6 }}><IndianRupee size={14} />Mark Paid</button>}
           </div>
         )}
@@ -479,7 +485,7 @@ function ExitDetailView({ exitRecord, isAdmin, assignableUsers, formatAmount, on
         <Card3D accent={OG} p="18px 20px">
           <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 13, color: DARK, marginBottom: 10 }}>Notice Period</div>
           <div style={{ fontFamily: FF, fontSize: 20, fontWeight: 900, color: noticeDaysRemaining < 0 ? '#ef4444' : OG, marginBottom: 8 }}>
-            {noticeDaysRemaining < 0 ? `${Math.abs(noticeDaysRemaining)} days overdue` : `${noticeDaysRemaining} days remaining`}
+            {typeof noticeDaysRemaining !== 'number' ? '—' : noticeDaysRemaining < 0 ? `${Math.abs(noticeDaysRemaining)} days overdue` : `${noticeDaysRemaining} days remaining`}
           </div>
           <div style={{ height: 8, borderRadius: 4, background: 'rgba(0,0,0,0.08)', overflow: 'hidden', marginBottom: 8 }}>
             <div style={{ height: '100%', width: `${noticePct}%`, background: progressColor(noticePct), borderRadius: 4 }} />
@@ -689,7 +695,9 @@ export default function HRExitPage() {
                         <td style={{ padding: '11px 16px', color: MUTED }}>{e.department_name || '—'}</td>
                         <td style={{ padding: '11px 16px' }}><span style={{ fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 999, background: `${typeMeta.color}18`, color: typeMeta.color }}>{e.reason_label}</span></td>
                         <td style={{ padding: '11px 16px', color: '#4b4b4b', whiteSpace: 'nowrap' }}>{fmtDate(e.last_working_day)}</td>
-                        <td style={{ padding: '11px 16px', color: MUTED, whiteSpace: 'nowrap' }}>{e.notice_days_remaining < 0 ? `${Math.abs(e.notice_days_remaining)}d overdue` : `${e.notice_days_remaining}d left`}</td>
+                        <td style={{ padding: '11px 16px', color: MUTED, whiteSpace: 'nowrap' }}>
+                          {typeof e.notice_days_remaining !== 'number' ? '—' : e.notice_days_remaining < 0 ? `${Math.abs(e.notice_days_remaining)}d overdue` : `${e.notice_days_remaining}d left`}
+                        </td>
                         <td style={{ padding: '11px 16px', whiteSpace: 'nowrap' }}>
                           <span style={{ fontWeight: 700, color: OG }}>{fmtCurrency(e.final_settlement_amount)}</span>
                           {e.settlement_paid ? <span style={{ marginLeft: 8, fontSize: 11, color: '#10b981', fontWeight: 700 }}>· Paid</span> : <span style={{ marginLeft: 8, fontSize: 11, color: '#9ca3af', fontWeight: 700 }}>· Pending</span>}
