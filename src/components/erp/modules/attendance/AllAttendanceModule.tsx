@@ -31,6 +31,48 @@ const inputStyle: React.CSSProperties = {
 };
 const fmtTime = (iso?: string | null) => iso ? new Date(iso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '—';
 
+// ── 12-hour AM/PM time picker — native <input type="time"> renders in whatever 24-hour
+// format the browser/OS locale dictates (that's the "15:43" bug); these convert to/from the
+// 12-hour hour/minute/meridiem the UI shows, while the form still stores/sends 24-hour
+// "HH:MM" (what gets combined into the ISO datetime for the backend).
+type Meridiem = 'AM' | 'PM';
+
+function to12Hour(time24: string): { hour: number; minute: number; meridiem: Meridiem } {
+  if (!time24) return { hour: 9, minute: 0, meridiem: 'AM' };
+  const [h, m] = time24.split(':').map(Number);
+  const meridiem: Meridiem = h >= 12 ? 'PM' : 'AM';
+  let hour = h % 12;
+  if (hour === 0) hour = 12;
+  return { hour, minute: m || 0, meridiem };
+}
+
+function to24Hour(hour: number, minute: number, meridiem: Meridiem): string {
+  let h = hour % 12;
+  if (meridiem === 'PM') h += 12;
+  return `${String(h).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+}
+
+const MINUTE_OPTIONS = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+
+function TimeField12({ value, onChange, style }: { value: string; onChange: (v24: string) => void; style: React.CSSProperties }) {
+  const { hour, minute, meridiem } = to12Hour(value);
+  const set = (h: number, m: number, mer: Meridiem) => onChange(to24Hour(h, m, mer));
+  return (
+    <div style={{ display: 'flex', gap: 6 }}>
+      <select value={hour} onChange={e => set(Number(e.target.value), minute, meridiem)} style={{ ...style, width: 62 }}>
+        {Array.from({ length: 12 }, (_, i) => i + 1).map(h => <option key={h} value={h}>{String(h).padStart(2, '0')}</option>)}
+      </select>
+      <select value={minute} onChange={e => set(hour, Number(e.target.value), meridiem)} style={{ ...style, width: 62 }}>
+        {MINUTE_OPTIONS.map(m => <option key={m} value={m}>{String(m).padStart(2, '0')}</option>)}
+      </select>
+      <select value={meridiem} onChange={e => set(hour, minute, e.target.value as Meridiem)} style={{ ...style, width: 72 }}>
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  );
+}
+
 // ── Manual attendance entry modal ────────────────────────────────────────────
 function ManualAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
   const employees = useERPList<any>('hr/employees/');
@@ -93,11 +135,11 @@ function ManualAttendanceModal({ onClose, onSuccess }: { onClose: () => void; on
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
           <div>
             <label style={labelStyle}>Clock In</label>
-            <input type="time" value={form.clock_in_time} onChange={e => set('clock_in_time', e.target.value)} style={fieldStyle} />
+            <TimeField12 value={form.clock_in_time} onChange={v => set('clock_in_time', v)} style={fieldStyle} />
           </div>
           <div>
             <label style={labelStyle}>Clock Out</label>
-            <input type="time" value={form.clock_out_time} onChange={e => set('clock_out_time', e.target.value)} style={fieldStyle} />
+            <TimeField12 value={form.clock_out_time} onChange={v => set('clock_out_time', v)} style={fieldStyle} />
           </div>
         </div>
 
