@@ -165,18 +165,20 @@ function InitiateExitPanel({ employees, onClose, onSaved }: { employees: any[]; 
   const [saving, setSaving] = useState(false);
   const [preview, setPreview] = useState<any>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState('');
 
   const noticeStartDate = form.last_working_day && form.notice_period_days
     ? new Date(new Date(form.last_working_day).getTime() - Number(form.notice_period_days) * 86400000).toISOString().slice(0, 10)
     : '';
 
   useEffect(() => {
-    if (!form.employee || !form.last_working_day) { setPreview(null); return; }
+    if (!form.employee || !form.last_working_day) { setPreview(null); setPreviewError(''); return; }
     let cancelled = false;
     setPreviewLoading(true);
+    setPreviewError('');
     erpFetch(`hr/exit/preview-settlement/?employee=${form.employee}&last_working_day=${form.last_working_day}`)
       .then(res => { if (!cancelled) setPreview(res); })
-      .catch(() => { if (!cancelled) setPreview(null); })
+      .catch((e: any) => { if (!cancelled) { setPreview(null); setPreviewError(e.message || 'Could not calculate the settlement.'); } })
       .finally(() => { if (!cancelled) setPreviewLoading(false); });
     return () => { cancelled = true; };
   }, [form.employee, form.last_working_day]);
@@ -243,7 +245,11 @@ function InitiateExitPanel({ employees, onClose, onSaved }: { employees: any[]; 
         {form.employee && form.last_working_day && (
           <div>
             <label style={lbl}>Final Settlement ({symbol}) — auto-calculated</label>
-            {previewLoading ? <Skeleton h={120} /> : <SettlementBreakdown breakdown={preview} formatAmount={fmtCurrency} />}
+            {previewLoading ? <Skeleton h={120} /> : previewError ? (
+              <div style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.22)', borderRadius: 9, padding: '10px 14px', color: '#ef4444', fontSize: 12.5, fontFamily: FF }}>
+                Couldn't calculate the settlement: {previewError}
+              </div>
+            ) : <SettlementBreakdown breakdown={preview} formatAmount={fmtCurrency} />}
           </div>
         )}
       </div>
