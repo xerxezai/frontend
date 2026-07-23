@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Plus, Search, Check, X as XIcon, Clock3, Eye, Download, CheckCircle2, XCircle, Clock,
+  Plus, Search, Check, X as XIcon, Clock3, Eye, Download, CheckCircle2, XCircle, Clock, Trash2,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useERPList, erpFetch, isSuperUser } from '../../../../hooks/useERPApi';
@@ -199,6 +199,28 @@ function RejectDlg({ onCancel, onConfirm, busy }: { onCancel: () => void; onConf
   );
 }
 
+// ── Delete confirmation ────────────────────────────────────────────────────────
+function DeleteDlg({ entry, employeeName, onCancel, onConfirm, busy }: {
+  entry: any; employeeName: string; onCancel: () => void; onConfirm: () => void; busy?: boolean;
+}) {
+  return (
+    <div style={{ position:'fixed', inset:0, zIndex:1060, background:'rgba(0,0,0,0.45)', backdropFilter:'blur(3px)', display:'flex', alignItems:'center', justifyContent:'center', padding:16 }} onClick={onCancel}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:'#fff', borderRadius:14, padding:24, maxWidth:400, width:'100%', borderTop:'2px solid #ef4444', fontFamily:FF, boxShadow:'0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight:800, marginBottom:8, color:'#1A1A1A' }}>Delete Overtime Entry?</h6>
+        <p style={{ fontSize:13, color:MUTED, marginBottom:20, lineHeight:1.6 }}>
+          Are you sure you want to delete this overtime entry for <strong style={{ color:DARK }}>{employeeName}</strong> on <strong style={{ color:DARK }}>{fmtDate(entry.date)}</strong>? This action cannot be undone.
+        </p>
+        <div style={{ display:'flex', gap:10 }}>
+          <button onClick={onCancel} style={{...CNCL, flex:1}} disabled={busy}>Cancel</button>
+          <button onClick={onConfirm} disabled={busy} style={{ flex:1, background:'rgba(239,68,68,0.10)', border:'1px solid rgba(239,68,68,0.28)', borderRadius:9, padding:'9px', cursor: busy?'wait':'pointer', color:'#ef4444', fontFamily:FF, fontWeight:700, fontSize:13 }}>
+            {busy ? 'Deleting…' : 'Delete'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Detail side panel ─────────────────────────────────────────────────────────
 function DetailPanel({ entry, employee, formatAmount, onClose }: { entry: any; employee: any; formatAmount: (v: number) => string; onClose: () => void }) {
   const rejected = entry.status === 'rejected';
@@ -285,6 +307,9 @@ type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
 export default function OvertimeModule() {
   const { isCompanyAdmin, isHRManager } = useAccess();
   const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
+  // Deleting is a stricter bar than approve/reject — Super Admin and Company Admin only.
+  // HR Manager can approve/reject (covered by isAdmin above) but not delete.
+  const canDelete = isSuperUser() || isCompanyAdmin;
   const { formatAmount, symbol } = useCurrency();
 
   const overtime = useERPList<any>('hr/overtime/');
@@ -303,6 +328,7 @@ export default function OvertimeModule() {
   const [approving, setApproving] = useState<any>(null);
   const [rejecting, setRejecting] = useState<any>(null);
   const [viewing, setViewing] = useState<any>(null);
+  const [deleting, setDeleting] = useState<any>(null);
 
   // Filters — "draft" input state committed to "applied" on Search click.
   const [searchInput, setSearchInput] = useState('');
@@ -343,6 +369,20 @@ export default function OvertimeModule() {
       setApproving(null); setRejecting(null);
     } catch (e: any) {
       toast.error(e.message || 'Could not update this entry');
+    } finally {
+      setActioning(null);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    setActioning(id);
+    try {
+      await erpFetch(`hr/overtime/${id}/`, { method: 'DELETE' });
+      toast.success('Overtime entry deleted successfully');
+      overtime.reload(); // list + stat cards are both derived from overtime.data, so this alone refreshes everything
+      setDeleting(null);
+    } catch (e: any) {
+      toast.error(e.message || 'Could not delete this entry');
     } finally {
       setActioning(null);
     }
@@ -506,6 +546,11 @@ export default function OvertimeModule() {
                               <Clock3 size={11} />{o.approved_by_username ? `by ${o.approved_by_username}` : '—'}
                             </span>
                           )}
+                          {canDelete && (
+                            <button onClick={()=>setDeleting(o)} disabled={actioning===o.id} title="Delete" style={{ background:'rgba(239,68,68,0.08)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.22)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor: actioning===o.id?'wait':'pointer', flexShrink:0 }}>
+                              <Trash2 size={12} />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -538,6 +583,13 @@ export default function OvertimeModule() {
       )}
       {viewing && (
         <DetailPanel entry={viewing} employee={employeeById[viewing.employee]} formatAmount={formatAmount} onClose={()=>setViewing(null)} />
+      )}
+      {deleting && (
+        <DeleteDlg
+          entry={deleting} employeeName={deleting.employee_name}
+          busy={actioning===deleting.id}
+          onCancel={()=>setDeleting(null)} onConfirm={()=>handleDelete(deleting.id)}
+        />
       )}
     </div>
   );
