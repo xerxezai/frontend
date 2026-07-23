@@ -62,6 +62,59 @@ function computeTotalHours(start: string, end: string, breakMin: number): number
   return Math.round((Math.max(minutes, 0) / 60) * 100) / 100;
 }
 
+// ── 12-hour AM/PM time helpers — the form stores/sends 24-hour "HH:MM" (what the backend
+// TimeField expects); these convert to/from the 12-hour hour/minute/meridiem the UI shows,
+// so the displayed format doesn't depend on the browser's native <input type="time"> locale.
+type Meridiem = 'AM' | 'PM';
+
+function to12Hour(time24: string): { hour: number; minute: number; meridiem: Meridiem } {
+  if (!time24) return { hour: 9, minute: 0, meridiem: 'AM' };
+  const [h, m] = time24.split(':').map(Number);
+  const meridiem: Meridiem = h >= 12 ? 'PM' : 'AM';
+  let hour = h % 12;
+  if (hour === 0) hour = 12;
+  return { hour, minute: m || 0, meridiem };
+}
+
+function to24Hour(hour: number, minute: number, meridiem: Meridiem): string {
+  let h = hour % 12;
+  if (meridiem === 'PM') h += 12;
+  return `${String(h).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+}
+
+function fmt12(time24?: string): string {
+  if (!time24) return '';
+  const { hour, minute, meridiem } = to12Hour(time24.slice(0, 5));
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} ${meridiem}`;
+}
+
+const MINUTE_OPTIONS = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+
+function TimeField12({ value, onChange }: { value: string; onChange: (v24: string) => void }) {
+  const { hour, minute, meridiem } = to12Hour(value);
+  const set = (h: number, m: number, mer: Meridiem) => onChange(to24Hour(h, m, mer));
+  return (
+    <div style={{ display: 'flex', gap: 6 }}>
+      <select value={hour} onChange={e => set(Number(e.target.value), minute, meridiem)} style={{ ...inp, width: 62 }}>
+        {Array.from({ length: 12 }, (_, i) => i + 1).map(h => <option key={h} value={h}>{String(h).padStart(2, '0')}</option>)}
+      </select>
+      <select value={minute} onChange={e => set(hour, Number(e.target.value), meridiem)} style={{ ...inp, width: 62 }}>
+        {MINUTE_OPTIONS.map(m => <option key={m} value={m}>{String(m).padStart(2, '0')}</option>)}
+      </select>
+      <select value={meridiem} onChange={e => set(hour, minute, e.target.value as Meridiem)} style={{ ...inp, width: 72 }}>
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  );
+}
+
+const SHIFT_PRESETS = [
+  { key: 'morning', label: 'Morning (9AM–6PM)', start: '09:00', end: '18:00' },
+  { key: 'evening', label: 'Evening (2PM–11PM)', start: '14:00', end: '23:00' },
+  { key: 'night', label: 'Night (10PM–7AM)', start: '22:00', end: '07:00' },
+] as const;
+
 const TypeBadge = ({ t }: { t: string }) => {
   const m = TYPE_META[t] ?? TYPE_META.Morning;
   return (
@@ -180,19 +233,48 @@ function ShiftFormPanel({ initial, employees, onClose, onSaved }: {
           </div>
         </div>
 
+        <div>
+          <label style={lbl}>Shift Presets</label>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {SHIFT_PRESETS.map(p => {
+              const active = form.start_time === p.start && form.end_time === p.end;
+              return (
+                <button key={p.key} type="button" onClick={() => setForm(f => ({ ...f, start_time: p.start, end_time: p.end }))}
+                  style={{
+                    border: active ? `1.5px solid ${OG}` : `1px solid ${BORDER}`, borderRadius: 8, padding: '5px 12px',
+                    background: active ? 'rgba(201,136,58,0.10)' : CREAM, color: active ? OG : MUTED,
+                    fontFamily: FF, fontSize: 11.5, fontWeight: active ? 700 : 600, cursor: 'pointer',
+                  }}>
+                  {p.label}
+                </button>
+              );
+            })}
+            <button type="button" onClick={() => setForm(f => ({ ...f, start_time: '', end_time: '' }))}
+              style={{
+                border: !SHIFT_PRESETS.some(p => p.start === form.start_time && p.end === form.end_time) ? `1.5px solid ${OG}` : `1px solid ${BORDER}`,
+                borderRadius: 8, padding: '5px 12px',
+                background: !SHIFT_PRESETS.some(p => p.start === form.start_time && p.end === form.end_time) ? 'rgba(201,136,58,0.10)' : CREAM,
+                color: !SHIFT_PRESETS.some(p => p.start === form.start_time && p.end === form.end_time) ? OG : MUTED,
+                fontFamily: FF, fontSize: 11.5, fontWeight: 600, cursor: 'pointer',
+              }}>
+              Custom
+            </button>
+          </div>
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div>
             <label style={lbl}>Start Time</label>
-            <input type="time" value={form.start_time} onChange={e => setForm(f => ({ ...f, start_time: e.target.value }))} style={inp} required />
+            <TimeField12 value={form.start_time} onChange={v => setForm(f => ({ ...f, start_time: v }))} />
           </div>
           <div>
             <label style={lbl}>End Time</label>
-            <input type="time" value={form.end_time} onChange={e => setForm(f => ({ ...f, end_time: e.target.value }))} style={inp} required />
+            <TimeField12 value={form.end_time} onChange={v => setForm(f => ({ ...f, end_time: v }))} />
           </div>
         </div>
         {form.start_time && form.end_time && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: OG, marginTop: -6 }}>
-            <Timer size={13} /> Total Hours: {totalHours} hours
+            <Timer size={13} /> Total Shift Hours: {totalHours} hours
           </div>
         )}
 
@@ -506,7 +588,7 @@ export default function ShiftManagementModule() {
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 10 }}>
-                    <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 15, color: DARK }}>{s.start_time?.slice(0, 5)} → {s.end_time?.slice(0, 5)}</span>
+                    <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 15, color: DARK }}>{fmt12(s.start_time)} → {fmt12(s.end_time)}</span>
                     <span style={{ fontFamily: FF, fontSize: 12, color: OG, fontWeight: 700 }}>({s.total_hours}h)</span>
                   </div>
 
