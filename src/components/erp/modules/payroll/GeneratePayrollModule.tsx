@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
@@ -89,29 +89,77 @@ function SummaryStatCard({ label, val, icon, color, index }: { label: string; va
   );
 }
 
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+// ── Generate confirmation dialog ────────────────────────────────────────────────
+function ConfirmGenerateDlg({ monthLabel, year, count, totalCost, busy, onCancel, onConfirm }: {
+  monthLabel: string; year: string; count: number; totalCost: string; busy: boolean; onCancel: () => void; onConfirm: () => void;
+}) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1060, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(3px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onCancel}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 440, width: '100%', borderTop: `2px solid ${C.orange}`, fontFamily: "'DM Sans', sans-serif", boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight: 800, marginBottom: 10, color: C.dark, fontSize: 16 }}>Generate payroll for {monthLabel} {year}?</h6>
+        <p style={{ fontSize: 13.5, color: C.dark, marginBottom: 6, lineHeight: 1.6 }}>
+          For <strong>{count}</strong> employee{count === 1 ? '' : 's'}.
+        </p>
+        <p style={{ fontSize: 13.5, color: C.dark, marginBottom: 6, lineHeight: 1.6 }}>
+          Total Payroll Cost: <strong style={{ color: '#059669' }}>{totalCost}</strong>
+        </p>
+        <p style={{ fontSize: 12.5, color: C.muted, marginBottom: 20, lineHeight: 1.6 }}>
+          This will create payslips for all employees.
+        </p>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onCancel} disabled={busy} style={{ flex: 1, background: C.cream, border: `1px solid ${C.border}`, borderRadius: 9, padding: 9, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 13, color: C.muted }}>Cancel</button>
+          <button onClick={onConfirm} disabled={busy}
+            style={{ flex: 1, background: C.orangeGrad, color: '#fff', border: 'none', borderRadius: 9, padding: 9, cursor: busy ? 'wait' : 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, opacity: busy ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            {busy && <span className="spinner-border spinner-border-sm" style={{ width: 12, height: 12 }} />}
+            Confirm and Generate
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function GeneratePayrollModule() {
   const { formatAmount } = useCurrency();
   const now = new Date();
   const [month, setMonth] = useState(String(now.getMonth() + 1).padStart(2, '0'));
   const [year,  setYear]  = useState(String(now.getFullYear()));
   const [generating, setGenerating] = useState(false);
-  const [preview, setPreview]       = useState<any[]>([]);
   const [genErr, setGenErr]         = useState('');
-  const [generated, setGenerated]   = useState(false);
+  const [generated, setGenerated]   = useState<{ count: number; total: string } | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const [preview, setPreview] = useState<{ employees: any[]; count: number; total_net: number }>({ employees: [], count: 0, total_net: 0 });
+  const [previewLoading, setPreviewLoading] = useState(true);
+  const [previewErr, setPreviewErr] = useState('');
 
   const payrolls = useERPList<any>(`hr/payroll/?month=${month}&year=${year}`);
   const [actioning, setActioning] = useState<number | null>(null);
 
+  const loadPreview = useCallback(async () => {
+    setPreviewLoading(true); setPreviewErr('');
+    try {
+      const res = await erpFetch(`hr/payroll/preview/?month=${parseInt(month)}&year=${year}`);
+      setPreview(res);
+    } catch (e: any) { setPreviewErr(e.message); }
+    finally { setPreviewLoading(false); }
+  }, [month, year]);
+
+  useEffect(() => { loadPreview(); }, [loadPreview]);
+
   const handleGenerate = async () => {
-    setGenerating(true); setGenErr(''); setGenerated(false);
+    setGenerating(true); setGenErr(''); setGenerated(null);
     try {
       const res = await erpFetch('hr/payroll/generate/', {
         method: 'POST',
         body: JSON.stringify({ month: parseInt(month), year: parseInt(year) }),
       });
-      setPreview(res.payrolls ?? []);
-      setGenerated(true);
+      setGenerated({ count: res.generated ?? (res.payrolls?.length || 0), total: formatAmount((res.payrolls ?? []).reduce((a: number, p: any) => a + parseFloat(p.net_salary), 0)) });
+      setShowConfirm(false);
       await payrolls.reload();
+      await loadPreview();
     } catch (e: any) { setGenErr(e.message); }
     finally { setGenerating(false); }
   };
@@ -138,8 +186,6 @@ export default function GeneratePayrollModule() {
   const totalGross = rows.reduce((a: number, r: any) => a + parseFloat(r.gross), 0);
   const totalNet   = rows.reduce((a: number, r: any) => a + parseFloat(r.net_salary), 0);
 
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
   return (
     <div style={{ animation: 'gpFadeUp 0.45s ease both' }}>
       <style>{`@keyframes gpFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`}</style>
@@ -161,7 +207,7 @@ export default function GeneratePayrollModule() {
             </div>
             <h2 style={{ color: '#fff', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 24, margin: 0, letterSpacing: '-0.02em' }}>Generate Payroll</h2>
             <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: 13, fontFamily: "'DM Sans', sans-serif", margin: '6px 0 0' }}>
-              Auto-calculate from attendance records → preview → approve → mark paid
+              Preview from attendance records → confirm → generate → approve → mark paid
             </p>
           </div>
           {/* Month/year selector */}
@@ -178,29 +224,81 @@ export default function GeneratePayrollModule() {
               <input type="number" value={year} onChange={e => setYear(e.target.value)} min="2020" max="2040"
                 style={{ background: 'rgba(255,255,255,0.09)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: 9, padding: '9px 14px', color: '#fff', fontSize: 13, fontFamily: "'DM Sans', sans-serif", outline: 'none', width: 90 }} />
             </div>
-            <button onClick={handleGenerate} disabled={generating}
-              style={{
-                background: C.orangeGrad, color: '#fff', border: 'none', borderRadius: 10,
-                padding: '10px 22px', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13,
-                cursor: generating ? 'default' : 'pointer', opacity: generating ? 0.7 : 1,
-                boxShadow: '0 3px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.28)',
-                display: 'flex', alignItems: 'center', gap: 7,
-              }}>
-              {generating ? <span className="spinner-border spinner-border-sm" /> : <i className="fas fa-bolt" />}
-              Generate
-            </button>
           </div>
         </div>
       </div>
 
       {genErr && <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.22)', borderRadius: 10, padding: '12px 16px', marginBottom: 18, color: '#ef4444', fontFamily: "'DM Sans', sans-serif", fontSize: 13 }}>{genErr}</div>}
-      {generated && preview.length > 0 && (
+      {generated && (
         <div style={{ background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.22)', borderRadius: 10, padding: '12px 16px', marginBottom: 18, color: '#059669', fontFamily: "'DM Sans', sans-serif", fontSize: 13 }}>
-          <i className="fas fa-check-circle" style={{ marginRight: 7 }} />{preview.length} payroll record(s) generated for {MONTHS[parseInt(month)-1]} {year}.
+          <i className="fas fa-check-circle" style={{ marginRight: 7 }} />
+          Payroll generated successfully for {generated.count} employee{generated.count === 1 ? '' : 's'}. Total cost: {generated.total}
         </div>
       )}
 
-      {/* Summary strip */}
+      {/* Employee preview before generating */}
+      <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)', marginBottom: 28 }}>
+        <div style={{ padding: '14px 18px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 14, color: C.dark }}>
+            Preview — {MONTHS[parseInt(month) - 1]} {year}
+          </span>
+          {preview.count > 0 && (
+            <button onClick={() => setShowConfirm(true)}
+              style={{
+                background: C.orangeGrad, color: '#fff', border: 'none', borderRadius: 10,
+                padding: '9px 20px', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13,
+                cursor: 'pointer', boxShadow: '0 3px 0 rgba(150,95,30,0.50)', display: 'flex', alignItems: 'center', gap: 7,
+              }}>
+              <i className="fas fa-bolt" />Confirm and Generate
+            </button>
+          )}
+        </div>
+
+        {previewLoading ? (
+          <div style={{ padding: 48, textAlign: 'center' }}><div className="spinner-border" style={{ color: C.orange }} /></div>
+        ) : previewErr ? (
+          <div style={{ padding: '16px 18px', color: '#ef4444', fontFamily: "'DM Sans', sans-serif", fontSize: 13 }}>{previewErr}</div>
+        ) : preview.count === 0 ? (
+          <div style={{ padding: 64, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
+            <i className="fas fa-users-slash" style={{ fontSize: 32, display: 'block', marginBottom: 12, color: '#ddd' }} />
+            No employees with a salary structure set up yet. Add one in Salary Setup first.
+          </div>
+        ) : (
+          <>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
+                <thead>
+                  <tr style={{ background: '#fafaf9' }}>
+                    {['Employee', 'Department', 'Basic', 'Allowances', 'Deductions', 'Net Salary', 'Attendance Days', 'Leave Days'].map(h => (
+                      <th key={h} style={{ padding: '11px 14px', textAlign: 'left', color: C.muted, fontWeight: 700, fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `1px solid ${C.border}`, whiteSpace: 'nowrap' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {preview.employees.map((r: any) => (
+                    <tr key={r.employee_id} style={{ borderBottom: `1px solid ${C.border}` }}>
+                      <td style={{ padding: '11px 14px', fontWeight: 600, color: C.dark, whiteSpace: 'nowrap' }}>{r.employee_name}</td>
+                      <td style={{ padding: '11px 14px', color: C.muted }}>{r.department_name || '—'}</td>
+                      <td style={{ padding: '11px 14px', fontWeight: 600 }}>{formatAmount(r.basic_earned)}</td>
+                      <td style={{ padding: '11px 14px', color: '#3b82f6' }}>+{formatAmount(r.allowances)}</td>
+                      <td style={{ padding: '11px 14px', color: '#ef4444' }}>-{formatAmount(r.deductions)}</td>
+                      <td style={{ padding: '11px 14px', fontWeight: 800, color: '#10b981' }}>{formatAmount(r.net_salary)}</td>
+                      <td style={{ padding: '11px 14px' }}>{r.present_days}/{r.working_days}</td>
+                      <td style={{ padding: '11px 14px' }}>{r.leave_days}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ padding: '14px 18px', borderTop: `1px solid ${C.border}`, display: 'flex', justifyContent: 'flex-end', gap: 8, alignItems: 'baseline' }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12.5, color: C.muted, fontWeight: 600 }}>Total Payroll Cost:</span>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, fontWeight: 800, color: C.orange }}>{formatAmount(preview.total_net)}</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Summary strip for already-generated records */}
       {rows.length > 0 && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14, marginBottom: 22 }}>
           {[
@@ -213,7 +311,7 @@ export default function GeneratePayrollModule() {
         </div>
       )}
 
-      {/* Payroll table */}
+      {/* Generated payroll table */}
       <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
         <div style={{ padding: '14px 18px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 14, color: C.dark }}>
@@ -225,7 +323,7 @@ export default function GeneratePayrollModule() {
         ) : rows.length === 0 ? (
           <div style={{ padding: 64, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
             <i className="fas fa-file-invoice-dollar" style={{ fontSize: 32, display: 'block', marginBottom: 12, color: '#ddd' }} />
-            No payroll for this period. Click Generate to create records.
+            No payroll for this period yet. Confirm and Generate above to create records.
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
@@ -277,6 +375,13 @@ export default function GeneratePayrollModule() {
           </div>
         )}
       </div>
+
+      {showConfirm && (
+        <ConfirmGenerateDlg
+          monthLabel={MONTHS[parseInt(month) - 1]} year={year} count={preview.count} totalCost={formatAmount(preview.total_net)}
+          busy={generating} onCancel={() => setShowConfirm(false)} onConfirm={handleGenerate}
+        />
+      )}
     </div>
   );
 }

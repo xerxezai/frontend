@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { useERPList } from '../../../../hooks/useERPApi';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+} from 'recharts';
+import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 const C = {
@@ -8,61 +11,7 @@ const C = {
   border: 'rgba(0,0,0,0.07)',
 };
 
-// ── SVG bar chart ─────────────────────────────────────────────────────────────
-interface BarChartProps { data: { label: string; gross: number; net: number }[] }
-function BarChart({ data }: BarChartProps) {
-  const max = Math.max(...data.map(d => d.gross), 1);
-  const W = 560; const H = 180; const BAR_W = 28; const GAP = 12;
-  const totalW = data.length * (BAR_W * 2 + GAP + 8);
-
-  return (
-    <div style={{ overflowX: 'auto', paddingBottom: 4 }}>
-      <svg width={Math.max(W, totalW)} height={H + 40} style={{ display: 'block', fontFamily: "'DM Sans', sans-serif" }}>
-        {data.map((d, i) => {
-          const x = i * (BAR_W * 2 + GAP + 8) + 8;
-          const grossH = (d.gross / max) * H;
-          const netH   = (d.net / max) * H;
-          return (
-            <g key={d.label}>
-              {/* gross bar */}
-              <rect x={x} y={H - grossH} width={BAR_W} height={grossH} rx={4} fill="#3b82f6" opacity={0.75} />
-              {/* net bar */}
-              <rect x={x + BAR_W + 4} y={H - netH} width={BAR_W} height={netH} rx={4} fill={C.orange} opacity={0.85} />
-              <text x={x + BAR_W} y={H + 16} textAnchor="middle" fill={C.muted} fontSize={10} fontWeight={600}>{d.label}</text>
-            </g>
-          );
-        })}
-        {/* y axis line */}
-        <line x1={0} y1={0} x2={0} y2={H} stroke={C.border} strokeWidth={1} />
-        <line x1={0} y1={H} x2={Math.max(W, totalW)} y2={H} stroke={C.border} strokeWidth={1} />
-      </svg>
-      <div style={{ display: 'flex', gap: 14, marginTop: 6 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: C.muted }}>
-          <span style={{ width: 10, height: 10, borderRadius: 2, background: '#3b82f6', display: 'inline-block' }} />Gross
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: C.muted }}>
-          <span style={{ width: 10, height: 10, borderRadius: 2, background: C.orange, display: 'inline-block' }} />Net
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Line mini-chart ────────────────────────────────────────────────────────────
-function LineChart({ data }: { data: number[] }) {
-  if (data.length < 2) return null;
-  const max = Math.max(...data, 1);
-  const W = 200; const H = 48;
-  const pts = data.map((v, i) => `${(i / (data.length - 1)) * W},${H - (v / max) * H}`).join(' ');
-  return (
-    <svg width={W} height={H} style={{ display: 'block' }}>
-      <polyline points={pts} fill="none" stroke={C.orange} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-      {data.map((v, i) => (
-        <circle key={i} cx={(i / (data.length - 1)) * W} cy={H - (v / max) * H} r={3} fill={C.orange} />
-      ))}
-    </svg>
-  );
-}
+const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const STATUS_COLORS: Record<string, string> = { draft: '#f59e0b', approved: '#10b981', paid: '#6366f1' };
 const Badge = ({ s }: { s: string }) => (
@@ -97,30 +46,95 @@ function KpiStatCard({ label, val, icon, color, index }: { label: string; val: s
   );
 }
 
+function exportPayrollCSV(rows: any[], formatAmount: (v: number | string) => string) {
+  const header = ['Employee', 'Department', 'Basic', 'Allowances', 'Deductions', 'Net Salary', 'Status'];
+  const lines = [header.join(',')];
+  rows.forEach((r: any) => {
+    const cells = [
+      r.employee_name, r.department_name || '', formatAmount(r.basic), formatAmount(r.allowances), formatAmount(r.deductions), formatAmount(r.net_salary), r.status,
+    ].map(v => `"${String(v ?? '').replace(/"/g, '""')}"`);
+    lines.push(cells.join(','));
+  });
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `payroll-report-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+const CHART_TOOLTIP_STYLE = { background: '#fff', border: `1px solid ${C.border}`, borderRadius: 9, fontFamily: "'DM Sans', sans-serif", fontSize: 12 };
+
 export default function PayrollReportsModule() {
   const { formatAmount } = useCurrency();
   const now  = new Date();
   const [year, setYear] = useState(String(now.getFullYear()));
   const [month, setMonth] = useState('');
+  const [deptFilter, setDeptFilter] = useState('');
 
   const payrolls = useERPList<any>(`hr/payroll/report/?year=${year}${month ? `&month=${month}` : ''}`);
+  const departments = useERPList<any>('hr/departments/');
   const rows = payrolls.data;
+  const filteredRows = deptFilter ? rows.filter((r: any) => r.department_name === deptFilter) : rows;
 
   const totalGross = rows.reduce((a: number, r: any) => a + parseFloat(r.gross || 0), 0);
   const totalNet   = rows.reduce((a: number, r: any) => a + parseFloat(r.net_salary || 0), 0);
   const totalDeductions = rows.reduce((a: number, r: any) => a + parseFloat(r.deductions || 0), 0);
   const paidCount = rows.filter((r: any) => r.status === 'paid').length;
 
-  // group by month for chart
-  const byMonth: Record<number, { gross: number; net: number }> = {};
-  rows.forEach((r: any) => {
-    if (!byMonth[r.month]) byMonth[r.month] = { gross: 0, net: 0 };
-    byMonth[r.month].gross += parseFloat(r.gross || 0);
-    byMonth[r.month].net   += parseFloat(r.net_salary || 0);
-  });
-  const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const chartData = Object.entries(byMonth).sort(([a],[b]) => +a - +b).map(([m, v]) => ({ label: MONTH_LABELS[+m-1], ...v }));
-  const netTrend = chartData.map(d => d.net);
+  // ── Last 6 months total payroll cost trend — independent of the year/month filter above,
+  // always a fixed trailing window that may span a year boundary.
+  const [trend, setTrend] = useState<{ label: string; cost: number }[]>([]);
+  const [trendLoading, setTrendLoading] = useState(true);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setTrendLoading(true);
+      const months = Array.from({ length: 6 }, (_, i) => {
+        const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
+        return { y: d.getFullYear(), m: d.getMonth() + 1 };
+      });
+      const years = Array.from(new Set(months.map(x => x.y)));
+      try {
+        const results = await Promise.all(years.map(y => erpFetch(`hr/payroll/report/?year=${y}`)));
+        const all = results.flat();
+        const byKey: Record<string, number> = {};
+        all.forEach((r: any) => {
+          const key = `${r.year}-${r.month}`;
+          byKey[key] = (byKey[key] || 0) + parseFloat(r.net_salary || 0);
+        });
+        if (!cancelled) {
+          setTrend(months.map(({ y, m }) => ({ label: `${MONTH_LABELS[m - 1]} '${String(y).slice(2)}`, cost: byKey[`${y}-${m}`] || 0 })));
+        }
+      } catch {
+        if (!cancelled) setTrend([]);
+      } finally {
+        if (!cancelled) setTrendLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Department breakdown — always across the full year/month filter, regardless of the
+  // department dropdown (which only narrows the detailed table below).
+  const deptBreakdown = useMemo(() => {
+    const byDept: Record<string, { employees: Set<number>; cost: number }> = {};
+    rows.forEach((r: any) => {
+      const key = r.department_name || 'Unassigned';
+      if (!byDept[key]) byDept[key] = { employees: new Set(), cost: 0 };
+      byDept[key].employees.add(r.employee);
+      byDept[key].cost += parseFloat(r.net_salary || 0);
+    });
+    return Object.entries(byDept)
+      .map(([department, v]) => ({ department, employees: v.employees.size, cost: Math.round(v.cost * 100) / 100 }))
+      .sort((a, b) => b.cost - a.cost);
+  }, [rows]);
+
+  const departmentNames = departments.data.map((d: any) => d.name);
 
   return (
     <div style={{ animation: 'prFadeUp 0.45s ease both' }}>
@@ -146,42 +160,75 @@ export default function PayrollReportsModule() {
             {MONTH_LABELS.map((m, i) => <option key={i} value={String(i+1)}>{m}</option>)}
           </select>
         </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={{ fontSize: 11, fontWeight: 700, color: C.muted, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>Department</label>
+          <select value={deptFilter} onChange={e => setDeptFilter(e.target.value)}
+            style={{ border: `1px solid ${C.border}`, borderRadius: 8, padding: '7px 12px', fontSize: 13, fontFamily: "'DM Sans', sans-serif", background: C.cream, outline: 'none' }}>
+            <option value="">All Departments</option>
+            {departmentNames.map((d: string) => <option key={d} value={d}>{d}</option>)}
+          </select>
+        </div>
         <button onClick={() => payrolls.reload()}
           style={{ background: C.orangeGrad, color: '#fff', border: 'none', borderRadius: 9, padding: '8px 18px', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
           <i className="fas fa-sync-alt" style={{ marginRight: 6 }} />Refresh
         </button>
+        <button onClick={() => exportPayrollCSV(filteredRows, formatAmount)} disabled={filteredRows.length === 0}
+          style={{ background: C.white, color: C.dark, border: `1px solid ${C.border}`, borderRadius: 9, padding: '8px 18px', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, cursor: filteredRows.length === 0 ? 'default' : 'pointer', opacity: filteredRows.length === 0 ? 0.5 : 1 }}>
+          <i className="fas fa-file-excel" style={{ marginRight: 6, color: '#10b981' }} />Export to Excel
+        </button>
       </div>
 
       {/* KPI strip */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14, marginBottom: 24 }}>
         {[
           { label: 'Total Records', val: String(rows.length), icon: 'fas fa-file-alt', color: '#3b82f6' },
           { label: 'Gross Payroll', val: formatAmount(totalGross), icon: 'fas fa-coins', color: '#10b981' },
           { label: 'Total Deductions', val: formatAmount(totalDeductions), icon: 'fas fa-minus-circle', color: '#ef4444' },
+          { label: 'Net Payroll', val: formatAmount(totalNet), icon: 'fas fa-hand-holding-usd', color: C.orange },
           { label: 'Paid Out', val: String(paidCount), icon: 'fas fa-check-circle', color: '#6366f1' },
         ].map((s, i) => (
           <KpiStatCard key={i} label={s.label} val={s.val} icon={s.icon} color={s.color} index={i} />
         ))}
       </div>
 
-      {/* Charts row */}
-      {chartData.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 18, marginBottom: 24 }}>
-          <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, padding: '20px 22px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, color: C.dark, marginBottom: 14 }}>Gross vs Net — Monthly Breakdown</div>
-            <BarChart data={chartData} />
-          </div>
-          <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, padding: '20px 22px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, color: C.dark, marginBottom: 6 }}>Net Salary Trend</div>
-            <div style={{ color: C.muted, fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", marginBottom: 14 }}>{year}</div>
-            <LineChart data={netTrend} />
-            <div style={{ marginTop: 14, fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 20, color: C.orange }}>
-              {formatAmount(totalNet)}
-            </div>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: C.muted }}>Total Net Salary</div>
-          </div>
+      {/* Trend + department breakdown */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 18, marginBottom: 24 }}>
+        <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, padding: '20px 22px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, color: C.dark, marginBottom: 2 }}>Monthly Payroll Cost Trend</div>
+          <div style={{ color: C.muted, fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", marginBottom: 10 }}>Last 6 months</div>
+          {trendLoading ? (
+            <div style={{ padding: 32, textAlign: 'center' }}><div className="spinner-border" style={{ color: C.orange }} /></div>
+          ) : (
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={trend} margin={{ top: 5, right: 12, left: -10, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={C.border} vertical={false} />
+                <XAxis dataKey="label" tick={{ fontSize: 11, fontFamily: "'DM Sans', sans-serif", fill: C.muted }} axisLine={{ stroke: C.border }} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fontFamily: "'DM Sans', sans-serif", fill: C.muted }} axisLine={false} tickLine={false} tickFormatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(v)} />
+                <Tooltip contentStyle={CHART_TOOLTIP_STYLE} formatter={((v: number) => formatAmount(v)) as any} />
+                <Line type="monotone" dataKey="cost" stroke={C.orange} strokeWidth={2.5} dot={{ r: 4, fill: C.orange }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
-      )}
+
+        <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, padding: '20px 22px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, color: C.dark, marginBottom: 2 }}>Payroll Cost by Department</div>
+          <div style={{ color: C.muted, fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", marginBottom: 10 }}>{year}{month ? ` — ${MONTH_LABELS[+month - 1]}` : ''}</div>
+          {deptBreakdown.length === 0 ? (
+            <div style={{ padding: 32, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif", fontSize: 12.5 }}>No records for this period.</div>
+          ) : (
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={deptBreakdown} margin={{ top: 5, right: 12, left: -10, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={C.border} vertical={false} />
+                <XAxis dataKey="department" tick={{ fontSize: 10.5, fontFamily: "'DM Sans', sans-serif", fill: C.muted }} axisLine={{ stroke: C.border }} tickLine={false} interval={0} angle={-15} textAnchor="end" height={40} />
+                <YAxis tick={{ fontSize: 11, fontFamily: "'DM Sans', sans-serif", fill: C.muted }} axisLine={false} tickLine={false} tickFormatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(v)} />
+                <Tooltip contentStyle={CHART_TOOLTIP_STYLE} formatter={((v: number) => formatAmount(v)) as any} />
+                <Bar dataKey="cost" fill={C.orange} radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </div>
 
       {/* Detailed table */}
       <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
@@ -190,24 +237,25 @@ export default function PayrollReportsModule() {
         </div>
         {payrolls.loading ? (
           <div style={{ padding: 48, textAlign: 'center' }}><div className="spinner-border" style={{ color: C.orange }} /></div>
-        ) : rows.length === 0 ? (
+        ) : filteredRows.length === 0 ? (
           <div style={{ padding: 64, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>No payroll records for this period.</div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
               <thead>
                 <tr style={{ background: '#fafaf9' }}>
-                  {['Employee', 'Month', 'Year', 'Present', 'Basic', 'Gross', 'Net Salary', 'Status', 'Paid At'].map(h => (
+                  {['Employee', 'Department', 'Month', 'Year', 'Present', 'Basic', 'Gross', 'Net Salary', 'Status', 'Paid At'].map(h => (
                     <th key={h} style={{ padding: '11px 14px', textAlign: 'left', color: C.muted, fontWeight: 700, fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `1px solid ${C.border}`, whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {rows.map((r: any) => (
+                {filteredRows.map((r: any) => (
                   <tr key={r.id} style={{ borderBottom: `1px solid ${C.border}` }}
                     onMouseEnter={e => (e.currentTarget.style.background = '#fafaf8')}
                     onMouseLeave={e => (e.currentTarget.style.background = '')}>
                     <td style={{ padding: '11px 14px', fontWeight: 600, color: C.dark, whiteSpace: 'nowrap' }}>{r.employee_name}</td>
+                    <td style={{ padding: '11px 14px', color: C.muted }}>{r.department_name || '—'}</td>
                     <td style={{ padding: '11px 14px', color: C.muted }}>{MONTH_LABELS[r.month-1]}</td>
                     <td style={{ padding: '11px 14px', color: C.muted }}>{r.year}</td>
                     <td style={{ padding: '11px 14px' }}>{r.present_days}/{r.working_days}</td>
