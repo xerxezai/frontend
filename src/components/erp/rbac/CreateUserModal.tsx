@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { rbacApi } from './rbacApi';
+import CreateEmployeeProfilePrompt from '../../common/CreateEmployeeProfilePrompt';
 
 // Super Admin removed deliberately — it can no longer be granted through this form or its
 // API (both the frontend and backend block it now); use the Django admin panel instead.
@@ -32,6 +33,7 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
   const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [createdUser, setCreatedUser] = useState<{ id: number; full_name: string; email: string } | null>(null);
 
   useEffect(() => {
     rbacApi.getCompanies()
@@ -65,14 +67,14 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
     setLoading(true);
     setError('');
     try {
-      await rbacApi.createUser({
+      const res = await rbacApi.createUser({
         full_name: form.full_name, username: form.username, email: form.email, password: form.password,
         role: form.role, company_id: form.company,
         modules: form.role === 'company_admin' ? ALL_MODULES.map(m => m.name) : form.modules,
       });
       toast.success(`User created successfully! Welcome email sent to ${form.email} with login credentials.`);
       onSuccess?.();
-      onClose?.();
+      setCreatedUser({ id: res.user_id, full_name: form.full_name, email: form.email });
     } catch (e: any) {
       setError(e.message || 'Failed to create user');
     } finally {
@@ -88,6 +90,15 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
     display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
     letterSpacing: '0.06em', color: '#666', marginBottom: 6,
   };
+
+  if (createdUser) {
+    return (
+      <CreateEmployeeProfilePrompt
+        fullName={createdUser.full_name} email={createdUser.email} userId={createdUser.id}
+        onClose={() => { setCreatedUser(null); onClose?.(); }}
+      />
+    );
+  }
 
   return (
     <div style={{

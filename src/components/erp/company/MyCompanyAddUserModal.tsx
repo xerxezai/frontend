@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { companiesApi } from './companiesApi';
+import CreateEmployeeProfilePrompt from '../../common/CreateEmployeeProfilePrompt';
 
 // Company Admin cannot create another Company Admin or a Super Admin — only these three.
 const ROLES = [
@@ -26,6 +27,7 @@ const MyCompanyAddUserModal = ({ onClose, onSuccess }: { onClose?: () => void; o
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [createdUser, setCreatedUser] = useState<{ id: number; full_name: string; email: string } | null>(null);
 
   const set = (k: string, v: any) => setForm(f => ({ ...f, [k]: v }));
   const toggleModule = (name: string) => {
@@ -48,11 +50,12 @@ const MyCompanyAddUserModal = ({ onClose, onSuccess }: { onClose?: () => void; o
     setLoading(true);
     setError('');
     try {
-      await companiesApi.addMyCompanyUser({
+      const res = await companiesApi.addMyCompanyUser({
         full_name: form.full_name, username: form.username, email: form.email, password: form.password,
         role: form.role, modules: form.modules,
       });
       onSuccess?.(form.email);
+      setCreatedUser({ id: res.user_id, full_name: form.full_name, email: form.email });
     } catch (e: any) {
       setError(e.message || 'Failed to add user');
     } finally {
@@ -68,6 +71,15 @@ const MyCompanyAddUserModal = ({ onClose, onSuccess }: { onClose?: () => void; o
     display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
     letterSpacing: '0.06em', color: '#666', marginBottom: 6,
   };
+
+  if (createdUser) {
+    return (
+      <CreateEmployeeProfilePrompt
+        fullName={createdUser.full_name} email={createdUser.email} userId={createdUser.id}
+        onClose={() => { setCreatedUser(null); onClose?.(); }}
+      />
+    );
+  }
 
   return (
     <div style={{

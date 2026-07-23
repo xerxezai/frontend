@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Camera, User, Mail, Phone, Building2, Cake, MapPin, ShieldAlert } from 'lucide-react';
 import { useERPList, erpUpload, erpFetch } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
@@ -128,6 +129,8 @@ function AdminEmployeesView() {
   const { canWrite } = useAccess();
   const isAdmin = canWrite('hr');
   const { formatAmount, symbol, selectedCurrency } = useCurrency();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const employees   = useERPList<any>('hr/employees/');
   const departments = useERPList<any>('hr/departments/');
@@ -139,6 +142,19 @@ function AdminEmployeesView() {
   const [empF,      setEmpF]      = useState({...defEmp});
   const [photoFile,    setPhotoFile]    = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState('');
+
+  // Arrived here via "Yes, Create Profile" from the post-user-creation prompt — open the
+  // Add Employee form pre-filled with the account we just created, then drop the nav state
+  // so a refresh/back-navigation doesn't reopen it.
+  useEffect(() => {
+    const prefill = (location.state as any)?.prefillEmployee;
+    if (!prefill) return;
+    setEmpF(f => ({ ...f, full_name: prefill.full_name || '', email: prefill.email || '', user: prefill.user ? String(prefill.user) : '' }));
+    setEditing(null);
+    setShowModal(true);
+    navigate(location.pathname, { replace: true, state: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const close = () => { setShowModal(false); setEditing(null); setPhotoFile(null); setPhotoPreview(''); };
 

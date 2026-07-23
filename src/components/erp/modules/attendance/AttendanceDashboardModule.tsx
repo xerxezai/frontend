@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { Mail } from 'lucide-react';
 import { useAttendanceTodayStatus, useMyAttendance, erpFetch } from '../../../../hooks/useERPApi';
 
 const C = {
@@ -267,6 +268,13 @@ export default function AttendanceDashboardModule() {
   const [actionLoading, setActionLoading] = useState(false);
   const [actionErr, setActionErr] = useState('');
   const [actionOk, setActionOk] = useState('');
+  const [hrContact, setHrContact] = useState<{ email: string; label: string } | null>(null);
+
+  const isNoProfileError = /no employee profile/i.test(actionErr);
+  useEffect(() => {
+    if (!isNoProfileError || hrContact) return;
+    erpFetch('hr/employees/hr-contact/').then(setHrContact).catch(() => setHrContact({ email: 'info@xerxez.com', label: 'XERXEZ Support' }));
+  }, [isNoProfileError, hrContact]);
 
   const [weekStats, setWeekStats] = useState<any>(null);
   const [view, setView] = useState<'list' | 'calendar'>('list');
@@ -450,7 +458,29 @@ export default function AttendanceDashboardModule() {
             </button>
           </div>
 
-          {actionErr && (
+          {actionErr && isNoProfileError && (
+            <div style={{
+              marginTop: 14, padding: '14px 16px', borderRadius: 12,
+              background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.20)',
+              display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap',
+            }}>
+              <div style={{ flex: '1 1 260px', color: 'rgba(255,255,255,0.75)', fontSize: 13, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5 }}>
+                <i className="fas fa-exclamation-circle" style={{ marginRight: 6, color: '#f87171' }} />
+                Your employee profile has not been set up yet. Please contact your HR Manager or Company Admin to complete your profile setup.
+              </div>
+              <a
+                href={`mailto:${hrContact?.email || 'info@xerxez.com'}?subject=${encodeURIComponent('Employee profile setup needed')}&body=${encodeURIComponent('Hi,\n\nI logged into XERXEZ ERP but my employee profile hasn\'t been set up yet, so I can\'t clock in/out. Could you please link my account to an employee profile?\n\nThanks!')}`}
+                style={{
+                  flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 7,
+                  background: '#fff', color: '#1a1208', textDecoration: 'none',
+                  padding: '9px 16px', borderRadius: 9, fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13,
+                }}
+              >
+                <Mail size={14} />Contact HR
+              </a>
+            </div>
+          )}
+          {actionErr && !isNoProfileError && (
             <div style={{ marginTop: 12, color: '#f87171', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
               <i className="fas fa-exclamation-circle" style={{ marginRight: 6 }} />{actionErr}
             </div>
