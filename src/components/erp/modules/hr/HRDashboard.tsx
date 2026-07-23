@@ -194,6 +194,15 @@ const HRDashboard = () => {
       .catch(() => setExpiringDocsForbidden(true));
   }, []);
 
+  // ── Overdue onboarding tasks widget — Admin/HR Manager only, same 403-is-fine pattern.
+  const [overdueOnboarding, setOverdueOnboarding] = useState<any[]>([]);
+
+  useEffect(() => {
+    erpFetch('hr/onboarding/overdue/')
+      .then((res: any) => setOverdueOnboarding(Array.isArray(res) ? res : []))
+      .catch(() => setOverdueOnboarding([]));
+  }, []);
+
   const totalPayroll = payrollRaw.reduce((sum: number, p: any) => sum + Number(p.net_salary || 0), 0);
   const paidCount    = payrollRaw.filter((p: any) => p.status === 'paid').length;
   const pendingPayrollCount = Math.max(activeCount - paidCount, 0);
@@ -273,6 +282,35 @@ const HRDashboard = () => {
                 <span style={{ fontFamily: FF, fontSize: 11, fontWeight: 800, color: '#c2410c' }}>
                   {d.days_until_expiry === 0 ? 'Today' : d.days_until_expiry === 1 ? 'Tomorrow' : `${d.days_until_expiry} days remaining`}
                 </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Overdue onboarding tasks alert */}
+      {overdueOnboarding.length > 0 && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(239,68,68,0.08), rgba(239,68,68,0.02))',
+          border: '1px solid rgba(239,68,68,0.22)', borderRadius: 14, padding: '16px 20px', marginTop: 22,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ClipboardList size={15} color="#991b1b" />
+              <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 13.5, color: DARK }}>
+                Overdue Onboarding Tasks ({overdueOnboarding.length})
+              </span>
+            </div>
+            <Link to="/erp/hr/onboarding" style={{ fontFamily: FF, fontSize: 12, fontWeight: 700, color: OG, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+              View all<ArrowRight size={13} />
+            </Link>
+          </div>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            {overdueOnboarding.slice(0, 5).map((t: any) => (
+              <div key={t.id} style={{ background: WHITE, borderRadius: 10, padding: '10px 16px', border: `1px solid ${BORDER}`, minWidth: 200 }}>
+                <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 13, color: DARK }}>{t.employee_name}</div>
+                <div style={{ fontFamily: FF, fontSize: 11.5, color: MUTED, margin: '3px 0 6px' }}>{t.task}</div>
+                <span style={{ fontFamily: FF, fontSize: 11, fontWeight: 800, color: '#991b1b' }}>Due {fmtDate(t.due_date)}</span>
               </div>
             ))}
           </div>
