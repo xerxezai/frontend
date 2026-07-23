@@ -39,6 +39,34 @@ const DOC_TYPES: { key: string; label: string; icon: React.ElementType }[] = [
 ];
 const DOC_TYPE_MAP = Object.fromEntries(DOC_TYPES.map(d => [d.key, d]));
 
+// The "Document Number" field means something different per document type — it shouldn't
+// always show a Passport/visa placeholder regardless of what's actually selected.
+const DOC_NUMBER_LABEL: Record<string, string> = {
+  aadhar_card: 'Aadhaar Number',
+  pan_card: 'PAN Number',
+  passport: 'Passport Number',
+  driving_license: 'License Number',
+  emirates_id: 'Emirates ID Number',
+  visa: 'Visa Number',
+  employment_contract: 'Contract Reference No.',
+  offer_letter: 'Reference No.',
+  appointment_letter: 'Reference No.',
+  experience_certificate: 'Reference No.',
+  relieving_letter: 'Reference No.',
+  educational_certificate: 'Certificate No.',
+  degree_certificate: 'Certificate No.',
+  marksheet: 'Roll No. / Certificate No.',
+  medical_certificate: 'Certificate No.',
+  insurance: 'Policy Number',
+  bank_account_details: 'Account Number',
+  cancelled_cheque: 'Cheque Number',
+  salary_slip: 'Reference No.',
+  background_verification: 'Reference No.',
+  nda: 'Reference No.',
+  other: 'Document Number',
+};
+const docNumberLabel = (docType: string) => DOC_NUMBER_LABEL[docType] || 'Document Number';
+
 const EXPIRY_META: Record<string, { label: string; bg: string; color: string; icon: React.ElementType }> = {
   valid: { label: 'Valid', bg: '#d1fae5', color: '#065f46', icon: CheckCircle2 },
   expiring_soon: { label: 'Expiring Soon', bg: '#ffedd5', color: '#c2410c', icon: AlertTriangle },
@@ -315,8 +343,8 @@ function UploadDocumentPanel({ employees, onClose, onUploaded }: {
           <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Passport — John Doe" style={inp} required />
         </div>
         <div>
-          <label style={lbl}>Document Number</label>
-          <input value={form.document_number} onChange={e => setForm(f => ({ ...f, document_number: e.target.value }))} placeholder="Passport / visa number, etc." style={inp} />
+          <label style={lbl}>{docNumberLabel(form.doc_type)}</label>
+          <input value={form.document_number} onChange={e => setForm(f => ({ ...f, document_number: e.target.value }))} placeholder={`Enter ${docNumberLabel(form.doc_type).toLowerCase()}`} style={inp} />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div>
