@@ -315,6 +315,13 @@ export default function AttendanceDashboardModule() {
   const todayData = today.data;
   const isClockedIn  = todayData?.clocked_in ?? false;
   const isClockedOut = todayData?.clocked_out ?? false;
+  const todayHours = todayData?.hours ? parseFloat(todayData.hours) : 0;
+  // "Shift Complete" requires a genuine completed shift — clocked in AND out, the two
+  // times actually differ, and real hours were logged — not just both fields being set.
+  const shiftComplete = isClockedIn && isClockedOut
+    && !!todayData?.check_in && !!todayData?.check_out
+    && todayData.check_in !== todayData.check_out
+    && todayHours > 0;
   const employeeName = localStorage.getItem('xerxez_name') || 'there';
   const firstName = employeeName.split(' ')[0];
 
@@ -371,7 +378,7 @@ export default function AttendanceDashboardModule() {
                   animation: isClockedIn && !isClockedOut ? 'attPulse 2s infinite' : 'none',
                 }} />
                 <span style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11, fontFamily: "'DM Sans', sans-serif", fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
-                  {isClockedIn && !isClockedOut ? 'Clocked In' : isClockedOut ? 'Shift Complete' : 'Not Clocked In'}
+                  {isClockedIn && !isClockedOut ? 'Clocked In' : shiftComplete ? 'Shift Complete' : isClockedOut ? 'Clocked Out' : 'Not Clocked In'}
                 </span>
               </div>
               <h2 style={{ color: '#fff', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 26, margin: 0, letterSpacing: '-0.02em' }}>
