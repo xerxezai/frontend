@@ -141,9 +141,16 @@ export default function GeneratePayrollModule() {
   const loadPreview = useCallback(async () => {
     setPreviewLoading(true); setPreviewErr('');
     try {
-      const res = await erpFetch(`hr/payroll/preview/?month=${parseInt(month)}&year=${year}`);
+      const res = await erpFetch(`hr/payroll/preview/?month=${parseInt(month)}&year=${parseInt(year)}`);
       setPreview(res);
-    } catch (e: any) { setPreviewErr(e.message); }
+    } catch (e: any) {
+      const msg = e?.message || '';
+      // A 404 here means either no salary structures exist yet or (occasionally) the backend
+      // hasn't picked up this endpoint yet after a deploy — either way "Not found." verbatim
+      // is meaningless to an admin, so translate it into the actionable message instead.
+      setPreviewErr(/not found/i.test(msg) ? 'No salary structures found. Please set up salary structures in Salary Setup first.' : (msg || 'Failed to load payroll preview.'));
+      setPreview({ employees: [], count: 0, total_net: 0 });
+    }
     finally { setPreviewLoading(false); }
   }, [month, year]);
 
@@ -257,7 +264,10 @@ export default function GeneratePayrollModule() {
         {previewLoading ? (
           <div style={{ padding: 48, textAlign: 'center' }}><div className="spinner-border" style={{ color: C.orange }} /></div>
         ) : previewErr ? (
-          <div style={{ padding: '16px 18px', color: '#ef4444', fontFamily: "'DM Sans', sans-serif", fontSize: 13 }}>{previewErr}</div>
+          <div style={{ padding: 64, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
+            <i className="fas fa-users-slash" style={{ fontSize: 32, display: 'block', marginBottom: 12, color: '#ddd' }} />
+            {previewErr}
+          </div>
         ) : preview.count === 0 ? (
           <div style={{ padding: 64, textAlign: 'center', color: C.muted, fontFamily: "'DM Sans', sans-serif" }}>
             <i className="fas fa-users-slash" style={{ fontSize: 32, display: 'block', marginBottom: 12, color: '#ddd' }} />
