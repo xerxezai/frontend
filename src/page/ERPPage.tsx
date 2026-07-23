@@ -83,6 +83,7 @@ const HROnboardingPage  = lazy(() => import('../components/erp/modules/hr/HROnbo
 const HRExitPage        = lazy(() => import('../components/erp/modules/hr/HRExitPage'));
 const HolidaysModule    = lazy(() => import('../components/erp/modules/hr/HolidaysModule'));
 const OvertimeModule    = lazy(() => import('../components/erp/modules/hr/OvertimeModule'));
+const LeavePolicyModule = lazy(() => import('../components/erp/modules/hr/LeavePolicyModule'));
 
 // EPC modules — lazy loaded
 const ProjectDashboard  = lazy(() => import('../components/erp/modules/projects/ProjectDashboard'));
@@ -236,6 +237,7 @@ const ERPPage = () => {
           <Route path="hr/employees"       element={<ProtectedModuleRoute module="hr"><EmployeesPanel /></ProtectedModuleRoute>} />
           <Route path="hr/departments"     element={<ProtectedModuleRoute module="hr"><DepartmentsPanel /></ProtectedModuleRoute>} />
           <Route path="hr/leave"           element={<ProtectedModuleRoute module="hr"><LeaveManagementHub /></ProtectedModuleRoute>} />
+          <Route path="hr/leave-policy"    element={<ProtectedModuleRoute module="hr"><LeavePolicyModule /></ProtectedModuleRoute>} />
           <Route path="hr/overtime"        element={<ProtectedModuleRoute module="hr"><OvertimeModule /></ProtectedModuleRoute>} />
           <Route path="hr/holidays"        element={<ProtectedModuleRoute module="hr"><HolidaysModule /></ProtectedModuleRoute>} />
           <Route path="hr/performance"     element={<ProtectedModuleRoute module="hr"><HRPerformancePage /></ProtectedModuleRoute>} />

@@ -111,6 +111,7 @@ const HR_SUBMENU: SubNavItem[] = [
   { to: '/erp/attendance',        icon: 'fas fa-calendar-check',  label: 'Attendance' },
   { to: '/erp/hr/overtime',       icon: 'fas fa-business-time',   label: 'Overtime' },
   { to: '/erp/hr/leave',          icon: 'fas fa-umbrella-beach',  label: 'Leave Management' },
+  { to: '/erp/hr/leave-policy',   icon: 'fas fa-file-contract',   label: 'Leave Policy' },
   { to: '/erp/shifts',            icon: 'fas fa-exchange-alt',    label: 'Shifts',           adminOnly: true },
   { to: '/erp/hr/holidays',       icon: 'fas fa-calendar-alt',    label: 'Holidays' },
   { to: '/erp/payroll-reports',   icon: 'fas fa-money-check-alt', label: 'Payroll' },

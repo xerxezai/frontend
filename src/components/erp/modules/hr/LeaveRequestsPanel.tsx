@@ -442,12 +442,14 @@ export default function LeaveRequestsPanel() {
               </div>
 
               {leaveF.employee && (
-                <div style={{ background:'#F8F7F4', borderRadius:9, padding:'10px 14px', fontFamily:FF, fontSize:12, color:MUTED }}>
-                  {balanceLoading ? 'Checking leave balance…' : balance?.unlimited
-                    ? <><strong style={{color:DARK}}>{typeMeta(leaveF.type).label}</strong> leave has no fixed yearly cap.</>
-                    : balance
-                      ? <><strong style={{color: balance.remaining > 0 ? DARK : '#ef4444'}}>{balance.remaining}</strong> of {balance.allowance} {typeMeta(leaveF.type).label.toLowerCase()} day{balance.allowance===1?'':'s'} remaining this year.</>
-                      : 'Leave balance unavailable.'}
+                <div style={{ background: balance?.no_policy ? 'rgba(239,68,68,0.06)' : '#F8F7F4', borderRadius:9, padding:'10px 14px', fontFamily:FF, fontSize:12, color: balance?.no_policy ? '#991b1b' : MUTED }}>
+                  {balanceLoading ? 'Checking leave balance…' : balance?.no_policy
+                    ? 'Leave policy not configured — contact HR'
+                    : balance?.unlimited
+                      ? <><strong style={{color:DARK}}>{typeMeta(leaveF.type).label}</strong> leave has no fixed yearly cap.</>
+                      : balance
+                        ? <><strong style={{color: balance.remaining > 0 ? DARK : '#ef4444'}}>{balance.remaining}</strong> of {balance.allowance} {typeMeta(leaveF.type).label.toLowerCase()} day{balance.allowance===1?'':'s'} remaining this year.</>
+                        : 'Leave balance unavailable.'}
                 </div>
               )}
 
