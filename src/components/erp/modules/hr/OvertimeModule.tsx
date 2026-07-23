@@ -1,18 +1,34 @@
-import { useState } from 'react';
-import { Plus, Clock, Check, X as XIcon, Clock3 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Plus, Search, Check, X as XIcon, Clock3, Eye, Download, CheckCircle2, XCircle, Clock,
+} from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useERPList, erpFetch, isSuperUser } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import { useCurrency } from '../../../../context/CurrencyContext';
-import { Card3D, FF, OG, DARK, WHITE, Skeleton, EmptyState } from './hrShared';
+import { Card3D, FF, OG, DARK, WHITE, Skeleton, EmptyState, SlidePanel, initials } from './hrShared';
 
 const MUTED = '#6B6B6B';
 const BORDER = 'rgba(0,0,0,0.07)';
 
-const STATUS_META: Record<string, { label: string; bg: string; color: string }> = {
-  pending:  { label: 'Pending',  bg: '#fef3c7', color: '#92400e' },
-  approved: { label: 'Approved', bg: '#d1fae5', color: '#065f46' },
-  rejected: { label: 'Rejected', bg: '#fee2e2', color: '#991b1b' },
+const STATUS_META: Record<string, { label: string; bg: string; color: string; icon: React.ElementType }> = {
+  pending:  { label: 'Pending',  bg: '#fef3c7', color: '#92400e', icon: Clock },
+  approved: { label: 'Approved', bg: '#d1fae5', color: '#065f46', icon: CheckCircle2 },
+  rejected: { label: 'Rejected', bg: '#fee2e2', color: '#991b1b', icon: XCircle },
 };
+
+const RATE_META: Record<string, { label: string; short: string; bg: string; color: string }> = {
+  '1.5x': { label: '1.5x — Standard Overtime',                 short: '1.5x', bg: '#dbeafe', color: '#1d4ed8' },
+  '2x':   { label: '2x — Double Time (Weekends/Holidays)',      short: '2x',   bg: '#ede9fe', color: '#6d28d9' },
+  '2.5x': { label: '2.5x — Special Overtime',                   short: '2.5x', bg: '#fef3c7', color: '#92400e' },
+};
+const RATE_MULTIPLIER: Record<string, number> = { '1.5x': 1.5, '2x': 2, '2.5x': 2.5 };
+
+/** Matches OvertimeSerializer.get_cost on the backend exactly: monthly salary / 26 working
+ * days / 8 hours = hourly rate. */
+const hourlyRate = (salary: number) => (salary ? salary / 26 / 8 : 0);
+const estimateCost = (salary: number, hours: number, rate: string) =>
+  hourlyRate(salary) * (Number(hours) || 0) * (RATE_MULTIPLIER[rate] ?? 1.5);
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:FF,fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:MUTED,letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:FF };
@@ -21,16 +37,51 @@ const CNCL: React.CSSProperties = { background:'#F8F7F4',border:'1px solid rgba(
 
 const StatusBadge = ({ s }: { s: string }) => {
   const m = STATUS_META[s] ?? STATUS_META.pending;
-  return <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: m.bg, color: m.color, fontFamily: FF }}>{m.label}</span>;
+  const Icon = m.icon;
+  return (
+    <span style={{ display:'inline-flex', alignItems:'center', gap:5, padding:'3px 10px', borderRadius:20, fontSize:11, fontWeight:700, background:m.bg, color:m.color, fontFamily:FF }}>
+      <Icon size={11} />{m.label}
+    </span>
+  );
+};
+
+const RateBadge = ({ r }: { r: string }) => {
+  const m = RATE_META[r] ?? RATE_META['1.5x'];
+  return <span style={{ padding:'3px 10px', borderRadius:20, fontSize:11.5, fontWeight:800, background:m.bg, color:m.color, fontFamily:FF }}>{m.short}</span>;
+};
+
+const Avatar = ({ name, size = 32 }: { name: string; size?: number }) => (
+  <span style={{ width:size, height:size, borderRadius:'50%', background:`${OG}22`, color:OG, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:FF, fontWeight:800, fontSize:size*0.36, flexShrink:0 }}>
+    {initials(name)}
+  </span>
+);
+
+const fmtDate = (iso?: string | null) => {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+};
+const fmtDateTime = (iso?: string | null) => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
 };
 
 const defForm = { employee: '', date: new Date().toISOString().slice(0, 10), extra_hours: '', reason: '', rate: '1.5x' };
 
-function AddOvertimeModal({ onClose, onSaved }: { onClose: () => void; onSaved: () => void }) {
-  const employees = useERPList<any>('hr/employees/');
-  const activeEmployees = employees.data.filter((e: any) => e.status === 'active');
-  const [form, setForm] = useState({ ...defForm });
+// ── Add Overtime modal — rate dropdown + live cost preview ───────────────────
+function AddOvertimeModal({ onClose, onSaved, employees, isAdmin, myEmployee, formatAmount }: {
+  onClose: () => void; onSaved: () => void; employees: any[]; isAdmin: boolean; myEmployee: any;
+  formatAmount: (v: number) => string;
+}) {
+  const [form, setForm] = useState({ ...defForm, employee: isAdmin ? '' : (myEmployee ? String(myEmployee.id) : '') });
   const [saving, setSaving] = useState(false);
+
+  const selectedEmployee = isAdmin ? employees.find((e: any) => String(e.id) === form.employee) : myEmployee;
+  const salary = Number(selectedEmployee?.salary || 0);
+  const cost = form.extra_hours && form.rate ? estimateCost(salary, Number(form.extra_hours), form.rate) : 0;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,22 +108,48 @@ function AddOvertimeModal({ onClose, onSaved }: { onClose: () => void; onSaved: 
           <button onClick={onClose} style={{ background:'none',border:'none',cursor:'pointer',color:MUTED,fontSize:22 }}>&times;</button>
         </div>
         <form onSubmit={submit} style={{ display:'flex',flexDirection:'column',gap:14 }}>
-          <div>
-            <label style={lbl}>Employee *</label>
-            <select value={form.employee} onChange={e=>setForm(f=>({...f,employee:e.target.value}))} style={inp} required>
-              <option value="">Select employee...</option>
-              {activeEmployees.map((emp: any) => <option key={emp.id} value={emp.id}>{emp.full_name} ({emp.code})</option>)}
-            </select>
-          </div>
+          {isAdmin ? (
+            <div>
+              <label style={lbl}>Employee *</label>
+              <select value={form.employee} onChange={e=>setForm(f=>({...f,employee:e.target.value}))} style={inp} required>
+                <option value="">Select employee...</option>
+                {employees.filter((e: any) => e.status === 'active').map((emp: any) => <option key={emp.id} value={emp.id}>{emp.full_name} ({emp.code})</option>)}
+              </select>
+            </div>
+          ) : (
+            <div>
+              <label style={lbl}>Employee</label>
+              <div style={{ ...inp, color: myEmployee ? DARK : '#ef4444', fontWeight:700 }}>
+                {myEmployee ? `${myEmployee.full_name} (${myEmployee.code})` : 'No employee profile linked to your account'}
+              </div>
+            </div>
+          )}
           <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr',gap:14 }}>
             <div><label style={lbl}>Date *</label><input type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))} style={inp} required /></div>
             <div><label style={lbl}>Extra Hours *</label><input type="number" step="0.5" min="0" value={form.extra_hours} onChange={e=>setForm(f=>({...f,extra_hours:e.target.value}))} style={inp} required /></div>
           </div>
+
+          {/* Cost preview — updates live as Extra Hours / Rate / Employee change */}
+          <div style={{ marginTop:-4 }}>
+            {form.extra_hours && Number(form.extra_hours) > 0 ? (
+              salary > 0 ? (
+                <div style={{ fontFamily:FF, fontSize:13, fontWeight:800, color:'#10b981' }}>
+                  Estimated Cost: {formatAmount(cost)}
+                </div>
+              ) : (
+                <div style={{ fontFamily:FF, fontSize:12.5, fontWeight:600, color:'#ef4444' }}>
+                  Set employee salary to calculate cost
+                </div>
+              )
+            ) : null}
+          </div>
+
           <div>
             <label style={lbl}>Rate *</label>
             <select value={form.rate} onChange={e=>setForm(f=>({...f,rate:e.target.value}))} style={inp}>
-              <option value="1.5x">1.5x</option>
-              <option value="2x">2x</option>
+              <option value="1.5x">1.5x — Standard Overtime</option>
+              <option value="2x">2x — Double Time (Weekends/Holidays)</option>
+              <option value="2.5x">2.5x — Special Overtime</option>
             </select>
           </div>
           <div><label style={lbl}>Reason *</label><textarea value={form.reason} onChange={e=>setForm(f=>({...f,reason:e.target.value}))} style={{...inp,resize:'vertical',minHeight:70}} required /></div>
@@ -86,23 +163,209 @@ function AddOvertimeModal({ onClose, onSaved }: { onClose: () => void; onSaved: 
   );
 }
 
+// ── Approve confirmation ──────────────────────────────────────────────────────
+function ApproveDlg({ entry, employeeName, costLabel, onCancel, onConfirm, busy }: {
+  entry: any; employeeName: string; costLabel: string; onCancel: () => void; onConfirm: () => void; busy?: boolean;
+}) {
+  return (
+    <div style={{ position:'fixed', inset:0, zIndex:1060, background:'rgba(0,0,0,0.45)', backdropFilter:'blur(3px)', display:'flex', alignItems:'center', justifyContent:'center', padding:16 }} onClick={onCancel}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:'#fff', borderRadius:14, padding:24, maxWidth:400, width:'100%', borderTop:'2px solid #10b981', fontFamily:FF, boxShadow:'0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight:800, marginBottom:8, color:'#1A1A1A' }}>Approve Overtime?</h6>
+        <p style={{ fontSize:13, color:MUTED, marginBottom:20, lineHeight:1.6 }}>
+          Approve <strong style={{ color:DARK }}>{Number(entry.extra_hours).toFixed(1)} hours</strong> overtime for <strong style={{ color:DARK }}>{employeeName}</strong> on <strong style={{ color:DARK }}>{fmtDate(entry.date)}</strong>?<br />
+          Cost: <strong style={{ color:'#10b981' }}>{costLabel}</strong>
+        </p>
+        <div style={{ display:'flex', gap:10 }}>
+          <button onClick={onCancel} style={{...CNCL, flex:1}} disabled={busy}>Cancel</button>
+          <button onClick={onConfirm} disabled={busy} style={{ flex:1, background:'rgba(16,185,129,0.10)', border:'1px solid rgba(16,185,129,0.28)', borderRadius:9, padding:'9px', cursor: busy?'wait':'pointer', color:'#10b981', fontFamily:FF, fontWeight:700, fontSize:13 }}>
+            {busy ? 'Please wait…' : 'Confirm'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Reject dialog — reason required ──────────────────────────────────────────
+function RejectDlg({ onCancel, onConfirm, busy }: { onCancel: () => void; onConfirm: (reason: string) => void; busy?: boolean }) {
+  const [reason, setReason] = useState('');
+  return (
+    <div style={{ position:'fixed', inset:0, zIndex:1060, background:'rgba(0,0,0,0.45)', backdropFilter:'blur(3px)', display:'flex', alignItems:'center', justifyContent:'center', padding:16 }} onClick={onCancel}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:'#fff', borderRadius:14, padding:24, maxWidth:420, width:'100%', borderTop:'2px solid #ef4444', fontFamily:FF, boxShadow:'0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight:800, marginBottom:8, color:'#1A1A1A' }}>Reject Overtime Request</h6>
+        <p style={{ fontSize:13, color:MUTED, marginBottom:14 }}>Please provide a reason — this will be visible to the employee.</p>
+        <label style={lbl}>Rejection Reason *</label>
+        <textarea
+          value={reason} onChange={e=>setReason(e.target.value)} placeholder="e.g. Not pre-approved by manager"
+          style={{ ...inp, resize:'vertical', minHeight:80, marginBottom:16 }} autoFocus
+        />
+        <div style={{ display:'flex', gap:10 }}>
+          <button onClick={onCancel} style={{...CNCL, flex:1}} disabled={busy}>Cancel</button>
+          <button
+            onClick={()=>{ if (!reason.trim()) { toast.error('Rejection reason is required.'); return; } onConfirm(reason); }}
+            disabled={busy}
+            style={{ flex:1, background:'rgba(239,68,68,0.10)', border:'1px solid rgba(239,68,68,0.28)', borderRadius:9, padding:9, cursor: busy?'wait':'pointer', color:'#ef4444', fontFamily:FF, fontWeight:700, fontSize:13 }}
+          >
+            {busy ? 'Rejecting…' : 'Confirm Reject'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Detail side panel ─────────────────────────────────────────────────────────
+function DetailPanel({ entry, employee, formatAmount, onClose }: { entry: any; employee: any; formatAmount: (v: number) => string; onClose: () => void }) {
+  const salary = Number(employee?.salary || 0);
+  const hourly = hourlyRate(salary);
+  const multiplier = RATE_MULTIPLIER[entry.rate] ?? 1.5;
+  const rejected = entry.status === 'rejected';
+  const approved = entry.status === 'approved';
+  const decided = approved || rejected;
+
+  const steps = [
+    { label: 'Submitted', sub: fmtDateTime(entry.created_at), done: true },
+    { label: 'Pending Review', sub: decided ? undefined : 'Awaiting a decision', done: true },
+    { label: rejected ? 'Rejected' : 'Approved', sub: decided ? fmtDateTime(entry.approved_at) : undefined, done: decided, danger: rejected },
+  ];
+
+  return (
+    <SlidePanel title="Overtime Request" subtitle={`${entry.employee_name} · ${fmtDate(entry.date)}`} onClose={onClose}>
+      <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:22 }}>
+        <Avatar name={entry.employee_name || '?'} size={48} />
+        <div>
+          <div style={{ fontFamily:FF, fontWeight:800, fontSize:15, color:DARK }}>{entry.employee_name}</div>
+          <div style={{ fontFamily:FF, fontSize:12, color:MUTED }}>{entry.employee_code} · {employee?.department_name || 'Unassigned'} · {employee?.designation || '—'}</div>
+          {employee?.email && <div style={{ fontFamily:FF, fontSize:12, color:OG, marginTop:2 }}>{employee.email}</div>}
+        </div>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:22 }}>
+        {[
+          ['Date', fmtDate(entry.date)], ['Status', <StatusBadge key="s" s={entry.status} />],
+          ['Extra Hours', `${Number(entry.extra_hours).toFixed(1)}h`], ['Rate', <RateBadge key="r" r={entry.rate} />],
+        ].map(([label, val]) => (
+          <div key={label as string}>
+            <div style={{ fontFamily:FF, fontSize:10.5, fontWeight:700, color:'#9b9690', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>{label}</div>
+            <div style={{ fontFamily:FF, fontSize:13, fontWeight:600, color:DARK }}>{val}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginBottom:22 }}>
+        <div style={{ fontFamily:FF, fontSize:10.5, fontWeight:700, color:'#9b9690', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:6 }}>Reason</div>
+        <p style={{ fontFamily:FF, fontSize:13, color:DARK, lineHeight:1.6, margin:0, background:'#F8F7F4', borderRadius:9, padding:'10px 14px' }}>{entry.reason || '—'}</p>
+      </div>
+
+      <div style={{ marginBottom:22, background:'#F8F7F4', borderRadius:10, padding:'14px 16px' }}>
+        <div style={{ fontFamily:FF, fontSize:10.5, fontWeight:700, color:'#9b9690', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:8 }}>Cost Breakdown</div>
+        {salary > 0 ? (
+          <div style={{ fontFamily:FF, fontSize:12.5, color:MUTED, lineHeight:1.9 }}>
+            Hourly rate: <strong style={{ color:DARK }}>{formatAmount(hourly)}</strong> (salary ÷ 26 days ÷ 8h)<br />
+            {Number(entry.extra_hours).toFixed(1)}h × {multiplier}x = <strong style={{ color:'#10b981' }}>{formatAmount(entry.cost ?? hourly * multiplier * Number(entry.extra_hours))}</strong>
+          </div>
+        ) : (
+          <div style={{ fontFamily:FF, fontSize:12.5, color:'#ef4444' }}>Set employee salary to calculate cost.</div>
+        )}
+      </div>
+
+      {rejected && entry.rejection_reason && (
+        <div style={{ marginBottom:22, background:'rgba(239,68,68,0.06)', border:'1px solid rgba(239,68,68,0.20)', borderRadius:9, padding:'12px 14px' }}>
+          <div style={{ fontFamily:FF, fontSize:10.5, fontWeight:700, color:'#991b1b', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:6 }}>Rejection Reason</div>
+          <p style={{ fontFamily:FF, fontSize:13, color:'#7f1d1d', lineHeight:1.6, margin:0 }}>{entry.rejection_reason}</p>
+        </div>
+      )}
+
+      {decided && entry.approved_by_username && (
+        <p style={{ fontFamily:FF, fontSize:12, color:MUTED, marginBottom:22 }}>
+          {approved ? 'Approved' : 'Rejected'} by <strong style={{ color:DARK }}>{entry.approved_by_username}</strong> on {fmtDate(entry.approved_at)}
+        </p>
+      )}
+
+      <div style={{ fontFamily:FF, fontSize:10.5, fontWeight:700, color:'#9b9690', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:10 }}>Timeline</div>
+      <div style={{ display:'flex', flexDirection:'column' }}>
+        {steps.map((s, i) => (
+          <div key={s.label} style={{ display:'flex', gap:12 }}>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
+              <span style={{
+                width:12, height:12, borderRadius:'50%', flexShrink:0,
+                background: s.done ? (s.danger ? '#ef4444' : OG) : '#e5e0d8',
+                boxShadow: s.done ? `0 0 0 3px ${s.danger ? '#ef444422' : `${OG}22`}` : 'none',
+              }} />
+              {i < steps.length - 1 && <span style={{ width:2, flex:1, minHeight:28, background: steps[i+1].done ? (s.danger ? '#ef4444' : OG) : '#e5e0d8' }} />}
+            </div>
+            <div style={{ paddingBottom:22 }}>
+              <div style={{ fontFamily:FF, fontWeight:700, fontSize:13, color: s.done ? DARK : '#c0bbb2' }}>{s.label}</div>
+              {s.sub && <div style={{ fontFamily:FF, fontSize:11.5, color:MUTED, marginTop:2 }}>{s.sub}</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </SlidePanel>
+  );
+}
+
+type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
+
 export default function OvertimeModule() {
-  const isAdmin = isSuperUser();
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
   const { formatAmount } = useCurrency();
+
   const overtime = useERPList<any>('hr/overtime/');
+  const employees = useERPList<any>('hr/employees/');
+  const departments = useERPList<any>('hr/departments/');
+  const employeeById = useMemo(() => Object.fromEntries(employees.data.map((e: any) => [e.id, e])), [employees.data]);
+
+  const [myEmployee, setMyEmployee] = useState<any>(null);
+  useEffect(() => {
+    if (isAdmin) return;
+    erpFetch('hr/employees/me/').then(setMyEmployee).catch(() => setMyEmployee(null));
+  }, [isAdmin]);
+
   const [showAdd, setShowAdd] = useState(false);
   const [actioning, setActioning] = useState<number | null>(null);
+  const [approving, setApproving] = useState<any>(null);
+  const [rejecting, setRejecting] = useState<any>(null);
+  const [viewing, setViewing] = useState<any>(null);
 
-  const totalHours = overtime.data.reduce((sum: number, o: any) => sum + Number(o.extra_hours || 0), 0);
-  const totalCost = overtime.data.reduce((sum: number, o: any) => sum + Number(o.cost || 0), 0);
+  // Filters — "draft" input state committed to "applied" on Search click.
+  const [searchInput, setSearchInput] = useState('');
+  const [statusInput, setStatusInput] = useState<StatusFilter>('all');
+  const [deptInput, setDeptInput] = useState('');
+  const [dateFromInput, setDateFromInput] = useState('');
+  const [dateToInput, setDateToInput] = useState('');
+  const [applied, setApplied] = useState({ search: '', status: 'all' as StatusFilter, dept: '', dateFrom: '', dateTo: '' });
+
+  const runSearch = () => setApplied({ search: searchInput.trim().toLowerCase(), status: statusInput, dept: deptInput, dateFrom: dateFromInput, dateTo: dateToInput });
+
+  const filtered = useMemo(() => {
+    return overtime.data.filter((o: any) => {
+      if (applied.search && !(o.employee_name || '').toLowerCase().includes(applied.search)) return false;
+      if (applied.status !== 'all' && o.status !== applied.status) return false;
+      if (applied.dept && String(employeeById[o.employee]?.department || '') !== applied.dept) return false;
+      if (applied.dateFrom && o.date < applied.dateFrom) return false;
+      if (applied.dateTo && o.date > applied.dateTo) return false;
+      return true;
+    });
+  }, [overtime.data, applied, employeeById]);
+
+  // Stat cards — computed from the full (role-scoped) dataset, not the filtered view.
+  const now = new Date();
+  const isThisMonth = (iso: string) => { const d = new Date(iso); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); };
   const pendingCount = overtime.data.filter((o: any) => o.status === 'pending').length;
+  const approvedThisMonth = overtime.data.filter((o: any) => o.status === 'approved' && isThisMonth(o.date)).length;
+  const rejectedCount = overtime.data.filter((o: any) => o.status === 'rejected').length;
+  const totalHoursThisMonth = overtime.data.filter((o: any) => isThisMonth(o.date)).reduce((s: number, o: any) => s + Number(o.extra_hours || 0), 0);
+  const totalCostThisMonth = overtime.data.filter((o: any) => isThisMonth(o.date)).reduce((s: number, o: any) => s + Number(o.cost || 0), 0);
 
-  const decide = async (id: number, action: 'approved' | 'rejected') => {
+  const decide = async (id: number, action: 'approved' | 'rejected', rejection_reason?: string) => {
     setActioning(id);
     try {
-      await erpFetch(`hr/overtime/${id}/approve/`, { method: 'PATCH', body: JSON.stringify({ action }) });
+      await erpFetch(`hr/overtime/${id}/approve/`, { method: 'PATCH', body: JSON.stringify({ action, rejection_reason }) });
       toast.success(`Overtime ${action}`);
       overtime.reload();
+      setApproving(null); setRejecting(null);
     } catch (e: any) {
       toast.error(e.message || 'Could not update this entry');
     } finally {
@@ -110,75 +373,169 @@ export default function OvertimeModule() {
     }
   };
 
+  const exportExcel = () => {
+    const header = ['Employee', 'Department', 'Date', 'Extra Hours', 'Rate', 'Estimated Cost', 'Status', 'Reason'];
+    const rows = filtered.map((o: any) => [
+      o.employee_name, employeeById[o.employee]?.department_name || '', o.date,
+      Number(o.extra_hours).toFixed(1), RATE_META[o.rate]?.short || o.rate,
+      formatAmount(o.cost), STATUS_META[o.status]?.label || o.status, o.reason,
+    ]);
+    const csv = [header, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.download = `overtime_export_${Date.now()}.csv`;
+    a.click();
+  };
+
   return (
     <div>
+      <style>{`@keyframes otRowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
+
       <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:12, flexWrap:'wrap', marginBottom:20 }}>
         <div>
           <h2 style={{ fontSize:20, fontWeight:900, color:DARK, margin:0, fontFamily:FF, letterSpacing:'-0.01em' }}>Overtime</h2>
           <p style={{ color:MUTED, fontSize:13, margin:'4px 0 0', fontFamily:FF }}>Track and approve extra hours worked</p>
         </div>
-        {isAdmin && (
-          <button onClick={()=>setShowAdd(true)} style={{ ...SAVE, display:'flex', alignItems:'center', gap:6, padding:'10px 18px' }}>
-            <Plus size={14} />Add Overtime
-          </button>
-        )}
+        <button onClick={()=>setShowAdd(true)} style={{ ...SAVE, display:'flex', alignItems:'center', gap:6, padding:'10px 18px' }}>
+          <Plus size={14} />Add Overtime
+        </button>
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:14, marginBottom:22 }} className="ot-stat-grid">
-        <style>{`@media (max-width:700px){ .ot-stat-grid{grid-template-columns:1fr} }`}</style>
-        <Card3D accent={OG} p="18px 20px">
+      {/* Stat cards */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:14, marginBottom:22 }} className="ot-stat-grid">
+        <style>{`
+          @media (max-width:1100px){ .ot-stat-grid{grid-template-columns:repeat(3,1fr)} }
+          @media (max-width:700px){ .ot-stat-grid{grid-template-columns:1fr 1fr} }
+        `}</style>
+        <Card3D accent={OG} p="16px 18px">
           <div style={{ fontSize:11, fontWeight:700, color:MUTED, letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:FF, marginBottom:8 }}>Pending Approval</div>
-          <div style={{ fontSize:26, fontWeight:900, color:OG, fontFamily:FF, lineHeight:1 }}>{pendingCount}</div>
+          <div style={{ fontSize:24, fontWeight:900, color:OG, fontFamily:FF, lineHeight:1 }}>{pendingCount}</div>
         </Card3D>
-        <Card3D accent="#3b82f6" p="18px 20px">
-          <div style={{ fontSize:11, fontWeight:700, color:MUTED, letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:FF, marginBottom:8 }}>Total Overtime Hours</div>
-          <div style={{ fontSize:26, fontWeight:900, color:'#3b82f6', fontFamily:FF, lineHeight:1 }}>{totalHours.toFixed(1)}h</div>
+        <Card3D accent="#10b981" p="16px 18px">
+          <div style={{ fontSize:11, fontWeight:700, color:MUTED, letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:FF, marginBottom:8 }}>Approved This Month</div>
+          <div style={{ fontSize:24, fontWeight:900, color:'#10b981', fontFamily:FF, lineHeight:1 }}>{approvedThisMonth}</div>
         </Card3D>
-        <Card3D accent="#10b981" p="18px 20px">
-          <div style={{ fontSize:11, fontWeight:700, color:MUTED, letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:FF, marginBottom:8 }}>Total Overtime Cost</div>
-          <div style={{ fontSize:26, fontWeight:900, color:'#10b981', fontFamily:FF, lineHeight:1 }}>{formatAmount(totalCost)}</div>
+        <Card3D accent="#ef4444" p="16px 18px">
+          <div style={{ fontSize:11, fontWeight:700, color:MUTED, letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:FF, marginBottom:8 }}>Rejected</div>
+          <div style={{ fontSize:24, fontWeight:900, color:'#ef4444', fontFamily:FF, lineHeight:1 }}>{rejectedCount}</div>
         </Card3D>
+        <Card3D accent="#3b82f6" p="16px 18px">
+          <div style={{ fontSize:11, fontWeight:700, color:MUTED, letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:FF, marginBottom:8 }}>Hours This Month</div>
+          <div style={{ fontSize:24, fontWeight:900, color:'#3b82f6', fontFamily:FF, lineHeight:1 }}>{totalHoursThisMonth.toFixed(1)}h</div>
+        </Card3D>
+        <Card3D accent={OG} p="16px 18px">
+          <div style={{ fontSize:11, fontWeight:700, color:MUTED, letterSpacing:'0.06em', textTransform:'uppercase', fontFamily:FF, marginBottom:8 }}>Cost This Month</div>
+          <div style={{ fontSize:22, fontWeight:900, color:OG, fontFamily:FF, lineHeight:1 }}>{formatAmount(totalCostThisMonth)}</div>
+        </Card3D>
+      </div>
+
+      {/* Filter bar */}
+      <div style={{ background: WHITE, borderRadius: 12, border: `1px solid ${BORDER}`, padding: '14px 18px', marginBottom: 20 }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:4, flex:'1 1 200px', minWidth:180 }}>
+            <label style={lbl}>Search Employee</label>
+            <div style={{ position:'relative' }}>
+              <Search size={13} color={MUTED} style={{ position:'absolute', left:11, top:'50%', transform:'translateY(-50%)' }} />
+              <input value={searchInput} onChange={e=>setSearchInput(e.target.value)} placeholder="Employee name…" style={{ ...inp, paddingLeft:30 }} />
+            </div>
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', gap:4, minWidth:150 }}>
+            <label style={lbl}>Status</label>
+            <select value={statusInput} onChange={e=>setStatusInput(e.target.value as StatusFilter)} style={inp}>
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
+            <label style={lbl}>From</label>
+            <input type="date" value={dateFromInput} onChange={e=>setDateFromInput(e.target.value)} style={inp} />
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
+            <label style={lbl}>To</label>
+            <input type="date" value={dateToInput} onChange={e=>setDateToInput(e.target.value)} style={inp} />
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', gap:4, minWidth:170 }}>
+            <label style={lbl}>Department</label>
+            <select value={deptInput} onChange={e=>setDeptInput(e.target.value)} style={inp}>
+              <option value="">All Departments</option>
+              {departments.data.map((d: any) => <option key={d.id} value={d.id}>{d.name}</option>)}
+            </select>
+          </div>
+          <button onClick={runSearch} style={{ ...SAVE, display:'flex', alignItems:'center', gap:7, padding:'9px 18px' }}>
+            <Search size={13} />Search
+          </button>
+          {filtered.length > 0 && (
+            <button onClick={exportExcel} style={{ background:'#F8F7F4', color:DARK, border:`1px solid ${BORDER}`, borderRadius:9, padding:'9px 16px', fontFamily:FF, fontWeight:600, fontSize:13, cursor:'pointer', display:'flex', alignItems:'center', gap:7 }}>
+              <Download size={13} />Export to Excel
+            </button>
+          )}
+        </div>
       </div>
 
       {overtime.loading ? (
         <Skeleton h={240} />
-      ) : overtime.data.length === 0 ? (
-        <EmptyState icon={Clock} message="No overtime entries yet." cta={isAdmin ? <button style={SAVE} onClick={()=>setShowAdd(true)}>Add Overtime</button> : undefined} />
+      ) : filtered.length === 0 ? (
+        <EmptyState icon={Clock} message={overtime.data.length === 0 ? 'No overtime entries yet.' : 'No entries match your filters.'} cta={overtime.data.length === 0 ? <button style={SAVE} onClick={()=>setShowAdd(true)}>Add Overtime</button> : undefined} />
       ) : (
         <div style={{ background: WHITE, borderRadius: 14, border: `1px solid ${BORDER}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, fontFamily: FF }}>
               <thead>
                 <tr style={{ background: '#fafaf9' }}>
-                  {['Employee', 'Date', 'Hours', 'Rate', 'Cost', 'Reason', 'Status', isAdmin ? 'Actions' : ''].filter(Boolean).map(h => (
-                    <th key={h} style={{ padding: '11px 16px', textAlign: 'left', color: MUTED, fontWeight: 700, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `1px solid ${BORDER}` }}>{h}</th>
+                  {['Employee', 'Department', 'Date', 'Hours', 'Rate', 'Cost', 'Reason', 'Status', 'Actions'].map(h => (
+                    <th key={h} style={{ padding: '11px 16px', textAlign: 'left', color: MUTED, fontWeight: 700, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `1px solid ${BORDER}`, whiteSpace:'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {overtime.data.map((o: any) => (
-                  <tr key={o.id} style={{ borderBottom: `1px solid ${BORDER}` }}>
-                    <td style={{ padding: '11px 16px', fontWeight: 700, color: DARK, whiteSpace: 'nowrap' }}>{o.employee_name}</td>
-                    <td style={{ padding: '11px 16px', color: MUTED, whiteSpace: 'nowrap' }}>{new Date(o.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
-                    <td style={{ padding: '11px 16px', fontWeight: 700 }}>{Number(o.extra_hours).toFixed(1)}h</td>
-                    <td style={{ padding: '11px 16px', color: MUTED }}>{o.rate}</td>
-                    <td style={{ padding: '11px 16px', fontWeight: 700, color: OG }}>{formatAmount(o.cost)}</td>
-                    <td style={{ padding: '11px 16px', color: MUTED, maxWidth: 200 }}>{o.reason}</td>
-                    <td style={{ padding: '11px 16px' }}><StatusBadge s={o.status} /></td>
-                    {isAdmin && (
-                      <td style={{ padding: '11px 16px' }}>
-                        {o.status === 'pending' ? (
-                          <div style={{ display: 'flex', gap: 5 }}>
-                            <button onClick={()=>decide(o.id,'approved')} disabled={actioning===o.id} style={{ background:'rgba(16,185,129,0.10)', color:'#10b981', border:'1px solid rgba(16,185,129,0.25)', borderRadius:7, padding:'6px 12px', fontSize:12, fontWeight:700, fontFamily:FF, cursor: actioning===o.id?'wait':'pointer', display:'flex', alignItems:'center', gap:5 }}><Check size={12} />Approve</button>
-                            <button onClick={()=>decide(o.id,'rejected')} disabled={actioning===o.id} style={{ background:'rgba(239,68,68,0.08)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.22)', borderRadius:7, padding:'6px 12px', fontSize:12, fontWeight:700, fontFamily:FF, cursor: actioning===o.id?'wait':'pointer', display:'flex', alignItems:'center', gap:5 }}><XIcon size={12} />Reject</button>
+                {filtered.map((o: any, i: number) => {
+                  const emp = employeeById[o.employee];
+                  const statusBg = STATUS_META[o.status]?.bg;
+                  return (
+                    <tr key={o.id} style={{ borderBottom: `1px solid ${BORDER}`, background: statusBg ? `${statusBg}55` : undefined, animation: `otRowIn 0.25s ease ${i*0.02}s both` }}>
+                      <td style={{ padding: '10px 16px' }}>
+                        <div style={{ display:'flex', alignItems:'center', gap:9 }}>
+                          <Avatar name={o.employee_name || '?'} />
+                          <div style={{ minWidth:0 }}>
+                            <div style={{ fontWeight:700, color:DARK, whiteSpace:'nowrap' }}>{o.employee_name}</div>
+                            <div style={{ fontSize:11, color:'#9b9690' }}>{o.employee_code}</div>
                           </div>
-                        ) : (
-                          <span style={{ color: '#9ca3af', fontSize: 11.5, display: 'flex', alignItems: 'center', gap: 5 }}><Clock3 size={11} />{o.approved_by_username ? `by ${o.approved_by_username}` : '—'}</span>
-                        )}
+                        </div>
                       </td>
-                    )}
-                  </tr>
-                ))}
+                      <td style={{ padding: '11px 16px', color: MUTED, whiteSpace:'nowrap' }}>{emp?.department_name || '—'}</td>
+                      <td style={{ padding: '11px 16px', color: MUTED, whiteSpace: 'nowrap' }}>{fmtDate(o.date)}</td>
+                      <td style={{ padding: '11px 16px', fontWeight: 700 }}>{Number(o.extra_hours).toFixed(1)}h</td>
+                      <td style={{ padding: '11px 16px' }}><RateBadge r={o.rate} /></td>
+                      <td style={{ padding: '11px 16px', fontWeight: 700, color: OG, whiteSpace:'nowrap' }}>{formatAmount(o.cost)}</td>
+                      <td style={{ padding: '11px 16px', color: MUTED, maxWidth: 160, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }} title={o.reason}>{o.reason}</td>
+                      <td style={{ padding: '11px 16px' }}><StatusBadge s={o.status} /></td>
+                      <td style={{ padding: '11px 16px' }}>
+                        <div style={{ display: 'flex', gap: 5 }}>
+                          <button onClick={()=>setViewing(o)} title="View" style={{ background:'rgba(0,0,0,0.04)', color:MUTED, border:'1px solid rgba(0,0,0,0.08)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor:'pointer', flexShrink:0 }}>
+                            <Eye size={12} />
+                          </button>
+                          {isAdmin && o.status === 'pending' && (
+                            <>
+                              <button onClick={()=>setApproving(o)} disabled={actioning===o.id} title="Approve" style={{ background:'rgba(16,185,129,0.10)', color:'#10b981', border:'1px solid rgba(16,185,129,0.25)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor: actioning===o.id?'wait':'pointer', flexShrink:0 }}>
+                                <Check size={12} />
+                              </button>
+                              <button onClick={()=>setRejecting(o)} disabled={actioning===o.id} title="Reject" style={{ background:'rgba(239,68,68,0.08)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.22)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor: actioning===o.id?'wait':'pointer', flexShrink:0 }}>
+                                <XIcon size={12} />
+                              </button>
+                            </>
+                          )}
+                          {o.status !== 'pending' && (
+                            <span style={{ color: '#9ca3af', fontSize: 11, display: 'flex', alignItems: 'center', gap: 4, marginLeft: 2 }}>
+                              <Clock3 size={11} />{o.approved_by_username ? `by ${o.approved_by_username}` : '—'}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -186,7 +543,26 @@ export default function OvertimeModule() {
       )}
 
       {showAdd && (
-        <AddOvertimeModal onClose={()=>setShowAdd(false)} onSaved={()=>{ setShowAdd(false); overtime.reload(); toast.success('Overtime entry added'); }} />
+        <AddOvertimeModal
+          onClose={()=>setShowAdd(false)}
+          onSaved={()=>{ setShowAdd(false); overtime.reload(); toast.success('Overtime entry added'); }}
+          employees={employees.data} isAdmin={isAdmin} myEmployee={myEmployee}
+          formatAmount={formatAmount}
+        />
+      )}
+
+      {approving && (
+        <ApproveDlg
+          entry={approving} employeeName={approving.employee_name} costLabel={formatAmount(approving.cost)}
+          busy={actioning===approving.id}
+          onCancel={()=>setApproving(null)} onConfirm={()=>decide(approving.id, 'approved')}
+        />
+      )}
+      {rejecting && (
+        <RejectDlg busy={actioning===rejecting.id} onCancel={()=>setRejecting(null)} onConfirm={(reason)=>decide(rejecting.id, 'rejected', reason)} />
+      )}
+      {viewing && (
+        <DetailPanel entry={viewing} employee={employeeById[viewing.employee]} formatAmount={formatAmount} onClose={()=>setViewing(null)} />
       )}
     </div>
   );
