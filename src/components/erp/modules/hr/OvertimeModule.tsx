@@ -22,14 +22,6 @@ const RATE_META: Record<string, { label: string; short: string; bg: string; colo
   '2x':   { label: '2x — Double Time (Weekends/Holidays)',      short: '2x',   bg: '#ede9fe', color: '#6d28d9' },
   '2.5x': { label: '2.5x — Special Overtime',                   short: '2.5x', bg: '#fef3c7', color: '#92400e' },
 };
-const RATE_MULTIPLIER: Record<string, number> = { '1.5x': 1.5, '2x': 2, '2.5x': 2.5 };
-
-/** Matches OvertimeSerializer.get_cost on the backend exactly: monthly salary / 26 working
- * days / 8 hours = hourly rate. */
-const hourlyRate = (salary: number) => (salary ? salary / 26 / 8 : 0);
-const estimateCost = (salary: number, hours: number, rate: string) =>
-  hourlyRate(salary) * (Number(hours) || 0) * (RATE_MULTIPLIER[rate] ?? 1.5);
-
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:FF,fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:MUTED,letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:FF };
 const SAVE: React.CSSProperties = { background:'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)',color:'#fff',border:'none',borderRadius:9,padding:'9px 20px',fontFamily:FF,fontWeight:700,fontSize:13,cursor:'pointer' };
@@ -69,28 +61,24 @@ const fmtDateTime = (iso?: string | null) => {
   return d.toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
 };
 
-const defForm = { employee: '', date: new Date().toISOString().slice(0, 10), extra_hours: '', reason: '', rate: '1.5x' };
+const defForm = { employee: '', date: new Date().toISOString().slice(0, 10), extra_hours: '', reason: '', rate: '1.5x', amount: '' };
 
-// ── Add Overtime modal — rate dropdown + live cost preview ───────────────────
-function AddOvertimeModal({ onClose, onSaved, employees, isAdmin, myEmployee, formatAmount }: {
+// ── Add Overtime modal — rate dropdown + manually-entered overtime amount ────
+function AddOvertimeModal({ onClose, onSaved, employees, isAdmin, myEmployee, symbol }: {
   onClose: () => void; onSaved: () => void; employees: any[]; isAdmin: boolean; myEmployee: any;
-  formatAmount: (v: number) => string;
+  symbol: string;
 }) {
   const [form, setForm] = useState({ ...defForm, employee: isAdmin ? '' : (myEmployee ? String(myEmployee.id) : '') });
   const [saving, setSaving] = useState(false);
 
-  const selectedEmployee = isAdmin ? employees.find((e: any) => String(e.id) === form.employee) : myEmployee;
-  const salary = Number(selectedEmployee?.salary || 0);
-  const cost = form.extra_hours && form.rate ? estimateCost(salary, Number(form.extra_hours), form.rate) : 0;
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.employee || !form.extra_hours || !form.reason) { toast.error('Please fill all required fields.'); return; }
+    if (!form.employee || !form.extra_hours || !form.reason || !form.amount) { toast.error('Please fill all required fields.'); return; }
     setSaving(true);
     try {
       await erpFetch('hr/overtime/', {
         method: 'POST',
-        body: JSON.stringify({ employee: Number(form.employee), date: form.date, extra_hours: form.extra_hours, reason: form.reason, rate: form.rate }),
+        body: JSON.stringify({ employee: Number(form.employee), date: form.date, extra_hours: form.extra_hours, reason: form.reason, rate: form.rate, amount: form.amount }),
       });
       onSaved();
     } catch (err: any) {
@@ -129,19 +117,16 @@ function AddOvertimeModal({ onClose, onSaved, employees, isAdmin, myEmployee, fo
             <div><label style={lbl}>Extra Hours *</label><input type="number" step="0.5" min="0" value={form.extra_hours} onChange={e=>setForm(f=>({...f,extra_hours:e.target.value}))} style={inp} required /></div>
           </div>
 
-          {/* Cost preview — updates live as Extra Hours / Rate / Employee change */}
-          <div style={{ marginTop:-4 }}>
-            {form.extra_hours && Number(form.extra_hours) > 0 ? (
-              salary > 0 ? (
-                <div style={{ fontFamily:FF, fontSize:13, fontWeight:800, color:'#10b981' }}>
-                  Estimated Cost: {formatAmount(cost)}
-                </div>
-              ) : (
-                <div style={{ fontFamily:FF, fontSize:12.5, fontWeight:600, color:'#ef4444' }}>
-                  Set employee salary to calculate cost
-                </div>
-              )
-            ) : null}
+          <div>
+            <label style={lbl}>Overtime Amount *</label>
+            <div style={{ display:'flex' }}>
+              <span style={{ display:'flex', alignItems:'center', padding:'0 12px', background:'#F8F7F4', border:'1px solid rgba(0,0,0,0.10)', borderRight:'none', borderRadius:'9px 0 0 9px', fontFamily:FF, fontSize:13, fontWeight:700, color:MUTED, flexShrink:0 }}>{symbol}</span>
+              <input
+                type="number" step="0.01" min="0" placeholder="Enter overtime payment amount"
+                value={form.amount} onChange={e=>setForm(f=>({...f,amount:e.target.value}))}
+                style={{ ...inp, borderRadius:'0 9px 9px 0' }} required
+              />
+            </div>
           </div>
 
           <div>
@@ -216,9 +201,6 @@ function RejectDlg({ onCancel, onConfirm, busy }: { onCancel: () => void; onConf
 
 // ── Detail side panel ─────────────────────────────────────────────────────────
 function DetailPanel({ entry, employee, formatAmount, onClose }: { entry: any; employee: any; formatAmount: (v: number) => string; onClose: () => void }) {
-  const salary = Number(employee?.salary || 0);
-  const hourly = hourlyRate(salary);
-  const multiplier = RATE_MULTIPLIER[entry.rate] ?? 1.5;
   const rejected = entry.status === 'rejected';
   const approved = entry.status === 'approved';
   const decided = approved || rejected;
@@ -258,15 +240,8 @@ function DetailPanel({ entry, employee, formatAmount, onClose }: { entry: any; e
       </div>
 
       <div style={{ marginBottom:22, background:'#F8F7F4', borderRadius:10, padding:'14px 16px' }}>
-        <div style={{ fontFamily:FF, fontSize:10.5, fontWeight:700, color:'#9b9690', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:8 }}>Cost Breakdown</div>
-        {salary > 0 ? (
-          <div style={{ fontFamily:FF, fontSize:12.5, color:MUTED, lineHeight:1.9 }}>
-            Hourly rate: <strong style={{ color:DARK }}>{formatAmount(hourly)}</strong> (salary ÷ 26 days ÷ 8h)<br />
-            {Number(entry.extra_hours).toFixed(1)}h × {multiplier}x = <strong style={{ color:'#10b981' }}>{formatAmount(entry.cost ?? hourly * multiplier * Number(entry.extra_hours))}</strong>
-          </div>
-        ) : (
-          <div style={{ fontFamily:FF, fontSize:12.5, color:'#ef4444' }}>Set employee salary to calculate cost.</div>
-        )}
+        <div style={{ fontFamily:FF, fontSize:10.5, fontWeight:700, color:'#9b9690', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:8 }}>Overtime Amount</div>
+        <div style={{ fontFamily:FF, fontSize:18, fontWeight:800, color:'#10b981' }}>{formatAmount(entry.amount)}</div>
       </div>
 
       {rejected && entry.rejection_reason && (
@@ -310,7 +285,7 @@ type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
 export default function OvertimeModule() {
   const { isCompanyAdmin, isHRManager } = useAccess();
   const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
-  const { formatAmount } = useCurrency();
+  const { formatAmount, symbol } = useCurrency();
 
   const overtime = useERPList<any>('hr/overtime/');
   const employees = useERPList<any>('hr/employees/');
@@ -357,7 +332,7 @@ export default function OvertimeModule() {
   const approvedThisMonth = overtime.data.filter((o: any) => o.status === 'approved' && isThisMonth(o.date)).length;
   const rejectedCount = overtime.data.filter((o: any) => o.status === 'rejected').length;
   const totalHoursThisMonth = overtime.data.filter((o: any) => isThisMonth(o.date)).reduce((s: number, o: any) => s + Number(o.extra_hours || 0), 0);
-  const totalCostThisMonth = overtime.data.filter((o: any) => isThisMonth(o.date)).reduce((s: number, o: any) => s + Number(o.cost || 0), 0);
+  const totalCostThisMonth = overtime.data.filter((o: any) => isThisMonth(o.date)).reduce((s: number, o: any) => s + Number(o.amount || 0), 0);
 
   const decide = async (id: number, action: 'approved' | 'rejected', rejection_reason?: string) => {
     setActioning(id);
@@ -378,7 +353,7 @@ export default function OvertimeModule() {
     const rows = filtered.map((o: any) => [
       o.employee_name, employeeById[o.employee]?.department_name || '', o.date,
       Number(o.extra_hours).toFixed(1), RATE_META[o.rate]?.short || o.rate,
-      formatAmount(o.cost), STATUS_META[o.status]?.label || o.status, o.reason,
+      formatAmount(o.amount), STATUS_META[o.status]?.label || o.status, o.reason,
     ]);
     const csv = [header, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
     const a = document.createElement('a');
@@ -508,7 +483,7 @@ export default function OvertimeModule() {
                       <td style={{ padding: '11px 16px', color: MUTED, whiteSpace: 'nowrap' }}>{fmtDate(o.date)}</td>
                       <td style={{ padding: '11px 16px', fontWeight: 700 }}>{Number(o.extra_hours).toFixed(1)}h</td>
                       <td style={{ padding: '11px 16px' }}><RateBadge r={o.rate} /></td>
-                      <td style={{ padding: '11px 16px', fontWeight: 700, color: OG, whiteSpace:'nowrap' }}>{formatAmount(o.cost)}</td>
+                      <td style={{ padding: '11px 16px', fontWeight: 700, color: OG, whiteSpace:'nowrap' }}>{formatAmount(o.amount)}</td>
                       <td style={{ padding: '11px 16px', color: MUTED, maxWidth: 160, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }} title={o.reason}>{o.reason}</td>
                       <td style={{ padding: '11px 16px' }}><StatusBadge s={o.status} /></td>
                       <td style={{ padding: '11px 16px' }}>
@@ -547,13 +522,13 @@ export default function OvertimeModule() {
           onClose={()=>setShowAdd(false)}
           onSaved={()=>{ setShowAdd(false); overtime.reload(); toast.success('Overtime entry added'); }}
           employees={employees.data} isAdmin={isAdmin} myEmployee={myEmployee}
-          formatAmount={formatAmount}
+          symbol={symbol}
         />
       )}
 
       {approving && (
         <ApproveDlg
-          entry={approving} employeeName={approving.employee_name} costLabel={formatAmount(approving.cost)}
+          entry={approving} employeeName={approving.employee_name} costLabel={formatAmount(approving.amount)}
           busy={actioning===approving.id}
           onCancel={()=>setApproving(null)} onConfirm={()=>decide(approving.id, 'approved')}
         />
