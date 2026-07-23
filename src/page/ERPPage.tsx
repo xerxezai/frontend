@@ -62,6 +62,7 @@ import MLMReportsPanel from '../components/erp/modules/mlm/MLMReportsPanel';
 import HRDashboard from '../components/erp/modules/hr/HRDashboard';
 import EmployeesPanel from '../components/erp/modules/hr/EmployeesPanel';
 import DepartmentsPanel from '../components/erp/modules/hr/DepartmentsPanel';
+import MyDashboard from '../components/erp/modules/hr/MyDashboard';
 
 // HR & Payroll modules — lazy loaded
 // Attendance, Leave and Payroll are each a single hub page with tabs inside — the tabs
@@ -133,6 +134,15 @@ const ProtectedModuleRoute = ({ module, children }: { module: string; children: 
   return <>{children}</>;
 };
 
+/** The main /erp/dashboard route — Regular User gets the personal "My Dashboard" (own
+ * attendance/leave/payslips/performance only); Super Admin/Company Admin/Module Admin keep
+ * the company-wide ERPDashboard. */
+const DashboardRoute = () => {
+  const { userRole, isLoading } = useAccess();
+  if (isLoading) return <ModuleLoader />;
+  return userRole === 'regular_user' ? <MyDashboard /> : <ERPDashboard />;
+};
+
 const ERPPage = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -168,7 +178,7 @@ const ERPPage = () => {
       <Suspense fallback={<ModuleLoader />}>
         <Routes>
           <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard"          element={<ERPDashboard />} />
+          <Route path="dashboard"          element={<DashboardRoute />} />
 
           {/* CRM — one of the 8 RBAC-controlled modules; every route below requires 'crm' access. */}
           <Route path="crm"                element={<ProtectedModuleRoute module="crm"><CustomersPanel /></ProtectedModuleRoute>} />

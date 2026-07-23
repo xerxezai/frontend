@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Star, Plus, Trash2, Award, History } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
+import { useAccess } from '../../../../context/AccessContext';
 import {
   Card3D, SlidePanel, Skeleton, PageHead, EmptyState,
   OG, DARK, FF, inp, lbl, btnPrimary, btnGhost, initials,
@@ -35,6 +36,8 @@ const Stars = ({ value, size = 13, onChange }: { value: number; size?: number; o
 };
 
 export default function HRPerformancePage() {
+  const { userRole } = useAccess();
+  const isRegularUser = userRole === 'regular_user';
   const reviews = useERPList<Review>('hr/reviews/');
   const employees = useERPList<any>('hr/employees/');
   const [showAdd, setShowAdd] = useState(false);
@@ -73,9 +76,9 @@ export default function HRPerformancePage() {
     <div style={{ animation: 'hrFadeIn 0.3s ease both', fontFamily: FF }}>
       <style>{`@keyframes hrFadeIn{from{opacity:0}to{opacity:1}}`}</style>
       <PageHead
-        title="Performance Reviews"
-        subtitle="Track ratings, goals and growth across the team"
-        action={<button style={{ ...btnPrimary, display: 'flex', alignItems: 'center', gap: 7 }} onClick={() => setShowAdd(true)}><Plus size={15} /> Add Review</button>}
+        title={isRegularUser ? 'My Performance' : 'Performance Reviews'}
+        subtitle={isRegularUser ? 'Your ratings, goals and growth history' : 'Track ratings, goals and growth across the team'}
+        action={!isRegularUser && <button style={{ ...btnPrimary, display: 'flex', alignItems: 'center', gap: 7 }} onClick={() => setShowAdd(true)}><Plus size={15} /> Add Review</button>}
       />
 
       {/* stats */}
@@ -101,7 +104,11 @@ export default function HRPerformancePage() {
       {reviews.loading ? (
         <div>{[0, 1, 2].map(i => <Skeleton key={i} h={54} />)}</div>
       ) : reviews.data.length === 0 ? (
-        <EmptyState icon={Award} message="No reviews yet. Add your team's first performance review." cta={<button style={btnPrimary} onClick={() => setShowAdd(true)}>Add Review</button>} />
+        <EmptyState
+          icon={Award}
+          message={isRegularUser ? 'No performance reviews yet.' : "No reviews yet. Add your team's first performance review."}
+          cta={!isRegularUser ? <button style={btnPrimary} onClick={() => setShowAdd(true)}>Add Review</button> : undefined}
+        />
       ) : (
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', overflow: 'hidden', boxShadow: '0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.05)' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -127,7 +134,9 @@ export default function HRPerformancePage() {
                   <td style={{ padding: '11px 16px', color: '#6B6B6B' }}>{r.reviewer_username || '—'}</td>
                   <td style={{ padding: '11px 16px', color: '#9ca3af' }}>{r.review_date}</td>
                   <td style={{ padding: '11px 16px', textAlign: 'right' }}>
-                    <button onClick={() => del(r.id)} title="Delete" style={{ background: 'rgba(239,68,68,0.10)', border: 'none', borderRadius: 7, width: 28, height: 28, cursor: 'pointer', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={13} /></button>
+                    {!isRegularUser && (
+                      <button onClick={() => del(r.id)} title="Delete" style={{ background: 'rgba(239,68,68,0.10)', border: 'none', borderRadius: 7, width: 28, height: 28, cursor: 'pointer', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={13} /></button>
+                    )}
                   </td>
                 </tr>
               ))}

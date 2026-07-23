@@ -10,18 +10,19 @@ const C = { orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, 
 type Tab = 'my' | 'all' | 'report';
 
 export default function AttendanceHubModule() {
-  const { isCompanyAdmin, isHRManager } = useAccess();
+  const { isCompanyAdmin, isHRManager, userRole } = useAccess();
   // Super Admin / Company Admin / HR Manager see every employee's attendance; everyone
   // else only ever sees their own — All Attendance is hidden for them entirely.
   const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
+  const isRegularUser = userRole === 'regular_user';
   const [tab, setTab] = useState<Tab>('my');
 
-  const tabs: { key: Tab; label: string; adminOnly?: boolean }[] = [
+  const tabs: { key: Tab; label: string; adminOnly?: boolean; hideForRegular?: boolean }[] = [
     { key: 'my', label: 'My Attendance' },
     { key: 'all', label: 'All Attendance', adminOnly: true },
-    { key: 'report', label: 'Report' },
+    { key: 'report', label: 'Report', hideForRegular: true },
   ];
-  const visibleTabs = tabs.filter(t => !t.adminOnly || isAdmin);
+  const visibleTabs = tabs.filter(t => (!t.adminOnly || isAdmin) && !(t.hideForRegular && isRegularUser));
 
   return (
     <div>
@@ -41,7 +42,7 @@ export default function AttendanceHubModule() {
 
       {tab === 'my' && <AttendanceDashboardModule />}
       {tab === 'all' && isAdmin && <AllAttendanceModule />}
-      {tab === 'report' && <AttendanceReportTab />}
+      {tab === 'report' && !isRegularUser && <AttendanceReportTab />}
     </div>
   );
 }

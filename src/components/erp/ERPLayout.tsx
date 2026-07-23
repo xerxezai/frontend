@@ -145,6 +145,17 @@ const QHSE_SUBMENU: SubNavItem[] = [
   { to: '/erp/qhse/compliance',  icon: 'fas fa-file-signature',  label: 'Compliance' },
 ];
 
+// Regular User's HR submenu — self-service only, no visibility into other employees'
+// data or company-wide HR pages (Departments/Overtime/Shifts/Holidays/Documents/Org
+// Chart/Onboarding/Exit Management are all admin/HR-Manager territory).
+const REGULAR_USER_HR_SUBMENU: SubNavItem[] = [
+  { to: '/erp/attendance',      icon: 'fas fa-clock',               label: 'My Attendance' },
+  { to: '/erp/hr/leave',        icon: 'fas fa-calendar-minus',      label: 'My Leave' },
+  { to: '/erp/payroll-reports', icon: 'fas fa-file-invoice-dollar', label: 'My Payslips' },
+  { to: '/erp/hr/performance',  icon: 'fas fa-star',                label: 'My Performance' },
+  { to: '/erp/hr/employees',    icon: 'fas fa-user',                label: 'My Profile' },
+];
+
 const EXPANDABLE_SUBMENUS: Record<string, SubNavItem[]> = {
   '/erp/crm': CRM_SUBMENU,
   '/erp/sales': SALES_SUBMENU,
@@ -211,6 +222,12 @@ const ERPLayout = ({ children }: Props) => {
   const isAdmin   = isAdminUser();
   const { hasAccess, isSuperAdmin, isCompanyAdmin, userRole, isLoading: accessLoading } = useAccess();
   const { isPlatformAdmin, currentCompany } = useCompany();
+  // Regular User sees only their own personal HR data — a cut-down "My X" HR submenu and
+  // a personal dashboard in place of the company-wide one (see MyDashboard.tsx / ERPPage.tsx).
+  const isRegularUser = userRole === 'regular_user';
+  const submenus: Record<string, SubNavItem[]> = isRegularUser
+    ? { ...EXPANDABLE_SUBMENUS, '/erp/hr': REGULAR_USER_HR_SUBMENU }
+    : EXPANDABLE_SUBMENUS;
   // Real RBAC role from my-access/ — the legacy xerxez_role localStorage value lies
   // (it derives from an old profile field that shows every admin-ish user as super_admin).
   const ROLE_LABELS: Record<string, string> = {
@@ -227,7 +244,7 @@ const ERPLayout = ({ children }: Props) => {
   }, [isSuperAdmin]);
 
   let currentSub: SubNavItem | undefined;
-  for (const [parentTo, submenu] of Object.entries(EXPANDABLE_SUBMENUS)) {
+  for (const [parentTo, submenu] of Object.entries(submenus)) {
     currentSub = submenu.find(
       s => s.to !== parentTo && (s.to === location.pathname || location.pathname.startsWith(s.to + '/'))
     );
@@ -241,7 +258,7 @@ const ERPLayout = ({ children }: Props) => {
 
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
-    for (const [parentTo, submenu] of Object.entries(EXPANDABLE_SUBMENUS)) {
+    for (const [parentTo, submenu] of Object.entries(submenus)) {
       init[parentTo] = location.pathname.startsWith(parentTo)
         || submenu.some(s => location.pathname === s.to || location.pathname.startsWith(s.to + '/'));
     }
@@ -565,7 +582,7 @@ const ERPLayout = ({ children }: Props) => {
 
             // Every expandable section (CRM/Sales/Procurement/Logistics/Accounting/MLM/HR
             // Overview) shares this one toggle-button + submenu-panel pattern.
-            const submenu = EXPANDABLE_SUBMENUS[item.to];
+            const submenu = submenus[item.to];
             if (submenu && !collapsed) {
               const visibleSubmenu = submenu.filter(s => !s.adminOnly || isAdmin);
               const isOpen = openGroups[item.to] ?? false;
@@ -609,12 +626,13 @@ const ERPLayout = ({ children }: Props) => {
               );
             }
 
+            const navLabel = item.to === '/erp/dashboard' && isRegularUser ? 'My Dashboard' : item.label;
             return (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.to === '/erp/hr'}
-                title={item.label}
+                title={navLabel}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`
@@ -624,7 +642,7 @@ const ERPLayout = ({ children }: Props) => {
                 <span className="erp-icon-badge">
                   <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
                 </span>
-                {!collapsed && <span style={{ flex: 1 }}>{item.label}</span>}
+                {!collapsed && <span style={{ flex: 1 }}>{navLabel}</span>}
                 {!collapsed && (
                   <i className="fas fa-chevron-right erp-nav-chevron" style={{ fontSize: 10 }}></i>
                 )}

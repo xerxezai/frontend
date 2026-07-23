@@ -1,11 +1,89 @@
-import { useState } from 'react';
-import { Camera, User } from 'lucide-react';
-import { useERPList, erpUpload } from '../../../../hooks/useERPApi';
+import { useEffect, useState } from 'react';
+import { Camera, User, Mail, Phone, Building2, Cake, MapPin, ShieldAlert } from 'lucide-react';
+import { useERPList, erpUpload, erpFetch } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
 import { toast } from 'react-toastify';
 import ERPTable from '../../ERPTable';
 import { useCurrency } from '../../../../context/CurrencyContext';
 import PhoneInput from '../../../common/PhoneInput';
+import { Card3D, FF, OG, DARK, Skeleton, initials } from './hrShared';
+
+const MUTED = '#6B6B6B';
+
+function MyProfileView() {
+  const { formatAmount } = useCurrency();
+  const [me, setMe] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    erpFetch('hr/employees/me/')
+      .then(setMe)
+      .catch(() => setMe(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div><Skeleton h={220} /></div>;
+  if (!me) {
+    return (
+      <div style={{ textAlign: 'center', padding: '56px 24px', background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)' }}>
+        <ShieldAlert size={40} color="#d1d5db" style={{ margin: '0 auto 14px', display: 'block' }} />
+        <p style={{ color: MUTED, fontSize: 14, fontFamily: FF, fontWeight: 600 }}>No employee profile is linked to your account yet. Contact your admin.</p>
+      </div>
+    );
+  }
+
+  const fields: { icon: React.ElementType; label: string; value: string }[] = [
+    { icon: Mail, label: 'Email', value: me.email || '—' },
+    { icon: Phone, label: 'Phone', value: me.phone || '—' },
+    { icon: Building2, label: 'Department', value: me.department_name || '—' },
+    { icon: Cake, label: 'Date of Birth', value: me.date_of_birth || '—' },
+    { icon: MapPin, label: 'Address', value: me.address || '—' },
+  ];
+
+  return (
+    <div>
+      <h2 style={{ fontSize: 20, fontWeight: 900, color: DARK, margin: '0 0 4px', fontFamily: FF, letterSpacing: '-0.01em' }}>My Profile</h2>
+      <p style={{ color: MUTED, fontSize: 13, margin: '0 0 20px', fontFamily: FF }}>Your personal employee record</p>
+
+      <Card3D accent={OG} p="24px 26px">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 22 }}>
+          {me.profile_photo ? (
+            <img src={me.profile_photo} alt={me.full_name} style={{ width: 68, height: 68, borderRadius: '50%', objectFit: 'cover' }} />
+          ) : (
+            <span style={{ width: 68, height: 68, borderRadius: '50%', background: `${OG}22`, color: OG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FF, fontWeight: 800, fontSize: 22 }}>
+              {initials(me.full_name)}
+            </span>
+          )}
+          <div>
+            <div style={{ fontFamily: FF, fontWeight: 800, fontSize: 18, color: DARK }}>{me.full_name}</div>
+            <div style={{ fontFamily: FF, fontSize: 13, color: MUTED, marginTop: 2 }}>{me.designation || 'No designation set'} · {me.code}</div>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 18 }}>
+          {fields.map(f => (
+            <div key={f.label} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+              <f.icon size={15} color={OG} style={{ marginTop: 2, flexShrink: 0 }} />
+              <div>
+                <div style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, color: '#9b9690', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{f.label}</div>
+                <div style={{ fontFamily: FF, fontSize: 13.5, fontWeight: 600, color: DARK, marginTop: 2 }}>{f.value}</div>
+              </div>
+            </div>
+          ))}
+          {me.salary && (
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+              <User size={15} color={OG} style={{ marginTop: 2, flexShrink: 0 }} />
+              <div>
+                <div style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, color: '#9b9690', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Salary</div>
+                <div style={{ fontFamily: FF, fontSize: 13.5, fontWeight: 600, color: DARK, marginTop: 2 }}>{formatAmount(me.salary)}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </Card3D>
+    </div>
+  );
+}
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
@@ -41,9 +119,16 @@ const defEmp = {
 };
 
 export default function EmployeesPanel() {
+  const { userRole } = useAccess();
+  if (userRole === 'regular_user') return <MyProfileView />;
+  return <AdminEmployeesView />;
+}
+
+function AdminEmployeesView() {
   const { canWrite } = useAccess();
   const isAdmin = canWrite('hr');
   const { formatAmount, symbol, selectedCurrency } = useCurrency();
+
   const employees   = useERPList<any>('hr/employees/');
   const departments = useERPList<any>('hr/departments/');
   const users       = useERPList<any>('hr/employees/linkable-users/');
