@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-  Search, Plus, Eye, Check, X as XIcon, Clock, CheckCircle2, XCircle, Ban,
+  Search, Plus, Eye, Check, X as XIcon, Clock, CheckCircle2, XCircle, Ban, Trash2,
   Palmtree, Stethoscope, AlertTriangle, Baby, Wallet, FileQuestion, Calendar,
 } from 'lucide-react';
 import { useERPList, erpFetch, isSuperUser } from '../../../../hooks/useERPApi';
@@ -157,6 +157,9 @@ export default function LeaveRequestsPanel() {
   // who it's for, and can't approve/reject — the backend enforces both regardless of this
   // flag, this just keeps the UI honest about what will actually be allowed.
   const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
+  // Deleting is a stricter bar than approve/reject — Super Admin and Company Admin only.
+  // HR Manager can approve/reject (covered by isAdmin above) but not delete.
+  const canDelete = isSuperUser() || isCompanyAdmin;
   const [myEmployee, setMyEmployee] = useState<any>(null);
   useEffect(() => {
     if (isAdmin) return;
@@ -199,6 +202,7 @@ export default function LeaveRequestsPanel() {
   const [selected,   setSelected]   = useState<any>(null);
   const [approving,  setApproving]  = useState<any>(null);
   const [rejecting,  setRejecting]  = useState<any>(null);
+  const [deleting,   setDeleting]   = useState<any>(null);
   const [actionBusy, setActionBusy] = useState(false);
 
   const close = () => { setShowModal(false); setEditing(null); };
@@ -215,7 +219,16 @@ export default function LeaveRequestsPanel() {
 
   const saveLeave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (dayCount(leaveF.from_date, leaveF.to_date) === null) { toast.error('To date must be on or after the from date.'); return; }
+    const requestedDays = dayCount(leaveF.from_date, leaveF.to_date);
+    if (requestedDays === null) { toast.error('To date must be on or after the from date.'); return; }
+    if (balanceLoading) { toast.error('Still checking leave balance — please try again in a moment.'); return; }
+    // Unpaid leave has no limit (balance.unlimited); anything else needs a configured policy
+    // to check against — if none exists yet the balance display already flags that, so we
+    // don't additionally block submission on missing policy data here.
+    if (balance && !balance.unlimited && !balance.no_policy && balance.remaining !== null && requestedDays > balance.remaining) {
+      toast.error(`Insufficient leave balance. You have ${balance.remaining} days remaining but requested ${requestedDays} days.`);
+      return;
+    }
     try {
       const body: any = { type: leaveF.type, from_date: leaveF.from_date, to_date: leaveF.to_date, reason: leaveF.reason };
       if (leaveF.employee) body.employee = Number(leaveF.employee);
@@ -246,6 +259,17 @@ export default function LeaveRequestsPanel() {
       setRejecting(null); setSelected(null);
       reloadAll();
     } catch (err: any) { toast.error(err.message || 'Could not reject this request'); }
+    finally { setActionBusy(false); }
+  };
+
+  const doDelete = async () => {
+    setActionBusy(true);
+    try {
+      await erpFetch(`hr/leave-requests/${deleting.id}/`, { method: 'DELETE' });
+      toast.success('Leave request deleted successfully');
+      setDeleting(null); setSelected(null);
+      reloadAll(); // both leaves + allLeaves reload — table and stat cards update together
+    } catch (err: any) { toast.error(err.message || 'Could not delete this request'); }
     finally { setActionBusy(false); }
   };
 
@@ -383,6 +407,11 @@ export default function LeaveRequestsPanel() {
                                 <XIcon size={12} />
                               </button>
                             </>
+                          )}
+                          {canDelete && (
+                            <button onClick={()=>setDeleting(r)} title="Delete" style={{ background:'rgba(239,68,68,0.08)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.20)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor:'pointer', flexShrink:0 }}>
+                              <Trash2 size={12} />
+                            </button>
                           )}
                         </div>
                       </td>
@@ -543,6 +572,14 @@ export default function LeaveRequestsPanel() {
       )}
       {rejecting && (
         <RejectDlg onCancel={()=>setRejecting(null)} onConfirm={doReject} busy={actionBusy} />
+      )}
+      {deleting && (
+        <ConfirmDlg
+          title="Delete Leave Request?"
+          message={`Are you sure you want to delete this leave request for ${deleting.employee_name} from ${fmtDate(deleting.from_date)} to ${fmtDate(deleting.to_date)}?`}
+          confirmLabel="Delete" confirmColor="#ef4444" busy={actionBusy}
+          onCancel={()=>setDeleting(null)} onConfirm={doDelete}
+        />
       )}
     </div>
   );
