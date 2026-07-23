@@ -220,7 +220,7 @@ export default function MyCompanyUsers() {
       {showAdd && (
         <MyCompanyAddUserModal
           onClose={() => setShowAdd(false)}
-          onSuccess={() => { setShowAdd(false); load(); toast.success('User added successfully'); }}
+          onSuccess={(email) => { setShowAdd(false); load(); toast.success(`User added successfully! Welcome email sent to ${email} with login credentials and attendance instructions.`); }}
         />
       )}
       {editing && (

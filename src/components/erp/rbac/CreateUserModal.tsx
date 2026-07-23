@@ -70,7 +70,7 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
         role: form.role, company_id: form.company,
         modules: form.role === 'company_admin' ? ALL_MODULES.map(m => m.name) : form.modules,
       });
-      toast.success('User created');
+      toast.success(`User created successfully! Welcome email sent to ${form.email} with login credentials.`);
       onSuccess?.();
       onClose?.();
     } catch (e: any) {

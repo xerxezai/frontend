@@ -19,7 +19,7 @@ const ALL_MODULES = [
   { name: 'hr', label: 'HR Overview' },
 ];
 
-const MyCompanyAddUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSuccess?: () => void }) => {
+const MyCompanyAddUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSuccess?: (email: string) => void }) => {
   const [form, setForm] = useState({
     full_name: '', username: '', email: '', password: '', confirm_password: '',
     role: '', modules: ['dashboard'] as string[],
@@ -52,7 +52,7 @@ const MyCompanyAddUserModal = ({ onClose, onSuccess }: { onClose?: () => void; o
         full_name: form.full_name, username: form.username, email: form.email, password: form.password,
         role: form.role, modules: form.modules,
       });
-      onSuccess?.();
+      onSuccess?.(form.email);
     } catch (e: any) {
       setError(e.message || 'Failed to add user');
     } finally {
