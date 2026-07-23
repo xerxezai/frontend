@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 import {
   CalendarCheck, ClipboardList, Building2, UserPlus, PartyPopper, Gift, Wallet,
-  ArrowRight, Check, X as XIcon,
+  ArrowRight, Check, X as XIcon, AlertTriangle,
 } from 'lucide-react';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 import { Card3D, FF, DARK, OG, WHITE, Skeleton, EmptyState, useFmtCurrency } from './hrShared';
@@ -183,6 +183,17 @@ const HRDashboard = () => {
       .finally(() => setHolidaysLoading(false));
   }, []);
 
+  // ── Expiring documents widget — Admin/HR Manager only; a Regular User hitting this
+  // 403s (the endpoint is admin-only), so just show nothing rather than an error banner.
+  const [expiringDocs, setExpiringDocs] = useState<any[]>([]);
+  const [expiringDocsForbidden, setExpiringDocsForbidden] = useState(false);
+
+  useEffect(() => {
+    erpFetch('hr/documents/expiring/')
+      .then((res: any) => setExpiringDocs(Array.isArray(res) ? res : []))
+      .catch(() => setExpiringDocsForbidden(true));
+  }, []);
+
   const totalPayroll = payrollRaw.reduce((sum: number, p: any) => sum + Number(p.net_salary || 0), 0);
   const paidCount    = payrollRaw.filter((p: any) => p.status === 'paid').length;
   const pendingPayrollCount = Math.max(activeCount - paidCount, 0);
@@ -236,6 +247,37 @@ const HRDashboard = () => {
           </div>
         ))}
       </div>
+
+      {/* Expiring documents alert — Admin/HR Manager only (see expiringDocsForbidden) */}
+      {!expiringDocsForbidden && expiringDocs.length > 0 && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(249,115,22,0.09), rgba(249,115,22,0.03))',
+          border: '1px solid rgba(249,115,22,0.25)', borderRadius: 14, padding: '16px 20px', marginTop: 22,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <AlertTriangle size={15} color="#c2410c" />
+              <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 13.5, color: DARK }}>
+                Documents Expiring Soon ({expiringDocs.length})
+              </span>
+            </div>
+            <Link to="/erp/hr/documents" style={{ fontFamily: FF, fontSize: 12, fontWeight: 700, color: OG, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+              View all<ArrowRight size={13} />
+            </Link>
+          </div>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            {expiringDocs.slice(0, 5).map((d: any) => (
+              <div key={d.id} style={{ background: WHITE, borderRadius: 10, padding: '10px 16px', border: `1px solid ${BORDER}`, minWidth: 200 }}>
+                <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 13, color: DARK }}>{d.employee_name}</div>
+                <div style={{ fontFamily: FF, fontSize: 11.5, color: MUTED, margin: '3px 0 6px' }}>{d.doc_type_label} · {fmtDate(d.expiry_date)}</div>
+                <span style={{ fontFamily: FF, fontSize: 11, fontWeight: 800, color: '#c2410c' }}>
+                  {d.days_until_expiry === 0 ? 'Today' : d.days_until_expiry === 1 ? 'Tomorrow' : `${d.days_until_expiry} days remaining`}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Section 1 + 3: Attendance overview & department headcount */}
       <div style={{ display: 'grid', gap: 18, marginTop: 22 }} className="hr-charts-grid">
