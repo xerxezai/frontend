@@ -85,7 +85,7 @@ const FloatingChat = () => {
           role: "assistant",
           content:
             data.reply ||
-            "I'm having trouble responding right now. Please reach us at xerxez.in@gmail.com.",
+            "I'm having trouble responding right now. Please reach us at info@xerxez.com.",
         },
       ]);
     } catch {
@@ -94,7 +94,7 @@ const FloatingChat = () => {
         {
           role: "assistant",
           content:
-            "I'm having trouble connecting right now. Please reach us at xerxez.in@gmail.com or via xerxez.com/contact.",
+            "I'm having trouble connecting right now. Please reach us at info@xerxez.com or via xerxez.com/contact.",
         },
       ]);
     } finally {
@@ -312,7 +312,7 @@ const FloatingChat = () => {
               {showSalesOptions && (
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <a
-                    href="mailto:xerxez.in@gmail.com"
+                    href="mailto:info@xerxez.com"
                     style={{
                       display: "flex",
                       alignItems: "center",

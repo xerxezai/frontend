@@ -25,7 +25,7 @@ export const HOME_FAQS = [
   },
   {
     q: "How much does XERXEZ ERP cost?",
-    a: "XERXEZ offers flexible pricing for all business sizes. Contact us at xerxez.in@gmail.com or visit xerxez.com/contact for a custom quote.",
+    a: "XERXEZ offers flexible pricing for all business sizes. Contact us at info@xerxez.com or visit xerxez.com/contact for a custom quote.",
   },
   {
     q: "What courses does XERXEZ Academy offer?",
@@ -33,7 +33,7 @@ export const HOME_FAQS = [
   },
   {
     q: "How do I contact XERXEZ support?",
-    a: "Email xerxez.in@gmail.com, call +971 56 786 7451, or use the live chat on xerxez.com. We respond within 24 hours.",
+    a: "Email info@xerxez.com, call +971 56 786 7451, or use the live chat on xerxez.com. We respond within 24 hours.",
   },
 ];
 

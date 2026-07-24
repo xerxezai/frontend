@@ -91,7 +91,7 @@ const PartnerLogin = ({ onSuccess }: Props) => {
           </div>
 
           <div style={{ textAlign: 'right', marginBottom: 16 }}>
-            <a href="mailto:xerxez.in@gmail.com?subject=Partner%20Portal%20Password%20Reset" style={{ fontFamily: FF, fontSize: 12, color: OG, textDecoration: 'none', fontWeight: 600 }}>
+            <a href="mailto:info@xerxez.com?subject=Partner%20Portal%20Password%20Reset" style={{ fontFamily: FF, fontSize: 12, color: OG, textDecoration: 'none', fontWeight: 600 }}>
               Forgot password?
             </a>
           </div>

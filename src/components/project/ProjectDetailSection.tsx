@@ -992,7 +992,7 @@ const ProjectDetailSection: React.FC<Props> = ({ projectInfo, currentIndex }) =>
                     </Link>
                     <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 8 }}>
                       {[
-                        { icon: "fas fa-envelope", val: "xerxez.in@gmail.com" },
+                        { icon: "fas fa-envelope", val: "info@xerxez.com" },
                         { icon: "fas fa-map-marker-alt", val: "India & UAE — Remote-first" },
                       ].map(({ icon, val }) => (
                         <div key={val} style={{

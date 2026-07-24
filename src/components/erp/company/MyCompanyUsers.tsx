@@ -120,7 +120,7 @@ export default function MyCompanyUsers() {
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 14, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: '10px 14px' }}>
             <XCircle size={15} color="#991b1b" style={{ flexShrink: 0, marginTop: 1 }} />
             <span style={{ fontFamily: FF, fontSize: 12.5, color: '#991b1b' }}>
-              User limit reached ({currentUsers}/{maxUsers}). Contact XERXEZ at xerxez.in@gmail.com to add more users.
+              User limit reached ({currentUsers}/{maxUsers}). Contact XERXEZ at info@xerxez.com to add more users.
             </span>
           </div>
         )}

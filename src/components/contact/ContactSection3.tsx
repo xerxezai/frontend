@@ -24,7 +24,7 @@
                       </div>
                       <div className="content">
                         <h5>Our Email</h5>
-                        <p><a href="mailto:xerxez.in@gmail.com">xerxez.in@gmail.com</a></p>
+                        <p><a href="mailto:info@xerxez.com">info@xerxez.com</a></p>
                       </div>
                     </li>
                     <li>
@@ -52,7 +52,7 @@
                       </div>
                       <div className="content">
                         <h5>Sales Enquiries</h5>
-                        <p>xerxez.in@gmail.com</p>
+                        <p>info@xerxez.com</p>
                       </div>
                     </li>
                     <li>
@@ -61,7 +61,7 @@
                       </div>
                       <div className="content">
                         <h5>Partnerships</h5>
-                        <p>xerxez.in@gmail.com</p>
+                        <p>info@xerxez.com</p>
                       </div>
                     </li>
                     <li>
@@ -88,7 +88,7 @@
                       </div>
                       <div className="content">
                         <h5>Support Email</h5>
-                        <p>xerxez.in@gmail.com</p>
+                        <p>info@xerxez.com</p>
                       </div>
                     </li>
                     <li>

@@ -418,7 +418,7 @@ const CTASection = ({ title, desc, tags, contactHref }: { title: React.ReactNode
                 <Link to={contactHref} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg,#cc785c 0%,#C9883A 100%)", color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 24px", borderRadius: 10, textDecoration: "none", fontFamily: "'DM Sans',sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.50),0 6px 20px rgba(201,136,58,0.28)" }}>
                   Request A Demo <i className="far fa-arrow-right" style={{ fontSize: 12 }} />
                 </Link>
-                <a href="mailto:xerxez.in@gmail.com?subject=Enterprise Sales Enquiry" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: CREAM, color: DARK, padding: "13px 24px", borderRadius: 10, fontWeight: 700, fontSize: 15, border: "1px solid rgba(0,0,0,0.10)", textDecoration: "none", fontFamily: "'DM Sans',sans-serif" }}>
+                <a href="mailto:info@xerxez.com?subject=Enterprise Sales Enquiry" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: CREAM, color: DARK, padding: "13px 24px", borderRadius: 10, fontWeight: 700, fontSize: 15, border: "1px solid rgba(0,0,0,0.10)", textDecoration: "none", fontFamily: "'DM Sans',sans-serif" }}>
                   <i className="fas fa-envelope" style={{ color: OG, fontSize: 13 }} />
                   Contact Enterprise Sales
                 </a>
@@ -449,7 +449,7 @@ const ServicePageTemplate: React.FC<{ config: ServicePageConfig }> = ({ config }
         description={config.description}
         ctas={[
           { label: "Request a Demo",          to: contactHref,                                             primary: true  },
-          { label: "Contact Enterprise Sales", href: "mailto:xerxez.in@gmail.com?subject=Enterprise Enquiry", primary: false },
+          { label: "Contact Enterprise Sales", href: "mailto:info@xerxez.com?subject=Enterprise Enquiry", primary: false },
         ]}
         stats={config.heroStats}
         cascadeA={config.cascadeA}

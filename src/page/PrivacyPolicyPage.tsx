@@ -120,8 +120,8 @@ const sections = [
         </p>
         <p>
           To exercise any of these rights, contact us at{" "}
-          <a href="mailto:xerxez.in@gmail.com" style={{ color: orange, textDecoration: "none", fontWeight: 600 }}>
-            xerxez.in@gmail.com
+          <a href="mailto:info@xerxez.com" style={{ color: orange, textDecoration: "none", fontWeight: 600 }}>
+            info@xerxez.com
           </a>
           . We will respond within 30 days.
         </p>
@@ -194,8 +194,8 @@ const sections = [
         <div style={{ marginTop: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
             <i className="fas fa-envelope" style={{ color: orange, fontSize: 14, width: 18 }} />
-            <a href="mailto:xerxez.in@gmail.com" style={{ color: orange, textDecoration: "none", fontWeight: 600 }}>
-              xerxez.in@gmail.com
+            <a href="mailto:info@xerxez.com" style={{ color: orange, textDecoration: "none", fontWeight: 600 }}>
+              info@xerxez.com
             </a>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -280,7 +280,7 @@ const PrivacyPolicyPage = () => (
               <p style={{ color: "#6B6B6B", fontSize: 14, margin: 0, fontFamily: "'DM Sans', sans-serif" }}>Our team responds within 30 days to all data-related requests.</p>
             </div>
             <a
-              href="mailto:xerxez.in@gmail.com?subject=Privacy Enquiry"
+              href="mailto:info@xerxez.com?subject=Privacy Enquiry"
               style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)", color: "#fff", fontWeight: 700, fontSize: 14, padding: "11px 24px", borderRadius: 8, textDecoration: "none", fontFamily: "'DM Sans', sans-serif", boxShadow: "0 4px 0 rgba(150,95,30,0.45), 0 5px 14px rgba(201,136,58,0.24)", whiteSpace: "nowrap" }}
             >
               <i className="fas fa-envelope" style={{ fontSize: 13 }} />

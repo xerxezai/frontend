@@ -558,8 +558,8 @@ const CTASection = () => (
               <Link to={CONTACT_HREF} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: OG_G, color: "#fff", fontWeight: 700, fontSize: 15, padding: "14px 26px", borderRadius: 10, textDecoration: "none", fontFamily: FF, boxShadow: BS }}>
                 Start Free Consultation <ArrowRight size={15} />
               </Link>
-              <a href="mailto:xerxez.in@gmail.com" style={{ color: OG, fontSize: 14, fontWeight: 600, fontFamily: FF, textDecoration: "none" }}>
-                Or email: xerxez.in@gmail.com
+              <a href="mailto:info@xerxez.com" style={{ color: OG, fontSize: 14, fontWeight: 600, fontFamily: FF, textDecoration: "none" }}>
+                Or email: info@xerxez.com
               </a>
             </div>
           </FI>

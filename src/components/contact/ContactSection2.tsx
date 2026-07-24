@@ -617,7 +617,7 @@ const ContactSection2 = () => {
 
                 {/* contact rows */}
                 <div style={{ display:"flex", flexDirection:"column", gap:16, marginBottom:18 }}>
-                  <InfoRow icon="fas fa-envelope"       label="Email"    value="xerxez.in@gmail.com"          href="mailto:xerxez.in@gmail.com" delay={120} />
+                  <InfoRow icon="fas fa-envelope"       label="Email"    value="info@xerxez.com"          href="mailto:info@xerxez.com" delay={120} />
                   <InfoRow icon="fas fa-phone-alt"      label="Phone"    value="+971 56 786 7451"          href="tel:+971567867451"      delay={160} />
                   <InfoRow icon="fas fa-map-marker-alt" label="Location" value="India & UAE — Remote-first"                              delay={200} />
                 </div>

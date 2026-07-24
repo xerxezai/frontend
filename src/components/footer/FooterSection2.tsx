@@ -37,7 +37,7 @@ const NAV = [
 const SOCIAL = [
   { href: "https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/", icon: "fab fa-linkedin-in", label: "LinkedIn" },
   { href: "https://github.com/xerxezai",                                                    icon: "fab fa-github",      label: "GitHub"   },
-  { href: "mailto:xerxez.in@gmail.com",                                                        icon: "fas fa-envelope",    label: "Email"    },
+  { href: "mailto:info@xerxez.com",                                                        icon: "fas fa-envelope",    label: "Email"    },
 ];
 
 const colHead: React.CSSProperties = {
@@ -241,8 +241,8 @@ const FooterSection2 = () => (
                 {
                   icon: <Mail size={12} />,
                   content: (
-                    <a href="mailto:xerxez.in@gmail.com" style={linkBase} {...linkHov}>
-                      xerxez.in@gmail.com
+                    <a href="mailto:info@xerxez.com" style={linkBase} {...linkHov}>
+                      info@xerxez.com
                     </a>
                   ),
                 },
