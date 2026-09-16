@@ -9,7 +9,6 @@
 //              from a competitor, no XERXEZ branding borrowed from any
 //              reference site). No invented statistics.
 
-import { useState } from "react";
 import {
   CheckCircle2, Package, LayoutGrid, Users, Thermometer, LayoutDashboard, Smartphone,
   Plug, Building2, Bell, BarChart3, MapPin,
@@ -21,7 +20,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import SEO from "../../../components/seo/SEO";
 import {
-  XerxezShell, T, Eyebrow, SectionHeading, DotGrid, Btn, Reveal, IconTile, V2_HEADER_H,
+  XerxezShell, T, Eyebrow, SectionHeading, DotGrid, Btn, Reveal, IndustryHero, V2FeatureCard, DarkFeatureCard, V2_HEADER_H,
 } from "../../../components/v2";
 
 import heroImage from "../../../assets/images/iot/hero-smart-retail.jpg";
@@ -104,75 +103,6 @@ const CTA_TRUST_SIGNALS: { icon: LucideIcon; text: string }[] = [
   { icon: ShieldCheck, text: "Enterprise Grade" },
 ];
 
-// One white lift card — red icon tile, 3D lift on hover (translateY(-10px),
-// deeper shadow), no rotation. Used for "IoT Applications", "AI in Retail",
-// "Use Cases" and "Benefits".
-const WhiteCard = ({ icon: Icon, title, desc }: { icon: LucideIcon; title: string; desc: string }) => {
-  const [hover, setHover] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        height: "100%", background: "#fff", borderRadius: 16, padding: "28px 26px",
-        transform: hover ? "translateY(-10px)" : "translateY(0)",
-        boxShadow: hover ? "0 25px 50px rgba(7,26,51,0.20)" : "0 10px 30px rgba(7,26,51,0.08)",
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
-      }}
-    >
-      <IconTile active={hover}><Icon size={22} strokeWidth={2} /></IconTile>
-      <h3 style={{ fontFamily: T.fontHead, fontSize: 17, fontWeight: 700, color: T.headNavy, margin: "18px 0 9px", lineHeight: 1.3 }}>
-        {title}
-      </h3>
-      <p style={{ fontFamily: T.fontBody, fontSize: 14, lineHeight: 1.65, color: T.muted, margin: 0 }}>
-        {desc}
-      </p>
-    </div>
-  );
-};
-
-// One dark navy card (#0d2a4a) — subtle border, 3D lift on hover (border
-// turns red, deeper shadow), no rotation. `index` is optional: when given,
-// the card shows a faded "01" style number (Platform Capabilities); when
-// omitted, it's a plain icon card (Why XERXEZ).
-const DarkCard = ({ icon: Icon, title, desc, index }: { icon: LucideIcon; title: string; desc: string; index?: number }) => {
-  const [hover, setHover] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        height: "100%", background: "#0d2a4a", borderRadius: 16, padding: "24px 22px",
-        border: `1px solid ${hover ? T.red : "rgba(255,255,255,0.08)"}`,
-        transform: hover ? "translateY(-8px)" : "translateY(0)",
-        boxShadow: hover ? "0 24px 48px rgba(7,26,51,0.35)" : "0 10px 30px rgba(7,26,51,0.20)",
-        transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-        <span style={{
-          width: 40, height: 40, borderRadius: "50%", flexShrink: 0,
-          display: "inline-flex", alignItems: "center", justifyContent: "center",
-          border: `1.5px solid ${T.red}`, color: T.red,
-        }}>
-          <Icon size={18} strokeWidth={2} />
-        </span>
-        {index !== undefined && (
-          <span style={{ fontFamily: T.fontHead, fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.35)" }}>
-            {String(index + 1).padStart(2, "0")}
-          </span>
-        )}
-      </div>
-      <h3 style={{ fontFamily: T.fontHead, fontSize: 16, fontWeight: 700, color: "#fff", margin: "0 0 8px", lineHeight: 1.3 }}>
-        {title}
-      </h3>
-      <p style={{ fontFamily: T.fontBody, fontSize: 13.5, lineHeight: 1.6, color: "rgba(255,255,255,0.68)", margin: 0 }}>
-        {desc}
-      </p>
-    </div>
-  );
-};
-
 const SmartRetailPage = () => (
   <XerxezShell>
     <SEO
@@ -182,51 +112,25 @@ const SmartRetailPage = () => (
       noIndex
     />
 
-    {/* ── Hero — shared IoT background (same image on every IoT page), navy
-        scrim, left-aligned. ── */}
-    <section style={{
-      position: "relative", overflow: "hidden",
-      background: T.navyGrad,
-      minHeight: "100svh", display: "flex", alignItems: "center",
-      paddingTop: V2_HEADER_H + 56, paddingBottom: 72,
-    }}>
-      <div aria-hidden="true" style={{
-        position: "absolute", inset: 0,
-        backgroundImage: `url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center",
-      }} />
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(7,26,51,0.70)" }} />
-      <div aria-hidden="true" style={{
-        position: "absolute", top: "-25%", right: "-10%", width: 680, height: 680, borderRadius: "50%",
-        background: `radial-gradient(circle, ${T.redGlow} 0%, rgba(217,53,34,0.06) 45%, transparent 70%)`,
-        filter: "blur(20px)", pointerEvents: "none",
-      }} />
-      <DotGrid opacity={0.4} size={36} />
-
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 820, display: "flex", flexDirection: "column", gap: 14 }}>
-          <Eyebrow color={T.redLight} mb={0}>XERXEZ · SMART RETAIL</Eyebrow>
-          <h1 style={{
-            fontFamily: T.fontHead, fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.2rem)",
-            lineHeight: 1.15, letterSpacing: "-0.02em", color: "#fff", margin: 0,
-          }}>
-            Transform Retail With Connected, Intelligent &amp; Data-Driven Technology
-          </h1>
-          <p style={{ fontFamily: T.fontBody, fontSize: "1rem", lineHeight: 1.7, color: "rgba(255,255,255,0.8)", margin: 0 }}>
-            Connect stores, products, shelves, inventory, customers and business systems into a
-            unified digital retail ecosystem — enabling real-time visibility, automated operations
-            and intelligent customer experiences. Stop managing inventory manually, losing stock
-            to poor visibility and missing sales opportunities. Give your store managers and
-            operations teams a single platform that monitors every shelf, every product and every
-            customer interaction in real time — so decisions are based on data, not guesswork.
-            Across UAE &amp; India.
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 8 }}>
-            <Btn to="/v2/contact">Request a Demo</Btn>
-            <Btn href="#capabilities" variant="outline" dark arrow={false}>View Capabilities</Btn>
-          </div>
-        </div>
-      </div>
-    </section>
+    <IndustryHero
+      eyebrow="XERXEZ · SMART RETAIL"
+      heading={<>Transform Retail With Connected, Intelligent &amp; Data-Driven Technology</>}
+      subtitle={<>
+        Connect stores, products, shelves, inventory, customers and business systems into a
+        unified digital retail ecosystem — enabling real-time visibility, automated operations
+        and intelligent customer experiences. Stop managing inventory manually, losing stock
+        to poor visibility and missing sales opportunities. Give your store managers and
+        operations teams a single platform that monitors every shelf, every product and every
+        customer interaction in real time — so decisions are based on data, not guesswork.
+        Across UAE &amp; India.
+      </>}
+      heroImage={heroImage}
+      ctaButtons={[
+        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
+      ]}
+      overlayOpacity={0.70}
+    />
 
     {/* ── What Is Smart Retail — copy + checklist on the left, TALL image on
         the right (checklist sits below the paragraph, not beside the image). ── */}
@@ -288,7 +192,7 @@ const SmartRetailPage = () => (
           {IOT_APPLICATIONS.map((c, i) => (
             <div key={c.title} className="col-lg-4 col-md-6">
               <Reveal delay={(i % 3) * 60} fill>
-                <WhiteCard icon={c.icon} title={c.title} desc={c.desc} />
+                <V2FeatureCard icon={<c.icon size={22} strokeWidth={2} />} title={c.title} desc={c.desc} />
               </Reveal>
             </div>
           ))}
@@ -311,7 +215,7 @@ const SmartRetailPage = () => (
           {CAPABILITIES.map((c, i) => (
             <div key={c.title} className="col-lg-4 col-md-6">
               <Reveal delay={(i % 3) * 60} fill>
-                <DarkCard icon={c.icon} title={c.title} desc={c.desc} index={i} />
+                <DarkFeatureCard icon={c.icon} title={c.title} desc={c.desc} index={i} />
               </Reveal>
             </div>
           ))}
@@ -329,7 +233,7 @@ const SmartRetailPage = () => (
           {AI_IN_RETAIL.map((a, i) => (
             <div key={a.title} className="col-lg-4 col-md-6">
               <Reveal delay={(i % 3) * 60} fill>
-                <WhiteCard icon={a.icon} title={a.title} desc={a.desc} />
+                <V2FeatureCard icon={<a.icon size={22} strokeWidth={2} />} title={a.title} desc={a.desc} />
               </Reveal>
             </div>
           ))}
@@ -347,7 +251,7 @@ const SmartRetailPage = () => (
           {USE_CASES.map((u, i) => (
             <div key={u.title} className="col-lg-4 col-md-6">
               <Reveal delay={(i % 3) * 60} fill>
-                <WhiteCard icon={u.icon} title={u.title} desc={u.desc} />
+                <V2FeatureCard icon={<u.icon size={22} strokeWidth={2} />} title={u.title} desc={u.desc} />
               </Reveal>
             </div>
           ))}
@@ -365,7 +269,7 @@ const SmartRetailPage = () => (
           {BENEFITS.map((b, i) => (
             <div key={b.title} className="col-lg-4 col-md-6">
               <Reveal delay={(i % 3) * 60} fill>
-                <WhiteCard icon={b.icon} title={b.title} desc={b.desc} />
+                <V2FeatureCard icon={<b.icon size={22} strokeWidth={2} />} title={b.title} desc={b.desc} />
               </Reveal>
             </div>
           ))}
@@ -388,7 +292,7 @@ const SmartRetailPage = () => (
           {WHY_XERXEZ.map((w, i) => (
             <div key={w.title} className="col-lg-4 col-md-6">
               <Reveal delay={(i % 3) * 60} fill>
-                <DarkCard icon={w.icon} title={w.title} desc={w.desc} />
+                <DarkFeatureCard icon={w.icon} title={w.title} desc={w.desc} />
               </Reveal>
             </div>
           ))}
