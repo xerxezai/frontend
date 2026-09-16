@@ -42,6 +42,10 @@ export interface ProjectDataType {
 
 export interface ServiceKeyFact {
   icon: string;
+  // Renderer-agnostic icon lookup key (e.g. "brain") used by the /v2 lucide
+  // icon map in src/components/v2/01-core/icons.ts; `icon` (FontAwesome
+  // class) remains for the pre-/v2 ServiceDetailKeyFacts renderer.
+  iconKey?: string;
   title: string;
   desc: string;
 }
@@ -63,6 +67,12 @@ export interface ServiceDataType {
   width?: number;
   height?: number;
   highlights?: string[];
+  // Optional expanded version of `highlights` — same items, same order, each
+  // paired with a one-sentence description. Additive only: `highlights`
+  // itself stays a plain string[] because the pre-/v2 ServiceDetailSection.tsx
+  // renders it as plain text and would break on an object shape. Only the /v2
+  // XerxezServiceTemplate Overview checklist reads this field.
+  highlightDetails?: { title: string; desc: string }[];
   keyFacts?: ServiceKeyFact[];
   faqs?: ServiceFaq[];
 }

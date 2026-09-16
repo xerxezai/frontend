@@ -121,6 +121,20 @@ export const INDUSTRIES: IndustryDef[] = [
 export const getIndustryBySlug = (slug: string | undefined) =>
   INDUSTRIES.find((i) => i.slug === slug);
 
+// `shortName` reads clean for 6 of the 8 industries ("Oil & Gas",
+// "Construction", "Manufacturing", "Healthcare", "Logistics", "Retail");
+// "epc" and "facility-management" get a clearer single-line label here
+// instead — still describing the same real industry, not a fabricated one.
+// Every UI that shows a compact industry label (the homepage's
+// XerxezIndustries picker, the header's Industry We Serve dropdown, the
+// contact form's Industry field) calls this instead of reading `shortName`
+// directly, so the label stays identical everywhere.
+const LABEL_OVERRIDES: Record<string, string> = {
+  epc: "EPC & Engineering",
+  "facility-management": "Facility Management",
+};
+export const industryLabel = (ind: IndustryDef) => LABEL_OVERRIDES[ind.slug] ?? ind.shortName;
+
 export interface IndustryPageContent {
   painPoints: string[];
   modules: string[];

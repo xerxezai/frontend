@@ -93,5 +93,4 @@ Other commands:
 - Website: [xerxez.com](https://www.xerxez.com)
 - Email: xerxez.in@gmail.com
 - ERP Portal: [xerxez.com/erp](https://www.xerxez.com/erp)
- l
  

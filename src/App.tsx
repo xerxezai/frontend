@@ -8,7 +8,16 @@ class PageErrorBoundary extends Component<{ children: ReactNode }, { caught: boo
   static getDerivedStateFromError() { return { caught: true }; }
   render() {
     if (this.state.caught) {
-      return (
+      // This boundary wraps every route, v1 and /v2 alike. A crash on a /v2
+      // page should show the v2 navy/red theme instead of the v1 fallback's
+      // cream background — checked at render time (not cached) since the
+      // path that crashed is whatever the user was on when it happened.
+      const isV2 = typeof window !== "undefined" && window.location.pathname.startsWith("/v2");
+      return isV2 ? (
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#071a33", fontFamily: "'Poppins',sans-serif", color: "#fff", fontSize: 15 }}>
+          Something went wrong. <a href="/v2" style={{ marginLeft: 8, color: "#D93522" }}>Go home</a>
+        </div>
+      ) : (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans',sans-serif", color: "#6b7280", fontSize: 15 }}>
           Something went wrong. <a href="/" style={{ marginLeft: 8, color: "#C9883A" }}>Go home</a>
         </div>
@@ -63,6 +72,42 @@ const PrivacyPolicyPage  = lazy(() => import("./page/PrivacyPolicyPage"));
 const TermsPage          = lazy(() => import("./page/TermsPage"));
 const CareersPage        = lazy(() => import("./page/CareersPage"));
 const PartnersPage       = lazy(() => import("./page/PartnersPage"));
+const HomeV2             = lazy(() => import("./page/v2/HomeV2"));
+const AboutV2            = lazy(() => import("./page/v2/AboutV2"));
+const ServicesV2         = lazy(() => import("./page/v2/ServicesV2"));
+const PortfolioV2        = lazy(() => import("./page/v2/PortfolioV2"));
+const ContactV2          = lazy(() => import("./page/v2/ContactV2"));
+const TrainingV2         = lazy(() => import("./page/v2/TrainingV2"));
+const CareersV2          = lazy(() => import("./page/v2/CareersV2"));
+// One dynamic page for all 10 service detail routes (was 10 near-identical wrapper files)
+const ServiceDetailPageV2 = lazy(() => import("./page/v2/services/ServiceDetailPageV2"));
+// Standalone industry detail pages (more to follow per industry)
+const OilGasPage = lazy(() => import("./page/v2/industries/OilGasPage"));
+const ConstructionPage = lazy(() => import("./page/v2/industries/ConstructionPage"));
+const HealthcarePage = lazy(() => import("./page/v2/industries/HealthcarePage"));
+const FacilityManagementPage = lazy(() => import("./page/v2/industries/FacilityManagementPage"));
+const EpcEngineeringPage = lazy(() => import("./page/v2/industries/EpcEngineeringPage"));
+const ManufacturingPage = lazy(() => import("./page/v2/industries/ManufacturingPage"));
+
+// IoT Solutions
+const SmartAssetTrackingPage = lazy(() => import("./page/v2/iot/SmartAssetTrackingPage"));
+const IndustrialIoTPage = lazy(() => import("./page/v2/iot/IndustrialIoTPage"));
+const SmartBuildingPage = lazy(() => import("./page/v2/iot/SmartBuildingPage"));
+const FleetManagementPage = lazy(() => import("./page/v2/iot/FleetManagementPage"));
+const AgricultureIoTPage = lazy(() => import("./page/v2/iot/AgricultureIoTPage"));
+const HealthcareIoTPage = lazy(() => import("./page/v2/iot/HealthcareIoTPage"));
+const SmartRetailPage = lazy(() => import("./page/v2/iot/SmartRetailPage"));
+
+// Portfolio case studies
+const AIERPProjectPage = lazy(() => import("./page/v2/projects/AIERPProjectPage"));
+const MLOpsProjectPage = lazy(() => import("./page/v2/projects/MLOpsProjectPage"));
+const CloudInfraProjectPage = lazy(() => import("./page/v2/projects/CloudInfraProjectPage"));
+const EnterpriseSaaSPage = lazy(() => import("./page/v2/projects/EnterpriseSaaSPage"));
+const AITrainingProgramPage = lazy(() => import("./page/v2/projects/AITrainingPage"));
+const DigitalTransformationPage = lazy(() => import("./page/v2/projects/DigitalTransformationPage"));
+const SupplyChainAIPage = lazy(() => import("./page/v2/projects/SupplyChainAIPage"));
+const KubernetesSecurityPage = lazy(() => import("./page/v2/projects/KubernetesSecurityPage"));
+const FraudDetectionPage = lazy(() => import("./page/v2/projects/FraudDetectionPage"));
 
 // LMA (Learning Management Application)
 const LMABecomeInstructorPage   = lazy(() => import("./page/lma/BecomeInstructorPage"));
@@ -131,6 +176,40 @@ function App() {
           <Route path="/terms"                   element={<TermsPage />} />
           <Route path="/careers"                 element={<CareersPage />} />
           <Route path="/partners"                element={<PartnersPage />} />
+          <Route path="/v2"                      element={<HomeV2 />} />
+          <Route path="/v2/about"                element={<AboutV2 />} />
+          <Route path="/v2/services"             element={<ServicesV2 />} />
+          <Route path="/v2/portfolio"            element={<PortfolioV2 />} />
+          <Route path="/v2/contact"              element={<ContactV2 />} />
+          <Route path="/v2/training"             element={<TrainingV2 />} />
+          <Route path="/v2/careers"              element={<CareersV2 />} />
+          {/* one dynamic route for all 10 service detail pages (was 10 separate routes) */}
+          <Route path="/v2/services/:slug" element={<ServiceDetailPageV2 />} />
+          {/* standalone industry pages — first of eventually 6, one per real sector */}
+          <Route path="/v2/industries/oil-gas" element={<OilGasPage />} />
+          <Route path="/v2/industries/construction" element={<ConstructionPage />} />
+          <Route path="/v2/industries/healthcare" element={<HealthcarePage />} />
+          <Route path="/v2/industries/facility-management" element={<FacilityManagementPage />} />
+          <Route path="/v2/industries/epc-engineering" element={<EpcEngineeringPage />} />
+          <Route path="/v2/industries/manufacturing" element={<ManufacturingPage />} />
+          {/* standalone IoT Solutions pages — first two of eventually 7 */}
+          <Route path="/v2/iot/smart-asset-tracking" element={<SmartAssetTrackingPage />} />
+          <Route path="/v2/iot/industrial-iot" element={<IndustrialIoTPage />} />
+          <Route path="/v2/iot/smart-building-solutions" element={<SmartBuildingPage />} />
+          <Route path="/v2/iot/fleet-management-systems" element={<FleetManagementPage />} />
+          <Route path="/v2/iot/agriculture-iot" element={<AgricultureIoTPage />} />
+          <Route path="/v2/iot/healthcare-iot" element={<HealthcareIoTPage />} />
+          <Route path="/v2/iot/smart-retail" element={<SmartRetailPage />} />
+          {/* portfolio case studies */}
+          <Route path="/v2/project/ai-erp-platform" element={<AIERPProjectPage />} />
+          <Route path="/v2/project/mlops-pipeline" element={<MLOpsProjectPage />} />
+          <Route path="/v2/project/cloud-infrastructure" element={<CloudInfraProjectPage />} />
+          <Route path="/v2/project/enterprise-saas" element={<EnterpriseSaaSPage />} />
+          <Route path="/v2/project/ai-training-program" element={<AITrainingProgramPage />} />
+          <Route path="/v2/project/digital-transformation" element={<DigitalTransformationPage />} />
+          <Route path="/v2/project/supply-chain-ai" element={<SupplyChainAIPage />} />
+          <Route path="/v2/project/kubernetes-security" element={<KubernetesSecurityPage />} />
+          <Route path="/v2/project/fraud-detection-mlops" element={<FraudDetectionPage />} />
 
           {/* LMA routes */}
           <Route path="/lma/become-instructor"               element={<LMABecomeInstructorPage />} />
