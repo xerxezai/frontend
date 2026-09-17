@@ -1,7 +1,7 @@
 // AIERPProjectPage.tsx
-// Purpose: /v2/project/ai-erp-platform — case study data for the AI-Powered
+// Purpose: /project/ai-erp-platform — case study data for the AI-Powered
 //          ERP Platform project, rendered through <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/ai-erp-platform)
+// Used in: src/App.tsx (route: /project/ai-erp-platform)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -12,7 +12,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "AI-Powered ERP Platform | Case Study | XERXEZ",
   seoDesc: "How XERXEZ deployed an AI-native ERP platform for an engineering and industrial client — 40% cost reduction, 60% faster approvals, deployed in under 6 months.",
-  canonical: "/v2/project/ai-erp-platform",
+  canonical: "/project/ai-erp-platform",
 
   category: "AI & ERP",
   industry: "Engineering & Industrial",
@@ -58,7 +58,7 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "8 engineers" },
   ],
 
-  next: { title: "MLOps Pipeline Automation", href: "/v2/project/mlops-pipeline" },
+  next: { title: "MLOps Pipeline Automation", href: "/project/mlops-pipeline" },
 };
 
 const AIERPProjectPage = () => <ProjectCaseStudyTemplate data={data} />;

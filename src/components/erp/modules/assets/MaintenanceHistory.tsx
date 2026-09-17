@@ -63,13 +63,13 @@ export default function MaintenanceHistory({ assetId, records, loading, onReload
   const [showForm, setShowForm] = useState(false);
   const totalCost = records.reduce((s, r) => s + Number(r.cost || 0), 0);
 
-  if (loading) return <div className="d-flex justify-content-center py-4"><div className="spinner-border" style={{ color: '#C9883A' }} /></div>;
+  if (loading) return <div className="d-flex justify-content-center py-4"><div className="spinner-border" style={{ color: '#D93522' }} /></div>;
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
         <div style={{ fontFamily: FF, fontSize: 12.5, color: '#6B6B6B' }}>Total maintenance cost: <strong style={{ color: '#1A1A1A' }}>{fmtINR(totalCost)}</strong></div>
-        <button onClick={() => setShowForm(true)} style={{ background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none', borderRadius: 9, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>
+        <button onClick={() => setShowForm(true)} style={{ background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>
           <i className="fas fa-plus" style={{ marginRight: 6 }} />Log Maintenance
         </button>
       </div>
@@ -84,7 +84,7 @@ export default function MaintenanceHistory({ assetId, records, loading, onReload
                   <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 12.5, color: '#1A1A1A' }}>{MAINTENANCE_TYPE_LABEL[r.maintenance_type] ?? r.maintenance_type}</span>
                   <span style={{ fontFamily: FF, fontSize: 11.5, color: '#9ca3af', marginLeft: 8 }}>{r.date} · {r.performed_by}{r.vendor ? ` (${r.vendor})` : ''}</span>
                 </div>
-                <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 13, color: '#C9883A' }}>{fmtINR(r.cost)}</span>
+                <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 13, color: '#D93522' }}>{fmtINR(r.cost)}</span>
               </div>
               <div style={{ fontFamily: FF, fontSize: 12, color: '#374151', marginTop: 6 }}>{r.description}</div>
               {r.parts_replaced && <div style={{ fontFamily: FF, fontSize: 11.5, color: '#6B6B6B', marginTop: 4 }}>Parts: {r.parts_replaced}</div>}

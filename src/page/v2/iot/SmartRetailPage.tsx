@@ -1,9 +1,9 @@
 // SmartRetailPage.tsx
-// Purpose: /v2/iot/smart-retail — seventh and final standalone IoT
+// Purpose: /iot/smart-retail — seventh and final standalone IoT
 //          Solutions detail page. Same architecture and card language as
 //          SmartAssetTrackingPage.tsx (hero, white lift cards, numbered dark
 //          capability cards, closing CTA).
-// Used in: src/App.tsx (route: /v2/iot/smart-retail)
+// Used in: src/App.tsx (route: /iot/smart-retail)
 // Data source: original XERXEZ copy for this page (same standing allowance
 //              as every other industry/solution detail page — never copied
 //              from a competitor, no XERXEZ branding borrowed from any
@@ -108,7 +108,7 @@ const SmartRetailPage = () => (
     <SEO
       title="Smart Retail | IoT Solutions | XERXEZ"
       description="Connect stores, products, shelves, inventory, customers and business systems into a unified digital retail ecosystem — enabling real-time visibility and intelligent experiences."
-      canonical="/v2/iot/smart-retail"
+      canonical="/iot/smart-retail"
       noIndex
     />
 
@@ -126,7 +126,7 @@ const SmartRetailPage = () => (
       </>}
       heroImage={heroImage}
       ctaButtons={[
-        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
       ]}
       overlayOpacity={0.70}
@@ -325,7 +325,7 @@ const SmartRetailPage = () => (
             AI-powered customer experience? Our IoT specialists can help you identify the right
             devices, architecture and integration strategy.
           </p>
-          <Btn to="/v2/contact">Request a Demo</Btn>
+          <Btn to="/contact">Request a Demo</Btn>
 
           {/* 3 trust signals — centered row below the button */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", justifyContent: "center", marginTop: 34 }}>

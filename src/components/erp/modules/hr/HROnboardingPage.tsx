@@ -115,7 +115,7 @@ function Confetti() {
   useEffect(() => {
     const c = ref.current; if (!c) return;
     const ctx = c.getContext('2d')!; c.width = c.offsetWidth; c.height = c.offsetHeight;
-    const colors = [OG, '#e8a84e', '#10b981', '#3b82f6', '#fbbf24'];
+    const colors = [OG, '#D93522', '#10b981', '#3b82f6', '#fbbf24'];
     const parts = Array.from({ length: 80 }, () => ({
       x: c.width / 2 + (Math.random() - 0.5) * 80, y: c.height * 0.35,
       vx: (Math.random() - 0.5) * 9, vy: -(Math.random() * 7 + 3),
@@ -442,7 +442,7 @@ export default function HROnboardingPage() {
                 <EmployeeSearchSelect employees={notOnboardedEmployees} value={newEmployeeId} onChange={setNewEmployeeId} />
               </div>
               <button onClick={() => startOnboardingFor(newEmployeeId)} disabled={starting || !newEmployeeId}
-                style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: starting || !newEmployeeId ? 'default' : 'pointer', opacity: starting || !newEmployeeId ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: 7 }}>
+                style={{ background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: starting || !newEmployeeId ? 'default' : 'pointer', opacity: starting || !newEmployeeId ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: 7 }}>
                 <Plus size={15} />{starting ? 'Starting…' : 'Start Onboarding'}
               </button>
             </div>
@@ -496,7 +496,7 @@ export default function HROnboardingPage() {
                           <td style={{ padding: '11px 16px' }}>
                             <div style={{ display: 'flex', gap: 6 }}>
                               <button onClick={() => openChecklist(String(r.employee_id), r.employee_name)} title="View Checklist"
-                                style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
+                                style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
                                 <Eye size={12} />
                               </button>
                               <button onClick={() => openChecklist(String(r.employee_id), r.employee_name)} title="Edit"

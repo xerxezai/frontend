@@ -41,8 +41,8 @@ const XerxezCtaBand = () => (
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
           {/* no pricing page/figures exist yet — second CTA points at real content instead */}
-          <Btn to="/v2/contact">Book a free demo</Btn>
-          <Btn to="/v2/services" variant="outline" dark arrow={false}>Explore our services</Btn>
+          <Btn to="/contact">Book a free demo</Btn>
+          <Btn to="/services" variant="outline" dark arrow={false}>Explore our services</Btn>
         </div>
       </Reveal>
     </div>

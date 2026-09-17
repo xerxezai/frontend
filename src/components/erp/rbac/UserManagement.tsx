@@ -18,7 +18,7 @@ function getCurrentUserId(): number | null {
 }
 
 const FF = "'DM Sans',sans-serif";
-const OG = '#C9883A';
+const OG = '#D93522';
 const BORDER = 'rgba(0,0,0,0.08)';
 
 // Matches ERPTable.tsx's TH/TD exactly, so the bespoke Users table (needed for the
@@ -117,13 +117,13 @@ function EditAccessModal({ user, onClose, onSaved }: { user: any; onClose: () =>
             </div>
           </div>
         ) : (
-          <div style={{ background: 'rgba(201,136,58,0.08)', border: '1px solid rgba(201,136,58,0.25)', borderRadius: 8, padding: 12, marginBottom: 20, fontSize: 13, color: '#8B5E1A' }}>
+          <div style={{ background: 'rgba(217,53,34,0.08)', border: '1px solid rgba(217,53,34,0.25)', borderRadius: 8, padding: 12, marginBottom: 20, fontSize: 13, color: '#8B5E1A' }}>
             Super Admin has access to all modules automatically.
           </div>
         )}
         <div style={{ display: 'flex', gap: 10 }}>
           <button onClick={onClose} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '10px', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
-          <button onClick={save} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+          <button onClick={save} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1 }}>
             {saving ? 'Saving…' : 'Save'}
           </button>
         </div>
@@ -356,7 +356,7 @@ export default function UserManagement() {
             <h5 className="fw-bold mb-0" style={{ color: '#1a1a2e', fontSize: 15 }}>Users</h5>
             <button
               onClick={() => setShowCreate(true)}
-              style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 14px', fontFamily: FF, fontWeight: 700, fontSize: 12, boxShadow: '0 3px 0 rgba(150,95,30,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+              style={{ background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 14px', fontFamily: FF, fontWeight: 700, fontSize: 12, boxShadow: '0 3px 0 rgba(150,95,30,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
             >
               <i className="fas fa-plus" style={{ fontSize: 10 }}></i> Add New
             </button>
@@ -364,7 +364,7 @@ export default function UserManagement() {
 
           {selectedIds.length > 0 && (
             <div style={{
-              background: '#fff3e0', border: '1px solid #C9883A', borderRadius: 8,
+              background: '#fff3e0', border: '1px solid #D93522', borderRadius: 8,
               padding: '12px 20px', marginBottom: 16,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10,
             }}>
@@ -406,14 +406,14 @@ export default function UserManagement() {
             <div className="erp-table-card" style={{
               textAlign: 'center', padding: '64px 24px', background: '#fff', borderRadius: 16,
               border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`,
-              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
             }}>
               <p className="mb-0" style={{ color: '#6B6B6B', fontFamily: FF, fontSize: 13.5, fontWeight: 600 }}>No users found.</p>
             </div>
           ) : (
             <div className="erp-table-card" style={{
               background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`,
-              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
               overflowX: 'auto',
             }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
@@ -444,7 +444,7 @@ export default function UserManagement() {
                     const selected = selectedIds.includes(u.id);
                     const disabledReason = u.is_superuser ? 'Cannot delete Super Admin' : u.id === currentUserId ? 'You cannot delete yourself' : undefined;
                     return (
-                      <tr key={u.id} style={{ background: selected ? 'rgba(201,136,58,0.08)' : undefined }}>
+                      <tr key={u.id} style={{ background: selected ? 'rgba(217,53,34,0.08)' : undefined }}>
                         <td style={{ ...TD, textAlign: 'center', overflow: 'visible' }}>
                           <label
                             title={disabledReason}
@@ -472,7 +472,7 @@ export default function UserManagement() {
                         <td style={{ ...TD, width: 110 }}>
                           <div style={{ display: 'flex', gap: 5 }}>
                             <button title="Edit" onClick={() => setEditing(u)}
-                              style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
+                              style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
                               <i className="fas fa-pen" style={{ fontSize: 10 }}></i>
                             </button>
                             <button title="Deactivate — disables access but keeps them in this list" onClick={() => setDeactivating(u)}

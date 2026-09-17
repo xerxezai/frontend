@@ -4,20 +4,20 @@ import SEO from "../../components/seo/SEO";
 
 // ── colour tokens — identical to ERPLogin ────────────────────────────────────
 const C = {
-  orange:      "#C9883A",
-  orangeGrad:  "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
-  orangeDeep:  "rgba(150,95,30,0.50)",
-  orangeLight: "rgba(201,136,58,0.09)",
-  warmDark:    "#1a1208",
-  warmDarker:  "#0f0a05",
-  cream:       "#F8F7F4",
+  orange:      "#D93522",
+  orangeGrad:  "#D93522",
+  orangeDeep:  "rgba(139,31,23,0.50)",
+  orangeLight: "rgba(217,53,34,0.09)",
+  warmDark:    "#0f2c4d",
+  warmDarker:  "#071a33",
+  cream:       "#F4F7FA",
   white:       "#FFFFFF",
   dark:        "#1A1A1A",
   muted:       "#6B6B6B",
 };
 const shadow = {
-  card:  "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.03)",
-  badge: "0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.30)",
+  card:  "0 20px 50px rgba(7,26,51,0.14), 0 2px 8px rgba(7,26,51,0.06)",
+  badge: "0 8px 20px rgba(217,53,34,0.40)",
 };
 const FF = "'DM Sans', sans-serif";
 
@@ -69,9 +69,8 @@ const StatTile = ({ val, label, icon, delay, trigger }: {
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
         flex: 1,
-        background: "rgba(255,255,255,0.06)",
-        backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
-        border: "1px solid rgba(255,255,255,0.08)", borderTop: `2px solid ${C.orange}`,
+        background: "#0d2a4a",
+        border: "1px solid rgba(255,255,255,0.10)",
         borderRadius: 14, padding: "16px 14px", cursor: "default",
         transform: hov ? "translateY(-5px)" : "translateY(0)",
         boxShadow: hov ? "0 16px 40px rgba(0,0,0,0.35)" : "0 4px 14px rgba(0,0,0,0.20)",
@@ -92,7 +91,7 @@ const StatTile = ({ val, label, icon, delay, trigger }: {
 
 // ── social proof avatar row ────────────────────────────────────────────────────
 const AVATAR_COLORS = [
-  "linear-gradient(145deg,#e8a84e,#C9883A)",
+  "#D93522",
   "linear-gradient(145deg,#8b5cf6,#6d28d9)",
   "linear-gradient(145deg,#3b82f6,#1d4ed8)",
   "linear-gradient(145deg,#10b981,#047857)",
@@ -104,7 +103,7 @@ const SocialProofRow = ({ text, delay }: { text: string; delay: number }) => (
       {AVATAR_COLORS.map((grad, i) => (
         <span key={i} style={{
           width: 30, height: 30, borderRadius: "50%", background: grad,
-          border: "2px solid #1a1208", marginLeft: i === 0 ? 0 : -9,
+          border: "2px solid #071a33", marginLeft: i === 0 ? 0 : -9,
           display: "flex", alignItems: "center", justifyContent: "center",
           boxShadow: "0 2px 6px rgba(0,0,0,0.30)",
         }}>
@@ -120,7 +119,7 @@ const SocialProofRow = ({ text, delay }: { text: string; delay: number }) => (
 const UrgencyBanner = ({ text, delay }: { text: string; delay: number }) => (
   <div style={{
     display: "inline-flex", alignItems: "center", gap: 9,
-    background: "rgba(201,136,58,0.13)", border: "1px solid rgba(201,136,58,0.35)",
+    background: "rgba(217,53,34,0.10)", border: "1px solid rgba(217,53,34,0.35)",
     borderRadius: 20, padding: "8px 16px",
     animation: `lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
   }}>
@@ -128,7 +127,7 @@ const UrgencyBanner = ({ text, delay }: { text: string; delay: number }) => (
       <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.orange, animation: "lmaUrgentPing 1.6s ease-in-out infinite" }} />
       <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.orange }} />
     </span>
-    <span style={{ color: "#E5B460", fontSize: 12.5, fontWeight: 700, fontFamily: FF }}>{text}</span>
+    <span style={{ color: "#ff8a7a", fontSize: 12.5, fontWeight: 700, fontFamily: FF }}>{text}</span>
   </div>
 );
 
@@ -185,8 +184,8 @@ const PrimaryBtn = ({ label, onClick, busy, disabled: dis }: {
         fontFamily: FF, cursor: off ? "not-allowed" : "pointer",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
         boxShadow: hov && !off
-          ? `0 6px 0 ${C.orangeDeep}, 0 10px 28px rgba(201,136,58,0.35)`
-          : off ? "none" : `0 4px 0 ${C.orangeDeep}, 0 6px 20px rgba(201,136,58,0.28)`,
+          ? `0 6px 0 ${C.orangeDeep}, 0 10px 28px rgba(217,53,34,0.35)`
+          : off ? "none" : `0 4px 0 ${C.orangeDeep}, 0 6px 20px rgba(217,53,34,0.28)`,
         transform: hov && !off ? "translateY(-2px)" : "translateY(0)",
         transition: "transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms cubic-bezier(0.22,1,0.36,1)",
         opacity: busy ? 0.88 : 1,
@@ -202,7 +201,7 @@ const PrimaryBtn = ({ label, onClick, busy, disabled: dis }: {
 
 // ── shared input styles (exact ERP) ──────────────────────────────────────────
 const iBorder  = (foc: boolean) => foc ? C.orange : "rgba(0,0,0,0.11)";
-const iShadow  = (foc: boolean) => foc ? "0 0 0 3px rgba(201,136,58,0.14)" : "none";
+const iShadow  = (foc: boolean) => foc ? "0 0 0 3px rgba(217,53,34,0.14)" : "none";
 const iCss = (foc: boolean, rp = 0): React.CSSProperties => ({
   width: "100%", boxSizing: "border-box",
   padding: `12px ${12 + rp}px 12px 46px`,
@@ -341,12 +340,12 @@ export default function LMALoginPage() {
         .lma-right { background: ${C.cream}; }
         .lma-left  { display: flex; background-size: 200% 200% !important; animation: lmaGradientShift 8s ease-in-out infinite; }
         .lma-role-btn { transition: border-color 180ms, background 180ms, box-shadow 180ms; }
-        .lma-role-btn:hover:not(.lma-role-selected) { border-color: rgba(201,136,58,0.45) !important; background: rgba(201,136,58,0.04) !important; }
+        .lma-role-btn:hover:not(.lma-role-selected) { border-color: rgba(217,53,34,0.45) !important; background: rgba(217,53,34,0.04) !important; }
         .lma-left::-webkit-scrollbar { width: 6px; }
-        .lma-left::-webkit-scrollbar-thumb { background: rgba(201,136,58,0.25); border-radius: 3px; }
+        .lma-left::-webkit-scrollbar-thumb { background: rgba(217,53,34,0.25); border-radius: 3px; }
         @media(max-width:991px) {
           .lma-left  { display: none !important; }
-          .lma-right { background: linear-gradient(150deg,#1a1208 0%,#0f0a05 100%) !important; }
+          .lma-right { background: linear-gradient(150deg,#0f2c4d 0%,#071a33 100%) !important; }
           .lma-card  { box-shadow: 0 8px 48px rgba(0,0,0,0.52), 0 2px 8px rgba(0,0,0,0.32) !important; }
         }
         @media(prefers-reduced-motion:reduce) {
@@ -364,21 +363,21 @@ export default function LMALoginPage() {
           background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
         }}>
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
-          <span className="lma-orb-1" style={{ position: "absolute", top: "-10%", left: "-8%", width: 540, height: 540, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.15) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
-          <span className="lma-orb-2" style={{ position: "absolute", bottom: "-18%", right: "-4%", width: 440, height: 440, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
-          <span className="lma-orb-3" style={{ position: "absolute", top: "38%", right: "10%", width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
-          <span className="lma-orb-4" style={{ position: "absolute", top: "62%", left: "18%", width: 180, height: 180, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,136,58,0.07) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <span className="lma-orb-1" style={{ position: "absolute", top: "-10%", left: "-8%", width: 540, height: 540, borderRadius: "50%", background: "radial-gradient(circle, rgba(217,53,34,0.15) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <span className="lma-orb-2" style={{ position: "absolute", bottom: "-18%", right: "-4%", width: 440, height: 440, borderRadius: "50%", background: "radial-gradient(circle, rgba(217,53,34,0.10) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <span className="lma-orb-3" style={{ position: "absolute", top: "38%", right: "10%", width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(217,53,34,0.08) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <span className="lma-orb-4" style={{ position: "absolute", top: "62%", left: "18%", width: 180, height: 180, borderRadius: "50%", background: "radial-gradient(circle, rgba(217,53,34,0.07) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
 
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Logo */}
             <div style={{ marginBottom: 14, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
-              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 52, width: "auto" }} />
+              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 90, width: "auto" }} />
             </div>
 
             {/* Chip */}
             <div style={{ marginBottom: 12, animation: "lmaFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.10s both" }}>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(201,136,58,0.13)", border: "1px solid rgba(201,136,58,0.35)", color: "#E5B460", fontSize: 11, fontWeight: 700, padding: "6px 16px", borderRadius: 20, fontFamily: FF, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-                <i className="fas fa-graduation-cap" style={{ fontSize: 9, color: C.orange }} />
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: C.orange, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 16px", borderRadius: 20, fontFamily: FF, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                <i className="fas fa-graduation-cap" style={{ fontSize: 9, color: "#fff" }} />
                 Enterprise Learning Platform
               </span>
             </div>
@@ -432,8 +431,6 @@ export default function LMALoginPage() {
               padding: "24px 28px 20px",
               width: "100%", maxWidth: 460,
               boxShadow: shadow.card,
-              border: "1px solid rgba(0,0,0,0.06)",
-              borderTop: `3px solid ${C.orange}`,
               overflow: "hidden", willChange: "transform",
             }}
           >
@@ -462,7 +459,7 @@ export default function LMALoginPage() {
                             borderRadius: 12, padding: "18px 14px", cursor: "pointer",
                             background: sel ? C.orangeLight : C.white,
                             textAlign: "left", outline: "none",
-                            boxShadow: sel ? `0 0 0 3px rgba(201,136,58,0.14), ${shadow.card}` : shadow.card,
+                            boxShadow: sel ? `0 0 0 3px rgba(217,53,34,0.14), ${shadow.card}` : shadow.card,
                           }}
                         >
                           <div style={{ width: 36, height: 36, borderRadius: 10, marginBottom: 10, background: sel ? C.orangeGrad : "linear-gradient(145deg,#e2e8f0,#cbd5e1)", boxShadow: sel ? shadow.badge : "0 2px 0 rgba(0,0,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", transition: "background 180ms, box-shadow 180ms" }}>
@@ -563,7 +560,7 @@ export default function LMALoginPage() {
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "#9B9B9B", fontSize: 11.5, fontFamily: FF }}>
                       <i className="fas fa-lock" style={{ color: "#4ade80", fontSize: 11 }} />AES-256 Encrypted
                     </span>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: C.cream, border: "1px solid rgba(201,136,58,0.20)", borderRadius: 20, padding: "3px 12px" }}>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: C.cream, border: "1px solid rgba(217,53,34,0.20)", borderRadius: 20, padding: "3px 12px" }}>
                       <i className="fas fa-certificate" style={{ color: C.orange, fontSize: 10 }} />
                       <span style={{ fontSize: 11, color: C.muted, fontWeight: 600, fontFamily: FF }}>ISO 27001</span>
                     </div>

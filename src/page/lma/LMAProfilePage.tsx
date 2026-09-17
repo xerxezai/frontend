@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader, Eye, EyeOff } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)";
-const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)";
+const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.12)";
 
 interface Profile {
   name: string;
@@ -22,33 +22,22 @@ interface Profile {
   bio: string;
 }
 
-/* ── Card3D ── */
+/* ── Card3D — flat card, no tilt (the mouse-tracked 3D rotation was removed:
+   it was staying visibly rotated instead of settling flat) ── */
 const Card3D = ({ children, accent = GOLD, style = {}, p = "24px" }: {
   children: React.ReactNode; accent?: string; style?: React.CSSProperties; p?: string;
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
   const [h, setH] = useState(false);
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(700px) rotateY(${x * 8}deg) rotateX(${-y * 5}deg) translateY(-5px)`;
-    el.style.transition = "transform 0.08s ease";
-  };
-  const onLeave = () => {
-    const el = ref.current;
-    if (el) { el.style.transform = "translateY(0)"; el.style.transition = "transform 0.32s cubic-bezier(0.22,1,0.36,1)"; }
-  };
   return (
-    <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}
-      onMouseEnter={() => setH(true)} onMouseOut={() => setH(false)}
+    <div
+      onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
       style={{
         background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)",
         borderTop: `3px solid ${accent}`,
         boxShadow: h ? BHOV : BCARD,
-        transition: "box-shadow 0.28s ease",
-        padding: p, position: "relative", willChange: "transform",
+        transform: h ? "translateY(-5px)" : "translateY(0)",
+        transition: "transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease",
+        padding: p, position: "relative",
         ...style,
       }}>
       {children}
@@ -226,7 +215,7 @@ export default function LMAProfilePage() {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 margin: "0 auto 16px",
                 fontSize: 28, fontWeight: 900, color: "#0a0806", fontFamily: FF,
-                boxShadow: "0 4px 16px rgba(201,136,58,0.30)",
+                boxShadow: "0 4px 16px rgba(217,53,34,0.30)",
               }}>
                 {initials}
               </div>
@@ -239,7 +228,7 @@ export default function LMAProfilePage() {
               </div>
 
               {/* Role badge */}
-              <span style={{ display: "inline-block", fontSize: 11, fontWeight: 700, color: GOLD, background: "rgba(201,136,58,0.12)", padding: "4px 12px", borderRadius: 999, marginBottom: 14 }}>
+              <span style={{ display: "inline-block", fontSize: 11, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.12)", padding: "4px 12px", borderRadius: 999, marginBottom: 14 }}>
                 {profile?.role ?? "Student"}
               </span>
 
@@ -296,7 +285,7 @@ export default function LMAProfilePage() {
                   color: "#0a0806", fontSize: 13.5, fontWeight: 700, cursor: "pointer", fontFamily: FF,
                   display: "inline-flex", alignItems: "center", gap: 8,
                   opacity: saving ? 0.75 : 1, transition: "opacity 0.18s ease",
-                  boxShadow: "0 4px 0 rgba(140,80,20,0.25)",
+                  boxShadow: "0 4px 0 rgba(139,31,23,0.25)",
                 }}>
                   {saving ? <><Loader size={14} style={{ animation: "lma-spin 1s linear infinite" }} /> Saving…</> : "Save Profile"}
                 </button>

@@ -9,9 +9,9 @@ import {
 import LMAStudentLayout from "./LMAStudentLayout";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
+const DARK  = "#071a33";
 const FF    = "'DM Sans', sans-serif";
 
 /* ── Circular SVG progress ring ── */
@@ -128,13 +128,13 @@ export default function LMAStudentDashboard() {
 
         {/* ── Welcome Banner ── */}
         <div style={{
-          background: `linear-gradient(135deg,${DARK} 0%,#100c07 100%)`,
+          background: `linear-gradient(135deg,${DARK} 0%,#04101f 100%)`,
           borderRadius: 20, padding: "28px 32px", marginBottom: 24,
           position: "relative", overflow: "hidden",
           display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20,
         }}>
-          <div style={{ position: "absolute", top: -40, right: 100, width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.12) 0%,transparent 70%)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -20, left: 60, width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,136,58,0.07) 0%,transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: -40, right: 100, width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle,rgba(217,53,34,0.12) 0%,transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -20, left: 60, width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle,rgba(217,53,34,0.07) 0%,transparent 70%)", pointerEvents: "none" }} />
 
           <div style={{ position: "relative", zIndex: 1 }}>
             <div style={{ fontSize: 10, color: AMBER, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 6 }}>Continue where you left off</div>
@@ -153,7 +153,7 @@ export default function LMAStudentDashboard() {
                 background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                 color: "#0a0806", fontSize: 13, fontWeight: 700,
                 padding: "9px 20px", borderRadius: 9, textDecoration: "none",
-                boxShadow: "0 4px 0 rgba(140,80,20,0.40)",
+                boxShadow: "0 4px 0 rgba(139,31,23,0.40)",
               }}>
                 <Play size={14} fill="#0a0806" /> Resume Learning
               </Link>
@@ -163,7 +163,7 @@ export default function LMAStudentDashboard() {
                 background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                 color: "#0a0806", fontSize: 13, fontWeight: 700,
                 padding: "9px 20px", borderRadius: 9, textDecoration: "none",
-                boxShadow: "0 4px 0 rgba(140,80,20,0.40)",
+                boxShadow: "0 4px 0 rgba(139,31,23,0.40)",
               }}>
                 <BookOpen size={14} /> Browse Courses
               </Link>
@@ -293,14 +293,14 @@ export default function LMAStudentDashboard() {
                       borderBottom: i < (data.pending_assignments.length - 1) ? "1px solid rgba(0,0,0,0.05)" : "none",
                       display: "flex", gap: 12, alignItems: "flex-start",
                     }}>
-                      <div style={{ width: 36, height: 36, borderRadius: 10, background: overdue ? "#fee2e2" : "rgba(201,136,58,0.10)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <div style={{ width: 36, height: 36, borderRadius: 10, background: overdue ? "#fee2e2" : "rgba(217,53,34,0.10)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                         <ClipboardList size={15} color={overdue ? "#dc2626" : GOLD} />
                       </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: 13, fontWeight: 600, color: "#141413", fontFamily: FF }}>{a.title}</div>
                         <div style={{ fontSize: 11, color: "rgba(20,20,19,0.45)", marginTop: 2, fontFamily: FF }}>{a.course_title}</div>
                       </div>
-                      <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 999, background: overdue ? "#fee2e2" : "rgba(201,136,58,0.10)", color: overdue ? "#dc2626" : GOLD, whiteSpace: "nowrap", alignSelf: "center" }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 999, background: overdue ? "#fee2e2" : "rgba(217,53,34,0.10)", color: overdue ? "#dc2626" : GOLD, whiteSpace: "nowrap", alignSelf: "center" }}>
                         {due.toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
                       </span>
                     </div>
@@ -325,8 +325,8 @@ export default function LMAStudentDashboard() {
                 {(data.certificates ?? []).map((c: any) => (
                   <div key={c.id} style={{
                     background: "#fff", borderRadius: 14, padding: "16px 18px",
-                    border: "1px solid rgba(201,136,58,0.25)",
-                    boxShadow: "0 2px 0 rgba(201,136,58,0.12), 0 6px 20px rgba(201,136,58,0.08)",
+                    border: "1px solid rgba(217,53,34,0.25)",
+                    boxShadow: "0 2px 0 rgba(217,53,34,0.12), 0 6px 20px rgba(217,53,34,0.08)",
                     display: "flex", gap: 14, alignItems: "center",
                   }}>
                     <div style={{ width: 40, height: 40, borderRadius: 11, background: "linear-gradient(135deg,#fef3c7,#fde68a)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

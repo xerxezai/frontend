@@ -75,13 +75,13 @@ const IOT_COLUMNS = [
 // same one-at-a-time rollout INDUSTRY_PAGE_OVERRIDES (below) already used
 // for the industry pages.
 const IOT_ITEMS: Sub[] = [
-  { title: "Smart Asset Tracking",     link: "/v2/iot/smart-asset-tracking", desc: "Real-time visibility across high-value assets and inventory" },
-  { title: "Industrial IoT",           link: "/v2/iot/industrial-iot", desc: "Plant telemetry, predictive maintenance, and OT visibility" },
-  { title: "Smart Building Solutions", link: "/v2/iot/smart-building-solutions", desc: "Energy, access, and facility intelligence in one layer" },
-  { title: "Fleet Management Systems", link: "/v2/iot/fleet-management-systems", desc: "Live tracking, utilization, and route operations" },
-  { title: "Agriculture IoT",          link: "/v2/iot/agriculture-iot", desc: "Field sensors, irrigation, and yield intelligence" },
-  { title: "Healthcare IoT",           link: "/v2/iot/healthcare-iot", desc: "Connected care devices and clinical monitoring" },
-  { title: "Smart Retail",             link: "/v2/iot/smart-retail", desc: "Store operations, inventory, and customer experience" },
+  { title: "Smart Asset Tracking",     link: "/iot/smart-asset-tracking", desc: "Real-time visibility across high-value assets and inventory" },
+  { title: "Industrial IoT",           link: "/iot/industrial-iot", desc: "Plant telemetry, predictive maintenance, and OT visibility" },
+  { title: "Smart Building Solutions", link: "/iot/smart-building-solutions", desc: "Energy, access, and facility intelligence in one layer" },
+  { title: "Fleet Management Systems", link: "/iot/fleet-management-systems", desc: "Live tracking, utilization, and route operations" },
+  { title: "Agriculture IoT",          link: "/iot/agriculture-iot", desc: "Field sensors, irrigation, and yield intelligence" },
+  { title: "Healthcare IoT",           link: "/iot/healthcare-iot", desc: "Connected care devices and clinical monitoring" },
+  { title: "Smart Retail",             link: "/iot/smart-retail", desc: "Store operations, inventory, and customer experience" },
 ];
 
 // ── Who We Are mega-menu content ────────────────────────────────────────
@@ -103,7 +103,7 @@ const WHO_WE_ARE_ITEMS: Sub[] = [
 
 // The one page Industry We Serve owns — used both for its nav link and to
 // tell it apart from Services' own /v2/services/* match (see `isActive`).
-const INDUSTRY_PAGE_PATH = "/v2/services/erp-industries";
+const INDUSTRY_PAGE_PATH = "/services/erp-industries";
 
 // ── Industry We Serve mega-menu content ─────────────────────────────────
 // The real 8-sector list from erpIndustriesData.tsx — the same data the
@@ -126,12 +126,12 @@ const INDUSTRY_ICONS: Record<string, LucideIcon> = Object.fromEntries(
 // there instead of the hash-anchor fallback — add a slug here each time a
 // new one is built, same pattern `remap`'s V2_ROUTES table (below) uses.
 const INDUSTRY_PAGE_OVERRIDES: Record<string, string> = {
-  "oil-gas": "/v2/industries/oil-gas",
-  "construction": "/v2/industries/construction",
-  "healthcare": "/v2/industries/healthcare",
-  "facility-management": "/v2/industries/facility-management",
-  "epc": "/v2/industries/epc-engineering",
-  "manufacturing": "/v2/industries/manufacturing",
+  "oil-gas": "/industries/oil-gas",
+  "construction": "/industries/construction",
+  "healthcare": "/industries/healthcare",
+  "facility-management": "/industries/facility-management",
+  "epc": "/industries/epc-engineering",
+  "manufacturing": "/industries/manufacturing",
 };
 const INDUSTRY_ITEMS: Sub[] = INDUSTRY_LIST.map((ind) => ({
   title: industryLabel(ind),
@@ -240,25 +240,25 @@ const ServiceRow = ({ s, to, icon: Icon, compact = false, descMaxWidth }: { s: S
 // this map passes through to the existing site unchanged, because it has no
 // /v2 variant.
 const V2_ROUTES: Record<string, string> = {
-  "/":         "/v2",
-  "/about":    "/v2/about",
-  "/service":  "/v2/services",
-  "/project":  "/v2/portfolio",
-  "/training": "/v2/training",
-  "/contact":  "/v2/contact",
-  "/careers":  "/v2/careers",
+  "/":         "/",
+  "/about":    "/about",
+  "/service":  "/services",
+  "/project":  "/portfolio",
+  "/training": "/training",
+  "/contact":  "/contact",
+  "/careers":  "/careers",
   // The 10 mega-menu service rows — each now has its own /v2/services/[slug]
   // detail page (src/page/v2/services/), so every row stays on /v2 end to end.
-  "/ai-erp":                            "/v2/services/ai-powered-erp",
-  "/service/software-development":      "/v2/services/software-development",
-  "/service/ai-training-consulting":    "/v2/services/ai-training-consulting",
-  "/service/mobile-application":        "/v2/services/mobile-application",
-  "/erp-industries":                    "/v2/services/erp-industries",
-  "/service/devsecops-mlops-solutions": "/v2/services/devsecops-mlops-solutions",
-  "/service/cloud-service-storage":     "/v2/services/cloud-service-storage",
-  "/service/quantum-computing":         "/v2/services/quantum-computing",
-  "/service/web-mobile-hosting":        "/v2/services/web-mobile-hosting",
-  "/service/software-consulting":       "/v2/services/software-consulting",
+  "/ai-erp":                            "/services/ai-powered-erp",
+  "/service/software-development":      "/services/software-development",
+  "/service/ai-training-consulting":    "/services/ai-training-consulting",
+  "/service/mobile-application":        "/services/mobile-application",
+  "/erp-industries":                    "/services/erp-industries",
+  "/service/devsecops-mlops-solutions": "/services/devsecops-mlops-solutions",
+  "/service/cloud-service-storage":     "/services/cloud-service-storage",
+  "/service/quantum-computing":         "/services/quantum-computing",
+  "/service/web-mobile-hosting":        "/services/web-mobile-hosting",
+  "/service/software-consulting":       "/services/software-consulting",
 };
 // Exported so XerxezMobileMenu (the off-canvas nav) remaps links through this
 // exact same table — one source of truth for "which /v2 page a v1 link maps to."
@@ -269,6 +269,7 @@ export const remap = (link: string) => V2_ROUTES[link] ?? link;   // /v2 route o
 const V2SignIn = ({ className }: { className?: string }) => {
   const [open, setOpen] = useState(false);          // is the panel open?
   const ref = useRef<HTMLDivElement>(null);         // wrapper, for outside-click detection
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null); // hover-close debounce
 
   // Close the panel when clicking anywhere outside it.
   useEffect(() => {
@@ -280,11 +281,23 @@ const V2SignIn = ({ className }: { className?: string }) => {
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
+  // Hover opens the panel immediately; leaving waits a beat (so moving the
+  // mouse from the button down into the panel doesn't flicker-close it) —
+  // same debounced pattern the mega-menus below use.
+  const onEnter = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
+  };
+  const onLeave = () => {
+    closeTimer.current = setTimeout(() => setOpen(false), 150);
+  };
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+
   return (
-    <div ref={ref} className={className} style={{ position: "relative" }}>
+    <div ref={ref} className={className} style={{ position: "relative" }} onMouseEnter={onEnter} onMouseLeave={onLeave}>
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}           // toggle
+        onClick={() => setOpen((o) => !o)}           // toggle (keyboard / touch)
         aria-expanded={open}
         aria-haspopup="true"
         style={{
@@ -390,7 +403,7 @@ const XerxezHeader = () => {
   const isActive = (item: MenuNode) => {
     const to = remap(item.link);
     if (item.title === "Services") return pathname.startsWith(to) && pathname !== INDUSTRY_PAGE_PATH && !pathname.startsWith(`${INDUSTRY_PAGE_PATH}/`);
-    return to === "/v2" ? pathname === "/v2" : pathname.startsWith(to);
+    return to === "/" ? pathname === "/" : pathname.startsWith(to);
   };
 
   return (
@@ -411,9 +424,9 @@ const XerxezHeader = () => {
         {/* position:relative so the centred nav can be absolutely positioned within it */}
         <div style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", gap: 20 }}>
           {/* Logo → /v2 home */}
-          <Link to="/v2" style={{ display: "inline-flex", flexShrink: 0, lineHeight: 0 }} aria-label="XERXEZ home">
+          <Link to="/" style={{ display: "inline-flex", flexShrink: 0, lineHeight: 0 }} aria-label="XERXEZ home">
             <Image src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" width={200} height={72}
-              style={{ height: 64, width: "auto", display: "block" }} />
+              style={{ height: 90, width: "auto", display: "block" }} />
           </Link>
 
           {/* Centre pill nav (desktop ≥ xl) — absolutely centred in the full header width
@@ -760,7 +773,7 @@ const XerxezHeader = () => {
             {/* Primary CTA — fully-rounded red pill (etiot "Hire Us" proportions:
                short height, full capsule radius), hidden on the smallest screens */}
             <Link
-              to="/v2/contact"
+              to="/contact"
               // was d-sm-inline-flex (576px+) — too early: between sm and xl the hamburger
               // is *also* visible, and the two competing for space in a narrow right-actions
               // group is what clipped this button. md (768px+) gives them more room.

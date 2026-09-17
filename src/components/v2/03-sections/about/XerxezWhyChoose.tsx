@@ -31,7 +31,7 @@ export const WHY_XERXEZ_ITEMS: { icon: LucideIcon; title: string; desc: string }
   { icon: Tag,        title: "Fixed-Price Delivery",      desc: "Clear scope and a clear budget agreed up front — no surprise change orders mid-project." },
   { icon: Clock,      title: "Under 6-Month Delivery",    desc: "From kickoff to production, most engagements go live inside two quarters, not two years." },
   { icon: Headphones, title: "24/7 Support",              desc: "Round-the-clock monitoring and response — not office-hours-only coverage." },
-  { icon: Shield,     title: "ISO 27001 Certified Security", desc: "ISO 27001 certified security practices built into every deployment — your data stays protected and compliant at all times." },
+  { icon: Shield,     title: "Secure by Design",          desc: "Security is not an add-on — every module is built with encryption, role-based access controls and audit trails from day one." },
   { icon: Key,        title: "Full IP Transfer",          desc: "You own the code, the documentation, and the deployment — no lock-in, ever." },
 ];
 
@@ -51,7 +51,7 @@ const XerxezWhyChoose = () => (
         </div>
         <div className="col-lg-4" style={{ textAlign: "left" }}>
           <Reveal delay={80}>
-            <Btn to="/v2/contact">Discuss your project</Btn>
+            <Btn to="/contact">Discuss your project</Btn>
           </Reveal>
         </div>
       </div>

@@ -100,8 +100,8 @@ const XerxezTrainingCard = () => (
         ))}
       </div>
 
-      {/* CTA → /v2 contact page */}
-      <Link to="/v2/contact" style={{
+      {/* CTA → contact page, pre-selecting the AI Training service */}
+      <Link to="/contact?service=ai-training" style={{
         display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         background: T.red, color: "#fff",
         fontFamily: T.fontHead, fontSize: 13, fontWeight: 600,

@@ -6,7 +6,7 @@ import {
 import { erpFetch } from '../../../../hooks/useERPApi';
 import { OG, FF, WHITE, BORDER, useFmtCurrency, KpiCard } from './accountingShared';
 
-const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#f59e0b', '#10b981', '#6366f1', '#ec4899', '#64748b'];
+const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#D93522', '#10b981', '#6366f1', '#ec4899', '#64748b'];
 
 interface DashboardData {
   total_revenue_this_month: number;
@@ -78,7 +78,7 @@ export default function AccountingDashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
                 <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`} />
-                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(201,136,58,0.06)' }} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(217,53,34,0.06)' }} />
                 <Legend wrapperStyle={{ fontSize: 11, fontFamily: FF }} iconType="circle" />
                 <Bar dataKey="revenue" name="Revenue" fill={OG} radius={[4, 4, 0, 0]} isAnimationActive animationDuration={700} />
                 <Bar dataKey="expenses" name="Expenses" fill="#7c3aed" radius={[4, 4, 0, 0]} isAnimationActive animationDuration={700} />

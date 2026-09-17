@@ -188,7 +188,7 @@ export default function InquiryDetail({ inquiry, onClose, onSaved }: Props) {
               <button
                 onClick={saveNotes} disabled={savingNotes}
                 style={{
-                  marginTop: 8, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', border: 'none', borderRadius: 8, padding: '8px 16px',
+                  marginTop: 8, background: 'linear-gradient(145deg,#D93522,#D93522)', border: 'none', borderRadius: 8, padding: '8px 16px',
                   color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: savingNotes ? 'wait' : 'pointer',
                 }}
               >
@@ -211,7 +211,7 @@ export default function InquiryDetail({ inquiry, onClose, onSaved }: Props) {
                   href={`mailto:${inquiry.email}?subject=${encodeURIComponent('Re: Your XERXEZ Inquiry')}`}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, textDecoration: 'none',
-                    background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 12.5,
+                    background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 12.5,
                     padding: '9px 14px', borderRadius: 8,
                   }}
                 >

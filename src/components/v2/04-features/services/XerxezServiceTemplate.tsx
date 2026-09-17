@@ -209,8 +209,8 @@ const XerxezServiceTemplate = ({
             ))}
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 4 }}>
-            <Btn to="/v2/contact">Book a Demo</Btn>
-            <Btn to="/v2/services" variant="outline" dark arrow={false}>View All Services</Btn>
+            <Btn to="/contact">Book a Demo</Btn>
+            <Btn to="/services" variant="outline" dark arrow={false}>View All Services</Btn>
           </div>
           {/* "who this is for" line, customised per service via service.title */}
           <p style={{ fontFamily: T.fontBody, fontSize: 13, color: "rgba(255,255,255,0.55)", margin: 0 }}>

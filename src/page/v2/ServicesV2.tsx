@@ -1,7 +1,7 @@
 // ServicesV2.tsx
-// Purpose: The /v2/services page — hero, deep service grid, process band, a
+// Purpose: The /services page — hero, deep service grid, process band, a
 //          stat strip, and the shared CTA band.
-// Used in: src/App.tsx  (route: /v2/services)
+// Used in: src/App.tsx  (route: /services)
 // Data source: `services` from src/data/index.ts is used to build the
 //              schema.org ItemList JSON-LD. The visible service cards come from
 //              <XerxezServiceDeepGrid> (same data). STATS below are the same figures
@@ -52,7 +52,7 @@ const ServicesV2 = () => (
     <SEO
       title="Our Services | AI ERP, DevSecOps, Cloud & More — XERXEZ India & UAE"
       description="Explore XERXEZ services: AI ERP, DevSecOps, cloud infrastructure, software development, mobile apps, AI training for enterprises in India, Dubai & Abu Dhabi UAE."
-      canonical="/v2/services"
+      canonical="/services"
       noIndex
       jsonLd={SERVICES_JSONLD}
     />
@@ -120,7 +120,7 @@ const ServicesV2 = () => (
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 4 }}>
             <Btn href="#services">Explore services</Btn>{/* scrolls to <XerxezServiceDeepGrid> */}
-            <Btn to="/v2/contact" variant="outline" dark arrow={false}>Book a demo</Btn>
+            <Btn to="/contact" variant="outline" dark arrow={false}>Book a demo</Btn>
           </div>
         </div>
       </div>

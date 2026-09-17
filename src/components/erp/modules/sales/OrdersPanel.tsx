@@ -6,7 +6,7 @@ import ERPTable from '../../ERPTable';
 import { OG, FF, inp, lbl, SAVE, CNCL, useFmtCurrency, O_STATUS, DelDlg, today, nextNumber, SearchableSelect } from './salesShared';
 
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
-const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:700,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
+const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:700,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #D93522',maxHeight:'85vh',overflowY:'auto' };
 
 const defO = { number: '', customer: '', order_date: '', status: 'open', assignee: '', notes: '' };
 
@@ -256,7 +256,7 @@ export default function OrdersPanel() {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                   <label style={{ ...lbl, marginBottom: 0 }}>Line Items *</label>
-                  <button type="button" onClick={addRow} style={{ background: 'none', border: 'none', color: '#C9883A', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12 }}>
+                  <button type="button" onClick={addRow} style={{ background: 'none', border: 'none', color: '#D93522', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12 }}>
                     <i className="fas fa-plus" style={{ marginRight: 4 }} />Add Item
                   </button>
                 </div>
@@ -279,7 +279,7 @@ export default function OrdersPanel() {
                     </div>
                   ))}
                 </div>
-                <div style={{ textAlign: 'right', marginTop: 10, fontFamily: FF, fontSize: 14, fontWeight: 800, color: '#C9883A' }}>
+                <div style={{ textAlign: 'right', marginTop: 10, fontFamily: FF, fontSize: 14, fontWeight: 800, color: '#D93522' }}>
                   Order Total: {fmtINR(grandTotal)}
                 </div>
               </div>

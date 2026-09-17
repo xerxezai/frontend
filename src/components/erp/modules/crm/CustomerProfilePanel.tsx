@@ -125,11 +125,11 @@ export default function CustomerProfilePanel({ target, onClose, onChanged }: Pro
               style={{
                 display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
                 border: 'none', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12.5,
-                background: tab === t.key ? 'rgba(201,136,58,0.10)' : 'transparent',
+                background: tab === t.key ? 'rgba(217,53,34,0.10)' : 'transparent',
                 color: tab === t.key ? OG : '#6B6B6B',
               }}>
               <t.icon size={13} />{t.key}
-              <span style={{ fontSize: 10, fontWeight: 800, padding: '1px 6px', borderRadius: 999, background: tab === t.key ? 'rgba(201,136,58,0.18)' : 'rgba(0,0,0,0.06)' }}>{t.count}</span>
+              <span style={{ fontSize: 10, fontWeight: 800, padding: '1px 6px', borderRadius: 999, background: tab === t.key ? 'rgba(217,53,34,0.18)' : 'rgba(0,0,0,0.06)' }}>{t.count}</span>
             </button>
           ))}
         </div>

@@ -1,9 +1,9 @@
 // FacilityManagementPage.tsx
-// Purpose: /v2/industries/facility-management — fourth standalone industry
+// Purpose: /industries/facility-management — fourth standalone industry
 //          detail page, same architecture as ConstructionPage.tsx /
 //          HealthcarePage.tsx (hero, overview, challenges, solutions,
 //          our-solution, key modules, results, shared Why XERXEZ + CTA).
-// Used in: src/App.tsx (route: /v2/industries/facility-management)
+// Used in: src/App.tsx (route: /industries/facility-management)
 // Data source: core facts (name/tagline/features) come from the
 //              "facility-management" entry in src/data/erpIndustriesData.tsx
 //              (INDUSTRIES), which — unlike healthcare — does have its own
@@ -93,7 +93,7 @@ const FacilityManagementPage = () => (
     <SEO
       title={`${industry.name} AI-Powered Platform & Digital Solutions | XERXEZ`}
       description={industry.tagline}
-      canonical="/v2/industries/facility-management"
+      canonical="/industries/facility-management"
       noIndex
     />
 
@@ -103,7 +103,7 @@ const FacilityManagementPage = () => (
       subtitle={HERO_SUBTITLE}
       heroImage={heroImage}
       highlights={HERO_FEATURES}
-      ctaButtons={[{ label: "Book a Demo", to: "/v2/contact" }]}
+      ctaButtons={[{ label: "Book a Demo", to: "/contact" }]}
       minHeight="82svh"
       maxWidth={680}
       titleSize="clamp(34px, 5vw, 56px)"
@@ -197,7 +197,7 @@ const FacilityManagementPage = () => (
               <SectionHeading eyebrow="Our Solution" title="Built for Facility &amp; Property Teams" subtitle="One AI-powered platform that connects assets, work orders and energy costs — so nothing gets missed and nothing waits longer than it should." />
               <Checklist items={HERO_FEATURES} />
               <div style={{ marginTop: 24 }}>
-                <Btn to="/v2/contact">Discuss your project</Btn>
+                <Btn to="/contact">Discuss your project</Btn>
               </div>
             </Reveal>
           </div>

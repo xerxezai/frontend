@@ -1,8 +1,8 @@
 // MLOpsProjectPage.tsx
-// Purpose: /v2/project/mlops-pipeline — case study data for the MLOps
+// Purpose: /project/mlops-pipeline — case study data for the MLOps
 //          Pipeline Automation project, rendered through
 //          <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/mlops-pipeline)
+// Used in: src/App.tsx (route: /project/mlops-pipeline)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -13,7 +13,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "MLOps Pipeline Automation | Case Study | XERXEZ",
   seoDesc: "How XERXEZ automated model deployment for a financial services client — 95% faster deployments, zero manual steps, models in production in hours.",
-  canonical: "/v2/project/mlops-pipeline",
+  canonical: "/project/mlops-pipeline",
 
   category: "MLOps",
   industry: "Financial Services",
@@ -59,8 +59,8 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "5 engineers" },
   ],
 
-  prev: { title: "AI-Powered ERP Platform", href: "/v2/project/ai-erp-platform" },
-  next: { title: "Zero-Trust Cloud Infrastructure", href: "/v2/project/cloud-infrastructure" },
+  prev: { title: "AI-Powered ERP Platform", href: "/project/ai-erp-platform" },
+  next: { title: "Zero-Trust Cloud Infrastructure", href: "/project/cloud-infrastructure" },
 };
 
 const MLOpsProjectPage = () => <ProjectCaseStudyTemplate data={data} />;

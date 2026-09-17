@@ -1,9 +1,9 @@
 // EpcEngineeringPage.tsx
-// Purpose: /v2/industries/epc-engineering — fifth standalone industry detail
+// Purpose: /industries/epc-engineering — fifth standalone industry detail
 //          page, same architecture as ConstructionPage.tsx (hero, overview,
 //          challenges, solutions, our-solution, key modules, results, then
 //          the shared Why XERXEZ + CTA sections).
-// Used in: src/App.tsx (route: /v2/industries/epc-engineering)
+// Used in: src/App.tsx (route: /industries/epc-engineering)
 // Data source: core facts (name/tagline/features) come from the "epc" entry
 //              in src/data/erpIndustriesData.tsx (INDUSTRIES) — the route
 //              path uses the client-specified "epc-engineering" slug while
@@ -95,7 +95,7 @@ const EpcEngineeringPage = () => (
     <SEO
       title={`${industry.name} AI-Powered Platform & Digital Solutions | XERXEZ`}
       description={industry.tagline}
-      canonical="/v2/industries/epc-engineering"
+      canonical="/industries/epc-engineering"
       noIndex
     />
 
@@ -105,7 +105,7 @@ const EpcEngineeringPage = () => (
       subtitle={HERO_SUBTITLE}
       heroImage={heroImage}
       highlights={HERO_FEATURES}
-      ctaButtons={[{ label: "Book a Demo", to: "/v2/contact" }]}
+      ctaButtons={[{ label: "Book a Demo", to: "/contact" }]}
       minHeight="82svh"
       maxWidth={680}
       titleSize="clamp(34px, 5vw, 56px)"
@@ -199,7 +199,7 @@ const EpcEngineeringPage = () => (
               <SectionHeading eyebrow="Our Solution" title="Built for EPC Project Directors &amp; Engineers" subtitle="One AI-powered platform that connects project controls, procurement and subcontractor management — so cost and schedule risk gets caught early." />
               <Checklist items={HERO_FEATURES} />
               <div style={{ marginTop: 24 }}>
-                <Btn to="/v2/contact">Discuss your project</Btn>
+                <Btn to="/contact">Discuss your project</Btn>
               </div>
             </Reveal>
           </div>

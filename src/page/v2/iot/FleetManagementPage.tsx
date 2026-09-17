@@ -1,9 +1,9 @@
 // FleetManagementPage.tsx
-// Purpose: /v2/iot/fleet-management-systems — fourth standalone IoT
+// Purpose: /iot/fleet-management-systems — fourth standalone IoT
 //          Solutions detail page. Same architecture and card language as
 //          SmartAssetTrackingPage.tsx (hero, white lift cards, numbered dark
 //          capability cards, closing CTA).
-// Used in: src/App.tsx (route: /v2/iot/fleet-management-systems)
+// Used in: src/App.tsx (route: /iot/fleet-management-systems)
 // Data source: original XERXEZ copy for this page (same standing allowance
 //              as every other industry/solution detail page — never copied
 //              from a competitor, no XERXEZ branding borrowed from any
@@ -98,7 +98,7 @@ const FleetManagementPage = () => (
     <SEO
       title="Fleet Management Systems | IoT Solutions | XERXEZ"
       description="Get real-time visibility into vehicle movement, driver behavior, fuel usage, maintenance, routes and delivery operations — across your entire fleet."
-      canonical="/v2/iot/fleet-management-systems"
+      canonical="/iot/fleet-management-systems"
       noIndex
     />
 
@@ -117,7 +117,7 @@ const FleetManagementPage = () => (
       </>}
       heroImage={heroImage}
       ctaButtons={[
-        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
       ]}
       overlayOpacity={0.70}
@@ -299,7 +299,7 @@ const FleetManagementPage = () => (
             IoT-powered fleet management platform? Our IoT specialists can help you select the
             right tracking devices, platform and integrations.
           </p>
-          <Btn to="/v2/contact">Request a Demo</Btn>
+          <Btn to="/contact">Request a Demo</Btn>
 
           {/* 3 trust signals — centered row below the button */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", justifyContent: "center", marginTop: 34 }}>

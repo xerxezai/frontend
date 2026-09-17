@@ -15,9 +15,9 @@ import { Link } from 'react-router-dom';
 import { inquiryApi, type Inquiry } from './inquiries/inquiryApi';
 
 // ── XERXEZ brand tokens ─────────────────────────────────────────────────────
-const GOLD  = '#C9883A';
-const DARK  = '#1a1208';
-const CREAM = '#F8F7F4';
+const GOLD  = '#D93522';
+const DARK  = '#0f2c4d';
+const CREAM = '#F4F7FA';
 const FF    = "'DM Sans', sans-serif";
 
 const C = {
@@ -25,7 +25,7 @@ const C = {
   cardHover: '#FDF9F4',
   text:      DARK,
   muted:     'rgba(20,20,19,0.50)',
-  border:    'rgba(0,0,0,0.08)',
+  border:    'rgba(217,53,34,0.16)',
 };
 const shadow = { card: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)' };
 
@@ -33,7 +33,7 @@ const shadow = { card: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)'
 const SECTION = {
   crm:       { from: '#0D9488', to: '#0F766E', accent: '#0D9488' },
   finance:   { from: '#1a6b3c', to: '#0f4d2a', accent: '#1a6b3c' },
-  operations:{ from: '#C9883A', to: '#8B5E28', accent: GOLD },
+  operations:{ from: '#D93522', to: '#8B1F17', accent: GOLD },
   hr:        { from: '#1e3a6e', to: '#162a52', accent: '#1e3a6e' },
 } as const;
 type SectionKey = keyof typeof SECTION;
@@ -42,7 +42,7 @@ const ACTIVITY_BADGE: Record<string, { bg: string; color: string; label: string 
   crm:     { bg: 'rgba(13,148,136,0.12)',  color: '#0D9488', label: 'CRM' },
   finance: { bg: 'rgba(26,107,60,0.12)',   color: '#1a6b3c', label: 'Finance' },
   hr:      { bg: 'rgba(30,58,110,0.12)',   color: '#1e3a6e', label: 'HR' },
-  sales:   { bg: 'rgba(201,136,58,0.14)',  color: GOLD,      label: 'Sales' },
+  sales:   { bg: 'rgba(217,53,34,0.14)',  color: GOLD,      label: 'Sales' },
 };
 
 // ── count-up hook ────────────────────────────────────────────────────────────
@@ -197,9 +197,9 @@ const TabBar = ({ active, onChange }: { active: Tab; onChange: (t: Tab) => void 
       <div style={{
         position: 'absolute', top: 5, bottom: 5,
         left: indicator.left, width: indicator.width,
-        background: `linear-gradient(135deg, #e8a84e, ${GOLD})`,
+        background: `linear-gradient(135deg, #e2483a, ${GOLD})`,
         borderRadius: 10,
-        boxShadow: '0 3px 10px rgba(201,136,58,0.35)',
+        boxShadow: '0 3px 10px rgba(217,53,34,0.35)',
         transition: 'left 0.28s cubic-bezier(0.22,1,0.36,1), width 0.28s cubic-bezier(0.22,1,0.36,1)',
       }} />
       {TABS.map(t => (
@@ -780,8 +780,8 @@ const ERPDashboard = () => {
         <div style={{ textAlign: 'center', padding: '72px 24px' }}>
           <div style={{
             width: 64, height: 64, borderRadius: 18,
-            background: `linear-gradient(135deg,#e8a84e,${GOLD})`,
-            boxShadow: '0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.28)',
+            background: `linear-gradient(135deg,#e2483a,${GOLD})`,
+            boxShadow: '0 4px 0 rgba(139,31,23,0.50), 0 6px 20px rgba(217,53,34,0.28)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px',
           }}>
             <ActivityIcon size={26} color="#fff" />

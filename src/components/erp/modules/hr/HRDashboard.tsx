@@ -547,7 +547,7 @@ const HRDashboard = () => {
               to="/erp/payroll-reports"
               style={{
                 fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: '#fff', textDecoration: 'none',
-                background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', borderRadius: 9, padding: '9px 16px',
+                background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', borderRadius: 9, padding: '9px 16px',
                 display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
               }}
             >

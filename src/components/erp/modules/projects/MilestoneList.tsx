@@ -66,12 +66,12 @@ export default function MilestoneList({ projectId, milestones, loading, onReload
     catch (err: any) { toast.error(err.message || 'Delete failed'); }
   };
 
-  if (loading) return <div className="d-flex justify-content-center py-4"><div className="spinner-border" style={{ color: '#C9883A' }} /></div>;
+  if (loading) return <div className="d-flex justify-content-center py-4"><div className="spinner-border" style={{ color: '#D93522' }} /></div>;
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
-        <button onClick={() => { setEditing(null); setShowForm(true); }} style={{ background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none', borderRadius: 9, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>
+        <button onClick={() => { setEditing(null); setShowForm(true); }} style={{ background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>
           <i className="fas fa-plus" style={{ marginRight: 6 }} />Add Milestone
         </button>
       </div>
@@ -97,7 +97,7 @@ export default function MilestoneList({ projectId, milestones, loading, onReload
                 <StatusBadge status={m.status} map={MILESTONE_STATUS} />
                 <div style={{ display: 'flex', gap: 5 }}>
                   <button onClick={() => { setEditing(m); setShowForm(true); }} title="Edit"
-                    style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, borderRadius: 6, cursor: 'pointer' }}>
+                    style={{ background: 'rgba(217,53,34,0.08)', color: '#D93522', border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, borderRadius: 6, cursor: 'pointer' }}>
                     <i className="fas fa-pen" style={{ fontSize: 10 }} />
                   </button>
                   <button onClick={() => setDelId(m.id)} title="Delete"

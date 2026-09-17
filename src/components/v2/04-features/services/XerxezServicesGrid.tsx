@@ -10,7 +10,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Brain, Shield, Cloud, Code, GraduationCap, Atom, Smartphone, Server, MessageSquare } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { T, SectionHeading, LearnMore, IconTile, Reveal, ArrowRight, sectionPad } from "../../01-core/v2theme";
+import { T, Eyebrow, Reveal, ArrowRight, sectionPad } from "../../01-core/v2theme";
 
 type Svc = { icon: LucideIcon; title: string; slug: string; desc: string };
 
@@ -37,7 +37,7 @@ const Card = ({ s }: { s: Svc }) => {
 
   return (
     <Link
-      to={`/v2/services/${s.slug}`}
+      to={`/services/${s.slug}`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -45,17 +45,25 @@ const Card = ({ s }: { s: Svc }) => {
         flexDirection: "column",
         height: "100%",                        // equal-height row
         background: "#fff",
-        border: `1px solid ${hover ? "rgba(217,53,34,0.28)" : T.border}`,
+        border: `1px solid ${hover ? "rgba(217,53,34,0.28)" : "rgba(7,26,51,0.08)"}`,
         borderTop: `3px solid ${hover ? T.red : "transparent"}`,   // red accent appears on hover
-        borderRadius: T.rcard,
+        borderRadius: 16,
         padding: "28px 26px 26px",
         textDecoration: "none",
-        transform: hover ? "translateY(-8px)" : "translateY(0)",
-        boxShadow: hover ? `0 24px 48px ${T.scrim(0.16)}` : T.cardShadow,
+        transform: hover ? "translateY(-6px)" : "translateY(0)",
+        boxShadow: hover ? `0 24px 48px ${T.scrim(0.16)}` : "0 4px 20px rgba(7,26,51,0.08)",
         transition: "transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms ease, border-color 220ms ease",
       }}
     >
-      <IconTile active={hover}><Icon size={22} strokeWidth={2} /></IconTile>
+      <span style={{
+        width: 48, height: 48, flexShrink: 0,
+        borderRadius: 14,
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+        background: "rgba(217,53,34,0.12)",
+        color: T.red,
+      }}>
+        <Icon size={22} strokeWidth={2} />
+      </span>
       <h3 style={{
         fontFamily: T.fontHead,
         fontSize: 18,
@@ -95,16 +103,35 @@ const XerxezServicesGrid = () => (
   <section style={{ ...sectionPad, background: "#fff" }}>
     <div className="container">
       <Reveal>
-        <SectionHeading
-          eyebrow="Our Services"
-          title={<>Enterprise solutions for every<br className="d-none d-lg-inline" /> business challenge</>}
-          subtitle="From AI-native ERP to quantum computing — architected, built, and delivered end to end."
-        />
+        <div>
+          <Eyebrow color={T.red}>Our Services</Eyebrow>
+          <h2 style={{
+            fontFamily: T.fontHead,
+            fontWeight: 800,
+            fontSize: "clamp(2rem, 4vw, 3rem)",
+            lineHeight: 1.1,
+            letterSpacing: "-0.015em",
+            color: T.headNavy,
+            margin: 0,
+          }}>
+            Enterprise solutions for every<br className="d-none d-lg-inline" /> business challenge
+          </h2>
+          <p style={{
+            fontFamily: T.fontBody,
+            fontSize: 17,
+            lineHeight: 1.7,
+            color: T.muted,
+            margin: "18px 0 0",
+            maxWidth: 640,
+          }}>
+            From AI-native ERP to quantum computing — architected, built, and delivered end to end.
+          </p>
+        </div>
       </Reveal>
 
       {/* 3-up on lg, 2-up on md — 9 services divide evenly into 3 full rows of 3
           (a 4-up grid left the last row with a single card and a wide gap). */}
-      <div className="row g-4" style={{ marginTop: 56 }}>
+      <div className="row g-4" style={{ marginTop: 40 }}>
         {SERVICES.map((s, i) => (
           <div key={s.slug} className="col-lg-4 col-md-6">
             {/* stagger by column position within the 3-wide row */}
@@ -114,12 +141,6 @@ const XerxezServicesGrid = () => (
           </div>
         ))}
       </div>
-
-      <Reveal delay={80}>
-        <div style={{ marginTop: 44 }}>
-          <LearnMore to="/v2/services" label="View all services" />
-        </div>
-      </Reveal>
     </div>
   </section>
 );

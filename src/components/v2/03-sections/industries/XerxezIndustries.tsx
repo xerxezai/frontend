@@ -10,12 +10,28 @@ import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { INDUSTRIES, industryLabel } from "../../../../data/erpIndustriesData";
 import { T, SectionHeading, Btn, Reveal, DotGrid, sectionPad } from "../../01-core/v2theme";
+import epcHero from "../../../../assets/images/industries/epc-engineering.jpg";
+import oilGasHero from "../../../../assets/images/industries/oil-gas.jpg";
+import constructionHero from "../../../../assets/images/industries/construction.jpg";
+import manufacturingHero from "../../../../assets/images/industries/manufacturing.jpg";
+import facilityManagementHero from "../../../../assets/images/industries/facility-management.jpg";
+import healthcareHero from "../../../../assets/images/industries/healthcare.jpg";
 
 // Show the first 6 industries so the list fits without scrolling. These 6
 // slugs are exactly the ones with a standalone /v2/industries/* page — only
 // "epc" needs remapping, since its v2 route is "epc-engineering".
 const LIST = INDUSTRIES.slice(0, 6);
-const industryRoute = (slug: string) => `/v2/industries/${slug === "epc" ? "epc-engineering" : slug}`;
+const industryRoute = (slug: string) => `/industries/${slug === "epc" ? "epc-engineering" : slug}`;
+
+// Right-panel background photo per industry, keyed by slug — matches LIST 1:1.
+const HERO_IMAGE: Record<string, string> = {
+  "epc": epcHero,
+  "oil-gas": oilGasHero,
+  "construction": constructionHero,
+  "manufacturing": manufacturingHero,
+  "facility-management": facilityManagementHero,
+  "healthcare": healthcareHero,
+};
 
 const XerxezIndustries = () => {
   const [active, setActive] = useState(0);   // index of the selected industry
@@ -106,75 +122,105 @@ const XerxezIndustries = () => {
 
           {/* ── Right: detail panel for the selected industry ── */}
           <div className="col-lg-7">
-            <Reveal delay={80}>
+            <Reveal delay={80} fill>
               <div style={{
+                position: "relative",
                 height: "100%",
                 minHeight: 380,                       // keep the panel tall even for short content
                 display: "flex",
                 flexDirection: "column",
-                background: "rgba(255,255,255,0.05)",
                 border: "1px solid rgba(255,255,255,0.12)",
                 borderRadius: 20,
                 padding: "clamp(24px, 4vw, 44px)",
+                overflow: "hidden",                    // clip the background photo to the rounded corners
               }}>
-                {/* header: red icon tile + "01 — Industry focus" kicker */}
-                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                  <span style={{
-                    width: 52, height: 52, borderRadius: 14, flexShrink: 0,
-                    display: "inline-flex", alignItems: "center", justifyContent: "center",
-                    background: T.red, color: "#fff",
-                    boxShadow: `0 8px 20px ${T.redGlow}`,
-                  }}>
-                    <SelIcon size={24} strokeWidth={2} />
-                  </span>
-                  <span style={{
-                    fontFamily: T.fontBody, fontSize: 12, fontWeight: 600,
-                    letterSpacing: "0.24em", textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.5)",
-                  }}>
-                    {String(active + 1).padStart(2, "0")} — Industry focus
-                  </span>
-                </div>
+                {/* background photo layer — one <img> per industry, cross-faded via opacity
+                    so switching industries transitions smoothly instead of popping */}
+                {LIST.map((ind, i) => (
+                  <img
+                    key={ind.slug}
+                    src={HERO_IMAGE[ind.slug]}
+                    alt=""
+                    aria-hidden="true"
+                    style={{
+                      position: "absolute", inset: 0,
+                      width: "100%", height: "100%",
+                      objectFit: "cover",
+                      opacity: i === active ? 1 : 0,
+                      transition: "opacity 500ms ease",
+                      zIndex: 0,
+                    }}
+                  />
+                ))}
+                {/* dark overlay so the white/red text stays readable over any photo */}
+                <div aria-hidden="true" style={{
+                  position: "absolute", inset: 0,
+                  background: "rgba(7,26,51,0.75)",
+                  zIndex: 1,
+                }} />
 
-                {/* full industry name */}
-                <h3 style={{
-                  fontFamily: T.fontHead,
-                  fontSize: "clamp(24px, 3vw, 34px)",
-                  fontWeight: 800,
-                  color: "#fff",
-                  margin: "22px 0 14px",
-                  lineHeight: 1.2,
-                  letterSpacing: "-0.015em",
-                }}>
-                  {sel.name}
-                </h3>
-
-                <p style={{
-                  fontFamily: T.fontBody, fontSize: 16, lineHeight: 1.7,
-                  color: "rgba(255,255,255,0.78)", margin: "0 0 22px",
-                }}>
-                  {sel.tagline}
-                </p>
-
-                {/* feature bullets with a small red dot */}
-                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 30px", display: "grid", gap: 10 }}>
-                  {sel.features.map((f) => (
-                    <li key={f} style={{
-                      display: "flex", alignItems: "flex-start", gap: 10,
-                      fontFamily: T.fontBody, fontSize: 14.5, color: "rgba(255,255,255,0.72)",
+                {/* text content — lifted above the photo + overlay layers (both position:absolute
+                    with a z-index), so it needs its own stacking context on top of them */}
+                <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", flex: 1 }}>
+                  {/* header: red icon tile + "01 — Industry focus" kicker */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                    <span style={{
+                      width: 52, height: 52, borderRadius: 14, flexShrink: 0,
+                      display: "inline-flex", alignItems: "center", justifyContent: "center",
+                      background: T.red, color: "#fff",
+                      boxShadow: `0 8px 20px ${T.redGlow}`,
                     }}>
-                      <span style={{
-                        width: 6, height: 6, borderRadius: "50%", background: T.redLight,
-                        flexShrink: 0, marginTop: 8,
-                      }} />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
+                      <SelIcon size={24} strokeWidth={2} />
+                    </span>
+                    <span style={{
+                      fontFamily: T.fontBody, fontSize: 12, fontWeight: 600,
+                      letterSpacing: "0.24em", textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.5)",
+                    }}>
+                      {String(active + 1).padStart(2, "0")} — Industry focus
+                    </span>
+                  </div>
 
-                {/* margin-top:auto pins the button to the bottom of the panel */}
-                <div style={{ marginTop: "auto" }}>
-                  <Btn to={industryRoute(sel.slug)}>Explore industry</Btn>
+                  {/* full industry name */}
+                  <h3 style={{
+                    fontFamily: T.fontHead,
+                    fontSize: "clamp(24px, 3vw, 34px)",
+                    fontWeight: 800,
+                    color: "#fff",
+                    margin: "22px 0 14px",
+                    lineHeight: 1.2,
+                    letterSpacing: "-0.015em",
+                  }}>
+                    {sel.name}
+                  </h3>
+
+                  <p style={{
+                    fontFamily: T.fontBody, fontSize: 16, lineHeight: 1.7,
+                    color: "rgba(255,255,255,0.78)", margin: "0 0 22px",
+                  }}>
+                    {sel.tagline}
+                  </p>
+
+                  {/* feature bullets with a small red dot */}
+                  <ul style={{ listStyle: "none", padding: 0, margin: "0 0 30px", display: "grid", gap: 10 }}>
+                    {sel.features.map((f) => (
+                      <li key={f} style={{
+                        display: "flex", alignItems: "flex-start", gap: 10,
+                        fontFamily: T.fontBody, fontSize: 14.5, color: "rgba(255,255,255,0.72)",
+                      }}>
+                        <span style={{
+                          width: 6, height: 6, borderRadius: "50%", background: T.redLight,
+                          flexShrink: 0, marginTop: 8,
+                        }} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* margin-top:auto pins the button to the bottom of the panel */}
+                  <div style={{ marginTop: "auto" }}>
+                    <Btn to={industryRoute(sel.slug)}>Explore industry</Btn>
+                  </div>
                 </div>
               </div>
             </Reveal>

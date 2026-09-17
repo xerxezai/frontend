@@ -112,7 +112,7 @@ export default function PayoutsPanel() {
           </select>
         </div>
         <button onClick={exportCSV} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}>
-          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#C9883A' }} />Export CSV
+          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#D93522' }} />Export CSV
         </button>
       </div>
 
@@ -138,7 +138,7 @@ export default function PayoutsPanel() {
                 <div style={{ display: 'flex', gap: 8 }}>
                   <input type="number" value={pF.amount} onChange={e => setPF(f => ({ ...f, amount: e.target.value }))} style={inp} required step="0.01" min="0.01" />
                   <button type="button" onClick={fillFromPending} disabled={filling}
-                    style={{ background: 'rgba(201,136,58,0.08)', border: '1px solid rgba(201,136,58,0.22)', borderRadius: 9, padding: '0 12px', fontFamily: FF, fontWeight: 700, fontSize: 11.5, cursor: filling ? 'wait' : 'pointer', color: '#C9883A', whiteSpace: 'nowrap' }}>
+                    style={{ background: 'rgba(217,53,34,0.08)', border: '1px solid rgba(217,53,34,0.22)', borderRadius: 9, padding: '0 12px', fontFamily: FF, fontWeight: 700, fontSize: 11.5, cursor: filling ? 'wait' : 'pointer', color: '#D93522', whiteSpace: 'nowrap' }}>
                     {filling ? 'Filling…' : 'Fill from pending'}
                   </button>
                 </div>

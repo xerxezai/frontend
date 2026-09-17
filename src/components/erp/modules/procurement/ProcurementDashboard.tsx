@@ -73,7 +73,7 @@ export default function ProcurementDashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
               <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${symbol}${(v / 1000).toFixed(0)}k`} />
-              <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(201,136,58,0.06)' }} />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(217,53,34,0.06)' }} />
               <Bar dataKey="total" name="Spend" fill={OG} radius={[4, 4, 0, 0]} isAnimationActive animationDuration={700} />
             </BarChart>
           </ResponsiveContainer>
@@ -121,7 +121,7 @@ export default function ProcurementDashboard() {
             <div style={{ padding: '8px 0' }}>
               {data.top_suppliers.map((s, i) => (
                 <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 18px', borderTop: i ? `1px solid ${BORDER}` : 'none' }}>
-                  <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(201,136,58,0.10)', color: OG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FF, fontWeight: 800, fontSize: 11, flexShrink: 0 }}>{i + 1}</div>
+                  <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(217,53,34,0.10)', color: OG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FF, fontWeight: 800, fontSize: 11, flexShrink: 0 }}>{i + 1}</div>
                   <span style={{ flex: 1, fontFamily: FF, fontSize: 13, fontWeight: 600, color: '#1A1A1A' }}>{s.name}</span>
                   <span style={{ fontFamily: FF, fontSize: 13, fontWeight: 800, color: OG }}>{fmtINR(s.spend)}</span>
                 </div>

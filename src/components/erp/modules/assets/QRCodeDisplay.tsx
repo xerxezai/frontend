@@ -68,7 +68,7 @@ export default function QRCodeDisplay({ asset, onGenerated }: { asset: any; onGe
             <i className="fas fa-qrcode" style={{ fontSize: 48, color: '#d1cec7' }} />
           </div>
           <div style={{ fontFamily: FF, fontSize: 12.5, color: '#6B6B6B', margin: '14px 0 18px' }}>No QR code generated yet for {asset.asset_code}.</div>
-          <button onClick={generate} disabled={generating} style={{ background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none', borderRadius: 9, padding: '9px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: generating ? 'wait' : 'pointer' }}>
+          <button onClick={generate} disabled={generating} style={{ background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: '9px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: generating ? 'wait' : 'pointer' }}>
             <i className={`fas ${generating ? 'fa-spinner fa-spin' : 'fa-qrcode'}`} style={{ marginRight: 8 }} />{generating ? 'Generating…' : 'Generate QR'}
           </button>
         </>

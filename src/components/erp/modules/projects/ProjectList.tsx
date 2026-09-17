@@ -39,7 +39,7 @@ export default function ProjectList() {
 
   const cols = [
     { key: 'project_code', label: 'Code', width: 90 },
-    { key: 'name', label: 'Name', width: 180, render: (r: any) => <span onClick={() => navigate(`/erp/projects/${r.id}`)} style={{ cursor: 'pointer', color: '#C9883A', fontWeight: 700 }}>{r.name}</span> },
+    { key: 'name', label: 'Name', width: 180, render: (r: any) => <span onClick={() => navigate(`/erp/projects/${r.id}`)} style={{ cursor: 'pointer', color: '#D93522', fontWeight: 700 }}>{r.name}</span> },
     { key: 'client', label: 'Client' },
     { key: 'status', label: 'Status', render: (r: any) => <StatusBadge status={r.status} map={PROJECT_STATUS} /> },
     { key: 'priority', label: 'Priority', render: (r: any) => <StatusBadge status={r.priority} map={PRIORITY_BADGE} /> },
@@ -69,7 +69,7 @@ export default function ProjectList() {
           </select>
         </div>
         <button onClick={exportCSV} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}>
-          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#C9883A' }} />Export CSV
+          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#D93522' }} />Export CSV
         </button>
       </div>
 

@@ -1,11 +1,11 @@
 // SmartAssetTrackingPage.tsx
-// Purpose: /v2/iot/smart-asset-tracking — first standalone IoT Solutions
+// Purpose: /iot/smart-asset-tracking — first standalone IoT Solutions
 //          detail page (hero, why-it-matters, operational advantages,
 //          platform capabilities, closing CTA). Structure follows the same
 //          pattern established by the industry detail pages (e.g.
 //          ConstructionPage.tsx), adapted for IoT content per the client's
 //          etiot.in reference.
-// Used in: src/App.tsx (route: /v2/iot/smart-asset-tracking)
+// Used in: src/App.tsx (route: /iot/smart-asset-tracking)
 // Data source: original XERXEZ copy for this page (per the standing "original
 //              copy allowed on industry/solution detail pages" decision —
 //              never copied from a competitor). No invented statistics —
@@ -60,7 +60,7 @@ const SmartAssetTrackingPage = () => (
     <SEO
       title="Smart Asset Tracking | IoT Solutions | XERXEZ"
       description="Continuous, site-wide asset intelligence — GPS, RFID, BLE, geofencing, utilization analytics, and centralized monitoring for high-value assets and inventory."
-      canonical="/v2/iot/smart-asset-tracking"
+      canonical="/iot/smart-asset-tracking"
       noIndex
     />
 
@@ -75,7 +75,7 @@ const SmartAssetTrackingPage = () => (
       </>}
       heroImage={heroImage}
       ctaButtons={[
-        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
       ]}
       maxWidth={720}
@@ -191,7 +191,7 @@ const SmartAssetTrackingPage = () => (
             Let&apos;s map your asset environment, hardware mix, site count, and compliance
             requirements — and show you exactly what visibility at this level changes for your operations.
           </p>
-          <Btn to="/v2/contact">Request a Demo</Btn>
+          <Btn to="/contact">Request a Demo</Btn>
 
           {/* 3 trust signals — centered row below the button */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", justifyContent: "center", marginTop: 34 }}>

@@ -6,7 +6,7 @@ import {
 import { erpFetch } from '../../../../hooks/useERPApi';
 import { OG, FF, WHITE, BORDER, useFmtCurrency, Card3D } from './inventoryShared';
 
-const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#f59e0b', '#10b981', '#6366f1', '#ec4899', '#64748b'];
+const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#D93522', '#10b981', '#6366f1', '#ec4899', '#64748b'];
 
 interface DashboardData {
   total_value: number;

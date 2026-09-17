@@ -10,12 +10,12 @@ import { inquiryApi } from './inquiries/inquiryApi';
 const CURRENCY_FLAG: Record<string, string> = { AED: '🇦🇪', INR: '🇮🇳', USD: '🇺🇸' };
 
 const C = {
-  orange:     "#C9883A",
-  orangeGrad: "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
-  warmDark:   "#1a1208",
-  warmDarker: "#0f0a05",
-  dark:       "#1a1208",
-  cream:      "#F8F7F4",
+  orange:     "#D93522",
+  orangeGrad: "linear-gradient(145deg, #e2483a 0%, #D93522 100%)",
+  warmDark:   "#071a33",
+  warmDarker: "#04101f",
+  dark:       "#071a33",
+  cream:      "#F4F7FA",
   white:      "#FFFFFF",
   muted:      "#6B6B6B",
   border:     "rgba(0,0,0,0.07)",
@@ -284,7 +284,7 @@ const ERPLayout = ({ children }: Props) => {
     <div
       style={{
         minHeight: '100vh',
-        background: '#F8F7F4',
+        background: '#F4F7FA',
         '--sidebar-w': `${sidebarW}px`,
       } as React.CSSProperties}
     >
@@ -327,11 +327,11 @@ const ERPLayout = ({ children }: Props) => {
         }
         .erp-nav-item:hover {
           color: rgba(255,255,255,0.92);
-          background: rgba(201,136,58,0.15);
+          background: rgba(217,53,34,0.15);
         }
         .erp-nav-active {
           color: #ffffff !important;
-          background: #C9883A !important;
+          background: #D93522 !important;
           border-left-color: #ffffff !important;
           font-weight: 700 !important;
         }
@@ -355,17 +355,17 @@ const ERPLayout = ({ children }: Props) => {
           margin: 1px 0;
           border-left: 3px solid transparent;
           border-bottom: 1px solid #F3F4F6;
-          text-decoration: none; color: #1a1208; background: #FFFFFF;
+          text-decoration: none; color: #071a33; background: #FFFFFF;
           font-size: 13px; font-weight: 400; line-height: 1.3; font-family: 'DM Sans', sans-serif;
           transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
           box-sizing: border-box;
         }
         .erp-subnav-item:last-child { border-bottom: none; }
-        .erp-subnav-item:hover { color: #C9883A; background: rgba(201,136,58,0.15); }
+        .erp-subnav-item:hover { color: #D93522; background: rgba(217,53,34,0.15); }
         .erp-subnav-active {
-          color: #ffffff !important; background: #C9883A !important;
-          border-left-color: #C9883A !important; font-weight: 700 !important;
+          color: #ffffff !important; background: #D93522 !important;
+          border-left-color: #D93522 !important; font-weight: 700 !important;
         }
 
         .erp-icon-badge {
@@ -394,7 +394,7 @@ const ERPLayout = ({ children }: Props) => {
           content: '';
           flex: 1;
           height: 1px;
-          background: linear-gradient(to right, rgba(201,136,58,0.20), transparent);
+          background: linear-gradient(to right, rgba(217,53,34,0.20), transparent);
         }
 
         .erp-nav-slide {
@@ -418,19 +418,19 @@ const ERPLayout = ({ children }: Props) => {
           transition: border-color 0.2s, box-shadow 0.2s;
         }
         .erp-search:focus {
-          border-color: #C9883A;
-          box-shadow: 0 0 0 3px rgba(201,136,58,0.15);
+          border-color: #D93522;
+          box-shadow: 0 0 0 3px rgba(217,53,34,0.15);
         }
         .erp-search::placeholder { color: rgba(255,255,255,0.28); }
 
         .erp-search-light {
           border: 1.5px solid rgba(0,0,0,0.10);
-          background: #F8F7F4;
-          color: #1a1208;
+          background: #F4F7FA;
+          color: #071a33;
         }
         .erp-search-light:focus {
-          border-color: #C9883A;
-          box-shadow: 0 0 0 3px rgba(201,136,58,0.14);
+          border-color: #D93522;
+          box-shadow: 0 0 0 3px rgba(217,53,34,0.14);
         }
         .erp-search-light::placeholder { color: rgba(0,0,0,0.32); }
 
@@ -443,25 +443,25 @@ const ERPLayout = ({ children }: Props) => {
           cursor: pointer; position: relative;
           transition: background 0.2s, border-color 0.2s;
         }
-        .erp-bell:hover { background: rgba(201,136,58,0.14); border-color: rgba(201,136,58,0.36); }
+        .erp-bell:hover { background: rgba(217,53,34,0.14); border-color: rgba(217,53,34,0.36); }
 
         .erp-bell-light {
-          background: #F8F7F4;
+          background: #F4F7FA;
           border: 1.5px solid rgba(0,0,0,0.08);
         }
-        .erp-bell-light:hover { background: rgba(201,136,58,0.12); border-color: rgba(201,136,58,0.30); }
+        .erp-bell-light:hover { background: rgba(217,53,34,0.12); border-color: rgba(217,53,34,0.30); }
 
         .erp-topbtn {
           height: 38px;
           border-radius: 10px;
-          background: #F8F7F4;
+          background: #F4F7FA;
           border: 1.5px solid rgba(0,0,0,0.08);
           display: flex; align-items: center; justify-content: center;
           cursor: pointer; position: relative;
           padding: 0 11px;
           transition: background 0.2s, border-color 0.2s;
         }
-        .erp-topbtn:hover { background: rgba(201,136,58,0.12); border-color: rgba(201,136,58,0.30); }
+        .erp-topbtn:hover { background: rgba(217,53,34,0.12); border-color: rgba(217,53,34,0.30); }
 
         .erp-logout {
           background: rgba(239,68,68,0.07);
@@ -520,17 +520,23 @@ const ERPLayout = ({ children }: Props) => {
           flexShrink: 0,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'flex-start' }}>
-            {!collapsed ? (
-              <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-                style={{ height: 68, width: 'auto', display: 'block', objectFit: 'contain' }} />
-            ) : (
-              <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
-                style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
-            )}
+            <button
+              onClick={() => navigate('/')}
+              aria-label="Go to Xerxez website"
+              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex' }}
+            >
+              {!collapsed ? (
+                <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
+                  style={{ height: 68, width: 'auto', display: 'block', objectFit: 'contain' }} />
+              ) : (
+                <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
+                  style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
+              )}
+            </button>
           </div>
           {!collapsed && (
             <div style={{
-              marginTop: 7, fontSize: 10, color: C.orange, fontWeight: 700,
+              marginTop: 7, fontSize: 10, color: 'rgba(255,255,255,0.65)', fontWeight: 700,
               letterSpacing: '0.14em', textTransform: 'uppercase',
               fontFamily: "'DM Sans', sans-serif",
             }}>
@@ -714,7 +720,7 @@ const ERPLayout = ({ children }: Props) => {
                     <span style={{ flex: 1 }}>Admin</span>
                     {newInquiriesCount > 0 && !adminGroupOpen && (
                       <span style={{
-                        background: '#C9883A', color: '#fff', fontSize: 10, fontWeight: 800,
+                        background: '#D93522', color: '#fff', fontSize: 10, fontWeight: 800,
                         minWidth: 18, height: 18, borderRadius: 9, padding: '0 5px',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                         fontFamily: "'DM Sans', sans-serif",
@@ -758,7 +764,7 @@ const ERPLayout = ({ children }: Props) => {
                         <span style={{ flex: 1 }}>Inquiries</span>
                         {newInquiriesCount > 0 && (
                           <span style={{
-                            background: '#C9883A', color: '#fff', fontSize: 10, fontWeight: 800,
+                            background: '#D93522', color: '#fff', fontSize: 10, fontWeight: 800,
                             minWidth: 18, height: 18, borderRadius: 9, padding: '0 5px',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                             fontFamily: "'DM Sans', sans-serif",
@@ -829,21 +835,21 @@ const ERPLayout = ({ children }: Props) => {
         {isSuperAdmin && (
           <div style={{ padding: '10px 10px 0', flexShrink: 0, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <button
-              onClick={() => navigate('/home')}
+              onClick={() => navigate('/lma/courses')}
               aria-label="Switch to Academy"
               style={{
                 display: 'flex', alignItems: 'center', gap: 10,
                 width: '100%', justifyContent: collapsed ? 'center' : 'flex-start',
-                background: 'rgba(201,136,58,0.07)',
-                border: '1px solid rgba(201,136,58,0.16)',
+                background: 'rgba(217,53,34,0.07)',
+                border: '1px solid rgba(217,53,34,0.16)',
                 borderRadius: 10, padding: '9px 13px',
                 cursor: 'pointer', color: C.orange,
                 fontSize: 13.5, fontWeight: 600,
                 fontFamily: "'DM Sans', sans-serif",
                 transition: 'background 0.2s, border-color 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.14)'; e.currentTarget.style.borderColor = 'rgba(201,136,58,0.32)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.07)'; e.currentTarget.style.borderColor = 'rgba(201,136,58,0.16)'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.14)'; e.currentTarget.style.borderColor = 'rgba(217,53,34,0.32)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.07)'; e.currentTarget.style.borderColor = 'rgba(217,53,34,0.16)'; }}
             >
               <i className="fas fa-graduation-cap" style={{ fontSize: 13, flexShrink: 0 }}></i>
               {!collapsed && <span>Switch to Academy</span>}
@@ -929,8 +935,8 @@ const ERPLayout = ({ children }: Props) => {
                 aria-label="Select currency"
                 style={{
                   gap: 6,
-                  background: currencyOpen ? 'rgba(201,136,58,0.12)' : '#F8F7F4',
-                  borderColor: currencyOpen ? 'rgba(201,136,58,0.36)' : 'rgba(0,0,0,0.08)',
+                  background: currencyOpen ? 'rgba(217,53,34,0.12)' : '#F4F7FA',
+                  borderColor: currencyOpen ? 'rgba(217,53,34,0.36)' : 'rgba(0,0,0,0.08)',
                 }}
               >
                 <span style={{ fontSize: 13, lineHeight: 1 }}>{CURRENCY_FLAG[selectedCurrency]}</span>
@@ -960,7 +966,7 @@ const ERPLayout = ({ children }: Props) => {
                       key={cur.code}
                       onClick={() => { setCurrency(cur.code); setCurrencyOpen(false); }}
                       style={{
-                        width: '100%', background: cur.code === selectedCurrency ? 'rgba(201,136,58,0.08)' : 'none',
+                        width: '100%', background: cur.code === selectedCurrency ? 'rgba(217,53,34,0.08)' : 'none',
                         border: 'none', borderBottom: '1px solid rgba(0,0,0,0.05)',
                         padding: '10px 14px',
                         display: 'flex', alignItems: 'center', gap: 10,
@@ -968,8 +974,8 @@ const ERPLayout = ({ children }: Props) => {
                         transition: 'background 0.16s',
                         minHeight: 44,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.12)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = cur.code === selectedCurrency ? 'rgba(201,136,58,0.08)' : 'none'; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.12)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = cur.code === selectedCurrency ? 'rgba(217,53,34,0.08)' : 'none'; }}
                     >
                       <span style={{ fontSize: 15 }}>{CURRENCY_FLAG[cur.code]}</span>
                       <div style={{ flex: 1 }}>
@@ -1008,8 +1014,8 @@ const ERPLayout = ({ children }: Props) => {
                 aria-label="User menu"
                 style={{
                   display: 'flex', alignItems: 'center', gap: 9,
-                  background: profileOpen ? 'rgba(201,136,58,0.12)' : '#F8F7F4',
-                  border: `1px solid ${profileOpen ? 'rgba(201,136,58,0.36)' : 'rgba(0,0,0,0.08)'}`,
+                  background: profileOpen ? 'rgba(217,53,34,0.12)' : '#F4F7FA',
+                  border: `1px solid ${profileOpen ? 'rgba(217,53,34,0.36)' : 'rgba(0,0,0,0.08)'}`,
                   borderRadius: 12, padding: '5px 11px 5px 5px',
                   cursor: 'pointer',
                   transition: 'background 0.2s, border-color 0.2s',
@@ -1040,9 +1046,9 @@ const ERPLayout = ({ children }: Props) => {
                 <div style={{
                   position: 'absolute', top: 'calc(100% + 8px)', right: 0,
                   width: 230,
-                  background: 'linear-gradient(160deg,#1a1208 0%,#0f0a05 100%)',
+                  background: 'linear-gradient(160deg,#071a33 0%,#04101f 100%)',
                   border: '1px solid rgba(255,255,255,0.07)',
-                  borderTop: '2px solid #C9883A',
+                  borderTop: '2px solid #D93522',
                   borderRadius: 14,
                   boxShadow: '0 6px 0 rgba(0,0,0,0.45),0 20px 48px rgba(0,0,0,0.60)',
                   overflow: 'hidden',
@@ -1053,13 +1059,13 @@ const ERPLayout = ({ children }: Props) => {
                   <div style={{
                     padding: '14px 16px 12px',
                     borderBottom: '1px solid rgba(255,255,255,0.06)',
-                    background: 'rgba(201,136,58,0.04)',
+                    background: 'rgba(217,53,34,0.04)',
                     display: 'flex', alignItems: 'center', gap: 11,
                   }}>
                     <div style={{
                       width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
                       background: C.orangeGrad,
-                      boxShadow: `0 0 0 2px #1a1208, 0 0 0 3px ${C.orange}`,
+                      boxShadow: `0 0 0 2px #071a33, 0 0 0 3px ${C.orange}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
                       <span style={{ color: '#fff', fontWeight: 800, fontSize: 15, fontFamily: "'DM Sans', sans-serif" }}>{initial}</span>
@@ -1068,8 +1074,8 @@ const ERPLayout = ({ children }: Props) => {
                       <div style={{ color: '#fff', fontWeight: 700, fontSize: 13.5, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.2 }}>{adminName}</div>
                       <span style={{
                         display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4,
-                        background: 'rgba(201,136,58,0.12)',
-                        border: '1px solid rgba(201,136,58,0.28)',
+                        background: 'rgba(217,53,34,0.12)',
+                        border: '1px solid rgba(217,53,34,0.28)',
                         color: C.orange, fontSize: 9, fontWeight: 700,
                         padding: '2px 7px', borderRadius: 20,
                         letterSpacing: '0.10em', textTransform: 'uppercase',
@@ -1100,13 +1106,13 @@ const ERPLayout = ({ children }: Props) => {
                         transition: 'background 0.16s',
                         minHeight: 44,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.08)'; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.08)'; }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
                     >
                       <div style={{
                         width: 28, height: 28, borderRadius: 7, flexShrink: 0,
-                        background: 'rgba(201,136,58,0.08)',
-                        border: '1px solid rgba(201,136,58,0.15)',
+                        background: 'rgba(217,53,34,0.08)',
+                        border: '1px solid rgba(217,53,34,0.15)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
                         <i className={item.icon} style={{ color: C.orange, fontSize: 12 }} />
@@ -1148,18 +1154,18 @@ const ERPLayout = ({ children }: Props) => {
 
         {isPlatformAdmin && currentCompany && (
           <div style={{
-            background: 'rgba(201,136,58,0.10)', borderBottom: '1px solid rgba(201,136,58,0.25)',
+            background: 'rgba(217,53,34,0.10)', borderBottom: '1px solid rgba(217,53,34,0.25)',
             padding: '8px 28px', display: 'flex', alignItems: 'center', gap: 8,
           }}>
             <i className="fas fa-eye" style={{ color: C.orange, fontSize: 12 }} />
-            <span style={{ color: '#8B5E1A', fontSize: 12.5, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>
+            <span style={{ color: '#A32819', fontSize: 12.5, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>
               You are viewing <strong>{currentCompany.name}</strong>'s data
             </span>
           </div>
         )}
 
         {/* content */}
-        <div style={{ flex: 1, padding: '24px 28px', background: '#F8F7F4' }}>
+        <div style={{ flex: 1, padding: '24px 28px', background: '#F4F7FA' }}>
           {children}
         </div>
 

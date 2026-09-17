@@ -79,7 +79,7 @@ export default function RecurringInvoicesPanel() {
       render: (r: any) => (
         <div style={{ display: 'flex', gap: 5 }}>
           <button title="Generate Invoice Now" disabled={busyId === r.id} onClick={() => generateNow(r.id)}
-            style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
+            style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
             <i className={`fas ${busyId === r.id ? 'fa-spinner fa-spin' : 'fa-bolt'}`} style={{ fontSize: 10 }} />
           </button>
           <button title={r.status === 'active' ? 'Pause' : 'Resume'} disabled={busyId === r.id} onClick={() => toggleStatus(r.id)}

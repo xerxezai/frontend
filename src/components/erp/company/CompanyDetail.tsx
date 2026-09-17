@@ -6,7 +6,7 @@ import { companiesApi } from './companiesApi';
 import AddCompanyUserModal from './AddCompanyUserModal';
 
 const FF = "'DM Sans',sans-serif";
-const OG = '#C9883A';
+const OG = '#D93522';
 
 const STATUS_BADGE: Record<string, { label: string; bg: string; color: string }> = {
   active:    { label: 'Active',    bg: '#d1fae5', color: '#065f46' },
@@ -50,7 +50,7 @@ function EditLimitModal({ current, onClose, onSave }: { current: number; onClose
           <button
             onClick={async () => { setSaving(true); await onSave(value); setSaving(false); }}
             disabled={saving}
-            style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none', borderRadius: 9, padding: 10, cursor: saving ? 'wait' : 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 13, opacity: saving ? 0.75 : 1 }}
+            style={{ flex: 1, background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: 10, cursor: saving ? 'wait' : 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 13, opacity: saving ? 0.75 : 1 }}
           >
             {saving ? 'Saving…' : 'Save'}
           </button>
@@ -125,7 +125,7 @@ export default function CompanyDetail() {
 
       <div style={{
         background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`,
-        boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
         padding: 24, marginBottom: 24,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>

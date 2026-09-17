@@ -6,21 +6,26 @@ import {
   X,
   Send,
   Sparkles,
-  Mail,
-  MessageCircle,
   LogIn,
   GraduationCap,
+  Building2,
+  ShieldCheck,
+  CalendarClock,
+  PhoneCall,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
   "https://backend-production-b9f2.up.railway.app/api/v1";
 
-const GOLD = "#C9883A";
-const GOLD_LIGHT = "#e8a84e";
-const DARK = "#1a1208";
-const DARK_2 = "#241a0d";
+// ── v2 navy/red theme tokens ─────────────────────────────────────────────────
+const RED = "#D93522";
+const NAVY = "#071a33";
+const NAVY_2 = "#0c294d";
 const CREAM = "#F8F7F4";
+const BOT_BUBBLE_BG = "#F4F7FA";
+const BOT_TEXT = "#0f2c4d";
 
 interface Message {
   role: "user" | "assistant";
@@ -33,20 +38,18 @@ const GREETING: Message = {
     "Hi, I'm the Xerxez AI Assistant. Ask me about our ERP, Academy, or DevSecOps & Cloud services — or use a quick option below.",
 };
 
-type QuickReply = {
-  label: string;
-  action: "ask" | "navigate" | "sales" | "demo";
-  payload?: string;
-};
+// Every quick reply is a direct link to a real route, each with its own icon
+// for quick scanning (was icon-inconsistent — only 2 of 7 had one).
+type QuickReply = { label: string; to: string; icon: LucideIcon };
 
 const QUICK_REPLIES: QuickReply[] = [
-  { label: "Tell me about ERP", action: "ask", payload: "Tell me about the ERP product." },
-  { label: "Tell me about Academy", action: "ask", payload: "Tell me about LMA Academy." },
-  { label: "DevSecOps Services", action: "ask", payload: "Tell me about your DevSecOps & Cloud services." },
-  { label: "Book a Demo", action: "demo" },
-  { label: "Talk to Sales", action: "sales" },
-  { label: "Student Login", action: "navigate", payload: "/lma/login" },
-  { label: "ERP Login", action: "navigate", payload: "/erp" },
+  { label: "Tell me about ERP", to: "/services/ai-powered-erp", icon: Building2 },
+  { label: "Tell me about Academy", to: "/training", icon: GraduationCap },
+  { label: "DevSecOps Services", to: "/services/devsecops-mlops-solutions", icon: ShieldCheck },
+  { label: "Book a Demo", to: "/contact", icon: CalendarClock },
+  { label: "Talk to Sales", to: "/contact", icon: PhoneCall },
+  { label: "Student Login", to: "/lma/login", icon: GraduationCap },
+  { label: "ERP Login", to: "/erp/login", icon: LogIn },
 ];
 
 const FloatingChat = () => {
@@ -54,7 +57,6 @@ const FloatingChat = () => {
   const [messages, setMessages] = useState<Message[]>([GREETING]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showSalesOptions, setShowSalesOptions] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -103,47 +105,14 @@ const FloatingChat = () => {
   };
 
   const handleQuickReply = (qr: QuickReply) => {
-    setShowSalesOptions(false);
-    if (qr.action === "navigate" && qr.payload) {
-      navigate(qr.payload);
-      setOpen(false);
-      return;
-    }
-    if (qr.action === "demo") {
-      setMessages((m) => [
-        ...m,
-        { role: "user", content: qr.label },
-        {
-          role: "assistant",
-          content:
-            "I'd love to set that up. Fill in the short form on our contact page and our team will confirm a demo slot within 24 hours.",
-        },
-      ]);
-      setTimeout(() => navigate("/contact"), 900);
-      return;
-    }
-    if (qr.action === "sales") {
-      setMessages((m) => [
-        ...m,
-        { role: "user", content: qr.label },
-        {
-          role: "assistant",
-          content: "You can reach our sales team directly — pick whichever is easiest:",
-        },
-      ]);
-      setShowSalesOptions(true);
-      return;
-    }
-    if (qr.action === "ask" && qr.payload) {
-      askAI(qr.payload);
-    }
+    navigate(qr.to);
+    setOpen(false);
   };
 
   const send = () => {
     const text = input.trim();
     if (!text || loading) return;
     setInput("");
-    setShowSalesOptions(false);
     askAI(text);
   };
 
@@ -163,12 +132,15 @@ const FloatingChat = () => {
               zIndex: 1050,
               width: 360,
               maxWidth: "calc(100vw - 32px)",
-              height: 520,
+              // No fixed height — the panel hugs its content (greeting + quick
+              // options + input) so it doesn't open with a big dead gap, and
+              // only grows into a scrolling conversation once there's enough
+              // messages to need it.
               maxHeight: "calc(100vh - 140px)",
               borderRadius: 20,
-              background: DARK,
+              background: NAVY,
               boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
-              border: `1px solid rgba(201,136,58,0.25)`,
+              border: `1px solid rgba(217,53,34,0.25)`,
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",
@@ -177,12 +149,12 @@ const FloatingChat = () => {
             {/* Header */}
             <div
               style={{
-                background: `linear-gradient(135deg, ${DARK} 0%, #0f0a05 100%)`,
+                background: NAVY,
                 padding: "16px 18px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                borderBottom: `1px solid rgba(201,136,58,0.18)`,
+                borderBottom: `1px solid rgba(217,53,34,0.18)`,
                 flexShrink: 0,
               }}
             >
@@ -192,11 +164,11 @@ const FloatingChat = () => {
                     width: 38,
                     height: 38,
                     borderRadius: "50%",
-                    background: `linear-gradient(145deg, ${GOLD_LIGHT}, ${GOLD})`,
+                    background: RED,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    boxShadow: "0 2px 10px rgba(201,136,58,0.4)",
+                    boxShadow: "0 2px 10px rgba(217,53,34,0.4)",
                     flexShrink: 0,
                   }}
                 >
@@ -207,6 +179,7 @@ const FloatingChat = () => {
                     Xerxez AI Assistant
                   </div>
                   <div style={{ color: "rgba(248,247,244,0.55)", fontSize: 11, display: "flex", alignItems: "center", gap: 4 }}>
+                    {/* "Online" badge — kept as-is (green dot) */}
                     <span
                       style={{
                         display: "inline-block",
@@ -244,7 +217,8 @@ const FloatingChat = () => {
             {/* Messages */}
             <div
               style={{
-                flex: 1,
+                flex: "1 1 auto",
+                minHeight: 0,   // lets this shrink to scroll once maxHeight caps the panel, instead of forcing overflow
                 overflowY: "auto",
                 padding: "16px 16px 8px",
                 display: "flex",
@@ -263,10 +237,9 @@ const FloatingChat = () => {
                   <div
                     style={{
                       maxWidth: "84%",
-                      background:
-                        m.role === "user" ? `linear-gradient(145deg, ${GOLD_LIGHT}, ${GOLD})` : DARK_2,
-                      color: m.role === "user" ? "#fff" : CREAM,
-                      border: m.role === "user" ? "none" : "1px solid rgba(201,136,58,0.16)",
+                      background: m.role === "user" ? RED : BOT_BUBBLE_BG,
+                      color: m.role === "user" ? "#fff" : BOT_TEXT,
+                      border: "none",
                       borderRadius: m.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
                       padding: "10px 13px",
                       fontSize: 13,
@@ -283,8 +256,7 @@ const FloatingChat = () => {
                 <div style={{ display: "flex", justifyContent: "flex-start" }}>
                   <div
                     style={{
-                      background: DARK_2,
-                      border: "1px solid rgba(201,136,58,0.16)",
+                      background: BOT_BUBBLE_BG,
                       borderRadius: "14px 14px 14px 4px",
                       padding: "11px 15px",
                       display: "flex",
@@ -300,7 +272,7 @@ const FloatingChat = () => {
                           width: 5,
                           height: 5,
                           borderRadius: "50%",
-                          background: GOLD,
+                          background: RED,
                           display: "inline-block",
                         }}
                       />
@@ -309,62 +281,24 @@ const FloatingChat = () => {
                 </div>
               )}
 
-              {showSalesOptions && (
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <a
-                    href="mailto:info@xerxez.com"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      background: DARK_2,
-                      border: `1px solid ${GOLD}`,
-                      borderRadius: 10,
-                      padding: "8px 12px",
-                      fontSize: 12,
-                      color: GOLD_LIGHT,
-                      textDecoration: "none",
-                      fontWeight: 600,
-                    }}
-                  >
-                    <Mail size={13} /> Email Sales
-                  </a>
-                  <a
-                    href="https://wa.me/971567867451"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      background: DARK_2,
-                      border: `1px solid ${GOLD}`,
-                      borderRadius: 10,
-                      padding: "8px 12px",
-                      fontSize: 12,
-                      color: GOLD_LIGHT,
-                      textDecoration: "none",
-                      fontWeight: 600,
-                    }}
-                  >
-                    <MessageCircle size={13} /> WhatsApp
-                  </a>
-                </div>
-              )}
               <div ref={bottomRef} />
             </div>
 
-            {/* Quick replies */}
+            {/* Quick replies — each navigates straight to its route */}
             <div
               style={{
-                padding: "8px 14px",
-                display: "flex",
-                gap: 6,
-                flexWrap: "wrap",
-                borderTop: "1px solid rgba(201,136,58,0.12)",
+                padding: "10px 14px 8px",
+                borderTop: "1px solid rgba(217,53,34,0.12)",
                 flexShrink: 0,
               }}
             >
+              <div style={{
+                fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.40)",
+                letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: 8,
+              }}>
+                Quick options
+              </div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {QUICK_REPLIES.map((qr) => (
                 <button
                   key={qr.label}
@@ -373,22 +307,30 @@ const FloatingChat = () => {
                     display: "flex",
                     alignItems: "center",
                     gap: 5,
-                    background: "rgba(201,136,58,0.10)",
-                    border: `1px solid rgba(201,136,58,0.30)`,
+                    background: "rgba(217,53,34,0.08)",
+                    border: `1px solid rgba(217,53,34,0.25)`,
                     borderRadius: 20,
                     padding: "5px 11px",
                     fontSize: 11,
-                    color: GOLD_LIGHT,
+                    color: RED,
                     cursor: "pointer",
                     fontWeight: 500,
-                    marginTop: 6,
+                    transition: "background 150ms ease, color 150ms ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = RED;
+                    e.currentTarget.style.color = "#fff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(217,53,34,0.08)";
+                    e.currentTarget.style.color = RED;
                   }}
                 >
-                  {qr.action === "navigate" && qr.payload === "/erp" && <LogIn size={11} />}
-                  {qr.action === "navigate" && qr.payload === "/lma/login" && <GraduationCap size={11} />}
+                  <qr.icon size={11} />
                   {qr.label}
                 </button>
               ))}
+              </div>
             </div>
 
             {/* Input */}
@@ -398,7 +340,7 @@ const FloatingChat = () => {
                 display: "flex",
                 gap: 8,
                 alignItems: "center",
-                borderTop: "1px solid rgba(201,136,58,0.14)",
+                borderTop: "1px solid rgba(217,53,34,0.14)",
                 flexShrink: 0,
               }}
             >
@@ -409,13 +351,13 @@ const FloatingChat = () => {
                 placeholder="Ask about Xerxez…"
                 style={{
                   flex: 1,
-                  border: "1px solid rgba(201,136,58,0.25)",
+                  border: "1px solid rgba(217,53,34,0.25)",
                   borderRadius: 10,
                   padding: "9px 13px",
                   fontSize: 13,
                   color: CREAM,
                   outline: "none",
-                  background: DARK_2,
+                  background: NAVY_2,
                 }}
               />
               <button
@@ -427,7 +369,7 @@ const FloatingChat = () => {
                   height: 38,
                   borderRadius: "50%",
                   border: "none",
-                  background: `linear-gradient(145deg, ${GOLD_LIGHT}, ${GOLD})`,
+                  background: RED,
                   color: "#fff",
                   cursor: loading || !input.trim() ? "default" : "pointer",
                   opacity: loading || !input.trim() ? 0.5 : 1,
@@ -458,9 +400,9 @@ const FloatingChat = () => {
           width: 56,
           height: 56,
           borderRadius: "50%",
-          background: `linear-gradient(145deg, ${GOLD_LIGHT}, ${GOLD})`,
+          background: RED,
           border: "none",
-          boxShadow: "0 4px 22px rgba(201,136,58,0.45)",
+          boxShadow: "0 4px 22px rgba(217,53,34,0.45)",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
@@ -489,7 +431,7 @@ const FloatingChat = () => {
               height: 15,
               borderRadius: "50%",
               background: "#4ade80",
-              border: `2px solid ${DARK}`,
+              border: `2px solid ${NAVY}`,
             }}
           />
         )}

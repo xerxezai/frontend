@@ -47,7 +47,7 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
 
   if (loading) return (
     <div className="d-flex flex-column align-items-center justify-content-center py-5 gap-3 text-muted">
-      <div className="spinner-border" style={{ color: '#C9883A' }} role="status"></div>
+      <div className="spinner-border" style={{ color: '#D93522' }} role="status"></div>
       <p>Loading {title}…</p>
     </div>
   );
@@ -66,7 +66,7 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
         {isAdmin && onAdd && (
           <button
             onClick={onAdd}
-            style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 14px', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 12, boxShadow: '0 3px 0 rgba(150,95,30,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+            style={{ background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 14px', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 12, boxShadow: '0 3px 0 rgba(150,95,30,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
           >
             <i className="fas fa-plus" style={{ fontSize: 10 }}></i> Add New
           </button>
@@ -79,15 +79,15 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
           style={{
             textAlign: 'center', padding: '64px 24px',
             background: '#fff', borderRadius: 16,
-            border: '1px solid rgba(0,0,0,0.07)', borderTop: '3px solid #C9883A',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+            border: '1px solid rgba(0,0,0,0.07)', borderTop: '3px solid #D93522',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
             animation: 'erpTableIn 0.42s cubic-bezier(0.22,1,0.36,1) both',
           }}
         >
           <div style={{
             width: 56, height: 56, borderRadius: 14, margin: '0 auto 16px',
-            background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)',
-            boxShadow: '0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.30)',
+            background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)',
+            boxShadow: '0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(217,53,34,0.30)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <i className="fas fa-inbox" style={{ color: '#fff', fontSize: 22 }}></i>
@@ -103,10 +103,10 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
           onMouseLeave={() => setTableHover(false)}
           style={{
             background: '#fff', borderRadius: 16,
-            border: '1px solid rgba(0,0,0,0.07)', borderTop: '3px solid #C9883A',
+            border: '1px solid rgba(0,0,0,0.07)', borderTop: '3px solid #D93522',
             boxShadow: tableHover
-              ? '0 2px 4px rgba(0,0,0,0.07), 0 12px 32px rgba(0,0,0,0.10), 0 20px 48px rgba(201,136,58,0.10)'
-              : '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+              ? '0 2px 4px rgba(0,0,0,0.07), 0 12px 32px rgba(0,0,0,0.10), 0 20px 48px rgba(217,53,34,0.10)'
+              : '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
             transform: tableHover ? 'translateY(-4px)' : 'translateY(0)',
             transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1), box-shadow 280ms cubic-bezier(0.22,1,0.36,1)',
             overflowX: 'auto',
@@ -148,7 +148,7 @@ const ERPTable = ({ title, columns, data, loading, error, isAdmin = false, onAdd
                       <div style={{ display: 'flex', gap: 5 }}>
                         {onEdit && row.id != null && (
                           <button
-                            style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}
+                            style={{ background: 'rgba(217,53,34,0.08)', color: '#D93522', border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}
                             onClick={() => onEdit!(row)} title="Edit"
                           >
                             <i className="fas fa-pen" style={{ fontSize: 10 }}></i>

@@ -5,7 +5,7 @@ import AttendanceDashboardModule from './AttendanceDashboardModule';
 import AllAttendanceModule from './AllAttendanceModule';
 import AttendanceReportTab from './AttendanceReportTab';
 
-const C = { orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B', border: 'rgba(0,0,0,0.07)' };
+const C = { orange: '#D93522', orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B', border: 'rgba(0,0,0,0.07)' };
 
 type Tab = 'my' | 'all' | 'report';
 

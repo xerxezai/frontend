@@ -1,9 +1,9 @@
 // AboutV2.tsx
-// Purpose: The /v2/about page — a one-screen hero, 4 stat cards, "why XERXEZ"
+// Purpose: The /about page — a one-screen hero, 4 stat cards, "why XERXEZ"
 //          copy + tech-stack marquee, a dark "six principles" grid,
 //          mission/conviction cards, the three products, a leadership card,
 //          the shared "Why XERXEZ" differentiators grid, and the shared CTA band.
-// Used in: src/App.tsx  (route: /v2/about)
+// Used in: src/App.tsx  (route: /about)
 // Data source: STATS use the real homepage/footer figures. PRODUCTS and VALUES
 //              started from the existing About page (src/page/AboutPage.tsx)
 //              but now carry this page's own copy/links per its design brief.
@@ -43,11 +43,11 @@ const STATS: { icon: LucideIcon; value: string; label: string; sub: string }[] =
 
 // The three XERXEZ products.
 const PRODUCTS: { icon: LucideIcon; title: string; desc: string; to: string }[] = [
-  { icon: Layers,        title: "AI-Powered ERP", to: "/v2/services/ai-powered-erp",
+  { icon: Layers,        title: "AI-Powered ERP", to: "/services/ai-powered-erp",
     desc: "HR, CRM, Payroll, Sales, and Inventory — one AI-native platform that forecasts demand and automates workflows. Free to try, no credit card required." },
-  { icon: GraduationCap, title: "LMA Academy", to: "/v2/training",
+  { icon: GraduationCap, title: "LMA Academy", to: "/training",
     desc: "Courses in AI, MLOps, DevSecOps, Full Stack Development, and Cloud Architecture — taught by practitioners, with certificates on completion." },
-  { icon: Cloud,         title: "DevSecOps & Cloud", to: "/v2/services/devsecops-mlops-solutions",
+  { icon: Cloud,         title: "DevSecOps & Cloud", to: "/services/devsecops-mlops-solutions",
     desc: "Security-embedded CI/CD pipelines and multi-cloud infrastructure on AWS, Azure, and GCP — zero-trust from day one." },
 ];
 
@@ -202,7 +202,7 @@ const AboutV2 = () => (
     <SEO
       title="About XERXEZ | AI ERP & Enterprise Tech Company India & UAE"
       description="Learn about XERXEZ — AI-powered enterprise platform and technology company serving businesses across India, Dubai & Abu Dhabi UAE. ISO 27001 certified security."
-      canonical="/v2/about"
+      canonical="/about"
       noIndex
     />
 
@@ -237,8 +237,8 @@ const AboutV2 = () => (
             AI-Powered ERP, LMA Academy, and DevSecOps &amp; Cloud — owned end-to-end by one team.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center", marginTop: 14 }}>
-            <Btn to="/v2/contact">Start a discovery discussion</Btn>
-            <Btn to="/v2/services" variant="outline" dark arrow={false}>Explore solutions</Btn>
+            <Btn to="/contact">Start a discovery discussion</Btn>
+            <Btn to="/services" variant="outline" dark arrow={false}>Explore solutions</Btn>
           </div>
         </div>
       </div>

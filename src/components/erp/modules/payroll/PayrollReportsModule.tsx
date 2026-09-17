@@ -6,7 +6,7 @@ import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 const C = {
-  orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
+  orange: '#D93522', orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)',
   cream: '#F8F7F4', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B',
   border: 'rgba(0,0,0,0.07)',
 };
@@ -30,7 +30,7 @@ function KpiStatCard({ label, val, icon, color, index }: { label: string; val: s
         background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, borderTop: `2px solid ${color}`,
         padding: '14px',
         boxShadow: hovered
-          ? '0 6px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(201,136,58,0.18)'
+          ? '0 6px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(217,53,34,0.18)'
           : '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
         transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',

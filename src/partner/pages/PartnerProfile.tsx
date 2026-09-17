@@ -30,9 +30,9 @@ const PartnerProfile = () => {
       <div style={cardStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 22 }}>
           <div style={{
-            width: 56, height: 56, borderRadius: '50%', background: `linear-gradient(145deg,#e8a84e,${OG})`,
+            width: 56, height: 56, borderRadius: '50%', background: OG,
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-            fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700, color: '#fff',
+            fontFamily: FF, fontSize: 22, fontWeight: 700, color: '#fff',
           }}>
             {partner.full_name.charAt(0).toUpperCase()}
           </div>
@@ -42,7 +42,7 @@ const PartnerProfile = () => {
               <span style={{ fontFamily: FF, fontSize: 12.5, color: '#9b9690' }}>{partner.partner_code}</span>
               <span style={{
                 fontFamily: FF, fontSize: 10.5, fontWeight: 700, padding: '2px 10px', borderRadius: 20,
-                background: 'rgba(201,136,58,0.10)', color: OG, textTransform: 'capitalize', border: '1px solid rgba(201,136,58,0.25)',
+                background: 'rgba(217,53,34,0.10)', color: OG, textTransform: 'capitalize', border: '1px solid rgba(217,53,34,0.25)',
               }}>
                 {TIER_LABEL[partner.commission_tier] || partner.commission_tier} Tier
               </span>
@@ -65,7 +65,7 @@ const PartnerProfile = () => {
       </div>
 
       <div style={cardStyle}>
-        <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 18, fontWeight: 700, color: '#141413', marginBottom: 16 }}>
+        <h3 style={{ fontFamily: FF, fontSize: 18, fontWeight: 700, color: '#141413', marginBottom: 16 }}>
           Lifetime Stats
         </h3>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>

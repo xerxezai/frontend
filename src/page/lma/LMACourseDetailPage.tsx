@@ -3,18 +3,18 @@ import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom"
 import { CheckCircle2, Shield, ShieldCheck, X, Lock, PlayCircle, FileText, Star } from "lucide-react";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
-const DARK2 = "#100c07";
-const CREAM = "#F8F4EE";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
+const DARK  = "#071a33";
+const DARK2 = "#04101f";
+const CREAM = "#F4F7FA";
 const FF    = "'DM Sans', sans-serif";
 
 const THUMB_GRADS = [
   ["#1e3a5f", "#3b82f6"],
   ["#3b1f6e", "#8b5cf6"],
   ["#0f3d30", "#10b981"],
-  ["#5a3200", "#C9883A"],
+  ["#5a1f16", "#D93522"],
   ["#5a1020", "#f43f5e"],
   ["#0f2040", "#60a5fa"],
 ];
@@ -135,7 +135,7 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll, token, isInstructor 
                 }}>
                   <div style={{
                     width: 36, height: 36,
-                    border: `3px solid rgba(201,136,58,0.20)`,
+                    border: `3px solid rgba(217,53,34,0.20)`,
                     borderTop: `3px solid ${GOLD}`,
                     borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite",
                   }} />
@@ -150,7 +150,7 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll, token, isInstructor 
                   }}>
                     <div style={{
                       width: 36, height: 36,
-                      border: `3px solid rgba(201,136,58,0.20)`,
+                      border: `3px solid rgba(217,53,34,0.20)`,
                       borderTop: `3px solid ${GOLD}`,
                       borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite",
                     }} />
@@ -173,7 +173,7 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll, token, isInstructor 
               <div style={{ padding: "20px 24px 0", background: "#f9f7f4" }}>
                 <div style={{
                   display: "flex", alignItems: "center", gap: 8, padding: "12px 16px",
-                  background: "rgba(201,136,58,0.08)", borderRadius: 10, border: "1px solid rgba(201,136,58,0.20)",
+                  background: "rgba(217,53,34,0.08)", borderRadius: 10, border: "1px solid rgba(217,53,34,0.20)",
                 }}>
                   <PlayCircle size={15} color={GOLD} />
                   <span style={{ fontSize: 13, color: GOLD, fontWeight: 600, fontFamily: FF }}>Video link: </span>
@@ -189,11 +189,11 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll, token, isInstructor 
             <div style={{
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
               padding: "48px 24px", textAlign: "center",
-              background: `linear-gradient(160deg,${DARK} 0%,#120e05 100%)`,
+              background: `linear-gradient(160deg,${DARK} 0%,#04101f 100%)`,
             }}>
               <div style={{
                 width: 72, height: 72, borderRadius: "50%",
-                background: "rgba(201,136,58,0.12)", border: `1.5px solid rgba(201,136,58,0.30)`,
+                background: "rgba(217,53,34,0.12)", border: `1.5px solid rgba(217,53,34,0.30)`,
                 display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18,
               }}>
                 <Lock size={28} color={GOLD} />
@@ -208,7 +208,7 @@ const LessonModal = ({ lesson, enrolled, onClose, onEnroll, token, isInstructor 
                 background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                 color: "#0a0806", fontWeight: 800, fontSize: 14, fontFamily: FF,
                 border: "none", borderRadius: 11, padding: "13px 32px", cursor: "pointer",
-                boxShadow: "0 4px 0 rgba(130,78,18,0.45),0 8px 24px rgba(201,136,58,0.28)",
+                boxShadow: "0 4px 0 rgba(139,31,23,0.45),0 8px 24px rgba(217,53,34,0.28)",
               }}>
                 Enroll Now →
               </button>
@@ -387,8 +387,8 @@ const ReviewsSection = ({ courseId, enrolled, token }: { courseId: string; enrol
                 </p>
               </div>
               <button type="button" onClick={() => setEditing(true)} style={{
-                fontSize: 12.5, fontWeight: 700, color: GOLD, background: "rgba(201,136,58,0.08)",
-                border: "1px solid rgba(201,136,58,0.22)", borderRadius: 8, padding: "7px 14px",
+                fontSize: 12.5, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.08)",
+                border: "1px solid rgba(217,53,34,0.22)", borderRadius: 8, padding: "7px 14px",
                 cursor: "pointer", fontFamily: FF, flexShrink: 0,
               }}>
                 Edit Review
@@ -421,7 +421,7 @@ const ReviewsSection = ({ courseId, enrolled, token }: { courseId: string; enrol
                   fontSize: 13, fontWeight: 700, border: "none", borderRadius: 9,
                   padding: "10px 22px", cursor: submitting ? "not-allowed" : "pointer",
                   opacity: submitting ? 0.7 : 1, fontFamily: FF,
-                  boxShadow: "0 4px 0 rgba(140,80,20,0.30)",
+                  boxShadow: "0 4px 0 rgba(139,31,23,0.30)",
                 }}>
                   {submitting ? "Submitting…" : submitted ? "Update Review" : "Submit Review"}
                 </button>
@@ -501,7 +501,7 @@ const LessonRow = ({ lesson, enrolled, onClick }: {
         display: "flex", alignItems: "center", gap: 10, padding: "9px 8px",
         borderBottom: "1px solid rgba(0,0,0,0.05)", cursor: "pointer",
         borderRadius: 7, transition: "background 0.16s ease",
-        background: hov ? (canWatch ? "rgba(201,136,58,0.06)" : "rgba(0,0,0,0.03)") : "transparent",
+        background: hov ? (canWatch ? "rgba(217,53,34,0.06)" : "rgba(0,0,0,0.03)") : "transparent",
         margin: "0 -8px",
       }}
     >
@@ -605,7 +605,7 @@ const InstructorItem = ({ name, designation, courses, learners }: {
           background: `linear-gradient(135deg,${AMBER},${GOLD})`,
           display: "flex", alignItems: "center", justifyContent: "center",
           color: "#0a0806", fontWeight: 800, fontSize: 15, cursor: "pointer",
-          boxShadow: hov ? `0 0 0 3px ${GOLD},0 0 18px rgba(201,136,58,0.40)` : "none",
+          boxShadow: hov ? `0 0 0 3px ${GOLD},0 0 18px rgba(217,53,34,0.40)` : "none",
           transition: "box-shadow 0.22s ease",
         }}
       >{initials}</div>
@@ -721,7 +721,7 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
             </div>
             <div style={{ display: "flex", gap: 10 }}>
               <button type="button" onClick={onClose} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF }}>Cancel</button>
-              <button type="button" onClick={pay} style={{ flex: 2, fontSize: 13, fontWeight: 700, color: "#fff", background: `linear-gradient(135deg,${AMBER},${GOLD})`, border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF, boxShadow: "0 3px 0 rgba(140,80,20,0.40)" }}>
+              <button type="button" onClick={pay} style={{ flex: 2, fontSize: 13, fontWeight: 700, color: "#fff", background: `linear-gradient(135deg,${AMBER},${GOLD})`, border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF, boxShadow: "0 3px 0 rgba(139,31,23,0.40)" }}>
                 Pay ₹{course.price?.toLocaleString()} →
               </button>
             </div>
@@ -833,15 +833,15 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
             <span style={{ fontSize: 10.5, fontWeight: 700, color: GOLD, fontFamily: FF }}>{course.avg_completion ?? 0}%</span>
           </div>
           <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 99, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${course.avg_completion ?? 0}%`, borderRadius: 99, background: `linear-gradient(90deg,${AMBER},${GOLD})`, boxShadow: `0 0 8px rgba(201,136,58,0.50)` }} />
+            <div style={{ height: "100%", width: `${course.avg_completion ?? 0}%`, borderRadius: 99, background: `linear-gradient(90deg,${AMBER},${GOLD})`, boxShadow: `0 0 8px rgba(217,53,34,0.50)` }} />
           </div>
         </div>
 
         {/* Certificate badge */}
         <div style={{
           display: "flex", alignItems: "center", gap: 9, padding: "9px 12px",
-          borderRadius: 10, background: "rgba(201,136,58,0.08)",
-          border: "1px solid rgba(201,136,58,0.20)", marginBottom: 14,
+          borderRadius: 10, background: "rgba(217,53,34,0.08)",
+          border: "1px solid rgba(217,53,34,0.20)", marginBottom: 14,
         }}>
           <i className="fas fa-certificate" style={{ color: GOLD, fontSize: 18, flexShrink: 0 }} />
           <div>
@@ -856,7 +856,7 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
           background: `linear-gradient(135deg,${AMBER},${GOLD})`,
           color: "#0a0806", fontWeight: 800, fontSize: 13, fontFamily: FF,
           border: "none", cursor: "pointer",
-          boxShadow: "0 3px 0 rgba(130,78,18,0.45),0 6px 20px rgba(201,136,58,0.28)",
+          boxShadow: "0 3px 0 rgba(139,31,23,0.45),0 6px 20px rgba(217,53,34,0.28)",
         }}>
           Enroll Now — ₹{course.price?.toLocaleString() ?? "–"}
         </button>
@@ -991,7 +991,7 @@ export default function LMACourseDetailPage() {
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(201,136,58,${0.18 * (1 - d / LINK)})`;
+            ctx.strokeStyle = `rgba(217,53,34,${0.18 * (1 - d / LINK)})`;
             ctx.lineWidth = 0.6;
             ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
             ctx.stroke();
@@ -1000,7 +1000,7 @@ export default function LMACourseDetailPage() {
       }
       pts.forEach(p => {
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(201,136,58,0.36)"; ctx.fill();
+        ctx.fillStyle = "rgba(217,53,34,0.36)"; ctx.fill();
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > W) p.vx *= -1;
         if (p.y < 0 || p.y > H) p.vy *= -1;
@@ -1061,7 +1061,7 @@ export default function LMACourseDetailPage() {
       {/* ══ STICKY SCROLL BAR ══ */}
       <div style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
-        background: DARK, borderBottom: "1px solid rgba(201,136,58,0.18)",
+        background: DARK, borderBottom: "1px solid rgba(217,53,34,0.18)",
         transform: showStickyBar ? "translateY(0)" : "translateY(-100%)",
         opacity: showStickyBar ? 1 : 0,
         transition: "transform 0.26s cubic-bezier(0.4,0,0.2,1), opacity 0.20s ease",
@@ -1083,7 +1083,7 @@ export default function LMACourseDetailPage() {
             color: "#0a0806", fontSize: 13, fontWeight: 800,
             border: "none", borderRadius: 9, padding: "9px 22px",
             cursor: "pointer", flexShrink: 0, fontFamily: FF,
-            boxShadow: "0 2px 0 rgba(130,78,18,0.40)",
+            boxShadow: "0 2px 0 rgba(139,31,23,0.40)",
             position: "relative", overflow: "hidden",
           }}>
             Enroll Now
@@ -1407,7 +1407,7 @@ export default function LMACourseDetailPage() {
                       background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                       color: "#0a0806", fontSize: 14, fontWeight: 700,
                       padding: "12px 28px", borderRadius: 10, border: "none", cursor: "pointer",
-                      boxShadow: "0 4px 0 rgba(140,80,20,0.38),0 8px 24px rgba(201,136,58,0.22)",
+                      boxShadow: "0 4px 0 rgba(139,31,23,0.38),0 8px 24px rgba(217,53,34,0.22)",
                       fontFamily: FF,
                     }}>
                       Enroll in this course <i className="fas fa-arrow-right" style={{ fontSize: 12 }} />
@@ -1443,11 +1443,8 @@ export default function LMACourseDetailPage() {
 
               <div className="lmacd-sidebar-card">
                 <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>Offered by</h3>
-                <div style={{ background: DARK, borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, marginBottom: 12, border: "1px solid rgba(201,136,58,0.20)" }}>
-                  <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 28, width: "auto" }} />
-                </div>
                 <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.52)", lineHeight: 1.62, margin: "0 0 10px", fontFamily: FF }}>
-                  Enterprise AI training and software solutions across UAE, India, and UK.
+                  <strong style={{ color: "#141413", fontWeight: 800 }}>Xerxez</strong> Enterprise AI training and software solutions across UAE, India, and UK.
                 </p>
                 <Link to="/about" style={{ fontSize: 12.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: FF }}>
                   Learn more →
@@ -1456,7 +1453,7 @@ export default function LMACourseDetailPage() {
 
               <div style={{ height: 1, background: "rgba(0,0,0,0.07)", margin: "0 0 16px" }} />
 
-              <div style={{ background: `linear-gradient(160deg,${DARK} 0%,${DARK2} 100%)`, borderRadius: 16, padding: "20px 22px", border: `1px solid rgba(201,136,58,0.22)` }}>
+              <div style={{ background: `linear-gradient(160deg,${DARK} 0%,${DARK2} 100%)`, borderRadius: 16, padding: "20px 22px", border: `1px solid rgba(217,53,34,0.22)` }}>
                 <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.36)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6, fontFamily: FF }}>
                   One-time · Lifetime access
                 </div>
@@ -1478,7 +1475,7 @@ export default function LMACourseDetailPage() {
                       background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                       color: "#0a0806", fontSize: 14, fontWeight: 700,
                       border: "none", borderRadius: 10, padding: "12px", cursor: "pointer",
-                      boxShadow: "0 4px 0 rgba(130,78,18,0.45)", marginBottom: 10, fontFamily: FF,
+                      boxShadow: "0 4px 0 rgba(139,31,23,0.45)", marginBottom: 10, fontFamily: FF,
                     }}>
                       Enroll Now
                     </button>
@@ -1494,7 +1491,7 @@ export default function LMACourseDetailPage() {
                   </>
                 )}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5, fontSize: 11, color: "rgba(255,255,255,0.42)", fontFamily: FF }}>
-                  <ShieldCheck size={13} color="rgba(201,136,58,0.65)" />
+                  <ShieldCheck size={13} color="rgba(217,53,34,0.65)" />
                   30-day money-back guarantee
                 </div>
               </div>
@@ -1520,8 +1517,8 @@ export default function LMACourseDetailPage() {
               {["Tata", "Capgemini", "P&G", "L'Oréal", "Danone", "HCL"].map(co => (
                 <span key={co} style={{
                   fontSize: 13, fontWeight: 600, color: "#3d2a10",
-                  background: "rgba(201,136,58,0.10)",
-                  border: "1px solid rgba(201,136,58,0.20)",
+                  background: "rgba(217,53,34,0.10)",
+                  border: "1px solid rgba(217,53,34,0.20)",
                   borderRadius: 8, padding: "6px 16px", fontFamily: FF,
                 }}>{co}</span>
               ))}
@@ -1617,7 +1614,7 @@ export default function LMACourseDetailPage() {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: radial-gradient(rgba(201,136,58,0.08) 1px, transparent 1px);
+          background-image: radial-gradient(rgba(217,53,34,0.08) 1px, transparent 1px);
           background-size: 30px 30px;
           pointer-events: none;
           z-index: 0;
@@ -1627,28 +1624,28 @@ export default function LMACourseDetailPage() {
 
         /* Atmospheric orbs */
         .lmacd-orb { position:absolute; border-radius:50%; pointer-events:none; }
-        .lmacd-orb-1 { top:-5%;left:-8%;width:520px;height:520px;background:radial-gradient(circle,rgba(201,136,58,0.12) 0%,transparent 65%);animation:lmacd-float1 11s ease-in-out infinite; }
-        .lmacd-orb-2 { bottom:-10%;right:-5%;width:440px;height:440px;background:radial-gradient(circle,rgba(232,168,78,0.09) 0%,transparent 65%);animation:lmacd-float2 15s ease-in-out infinite; }
-        .lmacd-orb-3 { top:42%;right:28%;width:180px;height:180px;background:radial-gradient(circle,rgba(201,136,58,0.16) 0%,transparent 70%);animation:lmacd-float3 8s ease-in-out infinite; }
-        .lmacd-orb-4 { top:18%;right:8%;width:260px;height:260px;background:radial-gradient(circle,rgba(232,168,78,0.06) 0%,transparent 70%);animation:lmacd-float1 13s ease-in-out infinite 2s; }
+        .lmacd-orb-1 { top:-5%;left:-8%;width:520px;height:520px;background:radial-gradient(circle,rgba(217,53,34,0.12) 0%,transparent 65%);animation:lmacd-float1 11s ease-in-out infinite; }
+        .lmacd-orb-2 { bottom:-10%;right:-5%;width:440px;height:440px;background:radial-gradient(circle,rgba(217,53,34,0.09) 0%,transparent 65%);animation:lmacd-float2 15s ease-in-out infinite; }
+        .lmacd-orb-3 { top:42%;right:28%;width:180px;height:180px;background:radial-gradient(circle,rgba(217,53,34,0.16) 0%,transparent 70%);animation:lmacd-float3 8s ease-in-out infinite; }
+        .lmacd-orb-4 { top:18%;right:8%;width:260px;height:260px;background:radial-gradient(circle,rgba(217,53,34,0.06) 0%,transparent 70%);animation:lmacd-float1 13s ease-in-out infinite 2s; }
 
         /* Diagonal light rays */
         .lmacd-ray { position:absolute; pointer-events:none; opacity:0.04; }
-        .lmacd-ray-1 { top:-30%;left:-10%;width:120px;height:200%;background:linear-gradient(180deg,transparent,rgba(201,136,58,0.9),transparent);transform:rotate(-35deg);animation:lmacd-rayDrift 9s ease-in-out infinite; }
-        .lmacd-ray-2 { top:-20%;left:18%;width:60px;height:180%;background:linear-gradient(180deg,transparent,rgba(232,168,78,0.7),transparent);transform:rotate(-35deg);animation:lmacd-rayDrift 12s ease-in-out infinite 3s; }
+        .lmacd-ray-1 { top:-30%;left:-10%;width:120px;height:200%;background:linear-gradient(180deg,transparent,rgba(217,53,34,0.9),transparent);transform:rotate(-35deg);animation:lmacd-rayDrift 9s ease-in-out infinite; }
+        .lmacd-ray-2 { top:-20%;left:18%;width:60px;height:180%;background:linear-gradient(180deg,transparent,rgba(217,53,34,0.7),transparent);transform:rotate(-35deg);animation:lmacd-rayDrift 12s ease-in-out infinite 3s; }
 
         /* Orbit rings */
         .lmacd-orbit { position:absolute; border-radius:50%; pointer-events:none; border:1px solid; right:-120px; top:50%; transform:translateY(-50%); }
-        .lmacd-orbit-1 { width:560px;height:560px;border-color:rgba(201,136,58,0.08);animation:lmacd-orbitSpin 60s linear infinite; }
-        .lmacd-orbit-2 { width:420px;height:420px;border-color:rgba(201,136,58,0.12);right:-60px;animation:lmacd-orbitSpin 40s linear infinite reverse; }
-        .lmacd-orbit-3 { width:280px;height:280px;border-color:rgba(201,136,58,0.18);right:0px;animation:lmacd-orbitSpin 28s linear infinite; }
+        .lmacd-orbit-1 { width:560px;height:560px;border-color:rgba(217,53,34,0.08);animation:lmacd-orbitSpin 60s linear infinite; }
+        .lmacd-orbit-2 { width:420px;height:420px;border-color:rgba(217,53,34,0.12);right:-60px;animation:lmacd-orbitSpin 40s linear infinite reverse; }
+        .lmacd-orbit-3 { width:280px;height:280px;border-color:rgba(217,53,34,0.18);right:0px;animation:lmacd-orbitSpin 28s linear infinite; }
 
         /* Floating diamonds */
         .lmacd-geo { position:absolute; pointer-events:none; }
-        .lmacd-geo-1 { right:6%;top:12%;width:16px;height:16px;background:rgba(201,136,58,0.28);border:1px solid rgba(201,136,58,0.50);transform:rotate(45deg);animation:lmacd-diamondFloat 6s ease-in-out infinite; }
-        .lmacd-geo-2 { right:22%;top:70%;width:10px;height:10px;background:rgba(232,168,78,0.20);border:1px solid rgba(232,168,78,0.45);transform:rotate(45deg);animation:lmacd-diamondFloat 8s ease-in-out infinite 1.5s; }
-        .lmacd-geo-3 { left:6%;bottom:22%;width:12px;height:12px;background:rgba(201,136,58,0.18);border:1px solid rgba(201,136,58,0.40);transform:rotate(45deg);animation:lmacd-diamondFloat 7s ease-in-out infinite 3s; }
-        .lmacd-geo-4 { right:32%;top:8%;width:8px;height:8px;background:rgba(201,136,58,0.25);border:1px solid rgba(201,136,58,0.55);transform:rotate(45deg);animation:lmacd-diamondFloat 5s ease-in-out infinite 0.8s; }
+        .lmacd-geo-1 { right:6%;top:12%;width:16px;height:16px;background:rgba(217,53,34,0.28);border:1px solid rgba(217,53,34,0.50);transform:rotate(45deg);animation:lmacd-diamondFloat 6s ease-in-out infinite; }
+        .lmacd-geo-2 { right:22%;top:70%;width:10px;height:10px;background:rgba(217,53,34,0.20);border:1px solid rgba(217,53,34,0.45);transform:rotate(45deg);animation:lmacd-diamondFloat 8s ease-in-out infinite 1.5s; }
+        .lmacd-geo-3 { left:6%;bottom:22%;width:12px;height:12px;background:rgba(217,53,34,0.18);border:1px solid rgba(217,53,34,0.40);transform:rotate(45deg);animation:lmacd-diamondFloat 7s ease-in-out infinite 3s; }
+        .lmacd-geo-4 { right:32%;top:8%;width:8px;height:8px;background:rgba(217,53,34,0.25);border:1px solid rgba(217,53,34,0.55);transform:rotate(45deg);animation:lmacd-diamondFloat 5s ease-in-out infinite 0.8s; }
 
         /* Back link */
         .lmacd-back-link {
@@ -1664,13 +1661,13 @@ export default function LMACourseDetailPage() {
         .lmacd-eyebrow-chip {
           display:inline-flex; align-items:center; gap:7px;
           padding:6px 14px 6px 10px; border-radius:999px; margin-bottom:18px;
-          background:rgba(201,136,58,0.10); border:1px solid rgba(201,136,58,0.30);
+          background:rgba(217,53,34,0.10); border:1px solid rgba(217,53,34,0.30);
           backdrop-filter:blur(8px);
         }
         .lmacd-eyebrow-dot {
           width:6px; height:6px; border-radius:50%;
           background:${GOLD}; flex-shrink:0;
-          box-shadow:0 0 0 2px rgba(201,136,58,0.30);
+          box-shadow:0 0 0 2px rgba(217,53,34,0.30);
           animation:lmacd-pulse 2s ease-in-out infinite;
         }
 
@@ -1721,12 +1718,12 @@ export default function LMACourseDetailPage() {
           color:#0a0806; font-size:14px; font-weight:800;
           height:52px; padding:0 28px; border-radius:11px; border:none;
           cursor:pointer; font-family:${FF};
-          box-shadow:0 4px 0 rgba(130,78,18,0.45),0 10px 32px rgba(201,136,58,0.25);
+          box-shadow:0 4px 0 rgba(139,31,23,0.45),0 10px 32px rgba(217,53,34,0.25);
           transition:transform 0.18s ease, box-shadow 0.18s ease;
         }
         .lmacd-enroll-btn:hover {
           transform:translateY(-2px);
-          box-shadow:0 6px 0 rgba(130,78,18,0.45),0 14px 36px rgba(201,136,58,0.35);
+          box-shadow:0 6px 0 rgba(139,31,23,0.45),0 14px 36px rgba(217,53,34,0.35);
         }
         .lmacd-preview-btn {
           display:inline-flex; align-items:center; gap:8px;
@@ -1735,7 +1732,7 @@ export default function LMACourseDetailPage() {
           border-radius:11px; border:2px solid ${GOLD}; cursor:pointer;
           font-family:${FF}; transition:background 0.20s ease;
         }
-        .lmacd-preview-btn:hover { background:rgba(201,136,58,0.14); }
+        .lmacd-preview-btn:hover { background:rgba(217,53,34,0.14); }
 
         /* Hero layout */
         .lmacd-hero-row { display:flex; gap:56px; align-items:flex-start; }
@@ -1747,7 +1744,7 @@ export default function LMACourseDetailPage() {
         .lmacd-hcard {
           background:linear-gradient(145deg,#1f1507 0%,#120e05 100%);
           border-radius:18px; padding:20px; overflow:hidden;
-          border:1px solid rgba(201,136,58,0.22);
+          border:1px solid rgba(217,53,34,0.22);
           box-shadow:0 20px 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.05);
           transition:transform 0.18s cubic-bezier(0.25,0.46,0.45,0.94);
           will-change:transform;
@@ -1760,7 +1757,7 @@ export default function LMACourseDetailPage() {
         .lmacd-sidebar-card { background:#fff; border-radius:16px; padding:22px 22px 18px; border:1px solid rgba(0,0,0,0.08); box-shadow:0 4px 20px rgba(0,0,0,0.07); margin-bottom:16px; }
 
         /* Spinner */
-        .lmacd-spinner { width:36px; height:36px; border:3px solid rgba(201,136,58,0.18); border-top-color:${GOLD}; border-radius:50%; animation:lmacd-spin 0.8s linear infinite; display:inline-block; }
+        .lmacd-spinner { width:36px; height:36px; border:3px solid rgba(217,53,34,0.18); border-top-color:${GOLD}; border-radius:50%; animation:lmacd-spin 0.8s linear infinite; display:inline-block; }
 
         /* Keyframes */
         @keyframes lmacd-float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(28px,-40px) scale(1.07)} }
@@ -1771,7 +1768,7 @@ export default function LMACourseDetailPage() {
         @keyframes lmacd-fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
         @keyframes lmacd-slideUp { from{opacity:0;transform:translateY(40px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
         @keyframes lmacd-letterIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes lmacd-pulse { 0%,100%{box-shadow:0 0 0 2px rgba(201,136,58,0.30)} 50%{box-shadow:0 0 0 5px rgba(201,136,58,0.08)} }
+        @keyframes lmacd-pulse { 0%,100%{box-shadow:0 0 0 2px rgba(217,53,34,0.30)} 50%{box-shadow:0 0 0 5px rgba(217,53,34,0.08)} }
         @keyframes lmacd-card-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
         @keyframes lmacd-rayDrift { 0%,100%{opacity:0.04} 50%{opacity:0.09} }
         @keyframes lmacd-orbitSpin { to{transform:translateY(-50%) rotate(360deg)} }

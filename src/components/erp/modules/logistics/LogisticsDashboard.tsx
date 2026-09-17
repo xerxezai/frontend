@@ -70,7 +70,7 @@ export default function LogisticsDashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
               <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(201,136,58,0.06)' }} />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(217,53,34,0.06)' }} />
               <Bar dataKey="count" name="Shipments" radius={[4, 4, 0, 0]} isAnimationActive animationDuration={700}>
                 {chartData.map(c => <Cell key={c.status} fill={c.fill} />)}
               </Bar>

@@ -1,5 +1,5 @@
 export const FF = "'DM Sans',sans-serif";
-export const OG = '#C9883A';
+export const OG = '#D93522';
 
 export const STATUS_BADGE: Record<string, { label: string; bg: string; color: string }> = {
   new:      { label: 'New',      bg: '#fff3e0', color: '#e65100' },

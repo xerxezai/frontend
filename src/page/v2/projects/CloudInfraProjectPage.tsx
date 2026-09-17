@@ -1,8 +1,8 @@
 // CloudInfraProjectPage.tsx
-// Purpose: /v2/project/cloud-infrastructure — case study data for the
+// Purpose: /project/cloud-infrastructure — case study data for the
 //          Zero-Trust Cloud Infrastructure project, rendered through
 //          <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/cloud-infrastructure)
+// Used in: src/App.tsx (route: /project/cloud-infrastructure)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -13,7 +13,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "Zero-Trust Cloud Infrastructure | Case Study | XERXEZ",
   seoDesc: "How XERXEZ rebuilt an enterprise client's cloud infrastructure on zero-trust principles — 99.9% uptime, full compliance automation, SOC 2 Type II certified.",
-  canonical: "/v2/project/cloud-infrastructure",
+  canonical: "/project/cloud-infrastructure",
 
   category: "DevSecOps",
   industry: "Enterprise Technology",
@@ -59,8 +59,8 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "6 engineers" },
   ],
 
-  prev: { title: "MLOps Pipeline Automation", href: "/v2/project/mlops-pipeline" },
-  next: { title: "Enterprise SaaS Platform", href: "/v2/project/enterprise-saas" },
+  prev: { title: "MLOps Pipeline Automation", href: "/project/mlops-pipeline" },
+  next: { title: "Enterprise SaaS Platform", href: "/project/enterprise-saas" },
 };
 
 const CloudInfraProjectPage = () => <ProjectCaseStudyTemplate data={data} />;

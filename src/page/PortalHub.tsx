@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
-const GOLD  = "#C9883A";
+const GOLD  = "#D93522";
 const WHITE = "#FFFFFF";
-const CREAM = "#F8F7F4";
+const CREAM = "#F4F7FA";
 const FF    = "'DM Sans', sans-serif";
-const OG_G  = "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)";
+const OG_G  = "#D93522";
 
 // ── Auth helpers ──────────────────────────────────────────────────────────────
 function isAdminUser(): boolean {
@@ -38,9 +38,9 @@ interface Portal {
 }
 
 const PORTALS: Portal[] = [
-  { id: "erp",        label: "ERP Dashboard",     icon: "fas fa-chart-bar",           color: "#C9883A", desc: "Enterprise overview & analytics",   route: "/erp/dashboard",           req: "erp"        },
-  { id: "instructor", label: "Academy Instructor", icon: "fas fa-chalkboard-teacher",  color: "#8B5CF6", desc: "Create & manage your courses",      route: "/lma/instructor/dashboard", req: "instructor" },
-  { id: "student",    label: "Academy Student",    icon: "fas fa-graduation-cap",      color: "#10b981", desc: "Your courses & learning path",      route: "/lma/student/dashboard",   req: "student"    },
+  { id: "erp",        label: "ERP Dashboard",     icon: "fas fa-chart-bar",           color: "#D93522", desc: "Enterprise overview & analytics",   route: "/erp/dashboard",           req: "erp"        },
+  { id: "instructor", label: "Academy Instructor", icon: "fas fa-chalkboard-teacher",  color: "#D93522", desc: "Create & manage your courses",      route: "/lma/instructor/dashboard", req: "instructor" },
+  { id: "student",    label: "Academy Student",    icon: "fas fa-graduation-cap",      color: "#D93522", desc: "Your courses & learning path",      route: "/lma/student/dashboard",   req: "student"    },
   { id: "crm",        label: "CRM",                icon: "fas fa-handshake",           color: "#3b82f6", desc: "Customers, leads & pipeline",       route: "/erp/crm",                 req: "erp"        },
   { id: "hr",         label: "HR & Payroll",       icon: "fas fa-users",               color: "#ec4899", desc: "Staff, attendance & salaries",      route: "/erp/hr",                  req: "erp"        },
   { id: "mlm",        label: "MLM",                icon: "fas fa-sitemap",             color: "#f59e0b", desc: "Network & commission tracking",     route: "/erp/mlm",                 req: "erp"        },
@@ -84,7 +84,7 @@ const PortalCard = ({ portal, index }: { portal: Portal; index: number }) => {
     const r  = el.getBoundingClientRect();
     const x  = (e.clientX - r.left)  / r.width  - 0.5;
     const y  = (e.clientY - r.top)   / r.height - 0.5;
-    el.style.transform  = `perspective(900px) rotateY(${x * 18}deg) rotateX(${-y * 18}deg) translateZ(22px) scale(1.025)`;
+    el.style.transform  = `perspective(900px) rotateY(${x * 18}deg) rotateX(${-y * 18}deg) translateZ(22px) translateY(-6px) scale(1.025)`;
     el.style.transition = "transform 0.06s linear";
     if (shineRef.current) {
       shineRef.current.style.opacity  = "1";
@@ -92,10 +92,19 @@ const PortalCard = ({ portal, index }: { portal: Portal; index: number }) => {
     }
   };
 
+  const onEnter = () => {
+    const el = wrapRef.current;
+    if (el) {
+      el.style.transform  = "perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0) translateY(-6px) scale(1.025)";
+      el.style.transition = "transform 0.25s cubic-bezier(0.22,1,0.36,1)";
+    }
+    setHov(true);
+  };
+
   const onLeave = () => {
     const el = wrapRef.current;
     if (!el) return;
-    el.style.transform  = "perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0) scale(1)";
+    el.style.transform  = "perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0) translateY(0) scale(1)";
     el.style.transition = "transform 0.55s cubic-bezier(0.22,1,0.36,1)";
     if (shineRef.current) shineRef.current.style.opacity = "0";
     setHov(false);
@@ -107,13 +116,16 @@ const PortalCard = ({ portal, index }: { portal: Portal; index: number }) => {
     <div
       ref={wrapRef}
       onMouseMove={onMove}
-      onMouseEnter={() => setHov(true)}
+      onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onClick={() => navigate(portal.route)}
       style={{
-        background:     WHITE,
-        borderRadius:   20,
-        border:         hov ? `1.5px solid rgba(${rgb},0.30)` : "1.5px solid rgba(0,0,0,0.06)",
+        background:      WHITE,
+        borderRadius:    20,
+        borderLeft:      hov ? `1.5px solid rgba(${rgb},0.30)` : "1.5px solid rgba(0,0,0,0.06)",
+        borderRight:     hov ? `1.5px solid rgba(${rgb},0.30)` : "1.5px solid rgba(0,0,0,0.06)",
+        borderBottom:    hov ? `1.5px solid rgba(${rgb},0.30)` : "1.5px solid rgba(0,0,0,0.06)",
+        borderTop:       `3px solid ${portal.color}`,
         boxShadow:      hov
           ? `0 2px 4px rgba(0,0,0,0.04), 0 12px 28px rgba(0,0,0,0.09), 0 28px 56px rgba(${rgb},0.16), inset 0 1px 0 rgba(255,255,255,0.9)`
           : `0 1px 2px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 12px 28px rgba(0,0,0,0.04)`,
@@ -128,13 +140,6 @@ const PortalCard = ({ portal, index }: { portal: Portal; index: number }) => {
         animation:      `phCardIn 0.60s cubic-bezier(0.22,1,0.36,1) ${delay} both`,
       }}
     >
-      {/* Colored shelf */}
-      <div style={{
-        height: 5,
-        background: `linear-gradient(90deg, ${portal.color}, ${portal.color}70)`,
-        flexShrink: 0,
-      }} />
-
       {/* Mouse-tracked shine overlay */}
       <div ref={shineRef} style={{
         position: "absolute", inset: 0,
@@ -214,7 +219,7 @@ const AvatarDropdown = ({ name, onLogout }: { name: string; onLogout: () => void
         style={{
           width: 40, height: 40, borderRadius: "50%",
           background: OG_G,
-          boxShadow: "0 3px 0 rgba(150,95,30,0.38), 0 5px 16px rgba(201,136,58,0.30)",
+          boxShadow: "0 3px 0 rgba(139,31,23,0.38), 0 5px 16px rgba(217,53,34,0.30)",
           border: "none", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
           color: "#fff", fontWeight: 800, fontSize: 16, fontFamily: FF,
@@ -325,7 +330,7 @@ export default function PortalHub() {
           <div style={{
             position: "absolute", top: "-15%", left: "5%",
             width: 700, height: 700, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(201,136,58,0.09) 0%, transparent 68%)",
+            background: "radial-gradient(circle, rgba(217,53,34,0.09) 0%, transparent 68%)",
             animation: "phBlob1 10s ease-in-out infinite",
           }} />
           <div style={{
@@ -345,9 +350,9 @@ export default function PortalHub() {
         {/* ── HEADER ───────────────────────────────────────────────────────── */}
         <header style={{
           position:      "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          background:    "rgba(16,11,6,0.96)",
-          borderBottom:  "1px solid rgba(201,136,58,0.16)",
-          boxShadow:     "0 2px 0 rgba(201,136,58,0.14), 0 6px 28px rgba(0,0,0,0.50)",
+          background:    "rgba(7,26,51,0.96)",
+          borderBottom:  "none",
+          boxShadow:     "0 6px 28px rgba(0,0,0,0.35)",
           backdropFilter:"blur(20px) saturate(1.4)",
           WebkitBackdropFilter: "blur(20px) saturate(1.4)",
           animation:     "phFadeDown 0.5s cubic-bezier(0.22,1,0.36,1) both",
@@ -357,11 +362,11 @@ export default function PortalHub() {
             height: 72,
             display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
-            {/* Logo — bigger, more presence */}
+            {/* Logo */}
             <img
               src="/assets/img/logo/xerxez_logo.png"
               alt="XERXEZ"
-              style={{ height: 56, width: "auto", display: "block" }}
+              style={{ height: 64, width: "auto", display: "block" }}
             />
 
             {/* Right */}
@@ -369,8 +374,8 @@ export default function PortalHub() {
               {isAdmin && (
                 <span style={{
                   display: "inline-flex", alignItems: "center", gap: 6,
-                  background: "rgba(201,136,58,0.09)",
-                  border: "1px solid rgba(201,136,58,0.28)",
+                  background: "rgba(217,53,34,0.12)",
+                  border: "1px solid rgba(217,53,34,0.32)",
                   color: GOLD, fontSize: 10.5, fontWeight: 700,
                   padding: "5px 13px", borderRadius: 20,
                   letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: FF,
@@ -382,12 +387,6 @@ export default function PortalHub() {
               <AvatarDropdown name={name} onLogout={handleLogout} />
             </div>
           </div>
-
-          {/* Gold gradient rule */}
-          <div style={{
-            height: 2,
-            background: "linear-gradient(90deg, #C9883A 0%, #e8a84e 50%, transparent 100%)",
-          }} />
         </header>
 
         {/* ── MAIN ─────────────────────────────────────────────────────────── */}
@@ -420,7 +419,7 @@ export default function PortalHub() {
                 Welcome back,{" "}
                 <span style={{
                   color: GOLD,
-                  textShadow: "0 0 40px rgba(201,136,58,0.22)",
+                  textShadow: "0 0 40px rgba(217,53,34,0.22)",
                 }}>
                   {name}
                 </span>

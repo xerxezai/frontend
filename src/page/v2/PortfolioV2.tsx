@@ -1,6 +1,6 @@
 // PortfolioV2.tsx
-// Purpose: The /v2/portfolio page — hero, the filterable project grid, CTA band.
-// Used in: src/App.tsx  (route: /v2/portfolio)
+// Purpose: The /portfolio page — hero, the filterable project grid, CTA band.
+// Used in: src/App.tsx  (route: /portfolio)
 // Data source: none here — <XerxezPortfolio> owns the project data / filtering.
 
 import { CheckCircle2 } from "lucide-react";
@@ -17,7 +17,7 @@ const PortfolioV2 = () => (
     <SEO
       title="XERXEZ Portfolio | AI ERP Projects UAE & India"
       description="See XERXEZ enterprise projects and ERP implementations across UAE & India. AI-powered solutions for EPC, Construction & Manufacturing."
-      canonical="/v2/portfolio"
+      canonical="/portfolio"
       noIndex
     />
 
@@ -66,7 +66,7 @@ const PortfolioV2 = () => (
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 8 }}>
             <Btn href="#project-grid">Explore work</Btn>
-            <Btn to="/v2/contact" variant="outline" dark arrow={false}>Start a project</Btn>
+            <Btn to="/contact" variant="outline" dark arrow={false}>Start a project</Btn>
           </div>
         </div>
       </div>

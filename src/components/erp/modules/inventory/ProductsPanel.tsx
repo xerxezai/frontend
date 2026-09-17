@@ -151,11 +151,11 @@ export default function ProductsPanel() {
         <div style={{ flex: 1 }} />
         {isAdmin && (
           <button onClick={() => setModal('import')} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}>
-            <i className="fas fa-file-import" style={{ marginRight: 6, color: '#C9883A' }} />Bulk Import
+            <i className="fas fa-file-import" style={{ marginRight: 6, color: '#D93522' }} />Bulk Import
           </button>
         )}
         <button onClick={exportCSV} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}>
-          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#C9883A' }} />Export CSV
+          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#D93522' }} />Export CSV
         </button>
       </div>
 

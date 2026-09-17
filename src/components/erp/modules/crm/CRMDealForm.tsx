@@ -137,7 +137,7 @@ export default function CRMDealForm({ deal, defaultStage = 'new', defaultCustome
                     flex: 1, padding: '8px', borderRadius: 8, cursor: 'pointer', fontFamily: FF,
                     fontSize: 12.5, fontWeight: 700, textTransform: 'capitalize',
                     border: form.linkType === t ? `1.5px solid ${OG}` : '1px solid rgba(0,0,0,0.10)',
-                    background: form.linkType === t ? 'rgba(201,136,58,0.08)' : '#fff',
+                    background: form.linkType === t ? 'rgba(217,53,34,0.08)' : '#fff',
                     color: form.linkType === t ? OG : '#6B6B6B',
                   }}
                 >

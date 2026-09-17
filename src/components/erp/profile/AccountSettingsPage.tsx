@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import apiService from '../../../services/api';
 
-const OG   = '#C9883A';
-const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
+const OG   = '#D93522';
+const OG_G = 'linear-gradient(145deg, #D93522 0%, #D93522 100%)';
 const CARD: React.CSSProperties = {
   background:   '#FFFFFF',
   border:       '1px solid rgba(0,0,0,0.08)',
-  borderTop:    '2px solid rgba(201,136,58,0.55)',
+  borderTop:    '2px solid rgba(217,53,34,0.55)',
   borderRadius: 14,
   boxShadow:    '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
@@ -41,13 +41,13 @@ function PwdField({ label, value, onChange }: { label: string; value: string; on
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         style={{
           width: '100%', boxSizing: 'border-box',
-          background: focused ? 'rgba(201,136,58,0.04)' : '#F8F7F4',
-          border: `1px solid ${focused ? 'rgba(201,136,58,0.55)' : 'rgba(0,0,0,0.12)'}`,
+          background: focused ? 'rgba(217,53,34,0.04)' : '#F8F7F4',
+          border: `1px solid ${focused ? 'rgba(217,53,34,0.55)' : 'rgba(0,0,0,0.12)'}`,
           borderRadius: 10, color: '#141413', fontFamily: FONT, fontSize: 14, outline: 'none',
           padding: elevated ? '24px 44px 8px 14px' : '14px 44px 14px 14px',
           height: 54,
           transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s',
-          boxShadow: focused ? '0 0 0 3px rgba(201,136,58,0.12)' : 'none',
+          boxShadow: focused ? '0 0 0 3px rgba(217,53,34,0.12)' : 'none',
         }}
       />
       <button type="button" onClick={() => setShow(s => !s)} tabIndex={-1}
@@ -127,7 +127,7 @@ export default function AccountSettingsPage() {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.42, delay: 0.07 }}>
         <div style={{ ...CARD, padding: '22px 20px', marginBottom: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-            <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(217,53,34,0.10)', border: '1px solid rgba(217,53,34,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <i className="fas fa-key" style={{ color: OG, fontSize: 11 }} />
             </span>
             <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Change Password</span>
@@ -142,7 +142,7 @@ export default function AccountSettingsPage() {
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
             <button
               onClick={handlePasswordChange} disabled={pwdBusy}
-              style={{ background: pwdBusy ? 'rgba(201,136,58,0.45)' : OG_G, border: 'none', borderRadius: 10, padding: '10px 24px', color: '#fff', fontSize: 13, fontWeight: 700, cursor: pwdBusy ? 'not-allowed' : 'pointer', fontFamily: FONT, boxShadow: pwdBusy ? 'none' : '0 3px 0 rgba(130,78,18,0.50)', display: 'flex', alignItems: 'center', gap: 8 }}
+              style={{ background: pwdBusy ? 'rgba(217,53,34,0.45)' : OG_G, border: 'none', borderRadius: 10, padding: '10px 24px', color: '#fff', fontSize: 13, fontWeight: 700, cursor: pwdBusy ? 'not-allowed' : 'pointer', fontFamily: FONT, boxShadow: pwdBusy ? 'none' : '0 3px 0 rgba(130,78,18,0.50)', display: 'flex', alignItems: 'center', gap: 8 }}
             >
               {pwdBusy && (
                 <span style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'erpSpin 0.7s linear infinite', display: 'inline-block' }} />
@@ -157,13 +157,13 @@ export default function AccountSettingsPage() {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.42, delay: 0.12 }}>
         <div style={{ ...CARD, padding: '22px 20px', marginBottom: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-            <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(217,53,34,0.10)', border: '1px solid rgba(217,53,34,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <i className="fas fa-desktop" style={{ color: OG, fontSize: 11 }} />
             </span>
             <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Active Sessions</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px', background: 'rgba(201,136,58,0.04)', border: '1px solid rgba(201,136,58,0.12)', borderRadius: 10 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(201,136,58,0.09)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px', background: 'rgba(217,53,34,0.04)', border: '1px solid rgba(217,53,34,0.12)', borderRadius: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(217,53,34,0.09)', border: '1px solid rgba(217,53,34,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <i className="fas fa-globe" style={{ color: OG, fontSize: 14 }} />
             </div>
             <div style={{ flex: 1 }}>
@@ -174,7 +174,7 @@ export default function AccountSettingsPage() {
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', display: 'inline-block', boxShadow: '0 0 6px rgba(74,222,128,0.70)' }} />
               <span style={{ color: '#4ade80', fontSize: 11, fontWeight: 700 }}>Active</span>
             </div>
-            <span style={{ background: 'rgba(201,136,58,0.12)', border: '1px solid rgba(201,136,58,0.22)', color: OG, fontSize: 9.5, fontWeight: 700, padding: '3px 8px', borderRadius: 6, letterSpacing: '0.07em', textTransform: 'uppercase', flexShrink: 0 }}>
+            <span style={{ background: 'rgba(217,53,34,0.12)', border: '1px solid rgba(217,53,34,0.22)', color: OG, fontSize: 9.5, fontWeight: 700, padding: '3px 8px', borderRadius: 6, letterSpacing: '0.07em', textTransform: 'uppercase', flexShrink: 0 }}>
               This device
             </span>
           </div>
@@ -213,7 +213,7 @@ export default function AccountSettingsPage() {
         >
           <div
             onClick={e => e.stopPropagation()}
-            style={{ background: 'linear-gradient(160deg, #1a1208 0%, #0f0a05 100%)', border: '1px solid rgba(239,68,68,0.30)', borderTop: '2px solid #f87171', borderRadius: 16, padding: '28px 28px 24px', maxWidth: 420, width: '90%', boxShadow: '0 24px 60px rgba(0,0,0,0.70)', fontFamily: FONT }}
+            style={{ background: 'linear-gradient(160deg, #071a33 0%, #04101f 100%)', border: '1px solid rgba(239,68,68,0.30)', borderTop: '2px solid #f87171', borderRadius: 16, padding: '28px 28px 24px', maxWidth: 420, width: '90%', boxShadow: '0 24px 60px rgba(0,0,0,0.70)', fontFamily: FONT }}
           >
             <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
               <i className="fas fa-trash" style={{ color: '#f87171', fontSize: 18 }} />

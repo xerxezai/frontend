@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 
 const C = {
-  orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
+  orange: '#D93522', orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)',
   cream: '#F8F7F4', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B',
   border: 'rgba(0,0,0,0.07)',
 };
@@ -57,7 +57,7 @@ export default function LeaveApprovalsModule() {
       {toast && (
         <div style={{
           position: 'fixed', top: 20, right: 20, zIndex: 9999,
-          background: '#1a1208', color: '#fff', padding: '12px 20px', borderRadius: 10,
+          background: '#071a33', color: '#fff', padding: '12px 20px', borderRadius: 10,
           fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600,
           boxShadow: '0 6px 24px rgba(0,0,0,0.22)',
           animation: 'laFadeUp 0.3s ease both',

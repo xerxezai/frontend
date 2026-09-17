@@ -7,10 +7,11 @@ import {
   Maximize, Minimize,
 } from "lucide-react";
 
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
+const DARK  = "#071a33";
 const FF    = "'DM Sans', sans-serif";
+const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 
 /* ── Sidebar nav item ── */
 const SideItem = ({
@@ -50,7 +51,7 @@ const SideItem = ({
         display: "flex", alignItems: "center", gap: 10,
         padding: "10px 16px", borderRadius: 10,
         textDecoration: "none",
-        background: active ? "rgba(201,136,58,0.14)" : "transparent",
+        background: active ? "rgba(217,53,34,0.14)" : "transparent",
         borderLeft: `3px solid ${active ? GOLD : "transparent"}`,
         color: active ? AMBER : "rgba(255,255,255,0.60)",
         fontSize: 13.5, fontWeight: active ? 700 : 500, fontFamily: FF,
@@ -89,12 +90,29 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
 
   const token = localStorage.getItem("lma_token");
   const name = localStorage.getItem("lma_name") ?? "Student";
-  const canInstructor = localStorage.getItem("lma_can_instructor") === "true";
 
   // All hooks must be declared before any conditional return (Rules of Hooks)
   const [sideOpen, setSideOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Whether to show the "Instructor Portal" switch link. Starts false (hidden)
+  // and is only flipped on once the backend confirms it via a live, token-
+  // authenticated request to /lma/profile/ — the same endpoint LMAProfilePage
+  // uses. Deliberately does NOT read the localStorage `lma_can_instructor`
+  // flag: that value is just a display cache written at login time and is
+  // trivially editable in DevTools, so trusting it here would let any student
+  // reveal the link by flipping one localStorage value. The link itself isn't
+  // a security boundary (the instructor dashboard independently checks auth),
+  // but it shouldn't be visible to accounts that don't actually have access.
+  const [canInstructor, setCanInstructor] = useState(false);
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${API}/lma/profile/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { if (d) setCanInstructor(!!d.can_access_instructor); })
+      .catch(() => {});
+  }, [token]);
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -120,7 +138,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
     ["lma_token", "lma_role", "lma_can_instructor", "lma_name"].forEach(k =>
       localStorage.removeItem(k)
     );
-    navigate("/lma/login");
+    navigate("/", { replace: true });
   };
 
   const hour = new Date().getHours();
@@ -153,7 +171,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   ];
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#f4f2ef", fontFamily: FF }}>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#F4F7FA", fontFamily: FF }}>
 
       {/* Global styles */}
       <style>{`
@@ -192,7 +210,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
           .lma-menu-btn { display: flex !important; }
         }
         .lma-side-item:hover {
-          background: rgba(201,136,58,0.08) !important;
+          background: rgba(217,53,34,0.08) !important;
           color: rgba(255,255,255,0.85) !important;
         }
       `}</style>
@@ -211,7 +229,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
           <Link to="/">
             <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 60, width: "auto" }} />
           </Link>
-          <div style={{ marginTop: 8, fontSize: 10, color: AMBER, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+          <div style={{ marginTop: 8, fontSize: 10, color: "rgba(255,255,255,0.70)", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>
             Academy · Student
           </div>
         </div>
@@ -220,7 +238,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
           {navSections.map(({ section, items }) => (
             <div key={section}>
               <div style={{
-                fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.25)",
+                fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.40)",
                 letterSpacing: "0.14em", textTransform: "uppercase",
                 padding: "12px 4px 6px",
               }}>
@@ -245,14 +263,14 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
 
         {canInstructor && (
           <div style={{ padding: "0 12px 8px" }}>
-            <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.25)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "12px 4px 6px" }}>
+            <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.40)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "12px 4px 6px" }}>
               SWITCH PORTAL
             </div>
             <Link to="/lma/instructor/dashboard" style={{
               display: "flex", alignItems: "center", gap: 10,
               padding: "10px 16px", borderRadius: 10, textDecoration: "none",
-              background: "linear-gradient(135deg, rgba(201,136,58,0.20) 0%, rgba(232,168,78,0.10) 100%)",
-              border: "1px solid rgba(201,136,58,0.35)",
+              background: "linear-gradient(135deg, rgba(217,53,34,0.20) 0%, rgba(217,53,34,0.10) 100%)",
+              border: "1px solid rgba(217,53,34,0.35)",
               color: AMBER, fontSize: 13.5, fontWeight: 700, fontFamily: FF,
               marginBottom: 2, transition: "all 0.18s ease",
             }}>

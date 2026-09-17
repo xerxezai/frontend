@@ -1,9 +1,9 @@
 // SmartBuildingPage.tsx
-// Purpose: /v2/iot/smart-building-solutions — third standalone IoT Solutions
+// Purpose: /iot/smart-building-solutions — third standalone IoT Solutions
 //          detail page. Same architecture and card language as
 //          SmartAssetTrackingPage.tsx / IndustrialIoTPage.tsx (hero, white
 //          lift cards, numbered dark capability cards, closing CTA).
-// Used in: src/App.tsx (route: /v2/iot/smart-building-solutions)
+// Used in: src/App.tsx (route: /iot/smart-building-solutions)
 // Data source: original XERXEZ copy for this page (same standing allowance
 //              as every other industry/solution detail page — never copied
 //              from a competitor, no XERXEZ branding borrowed from any
@@ -96,7 +96,7 @@ const SmartBuildingPage = () => (
     <SEO
       title="Smart Building Solutions | IoT Solutions | XERXEZ"
       description="Connect sensors, equipment, lighting, HVAC, security and building management systems into one unified digital ecosystem."
-      canonical="/v2/iot/smart-building-solutions"
+      canonical="/iot/smart-building-solutions"
       noIndex
     />
 
@@ -113,7 +113,7 @@ const SmartBuildingPage = () => (
       </>}
       heroImage={heroImage}
       ctaButtons={[
-        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
       ]}
       overlayOpacity={0.70}
@@ -297,7 +297,7 @@ const SmartBuildingPage = () => (
             facility monitoring? Our IoT specialists can help you identify the right devices,
             platform and automation strategy.
           </p>
-          <Btn to="/v2/contact">Request a Demo</Btn>
+          <Btn to="/contact">Request a Demo</Btn>
 
           {/* 3 trust signals — centered row below the button */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", justifyContent: "center", marginTop: 34 }}>

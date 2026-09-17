@@ -4,11 +4,11 @@ import { ClipboardList, CheckCircle2, X, Loader } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)";
-const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)";
+const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.12)";
 
 interface Assignment {
   id: number;
@@ -161,7 +161,7 @@ const StatusBadge = ({ a }: { a: Assignment }) => {
     </span>
   );
   return (
-    <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, background: "rgba(201,136,58,0.10)", padding: "3px 10px", borderRadius: 999 }}>
+    <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.10)", padding: "3px 10px", borderRadius: 999 }}>
       Pending
     </span>
   );

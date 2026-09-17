@@ -110,7 +110,7 @@ const TaskCard = ({ task, onClick }: { task: any; onClick: () => void }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           {task.due_date && <span style={{ fontFamily: FF, fontSize: 10.5, color: '#9ca3af' }}>{new Date(task.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>}
           {task.assigned_to_name && (
-            <div title={task.assigned_to_name} style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', fontSize: 8.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div title={task.assigned_to_name} style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', fontSize: 8.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {initials(task.assigned_to_name)}
             </div>
           )}
@@ -124,9 +124,9 @@ const Column = ({ col, tasks, onAdd, onTaskClick }: { col: { key: string; label:
   const { setNodeRef, isOver } = useDroppable({ id: col.key });
   return (
     <div ref={setNodeRef} style={{
-      background: isOver ? 'rgba(201,136,58,0.06)' : '#F8F7F4', borderRadius: 12, padding: 10,
+      background: isOver ? 'rgba(217,53,34,0.06)' : '#F8F7F4', borderRadius: 12, padding: 10,
       minWidth: 250, width: 250, flexShrink: 0, display: 'flex', flexDirection: 'column', maxHeight: '100%',
-      boxShadow: isOver ? '0 0 0 1.5px rgba(201,136,58,0.4)' : 'none', transition: 'box-shadow 0.2s ease, background 0.2s ease',
+      boxShadow: isOver ? '0 0 0 1.5px rgba(217,53,34,0.4)' : 'none', transition: 'box-shadow 0.2s ease, background 0.2s ease',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, padding: '2px 2px' }}>
         <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 12.5, color: '#1A1A1A' }}>{col.label} <span style={{ color: '#9ca3af', fontWeight: 700 }}>({tasks.length})</span></span>

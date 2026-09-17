@@ -75,7 +75,7 @@ export default function WarehousesPanel() {
           </select>
         </div>
         <button onClick={exportCSV} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}>
-          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#C9883A' }} />Export CSV
+          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#D93522' }} />Export CSV
         </button>
       </div>
 

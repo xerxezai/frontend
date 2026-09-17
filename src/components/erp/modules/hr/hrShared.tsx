@@ -3,14 +3,14 @@ import { X } from 'lucide-react';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens ──────────────────────────────────────────────────────
-export const OG    = '#C9883A';
-export const OG_G  = 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)';
-export const DARK  = '#1a1208';
+export const OG    = '#D93522';
+export const OG_G  = 'linear-gradient(145deg,#D93522 0%,#D93522 100%)';
+export const DARK  = '#071a33';
 export const CREAM = '#F8F7F4';
 export const WHITE = '#FFFFFF';
 export const FF    = "'DM Sans',sans-serif";
 export const BCARD = '0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)';
-export const BHOV  = '0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)';
+export const BHOV  = '0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.12)';
 
 // ── Card3D — copied exactly from AIERPPage.tsx ───────────────────────────────
 export const Card3D = ({

@@ -3,7 +3,7 @@ import { useERPList } from '../../../../hooks/useERPApi';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 const C = {
-  orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
+  orange: '#D93522', orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)',
   cream: '#F8F7F4', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B',
   border: 'rgba(0,0,0,0.07)',
 };
@@ -56,7 +56,7 @@ function PresetEditor({ label, presets, items, onChange }: {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
         <label style={labelStyle}>{label}</label>
         <select value="" onChange={e => handleSelect(e.target.value)}
-          style={{ border: `1px solid rgba(201,136,58,0.28)`, borderRadius: 7, padding: '4px 8px', fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: C.orange, fontWeight: 700, background: 'rgba(201,136,58,0.08)', cursor: 'pointer' }}>
+          style={{ border: `1px solid rgba(217,53,34,0.28)`, borderRadius: 7, padding: '4px 8px', fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: C.orange, fontWeight: 700, background: 'rgba(217,53,34,0.08)', cursor: 'pointer' }}>
           <option value="">+ Add {label.replace(/s$/, '')}</option>
           {presets.map(p => <option key={p} value={p}>{p}</option>)}
         </select>
@@ -274,7 +274,7 @@ export default function SalaryStructuresModule() {
                           <td style={{ padding: '11px 16px' }}>
                             <div style={{ display: 'flex', gap: 6 }}>
                               <button onClick={() => openEdit(s)}
-                                style={{ background: 'rgba(201,136,58,0.08)', border: `1px solid rgba(201,136,58,0.22)`, borderRadius: 7, padding: '5px 10px', fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: C.orange, cursor: 'pointer', fontWeight: 600 }}>
+                                style={{ background: 'rgba(217,53,34,0.08)', border: `1px solid rgba(217,53,34,0.22)`, borderRadius: 7, padding: '5px 10px', fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: C.orange, cursor: 'pointer', fontWeight: 600 }}>
                                 <i className="fas fa-pen" style={{ fontSize: 10 }} />
                               </button>
                               <button onClick={() => setDeleting(s)}

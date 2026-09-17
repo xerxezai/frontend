@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 
-const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
+const OG_G = 'linear-gradient(145deg, #D93522 0%, #D93522 100%)';
 const CARD: React.CSSProperties = {
   background:   '#FFFFFF',
   border:       '1px solid rgba(0,0,0,0.08)',
-  borderTop:    '2px solid rgba(201,136,58,0.55)',
+  borderTop:    '2px solid rgba(217,53,34,0.55)',
   borderRadius: 14,
   boxShadow:    '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
@@ -45,7 +45,7 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
         background: on ? OG_G : 'rgba(0,0,0,0.12)',
         cursor: 'pointer', position: 'relative', flexShrink: 0,
         transition: 'background 0.25s ease',
-        boxShadow: on ? '0 0 10px rgba(201,136,58,0.28)' : 'none',
+        boxShadow: on ? '0 0 10px rgba(217,53,34,0.28)' : 'none',
       }}
     >
       <span style={{
@@ -114,7 +114,7 @@ export default function PrivacySettingsPage() {
                 cursor: 'default',
                 transition: 'background 0.16s',
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'rgba(201,136,58,0.03)'; }}
+              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'rgba(217,53,34,0.03)'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
             >
               <div style={{ flex: 1 }}>

@@ -1,8 +1,8 @@
 // TrainingV2.tsx
-// Purpose: The /v2/training page — hero (with the cohort card), the live course
+// Purpose: The /training page — hero (with the cohort card), the live course
 //          grid, a "why our training" band with a stat strip, an enterprise-
 //          training CTA, and the shared CTA band.
-// Used in: src/App.tsx  (route: /v2/training)
+// Used in: src/App.tsx  (route: /training)
 // Data source: FEATURES and WHY_STATS mirror the existing TrainingPage
 //              (src/page/TrainingPage.tsx). Course cards come from the live API
 //              via <XerxezCourses>.
@@ -130,7 +130,7 @@ const TrainingV2 = () => (
     <SEO
       title="AI Training | Enterprise AI & Cloud Courses — XERXEZ India & UAE"
       description="XERXEZ AI training for IT teams and enterprises. Learn AI, DevSecOps, Cloud, and ERP from practitioners who've shipped it in production."
-      canonical="/v2/training"
+      canonical="/training"
       noIndex
     />
 
@@ -184,8 +184,8 @@ const TrainingV2 = () => (
                 ))}
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 8 }}>
-                <Btn to="/lma/student/dashboard">Browse courses</Btn>
-                <Btn to="/v2/contact" variant="outline" dark arrow={false}>Enterprise training</Btn>
+                <Btn to="/lma/courses">Browse courses</Btn>
+                <Btn to="/contact?service=ai-training" variant="outline" dark arrow={false}>Enterprise training</Btn>
               </div>
             </div>
           </div>
@@ -285,7 +285,7 @@ const TrainingV2 = () => (
                 "Teams leave with production-ready AI skills, not just theory."
               </p>
               <div style={{ marginTop: 28 }}>
-                <Btn to="/v2/contact">Request enterprise training</Btn>
+                <Btn to="/contact?service=ai-training">Request enterprise training</Btn>
               </div>
             </Reveal>
           </div>
@@ -330,7 +330,7 @@ const TrainingV2 = () => (
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
             <Btn to="/lma/courses">Browse courses</Btn>
-            <Btn to="/v2/contact" variant="outline" dark arrow={false}>Enterprise training</Btn>
+            <Btn to="/contact?service=ai-training" variant="outline" dark arrow={false}>Enterprise training</Btn>
           </div>
 
           {/* 3 trust signals — centered row below the buttons */}

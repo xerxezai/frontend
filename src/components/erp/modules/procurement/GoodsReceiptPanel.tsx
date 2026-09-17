@@ -126,7 +126,7 @@ export default function GoodsReceiptPanel() {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                   <label style={{ ...lbl, marginBottom: 0 }}>Items Received *</label>
-                  <button type="button" onClick={addRow} style={{ background: 'none', border: 'none', color: '#C9883A', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12 }}>
+                  <button type="button" onClick={addRow} style={{ background: 'none', border: 'none', color: '#D93522', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12 }}>
                     <i className="fas fa-plus" style={{ marginRight: 4 }} />Add Item
                   </button>
                 </div>

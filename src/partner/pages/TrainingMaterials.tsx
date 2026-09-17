@@ -11,7 +11,7 @@ const cardStyle: React.CSSProperties = {
 };
 const btnStyle: React.CSSProperties = {
   marginTop: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-  textDecoration: 'none', background: `linear-gradient(145deg,#e8a84e,${OG})`, color: '#fff',
+  textDecoration: 'none', background: OG, color: '#fff',
   fontFamily: FF, fontWeight: 700, fontSize: 13, padding: '10px 18px', borderRadius: 10, border: 'none', cursor: 'pointer',
 };
 
@@ -131,12 +131,12 @@ function ModulePlaybookAccordion() {
               type="button" onClick={() => setOpen(isOpen ? null : m.key)}
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px',
-                background: isOpen ? 'rgba(201,136,58,0.05)' : '#fff', border: 'none', cursor: 'pointer', textAlign: 'left',
+                background: isOpen ? 'rgba(217,53,34,0.05)' : '#fff', border: 'none', cursor: 'pointer', textAlign: 'left',
               }}
               aria-expanded={isOpen}
             >
               <span style={{
-                width: 36, height: 36, borderRadius: 10, background: 'rgba(201,136,58,0.10)', flexShrink: 0,
+                width: 36, height: 36, borderRadius: 10, background: 'rgba(217,53,34,0.10)', flexShrink: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <i className={m.icon} style={{ color: OG, fontSize: 15 }} />
@@ -236,13 +236,13 @@ function CommissionCalcCard() {
         </select>
       </div>
       <div style={{
-        marginTop: 'auto', background: 'rgba(201,136,58,0.08)', border: '1.5px solid rgba(201,136,58,0.25)',
+        marginTop: 'auto', background: 'rgba(217,53,34,0.08)', border: '1.5px solid rgba(217,53,34,0.25)',
         borderRadius: 10, padding: '12px 16px', textAlign: 'center',
       }}>
-        <div style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, color: '#8B5E1A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+        <div style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, color: '#A32819', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
           Estimated Commission
         </div>
-        <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, fontWeight: 700, color: OG }}>
+        <div style={{ fontFamily: FF, fontSize: 26, fontWeight: 700, color: OG }}>
           {currency.symbol} {amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
         </div>
       </div>
@@ -284,7 +284,7 @@ const TrainingMaterials = () => {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, fontWeight: 700, color: '#141413', margin: '0 0 6px' }}>
+        <h1 style={{ fontFamily: FF, fontSize: 26, fontWeight: 700, color: '#141413', margin: '0 0 6px' }}>
           Module Sales Playbook
         </h1>
         <p style={{ fontFamily: FF, fontSize: 13.5, color: '#9b9690', margin: 0 }}>

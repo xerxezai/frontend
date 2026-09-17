@@ -41,7 +41,7 @@ export default function AssetList() {
 
   const cols = [
     { key: 'asset_code', label: 'Code', width: 90 },
-    { key: 'name', label: 'Name', width: 160, render: (r: any) => <span onClick={() => navigate(`/erp/assets/${r.id}`)} style={{ cursor: 'pointer', color: '#C9883A', fontWeight: 700 }}>{r.name}</span> },
+    { key: 'name', label: 'Name', width: 160, render: (r: any) => <span onClick={() => navigate(`/erp/assets/${r.id}`)} style={{ cursor: 'pointer', color: '#D93522', fontWeight: 700 }}>{r.name}</span> },
     { key: 'category', label: 'Category', render: (r: any) => ASSET_CATEGORY[r.category]?.label ?? r.category },
     { key: 'status', label: 'Status', render: (r: any) => <StatusBadge status={r.status} map={ASSET_STATUS} /> },
     { key: 'location', label: 'Location' },
@@ -85,7 +85,7 @@ export default function AssetList() {
           </select>
         </div>
         <button onClick={exportCSV} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}>
-          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#C9883A' }} />Export CSV
+          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#D93522' }} />Export CSV
         </button>
       </div>
 

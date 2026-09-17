@@ -125,7 +125,7 @@ export default function HRPerformancePage() {
                   <td style={{ padding: '11px 16px' }}>
                     <button onClick={() => setHistoryEmp({ id: r.employee, name: r.employee_name })}
                       style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'none', border: 'none', cursor: 'pointer', fontFamily: FF }}>
-                      <span style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', fontSize: 10.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{initials(r.employee_name)}</span>
+                      <span style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', fontSize: 10.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{initials(r.employee_name)}</span>
                       <span style={{ fontWeight: 700, color: DARK }}>{r.employee_name}</span>
                     </button>
                   </td>
@@ -184,7 +184,7 @@ export default function HRPerformancePage() {
             <div style={{ position: 'relative' }}>
               {empHistory.map((r, i) => (
                 <div key={r.id} style={{ display: 'flex', gap: 14, paddingBottom: i < empHistory.length - 1 ? 20 : 0, position: 'relative' }}>
-                  {i < empHistory.length - 1 && <div style={{ position: 'absolute', left: 13, top: 28, bottom: 0, width: 2, background: 'rgba(201,136,58,0.15)' }} />}
+                  {i < empHistory.length - 1 && <div style={{ position: 'absolute', left: 13, top: 28, bottom: 0, width: 2, background: 'rgba(217,53,34,0.15)' }} />}
                   <div style={{ width: 28, height: 28, borderRadius: '50%', background: `${ratingColor(r.rating)}18`, border: `2px solid ${ratingColor(r.rating)}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 11, fontWeight: 800, color: ratingColor(r.rating) }}>{r.rating}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>

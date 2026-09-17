@@ -5,7 +5,7 @@
 // Data source: industries + assurance labels are the INDUSTRIES / CERTS arrays
 //              from the existing homepage (src/components/marketing/IndustriesBar.tsx).
 
-import { HardHat, Fuel, Building, Factory, Wrench, Landmark, Check } from "lucide-react";
+import { HardHat, Fuel, Building, Factory, Wrench, HeartPulse, Check } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { T, Eyebrow, Reveal } from "../../01-core/v2theme";
 
@@ -16,7 +16,7 @@ const INDUSTRIES: { icon: LucideIcon; label: string }[] = [
   { icon: Building,  label: "Construction" },
   { icon: Factory,  label: "Manufacturing" },
   { icon: Wrench,   label: "Facilities Management" },
-  { icon: Landmark, label: "Government Contractors" },
+  { icon: HeartPulse, label: "Healthcare" },
 ];
 
 // Assurance items shown as a check-marked list below the pills.

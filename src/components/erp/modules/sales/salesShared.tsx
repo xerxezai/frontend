@@ -2,14 +2,14 @@ import { useState, useRef, useEffect, type CSSProperties, type ReactNode } from 
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens — copied from crmShared.tsx / hrShared.tsx ──────────
-export const OG    = '#C9883A';
-export const OG_G  = 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)';
-export const DARK  = '#1a1208';
+export const OG    = '#D93522';
+export const OG_G  = 'linear-gradient(145deg,#D93522 0%,#D93522 100%)';
+export const DARK  = '#071a33';
 export const CREAM = '#F8F7F4';
 export const WHITE = '#FFFFFF';
 export const FF    = "'DM Sans',sans-serif";
 export const BCARD = '0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)';
-export const BHOV  = '0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)';
+export const BHOV  = '0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.12)';
 export const BORDER = 'rgba(0,0,0,0.08)';
 
 export const inp: CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:FF,fontSize:13,outline:'none',boxSizing:'border-box' };
@@ -103,9 +103,9 @@ export const SearchableSelect = ({
             <div
               key={o.value}
               onClick={() => { onChange(o.value); setOpen(false); setQuery(''); }}
-              style={{ padding: '8px 12px', cursor: 'pointer', fontFamily: FF, fontSize: 12.5, color: '#1A1A1A', fontWeight: o.value === value ? 700 : 500, background: o.value === value ? 'rgba(201,136,58,0.08)' : 'transparent' }}
-              onMouseEnter={e => (e.currentTarget.style.background = o.value === value ? 'rgba(201,136,58,0.08)' : '#F8F7F4')}
-              onMouseLeave={e => (e.currentTarget.style.background = o.value === value ? 'rgba(201,136,58,0.08)' : 'transparent')}
+              style={{ padding: '8px 12px', cursor: 'pointer', fontFamily: FF, fontSize: 12.5, color: '#1A1A1A', fontWeight: o.value === value ? 700 : 500, background: o.value === value ? 'rgba(217,53,34,0.08)' : 'transparent' }}
+              onMouseEnter={e => (e.currentTarget.style.background = o.value === value ? 'rgba(217,53,34,0.08)' : '#F8F7F4')}
+              onMouseLeave={e => (e.currentTarget.style.background = o.value === value ? 'rgba(217,53,34,0.08)' : 'transparent')}
             >
               {o.label}
             </div>

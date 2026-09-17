@@ -141,7 +141,7 @@ export default function PurchaseOrdersPanel() {
             </span>
           ) : (
             <button title="Generate Bill" disabled={busyId === r.id} onClick={() => generateBill(r)}
-              style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
+              style={{ background: 'rgba(217,53,34,0.08)', color: '#D93522', border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, borderRadius: 6, cursor: busyId === r.id ? 'wait' : 'pointer' }}>
               <i className={`fas ${busyId === r.id ? 'fa-spinner fa-spin' : 'fa-file-invoice-dollar'}`} style={{ fontSize: 10 }} />
             </button>
           )}
@@ -170,7 +170,7 @@ export default function PurchaseOrdersPanel() {
           <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={{ ...inp, width: 140 }} title="To date" />
         </div>
         <button onClick={exportCSV} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', color: '#1A1A1A' }}>
-          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#C9883A' }} />Export CSV
+          <i className="fas fa-file-csv" style={{ marginRight: 6, color: '#D93522' }} />Export CSV
         </button>
       </div>
 
@@ -206,7 +206,7 @@ export default function PurchaseOrdersPanel() {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                   <label style={{ ...lbl, marginBottom: 0 }}>Line Items *</label>
-                  <button type="button" onClick={addRow} style={{ background: 'none', border: 'none', color: '#C9883A', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12 }}>
+                  <button type="button" onClick={addRow} style={{ background: 'none', border: 'none', color: '#D93522', cursor: 'pointer', fontFamily: FF, fontWeight: 700, fontSize: 12 }}>
                     <i className="fas fa-plus" style={{ marginRight: 4 }} />Add Item
                   </button>
                 </div>
@@ -233,7 +233,7 @@ export default function PurchaseOrdersPanel() {
                     </div>
                   ))}
                 </div>
-                <div style={{ textAlign: 'right', marginTop: 10, fontFamily: FF, fontSize: 14, fontWeight: 800, color: '#C9883A' }}>
+                <div style={{ textAlign: 'right', marginTop: 10, fontFamily: FF, fontSize: 14, fontWeight: 800, color: '#D93522' }}>
                   Total: {fmtINR(grandTotal)}
                 </div>
               </div>

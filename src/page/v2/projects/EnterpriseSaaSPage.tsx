@@ -1,7 +1,7 @@
 // EnterpriseSaaSPage.tsx
-// Purpose: /v2/project/enterprise-saas — case study data for the Enterprise
+// Purpose: /project/enterprise-saas — case study data for the Enterprise
 //          SaaS Platform project, rendered through <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/enterprise-saas)
+// Used in: src/App.tsx (route: /project/enterprise-saas)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -12,7 +12,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "Enterprise SaaS Platform | Case Study | XERXEZ",
   seoDesc: "How XERXEZ built a multi-tenant enterprise SaaS platform — 99.9% uptime, 15+ enterprise clients, auto-scaling infrastructure, 24-hour onboarding.",
-  canonical: "/v2/project/enterprise-saas",
+  canonical: "/project/enterprise-saas",
 
   category: "Software",
   industry: "Enterprise Technology",
@@ -58,8 +58,8 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "7 engineers" },
   ],
 
-  prev: { title: "Zero-Trust Cloud Infrastructure", href: "/v2/project/cloud-infrastructure" },
-  next: { title: "Corporate AI Upskilling Program", href: "/v2/project/ai-training-program" },
+  prev: { title: "Zero-Trust Cloud Infrastructure", href: "/project/cloud-infrastructure" },
+  next: { title: "Corporate AI Upskilling Program", href: "/project/ai-training-program" },
 };
 
 const EnterpriseSaaSPage = () => <ProjectCaseStudyTemplate data={data} />;

@@ -1,9 +1,9 @@
 // AgricultureIoTPage.tsx
-// Purpose: /v2/iot/agriculture-iot — fifth standalone IoT Solutions detail
+// Purpose: /iot/agriculture-iot — fifth standalone IoT Solutions detail
 //          page. Same architecture and card language as
 //          SmartAssetTrackingPage.tsx (hero, white lift cards, numbered dark
 //          capability cards, closing CTA).
-// Used in: src/App.tsx (route: /v2/iot/agriculture-iot)
+// Used in: src/App.tsx (route: /iot/agriculture-iot)
 // Data source: original XERXEZ copy for this page (same standing allowance
 //              as every other industry/solution detail page — never copied
 //              from a competitor, no XERXEZ branding borrowed from any
@@ -98,7 +98,7 @@ const AgricultureIoTPage = () => (
     <SEO
       title="Agriculture IoT | IoT Solutions | XERXEZ"
       description="Monitor crops, soil, weather, irrigation, livestock and equipment in real time — reducing waste, improving yields and making every farming decision data-driven."
-      canonical="/v2/iot/agriculture-iot"
+      canonical="/iot/agriculture-iot"
       noIndex
     />
 
@@ -117,7 +117,7 @@ const AgricultureIoTPage = () => (
       </>}
       heroImage={heroImage}
       ctaButtons={[
-        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
       ]}
       overlayOpacity={0.70}
@@ -300,7 +300,7 @@ const AgricultureIoTPage = () => (
             Our IoT experts can help you define the right sensors, connectivity, platform
             architecture, applications and AI capabilities for your use case.
           </p>
-          <Btn to="/v2/contact">Request a Demo</Btn>
+          <Btn to="/contact">Request a Demo</Btn>
 
           {/* 3 trust signals — centered row below the button */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", justifyContent: "center", marginTop: 34 }}>

@@ -8,14 +8,16 @@ class PageErrorBoundary extends Component<{ children: ReactNode }, { caught: boo
   static getDerivedStateFromError() { return { caught: true }; }
   render() {
     if (this.state.caught) {
-      // This boundary wraps every route, v1 and /v2 alike. A crash on a /v2
-      // page should show the v2 navy/red theme instead of the v1 fallback's
-      // cream background — checked at render time (not cached) since the
-      // path that crashed is whatever the user was on when it happened.
-      const isV2 = typeof window !== "undefined" && window.location.pathname.startsWith("/v2");
-      return isV2 ? (
+      // This boundary wraps every route. The v2 navy/red theme is now the
+      // main site, so it's the default fallback — the old cream v1 fallback
+      // is reserved for the few still-standalone sub-apps (ERP/LMA/Partner)
+      // that keep their own chrome. Checked at render time (not cached)
+      // since the path that crashed is whatever the user was on when it happened.
+      const isLegacyApp = typeof window !== "undefined"
+        && ["/erp", "/lma", "/partner"].some(p => window.location.pathname.startsWith(p));
+      return !isLegacyApp ? (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#071a33", fontFamily: "'Poppins',sans-serif", color: "#fff", fontSize: 15 }}>
-          Something went wrong. <a href="/v2" style={{ marginLeft: 8, color: "#D93522" }}>Go home</a>
+          Something went wrong. <a href="/" style={{ marginLeft: 8, color: "#D93522" }}>Go home</a>
         </div>
       ) : (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans',sans-serif", color: "#6b7280", fontSize: 15 }}>
@@ -33,20 +35,13 @@ import FloatingChat from "./components/chat/FloatingChat";
 import PageProgress from "./components/utils/PageProgress";
 
 // Lazy-loaded page chunks — each page is its own split point
-const HomePage1       = lazy(() => import("./page/HomePage1"));
 const HomePage2       = lazy(() => import("./page/HomePage2"));
 const HomePage3       = lazy(() => import("./page/HomePage3"));
 const HomePage4       = lazy(() => import("./page/HomePage4"));
-const AboutPage       = lazy(() => import("./page/AboutPage"));
 const BlogPage        = lazy(() => import("./page/BlogPage"));
 const BlogDetailPage  = lazy(() => import("./page/BlogDetailPage"));
-const ContactPage     = lazy(() => import("./page/ContactPage"));
 const FaqPage         = lazy(() => import("./page/FaqPage"));
 const PricingPage     = lazy(() => import("./page/PricingPage"));
-const ProjectPage     = lazy(() => import("./page/ProjectPage"));
-const ProjectDetailPage = lazy(() => import("./page/ProjectDetailPage"));
-const ServicePage     = lazy(() => import("./page/ServicePage"));
-const ServiceDetailPage = lazy(() => import("./page/ServiceDetailPage"));
 const TeamPage        = lazy(() => import("./page/TeamPage"));
 const TeamDetailPage  = lazy(() => import("./page/TeamDetailPage"));
 const NotFoundPage    = lazy(() => import("./page/NotFoundPage"));
@@ -54,23 +49,12 @@ const DocsPage        = lazy(() => import("./page/DocsPage"));
 const HealthPage      = lazy(() => import("./page/HealthPage"));
 const MLMPage         = lazy(() => import("./page/MLMPage"));
 const ERPPage         = lazy(() => import("./page/ERPPage"));
-const AIERPPage       = lazy(() => import("./page/AIERPPage"));
-const DevSecOpsPage   = lazy(() => import("./page/DevSecOpsPage"));
-const CloudPage       = lazy(() => import("./page/CloudPage"));
-const SoftwareDevPage = lazy(() => import("./page/SoftwareDevPage"));
-const AITrainingPage  = lazy(() => import("./page/AITrainingPage"));
-const QuantumPage     = lazy(() => import("./page/QuantumPage"));
-const MobilePage      = lazy(() => import("./page/MobilePage"));
-const HostingPage     = lazy(() => import("./page/HostingPage"));
-const ConsultingPage  = lazy(() => import("./page/ConsultingPage"));
-const TrainingPage       = lazy(() => import("./page/TrainingPage"));
 const ERPIndustriesPage      = lazy(() => import("./page/ERPIndustriesPage"));
 const ERPLandingPage         = lazy(() => import("./page/ERPLandingPage"));
 const ERPIndustryDetailPage  = lazy(() => import("./page/ERPIndustryDetailPage"));
 const LandingPage        = lazy(() => import("./page/LandingPage"));
 const PrivacyPolicyPage  = lazy(() => import("./page/PrivacyPolicyPage"));
 const TermsPage          = lazy(() => import("./page/TermsPage"));
-const CareersPage        = lazy(() => import("./page/CareersPage"));
 const PartnersPage       = lazy(() => import("./page/PartnersPage"));
 const HomeV2             = lazy(() => import("./page/v2/HomeV2"));
 const AboutV2            = lazy(() => import("./page/v2/AboutV2"));
@@ -79,6 +63,8 @@ const PortfolioV2        = lazy(() => import("./page/v2/PortfolioV2"));
 const ContactV2          = lazy(() => import("./page/v2/ContactV2"));
 const TrainingV2         = lazy(() => import("./page/v2/TrainingV2"));
 const CareersV2          = lazy(() => import("./page/v2/CareersV2"));
+const PrivacyPolicyV2    = lazy(() => import("./page/v2/PrivacyPolicyV2"));
+const TermsOfUseV2       = lazy(() => import("./page/v2/TermsOfUseV2"));
 // One dynamic page for all 10 service detail routes (was 10 near-identical wrapper files)
 const ServiceDetailPageV2 = lazy(() => import("./page/v2/services/ServiceDetailPageV2"));
 // Standalone industry detail pages (more to follow per industry)
@@ -136,29 +122,57 @@ function App() {
       <PageErrorBoundary>
       <Suspense fallback={<div style={{ minHeight: "100vh" }} />}>
         <Routes>
-          <Route path="/"                        element={<HomePage1 />} />
+          {/* v2 is now the main site — routes below are unprefixed. Old v1
+              equivalents that conflicted (home, about, contact, training,
+              careers, project, service*) were removed entirely; anything not
+              listed here (home-2/3/4, blog, faq, pricing, team, documentation,
+              health, mlm, landing, privacy, terms, partners, ai-erp,
+              erp-industries) is untouched legacy content that never had a v2
+              counterpart. */}
+          <Route path="/"                        element={<HomeV2 />} />
+          <Route path="/about"                   element={<AboutV2 />} />
+          <Route path="/services"                element={<ServicesV2 />} />
+          <Route path="/portfolio"               element={<PortfolioV2 />} />
+          <Route path="/contact"                 element={<ContactV2 />} />
+          <Route path="/training"                element={<TrainingV2 />} />
+          <Route path="/careers"                 element={<CareersV2 />} />
+          <Route path="/privacy-policy"          element={<PrivacyPolicyV2 />} />
+          <Route path="/terms-of-use"            element={<TermsOfUseV2 />} />
+          {/* one dynamic route for all 10 service detail pages */}
+          <Route path="/services/:slug" element={<ServiceDetailPageV2 />} />
+          {/* standalone industry pages — first of eventually 6, one per real sector */}
+          <Route path="/industries/oil-gas" element={<OilGasPage />} />
+          <Route path="/industries/construction" element={<ConstructionPage />} />
+          <Route path="/industries/healthcare" element={<HealthcarePage />} />
+          <Route path="/industries/facility-management" element={<FacilityManagementPage />} />
+          <Route path="/industries/epc-engineering" element={<EpcEngineeringPage />} />
+          <Route path="/industries/manufacturing" element={<ManufacturingPage />} />
+          {/* standalone IoT Solutions pages — first two of eventually 7 */}
+          <Route path="/iot/smart-asset-tracking" element={<SmartAssetTrackingPage />} />
+          <Route path="/iot/industrial-iot" element={<IndustrialIoTPage />} />
+          <Route path="/iot/smart-building-solutions" element={<SmartBuildingPage />} />
+          <Route path="/iot/fleet-management-systems" element={<FleetManagementPage />} />
+          <Route path="/iot/agriculture-iot" element={<AgricultureIoTPage />} />
+          <Route path="/iot/healthcare-iot" element={<HealthcareIoTPage />} />
+          <Route path="/iot/smart-retail" element={<SmartRetailPage />} />
+          {/* portfolio case studies */}
+          <Route path="/project/ai-erp-platform" element={<AIERPProjectPage />} />
+          <Route path="/project/mlops-pipeline" element={<MLOpsProjectPage />} />
+          <Route path="/project/cloud-infrastructure" element={<CloudInfraProjectPage />} />
+          <Route path="/project/enterprise-saas" element={<EnterpriseSaaSPage />} />
+          <Route path="/project/ai-training-program" element={<AITrainingProgramPage />} />
+          <Route path="/project/digital-transformation" element={<DigitalTransformationPage />} />
+          <Route path="/project/supply-chain-ai" element={<SupplyChainAIPage />} />
+          <Route path="/project/kubernetes-security" element={<KubernetesSecurityPage />} />
+          <Route path="/project/fraud-detection-mlops" element={<FraudDetectionPage />} />
+
           <Route path="/home-2"                  element={<HomePage2 />} />
           <Route path="/home-3"                  element={<HomePage3 />} />
           <Route path="/home-4"                  element={<HomePage4 />} />
-          <Route path="/about"                   element={<AboutPage />} />
           <Route path="/blog"                    element={<BlogPage />} />
           <Route path="/blog/:slug"              element={<BlogDetailPage />} />
-          <Route path="/contact"                 element={<ContactPage />} />
           <Route path="/faq"                     element={<FaqPage />} />
           <Route path="/pricing"                 element={<PricingPage />} />
-          <Route path="/project"                 element={<ProjectPage />} />
-          <Route path="/project/:slug"           element={<ProjectDetailPage />} />
-          <Route path="/service"                 element={<ServicePage />} />
-          <Route path="/service/ai-powered-erp"             element={<AIERPPage />} />
-          <Route path="/service/devsecops-mlops-solutions" element={<DevSecOpsPage />} />
-          <Route path="/service/cloud-service-storage"     element={<CloudPage />} />
-          <Route path="/service/software-development"      element={<SoftwareDevPage />} />
-          <Route path="/service/ai-training-consulting"    element={<AITrainingPage />} />
-          <Route path="/service/quantum-computing"         element={<QuantumPage />} />
-          <Route path="/service/mobile-application"        element={<MobilePage />} />
-          <Route path="/service/web-mobile-hosting"        element={<HostingPage />} />
-          <Route path="/service/software-consulting"       element={<ConsultingPage />} />
-          <Route path="/service/:slug"                     element={<ServiceDetailPage />} />
           <Route path="/ai-erp"                             element={<ERPLandingPage />} />
           <Route path="/erp-industries"                    element={<ERPIndustriesPage />} />
           <Route path="/erp-industries/:industry"          element={<ERPIndustryDetailPage />} />
@@ -170,46 +184,10 @@ function App() {
           <Route path="/home"                    element={<PortalHub />} />
           <Route path="/partner/*"               element={<PartnerApp />} />
           <Route path="/erp/*"                   element={<ERPPage />} />
-          <Route path="/training"                element={<TrainingPage />} />
           <Route path="/landing"                 element={<LandingPage />} />
           <Route path="/privacy"                 element={<PrivacyPolicyPage />} />
           <Route path="/terms"                   element={<TermsPage />} />
-          <Route path="/careers"                 element={<CareersPage />} />
           <Route path="/partners"                element={<PartnersPage />} />
-          <Route path="/v2"                      element={<HomeV2 />} />
-          <Route path="/v2/about"                element={<AboutV2 />} />
-          <Route path="/v2/services"             element={<ServicesV2 />} />
-          <Route path="/v2/portfolio"            element={<PortfolioV2 />} />
-          <Route path="/v2/contact"              element={<ContactV2 />} />
-          <Route path="/v2/training"             element={<TrainingV2 />} />
-          <Route path="/v2/careers"              element={<CareersV2 />} />
-          {/* one dynamic route for all 10 service detail pages (was 10 separate routes) */}
-          <Route path="/v2/services/:slug" element={<ServiceDetailPageV2 />} />
-          {/* standalone industry pages — first of eventually 6, one per real sector */}
-          <Route path="/v2/industries/oil-gas" element={<OilGasPage />} />
-          <Route path="/v2/industries/construction" element={<ConstructionPage />} />
-          <Route path="/v2/industries/healthcare" element={<HealthcarePage />} />
-          <Route path="/v2/industries/facility-management" element={<FacilityManagementPage />} />
-          <Route path="/v2/industries/epc-engineering" element={<EpcEngineeringPage />} />
-          <Route path="/v2/industries/manufacturing" element={<ManufacturingPage />} />
-          {/* standalone IoT Solutions pages — first two of eventually 7 */}
-          <Route path="/v2/iot/smart-asset-tracking" element={<SmartAssetTrackingPage />} />
-          <Route path="/v2/iot/industrial-iot" element={<IndustrialIoTPage />} />
-          <Route path="/v2/iot/smart-building-solutions" element={<SmartBuildingPage />} />
-          <Route path="/v2/iot/fleet-management-systems" element={<FleetManagementPage />} />
-          <Route path="/v2/iot/agriculture-iot" element={<AgricultureIoTPage />} />
-          <Route path="/v2/iot/healthcare-iot" element={<HealthcareIoTPage />} />
-          <Route path="/v2/iot/smart-retail" element={<SmartRetailPage />} />
-          {/* portfolio case studies */}
-          <Route path="/v2/project/ai-erp-platform" element={<AIERPProjectPage />} />
-          <Route path="/v2/project/mlops-pipeline" element={<MLOpsProjectPage />} />
-          <Route path="/v2/project/cloud-infrastructure" element={<CloudInfraProjectPage />} />
-          <Route path="/v2/project/enterprise-saas" element={<EnterpriseSaaSPage />} />
-          <Route path="/v2/project/ai-training-program" element={<AITrainingProgramPage />} />
-          <Route path="/v2/project/digital-transformation" element={<DigitalTransformationPage />} />
-          <Route path="/v2/project/supply-chain-ai" element={<SupplyChainAIPage />} />
-          <Route path="/v2/project/kubernetes-security" element={<KubernetesSecurityPage />} />
-          <Route path="/v2/project/fraud-detection-mlops" element={<FraudDetectionPage />} />
 
           {/* LMA routes */}
           <Route path="/lma/become-instructor"               element={<LMABecomeInstructorPage />} />

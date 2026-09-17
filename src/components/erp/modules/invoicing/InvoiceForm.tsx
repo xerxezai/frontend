@@ -5,7 +5,7 @@ import { OG, inp, lbl, SAVE, CNCL, useFmtCurrency, calcTotals, type InvoiceItemR
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
-const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:720,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'88vh',overflowY:'auto' };
+const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:720,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #D93522',maxHeight:'88vh',overflowY:'auto' };
 
 export interface InvoiceFormValues {
   number: string; customer: string; issue_date: string; due_date: string;
@@ -100,7 +100,7 @@ export default function InvoiceForm({ initial, editing, onClose, onSave }: {
           <div>
             <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8 }}>
               <label style={{ ...lbl, marginBottom: 0 }}>Line Items</label>
-              <button type="button" onClick={addItem} style={{ background:'rgba(201,136,58,0.10)',color:OG,border:'1px solid rgba(201,136,58,0.28)',borderRadius:7,padding:'5px 12px',fontFamily:'DM Sans,sans-serif',fontWeight:700,fontSize:11.5,cursor:'pointer' }}>
+              <button type="button" onClick={addItem} style={{ background:'rgba(217,53,34,0.10)',color:OG,border:'1px solid rgba(217,53,34,0.28)',borderRadius:7,padding:'5px 12px',fontFamily:'DM Sans,sans-serif',fontWeight:700,fontSize:11.5,cursor:'pointer' }}>
                 <i className="fas fa-plus" style={{ fontSize: 9, marginRight: 5 }} />Add Item
               </button>
             </div>
