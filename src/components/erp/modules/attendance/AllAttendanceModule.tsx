@@ -4,7 +4,7 @@ import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
 
 const C = {
-  orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
+  orange: '#D93522', orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)',
   cream: '#F8F7F4', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B',
   border: 'rgba(0,0,0,0.07)',
 };

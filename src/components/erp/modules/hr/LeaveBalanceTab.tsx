@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { erpFetch, useERPList, isSuperUser } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
 
-const C = { orange: '#C9883A', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B', border: 'rgba(0,0,0,0.07)' };
+const C = { orange: '#D93522', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B', border: 'rgba(0,0,0,0.07)' };
 
 // Matches LEAVE_ANNUAL_ALLOWANCE in apps/hr/views.py — the only leave types with a pooled
 // yearly cap; unpaid/maternity/paternity/other are uncapped and have no "balance" to show.

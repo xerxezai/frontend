@@ -144,7 +144,7 @@ const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose, onReopen }:
         <button
           onClick={onEdit}
           title="Edit deal"
-          style={{ background: 'rgba(201,136,58,0.10)', border: 'none', borderRadius: 6, width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: OG }}
+          style={{ background: 'rgba(217,53,34,0.10)', border: 'none', borderRadius: 6, width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: OG }}
         >
           <Pencil size={11} />
         </button>
@@ -177,7 +177,7 @@ const DealCard = ({ deal, removing, onEdit, onDelete, onWin, onLose, onReopen }:
         {deal.assigned_to_name && (
           <div title={deal.assigned_to_name} style={{
             width: 22, height: 22, borderRadius: '50%',
-            background: 'linear-gradient(145deg,#e8a84e,#C9883A)',
+            background: 'linear-gradient(145deg,#D93522,#D93522)',
             color: '#fff', fontSize: 9.5, fontWeight: 800, fontFamily: FF,
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
           }}>
@@ -375,7 +375,7 @@ export default function CRMPipeline() {
         <GradStat
           label="Total Pipeline" target={stats?.total_pipeline_value ?? 0}
           format={n => fmtINR(Math.round(n))}
-          grad="linear-gradient(135deg,#C9883A,#8B5E28)" icon={TrendingUp} index={0}
+          grad="linear-gradient(135deg,#D93522,#8B5E28)" icon={TrendingUp} index={0}
         />
         <GradStat
           label="Deals Won" target={stats?.deals_won.count ?? 0}

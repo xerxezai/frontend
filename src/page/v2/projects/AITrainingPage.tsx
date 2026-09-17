@@ -1,8 +1,8 @@
 // AITrainingPage.tsx
-// Purpose: /v2/project/ai-training-program — case study data for the
+// Purpose: /project/ai-training-program — case study data for the
 //          Corporate AI Upskilling Program, rendered through
 //          <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/ai-training-program)
+// Used in: src/App.tsx (route: /project/ai-training-program)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -13,7 +13,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "Corporate AI Upskilling Program | Case Study | XERXEZ",
   seoDesc: "How XERXEZ trained 75+ engineers in applied AI/ML — 90% completion rate, 12 internal AI projects launched, 3 engineers promoted to AI leads.",
-  canonical: "/v2/project/ai-training-program",
+  canonical: "/project/ai-training-program",
 
   category: "AI Training",
   industry: "Corporate Learning",
@@ -59,8 +59,8 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "4 trainers" },
   ],
 
-  prev: { title: "Enterprise SaaS Platform", href: "/v2/project/enterprise-saas" },
-  next: { title: "Digital Transformation Roadmap", href: "/v2/project/digital-transformation" },
+  prev: { title: "Enterprise SaaS Platform", href: "/project/enterprise-saas" },
+  next: { title: "Digital Transformation Roadmap", href: "/project/digital-transformation" },
 };
 
 const AITrainingPage = () => <ProjectCaseStudyTemplate data={data} />;

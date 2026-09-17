@@ -1,9 +1,9 @@
 // HealthcarePage.tsx
-// Purpose: /v2/industries/healthcare — third standalone industry detail
+// Purpose: /industries/healthcare — third standalone industry detail
 //          page, same architecture as ConstructionPage.tsx (hero, overview,
 //          challenges, solutions, our-solution, key modules, results, then
 //          the shared Why XERXEZ + CTA sections).
-// Used in: src/App.tsx (route: /v2/industries/healthcare)
+// Used in: src/App.tsx (route: /industries/healthcare)
 // Data source: the industry's core facts — name and tagline — come from the
 //              "healthcare" entry in src/data/erpIndustriesData.tsx
 //              (INDUSTRIES). That entry's `painPoints`/`modules` fall back to
@@ -94,7 +94,7 @@ const HealthcarePage = () => (
     <SEO
       title={`${industry.name} AI-Powered Platform & Digital Solutions | XERXEZ`}
       description={industry.tagline}
-      canonical="/v2/industries/healthcare"
+      canonical="/industries/healthcare"
       noIndex
     />
 
@@ -104,7 +104,7 @@ const HealthcarePage = () => (
       subtitle={HERO_SUBTITLE}
       heroImage={heroImage}
       highlights={HERO_FEATURES}
-      ctaButtons={[{ label: "Book a Demo", to: "/v2/contact" }]}
+      ctaButtons={[{ label: "Book a Demo", to: "/contact" }]}
       minHeight="82svh"
       maxWidth={680}
       titleSize="clamp(34px, 5vw, 56px)"
@@ -198,7 +198,7 @@ const HealthcarePage = () => (
               <SectionHeading eyebrow="Our Solution" title="Built for Hospitals &amp; Healthcare Networks" subtitle="One AI-powered platform that connects patient billing, supply chain and staffing — so administrative complexity never gets in the way of patient care." />
               <Checklist items={HERO_FEATURES} />
               <div style={{ marginTop: 24 }}>
-                <Btn to="/v2/contact">Discuss your project</Btn>
+                <Btn to="/contact">Discuss your project</Btn>
               </div>
             </Reveal>
           </div>

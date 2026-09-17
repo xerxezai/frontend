@@ -112,7 +112,7 @@ const AddCompanyModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
           onClick={submit}
           disabled={loading}
           style={{
-            width: '100%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none',
+            width: '100%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none',
             padding: '13px 20px', borderRadius: 8, fontWeight: 700, fontSize: 14,
             cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.75 : 1,
           }}>

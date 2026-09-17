@@ -5,7 +5,7 @@ import { partnersApi } from './partnersApi';
 import { useCurrency } from '../../../context/CurrencyContext';
 
 const FF = "'DM Sans',sans-serif";
-const OG = '#C9883A';
+const OG = '#D93522';
 const CUR_LOCALE: Record<string, string> = { AED: 'en-AE', INR: 'en-IN', USD: 'en-US' };
 
 /** Partner Portal amounts are stored/entered in AED (unlike the rest of the ERP, which is
@@ -270,7 +270,7 @@ function ApplicationModal({ app, onClose, onSaved, onApproveClick }: { app: any;
               Suspend
             </button>
           )}
-          <button onClick={saveNotes} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', border: 'none', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13 }}>
+          <button onClick={saveNotes} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#D93522,#D93522)', border: 'none', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13 }}>
             {saving ? 'Saving…' : 'Save Notes'}
           </button>
         </div>
@@ -460,7 +460,7 @@ function ManagePartnerModal({ partner, onClose, onSaved, onViewDeals }: { partne
           <button onClick={suspend} disabled={saving} style={{ flex: 1, background: 'rgba(230,81,0,0.10)', border: '1px solid rgba(230,81,0,0.28)', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#e65100', fontWeight: 700, fontSize: 13 }}>
             Suspend
           </button>
-          <button onClick={saveTier} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e,#C9883A)', border: 'none', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13 }}>
+          <button onClick={saveTier} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#D93522,#D93522)', border: 'none', borderRadius: 9, padding: '11px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13 }}>
             {saving ? 'Saving…' : 'Save Tier'}
           </button>
         </div>
@@ -644,7 +644,7 @@ function DealModal({ deal, onClose, onSaved }: { deal: any; onClose: () => void;
           </div>
         </div>
 
-        <button onClick={save} disabled={saving} style={{ width: '100%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', border: 'none', borderRadius: 9, padding: '12px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13.5 }}>
+        <button onClick={save} disabled={saving} style={{ width: '100%', background: 'linear-gradient(145deg,#D93522,#D93522)', border: 'none', borderRadius: 9, padding: '12px', cursor: saving ? 'wait' : 'pointer', color: '#fff', fontWeight: 700, fontSize: 13.5 }}>
           {saving ? 'Saving…' : 'Save Deal'}
         </button>
       </div>
@@ -731,7 +731,7 @@ function AllDealsTab({ partnerFilter, onClearPartnerFilter }: { partnerFilter: n
           <option value="enterprise">Enterprise</option>
         </select>
         {partnerFilter && (
-          <button type="button" onClick={onClearPartnerFilter} style={{ background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.28)', borderRadius: 8, padding: '8px 14px', fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: OG, cursor: 'pointer' }}>
+          <button type="button" onClick={onClearPartnerFilter} style={{ background: 'rgba(217,53,34,0.10)', border: '1px solid rgba(217,53,34,0.28)', borderRadius: 8, padding: '8px 14px', fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: OG, cursor: 'pointer' }}>
             Filtered by partner &times;
           </button>
         )}

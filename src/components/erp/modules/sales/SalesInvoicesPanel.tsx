@@ -116,7 +116,7 @@ export default function SalesInvoicesPanel() {
           )}
           {isAdmin && r.status !== 'paid' && r.status !== 'cancelled' && (
             <button title="Record Payment" onClick={() => setPayTarget(r)}
-              style={{ background:'rgba(201,136,58,0.08)',color:OG,border:'1px solid rgba(201,136,58,0.22)',width:28,height:28,borderRadius:6,cursor:'pointer' }}>
+              style={{ background:'rgba(217,53,34,0.08)',color:OG,border:'1px solid rgba(217,53,34,0.22)',width:28,height:28,borderRadius:6,cursor:'pointer' }}>
               <i className="fas fa-hand-holding-usd" style={{ fontSize: 10 }} />
             </button>
           )}

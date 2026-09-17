@@ -1,7 +1,7 @@
 // HomeV2.tsx
-// Purpose: The /v2 homepage. Just composition — every section is its own
+// Purpose: The / homepage. Just composition — every section is its own
 //          component under src/components/v2/sections & /features.
-// Used in: src/App.tsx  (route: /v2)
+// Used in: src/App.tsx  (route: /)
 // Data source: none here — each section pulls its own copy/data. See those files.
 //              <XerxezShell> provides the header, footer, Poppins font and mobile menu.
 
@@ -22,11 +22,11 @@ import {
 
 const HomeV2 = () => (
   <XerxezShell>
-    {/* per-page <head> tags; noIndex keeps /v2 out of search while under review */}
+    {/* per-page <head> tags; noIndex keeps / out of search while under review */}
     <SEO
       title="XERXEZ | AI-Powered ERP for UAE & India Enterprises"
       description="Transform your enterprise with XERXEZ AI-powered ERP. Built for UAE & India across EPC, Oil & Gas, Construction, Manufacturing and more."
-      canonical="/v2"
+      canonical="/"
       noIndex
     />
     {/* sections render top-to-bottom in this order */}

@@ -1,8 +1,8 @@
 // DigitalTransformationPage.tsx
-// Purpose: /v2/project/digital-transformation — case study data for the
+// Purpose: /project/digital-transformation — case study data for the
 //          Digital Transformation Roadmap project, rendered through
 //          <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/digital-transformation)
+// Used in: src/App.tsx (route: /project/digital-transformation)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -13,7 +13,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "Digital Transformation Roadmap | Case Study | XERXEZ",
   seoDesc: "How XERXEZ built a 3-year digital transformation roadmap for a large enterprise — 38% cost reduction, 23 systems consolidated to 8, $2.4M in identified savings.",
-  canonical: "/v2/project/digital-transformation",
+  canonical: "/project/digital-transformation",
 
   category: "Consulting",
   industry: "Enterprise",
@@ -59,8 +59,8 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "3 consultants" },
   ],
 
-  prev: { title: "Corporate AI Upskilling Program", href: "/v2/project/ai-training-program" },
-  next: { title: "Supply Chain AI Optimization", href: "/v2/project/supply-chain-ai" },
+  prev: { title: "Corporate AI Upskilling Program", href: "/project/ai-training-program" },
+  next: { title: "Supply Chain AI Optimization", href: "/project/supply-chain-ai" },
 };
 
 const DigitalTransformationPage = () => <ProjectCaseStudyTemplate data={data} />;

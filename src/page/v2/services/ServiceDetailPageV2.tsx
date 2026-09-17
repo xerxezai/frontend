@@ -1,5 +1,5 @@
 // ServiceDetailPageV2.tsx
-// Purpose: /v2/services/:slug — ONE dynamic page for all 10 service detail
+// Purpose: /services/:slug — ONE dynamic page for all 10 service detail
 //          pages, replacing the 10 near-identical wrapper files (Software
 //          DevelopmentPage.tsx, MobileApplicationPage.tsx, etc.) that each
 //          only varied a slug string, an eyebrow label, and two image
@@ -7,10 +7,10 @@
 //          `services` (via getServiceDetail) and its per-slug config below,
 //          and renders the shared XerxezServiceTemplate. A slug with no match
 //          (bad link, stale bookmark, a renamed slug) redirects to
-//          /v2/services with a toast — the same class of "recoverable 404"
+//          /services with a toast — the same class of "recoverable 404"
 //          the app's top-level catch-all route already handles for unknown
 //          URLs — instead of crashing the whole route.
-// Used in: src/App.tsx  (route: /v2/services/:slug)
+// Used in: src/App.tsx  (route: /services/:slug)
 // Data source: services[] in src/data/index.ts (via getServiceDetail); the
 //              eyebrow/hero photo/illustration photo per slug are this
 //              file's own SERVICE_PAGE_CONFIG, the same values every one of
@@ -72,14 +72,14 @@ const ServiceDetailPageV2 = () => {
     if (notFound) toast.error("That service page doesn't exist — showing all services instead.");
   }, [notFound]);
 
-  if (notFound) return <Navigate to="/v2/services" replace />;
+  if (notFound) return <Navigate to="/services" replace />;
 
   return (
     <XerxezShell>
       <SEO
         title={`${service.title} | XERXEZ`}
         description={service.description}
-        canonical={`/v2/services/${slug}`}   // derived from the URL param, not retyped per page
+        canonical={`/services/${slug}`}   // derived from the URL param, not retyped per page
         noIndex
       />
       <XerxezServiceTemplate service={service} heroImage={config.heroImage} illustrationImage={config.illustrationImage} eyebrow={config.eyebrow} />

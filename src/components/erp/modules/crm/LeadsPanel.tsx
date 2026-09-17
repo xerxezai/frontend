@@ -141,7 +141,7 @@ export default function LeadsPanel() {
     {
       key: 'quick_actions', label: 'Convert', render: (r: any) => (
         <div style={{ display: 'flex', gap: 5 }}>
-          <button title="Notes" onClick={() => setNotesTarget({ type: 'lead', id: r.id, name: r.name })} style={{ background: 'rgba(201,136,58,0.08)', color: '#C9883A', border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
+          <button title="Notes" onClick={() => setNotesTarget({ type: 'lead', id: r.id, name: r.name })} style={{ background: 'rgba(217,53,34,0.08)', color: '#D93522', border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
             <StickyNote size={13} />
           </button>
           {!r.customer && (

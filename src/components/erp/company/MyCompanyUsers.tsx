@@ -7,7 +7,7 @@ import MyCompanyAddUserModal from './MyCompanyAddUserModal';
 import MyCompanyEditUserModal from './MyCompanyEditUserModal';
 
 const FF = "'DM Sans',sans-serif";
-const OG = '#C9883A';
+const OG = '#D93522';
 const DARK = '#1A1A1A';
 const MUTED = '#6B6B6B';
 const BORDER = 'rgba(0,0,0,0.07)';
@@ -132,7 +132,7 @@ export default function MyCompanyUsers() {
           disabled={atLimit}
           title={atLimit ? 'User limit reached — contact XERXEZ to add more users' : undefined}
           style={{
-            background: atLimit ? '#e5e0d8' : 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none',
+            background: atLimit ? '#e5e0d8' : 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none',
             borderRadius: 9, padding: '9px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5,
             cursor: atLimit ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6,
           }}
@@ -194,7 +194,7 @@ export default function MyCompanyUsers() {
                             title={locked ? 'Contact XERXEZ to remove admin access' : 'Edit'}
                             disabled={locked}
                             onClick={() => setEditing(u)}
-                            style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: locked ? 'not-allowed' : 'pointer', opacity: locked ? 0.4 : 1, flexShrink: 0 }}
+                            style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: locked ? 'not-allowed' : 'pointer', opacity: locked ? 0.4 : 1, flexShrink: 0 }}
                           >
                             <Pencil size={12} />
                           </button>

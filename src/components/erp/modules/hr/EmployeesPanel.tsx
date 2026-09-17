@@ -89,8 +89,8 @@ function MyProfileView() {
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
-const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:560,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
-const SAVE: React.CSSProperties = { background:'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)',color:'#fff',border:'none',borderRadius:9,padding:'9px 20px',fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:13,cursor:'pointer' };
+const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:560,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #D93522',maxHeight:'85vh',overflowY:'auto' };
+const SAVE: React.CSSProperties = { background:'linear-gradient(145deg,#D93522 0%,#D93522 100%)',color:'#fff',border:'none',borderRadius:9,padding:'9px 20px',fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:13,cursor:'pointer' };
 const CNCL: React.CSSProperties = { background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRadius:9,padding:'9px 20px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13 };
 
 const empStatusColors: Record<string,{bg:string,color:string}> = { active:{bg:'#d1fae5',color:'#065f46'},inactive:{bg:'#f1f5f9',color:'#64748b'},on_leave:{bg:'#fef3c7',color:'#92400e'},terminated:{bg:'#fee2e2',color:'#991b1b'} };
@@ -250,7 +250,7 @@ function AdminEmployeesView() {
                   </div>
                   <label htmlFor="emp-photo-input" style={{
                     position:'absolute',bottom:-2,right:-2,width:30,height:30,borderRadius:'50%',
-                    background:'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)',display:'flex',alignItems:'center',justifyContent:'center',
+                    background:'linear-gradient(145deg,#D93522 0%,#D93522 100%)',display:'flex',alignItems:'center',justifyContent:'center',
                     cursor:'pointer',border:'2px solid #fff',boxShadow:'0 2px 6px rgba(0,0,0,0.18)',
                   }}>
                     <Camera size={13} color="#fff" />

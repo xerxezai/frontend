@@ -11,10 +11,10 @@ const AccessDenied = ({ module = '' }: { module?: string }) => {
       minHeight: '60vh', padding: 40, textAlign: 'center',
     }}>
       <div style={{
-        width: 80, height: 80, borderRadius: '50%', background: 'rgba(201,136,58,0.12)',
+        width: 80, height: 80, borderRadius: '50%', background: 'rgba(217,53,34,0.12)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24,
       }}>
-        <i className="fas fa-lock" style={{ fontSize: 32, color: '#C9883A' }} />
+        <i className="fas fa-lock" style={{ fontSize: 32, color: '#D93522' }} />
       </div>
       <h2 style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 24, fontWeight: 800, color: '#1A1A1A', marginBottom: 12 }}>
         Access Denied
@@ -26,7 +26,7 @@ const AccessDenied = ({ module = '' }: { module?: string }) => {
         <button
           onClick={() => setShowRequest(true)}
           style={{
-            background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none',
+            background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none',
             padding: '12px 24px', borderRadius: 8, fontWeight: 700, cursor: 'pointer', fontSize: 14,
             fontFamily: "'DM Sans',sans-serif",
           }}>

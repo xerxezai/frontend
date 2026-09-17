@@ -6,7 +6,7 @@ import { companiesApi } from './companiesApi';
 import AddCompanyModal from './AddCompanyModal';
 
 const FF = "'DM Sans',sans-serif";
-const OG = '#C9883A';
+const OG = '#D93522';
 
 const STATUS_BADGE: Record<string, { label: string; bg: string; color: string }> = {
   active:    { label: 'Active',    bg: '#d1fae5', color: '#065f46' },

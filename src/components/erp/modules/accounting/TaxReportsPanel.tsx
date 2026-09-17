@@ -81,7 +81,7 @@ export default function TaxReportsPanel() {
           )}
         </div>
         <button onClick={exportPDF} disabled={!report} style={{ background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: report ? 'pointer' : 'not-allowed', color: '#1A1A1A', opacity: report ? 1 : 0.6 }}>
-          <i className="fas fa-file-pdf" style={{ marginRight: 6, color: '#C9883A' }} />Export PDF
+          <i className="fas fa-file-pdf" style={{ marginRight: 6, color: '#D93522' }} />Export PDF
         </button>
       </div>
 

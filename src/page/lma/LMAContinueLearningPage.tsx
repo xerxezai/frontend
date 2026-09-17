@@ -70,7 +70,7 @@ export default function LMAContinueLearningPage() {
             <div style={{
               width: 80, height: 80, borderRadius: "50%",
               background: `linear-gradient(135deg,${AMBER}22,${GOLD}18)`,
-              border: `2px solid rgba(201,136,58,0.20)`,
+              border: `2px solid rgba(217,53,34,0.20)`,
               display: "flex", alignItems: "center", justifyContent: "center",
               margin: "0 auto 24px",
             }}>
@@ -87,7 +87,7 @@ export default function LMAContinueLearningPage() {
               background: `linear-gradient(135deg,${AMBER},${GOLD})`,
               color: "#0a0806", fontSize: 14, fontWeight: 700,
               padding: "13px 28px", borderRadius: 12, textDecoration: "none",
-              boxShadow: `0 4px 0 rgba(140,80,20,0.35), 0 8px 24px rgba(201,136,58,0.24)`,
+              boxShadow: `0 4px 0 rgba(139,31,23,0.35), 0 8px 24px rgba(217,53,34,0.24)`,
             }}>
               <Search size={16} /> Browse Courses
             </Link>
@@ -118,7 +118,7 @@ export default function LMAContinueLearningPage() {
                   {/* Course icon */}
                   <div style={{
                     width: 72, height: 72, borderRadius: 16, flexShrink: 0,
-                    background: `linear-gradient(135deg,${DARK},#2d1c0a)`,
+                    background: `linear-gradient(135deg,${DARK},#071a33)`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     boxShadow: "0 6px 20px rgba(0,0,0,0.20)",
                   }}>
@@ -127,7 +127,7 @@ export default function LMAContinueLearningPage() {
 
                   <div style={{ flex: 1, minWidth: 200 }}>
                     <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-                      <span style={{ fontSize: 10, fontWeight: 700, color: GOLD, background: "rgba(201,136,58,0.10)", padding: "3px 10px", borderRadius: 999, letterSpacing: "0.06em" }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.10)", padding: "3px 10px", borderRadius: 999, letterSpacing: "0.06em" }}>
                         IN PROGRESS
                       </span>
                       {(() => { const lc = levelColor(hero.course_level); return (
@@ -162,7 +162,7 @@ export default function LMAContinueLearningPage() {
                         color: "#0a0806", fontSize: 14, fontWeight: 800,
                         padding: "13px 28px", borderRadius: 12, border: "none",
                         cursor: "pointer", fontFamily: FF,
-                        boxShadow: `0 4px 0 rgba(140,80,20,0.35), 0 8px 24px rgba(201,136,58,0.24)`,
+                        boxShadow: `0 4px 0 rgba(139,31,23,0.35), 0 8px 24px rgba(217,53,34,0.24)`,
                         transition: "transform 0.15s ease",
                       }}
                       onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)"; }}
@@ -255,8 +255,8 @@ export default function LMAContinueLearningPage() {
                 display: "inline-flex", alignItems: "center", gap: 7,
                 fontSize: 13, fontWeight: 600, color: GOLD, textDecoration: "none",
                 padding: "9px 20px", borderRadius: 10,
-                border: "1.5px solid rgba(201,136,58,0.35)",
-                background: "rgba(201,136,58,0.06)",
+                border: "1.5px solid rgba(217,53,34,0.35)",
+                background: "rgba(217,53,34,0.06)",
                 transition: "all 0.18s ease",
               }}>
                 <Search size={14} /> Discover More Courses

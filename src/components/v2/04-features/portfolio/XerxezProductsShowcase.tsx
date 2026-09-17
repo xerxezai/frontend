@@ -80,7 +80,7 @@ const Card = ({
         // `link` field is a v1 "/project/*" path — every one of these 6
         // projects now has a real /v2/project/* case study, so remap here
         // rather than editing the shared data.
-        to={`/v2${p.link}`}
+        to={p.link}
         // Only the centered card navigates; a peeking neighbour just recenters itself.
         onClick={(e) => { if (!active) { e.preventDefault(); onActivate(); } }}
         onMouseEnter={() => setHover(true)}

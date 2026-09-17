@@ -1,9 +1,9 @@
 // ContactV2.tsx
-// Purpose: The /v2/contact page — a confident hero with 3 stat cards, a
+// Purpose: The /contact page — a confident hero with 3 stat cards, a
 //          two-panel band (contact methods | "book a walkthrough" card), the
 //          full enquiry form (<XerxezContactForm>), and a "what you can expect" trio.
 //          Structure mirrors etiot.in's contact page.
-// Used in: src/App.tsx  (route: /v2/contact)
+// Used in: src/App.tsx  (route: /contact)
 // Data source: contact details (email/phone/WhatsApp/LinkedIn) are XERXEZ's real
 //              details. The 3 "expect" points paraphrase existing site copy
 //              (ReadyCTA / ContactTrustBar). The form itself owns its data.
@@ -111,7 +111,7 @@ const ContactV2 = () => (
     <SEO
       title="Contact XERXEZ | Book Free ERP Demo | Abu Dhabi & India"
       description="Contact XERXEZ for AI-powered ERP solutions in UAE & India. Book a free demo for EPC, Construction, Manufacturing ERP. Abu Dhabi office available."
-      canonical="/v2/contact"
+      canonical="/contact"
       noIndex
     />
 
@@ -217,7 +217,7 @@ const ContactV2 = () => (
                 </p>
                 {/* margin-top:auto pins this row to the bottom of the card */}
                 <div style={{ marginTop: "auto", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                  <Btn to="/v2/contact#enquiry">Request a demo</Btn>
+                  <Btn to="/contact#enquiry">Request a demo</Btn>
                   <span style={{ fontFamily: T.fontBody, fontSize: 13, color: "rgba(255,255,255,0.6)", maxWidth: 200 }}>
                     No commitment. Pick a time that works for you.
                   </span>

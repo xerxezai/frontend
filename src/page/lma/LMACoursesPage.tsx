@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Star, Users, Clock, BookOpen, ChevronRight } from "lucide-react";
+import { Star, Users, Clock, BookOpen, ChevronRight, Flame, Sparkles } from "lucide-react";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
-const DARK2 = "#0f0a05";
-const CREAM = "#F8F4EE";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
+const DARK  = "#071a33";
+const DARK2 = "#04101f";
+const CREAM = "#F4F7FA";
 const FF    = "'DM Sans', sans-serif";
 
 interface Course {
@@ -22,7 +22,7 @@ const headerGrad = (hc: string) => {
   if (hc === "blue")   return "linear-gradient(135deg,#0f2460 0%,#1d4ed8 100%)";
   if (hc === "green")  return "linear-gradient(135deg,#064e3b 0%,#10b981 100%)";
   if (hc === "purple") return "linear-gradient(135deg,#2e1065 0%,#7c3aed 100%)";
-  return `linear-gradient(135deg,${DARK} 0%,#2a1c0c 100%)`;
+  return `linear-gradient(135deg,${DARK} 0%,#0f2c4d 100%)`;
 };
 
 const levelCfg = (l: string) => {
@@ -30,13 +30,15 @@ const levelCfg = (l: string) => {
   if (lc.includes("begin")) return { c: "#059669", bg: "#d1fae5" };
   if (lc.includes("inter")) return { c: "#2563eb", bg: "#dbeafe" };
   if (lc.includes("advan")) return { c: "#7c3aed", bg: "#ede9fe" };
-  return { c: GOLD, bg: "rgba(201,136,58,0.12)" };
+  return { c: GOLD, bg: "rgba(217,53,34,0.12)" };
 };
 
 const badgeCfg = (b: string) => {
-  if (b === "BESTSELLER") return { c: "#92400e", bg: "rgba(255,193,0,0.20)", border: "rgba(255,193,0,0.38)" };
-  if (b === "NEW")        return { c: "#1e40af", bg: "rgba(59,130,246,0.16)", border: "rgba(59,130,246,0.38)" };
-  return { c: GOLD, bg: "rgba(201,136,58,0.15)", border: "rgba(201,136,58,0.35)" };
+  // Solid, opaque pills — the old translucent versions sat on a dark card
+  // header and became nearly unreadable (dark text on a dark-tinted background).
+  if (b === "BESTSELLER") return { c: "#78350f", bg: "#fbbf24", icon: Flame };
+  if (b === "NEW")        return { c: "#ffffff", bg: "#2563eb", icon: Sparkles };
+  return { c: "#ffffff", bg: GOLD, icon: Sparkles };
 };
 
 /* ════════════════════════════════════════
@@ -91,7 +93,7 @@ const CourseCard = ({ course, idx }: { course: Course; idx: number }) => {
         background: "#fff", borderRadius: 18, overflow: "hidden",
         border: "1px solid rgba(0,0,0,0.07)", borderTop: `3px solid ${GOLD}`,
         boxShadow: hov
-          ? `0 24px 60px rgba(0,0,0,0.15),0 8px 24px rgba(201,136,58,0.16)`
+          ? `0 24px 60px rgba(0,0,0,0.15),0 8px 24px rgba(217,53,34,0.16)`
           : `0 2px 8px rgba(0,0,0,0.06),0 8px 24px rgba(0,0,0,0.05)`,
         transition: "box-shadow 0.28s ease",
         display: "flex", flexDirection: "column",
@@ -115,11 +117,13 @@ const CourseCard = ({ course, idx }: { course: Course; idx: number }) => {
         {course.badge && (
           <span style={{
             position:"absolute", top:12, right:12,
+            display:"flex", alignItems:"center", gap:4,
             fontSize:9.5, fontWeight:800, letterSpacing:"0.09em",
-            padding:"3px 10px", borderRadius:999,
-            background:bdg.bg, color:bdg.c, border:`1px solid ${bdg.border}`,
-            backdropFilter:"blur(8px)",
+            padding:"4px 10px 4px 8px", borderRadius:999,
+            background:bdg.bg, color:bdg.c,
+            boxShadow:"0 2px 8px rgba(0,0,0,0.25)",
           }}>
+            <bdg.icon size={10} strokeWidth={2.5} />
             {course.badge}
           </span>
         )}
@@ -173,9 +177,9 @@ const CourseCard = ({ course, idx }: { course: Course; idx: number }) => {
           </div>
           <Link
             to={`/lma/courses/${course.id}`}
-            style={{ display:"inline-flex", alignItems:"center", gap:6, background:`linear-gradient(135deg,${AMBER},${GOLD})`, color:"#0a0806", fontSize:13, fontWeight:700, padding:"9px 18px", borderRadius:9, textDecoration:"none", boxShadow:"0 3px 0 rgba(130,78,18,0.40)", transition:"transform 0.18s ease, box-shadow 0.18s ease", fontFamily:FF }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 5px 0 rgba(130,78,18,0.40)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = ""; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 3px 0 rgba(130,78,18,0.40)"; }}
+            style={{ display:"inline-flex", alignItems:"center", gap:6, background:`linear-gradient(135deg,${AMBER},${GOLD})`, color:"#0a0806", fontSize:13, fontWeight:700, padding:"9px 18px", borderRadius:9, textDecoration:"none", boxShadow:"0 3px 0 rgba(139,31,23,0.40)", transition:"transform 0.18s ease, box-shadow 0.18s ease", fontFamily:FF }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 5px 0 rgba(139,31,23,0.40)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = ""; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 3px 0 rgba(139,31,23,0.40)"; }}
           >
             View <ChevronRight size={14} />
           </Link>
@@ -188,7 +192,7 @@ const CourseCard = ({ course, idx }: { course: Course; idx: number }) => {
 /* ── Skeleton ── */
 const Skeleton = () => (
   <div style={{ background:"#fff", borderRadius:18, overflow:"hidden", border:"1px solid rgba(0,0,0,0.06)" }}>
-    <div style={{ height:110, background:`linear-gradient(90deg,#1e1710 25%,#2a2010 50%,#1e1710 75%)`, backgroundSize:"600px 100%", animation:"lmac-shimmer 1.6s infinite" }} />
+    <div style={{ height:110, background:`linear-gradient(90deg,#0d2540 25%,#163a5c 50%,#0d2540 75%)`, backgroundSize:"600px 100%", animation:"lmac-shimmer 1.6s infinite" }} />
     <div style={{ padding:"16px 20px 20px" }}>
       {([[60,13,8],[90,17,6],[45,12,18],[100,40,0]] as [number,number,number][]).map(([w,h,mb],i) => (
         <div key={i} style={{ width:`${w}%`, height:h, borderRadius:h/2, marginBottom:mb, background:"linear-gradient(90deg,#f0ede8 25%,#e8e4de 50%,#f0ede8 75%)", backgroundSize:"600px 100%", animation:"lmac-shimmer 1.6s infinite" }} />
@@ -245,7 +249,7 @@ export default function LMACoursesPage() {
           const d  = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(201,136,58,${0.14 * (1 - d / LINK)})`;
+            ctx.strokeStyle = `rgba(217,53,34,${0.14 * (1 - d / LINK)})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
             ctx.stroke();
@@ -254,7 +258,7 @@ export default function LMACoursesPage() {
       }
       pts.forEach(p => {
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(201,136,58,0.30)"; ctx.fill();
+        ctx.fillStyle = "rgba(217,53,34,0.30)"; ctx.fill();
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > W) p.vx *= -1;
         if (p.y < 0 || p.y > H) p.vy *= -1;
@@ -290,36 +294,36 @@ export default function LMACoursesPage() {
         <canvas ref={canvasRef} style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:0 }} />
 
         {/* Dot grid */}
-        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(201,136,58,0.08) 1px,transparent 1px)", backgroundSize:"30px 30px", pointerEvents:"none", zIndex:0 }} />
+        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(217,53,34,0.08) 1px,transparent 1px)", backgroundSize:"30px 30px", pointerEvents:"none", zIndex:0 }} />
 
         {/* Atmospheric orbs */}
-        <div style={{ position:"absolute", top:"-18%", left:"-6%", width:520, height:520, borderRadius:"50%", background:"radial-gradient(circle,rgba(201,136,58,0.12) 0%,transparent 65%)", animation:"lmac-float1 11s ease-in-out infinite", pointerEvents:"none" }} />
-        <div style={{ position:"absolute", bottom:"-22%", right:"-6%", width:440, height:440, borderRadius:"50%", background:"radial-gradient(circle,rgba(232,168,78,0.08) 0%,transparent 65%)", animation:"lmac-float2 14s ease-in-out infinite", pointerEvents:"none" }} />
-        <div style={{ position:"absolute", top:"38%", right:"24%", width:160, height:160, borderRadius:"50%", background:"radial-gradient(circle,rgba(201,136,58,0.16) 0%,transparent 70%)", animation:"lmac-float3 8s ease-in-out infinite", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", top:"-18%", left:"-6%", width:520, height:520, borderRadius:"50%", background:"radial-gradient(circle,rgba(217,53,34,0.12) 0%,transparent 65%)", animation:"lmac-float1 11s ease-in-out infinite", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", bottom:"-22%", right:"-6%", width:440, height:440, borderRadius:"50%", background:"radial-gradient(circle,rgba(217,53,34,0.08) 0%,transparent 65%)", animation:"lmac-float2 14s ease-in-out infinite", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", top:"38%", right:"24%", width:160, height:160, borderRadius:"50%", background:"radial-gradient(circle,rgba(217,53,34,0.16) 0%,transparent 70%)", animation:"lmac-float3 8s ease-in-out infinite", pointerEvents:"none" }} />
 
         {/* Orbit rings */}
-        <div style={{ position:"absolute", right:-110, top:"50%", transform:"translateY(-50%)", width:520, height:520, borderRadius:"50%", border:"1px solid rgba(201,136,58,0.07)", animation:"lmac-orbit 58s linear infinite", pointerEvents:"none" }} />
-        <div style={{ position:"absolute", right:-65,  top:"50%", transform:"translateY(-50%)", width:380, height:380, borderRadius:"50%", border:"1px solid rgba(201,136,58,0.11)", animation:"lmac-orbit 38s linear infinite reverse", pointerEvents:"none" }} />
-        <div style={{ position:"absolute", right:-30,  top:"50%", transform:"translateY(-50%)", width:260, height:260, borderRadius:"50%", border:"1px solid rgba(201,136,58,0.16)", animation:"lmac-orbit 26s linear infinite", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", right:-110, top:"50%", transform:"translateY(-50%)", width:520, height:520, borderRadius:"50%", border:"1px solid rgba(217,53,34,0.07)", animation:"lmac-orbit 58s linear infinite", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", right:-65,  top:"50%", transform:"translateY(-50%)", width:380, height:380, borderRadius:"50%", border:"1px solid rgba(217,53,34,0.11)", animation:"lmac-orbit 38s linear infinite reverse", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", right:-30,  top:"50%", transform:"translateY(-50%)", width:260, height:260, borderRadius:"50%", border:"1px solid rgba(217,53,34,0.16)", animation:"lmac-orbit 26s linear infinite", pointerEvents:"none" }} />
 
         {/* Diagonal rays */}
-        <div style={{ position:"absolute", top:"-30%", left:"-8%", width:100, height:"220%", background:"linear-gradient(180deg,transparent,rgba(201,136,58,0.055),transparent)", transform:"rotate(-35deg)", pointerEvents:"none" }} />
-        <div style={{ position:"absolute", top:"-20%", left:"22%", width:55, height:"200%", background:"linear-gradient(180deg,transparent,rgba(232,168,78,0.038),transparent)", transform:"rotate(-35deg)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", top:"-30%", left:"-8%", width:100, height:"220%", background:"linear-gradient(180deg,transparent,rgba(217,53,34,0.055),transparent)", transform:"rotate(-35deg)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", top:"-20%", left:"22%", width:55, height:"200%", background:"linear-gradient(180deg,transparent,rgba(217,53,34,0.038),transparent)", transform:"rotate(-35deg)", pointerEvents:"none" }} />
 
         {/* Floating diamonds */}
-        <div style={{ position:"absolute", right:"8%", top:"16%", width:14, height:14, background:"rgba(201,136,58,0.26)", border:"1px solid rgba(201,136,58,0.52)", transform:"rotate(45deg)", animation:"lmac-diamond 6s ease-in-out infinite", pointerEvents:"none" }} />
-        <div style={{ position:"absolute", right:"26%", top:"68%", width:9, height:9, background:"rgba(232,168,78,0.20)", border:"1px solid rgba(232,168,78,0.46)", transform:"rotate(45deg)", animation:"lmac-diamond 8s ease-in-out infinite 1.5s", pointerEvents:"none" }} />
-        <div style={{ position:"absolute", left:"5%", bottom:"18%", width:11, height:11, background:"rgba(201,136,58,0.18)", border:"1px solid rgba(201,136,58,0.42)", transform:"rotate(45deg)", animation:"lmac-diamond 7s ease-in-out infinite 3s", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", right:"8%", top:"16%", width:14, height:14, background:"rgba(217,53,34,0.26)", border:"1px solid rgba(217,53,34,0.52)", transform:"rotate(45deg)", animation:"lmac-diamond 6s ease-in-out infinite", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", right:"26%", top:"68%", width:9, height:9, background:"rgba(217,53,34,0.20)", border:"1px solid rgba(217,53,34,0.46)", transform:"rotate(45deg)", animation:"lmac-diamond 8s ease-in-out infinite 1.5s", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", left:"5%", bottom:"18%", width:11, height:11, background:"rgba(217,53,34,0.18)", border:"1px solid rgba(217,53,34,0.42)", transform:"rotate(45deg)", animation:"lmac-diamond 7s ease-in-out infinite 3s", pointerEvents:"none" }} />
 
-        {/* ← Back to Home */}
+        {/* ← Back to Training */}
         <Link
-          to="/"
+          to="/training"
           style={{ position:"absolute", top:24, left:"clamp(24px,5vw,80px)", display:"inline-flex", alignItems:"center", gap:6, fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.36)", textDecoration:"none", zIndex:10, transition:"color 0.18s ease" }}
           onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.72)")}
           onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.36)")}
         >
           <i className="fas fa-arrow-left" style={{ fontSize:10 }} />
-          Back to Home
+          Back to Training
         </Link>
 
         {/* Centred content */}
@@ -328,11 +332,11 @@ export default function LMACoursesPage() {
           {/* Eyebrow chip */}
           <div style={{
             display:"inline-flex", alignItems:"center", gap:8, padding:"6px 16px 6px 11px",
-            borderRadius:999, border:"1px solid rgba(201,136,58,0.30)",
-            background:"rgba(201,136,58,0.10)", backdropFilter:"blur(8px)",
+            borderRadius:999, border:"1px solid rgba(217,53,34,0.30)",
+            background:"rgba(217,53,34,0.10)", backdropFilter:"blur(8px)",
             marginBottom:20, animation: pref ? "none" : "lmac-fadeUp 0.5s ease both",
           }}>
-            <span style={{ width:6, height:6, borderRadius:"50%", background:GOLD, boxShadow:"0 0 0 3px rgba(201,136,58,0.26)", animation:"lmac-pulse 2s ease-in-out infinite", flexShrink:0 }} />
+            <span style={{ width:6, height:6, borderRadius:"50%", background:GOLD, boxShadow:"0 0 0 3px rgba(217,53,34,0.26)", animation:"lmac-pulse 2s ease-in-out infinite", flexShrink:0 }} />
             <i className="fas fa-graduation-cap" style={{ fontSize:10, color:GOLD }} />
             <span style={{ fontSize:10.5, fontWeight:800, letterSpacing:"0.12em", textTransform:"uppercase", color:GOLD }}>
               XERXEZ Academy
@@ -368,7 +372,7 @@ export default function LMACoursesPage() {
                 fontSize:14.5, fontFamily:FF, outline:"none",
                 background: searchFocused ? "rgba(255,255,255,0.98)" : "rgba(255,255,255,0.92)",
                 boxShadow: searchFocused
-                  ? `0 4px 24px rgba(201,136,58,0.26),0 0 0 2px rgba(201,136,58,0.14)`
+                  ? `0 4px 24px rgba(217,53,34,0.26),0 0 0 2px rgba(217,53,34,0.14)`
                   : "0 4px 24px rgba(0,0,0,0.22)",
                 transition:"border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease",
                 boxSizing:"border-box", color:"#141413",
@@ -401,7 +405,7 @@ export default function LMACoursesPage() {
             fontSize:12, fontWeight:700, padding:"5px 14px", borderRadius:999,
             cursor:"pointer", flexShrink:0, fontFamily:FF,
             border:`1.5px solid ${level === l ? GOLD : "rgba(0,0,0,0.10)"}`,
-            background: level === l ? "rgba(201,136,58,0.10)" : "transparent",
+            background: level === l ? "rgba(217,53,34,0.10)" : "transparent",
             color: level === l ? GOLD : "rgba(20,20,19,0.52)",
             transition:"all 0.18s ease",
           }}>
@@ -415,7 +419,7 @@ export default function LMACoursesPage() {
             fontSize:12, fontWeight:700, padding:"5px 14px", borderRadius:999,
             cursor:"pointer", flexShrink:0, fontFamily:FF,
             border:`1.5px solid ${category === c ? GOLD : "rgba(0,0,0,0.10)"}`,
-            background: category === c ? "rgba(201,136,58,0.10)" : "transparent",
+            background: category === c ? "rgba(217,53,34,0.10)" : "transparent",
             color: category === c ? GOLD : "rgba(20,20,19,0.52)",
             transition:"all 0.18s ease",
           }}>
@@ -469,7 +473,7 @@ export default function LMACoursesPage() {
         @keyframes lmac-float2  { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-22px,30px)} }
         @keyframes lmac-float3  { 0%,100%{transform:translate(0,0)} 50%{transform:translate(16px,-18px)} }
         @keyframes lmac-orbit   { to{transform:translateY(-50%) rotate(360deg)} }
-        @keyframes lmac-pulse   { 0%,100%{box-shadow:0 0 0 3px rgba(201,136,58,0.26)} 50%{box-shadow:0 0 0 6px rgba(201,136,58,0.07)} }
+        @keyframes lmac-pulse   { 0%,100%{box-shadow:0 0 0 3px rgba(217,53,34,0.26)} 50%{box-shadow:0 0 0 6px rgba(217,53,34,0.07)} }
         @keyframes lmac-diamond { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(-10px)} }
         @keyframes lmac-shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
         @media (max-width:640px) {

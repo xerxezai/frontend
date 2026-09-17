@@ -82,7 +82,7 @@ function ChecklistForm({ checklist, onClose, onSaved }: { checklist?: any; onClo
                 </div>
               ))}
             </div>
-            <button type="button" onClick={addItem} style={{ marginTop: 8, background: 'none', border: 'none', color: '#C9883A', fontFamily: FF, fontWeight: 700, fontSize: 12, cursor: 'pointer', padding: 0 }}>
+            <button type="button" onClick={addItem} style={{ marginTop: 8, background: 'none', border: 'none', color: '#D93522', fontFamily: FF, fontWeight: 700, fontSize: 12, cursor: 'pointer', padding: 0 }}>
               <i className="fas fa-plus" style={{ marginRight: 5 }} />Add item
             </button>
           </div>
@@ -147,7 +147,7 @@ export default function SafetyChecklistPanel() {
   };
 
   const cols = [
-    { key: 'title', label: 'Title', width: 220, render: (r: any) => <span onClick={() => setViewing(r)} style={{ cursor: 'pointer', color: '#C9883A', fontWeight: 700 }}>{r.title}</span> },
+    { key: 'title', label: 'Title', width: 220, render: (r: any) => <span onClick={() => setViewing(r)} style={{ cursor: 'pointer', color: '#D93522', fontWeight: 700 }}>{r.title}</span> },
     { key: 'checklist_type', label: 'Type', render: (r: any) => TYPE_LABEL[r.checklist_type] ?? r.checklist_type },
     { key: 'date', label: 'Date' },
     { key: 'location', label: 'Location', render: (r: any) => r.location || '—' },

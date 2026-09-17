@@ -6,12 +6,12 @@ import {
 } from "lucide-react";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
-const GOLD      = "#C9883A";
-const GOLD_G    = "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)";
-const GOLD_DEEP = "rgba(150,95,30,0.50)";
-const DARK      = "#1a1208";
-const DARKER    = "#0f0a05";
-const CREAM     = "#F8F7F4";
+const GOLD      = "#D93522";
+const GOLD_G    = "#D93522";
+const GOLD_DEEP = "rgba(139,31,23,0.50)";
+const DARK      = "#0f2c4d";
+const DARKER    = "#071a33";
+const CREAM     = "#F4F7FA";
 const WHITE     = "#FFFFFF";
 const FF        = "'DM Sans', sans-serif";
 const API       = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
@@ -71,7 +71,7 @@ function Confetti() {
     const ctx = canvas.getContext("2d")!;
     canvas.width  = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    const colors = [GOLD, "#e8a84e", "#fff", "#f59e0b", "#fbbf24", "#d97706"];
+    const colors = [GOLD, "#ff6b52", "#fff", "#8B1F17", "#ffffff", "#b02d1a"];
     type P = { x: number; y: number; vx: number; vy: number; r: number; c: string; rot: number; vrot: number; };
     const particles: P[] = Array.from({ length: 90 }, () => ({
       x: canvas.width / 2 + (Math.random() - 0.5) * 60,
@@ -118,7 +118,7 @@ const FloatLabel = ({ id, label, type = "text", value, onChange, icon, error, va
         position: "relative",
         border: `1.5px solid ${error ? "#ef4444" : foc ? GOLD : valid ? "#10b981" : "rgba(0,0,0,0.13)"}`,
         borderRadius: 11, background: WHITE,
-        boxShadow: foc ? `0 0 0 3px ${error ? "rgba(239,68,68,0.12)" : "rgba(201,136,58,0.14)"}` : "none",
+        boxShadow: foc ? `0 0 0 3px ${error ? "rgba(239,68,68,0.12)" : "rgba(217,53,34,0.14)"}` : "none",
         transition: "border-color 200ms, box-shadow 200ms",
       }}>
         {/* Floating label */}
@@ -188,7 +188,7 @@ const FloatTextarea = ({ id, label, value, onChange, icon, rows = 3, error, vali
         position: "relative",
         border: `1.5px solid ${error ? "#ef4444" : foc ? GOLD : valid ? "#10b981" : "rgba(0,0,0,0.13)"}`,
         borderRadius: 11, background: WHITE,
-        boxShadow: foc ? `0 0 0 3px ${error ? "rgba(239,68,68,0.12)" : "rgba(201,136,58,0.14)"}` : "none",
+        boxShadow: foc ? `0 0 0 3px ${error ? "rgba(239,68,68,0.12)" : "rgba(217,53,34,0.14)"}` : "none",
         transition: "border-color 200ms, box-shadow 200ms",
       }}>
         <label htmlFor={id} style={{
@@ -317,7 +317,7 @@ const SuccessState = ({ email }: { email: string }) => {
             border: "none", borderRadius: 12, fontSize: 15, fontWeight: 700,
             fontFamily: FF, cursor: "pointer", display: "flex",
             alignItems: "center", justifyContent: "center", gap: 8,
-            boxShadow: `0 4px 0 ${GOLD_DEEP}, 0 6px 20px rgba(201,136,58,0.28)`,
+            boxShadow: `0 4px 0 ${GOLD_DEEP}, 0 6px 20px rgba(217,53,34,0.28)`,
           }}
         >
           Sign In to Academy <ArrowRight size={15} />
@@ -472,9 +472,9 @@ export default function BecomeInstructorPage() {
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
 
           {/* Orbs */}
-          <span style={{ position:"absolute", top:"-12%", left:"-10%", width:500, height:500, borderRadius:"50%", background:"radial-gradient(circle, rgba(201,136,58,0.16) 0%, transparent 65%)", animation:"biOrb1 8s ease-in-out infinite", pointerEvents:"none", zIndex:0 }} />
-          <span style={{ position:"absolute", bottom:"-18%", right:"-8%", width:420, height:420, borderRadius:"50%", background:"radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)", animation:"biOrb1 11s 3s ease-in-out infinite", pointerEvents:"none", zIndex:0 }} />
-          <span style={{ position:"absolute", top:"42%", right:"12%", width:200, height:200, borderRadius:"50%", background:"radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 65%)", animation:"biOrb1 9s 5s ease-in-out infinite", pointerEvents:"none", zIndex:0 }} />
+          <span style={{ position:"absolute", top:"-12%", left:"-10%", width:500, height:500, borderRadius:"50%", background:"radial-gradient(circle, rgba(217,53,34,0.16) 0%, transparent 65%)", animation:"biOrb1 8s ease-in-out infinite", pointerEvents:"none", zIndex:0 }} />
+          <span style={{ position:"absolute", bottom:"-18%", right:"-8%", width:420, height:420, borderRadius:"50%", background:"radial-gradient(circle, rgba(217,53,34,0.10) 0%, transparent 65%)", animation:"biOrb1 11s 3s ease-in-out infinite", pointerEvents:"none", zIndex:0 }} />
+          <span style={{ position:"absolute", top:"42%", right:"12%", width:200, height:200, borderRadius:"50%", background:"radial-gradient(circle, rgba(217,53,34,0.08) 0%, transparent 65%)", animation:"biOrb1 9s 5s ease-in-out infinite", pointerEvents:"none", zIndex:0 }} />
 
           {/* Floating particles */}
           {[
@@ -483,13 +483,15 @@ export default function BecomeInstructorPage() {
             { top:"72%", left:"72%", d:5, a:"biFloat3 7s 0.8s ease-in-out infinite" },
             { top:"30%", left:"20%", d:3, a:"biFloat4 9s 2.2s ease-in-out infinite" },
           ].map((p, i) => (
-            <span key={i} style={{ position:"absolute", top:p.top, left:p.left, width:p.d, height:p.d, borderRadius:"50%", background:`rgba(201,136,58,0.55)`, animation:p.a, pointerEvents:"none", zIndex:0 }} />
+            <span key={i} style={{ position:"absolute", top:p.top, left:p.left, width:p.d, height:p.d, borderRadius:"50%", background:`rgba(217,53,34,0.55)`, animation:p.a, pointerEvents:"none", zIndex:0 }} />
           ))}
 
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Logo */}
             <div style={{ marginBottom: 28, animation: "biFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both" }}>
-              <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ Academy" style={{ height: 70, width: "auto" }} />
+              <Link to="/">
+                <img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ Academy" style={{ height: 70, width: "auto" }} />
+              </Link>
             </div>
 
             {/* Headline — letter-by-letter rotateX reveal */}
@@ -717,8 +719,8 @@ function SubmitBtn({ loading, disabled }: { loading: boolean; disabled: boolean 
         cursor: off ? "not-allowed" : "pointer",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
         boxShadow: hov && !off
-          ? `0 6px 0 ${GOLD_DEEP}, 0 10px 28px rgba(201,136,58,0.35)`
-          : off ? "none" : `0 4px 0 ${GOLD_DEEP}, 0 6px 20px rgba(201,136,58,0.28)`,
+          ? `0 6px 0 ${GOLD_DEEP}, 0 10px 28px rgba(217,53,34,0.35)`
+          : off ? "none" : `0 4px 0 ${GOLD_DEEP}, 0 6px 20px rgba(217,53,34,0.28)`,
         transform: hov && !off ? "translateY(-2px)" : "translateY(0)",
         transition: "transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms, background 180ms",
         overflow: "hidden", position: "relative",

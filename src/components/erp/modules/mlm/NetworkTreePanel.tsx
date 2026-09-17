@@ -49,7 +49,7 @@ function TreeNodeView({ node, query, depth }: { node: TreeNode; query: string; d
         )}
         <Card3D accent={LEVEL_COLOR[node.level] || OG} p="12px 16px" style={{
           display: 'inline-flex', alignItems: 'center', gap: 12, minWidth: 340,
-          ...(isMatch ? { outline: '2px solid #C9883A', boxShadow: '0 0 0 4px rgba(201,136,58,0.18)', background: '#fffaf1' } : {}),
+          ...(isMatch ? { outline: '2px solid #D93522', boxShadow: '0 0 0 4px rgba(217,53,34,0.18)', background: '#fffaf1' } : {}),
         }}>
           {hasChildren ? (
             <button onClick={() => setExpanded(e => !e)} title={expanded ? 'Collapse' : 'Expand'}
@@ -74,7 +74,7 @@ function TreeNodeView({ node, query, depth }: { node: TreeNode; query: string; d
           </div>
         </Card3D>
         {hasMatchingDescendant && !expanded && (
-          <span style={{ marginLeft: 10, fontSize: 11, color: '#C9883A', fontFamily: FF, fontWeight: 700 }}>● match below</span>
+          <span style={{ marginLeft: 10, fontSize: 11, color: '#D93522', fontFamily: FF, fontWeight: 700 }}>● match below</span>
         )}
       </div>
       {hasChildren && expanded && (

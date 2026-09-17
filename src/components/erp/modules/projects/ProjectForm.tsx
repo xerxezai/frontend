@@ -117,8 +117,8 @@ export default function ProjectForm({ project, onClose, onSaved }: { project?: a
                   <button type="button" key={u.id} onClick={() => toggleTeamMember(id)}
                     style={{
                       fontFamily: FF, fontSize: 11.5, fontWeight: 700, padding: '5px 10px', borderRadius: 20, cursor: 'pointer',
-                      background: active ? 'rgba(201,136,58,0.14)' : '#fff', color: active ? '#C9883A' : '#6B6B6B',
-                      border: active ? '1px solid rgba(201,136,58,0.35)' : '1px solid rgba(0,0,0,0.10)',
+                      background: active ? 'rgba(217,53,34,0.14)' : '#fff', color: active ? '#D93522' : '#6B6B6B',
+                      border: active ? '1px solid rgba(217,53,34,0.35)' : '1px solid rgba(0,0,0,0.10)',
                     }}>
                     {active && <i className="fas fa-check" style={{ fontSize: 9, marginRight: 5 }} />}{u.name}
                   </button>

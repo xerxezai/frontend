@@ -4,7 +4,7 @@ import { erpFetch } from '../../../../hooks/useERPApi';
 import { OG, FF, WHITE, BORDER, useFmtCurrency, KpiCard } from './mlmShared';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
-const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#f59e0b', '#10b981', '#6366f1', '#ec4899', '#64748b'];
+const PIE_COLORS = [OG, '#0D9488', '#1d4ed8', '#8b5cf6', '#ef4444', '#D93522', '#10b981', '#6366f1', '#ec4899', '#64748b'];
 
 interface TopPerformer { id: number; distributor_id: string; name: string; level: number; total_sales: number; total_earnings: number; }
 interface DashboardData {
@@ -64,7 +64,7 @@ export default function MLMDashboard() {
         <KpiCard icon="fas fa-users" label="Total Distributors" value={String(data.total_distributors)} accent={OG} />
         <KpiCard icon="fas fa-user-check" label="Active Distributors" value={String(data.active_distributors)} accent="#10b981" />
         <KpiCard icon="fas fa-sack-dollar" label="Total Commissions This Month" value={fmtINR(data.total_commissions_this_month)} accent="#1d4ed8" />
-        <KpiCard icon="fas fa-hourglass-half" label="Pending Payouts" value={String(data.pending_payouts)} accent="#f59e0b" />
+        <KpiCard icon="fas fa-hourglass-half" label="Pending Payouts" value={String(data.pending_payouts)} accent="#D93522" />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 18, marginBottom: 22 }}>
@@ -79,7 +79,7 @@ export default function MLMDashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
                 <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 11, fill: '#6B6B6B', fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${symbol}${(v / 1000).toFixed(0)}k`} />
-                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(201,136,58,0.06)' }} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(217,53,34,0.06)' }} />
                 <Bar dataKey="total" name="Commissions" fill={OG} radius={[4, 4, 0, 0]} isAnimationActive animationDuration={700} />
               </BarChart>
             </ResponsiveContainer>

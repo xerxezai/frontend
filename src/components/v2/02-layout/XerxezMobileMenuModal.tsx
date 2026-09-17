@@ -30,7 +30,7 @@ const XerxezMobileMenuModal = ({ isOpen, toggle }: V2MobileMenuModalProps) => {
             <div className="offcanvas__content">
               <div className="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
-                  <Link to="/v2">
+                  <Link to="/">
                     <Image
                       src="/assets/img/logo/xerxez_logo.png"
                       alt="Xerxez Solutions"
@@ -104,7 +104,7 @@ const XerxezMobileMenuModal = ({ isOpen, toggle }: V2MobileMenuModalProps) => {
                   </li>
                 </ul>
               </div>
-              <Link to="/v2/contact" className="theme-btn" onClick={toggle}>
+              <Link to="/contact" className="theme-btn" onClick={toggle}>
                 <span>Get a Quote</span> <i className="far fa-arrow-right"></i>
               </Link>
             </div>

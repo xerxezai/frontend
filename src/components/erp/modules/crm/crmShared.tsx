@@ -2,14 +2,14 @@ import { useState, type CSSProperties, type ReactNode } from 'react';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 // ── XERXEZ brand tokens ──────────────────────────────────────────────────────
-export const OG    = '#C9883A';
-export const OG_G  = 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)';
-export const DARK  = '#1a1208';
+export const OG    = '#D93522';
+export const OG_G  = 'linear-gradient(145deg,#D93522 0%,#D93522 100%)';
+export const DARK  = '#071a33';
 export const CREAM = '#F8F7F4';
 export const WHITE = '#FFFFFF';
 export const FF    = "'DM Sans',sans-serif";
 export const BCARD = '0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)';
-export const BHOV  = '0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)';
+export const BHOV  = '0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.12)';
 export const BORDER = 'rgba(0,0,0,0.08)';
 
 export const inp: CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:FF,fontSize:13,outline:'none',boxSizing:'border-box' };
@@ -17,7 +17,7 @@ export const lbl: CSSProperties = { display:'block',fontSize:11,fontWeight:700,c
 export const SAVE: CSSProperties = { background:OG_G,color:'#fff',border:'none',borderRadius:9,padding:'9px 20px',fontFamily:FF,fontWeight:700,fontSize:13,cursor:'pointer' };
 export const CNCL: CSSProperties = { background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRadius:9,padding:'9px 20px',cursor:'pointer',fontFamily:FF,fontWeight:600,fontSize:13 };
 export const OVR: CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
-export const CRD: CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:560,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'88vh',overflowY:'auto' };
+export const CRD: CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:560,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #D93522',maxHeight:'88vh',overflowY:'auto' };
 
 export function DelDlg({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
   return (
@@ -107,8 +107,8 @@ export const ACTIVITY_TYPES: { key: string; label: string; icon: string; color: 
   { key: 'meeting',   label: 'Meeting',   icon: 'fas fa-handshake',     color: '#10b981', bg: 'rgba(16,185,129,0.10)' },
   { key: 'email',     label: 'Email',     icon: 'fas fa-envelope',      color: '#14b8a6', bg: 'rgba(20,184,166,0.10)' },
   { key: 'demo',      label: 'Demo',      icon: 'fas fa-desktop',       color: '#8b5cf6', bg: 'rgba(139,92,246,0.10)' },
-  { key: 'task',      label: 'Task',      icon: 'fas fa-check-square',  color: OG,        bg: 'rgba(201,136,58,0.10)' },
-  { key: 'follow_up', label: 'Follow Up', icon: 'fas fa-bell',          color: OG,        bg: 'rgba(201,136,58,0.10)' },
+  { key: 'task',      label: 'Task',      icon: 'fas fa-check-square',  color: OG,        bg: 'rgba(217,53,34,0.10)' },
+  { key: 'follow_up', label: 'Follow Up', icon: 'fas fa-bell',          color: OG,        bg: 'rgba(217,53,34,0.10)' },
   { key: 'note',      label: 'Note',      icon: 'fas fa-sticky-note',   color: '#6b7280', bg: 'rgba(107,114,128,0.10)' },
 ];
 export const activityTypeMeta = (key: string) => ACTIVITY_TYPES.find(a => a.key === key) ?? ACTIVITY_TYPES[ACTIVITY_TYPES.length - 1];
@@ -147,7 +147,7 @@ export interface CustomerNote {
 export const STAGES: { key: DealStage; label: string; color: string; bg: string; columnBg: string; grad: string }[] = [
   { key: 'new',         label: 'New',          color: '#6b7280', bg: 'rgba(107,114,128,0.09)', columnBg: '#F8F9FA', grad: 'linear-gradient(135deg,#9ca3af,#6b7280)' },
   { key: 'contacted',   label: 'Contacted',     color: '#3b82f6', bg: 'rgba(59,130,246,0.09)',  columnBg: '#EFF6FF', grad: 'linear-gradient(135deg,#60a5fa,#3b82f6)' },
-  { key: 'proposal',    label: 'Proposal Sent', color: OG,        bg: 'rgba(201,136,58,0.09)',  columnBg: '#FFF7ED', grad: OG_G },
+  { key: 'proposal',    label: 'Proposal Sent', color: OG,        bg: 'rgba(217,53,34,0.09)',  columnBg: '#FFF7ED', grad: OG_G },
   { key: 'negotiation', label: 'Negotiation',   color: '#8b5cf6', bg: 'rgba(139,92,246,0.09)',  columnBg: '#FAF5FF', grad: 'linear-gradient(135deg,#a78bfa,#8b5cf6)' },
   { key: 'won',         label: 'Won',           color: '#10b981', bg: 'rgba(16,185,129,0.09)',  columnBg: '#F0FDF4', grad: 'linear-gradient(135deg,#34d399,#10b981)' },
   { key: 'lost',        label: 'Lost',          color: '#ef4444', bg: 'rgba(239,68,68,0.09)',   columnBg: '#FFF1F2', grad: 'linear-gradient(135deg,#f87171,#ef4444)' },
@@ -159,7 +159,7 @@ export const NOTE_TYPES: { key: CustomerNote['note_type']; label: string; icon: 
   { key: 'call',      label: 'Phone Call',   icon: 'fas fa-phone',        color: '#3b82f6', bg: 'rgba(59,130,246,0.10)' },
   { key: 'meeting',   label: 'Meeting',      icon: 'fas fa-handshake',    color: '#10b981', bg: 'rgba(16,185,129,0.10)' },
   { key: 'email',     label: 'Email',        icon: 'fas fa-envelope',     color: '#14b8a6', bg: 'rgba(20,184,166,0.10)' },
-  { key: 'follow_up', label: 'Follow Up',    icon: 'fas fa-bell',         color: OG,        bg: 'rgba(201,136,58,0.10)' },
+  { key: 'follow_up', label: 'Follow Up',    icon: 'fas fa-bell',         color: OG,        bg: 'rgba(217,53,34,0.10)' },
   { key: 'general',   label: 'General',      icon: 'fas fa-sticky-note',  color: '#6b7280', bg: 'rgba(107,114,128,0.10)' },
 ];
 

@@ -16,7 +16,7 @@ const cardStyle: React.CSSProperties = {
 
 // ── same 6-color families as the ERP dashboard's section gradients ──────────
 const GRAD = {
-  gold:   { from: '#e8a84e', to: OG },
+  gold:   { from: OG, to: '#8B1F17' },
   green:  { from: '#22c55e', to: '#15803d' },
   orange: { from: '#f0993e', to: '#c2540a' },
   blue:   { from: '#3b82f6', to: '#1d4ed8' },
@@ -124,8 +124,8 @@ const PartnerDashboard = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
           <Link to="/partner/submit-deal" style={{
             display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none',
-            background: `linear-gradient(145deg,#e8a84e,${OG})`, color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 13.5,
-            padding: '11px 20px', borderRadius: 10, boxShadow: '0 4px 0 rgba(120,70,15,0.50), 0 8px 24px rgba(201,136,58,0.25)',
+            background: OG, color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 13.5,
+            padding: '11px 20px', borderRadius: 10, boxShadow: '0 4px 0 rgba(139,31,23,0.50), 0 8px 24px rgba(217,53,34,0.25)',
           }}>
             <i className="fas fa-plus" style={{ fontSize: 12 }} /> Submit New Deal
           </Link>
@@ -157,7 +157,7 @@ const PartnerDashboard = () => {
 
         <div style={{ ...cardStyle, animation: 'prtlFadeUp 0.48s cubic-bezier(0.22,1,0.36,1) 0.4s both' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 20, fontWeight: 700, color: '#141413', margin: 0 }}>
+            <h3 style={{ fontFamily: FF, fontSize: 20, fontWeight: 700, color: '#141413', margin: 0 }}>
               Recent Deals
             </h3>
             <Link to="/partner/deals" style={{ fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: OG, textDecoration: 'none' }}>

@@ -41,7 +41,7 @@ function MonthCalendar({ activities, selectedDate, onSelectDate }: { activities:
             <button key={i} onClick={() => onSelectDate(isSelected ? '' : dateStr)}
               style={{
                 aspectRatio: '1', border: isSelected ? `1.5px solid ${OG}` : '1px solid transparent', borderRadius: 8, cursor: 'pointer',
-                background: isSelected ? 'rgba(201,136,58,0.10)' : isToday ? 'rgba(201,136,58,0.05)' : 'transparent',
+                background: isSelected ? 'rgba(217,53,34,0.10)' : isToday ? 'rgba(217,53,34,0.05)' : 'transparent',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, fontFamily: FF,
               }}>
               <span style={{ fontSize: 12, fontWeight: isToday ? 800 : 500, color: isToday ? OG : '#1A1A1A' }}>{day}</span>
@@ -151,7 +151,7 @@ export default function ActivitiesPanel() {
       key: 'completed', label: 'Status', render: (r: any) => r.completed
         ? <span style={{ fontSize: 11, fontWeight: 700, color: '#065f46', background: '#d1fae5', padding: '2px 10px', borderRadius: 20, fontFamily: FF }}>Completed</span>
         : r.due_date ? (
-          <button onClick={() => markComplete(r.id)} style={{ fontSize: 11, fontWeight: 700, color: OG, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.28)', padding: '3px 10px', borderRadius: 20, fontFamily: FF, cursor: 'pointer' }}>Mark Complete</button>
+          <button onClick={() => markComplete(r.id)} style={{ fontSize: 11, fontWeight: 700, color: OG, background: 'rgba(217,53,34,0.10)', border: '1px solid rgba(217,53,34,0.28)', padding: '3px 10px', borderRadius: 20, fontFamily: FF, cursor: 'pointer' }}>Mark Complete</button>
         ) : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>,
     },
   ];
@@ -247,7 +247,7 @@ export default function ActivitiesPanel() {
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                   {(['customer', 'lead'] as const).map(t => (
                     <button key={t} type="button" onClick={() => setActF(f => ({ ...f, linkType: t }))}
-                      style={{ flex: 1, padding: '8px', borderRadius: 8, cursor: 'pointer', fontFamily: FF, fontSize: 12.5, fontWeight: 700, textTransform: 'capitalize', border: actF.linkType === t ? `1.5px solid ${OG}` : '1px solid rgba(0,0,0,0.10)', background: actF.linkType === t ? 'rgba(201,136,58,0.08)' : '#fff', color: actF.linkType === t ? OG : '#6B6B6B' }}>
+                      style={{ flex: 1, padding: '8px', borderRadius: 8, cursor: 'pointer', fontFamily: FF, fontSize: 12.5, fontWeight: 700, textTransform: 'capitalize', border: actF.linkType === t ? `1.5px solid ${OG}` : '1px solid rgba(0,0,0,0.10)', background: actF.linkType === t ? 'rgba(217,53,34,0.08)' : '#fff', color: actF.linkType === t ? OG : '#6B6B6B' }}>
                       {t}
                     </button>
                   ))}

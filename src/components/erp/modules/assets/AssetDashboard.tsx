@@ -13,7 +13,7 @@ interface DashboardData {
   maintenance_cost_this_month: number;
 }
 
-const PIE_COLORS = ['#C9883A', '#1d4ed8', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#64748b'];
+const PIE_COLORS = ['#D93522', '#1d4ed8', '#10b981', '#D93522', '#8b5cf6', '#ef4444', '#64748b'];
 
 export default function AssetDashboard() {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ export default function AssetDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14, marginBottom: 22 }}>
         <KpiCard icon="fas fa-toolbox" label="Total Assets" value={String(data?.total_assets ?? 0)} accent={OG} />
         <KpiCard icon="fas fa-check-circle" label="Active" value={String(data?.active_assets ?? 0)} accent="#10b981" />
-        <KpiCard icon="fas fa-wrench" label="Under Maintenance" value={String(data?.under_maintenance ?? 0)} accent="#f59e0b" />
+        <KpiCard icon="fas fa-wrench" label="Under Maintenance" value={String(data?.under_maintenance ?? 0)} accent="#D93522" />
         <KpiCard icon="fas fa-exclamation-triangle" label="Due for Maintenance" value={String(data?.due_for_maintenance ?? 0)} accent="#ef4444" />
         <KpiCard icon="fas fa-coins" label="Total Value" value={fmtINR(data?.total_asset_value ?? 0)} accent="#1d4ed8" />
       </div>

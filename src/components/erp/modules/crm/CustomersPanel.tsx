@@ -8,7 +8,7 @@ import CustomerProfilePanel from './CustomerProfilePanel';
 import PhoneInput from '../../../common/PhoneInput';
 
 const TAG_COLORS: Record<string, { bg: string; color: string }> = {
-  VIP: { bg: 'rgba(201,136,58,0.14)', color: OG },
+  VIP: { bg: 'rgba(217,53,34,0.14)', color: OG },
   Prospect: { bg: 'rgba(59,130,246,0.12)', color: '#1d4ed8' },
   Inactive: { bg: 'rgba(107,114,128,0.12)', color: '#6b7280' },
 };

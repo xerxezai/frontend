@@ -69,9 +69,14 @@ export const CompanyProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => { fetchMyCompany(); }, []);
 
   const switchCompany = async (id: number | null) => {
+    // Confirm the switch with the backend BEFORE touching localStorage — writing
+    // the new id first (the old order) meant a failed/rejected switch still left
+    // localStorage pointing at a company the server never actually activated, so
+    // the X-Active-Company-Id header on every later request would keep sending
+    // the wrong (unconfirmed) id. Let the caller handle/display any error.
+    await erpFetch('companies/switch/', { method: 'POST', body: JSON.stringify({ company_id: id }) });
     if (id) localStorage.setItem(ACTIVE_COMPANY_KEY, String(id));
     else localStorage.removeItem(ACTIVE_COMPANY_KEY);
-    await erpFetch('companies/switch/', { method: 'POST', body: JSON.stringify({ company_id: id }) });
     await fetchMyCompany();
   };
 

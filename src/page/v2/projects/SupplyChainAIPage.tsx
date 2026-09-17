@@ -1,8 +1,8 @@
 // SupplyChainAIPage.tsx
-// Purpose: /v2/project/supply-chain-ai — case study data for the Supply
+// Purpose: /project/supply-chain-ai — case study data for the Supply
 //          Chain AI Optimization project, rendered through
 //          <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/supply-chain-ai)
+// Used in: src/App.tsx (route: /project/supply-chain-ai)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -13,7 +13,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "Supply Chain AI Optimization | Case Study | XERXEZ",
   seoDesc: "How XERXEZ built AI-driven inventory optimization for a large manufacturer — 28% inventory cost reduction, 40% fewer stockouts, $14M working capital freed.",
-  canonical: "/v2/project/supply-chain-ai",
+  canonical: "/project/supply-chain-ai",
 
   category: "AI & ERP",
   industry: "Manufacturing & Logistics",
@@ -59,8 +59,8 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "5 engineers" },
   ],
 
-  prev: { title: "Digital Transformation Roadmap", href: "/v2/project/digital-transformation" },
-  next: { title: "Kubernetes Security Hardening", href: "/v2/project/kubernetes-security" },
+  prev: { title: "Digital Transformation Roadmap", href: "/project/digital-transformation" },
+  next: { title: "Kubernetes Security Hardening", href: "/project/kubernetes-security" },
 };
 
 const SupplyChainAIPage = () => <ProjectCaseStudyTemplate data={data} />;

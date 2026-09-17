@@ -3,12 +3,12 @@ import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import SEO from "../../components/seo/SEO";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
-const CREAM = "#F8F7F4";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
+const DARK  = "#071a33";
+const CREAM = "#F4F7FA";
 const FF    = "'DM Sans', sans-serif";
-const OD    = "#a06822"; // orangeDeep
+const OD    = "#8B1F17"; // orangeDeep
 
 /* ════════════════════════════════════════
    SUB-COMPONENTS  (ERP / LMA login parity)
@@ -66,7 +66,7 @@ const InputBadge = ({ icon, focused }: { icon: string; focused: boolean }) => (
       ? `linear-gradient(135deg,${AMBER},${GOLD})`
       : "linear-gradient(135deg,rgba(0,0,0,0.08),rgba(0,0,0,0.05))",
     display: "flex", alignItems: "center", justifyContent: "center",
-    boxShadow: focused ? "0 2px 8px rgba(201,136,58,0.35)" : "none",
+    boxShadow: focused ? "0 2px 8px rgba(217,53,34,0.35)" : "none",
     transition: "all 0.20s ease",
   }}>
     <i className={`fas fa-${icon}`} style={{ fontSize: 11, color: focused ? "#0a0806" : "#9ca3af" }} />
@@ -100,7 +100,7 @@ const PrimaryBtn = ({ label, onClick, busy, disabled }: {
         fontFamily: FF, letterSpacing: "-0.01em",
         transform: hov && !off ? "translateY(-2px)" : "none",
         boxShadow: hov && !off
-          ? `0 6px 0 ${OD},0 10px 28px rgba(201,136,58,0.35)`
+          ? `0 6px 0 ${OD},0 10px 28px rgba(217,53,34,0.35)`
           : off ? "none" : `0 4px 0 ${OD}`,
         transition: "transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease",
       }}
@@ -128,9 +128,9 @@ const InputRow = ({ foc }: { foc: boolean }) => ({
   display: "flex", alignItems: "center", gap: 10,
   border: `1.5px solid ${foc ? GOLD : "rgba(0,0,0,0.13)"}`,
   borderRadius: 11, padding: "0 10px 0 12px",
-  background: foc ? "rgba(201,136,58,0.025)" : "#fff",
+  background: foc ? "rgba(217,53,34,0.025)" : "#fff",
   transition: "border-color 0.20s ease, background 0.20s ease",
-  boxShadow: foc ? "0 0 0 3px rgba(201,136,58,0.10)" : "none",
+  boxShadow: foc ? "0 0 0 3px rgba(217,53,34,0.10)" : "none",
 });
 
 /* Error banner */
@@ -232,12 +232,12 @@ export default function LMARegisterPage() {
       for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
         const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = Math.sqrt(dx*dx+dy*dy);
         if (d < LINK) {
-          ctx.beginPath(); ctx.strokeStyle = `rgba(201,136,58,${0.14*(1-d/LINK)})`; ctx.lineWidth = 0.5;
+          ctx.beginPath(); ctx.strokeStyle = `rgba(217,53,34,${0.14*(1-d/LINK)})`; ctx.lineWidth = 0.5;
           ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
         }
       }
       pts.forEach(p => {
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = "rgba(201,136,58,0.28)"; ctx.fill();
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = "rgba(217,53,34,0.28)"; ctx.fill();
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > W) p.vx *= -1;
         if (p.y < 0 || p.y > H) p.vy *= -1;
@@ -295,7 +295,7 @@ export default function LMARegisterPage() {
           <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />
 
           {/* Dot grid */}
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(201,136,58,0.07) 1px,transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(217,53,34,0.07) 1px,transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none", zIndex: 0 }} />
 
           {/* Atmospheric orbs */}
           <div className="lmarg-orb lmarg-orb-1" />
@@ -303,8 +303,8 @@ export default function LMARegisterPage() {
           <div className="lmarg-orb lmarg-orb-3" />
 
           {/* Orbit ring */}
-          <div style={{ position: "absolute", bottom: "-30%", right: "-20%", width: 420, height: 420, borderRadius: "50%", border: "1px solid rgba(201,136,58,0.09)", animation: "lmarg-orbit 50s linear infinite", pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: 280, height: 280, borderRadius: "50%", border: "1px solid rgba(201,136,58,0.14)", animation: "lmarg-orbit 34s linear infinite reverse", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", bottom: "-30%", right: "-20%", width: 420, height: 420, borderRadius: "50%", border: "1px solid rgba(217,53,34,0.09)", animation: "lmarg-orbit 50s linear infinite", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: 280, height: 280, borderRadius: "50%", border: "1px solid rgba(217,53,34,0.14)", animation: "lmarg-orbit 34s linear infinite reverse", pointerEvents: "none", zIndex: 0 }} />
 
           {/* Floating diamonds */}
           <div className="lmarg-geo lmarg-geo-1" />
@@ -318,10 +318,10 @@ export default function LMARegisterPage() {
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               padding: "6px 16px 6px 10px", borderRadius: 999, marginBottom: 18,
-              border: "1px solid rgba(201,136,58,0.28)", background: "rgba(201,136,58,0.10)",
+              border: "1px solid rgba(217,53,34,0.28)", background: "rgba(217,53,34,0.10)",
               animation: "lmarg-fadeUp 0.55s ease both",
             }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: GOLD, boxShadow: `0 0 0 3px rgba(201,136,58,0.26)`, animation: "lmarg-pulse 2s ease-in-out infinite", flexShrink: 0 }} />
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: GOLD, boxShadow: `0 0 0 3px rgba(217,53,34,0.26)`, animation: "lmarg-pulse 2s ease-in-out infinite", flexShrink: 0 }} />
               <i className="fas fa-graduation-cap" style={{ fontSize: 10, color: GOLD }} />
               <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: GOLD }}>
                 Join XERXEZ Academy
@@ -506,15 +506,15 @@ export default function LMARegisterPage() {
         <style>{`
           /* Orbs */
           .lmarg-orb { position:absolute; border-radius:50%; pointer-events:none; }
-          .lmarg-orb-1 { top:-10%;left:-8%;width:480px;height:480px;background:radial-gradient(circle,rgba(201,136,58,0.11) 0%,transparent 65%);animation:lmarg-float1 11s ease-in-out infinite; }
-          .lmarg-orb-2 { bottom:-15%;right:-5%;width:360px;height:360px;background:radial-gradient(circle,rgba(232,168,78,0.07) 0%,transparent 65%);animation:lmarg-float2 14s ease-in-out infinite; }
-          .lmarg-orb-3 { top:42%;right:18%;width:140px;height:140px;background:radial-gradient(circle,rgba(201,136,58,0.16) 0%,transparent 70%);animation:lmarg-float3 8s ease-in-out infinite; }
+          .lmarg-orb-1 { top:-10%;left:-8%;width:480px;height:480px;background:radial-gradient(circle,rgba(217,53,34,0.11) 0%,transparent 65%);animation:lmarg-float1 11s ease-in-out infinite; }
+          .lmarg-orb-2 { bottom:-15%;right:-5%;width:360px;height:360px;background:radial-gradient(circle,rgba(217,53,34,0.07) 0%,transparent 65%);animation:lmarg-float2 14s ease-in-out infinite; }
+          .lmarg-orb-3 { top:42%;right:18%;width:140px;height:140px;background:radial-gradient(circle,rgba(217,53,34,0.16) 0%,transparent 70%);animation:lmarg-float3 8s ease-in-out infinite; }
 
           /* Floating diamonds */
           .lmarg-geo { position:absolute; pointer-events:none; transform:rotate(45deg); }
-          .lmarg-geo-1 { right:10%;top:14%;width:13px;height:13px;background:rgba(201,136,58,0.28);border:1px solid rgba(201,136,58,0.52);animation:lmarg-diamond 6s ease-in-out infinite; }
-          .lmarg-geo-2 { right:22%;bottom:28%;width:9px;height:9px;background:rgba(232,168,78,0.20);border:1px solid rgba(232,168,78,0.46);animation:lmarg-diamond 8s ease-in-out infinite 1.5s; }
-          .lmarg-geo-3 { left:8%;bottom:20%;width:11px;height:11px;background:rgba(201,136,58,0.18);border:1px solid rgba(201,136,58,0.42);animation:lmarg-diamond 7s ease-in-out infinite 3s; }
+          .lmarg-geo-1 { right:10%;top:14%;width:13px;height:13px;background:rgba(217,53,34,0.28);border:1px solid rgba(217,53,34,0.52);animation:lmarg-diamond 6s ease-in-out infinite; }
+          .lmarg-geo-2 { right:22%;bottom:28%;width:9px;height:9px;background:rgba(217,53,34,0.20);border:1px solid rgba(217,53,34,0.46);animation:lmarg-diamond 8s ease-in-out infinite 1.5s; }
+          .lmarg-geo-3 { left:8%;bottom:20%;width:11px;height:11px;background:rgba(217,53,34,0.18);border:1px solid rgba(217,53,34,0.42);animation:lmarg-diamond 7s ease-in-out infinite 3s; }
 
           /* Keyframes */
           @keyframes lmarg-fadeUp  { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
@@ -522,7 +522,7 @@ export default function LMARegisterPage() {
           @keyframes lmarg-float2  { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-22px,28px)} }
           @keyframes lmarg-float3  { 0%,100%{transform:translate(0,0)} 50%{transform:translate(16px,-18px)} }
           @keyframes lmarg-orbit   { to{transform:rotate(360deg)} }
-          @keyframes lmarg-pulse   { 0%,100%{box-shadow:0 0 0 3px rgba(201,136,58,0.26)} 50%{box-shadow:0 0 0 6px rgba(201,136,58,0.07)} }
+          @keyframes lmarg-pulse   { 0%,100%{box-shadow:0 0 0 3px rgba(217,53,34,0.26)} 50%{box-shadow:0 0 0 6px rgba(217,53,34,0.07)} }
           @keyframes lmarg-diamond { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(-9px)} }
           @keyframes lmarg-cardIn  { from{opacity:0;transform:translateY(28px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
           @keyframes lmarg-spin    { to{transform:rotate(360deg)} }

@@ -90,7 +90,7 @@ const Card = ({ s }: { s: Svc }) => {
       )}
 
       {/* margin-top:auto pins this link to the bottom so cards stay aligned */}
-      <Link to={`/v2/services/${s.slug}`} style={{
+      <Link to={`/services/${s.slug}`} style={{
         marginTop: "auto",
         display: "inline-flex", alignItems: "center", gap: 8,
         fontFamily: T.fontHead, fontSize: 14, fontWeight: 600, color: T.red,

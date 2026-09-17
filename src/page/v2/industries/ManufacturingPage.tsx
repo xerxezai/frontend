@@ -1,9 +1,9 @@
 // ManufacturingPage.tsx
-// Purpose: /v2/industries/manufacturing — sixth standalone industry detail
+// Purpose: /industries/manufacturing — sixth standalone industry detail
 //          page, same architecture as ConstructionPage.tsx (hero, overview,
 //          challenges, solutions, our-solution, key modules, results, then
 //          the shared Why XERXEZ + CTA sections).
-// Used in: src/App.tsx (route: /v2/industries/manufacturing)
+// Used in: src/App.tsx (route: /industries/manufacturing)
 // Data source: core facts (name/tagline/features) come from the
 //              "manufacturing" entry in src/data/erpIndustriesData.tsx
 //              (INDUSTRIES), which has its own specific painPoints/modules
@@ -90,7 +90,7 @@ const ManufacturingPage = () => (
     <SEO
       title={`${industry.name} AI-Powered Platform & Digital Solutions | XERXEZ`}
       description={industry.tagline}
-      canonical="/v2/industries/manufacturing"
+      canonical="/industries/manufacturing"
       noIndex
     />
 
@@ -100,7 +100,7 @@ const ManufacturingPage = () => (
       subtitle={HERO_SUBTITLE}
       heroImage={heroImage}
       highlights={HERO_FEATURES}
-      ctaButtons={[{ label: "Book a Demo", to: "/v2/contact" }]}
+      ctaButtons={[{ label: "Book a Demo", to: "/contact" }]}
       minHeight="82svh"
       maxWidth={680}
       titleSize="clamp(34px, 5vw, 56px)"
@@ -194,7 +194,7 @@ const ManufacturingPage = () => (
               <SectionHeading eyebrow="Our Solution" title="Built for Plant Managers &amp; Production Teams" subtitle="One AI-powered platform that connects production planning, inventory and quality — so a shortage or a defect gets caught on the floor, not at the customer." />
               <Checklist items={HERO_FEATURES} />
               <div style={{ marginTop: 24 }}>
-                <Btn to="/v2/contact">Discuss your project</Btn>
+                <Btn to="/contact">Discuss your project</Btn>
               </div>
             </Reveal>
           </div>

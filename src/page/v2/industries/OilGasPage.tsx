@@ -1,11 +1,11 @@
 // OilGasPage.tsx
-// Purpose: /v2/industries/oil-gas — the first standalone industry detail
+// Purpose: /industries/oil-gas — the first standalone industry detail
 //          page (etiot.in-style: hero, overview, challenges, solutions,
 //          our-solution, features, results, then the shared Why XERXEZ +
 //          CTA sections). Previously this sector only had a card in the
 //          header's Industry We Serve dropdown linking to a hash anchor on
 //          the ERP Industries service page; this is its own real page.
-// Used in: src/App.tsx (route: /v2/industries/oil-gas)
+// Used in: src/App.tsx (route: /industries/oil-gas)
 // Data source: the industry's core facts — name, tagline, the 3 `features`,
 //              the 4 `painPoints`, the 6 `modules` — come from the "oil-gas"
 //              entry in src/data/erpIndustriesData.tsx (INDUSTRIES +
@@ -99,7 +99,7 @@ const OilGasPage = () => (
     <SEO
       title={`${industry.name} AI-Powered Platform & Digital Solutions | XERXEZ`}
       description={industry.tagline}
-      canonical="/v2/industries/oil-gas"
+      canonical="/industries/oil-gas"
       noIndex
     />
 
@@ -109,7 +109,7 @@ const OilGasPage = () => (
       subtitle={HERO_SUBTITLE}
       heroImage={heroImage}
       highlights={industry.features}
-      ctaButtons={[{ label: "Book a Demo", to: "/v2/contact" }]}
+      ctaButtons={[{ label: "Book a Demo", to: "/contact" }]}
       minHeight="82svh"
       maxWidth={680}
       titleSize="clamp(34px, 5vw, 56px)"

@@ -242,7 +242,7 @@ function ShiftFormPanel({ initial, employees, onClose, onSaved }: {
                 <button key={p.key} type="button" onClick={() => setForm(f => ({ ...f, start_time: p.start, end_time: p.end }))}
                   style={{
                     border: active ? `1.5px solid ${OG}` : `1px solid ${BORDER}`, borderRadius: 8, padding: '5px 12px',
-                    background: active ? 'rgba(201,136,58,0.10)' : CREAM, color: active ? OG : MUTED,
+                    background: active ? 'rgba(217,53,34,0.10)' : CREAM, color: active ? OG : MUTED,
                     fontFamily: FF, fontSize: 11.5, fontWeight: active ? 700 : 600, cursor: 'pointer',
                   }}>
                   {p.label}
@@ -253,7 +253,7 @@ function ShiftFormPanel({ initial, employees, onClose, onSaved }: {
               style={{
                 border: !SHIFT_PRESETS.some(p => p.start === form.start_time && p.end === form.end_time) ? `1.5px solid ${OG}` : `1px solid ${BORDER}`,
                 borderRadius: 8, padding: '5px 12px',
-                background: !SHIFT_PRESETS.some(p => p.start === form.start_time && p.end === form.end_time) ? 'rgba(201,136,58,0.10)' : CREAM,
+                background: !SHIFT_PRESETS.some(p => p.start === form.start_time && p.end === form.end_time) ? 'rgba(217,53,34,0.10)' : CREAM,
                 color: !SHIFT_PRESETS.some(p => p.start === form.start_time && p.end === form.end_time) ? OG : MUTED,
                 fontFamily: FF, fontSize: 11.5, fontWeight: 600, cursor: 'pointer',
               }}>
@@ -306,7 +306,7 @@ function ShiftFormPanel({ initial, employees, onClose, onSaved }: {
                 <button key={day} type="button" onClick={() => toggleDay(day)}
                   style={{
                     border: sel ? `1.5px solid ${OG}` : `1px solid ${BORDER}`, borderRadius: 8, padding: '5px 12px',
-                    background: sel ? 'rgba(201,136,58,0.10)' : CREAM, color: sel ? OG : MUTED,
+                    background: sel ? 'rgba(217,53,34,0.10)' : CREAM, color: sel ? OG : MUTED,
                     fontFamily: FF, fontSize: 12, fontWeight: sel ? 700 : 500, cursor: 'pointer',
                   }}>
                   {DAY_ABBR[day]}
@@ -328,7 +328,7 @@ function ShiftFormPanel({ initial, employees, onClose, onSaved }: {
             ) : filteredEmployees.map((emp: any) => {
               const sel = form.employee_ids.includes(emp.id);
               return (
-                <label key={emp.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 6px', cursor: 'pointer', borderRadius: 7, background: sel ? 'rgba(201,136,58,0.06)' : 'transparent' }}>
+                <label key={emp.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 6px', cursor: 'pointer', borderRadius: 7, background: sel ? 'rgba(217,53,34,0.06)' : 'transparent' }}>
                   <input type="checkbox" checked={sel} onChange={() => toggleEmp(emp.id)} style={{ accentColor: OG }} />
                   <Avatar name={emp.full_name} size={22} />
                   <span style={{ fontFamily: FF, fontSize: 12.5, color: DARK }}>{emp.full_name}</span>

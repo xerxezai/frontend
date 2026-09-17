@@ -15,9 +15,9 @@ import {
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
+const DARK  = "#071a33";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06)";
 
@@ -143,7 +143,7 @@ function SideItem({ icon: Icon, label, active, onClick, danger }: {
     <div onClick={onClick} style={{
       display: "flex", alignItems: "center", gap: 10,
       padding: "10px 16px", borderRadius: 10, cursor: "pointer",
-      background: active ? "rgba(201,136,58,0.14)" : "transparent",
+      background: active ? "rgba(217,53,34,0.14)" : "transparent",
       borderLeft: `3px solid ${active ? GOLD : "transparent"}`,
       color: danger ? "rgba(239,68,68,0.80)" : active ? AMBER : "rgba(255,255,255,0.60)",
       fontSize: 13.5, fontWeight: active ? 700 : 500, fontFamily: FF,
@@ -236,7 +236,7 @@ function GradePanel({ sub, token, onClose, showToast }: {
               width: "100%", fontSize: 14, fontWeight: 700, color: "#0a0806",
               background: `linear-gradient(135deg,${AMBER},${GOLD})`,
               border: "none", borderRadius: 10, padding: "13px", cursor: "pointer",
-              boxShadow: "0 4px 0 rgba(140,80,20,0.35)", opacity: saving ? 0.7 : 1, fontFamily: FF,
+              boxShadow: "0 4px 0 rgba(139,31,23,0.35)", opacity: saving ? 0.7 : 1, fontFamily: FF,
             }}>{saving ? "Saving…" : `Submit Grade · ${grade}/100`}</button>
           </>
         )}
@@ -330,7 +330,7 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
           <Field label="Tech Stack (press Enter to add)">
             <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
               {form.tech_stack.map(t => (
-                <span key={t} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "rgba(201,136,58,0.12)", padding: "3px 10px", borderRadius: 999, display: "flex", alignItems: "center", gap: 6 }}>
+                <span key={t} style={{ fontSize: 12, fontWeight: 600, color: GOLD, background: "rgba(217,53,34,0.12)", padding: "3px 10px", borderRadius: 999, display: "flex", alignItems: "center", gap: 6 }}>
                   {t}
                   <button type="button" onClick={() => removeTag(t)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "#9ca3af", lineHeight: 1 }}><X size={12} /></button>
                 </span>
@@ -369,7 +369,7 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
             flex: 2, fontSize: 13, fontWeight: 700, color: "#0a0806",
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             border: "none", borderRadius: 10, padding: "12px", cursor: "pointer",
-            boxShadow: "0 4px 0 rgba(140,80,20,0.35)", opacity: saving ? 0.7 : 1, fontFamily: FF,
+            boxShadow: "0 4px 0 rgba(139,31,23,0.35)", opacity: saving ? 0.7 : 1, fontFamily: FF,
           }}>{saving ? "Saving…" : editing ? "Save Changes →" : "Create Course →"}</button>
         </div>
       </div>
@@ -521,7 +521,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
               display: "flex", alignItems: "center", gap: 8, marginBottom: 20,
               background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
               border: "none", borderRadius: 10, padding: "10px 18px", cursor: "pointer",
-              fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)",
+              fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(139,31,23,0.30)",
             }}>
               <Plus size={15} /> Add Module
             </button>
@@ -529,7 +529,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
 
           {/* Module form (add/edit) */}
           {modForm.show && (
-            <div style={{ background: "#f9f7f4", borderRadius: 12, padding: "16px 18px", marginBottom: 20, border: `1.5px solid rgba(201,136,58,0.30)` }}>
+            <div style={{ background: "#f9f7f4", borderRadius: 12, padding: "16px 18px", marginBottom: 20, border: `1.5px solid rgba(217,53,34,0.30)` }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(20,20,19,0.50)", margin: "0 0 10px", letterSpacing: "0.06em", fontFamily: FF }}>{modForm.id ? "EDIT MODULE" : "NEW MODULE"}</p>
               <input style={{ ...inputStyle, marginBottom: 10 }} value={modForm.title} placeholder="Module title…" autoFocus
                 onChange={e => setModForm(f => ({ ...f, title: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
@@ -562,7 +562,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                   <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "13px 16px", background: "#fff" }}>
                     <button type="button" onClick={() => setExpanded(expanded === mod.id ? null : mod.id)}
                       style={{ background: "none", border: "none", cursor: "pointer", color: GOLD, padding: 0, display: "flex", alignItems: "center", gap: 6, flex: 1, textAlign: "left" }}>
-                      <div style={{ width: 28, height: 28, borderRadius: 7, background: "rgba(201,136,58,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: 7, background: "rgba(217,53,34,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                         <BookOpen size={13} color={GOLD} />
                       </div>
                       <div>
@@ -572,7 +572,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                       <ChevronDown size={15} style={{ marginLeft: "auto", transform: expanded === mod.id ? "rotate(180deg)" : "none", transition: "transform 0.22s ease" }} />
                     </button>
                     <button type="button" onClick={() => { setModForm({ show: true, id: mod.id, title: mod.title, order: String(mod.order) }); setExpanded(null); }}
-                      style={{ background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: GOLD }}>
+                      style={{ background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: GOLD }}>
                       <Edit3 size={13} />
                     </button>
                     <button type="button" onClick={() => deleteModule(mod.id)}
@@ -598,7 +598,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                                 {les.video_url && <span style={{ fontSize: 10, fontWeight: 700, color: "#3b82f6", background: "rgba(59,130,246,0.10)", padding: "1px 7px", borderRadius: 999, marginLeft: 4 }}>VIDEO</span>}
                               </div>
                               <button type="button" onClick={() => openEditLesson(mod, les)}
-                                style={{ background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: GOLD }}>
+                                style={{ background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: GOLD }}>
                                 <Edit3 size={12} />
                               </button>
                               <button type="button" onClick={() => deleteLesson(les.id)}
@@ -612,7 +612,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
 
                       {/* Lesson form */}
                       {lesForm.show && lesForm.modId === mod.id ? (
-                        <div style={{ background: "#fff", borderRadius: 10, padding: "14px 16px", border: `1.5px solid rgba(201,136,58,0.25)` }}>
+                        <div style={{ background: "#fff", borderRadius: 10, padding: "14px 16px", border: `1.5px solid rgba(217,53,34,0.25)` }}>
                           <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(20,20,19,0.50)", margin: "0 0 10px", letterSpacing: "0.06em", fontFamily: FF }}>
                             {lesForm.id ? "EDIT LESSON" : "NEW LESSON"}
                           </p>
@@ -643,7 +643,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
                         </div>
                       ) : (
                         <button type="button" onClick={() => setLesForm({ show: true, modId: mod.id, id: null, title: "", duration: "0", order: String((mod.lessons ?? []).length), content: "", video_url: "", is_free_preview: false })}
-                          style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(201,136,58,0.10)", border: "1.5px dashed rgba(201,136,58,0.35)", borderRadius: 9, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontWeight: 700, color: GOLD, fontFamily: FF }}>
+                          style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(217,53,34,0.10)", border: "1.5px dashed rgba(217,53,34,0.35)", borderRadius: 9, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontWeight: 700, color: GOLD, fontFamily: FF }}>
                           <Plus size={13} /> Add Lesson
                         </button>
                       )}
@@ -661,7 +661,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
             width: "100%", padding: "12px", borderRadius: 10, border: "none",
             background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
             fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF,
-            boxShadow: "0 4px 0 rgba(140,80,20,0.30)",
+            boxShadow: "0 4px 0 rgba(139,31,23,0.30)",
           }}>Done — Close Curriculum</button>
         </div>
       </div>
@@ -692,7 +692,7 @@ function DashboardView({ data, earningsChart, onGrade, isSuperInstructor }: {
         <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
             <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>Monthly Earnings</h3>
-            <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, background: "rgba(201,136,58,0.10)", padding: "3px 10px", borderRadius: 999 }}>6 months</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.10)", padding: "3px 10px", borderRadius: 999 }}>6 months</span>
           </div>
           <ResponsiveContainer width="100%" height={160}>
             <AreaChart data={earningsChart} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
@@ -775,7 +775,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, o
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search courses…"
             style={{ ...inputStyle, width: 220, padding: "8px 14px" }} onFocus={focusGold} onBlur={blurGold} />
-          <button type="button" onClick={onCreate} style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)", whiteSpace: "nowrap" }}>
+          <button type="button" onClick={onCreate} style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(139,31,23,0.30)", whiteSpace: "nowrap" }}>
             <PlusCircle size={15} /> Add Course
           </button>
         </div>
@@ -833,7 +833,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, o
                   <td style={{ padding: "13px 16px" }}>
                     <div style={{ display: "flex", gap: 6 }}>
                       <a href={`/lma/courses/${c.id}`} title="Preview" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", color: "#6b7280", background: "#f3f4f6", borderRadius: 7, padding: 7, textDecoration: "none" }}><Eye size={13} /></a>
-                      <button type="button" title="Edit" onClick={() => onEdit(c)} style={{ color: GOLD, background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Edit3 size={13} /></button>
+                      <button type="button" title="Edit" onClick={() => onEdit(c)} style={{ color: GOLD, background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Edit3 size={13} /></button>
                       <button type="button" title="Manage Curriculum" onClick={() => onManage(c)} style={{ color: "#3b82f6", background: "rgba(59,130,246,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Layers size={13} /></button>
                       {isSuperInstructor ? (
                         <button type="button" title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
@@ -1085,7 +1085,7 @@ function StudentDetailPanel({ studentId, token, onClose, onUnenrolled, studentNa
                           </button>
                         </div>
                         <div style={{ height: 5, borderRadius: 3, background: "rgba(0,0,0,0.08)", overflow: "hidden" }}>
-                          <div style={{ height: "100%", borderRadius: 3, background: `linear-gradient(90deg,${AMBER},${GOLD})`, width: `${enr.progress}%`, transition: "width 0.8s cubic-bezier(0.22,1,0.36,1)" }} />
+                          <div style={{ height: "100%", borderRadius: 3, background: GOLD, width: `${enr.progress}%`, transition: "width 0.8s cubic-bezier(0.22,1,0.36,1)" }} />
                         </div>
                         <div style={{ fontSize: 10.5, color: "rgba(20,20,19,0.38)", fontFamily: FF, marginTop: 3, textAlign: "right" }}>{enr.progress}%</div>
                       </div>
@@ -1135,7 +1135,7 @@ function StudentDetailPanel({ studentId, token, onClose, onUnenrolled, studentNa
                   <div style={{ fontSize: 13, color: "#9ca3af", fontFamily: FF, textAlign: "center", padding: "10px 0" }}>No activity recorded</div>
                 ) : (
                   <div style={{ position: "relative" }}>
-                    <div style={{ position: "absolute", left: 11, top: 8, bottom: 8, width: 2, background: `linear-gradient(180deg,${GOLD},rgba(201,136,58,0.12))`, borderRadius: 2 }} />
+                    <div style={{ position: "absolute", left: 11, top: 8, bottom: 8, width: 2, background: `linear-gradient(180deg,${GOLD},rgba(217,53,34,0.12))`, borderRadius: 2 }} />
                     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                       {(data.activity as any[]).map((a: any, i: number) => (
                         <div key={i} style={{ display: "flex", gap: 14, alignItems: "flex-start", animation: "lmai-pageIn 0.3s ease both", animationDelay: `${260 + i * 35}ms` }}>
@@ -1286,7 +1286,7 @@ function StudentsView({ token }: { token: string }) {
                   <td style={{ padding: "12px 16px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <div style={{ flex: 1, height: 5, borderRadius: 3, background: "rgba(0,0,0,0.08)", overflow: "hidden", maxWidth: 80 }}>
-                        <div style={{ height: "100%", borderRadius: 3, background: `linear-gradient(90deg,${AMBER},${GOLD})`, width: `${s.progress}%` }} />
+                        <div style={{ height: "100%", borderRadius: 3, background: GOLD, width: `${s.progress}%` }} />
                       </div>
                       <span style={{ fontSize: 11.5, fontWeight: 700, color: GOLD }}>{s.progress}%</span>
                     </div>
@@ -1521,7 +1521,7 @@ function AssignmentsView({ data, onGrade }: { data: any; onGrade: (s: any) => vo
                 flexShrink: 0, fontSize: 12, fontWeight: 700, color: "#fff",
                 background: `linear-gradient(135deg,${AMBER},${GOLD})`,
                 border: "none", borderRadius: 9, padding: "9px 18px", cursor: "pointer",
-                fontFamily: FF, boxShadow: "0 3px 0 rgba(140,80,20,0.30)",
+                fontFamily: FF, boxShadow: "0 3px 0 rgba(139,31,23,0.30)",
               }}>Grade →</button>
             </div>
           ))}
@@ -1663,7 +1663,7 @@ function ProfileView({ token, showToast, onUpdated }: {
           <textarea rows={3} style={{ ...inputStyle, resize: "vertical" }} value={form.bio} placeholder="A short intro students will see…" onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
         </Field>
         <button type="button" onClick={saveProfile} disabled={saving}
-          style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", fontSize: 14, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", fontFamily: FF, opacity: saving ? 0.7 : 1, boxShadow: "0 4px 0 rgba(140,80,20,0.28)" }}>
+          style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", fontSize: 14, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", fontFamily: FF, opacity: saving ? 0.7 : 1, boxShadow: "0 4px 0 rgba(139,31,23,0.28)" }}>
           {saving ? "Saving…" : "Save Changes"}
         </button>
       </div>
@@ -1830,7 +1830,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
         <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: 0, fontFamily: FF }}>Manage Instructors</h2>
         <button type="button" onClick={() => setShowForm(v => !v)}
-          style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(140,80,20,0.30)" }}>
+          style={{ display: "flex", alignItems: "center", gap: 6, background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 9, padding: "9px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(139,31,23,0.30)" }}>
           <PlusCircle size={15} /> Add Instructor
         </button>
       </div>
@@ -1893,7 +1893,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
                   </td>
                   <td style={{ padding: "12px 14px", fontSize: 12.5, color: "#6b7280", fontFamily: FF }}>{ins.email}</td>
                   <td style={{ padding: "12px 14px" }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: isSuper(ins) ? "rgba(139,92,246,0.10)" : "rgba(201,136,58,0.10)", color: isSuper(ins) ? "#7c3aed" : GOLD }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: isSuper(ins) ? "rgba(139,92,246,0.10)" : "rgba(217,53,34,0.10)", color: isSuper(ins) ? "#7c3aed" : GOLD }}>
                       {isSuper(ins) ? "Super" : "Regular"}
                     </span>
                   </td>
@@ -1908,7 +1908,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
                       </button>
                       {/* Edit */}
                       <button type="button" title="Edit" onClick={() => openEdit(ins)}
-                        style={{ color: GOLD, background: "rgba(201,136,58,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer", display: "flex", alignItems: "center" }}>
+                        style={{ color: GOLD, background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer", display: "flex", alignItems: "center" }}>
                         <Edit3 size={13} />
                       </button>
                       {/* Delete — locked for super / self */}
@@ -1971,7 +1971,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
       {editTarget && (() => {
         const focusEdit = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
           e.target.style.borderColor = GOLD;
-          e.target.style.boxShadow = `0 0 0 3px rgba(201,136,58,0.15)`;
+          e.target.style.boxShadow = `0 0 0 3px rgba(217,53,34,0.15)`;
         };
         const blurEdit = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
           e.target.style.borderColor = "#e5e7eb";
@@ -2019,7 +2019,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
           </Field>
 
           <button type="button" onClick={saveEdit} disabled={editSaving}
-            style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", fontSize: 14, fontWeight: 700, cursor: editSaving ? "not-allowed" : "pointer", fontFamily: FF, opacity: editSaving ? 0.7 : 1, marginBottom: 20, boxShadow: "0 4px 0 rgba(140,80,20,0.28)" }}>
+            style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", fontSize: 14, fontWeight: 700, cursor: editSaving ? "not-allowed" : "pointer", fontFamily: FF, opacity: editSaving ? 0.7 : 1, marginBottom: 20, boxShadow: "0 4px 0 rgba(139,31,23,0.28)" }}>
             {editSaving ? "Saving…" : "Save Changes"}
           </button>
 
@@ -2042,7 +2042,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
                   onChange={e => setResetPwInput(e.target.value)}
                   placeholder="Custom password (min 6 chars) or leave blank"
                   style={{ ...inputStyle, marginBottom: 10, background: "#fff", borderColor: resetPwInput && resetPwInput.length < 6 ? "#dc2626" : "#e5e7eb", transition: "border-color 150ms" }}
-                  onFocus={e => { e.target.style.borderColor = GOLD; e.target.style.boxShadow = `0 0 0 3px rgba(201,136,58,0.15)`; }}
+                  onFocus={e => { e.target.style.borderColor = GOLD; e.target.style.boxShadow = `0 0 0 3px rgba(217,53,34,0.15)`; }}
                   onBlur={e => { e.target.style.borderColor = resetPwInput && resetPwInput.length < 6 ? "#dc2626" : "#e5e7eb"; e.target.style.boxShadow = "none"; }}
                 />
                 {resetPwInput && resetPwInput.length < 6 && (
@@ -2265,7 +2265,7 @@ function ApplicationsView({ token, showToast }: {
         <div style={{ display: "flex", gap: 6 }}>
           {(["all", "pending", "approved", "rejected"] as const).map(f => (
             <button key={f} type="button" onClick={() => setFilter(f)}
-              style={{ padding: "6px 14px", borderRadius: 9, border: `1.5px solid ${filter === f ? GOLD : "rgba(0,0,0,0.10)"}`, background: filter === f ? "rgba(201,136,58,0.10)" : "#fff", fontSize: 12.5, fontWeight: filter === f ? 700 : 500, color: filter === f ? GOLD : "#6b7280", cursor: "pointer", fontFamily: FF, transition: "all 150ms" }}>
+              style={{ padding: "6px 14px", borderRadius: 9, border: `1.5px solid ${filter === f ? GOLD : "rgba(0,0,0,0.10)"}`, background: filter === f ? "rgba(217,53,34,0.10)" : "#fff", fontSize: 12.5, fontWeight: filter === f ? 700 : 500, color: filter === f ? GOLD : "#6b7280", cursor: "pointer", fontFamily: FF, transition: "all 150ms" }}>
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
@@ -2485,7 +2485,7 @@ export default function LMAInstructorDashboard() {
 
   const logout = () => {
     ["lma_token", "lma_role", "lma_can_instructor", "lma_instructor_level", "lma_name"].forEach(k => localStorage.removeItem(k));
-    navigate("/lma/login");
+    navigate("/");
   };
 
   const handleSubmitReview = async (course: any) => {
@@ -2563,7 +2563,7 @@ export default function LMAInstructorDashboard() {
   const renderSection = () => {
     if (loading && active === "Dashboard") return (
       <div style={{ padding: "60px 0", textAlign: "center" }}>
-        <div style={{ width: 32, height: 32, border: `3px solid rgba(201,136,58,0.20)`, borderTop: `3px solid ${GOLD}`, borderRadius: "50%", animation: "lmai-spin 0.8s linear infinite", display: "inline-block" }} />
+        <div style={{ width: 32, height: 32, border: `3px solid rgba(217,53,34,0.20)`, borderTop: `3px solid ${GOLD}`, borderRadius: "50%", animation: "lmai-spin 0.8s linear infinite", display: "inline-block" }} />
       </div>
     );
     switch (active) {
@@ -2590,13 +2590,13 @@ export default function LMAInstructorDashboard() {
       <aside className={`lmai-sidebar${sideOpen ? " open" : ""}`} style={{ width: 240, background: DARK, flexShrink: 0, display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, height: "100vh", zIndex: 200, overflowY: "auto" }}>
         <div style={{ padding: "22px 16px 14px" }}>
           <Link to="/"><img src="/assets/img/logo/xerxez_logo.png" alt="XERXEZ" style={{ height: 60, width: "auto" }} /></Link>
-          <div style={{ marginTop: 7, fontSize: 10, color: AMBER, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>Academy · Instructor</div>
+          <div style={{ marginTop: 7, fontSize: 10, color: "rgba(255,255,255,0.70)", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>Academy · Instructor</div>
         </div>
 
         <nav style={{ flex: 1, padding: "6px 12px" }}>
           {sideNav.map(({ section, items }) => (
             <div key={section}>
-              <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.25)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "10px 4px 5px", fontFamily: FF }}>{section}</div>
+              <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.40)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "10px 4px 5px", fontFamily: FF }}>{section}</div>
               {items.map(it => (
                 <SideItem key={it.label} icon={it.icon} label={it.label} active={active === it.label}
                   onClick={() => { setActive(it.label); setSideOpen(false); }} />
@@ -2607,8 +2607,8 @@ export default function LMAInstructorDashboard() {
 
         {isSuperInstructor && (
         <div style={{ padding: "0 12px 8px" }}>
-          <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.25)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "10px 4px 5px" }}>SWITCH PORTAL</div>
-          <Link to="/lma/student/dashboard" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderRadius: 10, textDecoration: "none", background: "linear-gradient(135deg,rgba(201,136,58,0.20),rgba(232,168,78,0.10))", border: "1px solid rgba(201,136,58,0.35)", color: AMBER, fontSize: 13.5, fontWeight: 700, marginBottom: 8 }}>
+          <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.40)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "10px 4px 5px" }}>SWITCH PORTAL</div>
+          <Link to="/lma/student/dashboard" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderRadius: 10, textDecoration: "none", background: "linear-gradient(135deg,rgba(217,53,34,0.20),rgba(217,53,34,0.10))", border: "1px solid rgba(217,53,34,0.35)", color: AMBER, fontSize: 13.5, fontWeight: 700, marginBottom: 8 }}>
             <GraduationCap size={16} /><span style={{ flex: 1 }}>Student Portal</span><ChevronRight size={14} />
           </Link>
         </div>
@@ -2635,7 +2635,7 @@ export default function LMAInstructorDashboard() {
             display: "flex", alignItems: "center", gap: 7,
             background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
             fontSize: 13, fontWeight: 700, border: "none", borderRadius: 9, padding: "9px 18px",
-            cursor: "pointer", boxShadow: "0 2px 0 rgba(140,80,20,0.35)", fontFamily: FF,
+            cursor: "pointer", boxShadow: "0 2px 0 rgba(139,31,23,0.35)", fontFamily: FF,
           }}>
             <PlusCircle size={15} /> New Course
           </button>
@@ -2668,9 +2668,9 @@ export default function LMAInstructorDashboard() {
                   {notifications.length === 0 ? (
                     <div style={{ padding: "28px 16px", textAlign: "center", color: "#9ca3af", fontSize: 13, fontFamily: FF }}>No notifications</div>
                   ) : notifications.map((n: any) => (
-                    <div key={n.id} onClick={() => markRead(n.id)} style={{ padding: "12px 16px", borderBottom: "1px solid rgba(0,0,0,0.05)", cursor: "pointer", background: n.is_read ? "#fff" : "rgba(201,136,58,0.05)", transition: "background 0.15s" }}
+                    <div key={n.id} onClick={() => markRead(n.id)} style={{ padding: "12px 16px", borderBottom: "1px solid rgba(0,0,0,0.05)", cursor: "pointer", background: n.is_read ? "#fff" : "rgba(217,53,34,0.05)", transition: "background 0.15s" }}
                       onMouseEnter={e => (e.currentTarget.style.background = "#f9f7f4")}
-                      onMouseLeave={e => (e.currentTarget.style.background = n.is_read ? "#fff" : "rgba(201,136,58,0.05)")}>
+                      onMouseLeave={e => (e.currentTarget.style.background = n.is_read ? "#fff" : "rgba(217,53,34,0.05)")}>
                       <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                         {!n.is_read && <div style={{ width: 7, height: 7, borderRadius: "50%", background: GOLD, flexShrink: 0, marginTop: 5 }} />}
                         <div style={{ flex: 1 }}>

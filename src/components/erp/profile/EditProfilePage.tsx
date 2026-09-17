@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import apiService from '../../../services/api';
 
-const OG   = '#C9883A';
-const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
+const OG   = '#D93522';
+const OG_G = 'linear-gradient(145deg, #D93522 0%, #D93522 100%)';
 const CARD: React.CSSProperties = {
   background:   '#FFFFFF',
   border:       '1px solid rgba(0,0,0,0.08)',
-  borderTop:    '2px solid rgba(201,136,58,0.55)',
+  borderTop:    '2px solid rgba(217,53,34,0.55)',
   borderRadius: 14,
   boxShadow:    '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
@@ -29,13 +29,13 @@ function Field({
   const base: React.CSSProperties = {
     width: '100%', boxSizing: 'border-box',
     background: disabled  ? 'rgba(0,0,0,0.03)'
-               : focused  ? 'rgba(201,136,58,0.04)'
+               : focused  ? 'rgba(217,53,34,0.04)'
                :             '#F8F7F4',
-    border: `1px solid ${focused ? 'rgba(201,136,58,0.55)' : 'rgba(0,0,0,0.12)'}`,
+    border: `1px solid ${focused ? 'rgba(217,53,34,0.55)' : 'rgba(0,0,0,0.12)'}`,
     borderRadius: 10, color: '#141413', fontFamily: FONT, fontSize: 14,
     outline: 'none', resize: 'none',
     transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s',
-    boxShadow: focused ? '0 0 0 3px rgba(201,136,58,0.12)' : 'none',
+    boxShadow: focused ? '0 0 0 3px rgba(217,53,34,0.12)' : 'none',
     opacity: disabled ? 0.55 : 1,
   };
 
@@ -231,7 +231,7 @@ export default function EditProfilePage() {
                 position: 'absolute', bottom: 0, right: 0,
                 width: 24, height: 24, borderRadius: '50%', background: OG_G,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(201,136,58,0.40)',
+                boxShadow: '0 2px 8px rgba(217,53,34,0.40)',
               }}>
                 <i className="fas fa-camera" style={{ color: '#fff', fontSize: 9 }} />
               </div>
@@ -240,12 +240,12 @@ export default function EditProfilePage() {
               type="button"
               onClick={handleAvatarPick}
               style={{
-                background: 'rgba(201,136,58,0.08)', border: '1px solid rgba(201,136,58,0.20)',
+                background: 'rgba(217,53,34,0.08)', border: '1px solid rgba(217,53,34,0.20)',
                 borderRadius: 8, padding: '6px 14px', color: OG, fontSize: 11.5, fontWeight: 600,
                 fontFamily: FONT, cursor: 'pointer', transition: 'background 0.18s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.15)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.08)'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.08)'; }}
             >
               {avatarUrl ? 'Change Photo' : 'Add Photo'}
             </button>
@@ -295,7 +295,7 @@ export default function EditProfilePage() {
         >Cancel</button>
         <button
           onClick={handleSave} disabled={saving}
-          style={{ background: saving ? 'rgba(201,136,58,0.45)' : OG_G, border: 'none', borderRadius: 10, padding: '10px 24px', color: '#fff', fontSize: 13, fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer', fontFamily: FONT, boxShadow: saving ? 'none' : '0 3px 0 rgba(130,78,18,0.50)', display: 'flex', alignItems: 'center', gap: 8, transition: 'opacity 0.2s' }}
+          style={{ background: saving ? 'rgba(217,53,34,0.45)' : OG_G, border: 'none', borderRadius: 10, padding: '10px 24px', color: '#fff', fontSize: 13, fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer', fontFamily: FONT, boxShadow: saving ? 'none' : '0 3px 0 rgba(130,78,18,0.50)', display: 'flex', alignItems: 'center', gap: 8, transition: 'opacity 0.2s' }}
         >
           {saving && (
             <span style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'erpSpin 0.7s linear infinite', display: 'inline-block' }} />

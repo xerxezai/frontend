@@ -109,7 +109,7 @@ export default function ProjectDetail() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {project.team_members_detail.map((u: any) => (
                   <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: FF, fontSize: 12.5 }}>
-                    <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {u.name.split(' ').map((w: string) => w[0]).slice(0, 2).join('').toUpperCase()}
                     </div>
                     {u.name}

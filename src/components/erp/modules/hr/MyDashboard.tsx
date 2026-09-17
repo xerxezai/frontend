@@ -97,7 +97,7 @@ export default function MyDashboard() {
           My Attendance page (no particle canvas) since this is meant to be a quick summary. */}
       <div style={{
         borderRadius: 18, padding: '26px 28px', marginBottom: 22,
-        background: 'linear-gradient(135deg, #1a1208 0%, #2d1e08 50%, #0f0a05 100%)',
+        background: 'linear-gradient(135deg, #071a33 0%, #2d1e08 50%, #04101f 100%)',
         boxShadow: '0 8px 32px rgba(0,0,0,0.18)', animation: 'myDashFadeUp 0.4s ease both',
       }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
@@ -112,7 +112,7 @@ export default function MyDashboard() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
             <div>
               <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: FF, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>Clock In</div>
-              <div style={{ color: '#e8a84e', fontFamily: FF, fontWeight: 700, fontSize: 17 }}>{fmtTime(todayData?.check_in)}</div>
+              <div style={{ color: '#D93522', fontFamily: FF, fontWeight: 700, fontSize: 17 }}>{fmtTime(todayData?.check_in)}</div>
             </div>
             <div>
               <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: FF, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>Clock Out</div>

@@ -235,7 +235,7 @@ const ProjectCaseStudyTemplate = ({ data }: { data: CaseStudyData }) => (
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <Reveal>
           <div style={{ marginBottom: 24 }}>
-            <Btn to="/v2/portfolio" variant="outline" dark arrow={false}>← Back to Portfolio</Btn>
+            <Btn to="/portfolio" variant="outline" dark arrow={false}>← Back to Portfolio</Btn>
           </div>
           <div className="row align-items-center g-5">
             <div className="col-lg-8">

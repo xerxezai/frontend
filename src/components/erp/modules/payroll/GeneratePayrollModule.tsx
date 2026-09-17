@@ -3,7 +3,7 @@ import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
 const C = {
-  orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
+  orange: '#D93522', orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)',
   cream: '#F8F7F4', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B',
   border: 'rgba(0,0,0,0.07)',
 };
@@ -38,7 +38,7 @@ function GeometricHero() {
       ctx!.clearRect(0, 0, W, H);
       shapes.forEach(s => {
         polygon(s.x, s.y, s.size, s.sides, s.rot);
-        ctx!.strokeStyle = `rgba(201,136,58,${s.alpha})`;
+        ctx!.strokeStyle = `rgba(217,53,34,${s.alpha})`;
         ctx!.lineWidth = 1.5;
         ctx!.stroke();
         s.x += s.vx; s.y += s.vy; s.rot += s.vr;
@@ -73,7 +73,7 @@ function SummaryStatCard({ label, val, icon, color, index }: { label: string; va
         background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, borderTop: `2px solid ${color}`,
         padding: '16px 14px',
         boxShadow: hovered
-          ? '0 6px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(201,136,58,0.18)'
+          ? '0 6px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(217,53,34,0.18)'
           : '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
         transition: 'transform 240ms cubic-bezier(0.22,1,0.36,1), box-shadow 240ms cubic-bezier(0.22,1,0.36,1)',
@@ -200,7 +200,7 @@ export default function GeneratePayrollModule() {
       {/* Hero */}
       <div style={{
         position: 'relative', borderRadius: 18, overflow: 'hidden', marginBottom: 28,
-        background: 'linear-gradient(135deg, #1a1208 0%, #2d1e08 60%, #0f0a05 100%)',
+        background: 'linear-gradient(135deg, #071a33 0%, #2d1e08 60%, #04101f 100%)',
         padding: '28px 32px', boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
       }}>
         <GeometricHero />
@@ -223,7 +223,7 @@ export default function GeneratePayrollModule() {
               <label style={{ display: 'block', fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.40)', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 5 }}>Month</label>
               <select value={month} onChange={e => setMonth(e.target.value)}
                 style={{ background: 'rgba(255,255,255,0.09)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: 9, padding: '9px 14px', color: '#fff', fontSize: 13, fontFamily: "'DM Sans', sans-serif", outline: 'none' }}>
-                {MONTHS.map((m, i) => <option key={i} value={String(i+1).padStart(2,'0')} style={{ background: '#1a1208' }}>{m}</option>)}
+                {MONTHS.map((m, i) => <option key={i} value={String(i+1).padStart(2,'0')} style={{ background: '#071a33' }}>{m}</option>)}
               </select>
             </div>
             <div>

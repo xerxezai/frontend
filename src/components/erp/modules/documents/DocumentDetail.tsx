@@ -60,7 +60,7 @@ export default function DocumentDetail({
       <div
         style={{
           background: '#fff', borderRadius: 14, padding: 0, maxWidth: 900, width: '100%',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.16)', borderTop: '3px solid #C9883A',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.16)', borderTop: '3px solid #D93522',
           maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
@@ -95,9 +95,9 @@ export default function DocumentDetail({
               style={{
                 padding: '8px 14px', borderRadius: '8px 8px 0 0', border: 'none', cursor: 'pointer',
                 fontFamily: FF, fontWeight: 700, fontSize: 12.5,
-                background: tab === t.key ? 'rgba(201,136,58,0.10)' : 'transparent',
+                background: tab === t.key ? 'rgba(217,53,34,0.10)' : 'transparent',
                 color: tab === t.key ? OG : '#6B6B6B',
-                borderBottom: tab === t.key ? '2px solid #C9883A' : '2px solid transparent',
+                borderBottom: tab === t.key ? '2px solid #D93522' : '2px solid transparent',
                 marginBottom: -1,
               }}>
               {t.label}

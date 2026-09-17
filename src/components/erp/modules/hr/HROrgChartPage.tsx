@@ -10,7 +10,7 @@ const Avatar = ({ name, size = 40, tip }: { name: string; size?: number; tip?: s
   const [hover, setHover] = useState(false);
   return (
     <div style={{ position: 'relative' }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <div style={{ width: size, height: size, borderRadius: '50%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', fontWeight: 800, fontSize: size * 0.36, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px rgba(201,136,58,0.30)' }}>
+      <div style={{ width: size, height: size, borderRadius: '50%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', fontWeight: 800, fontSize: size * 0.36, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px rgba(217,53,34,0.30)' }}>
         {initials(name)}
       </div>
       {tip && hover && (
@@ -56,7 +56,7 @@ export default function HROrgChartPage() {
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', marginTop: 2 }}>{employees.data.length} employees · {departments.data.length} departments</div>
             </div>
             {/* connector down */}
-            <div style={{ width: 2, height: 24, background: 'rgba(201,136,58,0.35)' }} />
+            <div style={{ width: 2, height: 24, background: 'rgba(217,53,34,0.35)' }} />
 
             {/* departments row */}
             <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -67,7 +67,7 @@ export default function HROrgChartPage() {
                   <div key={dept.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <button onClick={() => toggle(dept.id)}
                       style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`, borderRadius: 12, padding: '12px 18px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: 10, minWidth: 180, fontFamily: FF }}>
-                      <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(201,136,58,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Users size={16} color={OG} /></div>
+                      <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(217,53,34,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Users size={16} color={OG} /></div>
                       <div style={{ flex: 1, textAlign: 'left' }}>
                         <div style={{ fontSize: 13.5, fontWeight: 800, color: DARK }}>{dept.name}</div>
                         <div style={{ fontSize: 11, color: '#9ca3af' }}>{emps.length} member{emps.length === 1 ? '' : 's'}</div>
@@ -76,7 +76,7 @@ export default function HROrgChartPage() {
                     </button>
                     {!isCollapsed && emps.length > 0 && (
                       <>
-                        <div style={{ width: 2, height: 18, background: 'rgba(201,136,58,0.30)' }} />
+                        <div style={{ width: 2, height: 18, background: 'rgba(217,53,34,0.30)' }} />
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, background: '#F8F7F4', borderRadius: 12, padding: '14px 12px', border: '1px solid rgba(0,0,0,0.05)' }}>
                           {emps.map(e => (
                             <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#fff', borderRadius: 10, padding: '8px 12px', minWidth: 190, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>

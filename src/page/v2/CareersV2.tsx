@@ -1,8 +1,8 @@
 // CareersV2.tsx
-// Purpose: The /v2/careers page — hero, "why join us", live open positions,
+// Purpose: The /careers page — hero, "why join us", live open positions,
 //          culture, benefits, the application form, and a closing CTA.
 //          Structure mirrors etiot.in's careers page.
-// Used in: src/App.tsx  (route: /v2/careers)
+// Used in: src/App.tsx  (route: /careers)
 // Data source: WHY_US / CULTURE / BENEFITS started from src/page/CareersPage.tsx's
 //              lists but now carry original, page-specific copy and card counts
 //              (4 / 6 / 8) per this page's own design brief — no longer a 1:1
@@ -235,7 +235,7 @@ const CareersV2 = () => {
   return (
     <XerxezShell>
       {/* PAGE_SEO.careers carries the careers JobPosting JSON-LD; canonical + noIndex overridden for /v2 */}
-      <SEO {...PAGE_SEO.careers} canonical="/v2/careers" noIndex />
+      <SEO {...PAGE_SEO.careers} canonical="/careers" noIndex />
 
       {/* ── Hero — full-bleed office photo + dark navy overlay + soft red glow, left-aligned ──
           Fixed to exactly one viewport (height + minHeight: 100svh, overflow: hidden) —

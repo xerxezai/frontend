@@ -1,9 +1,9 @@
 // HealthcareIoTPage.tsx
-// Purpose: /v2/iot/healthcare-iot — sixth standalone IoT Solutions detail
+// Purpose: /iot/healthcare-iot — sixth standalone IoT Solutions detail
 //          page. Same architecture and card language as
 //          SmartAssetTrackingPage.tsx (hero, white lift cards, numbered dark
 //          capability cards, closing CTA).
-// Used in: src/App.tsx (route: /v2/iot/healthcare-iot)
+// Used in: src/App.tsx (route: /iot/healthcare-iot)
 // Data source: original XERXEZ copy for this page (same standing allowance
 //              as every other industry/solution detail page — never copied
 //              from a competitor, no XERXEZ branding borrowed from any
@@ -109,7 +109,7 @@ const HealthcareIoTPage = () => (
     <SEO
       title="Healthcare IoT | IoT Solutions | XERXEZ"
       description="Connect patients, medical devices, healthcare professionals and facilities through intelligent digital systems — enabling continuous monitoring and data-driven care."
-      canonical="/v2/iot/healthcare-iot"
+      canonical="/iot/healthcare-iot"
       noIndex
     />
 
@@ -127,7 +127,7 @@ const HealthcareIoTPage = () => (
       </>}
       heroImage={heroImage}
       ctaButtons={[
-        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
       ]}
       overlayOpacity={0.70}
@@ -334,7 +334,7 @@ const HealthcareIoTPage = () => (
             connected healthcare platform? Our IoT specialists can help design an ecosystem
             around your healthcare requirements.
           </p>
-          <Btn to="/v2/contact">Request a Demo</Btn>
+          <Btn to="/contact">Request a Demo</Btn>
 
           {/* 3 trust signals — centered row below the button */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", justifyContent: "center", marginTop: 34 }}>

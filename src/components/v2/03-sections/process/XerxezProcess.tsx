@@ -7,9 +7,9 @@
 //              here because these are a real sequence.
 
 import { useState } from "react";
-import { Phone, PenTool, Code, LifeBuoy, ArrowRight } from "lucide-react";   // one icon per stage + connector
+import { Phone, PenTool, Code, LifeBuoy } from "lucide-react";   // one icon per stage
 import type { LucideIcon } from "lucide-react";
-import { T, SectionHeading, Reveal, sectionPad } from "../../01-core/v2theme";
+import { T, Eyebrow, Reveal, sectionPad } from "../../01-core/v2theme";
 
 // Ordered delivery stages.
 const STEPS: { icon: LucideIcon; title: string; desc: string }[] = [
@@ -37,11 +37,11 @@ const StepCard = ({ step, index }: { step: typeof STEPS[number]; index: number }
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
       }}
     >
-      {/* big faint red step number, top-right */}
+      {/* big faint step number, top-right */}
       <span aria-hidden="true" style={{
         position: "absolute", top: 6, right: 14,
         fontFamily: T.fontHead, fontSize: 56, fontWeight: 800,
-        color: "rgba(217,53,34,0.25)", lineHeight: 1,
+        color: "rgba(255,255,255,0.08)", lineHeight: 1,
       }}>
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -71,38 +71,54 @@ const StepCard = ({ step, index }: { step: typeof STEPS[number]; index: number }
 };
 
 const XerxezProcess = () => (
-  <section style={{ ...sectionPad, background: "#fff" }}>
+  <section style={{ ...sectionPad, background: "#ffffff" }}>
     <div className="container">
       <Reveal>
-        <SectionHeading
-          align="center"
-          eyebrow="How We Work"
-          title="A clear path from first call to go-live"
-          subtitle="Four disciplined stages that keep discovery, design, engineering, and support tightly connected."
-        />
+        <div style={{ textAlign: "center", maxWidth: 760, margin: "0 auto" }}>
+          <Eyebrow color={T.red}>How We Work</Eyebrow>
+          <h2 style={{
+            fontFamily: T.fontHead,
+            fontWeight: 800,
+            fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+            lineHeight: 1.1,
+            letterSpacing: "-0.015em",
+            color: T.headNavy,
+            margin: 0,
+          }}>
+            A clear path from first call to go-live
+          </h2>
+          <p style={{
+            fontFamily: T.fontBody,
+            fontSize: 17,
+            lineHeight: 1.7,
+            color: T.muted,
+            margin: "18px auto 0",
+            maxWidth: 640,
+          }}>
+            Four disciplined stages that keep discovery, design, engineering, and support tightly connected.
+          </p>
+        </div>
       </Reveal>
 
-      <div className="row g-4" style={{ marginTop: 54 }}>
+      <div className="row g-4" style={{ marginTop: 40 }}>
         {STEPS.map((s, i) => (
           <div key={s.title} className="col-lg-3 col-md-6" style={{ position: "relative" }}>
             <Reveal delay={i * 60} fill>
               <StepCard step={s} index={i} />
             </Reveal>
-            {/* arrow connector — desktop only, between cards (not after the last).
-                Anchored to a fixed `top` matching the icon tile's vertical
-                center (28px card padding + half the 48px tile) rather than
-                "50%" of the card, since description lines of different
-                lengths made each card a different height and left the
-                connectors at inconsistent heights relative to each other. */}
+            {/* connector — desktop only, a thin line sitting in the gutter
+                between cards (not after the last). Anchored to a fixed `top`
+                matching the icon tile's vertical center (28px card padding +
+                half the 48px tile) rather than "50%" of the card, since
+                description lines of different lengths made each card a
+                different height and left the connector at inconsistent
+                heights relative to each other. */}
             {i < STEPS.length - 1 && (
               <span aria-hidden="true" className="d-none d-lg-flex" style={{
-                position: "absolute", top: 36, right: -22, transform: "translateX(50%)",
-                width: 32, height: 32, borderRadius: "50%", zIndex: 1,
-                alignItems: "center", justifyContent: "center",
-                background: "#fff", border: `1px solid ${T.border}`, color: T.red,
-                boxShadow: T.cardShadow,
+                position: "absolute", top: 52, right: -24, transform: "translateX(50%)",
+                zIndex: 1, alignItems: "center", pointerEvents: "none",
               }}>
-                <ArrowRight size={15} strokeWidth={2.5} />
+                <span style={{ width: 18, height: 2, background: "rgba(217,53,34,0.40)", display: "block" }} />
               </span>
             )}
           </div>

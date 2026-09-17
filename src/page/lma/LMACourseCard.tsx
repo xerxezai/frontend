@@ -2,12 +2,12 @@ import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, Clock, Users, Star, CheckCircle2, Play } from "lucide-react";
 
-export const GOLD  = "#C9883A";
-export const AMBER = "#E8A84E";
-export const DARK  = "#1a1208";
+export const GOLD  = "#D93522";
+export const AMBER = "#D93522";
+export const DARK  = "#071a33";
 export const FF    = "'DM Sans', sans-serif";
 export const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)";
-export const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)";
+export const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.12)";
 
 /* ── Card3D — shared tilt-card shell used across all LMA student pages ── */
 export const Card3D = ({ children, accent = GOLD, style = {}, p = "22px 20px", onClick }: {
@@ -55,7 +55,7 @@ export const ProgressBar = ({ value, color = GOLD, h = 6 }: { value: number; col
   }, [value]);
   return (
     <div style={{ height: h, borderRadius: h / 2, background: "rgba(0,0,0,0.08)", overflow: "hidden" }}>
-      <div ref={ref} style={{ height: "100%", borderRadius: h / 2, background: `linear-gradient(90deg,${color},${AMBER})` }} />
+      <div ref={ref} style={{ height: "100%", borderRadius: h / 2, background: color }} />
     </div>
   );
 };
@@ -81,7 +81,7 @@ export const levelColor = (level: string) => {
   if (l.includes("beginner"))     return { color: "#059669", bg: "rgba(5,150,105,0.10)" };
   if (l.includes("intermediate")) return { color: "#3b82f6", bg: "rgba(59,130,246,0.10)" };
   if (l.includes("advanced"))     return { color: "#8b5cf6", bg: "rgba(139,92,246,0.10)" };
-  return { color: GOLD, bg: "rgba(201,136,58,0.10)" };
+  return { color: GOLD, bg: "rgba(217,53,34,0.10)" };
 };
 
 const StarRating = ({ value }: { value: number }) => (
@@ -99,11 +99,14 @@ const IconTile = ({ accent, badge }: { accent: string; badge?: string }) => (
   <div style={{ position: "relative", flexShrink: 0 }}>
     <div style={{
       width: 48, height: 48, borderRadius: 12,
-      background: `linear-gradient(135deg,${DARK},#2d1c0a)`,
+      background: `linear-gradient(135deg,${DARK},#0f2c4d)`,
       display: "flex", alignItems: "center", justifyContent: "center",
       boxShadow: `0 4px 14px rgba(0,0,0,0.22)`,
     }}>
-      <BookOpen size={20} color={accent} />
+      {/* icon is always white — `accent` (the raw API course_header_color value,
+          e.g. "blue"/"dark"/etc.) isn't guaranteed to resolve to a visible
+          color against this dark tile, and some values rendered invisible */}
+      <BookOpen size={20} color="#ffffff" />
     </div>
     {badge && (
       <div style={{
@@ -147,7 +150,7 @@ export const CourseCard = ({ data, index = 0 }: { data: CourseCardData; index?: 
   const statusBadge = data.completed
     ? { label: "Completed", color: "#059669", bg: "rgba(5,150,105,0.10)" }
     : (data.progress ?? 0) > 0
-      ? { label: "In Progress", color: GOLD, bg: "rgba(201,136,58,0.10)" }
+      ? { label: "In Progress", color: GOLD, bg: "rgba(217,53,34,0.10)" }
       : { label: "Not Started", color: "#6b7280", bg: "rgba(107,114,128,0.10)" };
 
   return (
@@ -185,11 +188,11 @@ export const CourseCard = ({ data, index = 0 }: { data: CourseCardData; index?: 
                 : `₹${data.price}`}
             </div>
             <button onClick={data.onEnroll} style={{
-              background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+              background: GOLD,
               color: "#0a0806", fontSize: 13, fontWeight: 700,
               padding: "9px 18px", borderRadius: 9, border: "none",
               cursor: "pointer", fontFamily: FF,
-              boxShadow: "0 4px 0 rgba(140,80,20,0.30)",
+              boxShadow: "0 4px 0 rgba(139,31,23,0.30)",
             }}>
               Enroll Now
             </button>
@@ -198,8 +201,10 @@ export const CourseCard = ({ data, index = 0 }: { data: CourseCardData; index?: 
       ) : (
         <>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-            <div style={{ flex: 1 }}><ProgressBar value={data.progress ?? 0} color={accent} /></div>
-            <span style={{ fontSize: 12, fontWeight: 800, color: accent, flexShrink: 0, fontFamily: FF }}>
+            {/* red, not `accent` — accent is the raw API course_header_color value,
+                which isn't guaranteed to be a visible/on-brand color (see IconTile above) */}
+            <div style={{ flex: 1 }}><ProgressBar value={data.progress ?? 0} color={GOLD} /></div>
+            <span style={{ fontSize: 12, fontWeight: 800, color: GOLD, flexShrink: 0, fontFamily: FF }}>
               {data.progress ?? 0}%
             </span>
           </div>
@@ -210,7 +215,7 @@ export const CourseCard = ({ data, index = 0 }: { data: CourseCardData; index?: 
             <Link to={`/lma/courses/${data.id}`} style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               fontSize: 12, fontWeight: 700, textDecoration: "none",
-              background: data.completed ? "rgba(5,150,105,0.10)" : `linear-gradient(135deg,${AMBER},${GOLD})`,
+              background: data.completed ? "rgba(5,150,105,0.10)" : GOLD,
               color: data.completed ? "#059669" : "#0a0806",
               padding: "7px 14px", borderRadius: 8,
               border: data.completed ? "1.5px solid rgba(5,150,105,0.25)" : "none",

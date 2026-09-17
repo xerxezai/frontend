@@ -8,8 +8,8 @@ const cardStyle: React.CSSProperties = {
 const sectionHeader = (n: number, title: string) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
     <div style={{
-      width: 26, height: 26, borderRadius: '50%', background: `linear-gradient(145deg,#e8a84e,${OG})`,
-      boxShadow: '0 3px 0 rgba(130,80,20,0.50)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+      width: 26, height: 26, borderRadius: '50%', background: OG,
+      boxShadow: '0 3px 0 rgba(139,31,23,0.50)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
     }}>
       <span style={{ fontFamily: FF, fontSize: 11, fontWeight: 700, color: '#fff' }}>{n}</span>
     </div>
@@ -122,7 +122,7 @@ const MarketingMaterials = () => {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, fontWeight: 700, color: '#141413', margin: '0 0 6px' }}>
+        <h1 style={{ fontFamily: FF, fontSize: 26, fontWeight: 700, color: '#141413', margin: '0 0 6px' }}>
           Marketing Materials
         </h1>
         <p style={{ fontFamily: FF, fontSize: 13.5, color: '#9b9690', margin: 0 }}>
@@ -163,7 +163,7 @@ const MarketingMaterials = () => {
           <h4 style={{ fontFamily: FF, fontSize: 13, fontWeight: 800, color: '#141413', margin: '0 0 8px' }}>
             Handling "We Already Have a System"
           </h4>
-          <p style={{ fontFamily: FF, fontSize: 13.5, color: '#333', lineHeight: 1.7, background: 'rgba(201,136,58,0.06)', border: '1px solid rgba(201,136,58,0.2)', borderRadius: 10, padding: '14px 16px', margin: 0 }}>
+          <p style={{ fontFamily: FF, fontSize: 13.5, color: '#333', lineHeight: 1.7, background: 'rgba(217,53,34,0.06)', border: '1px solid rgba(217,53,34,0.2)', borderRadius: 10, padding: '14px 16px', margin: 0 }}>
             <i className="fas fa-reply" style={{ color: OG, fontSize: 12, marginRight: 8 }} />
             That's actually the most common thing I hear — and it's usually Excel, an old accounting tool, or a few disconnected apps stitched together with WhatsApp. Ask what happens when someone's on leave and no one else knows where a file or approval is stuck — that's the gap XERXEZ closes. It's not about ripping out what works; it's about connecting what doesn't.
           </p>
@@ -190,7 +190,7 @@ const MarketingMaterials = () => {
           {MODULE_ONE_LINERS.map(m => (
             <div key={m.label} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, background: '#fafaf8', border: '1px solid #F0EBE4', borderRadius: 10, padding: '12px 14px' }}>
               <span style={{
-                width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', flexShrink: 0,
+                width: 30, height: 30, borderRadius: 8, background: 'rgba(217,53,34,0.10)', flexShrink: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <i className={m.icon} style={{ color: OG, fontSize: 12.5 }} />

@@ -3,8 +3,8 @@ import { Mail } from 'lucide-react';
 import { useAttendanceTodayStatus, useMyAttendance, erpFetch } from '../../../../hooks/useERPApi';
 
 const C = {
-  orange:     '#C9883A',
-  orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
+  orange:     '#D93522',
+  orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)',
   cream:      '#F8F7F4',
   white:      '#FFFFFF',
   dark:       '#1A1A1A',
@@ -49,7 +49,7 @@ function ParticleHero() {
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 120) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(201,136,58,${0.18 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(217,53,34,${0.18 * (1 - dist / 120)})`;
             ctx.lineWidth = 0.8;
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
@@ -62,7 +62,7 @@ function ParticleHero() {
         ctx.beginPath();
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.5);
         grad.addColorStop(0, 'rgba(232,168,78,0.85)');
-        grad.addColorStop(1, 'rgba(201,136,58,0)');
+        grad.addColorStop(1, 'rgba(217,53,34,0)');
         ctx.fillStyle = grad;
         ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
         ctx.fill();
@@ -139,7 +139,7 @@ const MiniCard = ({ label, value, icon, color, idx, suffix }: MiniCardProps) => 
         transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
         boxShadow: hovered
           ? `0 2px 4px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.10), 0 20px 40px ${color}22`
-          : '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(201,136,58,0.06)',
+          : '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
         transition: 'transform 280ms cubic-bezier(0.22,1,0.36,1), box-shadow 280ms cubic-bezier(0.22,1,0.36,1)',
         animation: `attFadeUp 0.45s cubic-bezier(0.22,1,0.36,1) ${idx * 0.08}s both`,
       }}
@@ -368,7 +368,7 @@ export default function AttendanceDashboardModule() {
       {/* Hero */}
       <div style={{
         position: 'relative', borderRadius: 18, overflow: 'hidden', marginBottom: 28,
-        background: 'linear-gradient(135deg, #1a1208 0%, #2d1e08 50%, #0f0a05 100%)',
+        background: 'linear-gradient(135deg, #071a33 0%, #2d1e08 50%, #04101f 100%)',
         padding: '32px 32px 28px',
         boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
         animation: 'attFadeUp 0.5s ease both',
@@ -399,7 +399,7 @@ export default function AttendanceDashboardModule() {
 
             {/* Live clock */}
             <div style={{ textAlign: 'right', flexShrink: 0 }}>
-              <div style={{ color: '#e8a84e', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 34, letterSpacing: '-0.01em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+              <div style={{ color: '#D93522', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 34, letterSpacing: '-0.01em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
                 {now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
               </div>
               <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, fontFamily: "'DM Sans', sans-serif", marginTop: 2 }}>Live time</div>
@@ -410,7 +410,7 @@ export default function AttendanceDashboardModule() {
           <div style={{ display: 'flex', gap: 28, marginTop: 24, flexWrap: 'wrap' }}>
             <div>
               <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Clock In</div>
-              <div style={{ color: '#e8a84e', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 20 }}>
+              <div style={{ color: '#D93522', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 20 }}>
                 {fmtTime(todayData?.check_in)}
               </div>
             </div>
@@ -472,7 +472,7 @@ export default function AttendanceDashboardModule() {
                 href={`mailto:${hrContact?.email || 'info@xerxez.com'}?subject=${encodeURIComponent('Employee profile setup needed')}&body=${encodeURIComponent('Hi,\n\nI logged into XERXEZ ERP but my employee profile hasn\'t been set up yet, so I can\'t clock in/out. Could you please link my account to an employee profile?\n\nThanks!')}`}
                 style={{
                   flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 7,
-                  background: '#fff', color: '#1a1208', textDecoration: 'none',
+                  background: '#fff', color: '#071a33', textDecoration: 'none',
                   padding: '9px 16px', borderRadius: 9, fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13,
                 }}
               >

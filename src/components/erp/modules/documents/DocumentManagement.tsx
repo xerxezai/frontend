@@ -240,13 +240,13 @@ export default function DocumentManagement() {
         <div style={{ display: 'flex', gap: 10 }}>
           <button
             onClick={() => setShowBulkUpload(true)}
-            style={{ background: '#fff', color: OG, border: '1px solid rgba(201,136,58,0.30)', borderRadius: 10, padding: '11px 18px', fontFamily: FF, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            style={{ background: '#fff', color: OG, border: '1px solid rgba(217,53,34,0.30)', borderRadius: 10, padding: '11px 18px', fontFamily: FF, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
           >
             <i className="fas fa-layer-group" />Bulk Upload
           </button>
           <button
             onClick={() => setShowUpload(true)}
-            style={{ background: `linear-gradient(145deg,#e8a84e 0%,${OG} 100%)`, color: '#fff', border: 'none', borderRadius: 10, padding: '11px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            style={{ background: `linear-gradient(145deg,#D93522 0%,${OG} 100%)`, color: '#fff', border: 'none', borderRadius: 10, padding: '11px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
           >
             <i className="fas fa-plus" />Upload Document
           </button>
@@ -293,7 +293,7 @@ export default function DocumentManagement() {
               style={{
                 padding: '7px 14px', borderRadius: 20, fontFamily: FF, fontWeight: 700, fontSize: 12.5,
                 border: active ? 'none' : '1px solid rgba(0,0,0,0.10)',
-                background: active ? `linear-gradient(145deg,#e8a84e 0%,${OG} 100%)` : '#fff',
+                background: active ? `linear-gradient(145deg,#D93522 0%,${OG} 100%)` : '#fff',
                 color: active ? '#fff' : '#4B4B4B', cursor: 'pointer',
               }}
             >

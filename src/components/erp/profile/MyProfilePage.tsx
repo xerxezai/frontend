@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import apiService from '../../../services/api';
 
-const OG   = '#C9883A';
-const OG_G = 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)';
+const OG   = '#D93522';
+const OG_G = 'linear-gradient(145deg, #D93522 0%, #D93522 100%)';
 const CARD: React.CSSProperties = {
   background:  '#FFFFFF',
   border:      '1px solid rgba(0,0,0,0.08)',
-  borderTop:   '2px solid rgba(201,136,58,0.55)',
+  borderTop:   '2px solid rgba(217,53,34,0.55)',
   borderRadius: 14,
   boxShadow:   '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.07)',
 };
@@ -67,7 +67,7 @@ export default function MyProfilePage() {
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       >
         <div style={{
-          background: 'linear-gradient(135deg, #1a1208 0%, #241809 55%, #0f0a05 100%)',
+          background: 'linear-gradient(135deg, #071a33 0%, #241809 55%, #04101f 100%)',
           border: '1px solid rgba(255,255,255,0.06)',
           borderTop: `3px solid ${OG}`,
           borderRadius: 16,
@@ -78,7 +78,7 @@ export default function MyProfilePage() {
         }}>
           <div aria-hidden style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: 'repeating-linear-gradient(135deg, transparent, transparent 24px, rgba(201,136,58,0.018) 24px, rgba(201,136,58,0.018) 25px)',
+            backgroundImage: 'repeating-linear-gradient(135deg, transparent, transparent 24px, rgba(217,53,34,0.018) 24px, rgba(217,53,34,0.018) 25px)',
           }} />
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, position: 'relative', flexWrap: 'wrap' }}>
@@ -89,7 +89,7 @@ export default function MyProfilePage() {
               style={{
                 width: 76, height: 76, borderRadius: '50%', flexShrink: 0,
                 background: profile?.avatar_url ? `#000 url(${profile.avatar_url}) center/cover no-repeat` : OG_G,
-                boxShadow: `0 0 0 3px #1a1208, 0 0 0 5px ${OG}, 0 8px 28px rgba(201,136,58,0.25)`,
+                boxShadow: `0 0 0 3px #071a33, 0 0 0 5px ${OG}, 0 8px 28px rgba(217,53,34,0.25)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
             >
@@ -103,7 +103,7 @@ export default function MyProfilePage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                 <span style={{
                   display: 'inline-flex', alignItems: 'center', gap: 5,
-                  background: 'rgba(201,136,58,0.12)', border: '1px solid rgba(201,136,58,0.28)',
+                  background: 'rgba(217,53,34,0.12)', border: '1px solid rgba(217,53,34,0.28)',
                   color: OG, fontSize: 9.5, fontWeight: 700,
                   padding: '3px 9px', borderRadius: 20,
                   letterSpacing: '0.10em', textTransform: 'uppercase',
@@ -142,7 +142,7 @@ export default function MyProfilePage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.42, delay: 0.09 }}>
           <div style={{ ...CARD, padding: '22px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-              <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(217,53,34,0.10)', border: '1px solid rgba(217,53,34,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <i className="fas fa-user" style={{ color: OG, fontSize: 11 }} />
               </span>
               <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Personal Info</span>
@@ -179,7 +179,7 @@ export default function MyProfilePage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.42, delay: 0.14 }}>
           <div style={{ ...CARD, padding: '22px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-              <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(201,136,58,0.10)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(217,53,34,0.10)', border: '1px solid rgba(217,53,34,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <i className="fas fa-history" style={{ color: OG, fontSize: 11 }} />
               </span>
               <span style={{ color: '#141413', fontWeight: 700, fontSize: 13.5 }}>Recent Activity</span>
@@ -188,9 +188,9 @@ export default function MyProfilePage() {
               {activity.map((item, i) => (
                 <div key={i} style={{ display: 'flex', gap: 12, paddingBottom: i < activity.length - 1 ? 14 : 0, position: 'relative' }}>
                   {i < activity.length - 1 && (
-                    <div style={{ position: 'absolute', left: 14, top: 28, bottom: 0, width: 1, background: 'rgba(201,136,58,0.13)' }} />
+                    <div style={{ position: 'absolute', left: 14, top: 28, bottom: 0, width: 1, background: 'rgba(217,53,34,0.13)' }} />
                   )}
-                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(201,136,58,0.07)', border: '1px solid rgba(201,136,58,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(217,53,34,0.07)', border: '1px solid rgba(217,53,34,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <i className={item.icon} style={{ color: OG, fontSize: 10 }} />
                   </div>
                   <div>
@@ -219,13 +219,13 @@ export default function MyProfilePage() {
               to={a.to}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7,
-                background: 'rgba(201,136,58,0.07)', border: '1px solid rgba(201,136,58,0.16)',
+                background: 'rgba(217,53,34,0.07)', border: '1px solid rgba(217,53,34,0.16)',
                 color: OG, fontSize: 12.5, fontWeight: 600,
                 padding: '7px 14px', borderRadius: 9, textDecoration: 'none',
                 transition: 'background 0.18s, transform 0.18s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,136,58,0.07)'; e.currentTarget.style.transform = ''; }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.07)'; e.currentTarget.style.transform = ''; }}
             >
               <i className={a.icon} style={{ fontSize: 11 }} />
               {a.label}

@@ -83,7 +83,7 @@ function StatCard({ label, val, icon: Icon, color }: { label: string; val: numbe
 }
 
 const Avatar = ({ name, size = 28 }: { name: string; size?: number }) => (
-  <span style={{ width: size, height: size, borderRadius: '50%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', fontSize: size * 0.38, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: FF }}>
+  <span style={{ width: size, height: size, borderRadius: '50%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', fontSize: size * 0.38, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: FF }}>
     {initials(name)}
   </span>
 );
@@ -365,7 +365,7 @@ function ExitInterviewModal({ exitRecord, isAdmin, onClose, onSaved }: { exitRec
         <button key={n} type="button" disabled={!isAdmin} onClick={() => set(field, n)}
           style={{
             width: 32, height: 32, borderRadius: 8, border: `1.5px solid ${Number(form[field]) === n ? OG : BORDER}`,
-            background: Number(form[field]) === n ? 'rgba(201,136,58,0.12)' : '#fff', color: Number(form[field]) === n ? OG : MUTED,
+            background: Number(form[field]) === n ? 'rgba(217,53,34,0.12)' : '#fff', color: Number(form[field]) === n ? OG : MUTED,
             fontWeight: 800, fontSize: 13, cursor: isAdmin ? 'pointer' : 'default', fontFamily: FF,
           }}>{n}</button>
       ))}
@@ -393,7 +393,7 @@ function ExitInterviewModal({ exitRecord, isAdmin, onClose, onSaved }: { exitRec
             <div style={{ display: 'flex', gap: 8 }}>
               {[['true', 'Yes'], ['false', 'No']].map(([val, label]) => (
                 <button key={val} type="button" disabled={!isAdmin} onClick={() => set('would_recommend', val)}
-                  style={{ padding: '7px 18px', borderRadius: 8, border: `1.5px solid ${form.would_recommend === val ? OG : BORDER}`, background: form.would_recommend === val ? 'rgba(201,136,58,0.12)' : '#fff', color: form.would_recommend === val ? OG : MUTED, fontWeight: 700, fontSize: 12.5, cursor: isAdmin ? 'pointer' : 'default', fontFamily: FF }}>{label}</button>
+                  style={{ padding: '7px 18px', borderRadius: 8, border: `1.5px solid ${form.would_recommend === val ? OG : BORDER}`, background: form.would_recommend === val ? 'rgba(217,53,34,0.12)' : '#fff', color: form.would_recommend === val ? OG : MUTED, fontWeight: 700, fontSize: 12.5, cursor: isAdmin ? 'pointer' : 'default', fontFamily: FF }}>{label}</button>
               ))}
             </div>
           </div>
@@ -713,7 +713,7 @@ export default function HRExitPage() {
                         <td style={{ padding: '11px 16px' }}>
                           <div style={{ display: 'flex', gap: 6 }}>
                             <button onClick={() => setViewing(e)} title="View Details"
-                              style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
+                              style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}>
                               <Eye size={12} />
                             </button>
                             {!e.settlement_paid && (

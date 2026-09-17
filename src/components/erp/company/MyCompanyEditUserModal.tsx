@@ -95,7 +95,7 @@ const MyCompanyEditUserModal = ({ user, onClose, onSuccess }: Props) => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, padding: 14, background: '#f8f7f4', borderRadius: 8 }}>
             {ALL_MODULES.map(m => (
               <label key={m.name} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>
-                <input type="checkbox" checked={modules.includes(m.name)} onChange={() => toggleModule(m.name)} style={{ accentColor: '#C9883A' }} />
+                <input type="checkbox" checked={modules.includes(m.name)} onChange={() => toggleModule(m.name)} style={{ accentColor: '#D93522' }} />
                 {m.label}
               </label>
             ))}
@@ -108,7 +108,7 @@ const MyCompanyEditUserModal = ({ user, onClose, onSuccess }: Props) => {
           onClick={submit}
           disabled={loading}
           style={{
-            width: '100%', background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none',
+            width: '100%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none',
             padding: '13px 20px', borderRadius: 8, fontWeight: 700, fontSize: 14,
             cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.75 : 1,
           }}>

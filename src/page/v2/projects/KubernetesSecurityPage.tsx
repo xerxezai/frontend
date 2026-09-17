@@ -1,8 +1,8 @@
 // KubernetesSecurityPage.tsx
-// Purpose: /v2/project/kubernetes-security — case study data for the
+// Purpose: /project/kubernetes-security — case study data for the
 //          Kubernetes Security Hardening project, rendered through
 //          <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/kubernetes-security)
+// Used in: src/App.tsx (route: /project/kubernetes-security)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -13,7 +13,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "Kubernetes Security Hardening | Case Study | XERXEZ",
   seoDesc: "How XERXEZ hardened Kubernetes clusters for a financial services firm and achieved SOC 2 Type II certification — 34 vulnerabilities resolved, zero incidents post-hardening.",
-  canonical: "/v2/project/kubernetes-security",
+  canonical: "/project/kubernetes-security",
 
   category: "DevSecOps",
   industry: "Financial Services",
@@ -59,8 +59,8 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "4 engineers" },
   ],
 
-  prev: { title: "Supply Chain AI Optimization", href: "/v2/project/supply-chain-ai" },
-  next: { title: "Real-Time Fraud Detection System", href: "/v2/project/fraud-detection-mlops" },
+  prev: { title: "Supply Chain AI Optimization", href: "/project/supply-chain-ai" },
+  next: { title: "Real-Time Fraud Detection System", href: "/project/fraud-detection-mlops" },
 };
 
 const KubernetesSecurityPage = () => <ProjectCaseStudyTemplate data={data} />;

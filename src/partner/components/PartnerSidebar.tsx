@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom';
-import { OG, FF } from '../constants';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { OG, DARK, FF } from '../constants';
 import type { PartnerProfile } from '../api/partnerApi';
 
 const NAV_ITEMS = [
@@ -20,9 +20,11 @@ interface Props {
   onLogout: () => void;
 }
 
-const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
+const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => {
+  const navigate = useNavigate();
+  return (
   <div style={{
-    width: 240, height: '100%', background: '#1a1208', display: 'flex', flexDirection: 'column',
+    width: 240, height: '100%', background: DARK, display: 'flex', flexDirection: 'column',
     borderRight: '1px solid rgba(255,255,255,0.06)',
   }}>
     <style>{`
@@ -33,14 +35,17 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
     `}</style>
 
     <div style={{ padding: '24px 22px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-      <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700, color: '#fff', letterSpacing: '0.02em' }}>
+      <button
+        type="button" onClick={() => navigate('/')} aria-label="Go to Xerxez website"
+        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'block', fontFamily: "'Poppins', 'Inter', sans-serif", fontSize: 22, fontWeight: 800, color: '#fff', letterSpacing: '0.02em' }}
+      >
         XERXEZ
-      </div>
+      </button>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 3 }}>
         <span style={{ fontFamily: FF, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: OG, whiteSpace: 'nowrap' }}>
           Partner Portal
         </span>
-        <span style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(201,136,58,0.35), transparent)' }} />
+        <span style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(217,53,34,0.35), transparent)' }} />
       </div>
     </div>
 
@@ -53,7 +58,7 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
           <span style={{ fontFamily: FF, fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>{partner.partner_code || '—'}</span>
           <span style={{
             fontFamily: FF, fontSize: 10, fontWeight: 700, padding: '2px 9px', borderRadius: 20,
-            background: 'rgba(201,136,58,0.18)', color: OG, textTransform: 'capitalize',
+            background: 'rgba(217,53,34,0.18)', color: OG, textTransform: 'capitalize',
           }}>
             {TIER_LABEL[partner.commission_tier] || partner.commission_tier}
           </span>
@@ -72,8 +77,8 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
             display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', borderRadius: 10,
             fontFamily: FF, fontSize: 13.5, fontWeight: 600, textDecoration: 'none',
             color: isActive ? '#fff' : 'rgba(255,255,255,0.62)',
-            background: isActive ? 'linear-gradient(145deg,#e8a84e,#C9883A)' : 'transparent',
-            boxShadow: isActive ? '0 3px 10px rgba(201,136,58,0.35)' : 'none',
+            background: isActive ? OG : 'transparent',
+            boxShadow: isActive ? '0 3px 10px rgba(217,53,34,0.35)' : 'none',
             transition: 'background 0.15s, color 0.15s',
             minHeight: 44,
             animationDelay: `${i * 0.05}s`,
@@ -106,6 +111,7 @@ const PartnerSidebar = ({ partner, onNavigate, onLogout }: Props) => (
       </button>
     </div>
   </div>
-);
+  );
+};
 
 export default PartnerSidebar;

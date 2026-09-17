@@ -16,7 +16,7 @@ const METRICS = [
   { v: "4+",    l: "Client projects delivered" },
   { v: "6+",    l: "Industries served" },
   { v: "12+",   l: "ERP modules" },
-  { v: "99.9%", l: "Frontend uptime" },
+  { v: "99.9%", l: "Frontend Uptime" },
 ];
 
 // Shown as the <video>'s poster (visible while it loads) and as the background
@@ -116,8 +116,8 @@ const XerxezHero = () => {
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 18 }}>
             {/* primary CTA → /v2 contact page; outline CTA → /v2 services page */}
-            <Btn to="/v2/contact">See ERP in action</Btn>
-            <Btn to="/v2/services" variant="outline" dark arrow={false}>Explore our solutions</Btn>
+            <Btn to="/contact">See ERP in action</Btn>
+            <Btn to="/services" variant="outline" dark arrow={false}>Explore our solutions</Btn>
           </div>
 
           <p style={{

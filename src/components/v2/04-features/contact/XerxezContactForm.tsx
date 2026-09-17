@@ -25,10 +25,15 @@ import { v2Label, v2Control, validateEmail, V2Field, V2Chips, V2SubmitBtn, V2For
 // ── Option lists (verbatim from ContactSection2) ─────────────────────────────
 const SERVICES = [
   "AI-Powered ERP", "DevSecOps Pipelines", "Cloud Infrastructure",
-  "Software Development", "AI Training & Consulting",
+  "Software Development", "AI Training & Consulting", "AI Training & Upskilling",
   "Quantum Computing", "Mobile Application",
   "Web & Mobile Hosting", "Software Consulting",
 ];
+// Short slugs used by deep-links that don't want to URL-encode the full label
+// (e.g. TrainingV2's "Enterprise training" CTA → /contact?service=ai-training).
+const SERVICE_SLUGS: Record<string, string> = {
+  "ai-training": "AI Training & Upskilling",
+};
 const COUNTRIES = ["India", "UAE", "Other"];
 const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
 // Diverges from ContactSection2's own (out-of-sync, 6-item) industry list —
@@ -221,9 +226,12 @@ const PARTNER_FORM_RESKIN_CSS = `
 // ── Component ───────────────────────────────────────────────────────────────
 const XerxezContactForm = () => {
   const [searchParams] = useSearchParams();
-  const urlService = searchParams.get("service");   // ?service=… deep-link
-  // Only honour it if it's a real service name.
-  const preselectedService = urlService && SERVICES.includes(urlService) ? urlService : null;
+  const urlService = searchParams.get("service");   // ?service=… deep-link — either the
+  // full label (e.g. "AI-Powered ERP", URL-encoded) or a short slug in SERVICE_SLUGS
+  // (e.g. "ai-training"). Only honoured if it resolves to a real service name.
+  const preselectedService = urlService
+    ? (SERVICE_SLUGS[urlService] ?? (SERVICES.includes(urlService) ? urlService : null))
+    : null;
   // Show the "Enquiring about: X" banner only when a service (but not a plan) was deep-linked.
   const [showServiceBanner, setShowServiceBanner] = useState(!!preselectedService && !searchParams.get("plan"));
   // Which tab is active. Open the Partner tab if the URL hash is #partner.
@@ -507,7 +515,7 @@ const XerxezContactForm = () => {
                 }}>
                 Chat on WhatsApp
               </a>
-              <Link to="/v2" style={{
+              <Link to="/" style={{
                 display: "flex", alignItems: "center", justifyContent: "center",
                 color: T.muted, textDecoration: "none",
                 fontFamily: T.fontHead, fontWeight: 600, fontSize: 14,

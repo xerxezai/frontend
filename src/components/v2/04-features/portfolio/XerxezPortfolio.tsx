@@ -157,7 +157,7 @@ const V2_CASE_STUDIES = new Set([
 const Card = ({ item }: { item: Project }) => {
   const [hover, setHover] = useState(false);
   const meta = projectMeta[item.slug] ?? DEFAULT_META;   // outcome data for this project
-  const href = V2_CASE_STUDIES.has(item.slug) ? `/v2/project/${item.slug}` : `/project/${item.slug}`;
+  const href = V2_CASE_STUDIES.has(item.slug) ? `/project/${item.slug}` : `/project/${item.slug}`;
   return (
     <Link
       to={href}

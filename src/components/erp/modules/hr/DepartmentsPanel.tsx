@@ -12,8 +12,8 @@ import { Card3D, FF, OG, DARK, WHITE, Skeleton, EmptyState } from './hrShared';
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
 const OVR: React.CSSProperties = { position:'fixed',inset:0,zIndex:1050,background:'rgba(0,0,0,0.40)',backdropFilter:'blur(3px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16 };
-const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:520,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #C9883A',maxHeight:'85vh',overflowY:'auto' };
-const SAVE: React.CSSProperties = { background:'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)',color:'#fff',border:'none',borderRadius:9,padding:'9px 20px',fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:13,cursor:'pointer' };
+const CRD: React.CSSProperties = { background:'#fff',borderRadius:14,padding:'28px 24px 24px',maxWidth:520,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.16)',borderTop:'3px solid #D93522',maxHeight:'85vh',overflowY:'auto' };
+const SAVE: React.CSSProperties = { background:'linear-gradient(145deg,#D93522 0%,#D93522 100%)',color:'#fff',border:'none',borderRadius:9,padding:'9px 20px',fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:13,cursor:'pointer' };
 const CNCL: React.CSSProperties = { background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRadius:9,padding:'9px 20px',cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:13 };
 const BORDER = 'rgba(0,0,0,0.07)';
 const MUTED = '#6B6B6B';
@@ -161,7 +161,7 @@ export default function DepartmentsPanel() {
             <button key={val} onClick={()=>setFilter(val)} style={{
               border:'none', borderRadius:7, padding:'7px 14px', fontFamily:FF, fontWeight:700, fontSize:12.5,
               cursor:'pointer', whiteSpace:'nowrap',
-              background: filter===val ? 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)' : 'transparent',
+              background: filter===val ? 'linear-gradient(145deg,#D93522 0%,#D93522 100%)' : 'transparent',
               color: filter===val ? '#fff' : MUTED,
             }}>{label}</button>
           ))}
@@ -199,7 +199,7 @@ export default function DepartmentsPanel() {
                     </div>
                     {isAdmin && (
                       <div style={{ display:'flex', gap:6, flexShrink:0 }}>
-                        <button onClick={()=>openEdit(d)} title="Edit" style={{ background:'rgba(201,136,58,0.08)', color:OG, border:'1px solid rgba(201,136,58,0.22)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor:'pointer' }}>
+                        <button onClick={()=>openEdit(d)} title="Edit" style={{ background:'rgba(217,53,34,0.08)', color:OG, border:'1px solid rgba(217,53,34,0.22)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor:'pointer' }}>
                           <Pencil size={12} />
                         </button>
                         <button onClick={()=>setDelId(d.id)} title="Delete" style={{ background:'rgba(239,68,68,0.08)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.20)', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:7, cursor:'pointer' }}>

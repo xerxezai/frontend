@@ -7,12 +7,12 @@ import {
 import LMAStudentLayout from "./LMAStudentLayout";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
-const DARK  = "#1a1208";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
+const DARK  = "#071a33";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)";
-const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.12)";
+const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.12)";
 
 interface CourseProgress {
   course_id: number;
@@ -28,33 +28,22 @@ interface ProgressData {
   timeline: TimelinePoint[];
 }
 
-/* ── Card3D ── */
+/* ── Card3D — flat card, no tilt (the mouse-tracked 3D rotation was removed:
+   it was staying visibly rotated instead of settling flat) ── */
 const Card3D = ({ children, accent = GOLD, style = {}, p = "22px 20px" }: {
   children: React.ReactNode; accent?: string; style?: React.CSSProperties; p?: string;
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
   const [h, setH] = useState(false);
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(700px) rotateY(${x * 10}deg) rotateX(${-y * 7}deg) translateY(-7px)`;
-    el.style.transition = "transform 0.08s ease";
-  };
-  const onLeave = () => {
-    const el = ref.current;
-    if (el) { el.style.transform = "translateY(0)"; el.style.transition = "transform 0.32s cubic-bezier(0.22,1,0.36,1)"; }
-  };
   return (
-    <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}
-      onMouseEnter={() => setH(true)} onMouseOut={() => setH(false)}
+    <div
+      onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
       style={{
         background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)",
         borderTop: `3px solid ${accent}`,
         boxShadow: h ? BHOV : BCARD,
-        transition: "box-shadow 0.28s ease",
-        padding: p, position: "relative", willChange: "transform",
+        transform: h ? "translateY(-7px)" : "translateY(0)",
+        transition: "transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease",
+        padding: p, position: "relative",
         ...style,
       }}>
       {children}

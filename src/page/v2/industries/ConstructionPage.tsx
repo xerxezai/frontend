@@ -1,9 +1,9 @@
 // ConstructionPage.tsx
-// Purpose: /v2/industries/construction — second standalone industry detail
+// Purpose: /industries/construction — second standalone industry detail
 //          page, same architecture as OilGasPage.tsx (hero, overview,
 //          challenges, solutions, our-solution, key modules, results, then
 //          the shared Why XERXEZ + CTA sections).
-// Used in: src/App.tsx (route: /v2/industries/construction)
+// Used in: src/App.tsx (route: /industries/construction)
 // Data source: the industry's core facts — name, tagline, the 3 `features`,
 //              the 4 `painPoints`, the 6 `modules` — come from the
 //              "construction" entry in src/data/erpIndustriesData.tsx
@@ -104,7 +104,7 @@ const ConstructionPage = () => (
     <SEO
       title={`${industry.name} AI-Powered Platform & Digital Solutions | XERXEZ`}
       description={industry.tagline}
-      canonical="/v2/industries/construction"
+      canonical="/industries/construction"
       noIndex
     />
 
@@ -114,7 +114,7 @@ const ConstructionPage = () => (
       subtitle={HERO_SUBTITLE}
       heroImage={heroImage}
       highlights={industry.features}
-      ctaButtons={[{ label: "Book a Demo", to: "/v2/contact" }]}
+      ctaButtons={[{ label: "Book a Demo", to: "/contact" }]}
       minHeight="82svh"
       maxWidth={680}
       titleSize="clamp(34px, 5vw, 56px)"
@@ -211,7 +211,7 @@ const ConstructionPage = () => (
               <SectionHeading eyebrow="Our Solution" title="Built for General Contractors & Developers" subtitle="One AI-powered platform that follows your project from groundbreaking to handover — replacing spreadsheets, disconnected tools and manual approvals." />
               <Checklist items={industry.features} />
               <div style={{ marginTop: 24 }}>
-                <Btn to="/v2/contact">Discuss your project</Btn>
+                <Btn to="/contact">Discuss your project</Btn>
               </div>
             </Reveal>
           </div>

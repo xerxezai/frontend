@@ -1,10 +1,10 @@
 // IndustrialIoTPage.tsx
-// Purpose: /v2/iot/industrial-iot — second standalone IoT Solutions detail
+// Purpose: /iot/industrial-iot — second standalone IoT Solutions detail
 //          page. Same architecture and card language as
 //          SmartAssetTrackingPage.tsx (hero, white lift cards, numbered dark
 //          capability cards, closing CTA), trimmed to exactly the sections
 //          in this page's brief.
-// Used in: src/App.tsx (route: /v2/iot/industrial-iot)
+// Used in: src/App.tsx (route: /iot/industrial-iot)
 // Data source: original XERXEZ copy for this page (same standing allowance
 //              as every other industry/solution detail page — never copied
 //              from a competitor). No invented statistics.
@@ -87,7 +87,7 @@ const IndustrialIoTPage = () => (
     <SEO
       title="Industrial IoT | IoT Solutions | XERXEZ"
       description="Connect machines, equipment, assets and enterprise systems into one unified digital industrial ecosystem — powered by real-time data and AI."
-      canonical="/v2/iot/industrial-iot"
+      canonical="/iot/industrial-iot"
       noIndex
     />
 
@@ -105,7 +105,7 @@ const IndustrialIoTPage = () => (
       </>}
       heroImage={heroImage}
       ctaButtons={[
-        { label: "Request a Demo", to: "/v2/contact" },
+        { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
       ]}
       overlayOpacity={0.70}
@@ -271,7 +271,7 @@ const IndustrialIoTPage = () => (
             connect your industrial assets? Our IoT specialists can help you identify the right
             use cases and implementation strategy.
           </p>
-          <Btn to="/v2/contact">Request a Demo</Btn>
+          <Btn to="/contact">Request a Demo</Btn>
 
           {/* 3 trust signals — centered row below the button */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", justifyContent: "center", marginTop: 34 }}>

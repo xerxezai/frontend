@@ -20,8 +20,8 @@ const labelStyle: React.CSSProperties = {
 const sectionHeader = (n: number, title: string) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
     <div style={{
-      width: 26, height: 26, borderRadius: '50%', background: `linear-gradient(145deg,#e8a84e,${OG})`,
-      boxShadow: '0 3px 0 rgba(130,80,20,0.50)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+      width: 26, height: 26, borderRadius: '50%', background: OG,
+      boxShadow: '0 3px 0 rgba(139,31,23,0.50)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
     }}>
       <span style={{ fontFamily: FF, fontSize: 11, fontWeight: 700, color: '#fff' }}>{n}</span>
     </div>
@@ -76,7 +76,7 @@ const SubmitDeal = () => {
         }}>
           <i className="fas fa-check" style={{ color: '#fff', fontSize: 26 }} />
         </div>
-        <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, fontWeight: 700, color: '#141413', marginBottom: 10 }}>
+        <h2 style={{ fontFamily: FF, fontSize: 26, fontWeight: 700, color: '#141413', marginBottom: 10 }}>
           Deal Submitted Successfully!
         </h2>
         <p style={{ fontFamily: FF, fontSize: 14, color: '#6B6B6B', lineHeight: 1.7, marginBottom: 6 }}>
@@ -88,7 +88,7 @@ const SubmitDeal = () => {
         </p>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link to="/partner/deals" style={{
-            textDecoration: 'none', background: `linear-gradient(145deg,#e8a84e,${OG})`, color: '#fff',
+            textDecoration: 'none', background: OG, color: '#fff',
             fontFamily: FF, fontWeight: 700, fontSize: 13.5, padding: '12px 22px', borderRadius: 10,
           }}>
             View My Deals
@@ -143,8 +143,8 @@ const SubmitDeal = () => {
               <button type="button" key={p.value} disabled={sending} onClick={() => set('package', p.value)} style={{
                 textAlign: 'left', cursor: sending ? 'not-allowed' : 'pointer',
                 border: `2px solid ${selected ? OG : '#E4DFD8'}`, borderRadius: 12, padding: '16px 18px',
-                background: selected ? 'rgba(201,136,58,0.08)' : '#fafaf8',
-                boxShadow: selected ? '0 0 0 3px rgba(201,136,58,0.12)' : 'none',
+                background: selected ? 'rgba(217,53,34,0.08)' : '#fafaf8',
+                boxShadow: selected ? '0 0 0 3px rgba(217,53,34,0.12)' : 'none',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                   <span style={{ fontFamily: FF, fontSize: 14.5, fontWeight: 800, color: selected ? OG : '#141413' }}>{p.label}</span>
@@ -188,7 +188,7 @@ const SubmitDeal = () => {
         type="button" onClick={submit} disabled={sending}
         style={{
           width: '100%', height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
-          background: sending ? 'rgba(201,136,58,0.55)' : `linear-gradient(145deg,#e8a84e,${OG})`,
+          background: sending ? 'rgba(217,53,34,0.55)' : OG,
           color: '#fff', fontFamily: FF, fontWeight: 700, fontSize: 14.5,
           border: 'none', borderRadius: 12, cursor: sending ? 'not-allowed' : 'pointer',
         }}

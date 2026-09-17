@@ -40,7 +40,7 @@ export const COMMISSION_STATUS_BADGE: Record<string, { label: string; bg: string
   paid: { label: 'Paid', bg: '#d1fae5', color: '#065f46' },
 };
 
-export const OG = '#C9883A';
-export const DARK = '#1a1208';
-export const CREAM = '#F8F7F4';
-export const FF = "'DM Sans',sans-serif";
+export const OG = '#D93522';
+export const DARK = '#071a33';
+export const CREAM = '#F4F7FA';
+export const FF = "'Poppins', 'Inter', sans-serif";

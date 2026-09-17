@@ -68,12 +68,12 @@ export default function BudgetTracker({ projectId, entries, loading, onReload }:
   const totalBudgeted = entries.reduce((s, e) => s + Number(e.budgeted_amount || 0), 0);
   const totalActual = entries.reduce((s, e) => s + Number(e.actual_amount || 0), 0);
 
-  if (loading) return <div className="d-flex justify-content-center py-4"><div className="spinner-border" style={{ color: '#C9883A' }} /></div>;
+  if (loading) return <div className="d-flex justify-content-center py-4"><div className="spinner-border" style={{ color: '#D93522' }} /></div>;
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
-        <button onClick={() => setShowForm(true)} style={{ background: 'linear-gradient(145deg,#e8a84e,#C9883A)', color: '#fff', border: 'none', borderRadius: 9, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>
+        <button onClick={() => setShowForm(true)} style={{ background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: '8px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>
           <i className="fas fa-plus" style={{ marginRight: 6 }} />Add Budget Entry
         </button>
       </div>
@@ -104,7 +104,7 @@ export default function BudgetTracker({ projectId, entries, loading, onReload }:
                     <td style={{ padding: '9px 10px', color: over ? '#ef4444' : undefined, fontWeight: over ? 700 : undefined }}>{fmtINR(actual)}</td>
                     <td style={{ padding: '9px 10px', color: variance < 0 ? '#ef4444' : '#10b981', fontWeight: 700 }}>{fmtINR(variance)}</td>
                     <td style={{ padding: '9px 10px', width: 120 }}>
-                      <ProgressBar value={pctUsed} height={6} accent={over ? '#ef4444' : '#C9883A'} />
+                      <ProgressBar value={pctUsed} height={6} accent={over ? '#ef4444' : '#D93522'} />
                     </td>
                     <td style={{ padding: '9px 10px' }}>
                       <button onClick={() => setDelId(e.id)} title="Delete" style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 26, height: 26, borderRadius: 6, cursor: 'pointer' }}>

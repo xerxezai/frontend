@@ -3,23 +3,23 @@ import { Link } from 'react-router-dom';
 import { useERPAuth } from '../../hooks/useERPAuth';
 import apiService from '../../services/api';
 
-// ── colour tokens ─────────────────────────────────────────────────────────────
+// ── colour tokens — v2 navy/red theme ────────────────────────────────────────
 const C = {
-  orange:      "#C9883A",
-  orangeGrad:  "linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)",
-  orangeDeep:  "rgba(150,95,30,0.50)",
-  orangeLight: "rgba(201,136,58,0.09)",
-  warmDark:    "#1a1208",
-  warmDarker:  "#0f0a05",
-  cream:       "#F8F7F4",
+  orange:      "#D93522",
+  orangeGrad:  "#D93522",
+  orangeDeep:  "rgba(217,53,34,0.45)",
+  orangeLight: "rgba(217,53,34,0.09)",
+  warmDark:    "#0f2c4d",
+  warmDarker:  "#071a33",
+  cream:       "#FFFFFF",
   white:       "#FFFFFF",
   dark:        "#1A1A1A",
   muted:       "#6B6B6B",
 };
 
 const shadow = {
-  card:  "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.03)",
-  badge: "0 4px 0 rgba(150,95,30,0.50), 0 6px 20px rgba(201,136,58,0.30)",
+  card:  "0 20px 50px rgba(7,26,51,0.14), 0 2px 8px rgba(7,26,51,0.06)",
+  badge: "0 8px 20px rgba(217,53,34,0.40)",
 };
 
 type Mode = 'login' | 'reg' | 'fp1' | 'fp2' | 'fp3' | 'fp4';
@@ -69,9 +69,9 @@ const StatTile = ({ val, label, icon, delay, trigger }: {
     <div
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        flex: 1, background: 'rgba(255,255,255,0.06)',
+        flex: 1, background: '#0d2a4a',
         backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-        border: '1px solid rgba(255,255,255,0.08)', borderTop: `2px solid ${C.orange}`,
+        border: '1px solid rgba(255,255,255,0.10)',
         borderRadius: 14, padding: '16px 14px', cursor: 'default',
         transform: hov ? 'translateY(-5px)' : 'translateY(0)',
         boxShadow: hov ? '0 16px 40px rgba(0,0,0,0.35)' : '0 4px 14px rgba(0,0,0,0.20)',
@@ -82,7 +82,7 @@ const StatTile = ({ val, label, icon, delay, trigger }: {
       <div style={{ width: 30, height: 30, borderRadius: 8, background: `${C.orange}20`, border: `1px solid ${C.orange}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
         <i className={icon} style={{ color: C.orange, fontSize: 12 }}></i>
       </div>
-      <div style={{ color: C.orange, fontWeight: 800, fontSize: 20, lineHeight: 1, marginBottom: 4, fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ color: C.orange, fontWeight: 800, fontSize: val.length > 6 ? 15 : 20, lineHeight: 1.15, marginBottom: 4, fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap' }}>
         <CountValue raw={val} trigger={trigger} />
       </div>
       <div style={{ color: 'rgba(255,255,255,0.50)', fontSize: 11, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.35 }}>{label}</div>
@@ -90,19 +90,19 @@ const StatTile = ({ val, label, icon, delay, trigger }: {
   );
 };
 
-// ── trust line (green pulsing dot) ─────────────────────────────────────────────
+// ── trust line (red pulsing dot) ─────────────────────────────────────────────
 const TrustLine = ({ text, delay }: { text: string; delay: number }) => (
   <div style={{
     display: 'inline-flex', alignItems: 'center', gap: 9,
-    background: 'rgba(74,222,128,0.10)', border: '1px solid rgba(74,222,128,0.30)',
+    background: 'rgba(217,53,34,0.10)', border: '1px solid rgba(217,53,34,0.35)',
     borderRadius: 20, padding: '8px 16px',
     animation: `erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
   }}>
     <span style={{ position: 'relative', width: 8, height: 8, flexShrink: 0 }}>
-      <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#4ade80', animation: 'erpUrgentPing 1.6s ease-in-out infinite' }} />
-      <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#4ade80' }} />
+      <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#D93522', animation: 'erpUrgentPing 1.6s ease-in-out infinite' }} />
+      <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#D93522' }} />
     </span>
-    <span style={{ color: '#6ee7a0', fontSize: 12.5, fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>{text}</span>
+    <span style={{ color: '#ff8a7a', fontSize: 12.5, fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>{text}</span>
   </div>
 );
 
@@ -239,7 +239,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
   // ── style helpers ──
   const iBorder = (err: string, focused: boolean) => err ? '#FECACA' : focused ? C.orange : 'rgba(0,0,0,0.11)';
   const iBg     = (err: string) => err ? '#FFF8F8' : C.white;
-  const iShadow = (focused: boolean) => focused ? '0 0 0 3px rgba(201,136,58,0.14)' : 'none';
+  const iShadow = (focused: boolean) => focused ? '0 0 0 3px rgba(217,53,34,0.14)' : 'none';
 
   const iStyle = (err: string, foc: boolean, rp = 0): React.CSSProperties => ({
     width: '100%', boxSizing: 'border-box',
@@ -276,8 +276,8 @@ const ERPLogin = ({ onSuccess }: Props) => {
         fontFamily: "'DM Sans', sans-serif", cursor: busy ? 'not-allowed' : 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
         boxShadow: btnHov && !busy
-          ? `0 6px 0 ${C.orangeDeep}, 0 10px 28px rgba(201,136,58,0.35)`
-          : `0 4px 0 ${C.orangeDeep}, 0 6px 20px rgba(201,136,58,0.28)`,
+          ? `0 12px 30px rgba(217,53,34,0.45)`
+          : `0 8px 20px rgba(217,53,34,0.35)`,
         transform: btnHov && !busy ? 'translateY(-2px)' : 'translateY(0)',
         transition: 'transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms cubic-bezier(0.22,1,0.36,1)',
         opacity: busy ? 0.88 : 1,
@@ -425,14 +425,14 @@ const ERPLogin = ({ onSuccess }: Props) => {
         .erp-orb-4{animation:erpOrbPulse 9s 1.5s ease-in-out infinite}
         .erp-left{background-size:200% 200%!important;animation:erpGradientShift 8s ease-in-out infinite}
         .erp-left::-webkit-scrollbar{width:6px}
-        .erp-left::-webkit-scrollbar-thumb{background:rgba(201,136,58,0.25);border-radius:3px}
+        .erp-left::-webkit-scrollbar-thumb{background:rgba(217,53,34,0.25);border-radius:3px}
         .erp-step-fwd{animation:erp-step-fwd 0.30s cubic-bezier(0.22,1,0.36,1) both}
         .erp-step-bck{animation:erp-step-bck 0.30s cubic-bezier(0.22,1,0.36,1) both}
-        .erp-otp-box:focus{border-color:#C9883A!important;box-shadow:0 0 0 3px rgba(201,136,58,0.18),0 3px 0 rgba(150,95,30,0.35)!important;outline:none}
+        .erp-otp-box:focus{border-color:#D93522!important;box-shadow:0 0 0 3px rgba(217,53,34,0.18)!important;outline:none}
         .erp-otp-box:active{transform:translateY(2px) scale(0.94)}
-        .erp-right{background:${C.cream}}
+        .erp-right{background:${C.white}}
         @media(max-width:991px){
-          .erp-right{background:linear-gradient(150deg,#1a1208 0%,#0f0a05 100%)!important}
+          .erp-right{background:linear-gradient(150deg,${C.warmDark} 0%,${C.warmDarker} 100%)!important}
           .erp-login-card{box-shadow:0 8px 48px rgba(0,0,0,0.52),0 2px 8px rgba(0,0,0,0.32)!important}
           .erp-footer-note{color:rgba(255,255,255,0.22)!important}
         }
@@ -450,20 +450,20 @@ const ERPLogin = ({ onSuccess }: Props) => {
              viewport regardless of how tall the right (form) column's content
              is — without it, the row stretches to the taller column's height
              and "center" ends up centring within that taller box instead. */}
-        <div className="d-none d-lg-flex erp-left" style={{ flex: '0 0 56%', flexDirection: 'column', justifyContent: 'center', padding: '24px 56px', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden auto', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
+        <div className="d-none d-lg-flex erp-left" style={{ flex: '0 0 55%', flexDirection: 'column', justifyContent: 'center', padding: '24px 56px', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden auto', background: `linear-gradient(150deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)` }}>
           <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-          <span className="erp-orb-1" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 540, height: 540, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.15) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
-          <span className="erp-orb-2" style={{ position: 'absolute', bottom: '-18%', right: '-4%', width: 440, height: 440, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.10) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
-          <span className="erp-orb-3" style={{ position: 'absolute', top: '38%', right: '10%', width: 240, height: 240, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.08) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
-          <span className="erp-orb-4" style={{ position: 'absolute', top: '64%', left: '20%', width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,136,58,0.07) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+          <span className="erp-orb-1" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 540, height: 540, borderRadius: '50%', background: 'radial-gradient(circle, rgba(217,53,34,0.15) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+          <span className="erp-orb-2" style={{ position: 'absolute', bottom: '-18%', right: '-4%', width: 440, height: 440, borderRadius: '50%', background: 'radial-gradient(circle, rgba(217,53,34,0.10) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+          <span className="erp-orb-3" style={{ position: 'absolute', top: '38%', right: '10%', width: 240, height: 240, borderRadius: '50%', background: 'radial-gradient(circle, rgba(217,53,34,0.08) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+          <span className="erp-orb-4" style={{ position: 'absolute', top: '64%', left: '20%', width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, rgba(217,53,34,0.07) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ marginBottom: 12, animation: 'erpFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.07s both' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(201,136,58,0.13)', border: '1px solid rgba(201,136,58,0.35)', color: '#E5B460', fontSize: 11, fontWeight: 700, padding: '6px 16px', borderRadius: 20, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                <i className="fas fa-bolt" style={{ fontSize: 9, color: C.orange }}></i>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#D93522', color: '#fff', fontSize: 11, fontWeight: 700, padding: '6px 16px', borderRadius: 20, fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <i className="fas fa-bolt" style={{ fontSize: 9, color: '#fff' }}></i>
                 Enterprise Operations Platform
               </span>
             </div>
-            <h1 style={{ color: '#fff', fontWeight: 800, fontSize: 'clamp(24px, 2.2vw, 34px)', lineHeight: 1.1, marginBottom: 10, fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.025em', animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both' }}>
+            <h1 style={{ color: '#fff', fontWeight: 800, fontSize: 'clamp(24px, 2.2vw, 34px)', lineHeight: 1.1, marginBottom: 10, fontFamily: "'Poppins', sans-serif", letterSpacing: '-0.025em', animation: 'erpSlideL 0.55s cubic-bezier(0.22,1,0.36,1) 0.13s both' }}>
               The AI ERP That<br />
               <em style={{ color: C.orange, fontStyle: 'italic' }}>Replaces 5 Legacy Systems</em>
             </h1>
@@ -478,17 +478,18 @@ const ERPLogin = ({ onSuccess }: Props) => {
             <div style={{ marginBottom: 18 }}>
               <TrustLine text="Invite-only enterprise access" delay={0.49} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
               <StatTile val="8+"  label="AI Modules"        icon="fas fa-cubes"          delay={0.55} trigger={statsLive} />
-              <StatTile val="UAE" label="Based & Supported" icon="fas fa-map-marker-alt" delay={0.59} trigger={statsLive} />
+              <StatTile val="UAE & India" label="Based & Supported" icon="fas fa-map-marker-alt" delay={0.59} trigger={statsLive} />
+              <StatTile val="24/7" label="Support" icon="fas fa-headset" delay={0.63} trigger={statsLive} />
             </div>
           </div>
         </div>
 
         {/* ══ RIGHT — form panel ══════════════════════════════════════════ */}
-        <div className="erp-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 52, paddingBottom: 32, paddingLeft: 28, paddingRight: 28, minHeight: '100vh' }}>
+        <div className="erp-right" style={{ flex: '0 0 45%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: 24, paddingBottom: 24, paddingLeft: 28, paddingRight: 28, minHeight: '100vh' }}>
 
-          <div className={`erp-login-card${shaking ? ' erp-shake' : ''}`} style={{ background: C.white, borderRadius: 20, padding: '24px 28px 20px', width: '100%', maxWidth: 460, boxShadow: shadow.card, border: '1px solid rgba(0,0,0,0.06)', borderTop: `3px solid ${C.orange}`, overflow: 'hidden' }}>
+          <div className={`erp-login-card${shaking ? ' erp-shake' : ''}`} style={{ background: C.white, borderRadius: 20, padding: '24px 28px 20px', width: '100%', maxWidth: 460, boxShadow: shadow.card, overflow: 'hidden' }}>
 
             {/* animated step wrapper */}
             <div key={mode} className={`erp-step-${anim}`}>
@@ -556,7 +557,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
                   {/* security badges */}
                   <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#9B9B9B', fontSize: 11.5, fontFamily: "'DM Sans', sans-serif" }}>
-                      <i className="fas fa-lock" style={{ color: '#4ade80', fontSize: 11 }} />AES-256 Encrypted
+                      <i className="fas fa-lock" style={{ color: C.orange, fontSize: 11 }} />AES-256 Encrypted
                     </span>
                   </div>
 
@@ -853,7 +854,7 @@ const ERPLogin = ({ onSuccess }: Props) => {
                   <p style={{ color: C.muted, fontSize: 13.5, margin: '0 0 20px', fontFamily: "'DM Sans', sans-serif", lineHeight: 1.6 }}>
                     Your password has been updated successfully.<br />Redirecting to sign in…
                   </p>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: C.orangeLight, border: '1px solid rgba(201,136,58,0.25)', borderRadius: 20, padding: '6px 18px' }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: C.orangeLight, border: '1px solid rgba(217,53,34,0.25)', borderRadius: 20, padding: '6px 18px' }}>
                     <i className="fas fa-lock" style={{ color: C.orange, fontSize: 11 }}></i>
                     <span style={{ fontSize: 12, color: C.orange, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Security updated</span>
                   </div>

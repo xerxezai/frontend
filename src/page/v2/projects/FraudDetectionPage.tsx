@@ -1,8 +1,8 @@
 // FraudDetectionPage.tsx
-// Purpose: /v2/project/fraud-detection-mlops — case study data for the
+// Purpose: /project/fraud-detection-mlops — case study data for the
 //          Real-Time Fraud Detection System project, rendered through
 //          <ProjectCaseStudyTemplate>.
-// Used in: src/App.tsx (route: /v2/project/fraud-detection-mlops)
+// Used in: src/App.tsx (route: /project/fraud-detection-mlops)
 // Data source: original XERXEZ copy per the client's project brief. No
 //              invented statistics — every number below is one the client
 //              supplied for this case study.
@@ -13,7 +13,7 @@ import ProjectCaseStudyTemplate, { type CaseStudyData } from "./ProjectCaseStudy
 const data: CaseStudyData = {
   seoTitle: "Real-Time Fraud Detection System | Case Study | XERXEZ",
   seoDesc: "How XERXEZ built a real-time ML fraud detection system for a financial institution — 10M+ daily detections, sub-100ms latency, 99.2% accuracy, $6.2M fraud prevented annually.",
-  canonical: "/v2/project/fraud-detection-mlops",
+  canonical: "/project/fraud-detection-mlops",
 
   category: "MLOps",
   industry: "Financial Services",
@@ -60,7 +60,7 @@ const data: CaseStudyData = {
     { label: "Team Size", value: "6 engineers" },
   ],
 
-  prev: { title: "Kubernetes Security Hardening", href: "/v2/project/kubernetes-security" },
+  prev: { title: "Kubernetes Security Hardening", href: "/project/kubernetes-security" },
 };
 
 const FraudDetectionPage = () => <ProjectCaseStudyTemplate data={data} />;

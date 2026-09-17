@@ -5,7 +5,7 @@ import CurrencySwitcher from './CurrencySwitcher';
 import { PartnerProvider, usePartner } from '../context/PartnerContext';
 import { CurrencyProvider } from '../context/CurrencyContext';
 import { partnerLogout } from '../api/partnerApi';
-import { OG, CREAM, FF } from '../constants';
+import { OG, DARK, CREAM, FF } from '../constants';
 
 const PAGE_TITLE: Record<string, string> = {
   dashboard: 'Dashboard', 'submit-deal': 'Submit a Deal', deals: 'My Deals',
@@ -25,7 +25,7 @@ function LayoutInner({ children, onLogout }: { children: ReactNode; onLogout: ()
   const doLogout = () => {
     partnerLogout();
     onLogout();
-    navigate('/partner', { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (
@@ -38,7 +38,7 @@ function LayoutInner({ children, onLogout }: { children: ReactNode; onLogout: ()
           .prtl-header-desktop { display: none !important; }
         }
         .prtl-topbar { display: none; }
-        .prtl-avatar-chip:hover { background: rgba(201,136,58,0.10) !important; border-color: rgba(201,136,58,0.30) !important; }
+        .prtl-avatar-chip:hover { background: rgba(217,53,34,0.10) !important; border-color: rgba(217,53,34,0.30) !important; }
       `}</style>
 
       {/* desktop fixed sidebar */}
@@ -60,7 +60,7 @@ function LayoutInner({ children, onLogout }: { children: ReactNode; onLogout: ()
         {/* mobile top bar */}
         <div className="prtl-topbar" style={{
           alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px',
-          background: '#1a1208', position: 'sticky', top: 0, zIndex: 15,
+          background: DARK, position: 'sticky', top: 0, zIndex: 15,
         }}>
           <button
             type="button" onClick={() => setMobileOpen(true)} aria-label="Open menu"
@@ -68,7 +68,7 @@ function LayoutInner({ children, onLogout }: { children: ReactNode; onLogout: ()
           >
             <i className="fas fa-bars" />
           </button>
-          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 18, fontWeight: 700, color: '#fff' }}>
+          <span style={{ fontFamily: FF, fontSize: 18, fontWeight: 700, color: '#fff' }}>
             {pageTitle}
           </span>
           <CurrencySwitcher dark />
@@ -95,7 +95,7 @@ function LayoutInner({ children, onLogout }: { children: ReactNode; onLogout: ()
               }}>
                 <div style={{
                   width: 32, height: 32, borderRadius: '50%',
-                  background: `linear-gradient(145deg,#e8a84e,${OG})`,
+                  background: OG,
                   boxShadow: `0 0 0 2px #fff, 0 0 0 3px ${OG}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>

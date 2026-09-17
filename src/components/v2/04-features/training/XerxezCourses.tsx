@@ -134,7 +134,7 @@ const CourseCard = ({ c }: { c: ApiCourse }) => {
           <span style={{ color: T.border }}>·</span>
           <PlayCircle size={13} color={T.red} /> {c.lessons} lessons
         </div>
-        <Link to="/lma/student/dashboard" style={{
+        <Link to={`/lma/courses/${c.id}`} style={{
           display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
           background: T.red, color: "#fff",
           fontFamily: T.fontHead, fontSize: 13.5, fontWeight: 600,

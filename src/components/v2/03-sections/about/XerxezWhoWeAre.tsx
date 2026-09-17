@@ -4,7 +4,7 @@
 // Data source: the three column titles/bodies are the `aboutCompanyData` items
 //              from src/data/index.ts (lightly re-cased). No new copy.
 
-import { T, SectionHeading, Reveal, sectionPad } from "../../01-core/v2theme";
+import { T, Eyebrow, LearnMore, Reveal, sectionPad } from "../../01-core/v2theme";
 
 // Three positioning statements shown side by side.
 const COLUMNS = [
@@ -23,18 +23,37 @@ const COLUMNS = [
 ];
 
 const XerxezWhoWeAre = () => (
-  <section style={{ ...sectionPad, background: "#fff" }}>
+  <section style={{ ...sectionPad, background: "#ffffff", borderTop: `4px solid ${T.red}` }}>
     <div className="container">
       <Reveal>
-        <SectionHeading
-          eyebrow="Who We Are"
-          // <br> only shows at ≥lg so the mobile heading wraps naturally
-          title={<>A technology partner built for<br className="d-none d-lg-inline" /> engineering-grade software</>}
-          subtitle="XERXEZ delivers AI-powered ERP, secure delivery pipelines, and cloud infrastructure for engineering, EPC, and industrial organisations across the UAE and India."
-        />
+        <div>
+          <Eyebrow color={T.red}>Who We Are</Eyebrow>
+          <h2 style={{
+            fontFamily: T.fontHead,
+            fontWeight: 800,
+            fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+            lineHeight: 1.1,
+            letterSpacing: "-0.015em",
+            color: T.headNavy,
+            margin: 0,
+          }}>
+            {/* <br> only shows at ≥lg so the mobile heading wraps naturally */}
+            A technology partner built for<br className="d-none d-lg-inline" /> engineering-grade software
+          </h2>
+          <p style={{
+            fontFamily: T.fontBody,
+            fontSize: 17,
+            lineHeight: 1.7,
+            color: T.muted,
+            margin: "18px 0 0",
+            maxWidth: 640,
+          }}>
+            XERXEZ delivers AI-powered ERP, secure delivery pipelines, and cloud infrastructure for engineering, EPC, and industrial organisations across the UAE and India.
+          </p>
+        </div>
       </Reveal>
 
-      <div className="row g-4 g-lg-5" style={{ marginTop: 52 }}>
+      <div className="row g-4 g-lg-5" style={{ marginTop: 40 }}>
         {COLUMNS.map((c, i) => (
           <div key={c.title} className="col-lg-4">
             {/* stagger each column's reveal by 70ms */}
@@ -65,6 +84,12 @@ const XerxezWhoWeAre = () => (
           </div>
         ))}
       </div>
+
+      <Reveal delay={80}>
+        <div style={{ marginTop: 40 }}>
+          <LearnMore to="/about" label="Learn more about us" />
+        </div>
+      </Reveal>
     </div>
   </section>
 );

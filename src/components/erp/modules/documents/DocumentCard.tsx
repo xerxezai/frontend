@@ -66,7 +66,7 @@ export default function DocumentCard({
       </div>
 
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
-        <button onClick={onEdit} style={btnStyle('rgba(201,136,58,0.10)', OG, '1px solid rgba(201,136,58,0.28)')}>
+        <button onClick={onEdit} style={btnStyle('rgba(217,53,34,0.10)', OG, '1px solid rgba(217,53,34,0.28)')}>
           <i className="fas fa-pen" style={{ marginRight: 6 }} />Edit
         </button>
         <button onClick={onDelete} style={btnStyle('rgba(239,68,68,0.10)', '#ef4444', '1px solid rgba(239,68,68,0.28)')}>

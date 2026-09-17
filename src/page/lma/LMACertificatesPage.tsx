@@ -4,11 +4,11 @@ import { Award, Download } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
 
 const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
-const GOLD  = "#C9883A";
-const AMBER = "#E8A84E";
+const GOLD  = "#D93522";
+const AMBER = "#D93522";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)";
-const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(201,136,58,0.20)";
+const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.20)";
 
 interface Certificate {
   id: number;
@@ -141,12 +141,12 @@ export default function LMACertificatesPage() {
                 {/* Award icon */}
                 <div style={{
                   width: 72, height: 72, borderRadius: "50%",
-                  background: `linear-gradient(135deg,#fef3c7,#fde68a)`,
+                  background: `linear-gradient(135deg,rgba(217,53,34,0.14),rgba(217,53,34,0.24))`,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   margin: "0 auto 16px",
-                  boxShadow: "0 4px 16px rgba(201,136,58,0.25)",
+                  boxShadow: "0 4px 16px rgba(217,53,34,0.25)",
                 }}>
-                  <Award size={36} color="#d97706" />
+                  <Award size={36} color={GOLD} />
                 </div>
 
                 <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>
@@ -166,7 +166,7 @@ export default function LMACertificatesPage() {
                   color: "#0a0806", fontSize: 13, fontWeight: 700,
                   cursor: "pointer", fontFamily: FF,
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  boxShadow: "0 4px 0 rgba(140,80,20,0.25)",
+                  boxShadow: "0 4px 0 rgba(139,31,23,0.25)",
                 }}>
                   <Download size={14} /> Download PDF
                 </button>

@@ -29,8 +29,8 @@ const CurrencySwitcher = ({ dark }: Props) => {
         type="button" onClick={() => setOpen(o => !o)} aria-expanded={open} aria-label="Select currency"
         style={{
           display: 'flex', alignItems: 'center', gap: 6, height: 36, padding: '0 12px', borderRadius: 8,
-          background: open ? 'rgba(201,136,58,0.12)' : (dark ? 'rgba(255,255,255,0.08)' : '#fafaf8'),
-          border: `1px solid ${open ? 'rgba(201,136,58,0.36)' : (dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)')}`,
+          background: open ? 'rgba(217,53,34,0.12)' : (dark ? 'rgba(255,255,255,0.08)' : '#fafaf8'),
+          border: `1px solid ${open ? 'rgba(217,53,34,0.36)' : (dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)')}`,
           cursor: 'pointer', minHeight: 44,
         }}
       >
@@ -54,7 +54,7 @@ const CurrencySwitcher = ({ dark }: Props) => {
               type="button"
               onClick={() => { setCurrency(cur.code); setOpen(false); }}
               style={{
-                width: '100%', background: cur.code === selectedCurrency ? 'rgba(201,136,58,0.08)' : 'none',
+                width: '100%', background: cur.code === selectedCurrency ? 'rgba(217,53,34,0.08)' : 'none',
                 border: 'none', borderBottom: '1px solid rgba(0,0,0,0.05)', padding: '10px 14px',
                 display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', textAlign: 'left', minHeight: 44,
               }}

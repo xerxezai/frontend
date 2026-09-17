@@ -4,7 +4,7 @@ import { useCurrency } from '../../../../context/CurrencyContext';
 import { downloadPayslipPDF } from './payslipPdf';
 
 const C = {
-  orange: '#C9883A', orangeGrad: 'linear-gradient(145deg, #e8a84e 0%, #C9883A 100%)',
+  orange: '#D93522', orangeGrad: 'linear-gradient(145deg, #D93522 0%, #D93522 100%)',
   cream: '#F8F7F4', white: '#FFFFFF', dark: '#1A1A1A', muted: '#6B6B6B',
   border: 'rgba(0,0,0,0.07)',
 };
@@ -21,7 +21,7 @@ function OrbHero() {
     let t = 0;
     function draw() {
       ctx!.clearRect(0, 0, W, H);
-      [[0.3,0.5,90,'rgba(201,136,58,0.12)'],[0.7,0.4,70,'rgba(99,102,241,0.09)'],[0.5,0.7,80,'rgba(16,185,129,0.07)']].forEach(([fx, fy, r, clr], i) => {
+      [[0.3,0.5,90,'rgba(217,53,34,0.12)'],[0.7,0.4,70,'rgba(99,102,241,0.09)'],[0.5,0.7,80,'rgba(16,185,129,0.07)']].forEach(([fx, fy, r, clr], i) => {
         const x = (fx as number) * W + Math.sin(t * 0.5 + i * 2) * 30;
         const y = (fy as number) * H + Math.cos(t * 0.4 + i) * 20;
         const g = ctx!.createRadialGradient(x, y, 0, x, y, r as number);
@@ -60,7 +60,7 @@ function PayslipDetailModal({ row, salaryStructure, formatAmount, onClose }: {
     <div style={{ position: 'fixed', inset: 0, zIndex: 1050, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(3px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, overflowY: 'auto' }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, maxWidth: 560, width: '100%', boxShadow: '0 24px 70px rgba(0,0,0,0.22)', overflow: 'hidden', margin: '24px 0' }}>
         {/* Header — company name + brand mark */}
-        <div style={{ background: 'linear-gradient(135deg, #1a1208 0%, #2d1e08 60%, #0f0a05 100%)', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ background: 'linear-gradient(135deg, #071a33 0%, #2d1e08 60%, #04101f 100%)', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <div style={{ color: C.orange, fontFamily: "'DM Sans', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: '0.02em' }}>XERXEZ</div>
             <div style={{ color: 'rgba(255,255,255,0.55)', fontFamily: "'DM Sans', sans-serif", fontSize: 11.5, marginTop: 2 }}>{row.company_name || 'Payslip'}</div>
@@ -151,7 +151,7 @@ export default function MyPayslipsModule() {
       {/* Hero */}
       <div style={{
         position: 'relative', borderRadius: 18, overflow: 'hidden', marginBottom: 28,
-        background: 'linear-gradient(135deg, #1a1208 0%, #2d1e08 50%, #0f0a05 100%)',
+        background: 'linear-gradient(135deg, #071a33 0%, #2d1e08 50%, #04101f 100%)',
         padding: '26px 32px 24px',
         boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
       }}>
@@ -170,7 +170,7 @@ export default function MyPayslipsModule() {
           <div style={{ marginTop: 16, display: 'flex', gap: 24 }}>
             <div>
               <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Total Payslips</div>
-              <div style={{ color: '#e8a84e', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 22 }}>{data.length}</div>
+              <div style={{ color: '#D93522', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 22 }}>{data.length}</div>
             </div>
             {data.length > 0 && (
               <div>
@@ -210,7 +210,7 @@ export default function MyPayslipsModule() {
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = ''; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)'; }}
               >
                 {/* Card header */}
-                <div style={{ background: `linear-gradient(135deg, #1a1208, #2d1e08)`, padding: '16px 20px', position: 'relative' }}>
+                <div style={{ background: `linear-gradient(135deg, #071a33, #2d1e08)`, padding: '16px 20px', position: 'relative' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
                       <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, fontFamily: "'DM Sans', sans-serif", fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
@@ -221,7 +221,7 @@ export default function MyPayslipsModule() {
                       </div>
                       <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", marginTop: 2 }}>Net Salary</div>
                     </div>
-                    <div style={{ width: 40, height: 40, borderRadius: 11, background: C.orangeGrad, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px rgba(201,136,58,0.35)' }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 11, background: C.orangeGrad, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px rgba(217,53,34,0.35)' }}>
                       <i className="fas fa-file-alt" style={{ color: '#fff', fontSize: 15 }} />
                     </div>
                   </div>

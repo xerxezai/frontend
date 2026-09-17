@@ -129,7 +129,7 @@ export default function Inquiries() {
 
   const rowStyle = (r: Inquiry): React.CSSProperties => {
     if (r.priority === 'high') return { background: 'rgba(239,68,68,0.045)' };
-    if (r.status === 'new') return { background: 'rgba(201,136,58,0.045)' };
+    if (r.status === 'new') return { background: 'rgba(217,53,34,0.045)' };
     return {};
   };
 
@@ -183,7 +183,7 @@ export default function Inquiries() {
       {selectedIds.length > 0 && (
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
-          background: 'rgba(201,136,58,0.08)', border: '1px solid rgba(201,136,58,0.25)', borderRadius: 10,
+          background: 'rgba(217,53,34,0.08)', border: '1px solid rgba(217,53,34,0.25)', borderRadius: 10,
           padding: '10px 16px', marginBottom: 14,
         }}>
           <span style={{ fontFamily: FF, fontSize: 12.5, fontWeight: 700, color: '#5a5650' }}>{selectedIds.length} selected</span>
@@ -269,7 +269,7 @@ export default function Inquiries() {
                       </button>
                       <button
                         title="Edit" onClick={() => setOpenInquiry(r)}
-                        style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}
+                        style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer' }}
                       >
                         <i className="fas fa-pen" style={{ fontSize: 10 }} />
                       </button>

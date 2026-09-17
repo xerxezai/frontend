@@ -320,7 +320,7 @@ function UploadDocumentPanel({ employees, onClose, onUploaded }: {
       footer={(
         <>
           <button type="button" onClick={onClose} style={{ flex: 1, background: CREAM, border: `1px solid ${BORDER}`, borderRadius: 9, padding: '10px 0', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13, color: MUTED }}>Cancel</button>
-          <button type="submit" form="doc-upload-form" disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px 0', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'default' : 'pointer', opacity: saving ? 0.6 : 1 }}>
+          <button type="submit" form="doc-upload-form" disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px 0', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'default' : 'pointer', opacity: saving ? 0.6 : 1 }}>
             {saving ? 'Uploading…' : 'Upload Document'}
           </button>
         </>
@@ -369,8 +369,8 @@ function UploadDocumentPanel({ employees, onClose, onUploaded }: {
         <div>
           <label style={lbl}>File *</label>
           <label style={{
-            display: 'flex', alignItems: 'center', gap: 8, border: `1.5px dashed ${file ? OG : 'rgba(201,136,58,0.35)'}`,
-            borderRadius: 9, padding: '10px 12px', cursor: 'pointer', background: file ? 'rgba(201,136,58,0.05)' : '#fff',
+            display: 'flex', alignItems: 'center', gap: 8, border: `1.5px dashed ${file ? OG : 'rgba(217,53,34,0.35)'}`,
+            borderRadius: 9, padding: '10px 12px', cursor: 'pointer', background: file ? 'rgba(217,53,34,0.05)' : '#fff',
           }}>
             <input ref={fileRef} type="file" accept=".pdf,.jpg,.jpeg,.png,.docx" style={{ display: 'none' }}
               onChange={e => pickFile(e.target.files?.[0] || null)} />
@@ -448,7 +448,7 @@ function BulkUploadPanel({ employees, onClose, onUploaded }: {
       footer={(
         <>
           <button type="button" onClick={onClose} style={{ flex: 1, background: CREAM, border: `1px solid ${BORDER}`, borderRadius: 9, padding: '10px 0', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13, color: MUTED }}>Cancel</button>
-          <button type="button" onClick={submit} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px 0', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'default' : 'pointer', opacity: saving ? 0.6 : 1 }}>
+          <button type="button" onClick={submit} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px 0', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'default' : 'pointer', opacity: saving ? 0.6 : 1 }}>
             {saving ? `Uploading ${progress.done}/${progress.total}…` : 'Upload All'}
           </button>
         </>
@@ -470,8 +470,8 @@ function BulkUploadPanel({ employees, onClose, onUploaded }: {
               )}
             </div>
             <label style={{
-              display: 'flex', alignItems: 'center', gap: 8, border: `1.5px dashed ${r.file ? OG : 'rgba(201,136,58,0.35)'}`,
-              borderRadius: 8, padding: '8px 10px', cursor: 'pointer', background: r.file ? 'rgba(201,136,58,0.05)' : '#fff',
+              display: 'flex', alignItems: 'center', gap: 8, border: `1.5px dashed ${r.file ? OG : 'rgba(217,53,34,0.35)'}`,
+              borderRadius: 8, padding: '8px 10px', cursor: 'pointer', background: r.file ? 'rgba(217,53,34,0.05)' : '#fff',
             }}>
               <input type="file" accept=".pdf,.jpg,.jpeg,.png,.docx" style={{ display: 'none' }}
                 onChange={e => pickFile(r.id, e.target.files?.[0] || null)} />
@@ -488,7 +488,7 @@ function BulkUploadPanel({ employees, onClose, onUploaded }: {
           </div>
         ))}
         <button type="button" onClick={addRow}
-          style={{ background: 'rgba(201,136,58,0.08)', border: '1px solid rgba(201,136,58,0.25)', borderRadius: 9, padding: '9px 0', color: OG, fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+          style={{ background: 'rgba(217,53,34,0.08)', border: '1px solid rgba(217,53,34,0.25)', borderRadius: 9, padding: '9px 0', color: OG, fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
           <Plus size={13} />Add Another File
         </button>
         <div style={{ fontSize: 11, color: MUTED, fontFamily: FF }}>Max 5MB per file · {ALLOWED_HINT}.</div>
@@ -608,7 +608,7 @@ export default function HRDocumentsPage() {
               <Files size={15} />Bulk Upload
             </button>
             <button onClick={() => setShowUpload(true)}
-              style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7, boxShadow: '0 3px 0 rgba(150,95,30,0.5)' }}>
+              style={{ background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px 20px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7, boxShadow: '0 3px 0 rgba(150,95,30,0.5)' }}>
               <Plus size={15} />Upload Document
             </button>
           </div>
@@ -666,7 +666,7 @@ export default function HRDocumentsPage() {
       {documents.loading ? (
         <Skeleton h={240} />
       ) : filtered.length === 0 ? (
-        <EmptyState icon={FileText} message={documents.data.length === 0 ? 'No documents uploaded yet.' : 'No documents match your search.'} cta={isAdmin && documents.data.length === 0 ? <button onClick={() => setShowUpload(true)} style={{ background: 'linear-gradient(145deg,#e8a84e 0%,#C9883A 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px 18px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>Upload Document</button> : undefined} />
+        <EmptyState icon={FileText} message={documents.data.length === 0 ? 'No documents uploaded yet.' : 'No documents match your search.'} cta={isAdmin && documents.data.length === 0 ? <button onClick={() => setShowUpload(true)} style={{ background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px 18px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>Upload Document</button> : undefined} />
       ) : (
         <div style={{ background: WHITE, borderRadius: 14, border: `1px solid ${BORDER}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
           <div style={{ overflowX: 'auto' }}>
@@ -717,7 +717,7 @@ export default function HRDocumentsPage() {
                           )}
                           {d.file_url && (
                             <a href={d.file_url} target="_blank" rel="noopener noreferrer" title="Download"
-                              style={{ background: 'rgba(201,136,58,0.08)', color: OG, border: '1px solid rgba(201,136,58,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6 }}>
+                              style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6 }}>
                               <Download size={12} />
                             </a>
                           )}

@@ -22,7 +22,7 @@ import dockerLogo from "../../../../assets/logos/docker.svg";
 import kubernetesLogo from "../../../../assets/logos/kubernetes.svg";
 import tensorflowLogo from "../../../../assets/logos/tensorflow.svg";
 import postgresqlLogo from "../../../../assets/logos/postgresql.svg";
-import { T, SectionHeading, Reveal, sectionPad } from "../../01-core/v2theme";
+import { T, SectionHeading, Reveal } from "../../01-core/v2theme";
 
 // Real stack, real logos — mirrors AboutV2's TECH list. Exported so
 // XerxezServiceTemplate's "Technologies we build with" section can reuse the
@@ -54,9 +54,9 @@ const Tile = ({ src, alt, decorative }: { src: string; alt: string; decorative?:
       flex: "0 0 auto", width: 150, height: 92,
       display: "flex", alignItems: "center", justifyContent: "center",
       background: "#fff", border: `1px solid ${T.border}`,
-      borderRadius: T.rcard,
+      borderRadius: 12,
       transform: hover ? "translateY(-10px)" : "translateY(0)",
-      boxShadow: hover ? `0 25px 50px ${T.scrim(0.20)}` : T.cardShadow,
+      boxShadow: hover ? `0 25px 50px ${T.scrim(0.20)}` : "0 4px 12px rgba(7,26,51,0.08)",
       transition: "transform 0.3s ease, box-shadow 0.3s ease",
     }}
   >
@@ -70,7 +70,7 @@ const Tile = ({ src, alt, decorative }: { src: string; alt: string; decorative?:
       src={src}
       alt={decorative ? "" : alt}
       decoding="async"
-      style={{ maxHeight: 34, maxWidth: 100, width: "auto", height: "auto", objectFit: "contain", display: "block" }}
+      style={{ height: 40, width: "auto", maxWidth: 110, objectFit: "contain", display: "block" }}
     />
   </div>
   );
@@ -89,7 +89,7 @@ export const XerxezTechLogoStrip = () => (
         to   { transform: translateX(-50%); }   /* strip is rendered twice, so 50% = exactly one loop */
       }
       .v2TechMarqueeTrack {
-        animation: v2TechScroll 26s linear infinite;
+        animation: v2TechScroll 38s linear infinite;
       }
       .v2TechMarqueeViewport:hover .v2TechMarqueeTrack,
       .v2TechMarqueeViewport:focus-within .v2TechMarqueeTrack {
@@ -118,7 +118,7 @@ export const XerxezTechLogoStrip = () => (
 );
 
 const XerxezTechStack = () => (
-  <section style={{ ...sectionPad, background: T.lightAlt }}>
+  <section style={{ padding: "60px 0", background: T.lightAlt }}>
     <div className="container">
       <Reveal>
         <SectionHeading
