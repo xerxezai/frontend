@@ -110,6 +110,9 @@ const LMACertificatesPage       = lazy(() => import("./page/lma/LMACertificatesP
 const LMAProgressPage           = lazy(() => import("./page/lma/LMAProgressPage"));
 const LMAContinueLearningPage   = lazy(() => import("./page/lma/LMAContinueLearningPage"));
 const LMAProfilePage            = lazy(() => import("./page/lma/LMAProfilePage"));
+const LMAAdminStudents          = lazy(() => import("./page/lma/LMAAdminStudents"));
+const LMAAdminEnrollments       = lazy(() => import("./page/lma/LMAAdminEnrollments"));
+const LMAAdminAnalytics         = lazy(() => import("./page/lma/LMAAdminAnalytics"));
 const PortalHub                 = lazy(() => import("./page/PortalHub"));
 const PartnerApp                = lazy(() => import("./partner/PartnerApp"));
 
@@ -201,6 +204,9 @@ function App() {
           <Route path="/lma/student/certificates"         element={<LMACertificatesPage />} />
           <Route path="/lma/student/progress"             element={<LMAProgressPage />} />
           <Route path="/lma/student/profile"              element={<LMAProfilePage />} />
+          <Route path="/lma/admin/students"               element={<LMAAdminStudents />} />
+          <Route path="/lma/admin/enrollments"            element={<LMAAdminEnrollments />} />
+          <Route path="/lma/admin/analytics"              element={<LMAAdminAnalytics />} />
           <Route path="/lma/instructor/dashboard"         element={<LMAInstructorDashboard />} />
           <Route path="/lma/courses"                      element={<LMACoursesPage />} />
           <Route path="/lma/courses/:id"                  element={<LMACourseDetailPage />} />

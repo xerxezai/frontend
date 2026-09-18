@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader, Eye, EyeOff } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
 const FF    = "'DM Sans', sans-serif";

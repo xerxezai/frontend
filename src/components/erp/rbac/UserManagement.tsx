@@ -83,7 +83,6 @@ function EditAccessModal({ user, onClose, onSaved }: { user: any; onClose: () =>
     setSaving(true);
     try {
       const payload = { role, modules: role === 'super_admin' ? ALL_MODULES.map(m => m.name) : modules };
-      console.log('[UserManagement] PUT rbac/users/%s/ payload:', user.id, payload);
       await rbacApi.updateUser(user.id, payload);
       toast.success('Access updated');
       onSaved(); onClose();

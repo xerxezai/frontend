@@ -3,8 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Play, BookOpen, Search, TrendingUp } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
 import { ProgressBar, levelColor, GOLD, AMBER, DARK, FF, BCARD, BHOV } from "./LMACourseCard";
-
-const API = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
 interface Enrollment {
   id: number;

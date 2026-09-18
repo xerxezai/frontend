@@ -1,14 +1,24 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
-import { CheckCircle2, Shield, ShieldCheck, X, Lock, PlayCircle, FileText, Star } from "lucide-react";
+import { CheckCircle2, Shield, ShieldCheck, X, Lock, PlayCircle, FileText, Star, Users } from "lucide-react";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
 const DARK  = "#071a33";
 const DARK2 = "#04101f";
 const CREAM = "#F4F7FA";
 const FF    = "'DM Sans', sans-serif";
+
+/** Decodes HTML entities (e.g. "&amp;" -> "&") in API text fields — the course
+ * description is plain text rendered directly (no dangerouslySetInnerHTML), so
+ * an entity-encoded value from the backend would otherwise show up literally
+ * as "&amp;" instead of "&" in the browser. */
+function decodeHtmlEntities(text: string): string {
+  if (!text) return text;
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  return doc.documentElement.textContent ?? text;
+}
 
 const THUMB_GRADS = [
   ["#1e3a5f", "#3b82f6"],
@@ -505,9 +515,11 @@ const LessonRow = ({ lesson, enrolled, onClick }: {
         margin: "0 -8px",
       }}
     >
-      {canWatch
-        ? <i className="fas fa-play-circle" style={{ fontSize: 14, color: hov ? AMBER : GOLD, flexShrink: 0, width: 16, transition: "color 0.16s ease" }} />
-        : <i className="fas fa-lock" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />}
+      {lesson.is_completed
+        ? <i className="fas fa-check-circle" style={{ fontSize: 14, color: "#059669", flexShrink: 0, width: 16 }} />
+        : canWatch
+          ? <i className="fas fa-play-circle" style={{ fontSize: 14, color: hov ? AMBER : GOLD, flexShrink: 0, width: 16, transition: "color 0.16s ease" }} />
+          : <i className="fas fa-lock" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />}
       <span style={{
         flex: 1, fontSize: 13, lineHeight: 1.45, fontFamily: FF,
         color: canWatch ? "#141413" : "rgba(20,20,19,0.52)",
@@ -516,6 +528,11 @@ const LessonRow = ({ lesson, enrolled, onClick }: {
       }}>
         {lesson.title}
       </span>
+      {lesson.is_completed && (
+        <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase" as const, color: "#059669", background: "rgba(5,150,105,0.10)", borderRadius: 4, padding: "1px 6px", flexShrink: 0 }}>
+          Completed
+        </span>
+      )}
       {lesson.is_free_preview && (
         <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase" as const, color: GOLD, border: `1px solid ${GOLD}`, borderRadius: 4, padding: "1px 6px", flexShrink: 0 }}>
           Free
@@ -590,12 +607,15 @@ const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLes
   );
 };
 
-/* ── Instructor item ── */
+/* ── Instructor item — courses/learners are real API numbers only; either one
+   renders "—" rather than a fabricated figure when the API doesn't provide it. ── */
 const InstructorItem = ({ name, designation, courses, learners }: {
-  name: string; designation: string; courses: number; learners: string;
+  name: string; designation: string; courses?: number | null; learners?: number | null;
 }) => {
   const [hov, setHov] = useState(false);
   const initials = name.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase();
+  const coursesLabel = courses != null ? `${courses} Course${courses !== 1 ? "s" : ""}` : "—";
+  const learnersLabel = learners != null ? `${learners.toLocaleString()} learners` : "—";
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 14 }}>
       <div
@@ -613,26 +633,24 @@ const InstructorItem = ({ name, designation, courses, learners }: {
         <div style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, marginBottom: 2, fontFamily: FF }}>{name}</div>
         <div style={{ fontSize: 12, color: "rgba(20,20,19,0.52)", marginBottom: 3, fontFamily: FF }}>{designation}</div>
         <div style={{ fontSize: 11, color: "rgba(20,20,19,0.38)", fontFamily: FF }}>
-          {courses} Course{courses !== 1 ? "s" : ""} · {learners} learners
+          {coursesLabel} · {learnersLabel}
         </div>
       </div>
     </div>
   );
 };
 
-/* ── What you'll learn ── */
-const WhatYouLearnBox = ({ techStack }: { techStack: string[] }) => {
-  const items = [
-    `Hands-on with ${techStack[0] ?? "Python"} from day one`,
-    "Build production-ready AI systems end-to-end",
-    `Deploy and monitor with ${techStack[1] ?? "cloud platforms"}`,
-    "Earn XERXEZ AI certification",
-    `Work with real enterprise ${techStack[2] ?? "data pipelines"}`,
-    "Master industry deployment patterns and MLOps",
-  ];
-  return (
-    <div style={{ border: "1px solid rgba(0,0,0,0.09)", borderRadius: 14, padding: "22px 26px", marginBottom: 24, background: "#fff" }}>
-      <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>What you'll learn</h3>
+/* ── What you'll learn — real per-course data from course.learning_outcomes,
+   set by the instructor. Falls back to a plain "coming soon" message rather
+   than a generic templated list when the instructor hasn't filled it in. ── */
+const WhatYouLearnBox = ({ items }: { items: string[] }) => (
+  <div style={{ border: "1px solid rgba(0,0,0,0.09)", borderRadius: 14, padding: "22px 26px", marginBottom: 24, background: "#fff" }}>
+    <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>What you'll learn</h3>
+    {items.length === 0 ? (
+      <p style={{ fontSize: 13, color: "rgba(20,20,19,0.45)", margin: 0, fontFamily: FF }}>
+        Course learning outcomes coming soon
+      </p>
+    ) : (
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 24px" }} className="lmacd-learn-grid">
         {items.map(item => (
           <div key={item} style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
@@ -641,9 +659,9 @@ const WhatYouLearnBox = ({ techStack }: { techStack: string[] }) => {
           </div>
         ))}
       </div>
-    </div>
-  );
-};
+    )}
+  </div>
+);
 
 /* ── Skills pills ── */
 const SkillsPills = ({ items, heading }: { items: string[]; heading: string }) => (
@@ -750,8 +768,8 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
 /* ════════════════════════════════════════════════════════════════════════════
    3-D HERO COURSE CARD
 ════════════════════════════════════════════════════════════════════════════ */
-const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
-  course: any; totalLessons: number; onEnroll: () => void; onPreview?: () => void;
+const HeroCourseCard = ({ course, totalLessons, enrolled, onEnroll, onPreview }: {
+  course: any; totalLessons: number; enrolled: boolean; onEnroll: () => void; onPreview?: () => void;
 }) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -850,25 +868,48 @@ const HeroCourseCard = ({ course, totalLessons, onEnroll, onPreview }: {
           </div>
         </div>
 
-        {/* Enroll CTA */}
-        <button type="button" onClick={onEnroll} style={{
-          width: "100%", padding: "11px", borderRadius: 10,
-          background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-          color: "#0a0806", fontWeight: 800, fontSize: 13, fontFamily: FF,
-          border: "none", cursor: "pointer",
-          boxShadow: "0 3px 0 rgba(139,31,23,0.45),0 6px 20px rgba(217,53,34,0.28)",
-        }}>
-          Enroll Now — ₹{course.price?.toLocaleString() ?? "–"}
-        </button>
-        <button type="button" onClick={onPreview} className="lmacd-preview-btn" style={{
-          width: "100%", padding: "9px", borderRadius: 10, marginTop: 8,
-          background: "transparent", color: GOLD, fontWeight: 700, fontSize: 11.5, fontFamily: FF,
-          border: `2px solid ${GOLD}`, cursor: "pointer",
-          transition: "background 0.20s ease",
-        }}>
-          <i className="fas fa-play-circle" style={{ fontSize: 10, marginRight: 5 }} />
-          Try Free Preview
-        </button>
+        {/* Enroll CTA — hidden once enrolled, replaced with Continue Learning */}
+        {enrolled ? (
+          <>
+            <span style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              width: "100%", boxSizing: "border-box", padding: "8px", borderRadius: 10, marginBottom: 8,
+              background: "rgba(16,185,129,0.15)", color: "#34d399", fontWeight: 800, fontSize: 11.5, fontFamily: FF,
+            }}>
+              <i className="fas fa-check-circle" /> You are enrolled
+            </span>
+            <button type="button" onClick={onPreview} style={{
+              width: "100%", padding: "11px", borderRadius: 10,
+              background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+              color: "#fff", fontWeight: 800, fontSize: 13, fontFamily: FF,
+              border: "none", cursor: "pointer",
+              boxShadow: "0 3px 0 rgba(139,31,23,0.45),0 6px 20px rgba(217,53,34,0.28)",
+            }}>
+              Continue Learning →
+            </button>
+          </>
+        ) : (
+          <>
+            <button type="button" onClick={onEnroll} style={{
+              width: "100%", padding: "11px", borderRadius: 10,
+              background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+              color: "#0a0806", fontWeight: 800, fontSize: 13, fontFamily: FF,
+              border: "none", cursor: "pointer",
+              boxShadow: "0 3px 0 rgba(139,31,23,0.45),0 6px 20px rgba(217,53,34,0.28)",
+            }}>
+              Enroll Now — ₹{course.price?.toLocaleString() ?? "–"}
+            </button>
+            <button type="button" onClick={onPreview} className="lmacd-preview-btn" style={{
+              width: "100%", padding: "9px", borderRadius: 10, marginTop: 8,
+              background: "transparent", color: GOLD, fontWeight: 700, fontSize: 11.5, fontFamily: FF,
+              border: `2px solid ${GOLD}`, cursor: "pointer",
+              transition: "background 0.20s ease",
+            }}>
+              <i className="fas fa-play-circle" style={{ fontSize: 10, marginRight: 5 }} />
+              Try Free Preview
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -1073,9 +1114,11 @@ export default function LMACourseDetailPage() {
           <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
             {course.title}
           </div>
-          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", marginTop: 2 }}>
-            {course.modules?.length ?? 0} modules · {totalLessons} lessons · {course.hours}h total
-          </div>
+          {totalLessons > 0 && (
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", marginTop: 2 }}>
+              {course.modules?.length ?? 0} modules · {totalLessons} lessons · {course.hours}h total
+            </div>
+          )}
         </div>
         {!enrolled && (
           <button type="button" onClick={handleEnroll} className="lmacd-shimmer-btn" style={{
@@ -1163,7 +1206,7 @@ export default function LMACourseDetailPage() {
                 margin: "0 0 16px", fontFamily: FF,
                 animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.38s both",
               }}>
-                {course.description}
+                {decodeHtmlEntities(course.description)}
               </p>
 
               {/* Cycling tech stack word */}
@@ -1236,13 +1279,33 @@ export default function LMACourseDetailPage() {
                 animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.60s both",
               }}>
                 {enrolled ? (
-                  <Link to="/lma/student/dashboard" style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
-                    background: "#d1fae5", color: "#059669", fontSize: 14, fontWeight: 800,
-                    padding: "0 28px", height: 52, borderRadius: 11, textDecoration: "none", fontFamily: FF,
-                  }}>
-                    <CheckCircle2 size={16} /> Go to Dashboard
-                  </Link>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", gap: 6, width: "fit-content",
+                      background: "#d1fae5", color: "#059669", fontSize: 12, fontWeight: 800,
+                      padding: "5px 12px", borderRadius: 999, fontFamily: FF,
+                    }}>
+                      <CheckCircle2 size={13} /> You are enrolled
+                    </span>
+                    <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                      <button type="button" onClick={scrollToCurriculum} style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        background: GOLD, color: "#fff", fontSize: 14, fontWeight: 800,
+                        padding: "0 28px", height: 52, borderRadius: 11, border: "none", cursor: "pointer",
+                        fontFamily: FF, boxShadow: "0 4px 0 rgba(139,31,23,0.45),0 8px 24px rgba(217,53,34,0.28)",
+                      }}>
+                        Continue Learning →
+                      </button>
+                      <Link to="/lma/student/dashboard" style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        background: "transparent", color: "rgba(255,255,255,0.65)", fontSize: 13, fontWeight: 600,
+                        padding: "0 22px", height: 52, borderRadius: 11, textDecoration: "none", fontFamily: FF,
+                        border: "1.5px solid rgba(255,255,255,0.20)",
+                      }}>
+                        Go to Dashboard
+                      </Link>
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <button type="button" onClick={handleEnroll} className="lmacd-enroll-btn">
@@ -1279,32 +1342,32 @@ export default function LMACourseDetailPage() {
 
             {/* ── Right card column ── */}
             <div className="lmacd-hero-card-col">
-              <HeroCourseCard course={course} totalLessons={totalLessons} onEnroll={handleEnroll} onPreview={scrollToCurriculum} />
+              <HeroCourseCard course={course} totalLessons={totalLessons} enrolled={enrolled} onEnroll={handleEnroll} onPreview={scrollToCurriculum} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ TRUST BAR ══ */}
-      <div style={{ background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.07)", padding: "13px 0" }}>
-        <div className="lmacd-container">
-          <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-            {[
-              { icon: "fas fa-award",         label: "CPD Accredited" },
-              { icon: "fas fa-certificate",    label: "AWS Certified"  },
-              { icon: "fas fa-shield-alt",     label: "ISO 27001"      },
-              { icon: "fas fa-graduation-cap", label: "Hands-On Labs"  },
-              { icon: "fas fa-users",          label: "500+ Trained"   },
-              { icon: "fas fa-brain",          label: "OpenAI Partner" },
-            ].map(t => (
-              <div key={t.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "rgba(20,20,19,0.52)", fontFamily: FF }}>
-                <i className={t.icon} style={{ color: GOLD, fontSize: 13 }} />
-                {t.label}
-              </div>
-            ))}
+      {/* ══ TRUST BAR — real course.badges from the API only; renders nothing
+           when the course has none, rather than a fabricated generic list. ══ */}
+      {(course.badges ?? []).length > 0 && (
+        <div style={{ background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.07)", padding: "13px 0" }}>
+          <div className="lmacd-container">
+            <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              {(course.badges ?? []).map((b: any) => {
+                const label = typeof b === "string" ? b : b.label;
+                const icon = typeof b === "string" ? "fas fa-check-circle" : (b.icon || "fas fa-check-circle");
+                return (
+                  <div key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "rgba(20,20,19,0.52)", fontFamily: FF }}>
+                    <i className={icon} style={{ color: GOLD, fontSize: 13 }} />
+                    {label}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ══ STICKY TAB NAV ══ */}
       <div ref={tabNavRef} className="lmacd-tab-nav" style={{ top: showStickyBar ? 52 : 0, transition: "top 0.26s ease" }}>
@@ -1336,7 +1399,7 @@ export default function LMACourseDetailPage() {
             <div style={{ flex: 1, minWidth: 0 }}>
               {activeTab === "about" && (
                 <>
-                  <WhatYouLearnBox techStack={course.tech_stack ?? []} />
+                  <WhatYouLearnBox items={course.learning_outcomes ?? []} />
                   <SkillsPills items={course.tech_stack ?? []} heading="Skills you'll gain" />
                   <DetailsToKnow hours={course.hours} lessonsCount={totalLessons} level={course.level ?? ""} />
                   <button type="button" onClick={scrollToCurriculum} style={{
@@ -1371,6 +1434,23 @@ export default function LMACourseDetailPage() {
               )}
 
               {activeTab === "curriculum" && (
+                totalLessons === 0 ? (
+                  /* ── Empty curriculum — course has no lessons yet ── */
+                  <div style={{ textAlign: "center", padding: "56px 24px", background: "#fff", borderRadius: 14, border: "1px solid rgba(0,0,0,0.07)" }}>
+                    <div style={{
+                      width: 60, height: 60, borderRadius: "50%", background: "rgba(217,53,34,0.10)",
+                      display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px",
+                    }}>
+                      <i className="fas fa-hourglass-half" style={{ color: GOLD, fontSize: 24 }} />
+                    </div>
+                    <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 6px", fontFamily: FF }}>
+                      Course content is being prepared
+                    </h3>
+                    <p style={{ fontSize: 13.5, color: "rgba(20,20,19,0.48)", margin: 0, fontFamily: FF }}>
+                      Check back soon.
+                    </p>
+                  </div>
+                ) : (
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
                     <h2 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>
@@ -1401,19 +1481,22 @@ export default function LMACourseDetailPage() {
                       onLessonClick={setSelectedLesson}
                     />
                   ))}
-                  <div style={{ marginTop: 24, textAlign: "center" }}>
-                    <button type="button" onClick={handleEnroll} style={{
-                      display: "inline-flex", alignItems: "center", gap: 8,
-                      background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-                      color: "#0a0806", fontSize: 14, fontWeight: 700,
-                      padding: "12px 28px", borderRadius: 10, border: "none", cursor: "pointer",
-                      boxShadow: "0 4px 0 rgba(139,31,23,0.38),0 8px 24px rgba(217,53,34,0.22)",
-                      fontFamily: FF,
-                    }}>
-                      Enroll in this course <i className="fas fa-arrow-right" style={{ fontSize: 12 }} />
-                    </button>
-                  </div>
+                  {!enrolled && (
+                    <div style={{ marginTop: 24, textAlign: "center" }}>
+                      <button type="button" onClick={handleEnroll} style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+                        color: "#0a0806", fontSize: 14, fontWeight: 700,
+                        padding: "12px 28px", borderRadius: 10, border: "none", cursor: "pointer",
+                        boxShadow: "0 4px 0 rgba(139,31,23,0.38),0 8px 24px rgba(217,53,34,0.22)",
+                        fontFamily: FF,
+                      }}>
+                        Enroll in this course <i className="fas fa-arrow-right" style={{ fontSize: 12 }} />
+                      </button>
+                    </div>
+                  )}
                 </div>
+                )
               )}
             </div>
 
@@ -1425,14 +1508,8 @@ export default function LMACourseDetailPage() {
                 <InstructorItem
                   name={course.instructor_name ?? "Expert Instructor"}
                   designation="Senior AI Instructor · XERXEZ Academy"
-                  courses={2}
-                  learners="1,650"
-                />
-                <InstructorItem
-                  name="Danish Sheikh"
-                  designation="Chief AI Officer · XERXEZ"
-                  courses={2}
-                  learners="500"
+                  courses={course.instructor_courses_count ?? null}
+                  learners={course.instructor_total_learners ?? null}
                 />
                 <button type="button" style={{ fontSize: 12.5, fontWeight: 700, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0, marginTop: 4 }}>
                   View all instructors →
@@ -1461,13 +1538,31 @@ export default function LMACourseDetailPage() {
                   ₹{course.price?.toLocaleString()}
                 </div>
                 {enrolled ? (
-                  <Link to="/lma/student/dashboard" style={{
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                    background: "#d1fae5", color: "#059669", fontSize: 14, fontWeight: 700,
-                    padding: "12px", borderRadius: 10, textDecoration: "none", marginBottom: 10, fontFamily: FF,
-                  }}>
-                    <CheckCircle2 size={16} /> Go to Dashboard
-                  </Link>
+                  <>
+                    <span style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                      background: "#d1fae5", color: "#059669", fontSize: 12.5, fontWeight: 800,
+                      padding: "7px", borderRadius: 8, marginBottom: 10, fontFamily: FF,
+                    }}>
+                      <CheckCircle2 size={14} /> You are enrolled
+                    </span>
+                    <button type="button" onClick={scrollToCurriculum} style={{
+                      width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                      background: GOLD, color: "#fff", fontSize: 14, fontWeight: 700,
+                      border: "none", borderRadius: 10, padding: "12px", cursor: "pointer",
+                      boxShadow: "0 4px 0 rgba(139,31,23,0.45)", marginBottom: 10, fontFamily: FF,
+                    }}>
+                      Continue Learning →
+                    </button>
+                    <Link to="/lma/student/dashboard" style={{
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      background: "transparent", color: "#6b7280", fontSize: 13, fontWeight: 600,
+                      border: "1.5px solid rgba(0,0,0,0.12)", borderRadius: 10, padding: "11px",
+                      textDecoration: "none", marginBottom: 12, fontFamily: FF,
+                    }}>
+                      Go to Dashboard
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <button type="button" onClick={handleEnroll} style={{
@@ -1507,21 +1602,21 @@ export default function LMACourseDetailPage() {
           <div style={{ display: "flex", gap: 40, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
             <div style={{ textAlign: "center", maxWidth: 400 }}>
               <h3 style={{ fontSize: 17, fontWeight: 800, color: "#141413", margin: "0 0 10px", fontFamily: FF }}>
-                See how top teams master AI faster with XERXEZ
+                Trusted by professionals across UAE &amp; India
               </h3>
               <Link to="/contact" style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, textDecoration: "none", fontFamily: FF }}>
                 Request enterprise training →
               </Link>
             </div>
-            <div style={{ display: "flex", gap: 28, flexWrap: "wrap", alignItems: "center" }}>
-              {["Tata", "Capgemini", "P&G", "L'Oréal", "Danone", "HCL"].map(co => (
-                <span key={co} style={{
-                  fontSize: 13, fontWeight: 600, color: "#3d2a10",
-                  background: "rgba(217,53,34,0.10)",
-                  border: "1px solid rgba(217,53,34,0.20)",
-                  borderRadius: 8, padding: "6px 16px", fontFamily: FF,
-                }}>{co}</span>
-              ))}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 10,
+              background: "rgba(217,53,34,0.10)", border: "1px solid rgba(217,53,34,0.20)",
+              borderRadius: 8, padding: "10px 20px",
+            }}>
+              <Users size={18} color={GOLD} />
+              <span style={{ fontSize: 15, fontWeight: 800, color: "#141413", fontFamily: FF }}>
+                50+ <span style={{ fontWeight: 600, color: "#3d2a10" }}>professionals trained</span>
+              </span>
             </div>
           </div>
         </div>
@@ -1570,7 +1665,7 @@ export default function LMACourseDetailPage() {
                   ))}
                 </div>
                 <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.48)", margin: "10px 4px 0", lineHeight: 1.6, fontFamily: FF }}>
-                  {course.description?.substring(0, 90)}…
+                  {decodeHtmlEntities(course.description ?? "").substring(0, 90)}…
                 </p>
               </div>
             )}

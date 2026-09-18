@@ -7,6 +7,39 @@
   <!-- Viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Content-Security-Policy — restricts script/style/connect origins to this
+       site plus the handful of external hosts the app actually uses (Google
+       Fonts, the Railway API). `style-src 'unsafe-inline'` is required: every
+       component in this app uses React inline `style={{...}}` props, which
+       render as real inline style="" attributes — removing this would break
+       all styling site-wide, not a small fix. `font-src` includes `data:`
+       because the bundled FontAwesome CSS (src/styles/fontawesome/) embeds
+       its icon fonts as base64 data: URIs — without it every `<i className=
+       "fas fa-...">` icon site-wide silently fails to render (found via a
+       real browser console check, not theoretical). `ws(s)://localhost:5173`
+       is for Vite's dev-server HMR only; harmless in production where it's
+       unused. `http://127.0.0.1:8000` is the local Django dev server —
+       pair with frontend/.env.local (VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1,
+       gitignored) to develop against a local backend instead of production;
+       also harmless in production since nothing there points at it.
+       Note: `frame-ancestors` is intentionally NOT set here — CSP
+       delivered via <meta> ignores frame-ancestors/report-uri/sandbox (spec
+       requires a real HTTP header for those); clickjacking protection
+       instead comes from the backend's X_FRAME_OPTIONS='DENY' on API
+       responses. -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' data: https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    media-src 'self' https:;
+    connect-src 'self' https://backend-production-b9f2.up.railway.app http://127.0.0.1:8000 ws://localhost:5173 wss://localhost:5173;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+  " />
+
   <!-- Google Search Console verification -->
   <meta name="google-site-verification" content="shIvk48S8S3jOs5Mt9dmxhzsFlpPf18595TO_tLuXcU" />
 

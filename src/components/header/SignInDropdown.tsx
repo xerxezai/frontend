@@ -10,6 +10,10 @@ const OG = "#C9883A";
 export const SIGNIN_OPTIONS = [
   { icon: "fas fa-building", label: "ERP Login", subtitle: "Access your ERP dashboard", to: "/erp" },
   { icon: "fas fa-handshake", label: "Partner Login", subtitle: "Access your partner portal", to: "/partner/training" },
+  // FontAwesome fallback for the v1 header / mobile menu, which both render
+  // opt.icon as an <i> class. XerxezHeader's own dropdown (V2SignIn) special-cases
+  // this entry to render the lucide GraduationCap icon instead — see below.
+  { icon: "fas fa-graduation-cap", label: "Academy Login", subtitle: "Student & Instructor access", to: "/lma/login" },
 ];
 
 interface Props {
