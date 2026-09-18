@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import SEO from "../../components/seo/SEO";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
 // ── colour tokens — identical to ERPLogin ────────────────────────────────────
 const C = {
@@ -267,12 +268,13 @@ export default function LMALoginPage() {
     setLoading(true); setError("");
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1"}/lma/auth/login/`,
+        `${API}/lma/auth/login/`,
         { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password, role }) }
       );
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Login failed."); shake(); return; }
       localStorage.setItem("lma_token",            data.lma_token);
+      localStorage.setItem("lma_refresh",          data.lma_refresh);
       localStorage.setItem("lma_role",             data.lma_role);
       localStorage.setItem("lma_can_instructor",   String(data.can_access_instructor));
       localStorage.setItem("lma_instructor_level", data.instructor_level || "regular");

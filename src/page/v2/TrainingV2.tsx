@@ -91,6 +91,43 @@ const AdvantageCard = ({ icon: Icon, title, desc }: { icon: LucideIcon; title: s
   );
 };
 
+// "Teach on XERXEZ Academy" — 4 benefit cards, left column of the instructor section.
+const INSTRUCTOR_BENEFITS: { emoji: string; title: string; desc: string }[] = [
+  { emoji: "💰", title: "Earn from your expertise", desc: "Get paid for every student who enrolls in your course. Competitive revenue share on every enrollment." },
+  { emoji: "🌍", title: "Reach enterprise learners", desc: "Your courses reach IT teams, engineers and enterprise professionals across UAE & India." },
+  { emoji: "🎓", title: "Build your brand", desc: "Establish yourself as a thought leader in AI, MLOps, DevSecOps or cloud architecture." },
+  { emoji: "🛠️", title: "Full production support", desc: "We handle hosting, payments, marketing and student support — you just teach." },
+];
+
+// Requirements checklist on the instructor CTA card.
+const INSTRUCTOR_REQUIREMENTS = [
+  "1+ years industry experience",
+  "Real production experience (not just theory)",
+  "Ability to create hands-on labs",
+];
+
+// One light-gray benefit card — used in the "Teach on XERXEZ Academy" left column.
+const InstructorBenefitCard = ({ emoji, title, desc }: { emoji: string; title: string; desc: string }) => (
+  <div style={{
+    height: "100%", background: T.lightAlt, borderRadius: 16, padding: "24px 22px",
+    border: `1px solid ${T.border}`,
+  }}>
+    <span style={{
+      width: 48, height: 48, borderRadius: 12, flexShrink: 0,
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      background: "#fff", fontSize: 22, boxShadow: T.cardShadow,
+    }}>
+      {emoji}
+    </span>
+    <h3 style={{ fontFamily: T.fontHead, fontSize: 16, fontWeight: 700, color: T.headNavy, margin: "16px 0 8px", lineHeight: 1.3 }}>
+      {title}
+    </h3>
+    <p style={{ fontFamily: T.fontBody, fontSize: 13.5, lineHeight: 1.6, color: T.muted, margin: 0 }}>
+      {desc}
+    </p>
+  </div>
+);
+
 // One translucent dark-on-dark feature card — used in the "For Organisations"
 // right column, which already sits on a navy section, so the card itself is
 // a subtle rgba tint rather than a solid navy fill.
@@ -186,6 +223,7 @@ const TrainingV2 = () => (
               <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 8 }}>
                 <Btn to="/lma/courses">Browse courses</Btn>
                 <Btn to="/contact?service=ai-training" variant="outline" dark arrow={false}>Enterprise training</Btn>
+                <Btn to="/lma/login" variant="outline" dark arrow>Sign in</Btn>
               </div>
             </div>
           </div>
@@ -299,6 +337,72 @@ const TrainingV2 = () => (
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── Teach on XERXEZ Academy — white, 4 benefit cards | dark instructor CTA card. ── */}
+    <section style={{ ...sectionPad, background: "#fff" }}>
+      <div className="container">
+        <Reveal>
+          <SectionHeading
+            eyebrow="For Instructors"
+            title="Share your expertise. Teach on XERXEZ Academy."
+            subtitle="Are you an AI practitioner, MLOps engineer, DevSecOps expert or cloud architect? Join our instructor team and teach thousands of enterprise professionals."
+            align="center"
+          />
+        </Reveal>
+
+        <div className="row g-4 align-items-stretch" style={{ marginTop: 24 }}>
+          <div className="col-lg-7">
+            <div className="row g-4">
+              {INSTRUCTOR_BENEFITS.map((b, i) => (
+                <div key={b.title} className="col-sm-6">
+                  <Reveal delay={80 + i * 60} fill>
+                    <InstructorBenefitCard emoji={b.emoji} title={b.title} desc={b.desc} />
+                  </Reveal>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="col-lg-5">
+            <Reveal delay={140} fill>
+              <div style={{
+                height: "100%", background: T.navy, borderRadius: 20, padding: "34px 30px",
+                display: "flex", flexDirection: "column",
+              }}>
+                <h3 style={{ fontFamily: T.fontHead, fontSize: 22, fontWeight: 700, color: "#fff", margin: 0 }}>
+                  Ready to teach?
+                </h3>
+                <p style={{ fontFamily: T.fontBody, fontSize: 14.5, lineHeight: 1.65, color: "rgba(255,255,255,0.70)", margin: "12px 0 0" }}>
+                  Apply to become an instructor — we review applications within 48 hours.
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 12, margin: "24px 0 0" }}>
+                  {INSTRUCTOR_REQUIREMENTS.map((r) => (
+                    <div key={r} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                      <span style={{
+                        width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 1,
+                        background: T.red, color: "#fff",
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                        fontSize: 11, fontWeight: 700, lineHeight: 1,
+                      }}>
+                        ✓
+                      </span>
+                      <span style={{ fontFamily: T.fontBody, fontSize: 14, lineHeight: 1.5, color: "rgba(255,255,255,0.88)" }}>
+                        {r}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ marginTop: 28 }}>
+                  <Btn to="/lma/become-instructor">Apply to become an instructor</Btn>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </div>
       </div>

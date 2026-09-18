@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import SEO from "../../components/seo/SEO";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
 const DARK  = "#071a33";
@@ -263,6 +263,7 @@ export default function LMARegisterPage() {
       const data = await res.json();
       if (!res.ok) { setErr(data.error || "Registration failed. Please try again."); return; }
       localStorage.setItem("lma_token",           data.lma_token);
+      localStorage.setItem("lma_refresh",         data.lma_refresh);
       localStorage.setItem("lma_role",            data.lma_role);
       localStorage.setItem("lma_can_instructor",  String(data.can_access_instructor));
       localStorage.setItem("lma_name",            data.name);
@@ -351,8 +352,8 @@ export default function LMARegisterPage() {
 
             {/* Stat tiles */}
             <div style={{ display: "flex", gap: 12, animation: "lmarg-fadeUp 0.6s ease 0.62s both" }}>
-              <StatTile icon="users"       value="500+"  label="Students"    color={GOLD}      delay={620} />
-              <StatTile icon="book-open"   value="12+"   label="Courses"     color="#10b981"   delay={700} />
+              <StatTile icon="users"       value="50+"   label="Students"    color={GOLD}      delay={620} />
+              <StatTile icon="book-open"   value="4+"    label="Courses"     color="#10b981"   delay={700} />
               <StatTile icon="star"        value="95%"   label="Satisfaction" color="#3b82f6"  delay={780} />
             </div>
           </div>

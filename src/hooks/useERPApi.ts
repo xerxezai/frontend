@@ -36,7 +36,7 @@ function getActiveCompanyId(): string | null {
   return localStorage.getItem('xerxez_active_company_id');
 }
 
-export async function erpFetch(path: string, options: RequestInit = {}) {
+export async function erpFetch(path: string, options: RequestInit = {}): Promise<any> {
   const token = getToken();
   const activeCompanyId = getActiveCompanyId();
   const res = await fetch(`${BASE}/${path}`, {
@@ -48,15 +48,22 @@ export async function erpFetch(path: string, options: RequestInit = {}) {
       ...(options.headers || {}),
     },
   });
+
+  // No silent refresh, by design: the access token is short-lived (30 min) and
+  // refresh tokens are single-use + rotated + blacklisted, so an expired session
+  // simply logs the user out — forcing regular re-authentication rather than
+  // staying silently signed in indefinitely.
+  if (res.status === 401) {
+    clearAllTokens();
+    window.location.href = '/erp/login';
+    throw new Error('Session expired. Please login again.');
+  }
+
   // 204 No Content (successful DELETE) has no body — don't parse
   if (res.status === 204) return null;
   const contentType = res.headers.get('content-type') || '';
   const data = contentType.includes('application/json') ? await res.json() : null;
   if (!res.ok) {
-    if (res.status === 401) {
-      clearAllTokens();
-      window.location.href = '/erp';
-    }
     throw new Error(data?.detail || JSON.stringify(data) || `HTTP ${res.status}`);
   }
   return data;

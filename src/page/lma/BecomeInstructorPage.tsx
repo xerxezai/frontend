@@ -4,6 +4,7 @@ import {
   User, Mail, Phone, BookOpen, FileText, MessageSquare,
   Check, ArrowRight, Users, IndianRupee, Award, ChevronRight, Lock,
 } from "lucide-react";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const GOLD      = "#D93522";
@@ -14,7 +15,6 @@ const DARKER    = "#071a33";
 const CREAM     = "#F4F7FA";
 const WHITE     = "#FFFFFF";
 const FF        = "'DM Sans', sans-serif";
-const API       = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 
 // ── DC (dark glass card) — copied exactly from AIERPPage ─────────────────────
 const DC = ({ children, accent = GOLD, style = {}, p = "20px 18px" }: {

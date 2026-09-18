@@ -5,8 +5,8 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import LMAStudentLayout from "./LMAStudentLayout";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
 const DARK  = "#071a33";

@@ -4,14 +4,22 @@ import {
   LayoutDashboard, BookOpen, Play, Search,
   ClipboardList, Award, TrendingUp, User,
   LogOut, ChevronRight, Bell, Menu, X,
-  Maximize, Minimize,
+  Maximize, Minimize, CheckCircle2,
+  Users, ListChecks, BarChart3,
 } from "lucide-react";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
+
+interface PendingAssignment {
+  id: number;
+  title: string;
+  course_title: string;
+  due_date: string;
+}
 
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
 const DARK  = "#071a33";
 const FF    = "'DM Sans', sans-serif";
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 
 /* ── Sidebar nav item ── */
 const SideItem = ({
@@ -30,7 +38,7 @@ const SideItem = ({
       <div
         onClick={onClick}
         style={{
-          display: "flex", alignItems: "center", gap: 10,
+          display: "flex", alignItems: "center", gap: 10, minHeight: 44,
           padding: "10px 16px", borderRadius: 10, cursor: "pointer",
           background: "transparent",
           borderLeft: "3px solid transparent",
@@ -48,7 +56,7 @@ const SideItem = ({
       to={to!}
       onClick={onClick}
       style={{
-        display: "flex", alignItems: "center", gap: 10,
+        display: "flex", alignItems: "center", gap: 10, minHeight: 44,
         padding: "10px 16px", borderRadius: 10,
         textDecoration: "none",
         background: active ? "rgba(217,53,34,0.14)" : "transparent",
@@ -94,7 +102,44 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   // All hooks must be declared before any conditional return (Rules of Hooks)
   const [sideOpen, setSideOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
+  const bellPanelRef = useRef<HTMLDivElement>(null);
+  const [bellOpen, setBellOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Notification bell — its own lightweight fetch so it works on every student
+  // page (not just the dashboard, which already loads this data itself but
+  // doesn't hand the list down through the layout). `pendingBadge`, when the
+  // caller passes it (the dashboard does), wins for the badge count so the
+  // sidebar and bell never briefly disagree; the dropdown's list always comes
+  // from this fetch either way.
+  const [pendingAssignments, setPendingAssignments] = useState<PendingAssignment[]>([]);
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${API}/lma/student/assignments/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => (r.ok ? r.json() : []))
+      .then((d: any) => {
+        const list = Array.isArray(d) ? d : d?.results ?? [];
+        setPendingAssignments(
+          list
+            .filter((a: any) => !a.submitted)
+            .sort((a: any, b: any) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())
+        );
+      })
+      .catch(() => {});
+  }, [token]);
+  const bellCount = pendingBadge ?? pendingAssignments.length;
+
+  useEffect(() => {
+    if (!bellOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (
+        bellPanelRef.current && !bellPanelRef.current.contains(e.target as Node) &&
+        bellRef.current && !bellRef.current.contains(e.target as Node)
+      ) setBellOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [bellOpen]);
 
   // Whether to show the "Instructor Portal" switch link. Starts false (hidden)
   // and is only flipped on once the backend confirms it via a live, token-
@@ -106,11 +151,19 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   // a security boundary (the instructor dashboard independently checks auth),
   // but it shouldn't be visible to accounts that don't actually have access.
   const [canInstructor, setCanInstructor] = useState(false);
+  // Same reasoning as canInstructor above — the Admin sidebar section is only
+  // shown once the backend confirms is_staff/is_superuser via this live,
+  // token-authenticated request, never from anything cached client-side.
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     if (!token) return;
     fetch(`${API}/lma/profile/`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => (r.ok ? r.json() : null))
-      .then(d => { if (d) setCanInstructor(!!d.can_access_instructor); })
+      .then(d => {
+        if (!d) return;
+        setCanInstructor(!!d.can_access_instructor);
+        setIsAdmin(!!(d.is_staff || d.is_superuser));
+      })
       .catch(() => {});
   }, [token]);
 
@@ -168,6 +221,16 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
         { icon: User, label: "Profile", to: "/lma/student/profile" },
       ],
     },
+    // Admin section — only rendered when isAdmin (is_staff/is_superuser,
+    // confirmed live from /lma/profile/) is true; hidden entirely otherwise.
+    ...(isAdmin ? [{
+      section: "ADMIN",
+      items: [
+        { icon: Users,      label: "All Students",     to: "/lma/admin/students" },
+        { icon: ListChecks, label: "Enrollments",       to: "/lma/admin/enrollments" },
+        { icon: BarChart3,  label: "Course Analytics", to: "/lma/admin/analytics" },
+      ],
+    }] : []),
   ];
 
   return (
@@ -175,6 +238,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
 
       {/* Global styles */}
       <style>{`
+        html, body { overflow-anchor: none; }
         @keyframes lma-shimmer {
           0%   { background-position: -400px 0; }
           100% { background-position:  400px 0; }
@@ -212,6 +276,10 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
         .lma-side-item:hover {
           background: rgba(217,53,34,0.08) !important;
           color: rgba(255,255,255,0.85) !important;
+        }
+        @media (max-width: 640px) {
+          .lma-header  { padding: 0 16px !important; gap: 8px !important; }
+          .lma-content { padding: 16px !important; }
         }
       `}</style>
 
@@ -290,17 +358,21 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
       <div className="lma-main">
 
         {/* Header */}
-        <header style={{
+        <header className="lma-header" style={{
           background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.07)",
           padding: "0 28px", height: 64,
           display: "flex", alignItems: "center", gap: 16,
           position: "sticky", top: 0, zIndex: 100,
         }}>
           <button
-            ref={bellRef}
+            type="button"
             onClick={() => setSideOpen(o => !o)}
             className="lma-menu-btn"
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#141413" }}
+            aria-label={sideOpen ? "Close menu" : "Open menu"}
+            style={{
+              background: "none", border: "none", cursor: "pointer", borderRadius: 8, color: "#141413",
+              minWidth: 44, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center",
+            }}
           >
             {sideOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -313,17 +385,94 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
           </div>
 
           <button
+            type="button"
             onClick={toggleFullscreen}
             aria-label="Toggle fullscreen"
             title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#6b7280" }}
+            style={{
+              background: "none", border: "none", cursor: "pointer", borderRadius: 8, color: "#6b7280",
+              minWidth: 44, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center",
+            }}
           >
             {isFullscreen ? <Minimize size={19} /> : <Maximize size={19} />}
           </button>
 
-          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#6b7280" }}>
-            <Bell size={20} />
-          </button>
+          <div style={{ position: "relative" }}>
+            <button
+              type="button"
+              ref={bellRef}
+              onClick={() => setBellOpen(o => !o)}
+              aria-label="Notifications"
+              aria-expanded={bellOpen}
+              style={{
+                background: bellOpen ? "rgba(217,53,34,0.08)" : "none", border: "none", cursor: "pointer",
+                borderRadius: 8, color: "#6b7280", position: "relative",
+                minWidth: 44, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >
+              <Bell size={20} />
+              {bellCount > 0 && (
+                <span style={{
+                  position: "absolute", top: 6, right: 6,
+                  background: GOLD, color: "#fff", fontSize: 9.5, fontWeight: 800,
+                  borderRadius: 999, minWidth: 16, height: 16, padding: "0 4px",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  border: "1.5px solid #fff", lineHeight: 1,
+                }}>
+                  {bellCount > 9 ? "9+" : bellCount}
+                </span>
+              )}
+            </button>
+
+            {bellOpen && (
+              <div ref={bellPanelRef} style={{
+                position: "absolute", top: "calc(100% + 10px)", right: 0, width: 300,
+                background: "#fff", borderRadius: 14, border: "1px solid rgba(0,0,0,0.08)",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.16)", overflow: "hidden", zIndex: 300,
+              }}>
+                <div style={{ padding: "14px 16px", borderBottom: "1px solid rgba(0,0,0,0.06)", fontSize: 13, fontWeight: 800, color: "#141413", fontFamily: FF }}>
+                  Pending Assignments
+                </div>
+                {pendingAssignments.length === 0 ? (
+                  <div style={{ padding: "24px 16px", textAlign: "center" }}>
+                    <CheckCircle2 size={22} color="#d1d5db" style={{ display: "block", margin: "0 auto 8px" }} />
+                    <p style={{ margin: 0, fontSize: 12.5, color: "#9ca3af", fontFamily: FF }}>All caught up!</p>
+                  </div>
+                ) : (
+                  <div style={{ maxHeight: 280, overflowY: "auto" }}>
+                    {pendingAssignments.slice(0, 6).map(a => (
+                      <Link
+                        key={a.id}
+                        to="/lma/student/assignments"
+                        onClick={() => setBellOpen(false)}
+                        style={{
+                          display: "block", padding: "10px 16px", textDecoration: "none",
+                          borderBottom: "1px solid rgba(0,0,0,0.05)",
+                        }}
+                        onMouseOver={e => (e.currentTarget.style.background = "rgba(217,53,34,0.05)")}
+                        onMouseOut={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <div style={{ fontSize: 12.5, fontWeight: 700, color: "#141413", fontFamily: FF }}>{a.title}</div>
+                        <div style={{ fontSize: 11, color: "rgba(20,20,19,0.5)", marginTop: 2, fontFamily: FF }}>
+                          {a.course_title} · due {new Date(a.due_date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                <Link
+                  to="/lma/student/assignments"
+                  onClick={() => setBellOpen(false)}
+                  style={{
+                    display: "block", textAlign: "center", padding: "10px", fontSize: 12, fontWeight: 700,
+                    color: GOLD, textDecoration: "none", borderTop: "1px solid rgba(0,0,0,0.06)", fontFamily: FF,
+                  }}
+                >
+                  View all assignments →
+                </Link>
+              </div>
+            )}
+          </div>
 
           <div style={{
             width: 36, height: 36, borderRadius: "50%",
@@ -337,7 +486,13 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
         </header>
 
         {/* Page content */}
-        <main style={{ flex: 1, padding: "28px", overflowY: "auto" }}>
+        {/* overflowAnchor: "none" disables CSS scroll-anchoring on this
+            scrollable container — reproduced directly: without it, opening a
+            modal (even portaled to document.body) still made the browser
+            snap this container's scrollTop to a different position the
+            instant new DOM was inserted anywhere on the page. This is the
+            standards-track property for exactly that failure mode. */}
+        <main className="lma-content" style={{ flex: 1, padding: "28px", overflowY: "auto", overflowAnchor: "none" }}>
           {children}
         </main>
       </div>

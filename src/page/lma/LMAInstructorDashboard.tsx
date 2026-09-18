@@ -12,9 +12,9 @@ import {
   Play, Plus, Save, Layers, Award, UserX, Search, FileCheck,
   UserCircle, Lock, Maximize, Minimize,
 } from "lucide-react";
+import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
 // ── Constants ────────────────────────────────────────────────────────────────
-const API   = import.meta.env.VITE_API_BASE_URL ?? "https://backend-production-b9f2.up.railway.app/api/v1";
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
 const DARK  = "#071a33";
@@ -30,7 +30,7 @@ const COLORS_MAP: Record<string, string> = { beginner: "#059669", intermediate: 
 const STATUS_COLOR: Record<string, { bg: string; color: string }> = {
   published:      { bg: "#d1fae5", color: "#059669" },
   draft:          { bg: "#f3f4f6", color: "#6b7280" },
-  pending_review: { bg: "#fef3c7", color: "#d97706" },
+  pending_review: { bg: "#fef3c7", color: "#D93522" },
   rejected:       { bg: "#fee2e2", color: "#dc2626" },
 };
 
@@ -260,8 +260,10 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
     badge:       course?.badge ?? "",
     status:      course?.status ?? "draft",
     tech_stack:  (course?.tech_stack as string[]) ?? [],
+    learning_outcomes: (course?.learning_outcomes as string[]) ?? [],
   });
   const [tagInput, setTagInput] = useState("");
+  const [outcomeInput, setOutcomeInput] = useState("");
   const [saving, setSaving] = useState(false);
   const set = (k: string, v: string | string[]) => setForm(f => ({ ...f, [k]: v }));
 
@@ -270,6 +272,14 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
     set("tech_stack", [...form.tech_stack, t]); setTagInput("");
   };
   const removeTag = (t: string) => set("tech_stack", form.tech_stack.filter(x => x !== t));
+
+  const addOutcome = () => {
+    const t = outcomeInput.trim();
+    if (!t || form.learning_outcomes.length >= 8) return;
+    set("learning_outcomes", [...form.learning_outcomes, t]); setOutcomeInput("");
+  };
+  const removeOutcome = (i: number) => set("learning_outcomes", form.learning_outcomes.filter((_, idx) => idx !== i));
+  const updateOutcome = (i: number, v: string) => set("learning_outcomes", form.learning_outcomes.map((o, idx) => idx === i ? v : o));
 
   const save = async () => {
     if (!form.title.trim()) { showToast("Title is required", "error"); return; }
@@ -339,6 +349,45 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
             <input style={inputStyle} value={tagInput} placeholder="e.g. Python, TensorFlow…" onChange={e => setTagInput(e.target.value)}
               onFocus={focusGold} onBlur={blurGold}
               onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }} />
+          </Field>
+          <Field label={`What students will learn (${form.learning_outcomes.length}/8)`}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 8 }}>
+              {form.learning_outcomes.map((outcome, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input
+                    style={{ ...inputStyle, flex: 1 }}
+                    value={outcome}
+                    placeholder="e.g. Deploy ML models to production"
+                    onChange={e => updateOutcome(i, e.target.value)}
+                    onFocus={focusGold} onBlur={blurGold}
+                  />
+                  <button type="button" onClick={() => removeOutcome(i)} style={{
+                    background: "#f3f4f6", border: "none", borderRadius: 8, width: 34, height: 34, flexShrink: 0,
+                    display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#9ca3af",
+                  }}>
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            {form.learning_outcomes.length < 8 && (
+              <div style={{ display: "flex", gap: 8 }}>
+                <input
+                  style={{ ...inputStyle, flex: 1 }}
+                  value={outcomeInput}
+                  placeholder="Add a learning outcome…"
+                  onChange={e => setOutcomeInput(e.target.value)}
+                  onFocus={focusGold} onBlur={blurGold}
+                  onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addOutcome(); } }}
+                />
+                <button type="button" onClick={addOutcome} style={{
+                  background: GOLD, color: "#fff", border: "none", borderRadius: 8, padding: "0 16px", flexShrink: 0,
+                  fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF,
+                }}>
+                  Add
+                </button>
+              </div>
+            )}
           </Field>
           {isSuperInstructor ? (
           <Field label="Status">
@@ -680,7 +729,7 @@ function DashboardView({ data, earningsChart, onGrade, isSuperInstructor }: {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 16, marginBottom: 28 }}>
         <StatCard index={0} label="Total Courses"   value={data?.stats?.total_courses ?? 0}  icon={BookOpen}     color="#3b82f6" />
         <StatCard index={1} label="Total Students"  value={data?.stats?.total_students ?? 0} icon={Users}        color="#10b981" />
-        <StatCard index={2} label="Pending Reviews" value={data?.stats?.pending_reviews ?? 0} icon={ClipboardList} color="#f59e0b" />
+        <StatCard index={2} label="Pending Reviews" value={data?.stats?.pending_reviews ?? 0} icon={ClipboardList} color="#D93522" />
         {isSuperInstructor && (
           <StatCard index={3} label="Total Earnings" value={data?.stats?.total_earnings ?? 0} icon={DollarSign} color="#8b5cf6" prefix="₹" />
         )}
@@ -724,7 +773,7 @@ function DashboardView({ data, earningsChart, onGrade, isSuperInstructor }: {
               {(data?.pending_submissions ?? []).map((s: any) => (
                 <div key={s.id} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 12px", background: "#f9f7f4", borderRadius: 10 }}>
                   <div style={{ width: 34, height: 34, borderRadius: 9, background: "linear-gradient(135deg,#fef3c7,#fde68a)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <ClipboardList size={15} color="#d97706" />
+                    <ClipboardList size={15} color="#D93522" />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 12.5, fontWeight: 600, color: "#141413", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontFamily: FF }}>{s.student_name}</div>
@@ -787,9 +836,9 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, o
         <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
           <BookOpen size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
           <p style={{ color: "#9ca3af", fontSize: 14, margin: "0 0 20px", fontFamily: FF }}>
-            {search ? "No courses match your search." : "No courses yet. Create your first!"}
+            {search ? "No courses match your search." : "No courses yet."}
           </p>
-          {!search && <button type="button" onClick={onCreate} style={{ background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806", border: "none", borderRadius: 10, padding: "10px 24px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF }}>Create Course</button>}
+          {!search && <button type="button" onClick={onCreate} style={{ background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#fff", border: "none", borderRadius: 10, padding: "10px 24px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(139,31,23,0.30)" }}>Create your first course</button>}
         </div>
       ) : (
         <div style={{ background: "#fff", borderRadius: 16, overflow: "auto", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
@@ -813,7 +862,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, o
                   </td>
                   <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413", fontWeight: 600, fontFamily: FF }}>{(c.total_students ?? 0).toLocaleString()}</td>
                   <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413", fontFamily: FF }}>
-                    {c.rating ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Star size={12} color="#f59e0b" fill="#f59e0b" />{c.rating}</span> : "—"}
+                    {c.rating ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Star size={12} color="#D93522" fill="#D93522" />{c.rating}</span> : "—"}
                   </td>
                   {isSuperInstructor && (
                   <td style={{ padding: "13px 16px", fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>
@@ -838,7 +887,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, o
                       {isSuperInstructor ? (
                         <button type="button" title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
                       ) : (c.status === "draft" || c.status === "rejected") && (
-                        <button type="button" title="Submit for Review" onClick={() => onSubmitReview(c)} style={{ color: "#d97706", background: "rgba(217,119,6,0.10)", border: "none", borderRadius: 7, padding: "7px 10px", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: FF }}>Submit</button>
+                        <button type="button" title="Submit for Review" onClick={() => onSubmitReview(c)} style={{ color: "#D93522", background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: "7px 10px", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: FF }}>Submit</button>
                       )}
                     </div>
                   </td>
@@ -980,7 +1029,7 @@ function StudentDetailPanel({ studentId, token, onClose, onUnenrolled, studentNa
   const gradeBadge = (grade: number | null) => {
     if (grade === null) return { bg: "#f3f4f6", color: "#6b7280", text: "Pending" };
     if (grade >= 70)    return { bg: "#d1fae5", color: "#059669", text: `${grade}%` };
-    if (grade >= 40)    return { bg: "#fef3c7", color: "#d97706", text: `${grade}%` };
+    if (grade >= 40)    return { bg: "#fef3c7", color: "#D93522", text: `${grade}%` };
     return               { bg: "rgba(220,38,38,0.08)", color: "#dc2626", text: `${grade}%` };
   };
 
@@ -1069,7 +1118,7 @@ function StudentDetailPanel({ studentId, token, onClose, onUnenrolled, studentNa
                             <div style={{ fontSize: 12.5, fontWeight: 600, color: "#141413", fontFamily: FF, marginBottom: 3 }}>{enr.course_title}</div>
                             <div style={{ fontSize: 11, color: "#9ca3af", fontFamily: FF }}>
                               {enr.completed_lessons}/{enr.total_lessons} lessons ·{" "}
-                              <span style={{ fontWeight: 700, color: enr.completed ? "#059669" : "#d97706" }}>
+                              <span style={{ fontWeight: 700, color: enr.completed ? "#059669" : "#D93522" }}>
                                 {enr.completed ? "Completed" : "In Progress"}
                               </span>
                             </div>
@@ -1292,7 +1341,7 @@ function StudentsView({ token }: { token: string }) {
                     </div>
                   </td>
                   <td style={{ padding: "12px 16px" }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: s.completed ? "#d1fae5" : s.progress > 0 ? "#fef3c7" : "#f3f4f6", color: s.completed ? "#059669" : s.progress > 0 ? "#d97706" : "#6b7280" }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: s.completed ? "#d1fae5" : s.progress > 0 ? "#fef3c7" : "#f3f4f6", color: s.completed ? "#059669" : s.progress > 0 ? "#D93522" : "#6b7280" }}>
                       {s.completed ? "Completed" : s.progress > 0 ? "In Progress" : "Not Started"}
                     </span>
                   </td>
@@ -1421,7 +1470,7 @@ function AnalyticsView({ token, isSuperInstructor }: { token: string; isSuperIns
                   {[
                     { label: "Students", value: c.total_students, color: "#3b82f6" },
                     { label: "Completion", value: `${c.completion_rate}%`, color: "#10b981" },
-                    { label: "Avg Rating", value: c.avg_rating ? `${c.avg_rating}★` : "—", color: "#f59e0b" },
+                    { label: "Avg Rating", value: c.avg_rating ? `${c.avg_rating}★` : "—", color: "#D93522" },
                     ...(isSuperInstructor ? [{ label: "Revenue", value: `₹${(c.revenue ?? 0).toLocaleString()}`, color: "#8b5cf6" }] : []),
                   ].map(({ label, value, color }) => (
                     <div key={label} style={{ background: `${color}08`, borderRadius: 10, padding: "10px 12px" }}>
@@ -1449,19 +1498,24 @@ function ReviewsView({ token }: { token: string }) {
       .catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
+  // The API has been observed returning the same review twice (e.g. when a
+  // course shows up in more than one of the backend's underlying querysets) —
+  // dedupe by id before rendering rather than trusting the response as-is.
+  const uniqueReviews = reviews.filter((r, i, arr) => arr.findIndex(x => x.id === r.id) === i);
+
   return (
     <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
       <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: "0 0 20px", fontFamily: FF }}>Reviews</h2>
       {loading ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>{[0,1,2].map(i => <SkeletonBox key={i} h={90} />)}</div>
-      ) : reviews.length === 0 ? (
+      ) : uniqueReviews.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
           <Star size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
           <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>No reviews yet.</p>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {reviews.map((r: any, i: number) => (
+          {uniqueReviews.map((r: any, i: number) => (
             <div key={r.id} style={{ background: "#fff", borderRadius: 14, padding: "18px 20px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, animation: "lmai-pageIn 0.40s ease both", animationDelay: `${i * 60}ms` }}>
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: r.comment ? 10 : 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -1473,7 +1527,7 @@ function ReviewsView({ token }: { token: string }) {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
                   <div style={{ display: "flex", gap: 2 }}>
-                    {[1,2,3,4,5].map(s => <Star key={s} size={13} color="#f59e0b" fill={s <= r.rating ? "#f59e0b" : "none"} />)}
+                    {[1,2,3,4,5].map(s => <Star key={s} size={13} color="#D93522" fill={s <= r.rating ? "#D93522" : "none"} />)}
                   </div>
                   <span style={{ fontSize: 10.5, color: "#9ca3af" }}>{new Date(r.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>
                 </div>
@@ -1502,7 +1556,7 @@ function AssignmentsView({ data, onGrade }: { data: any; onGrade: (s: any) => vo
           {subs.map((s: any, i: number) => (
             <div key={s.id} style={{ background: "#fff", borderRadius: 14, padding: "18px 20px", border: "1px solid rgba(0,0,0,0.07)", borderLeft: `4px solid ${GOLD}`, boxShadow: BCARD, display: "flex", alignItems: "center", gap: 14, animation: "lmai-pageIn 0.40s ease both", animationDelay: `${i * 60}ms` }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: "linear-gradient(135deg,#fef3c7,#fde68a)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <ClipboardList size={18} color="#d97706" />
+                <ClipboardList size={18} color="#D93522" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", fontFamily: FF }}>{s.student_name}</div>
@@ -1705,7 +1759,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
 
   // Create form
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", password: "", bio: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", bio: "", account_type: "instructor" });
   const [saving, setSaving] = useState(false);
 
   // View Courses panel
@@ -1715,7 +1769,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
 
   // Edit panel
   const [editTarget, setEditTarget] = useState<any | null>(null);
-  const [editForm, setEditForm] = useState({ full_name: "", email: "", instructor_level: "" });
+  const [editForm, setEditForm] = useState({ full_name: "", email: "", account_type: "instructor" });
   const [editSaving, setEditSaving] = useState(false);
   const [resetPwConfirm, setResetPwConfirm] = useState(false);
   const [resetPwInput, setResetPwInput] = useState("");
@@ -1743,7 +1797,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
       const d = await r.json();
       if (!r.ok) { showToast(d.error || "Failed", "error"); return; }
       showToast(`Instructor ${form.name} created!`);
-      setShowForm(false); setForm({ name: "", email: "", password: "", bio: "" }); load();
+      setShowForm(false); setForm({ name: "", email: "", password: "", bio: "", account_type: "instructor" }); load();
     } catch { showToast("Network error", "error"); } finally { setSaving(false); }
   };
 
@@ -1759,7 +1813,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
   // ── Edit
   const openEdit = (ins: any) => {
     setEditTarget(ins);
-    setEditForm({ full_name: ins.name, email: ins.email, instructor_level: ins.instructor_level });
+    setEditForm({ full_name: ins.name, email: ins.email, account_type: ins.is_staff ? "instructor_admin" : "instructor" });
     setResetPwConfirm(false);
   };
 
@@ -1773,7 +1827,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
       const d = await r.json();
       if (!r.ok) { showToast(d.error || "Update failed", "error"); return; }
       showToast("Instructor updated!");
-      setInstructors(prev => prev.map(i => i.id === editTarget.id ? { ...i, name: d.name, email: d.email, instructor_level: d.instructor_level } : i));
+      setInstructors(prev => prev.map(i => i.id === editTarget.id ? { ...i, name: d.name, email: d.email, is_staff: d.is_staff } : i));
       setEditTarget(null);
     } catch { showToast("Network error", "error"); } finally { setEditSaving(false); }
   };
@@ -1819,7 +1873,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
   const STATUS_C: Record<string, { bg: string; color: string }> = {
     published:      { bg: "#d1fae5", color: "#059669" },
     draft:          { bg: "#f3f4f6", color: "#6b7280" },
-    pending_review: { bg: "#fef3c7", color: "#d97706" },
+    pending_review: { bg: "#fef3c7", color: "#D93522" },
     rejected:       { bg: "#fee2e2", color: "#dc2626" },
   };
 
@@ -1838,14 +1892,30 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
       {/* Create form */}
       {showForm && (
         <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 20, animation: "lmai-pageIn 0.22s ease both" }}>
-          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>New Regular Instructor</h3>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>New Instructor</h3>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-            <Field label="Full Name"><input style={inputStyle} value={form.name} placeholder="e.g. Sarah Khan" onChange={e => setForm(f => ({ ...f, name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
-            <Field label="Email"><input type="email" style={inputStyle} value={form.email} placeholder="sarah@company.com" onChange={e => setForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
+            <Field label="Full Name"><input autoComplete="off" style={inputStyle} value={form.name} placeholder="e.g. Sarah Khan" onChange={e => setForm(f => ({ ...f, name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
+            <Field label="Email"><input type="email" autoComplete="off" style={inputStyle} value={form.email} placeholder="sarah@company.com" onChange={e => setForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-            <Field label="Temporary Password"><input type="password" style={inputStyle} value={form.password} placeholder="Min 6 characters" onChange={e => setForm(f => ({ ...f, password: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
-            <Field label="Bio (optional)"><input style={inputStyle} value={form.bio} placeholder="Brief introduction…" onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
+            <Field label="Temporary Password"><input type="password" autoComplete="new-password" style={inputStyle} value={form.password} placeholder="Min 6 characters" onChange={e => setForm(f => ({ ...f, password: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
+            <Field label="Bio (optional)"><input autoComplete="off" style={inputStyle} value={form.bio} placeholder="Brief introduction…" onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
+          </div>
+          <div style={{ marginBottom: 14 }}>
+            <Field label="Account Type">
+              <select
+                autoComplete="off"
+                style={{ ...inputStyle, appearance: "none" as const, paddingRight: 36, cursor: "pointer",
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center" }}
+                value={form.account_type}
+                onChange={e => setForm(f => ({ ...f, account_type: e.target.value }))}
+                onFocus={focusGold} onBlur={blurGold}
+              >
+                <option value="instructor">Instructor</option>
+                <option value="instructor_admin">Instructor Admin</option>
+              </select>
+            </Field>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <button type="button" onClick={() => setShowForm(false)} style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
@@ -1893,8 +1963,8 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
                   </td>
                   <td style={{ padding: "12px 14px", fontSize: 12.5, color: "#6b7280", fontFamily: FF }}>{ins.email}</td>
                   <td style={{ padding: "12px 14px" }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: isSuper(ins) ? "rgba(139,92,246,0.10)" : "rgba(217,53,34,0.10)", color: isSuper(ins) ? "#7c3aed" : GOLD }}>
-                      {isSuper(ins) ? "Super" : "Regular"}
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: ins.is_staff ? "rgba(217,53,34,0.10)" : "rgba(107,114,128,0.10)", color: ins.is_staff ? GOLD : "#6b7280" }}>
+                      {ins.is_staff ? "Instructor Admin" : "Instructor"}
                     </span>
                   </td>
                   <td style={{ padding: "12px 14px", fontSize: 13, color: "#141413", fontFamily: FF }}>{ins.course_count}</td>
@@ -1978,7 +2048,6 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
           e.target.style.boxShadow = "none";
         };
         const editInputStyle: React.CSSProperties = { ...inputStyle, transition: "border-color 150ms, box-shadow 150ms" };
-        const levelLocked = isSuper(editTarget) || isSelf(editTarget);
         const selectStyle: React.CSSProperties = {
           ...editInputStyle,
           appearance: "none" as const,
@@ -1986,8 +2055,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "right 12px center",
-          cursor: levelLocked ? "not-allowed" : "pointer",
-          opacity: levelLocked ? 0.55 : 1,
+          cursor: "pointer",
         };
         return (
         <InstructorSlidePanel title={`Edit — ${editTarget.name}`} onClose={() => setEditTarget(null)}>
@@ -1997,25 +2065,16 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
           <Field label="Email">
             <input type="email" style={editInputStyle} value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} onFocus={focusEdit} onBlur={blurEdit} />
           </Field>
-          <Field label="Instructor Level">
-            <div>
-              <select
-                style={selectStyle}
-                value={editForm.instructor_level}
-                disabled={levelLocked}
-                onChange={e => setEditForm(f => ({ ...f, instructor_level: e.target.value }))}
-                onFocus={focusEdit} onBlur={blurEdit}
-              >
-                <option value="regular">Regular Instructor</option>
-                <option value="super">Super Instructor</option>
-              </select>
-              {isSuper(editTarget) && (
-                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 5, fontFamily: FF }}>Cannot change a super instructor's level</div>
-              )}
-              {isSelf(editTarget) && !isSuper(editTarget) && (
-                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 5, fontFamily: FF }}>Cannot change your own level</div>
-              )}
-            </div>
+          <Field label="Account Type">
+            <select
+              style={selectStyle}
+              value={editForm.account_type}
+              onChange={e => setEditForm(f => ({ ...f, account_type: e.target.value }))}
+              onFocus={focusEdit} onBlur={blurEdit}
+            >
+              <option value="instructor">Instructor</option>
+              <option value="instructor_admin">Instructor Admin</option>
+            </select>
           </Field>
 
           <button type="button" onClick={saveEdit} disabled={editSaving}
@@ -2051,7 +2110,7 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
                 <div style={{ display: "flex", gap: 8 }}>
                   <button type="button" onClick={() => { setResetPwConfirm(false); setResetPwInput(""); }} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "#fff", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
                   <button type="button" onClick={resetPassword} disabled={resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)}
-                    style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: "#d97706", color: "#fff", fontSize: 12.5, fontWeight: 700, cursor: (resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)) ? "not-allowed" : "pointer", fontFamily: FF, opacity: (resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)) ? 0.6 : 1 }}>
+                    style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: "#D93522", color: "#fff", fontSize: 12.5, fontWeight: 700, cursor: (resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)) ? "not-allowed" : "pointer", fontFamily: FF, opacity: (resetPwLoading || (!!resetPwInput && resetPwInput.length < 6)) ? 0.6 : 1 }}>
                     {resetPwLoading ? "Sending…" : "Set & Send Password"}
                   </button>
                 </div>
@@ -2148,7 +2207,7 @@ function PendingReviewsView({ token, showToast, initialCourses, onRefresh }: {
     <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
       <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: "0 0 20px", fontFamily: FF }}>
         Pending Reviews
-        {courses.length > 0 && <span style={{ marginLeft: 10, fontSize: 13, fontWeight: 700, color: "#d97706", background: "#fef3c7", padding: "3px 10px", borderRadius: 999 }}>{courses.length}</span>}
+        {courses.length > 0 && <span style={{ marginLeft: 10, fontSize: 13, fontWeight: 700, color: "#D93522", background: "#fef3c7", padding: "3px 10px", borderRadius: 999 }}>{courses.length}</span>}
       </h2>
       {courses.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
@@ -2158,7 +2217,7 @@ function PendingReviewsView({ token, showToast, initialCourses, onRefresh }: {
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {courses.map((c: any, i: number) => (
-            <div key={c.id} style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid rgba(0,0,0,0.07)", borderLeft: `4px solid #d97706`, boxShadow: BCARD, animation: "lmai-pageIn 0.40s ease both", animationDelay: `${i * 60}ms` }}>
+            <div key={c.id} style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid rgba(0,0,0,0.07)", borderLeft: `4px solid #D93522`, boxShadow: BCARD, animation: "lmai-pageIn 0.40s ease both", animationDelay: `${i * 60}ms` }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 14, flexWrap: "wrap" }}>
                 <div style={{ flex: 1, minWidth: 200 }}>
                   <div style={{ fontSize: 14, fontWeight: 800, color: "#141413", marginBottom: 4, fontFamily: FF }}>{c.title}</div>
@@ -2246,7 +2305,7 @@ function ApplicationsView({ token, showToast }: {
   };
 
   const STATUS_PILL: Record<string, { bg: string; color: string; label: string }> = {
-    pending:  { bg: "#fef3c7", color: "#d97706", label: "Pending" },
+    pending:  { bg: "#fef3c7", color: "#D93522", label: "Pending" },
     approved: { bg: "#d1fae5", color: "#059669", label: "Approved" },
     rejected: { bg: "#fee2e2", color: "#dc2626", label: "Rejected" },
   };
@@ -2257,7 +2316,7 @@ function ApplicationsView({ token, showToast }: {
         <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: 0, fontFamily: FF }}>
           Instructor Applications
           {apps.filter(a => a.status === "pending").length > 0 && (
-            <span style={{ marginLeft: 10, fontSize: 12, fontWeight: 700, color: "#d97706", background: "#fef3c7", padding: "2px 10px", borderRadius: 999 }}>
+            <span style={{ marginLeft: 10, fontSize: 12, fontWeight: 700, color: "#D93522", background: "#fef3c7", padding: "2px 10px", borderRadius: 999 }}>
               {apps.filter(a => a.status === "pending").length} pending
             </span>
           )}
@@ -2386,7 +2445,7 @@ function ApplicationsView({ token, showToast }: {
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function LMAInstructorDashboard() {
   const navigate = useNavigate();
-  const [name, setName] = useState(localStorage.getItem("lma_name") ?? "Instructor");
+  const [name, setName] = useState(localStorage.getItem("lma_name") || "Instructor");
   const token           = localStorage.getItem("lma_token") ?? "";
   const canInstructor   = localStorage.getItem("lma_can_instructor") === "true";
   const instructorLevel = localStorage.getItem("lma_instructor_level") ?? "regular";
@@ -2396,6 +2455,22 @@ export default function LMAInstructorDashboard() {
   const [active, setActive] = useState<Section>("Dashboard");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Instructor Admin (is_staff=True on an instructor-role account) — shows the
+  // ADMIN sidebar section (Instructors + Applications) alongside super
+  // instructors, without the broader super-instructor feature set (Earnings,
+  // Pending Reviews, revenue Analytics stay instructor_level='super'-gated).
+  // Confirmed live from /lma/profile/, same pattern as LMAStudentLayout's
+  // isAdmin check — never trusted from localStorage, which is trivially
+  // editable in DevTools.
+  const [isInstructorAdmin, setIsInstructorAdmin] = useState(false);
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${API}/lma/profile/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { if (d) setIsInstructorAdmin(!!d.is_staff); })
+      .catch(() => {});
+  }, [token]);
 
   // Notifications
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -2473,7 +2548,17 @@ export default function LMAInstructorDashboard() {
   const loadDashboard = useCallback(() => {
     setLoading(true);
     fetch(`${API}/lma/instructor/dashboard/`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(d => setData(d)).catch(() => {}).finally(() => setLoading(false));
+      .then(r => r.json())
+      .then(d => {
+        setData(d);
+        // The API's `name` (real full name, or username as a last resort) is
+        // the source of truth — localStorage's lma_name was only ever a
+        // display cache from login time, and could be an empty string,
+        // which is why "Instructor · " was rendering with nothing after it.
+        if (d?.name) setName(d.name);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [token]);
 
   useEffect(() => {
@@ -2551,7 +2636,7 @@ export default function LMAInstructorDashboard() {
     { section: "TEACHING", items: [
       { icon: ClipboardList, label: "Assignments" as Section },
     ]},
-    ...(isSuperInstructor ? [{ section: "ADMIN", items: [
+    ...(isSuperInstructor || isInstructorAdmin ? [{ section: "ADMIN", items: [
       { icon: Users,      label: "Instructors" as Section },
       { icon: FileCheck,  label: "Applications" as Section },
     ]}] : []),
@@ -2574,9 +2659,9 @@ export default function LMAInstructorDashboard() {
       case "Analytics":      return <AnalyticsView token={token} isSuperInstructor={isSuperInstructor} />;
       case "Reviews":        return <ReviewsView token={token} />;
       case "Assignments":    return <AssignmentsView data={data} onGrade={setGradingSub} />;
-      case "Instructors":    return isSuperInstructor ? <ManageInstructorsView token={token} showToast={showToast} /> : null;
+      case "Instructors":    return (isSuperInstructor || isInstructorAdmin) ? <ManageInstructorsView token={token} showToast={showToast} /> : null;
       case "Pending Reviews": return isSuperInstructor ? <PendingReviewsView token={token} showToast={showToast} initialCourses={pendingReviewCourses} onRefresh={loadDashboard} /> : null;
-      case "Applications":   return isSuperInstructor ? <ApplicationsView token={token} showToast={showToast} /> : null;
+      case "Applications":   return (isSuperInstructor || isInstructorAdmin) ? <ApplicationsView token={token} showToast={showToast} /> : null;
       case "Profile":        return <ProfileView token={token} showToast={showToast} onUpdated={(n) => setName(n)} />;
       default:               return null;
     }

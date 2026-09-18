@@ -319,13 +319,15 @@ const V2SignIn = ({ className }: { className?: string }) => {
       </button>
 
       {open && (
-        // dropdown panel — white card, anchored to the right edge of the button
+        // dropdown panel — white card, anchored to the right edge of the button.
+        // Sized to match the "Who We Are" panel (width 320, padding 12, compact
+        // ServiceRow-style rows) rather than the taller first-pass sizing.
         <div style={{
           position: "absolute", top: "calc(100% + 12px)", right: 0,
-          width: 264, background: "#fff",
+          width: 320, background: "#fff",
           border: `1px solid ${T.border}`, borderRadius: 16,
-          boxShadow: `0 24px 60px ${T.scrim(0.22)}`,
-          overflow: "hidden", zIndex: 3,
+          boxShadow: "0 20px 40px rgba(7,26,51,0.15)",
+          zIndex: 3, padding: 8,
         }}>
           {SIGNIN_OPTIONS.map((opt) => (
             <Link
@@ -333,26 +335,28 @@ const V2SignIn = ({ className }: { className?: string }) => {
               to={opt.to}
               onClick={() => setOpen(false)}          // close after choosing
               style={{
-                display: "flex", alignItems: "flex-start", gap: 12,
-                padding: "13px 16px", textDecoration: "none",
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "6px 10px 6px 8px", textDecoration: "none",
+                borderRadius: 12,
                 transition: "background 140ms ease",
               }}
               onMouseOver={(e) => (e.currentTarget.style.background = T.lightAlt)}
               onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              {/* icon tile (FontAwesome class from SIGNIN_OPTIONS) */}
+              {/* icon tile — Academy Login gets the lucide GraduationCap icon;
+                  the other two render their FontAwesome class from SIGNIN_OPTIONS. */}
               <span style={{
-                width: 32, height: 32, borderRadius: 9, flexShrink: 0, marginTop: 1,
+                width: 30, height: 30, borderRadius: 9, flexShrink: 0,
                 background: T.tileBg, color: T.red,
                 display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 13,
               }}>
-                <i className={opt.icon} />
+                {opt.to === "/lma/login" ? <GraduationCap size={16} /> : <i className={opt.icon} />}
               </span>
               <span>
-                <span style={{ display: "block", fontFamily: T.fontHead, fontSize: 14, fontWeight: 600, color: T.headNavy }}>
+                <span style={{ display: "block", fontFamily: T.fontHead, fontSize: 13.5, fontWeight: 700, color: T.headNavy }}>
                   {opt.label}
                 </span>
-                <span style={{ display: "block", fontFamily: T.fontBody, fontSize: 12, color: T.muted, marginTop: 2 }}>
+                <span style={{ display: "block", fontFamily: T.fontBody, fontSize: 11.5, color: "#6b7280", marginTop: 1 }}>
                   {opt.subtitle}
                 </span>
               </span>
