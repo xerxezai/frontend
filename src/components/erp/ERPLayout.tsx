@@ -706,6 +706,18 @@ const ERPLayout = ({ children }: Props) => {
                       <i className="fas fa-users-cog" style={{ color: 'inherit', fontSize: 13 }}></i>
                     </span>
                   </NavLink>
+                  {isAdmin && (
+                    <NavLink
+                      to="/admin/partner-courses"
+                      title="Partner Courses"
+                      onClick={() => setMobileOpen(false)}
+                      className={({ isActive }) => `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
+                    >
+                      <span className="erp-icon-badge">
+                        <i className="fas fa-link" style={{ color: 'inherit', fontSize: 13 }}></i>
+                      </span>
+                    </NavLink>
+                  )}
                 </>
               ) : (
                 <>
@@ -732,7 +744,7 @@ const ERPLayout = ({ children }: Props) => {
                   </button>
                   <div style={{
                     overflow: 'hidden',
-                    maxHeight: adminGroupOpen ? (isPlatformAdmin ? 4 : 3) * 44 + 8 : 0,
+                    maxHeight: adminGroupOpen ? (isPlatformAdmin ? 4 : 3) * 44 + 8 + (isAdmin ? 44 : 0) : 0,
                     margin: adminGroupOpen ? '4px 8px 8px' : '0 8px',
                     transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
                   }}>
@@ -781,6 +793,16 @@ const ERPLayout = ({ children }: Props) => {
                         <i className="fas fa-users-cog" style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
                         <span>User Management</span>
                       </NavLink>
+                      {isAdmin && (
+                        <NavLink
+                          to="/admin/partner-courses"
+                          onClick={() => setMobileOpen(false)}
+                          className={({ isActive }) => `erp-subnav-item${isActive ? ' erp-subnav-active' : ''}`}
+                        >
+                          <i className="fas fa-link" style={{ fontSize: 11, width: 16, textAlign: 'center' }}></i>
+                          <span>Partner Courses</span>
+                        </NavLink>
+                      )}
                     </div>
                   </div>
                 </>

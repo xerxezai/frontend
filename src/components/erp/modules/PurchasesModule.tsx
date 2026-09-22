@@ -3,6 +3,7 @@ import { useERPList, isSuperUser } from '../../../hooks/useERPApi';
 import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
 import { useCurrency } from '../../../context/CurrencyContext';
+import PhoneInput from '../../common/PhoneInput';
 
 const inp: React.CSSProperties = { width:'100%',padding:'9px 12px',borderRadius:9,border:'1px solid rgba(0,0,0,0.10)',background:'#F8F7F4',fontFamily:"'DM Sans',sans-serif",fontSize:13,outline:'none',boxSizing:'border-box' };
 const lbl: React.CSSProperties = { display:'block',fontSize:11,fontWeight:700,color:'#6B6B6B',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:5,fontFamily:"'DM Sans',sans-serif" };
@@ -126,7 +127,7 @@ const PurchasesModule = () => {
               <div><label style={lbl}>Name *</label><input value={vF.name} onChange={e=>setVF(f=>({...f,name:e.target.value}))} style={inp} required /></div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
                 <div><label style={lbl}>Email</label><input type="email" value={vF.email} onChange={e=>setVF(f=>({...f,email:e.target.value}))} style={inp} /></div>
-                <div><label style={lbl}>Phone</label><input value={vF.phone} onChange={e=>setVF(f=>({...f,phone:e.target.value}))} style={inp} /></div>
+                <div><label style={lbl}>Phone</label><PhoneInput value={vF.phone} onChange={v=>setVF(f=>({...f,phone:v}))} /></div>
               </div>
               <div><label style={lbl}>Address</label><textarea value={vF.address} onChange={e=>setVF(f=>({...f,address:e.target.value}))} style={{...inp,resize:'vertical',minHeight:70}} /></div>
               <div><label style={lbl}>Active</label><select value={vF.is_active} onChange={e=>setVF(f=>({...f,is_active:e.target.value}))} style={inp}><option value="true">Yes</option><option value="false">No</option></select></div>

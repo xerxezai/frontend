@@ -54,6 +54,8 @@ const COMPANY = [
   { to: "/careers",         label: "Careers" },
   { to: "/contact",         label: "Contact" },
   { to: "/partner/training",   label: "Become a Partner" },
+  { to: "/lma/affiliate/apply", label: "Become an Affiliate" },
+  { to: "/partner-with-us",     label: "Partner with Us" },
 ];
 
 // Social links — FontAwesome brand classes (lucide has no brand icons).

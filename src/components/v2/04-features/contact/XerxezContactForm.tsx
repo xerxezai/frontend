@@ -27,12 +27,14 @@ const SERVICES = [
   "AI-Powered ERP", "DevSecOps Pipelines", "Cloud Infrastructure",
   "Software Development", "AI Training & Consulting", "AI Training & Upskilling",
   "Quantum Computing", "Mobile Application",
-  "Web & Mobile Hosting", "Software Consulting",
+  "Web & Mobile Hosting", "Software Consulting", "Partner Course Listing",
 ];
 // Short slugs used by deep-links that don't want to URL-encode the full label
-// (e.g. TrainingV2's "Enterprise training" CTA → /contact?service=ai-training).
+// (e.g. TrainingV2's "Enterprise training" CTA → /contact?service=ai-training;
+// PartnerWithUsPage's "List Your Courses" CTA → /contact?service=partner-courses).
 const SERVICE_SLUGS: Record<string, string> = {
   "ai-training": "AI Training & Upskilling",
+  "partner-courses": "Partner Course Listing",
 };
 const COUNTRIES = ["India", "UAE", "Other"];
 const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
@@ -84,6 +86,7 @@ interface F {
   cloudProvider: string; currentInfra: string; migrationNeeded: string;
   projectType: string; projectTimeline: string; approxBudget: string;
   trainingTeamSize: string; trainingMode: string; topicsOfInterest: string; trainingDuration: string;
+  courseNames: string; platformUrl: string; courseUrl: string;
 }
 const EMPTY: F = {
   fullName: "", email: "", phone: "", company: "",
@@ -94,13 +97,17 @@ const EMPTY: F = {
   cloudProvider: "", currentInfra: "", migrationNeeded: "",
   projectType: "", projectTimeline: "", approxBudget: "",
   trainingTeamSize: "", trainingMode: "", topicsOfInterest: "", trainingDuration: "",
+  courseNames: "", platformUrl: "", courseUrl: "",
 };
 // Fields that count toward the "form completion" progress bar (plus any active
 // service-section fields, added at runtime).
 const COMMON_TRACKED: (keyof F)[] = ["fullName", "email", "phone", "company", "service", "country", "hearAboutUs", "message"];
 
-// A field descriptor for the dynamic per-service section.
-type FieldDef = { key: keyof F; label: string; placeholder: string } &
+// A field descriptor for the dynamic per-service section. `required` only
+// drives the label asterisk + handleSubmit's validation (see the Partner
+// Course Listing section below) — every other service's fields are all
+// optional today, same as before this flag existed.
+type FieldDef = { key: keyof F; label: string; placeholder: string; required?: boolean } &
   ({ type: "text" } | { type: "select"; options: string[] } | { type: "multiselect"; options: string[] });
 
 // Validated field → the DOM id of its control, in the order focus should be
@@ -110,6 +117,9 @@ const ERROR_FIELD_IDS: { key: keyof F; id: string }[] = [
   { key: "email",    id: "v2c-email" },
   { key: "phone",    id: "v2c-phone" },
   { key: "message",  id: "v2c-message" },
+  { key: "courseNames", id: "v2c-courseNames" },
+  { key: "platformUrl", id: "v2c-platformUrl" },
+  { key: "courseUrl",   id: "v2c-courseUrl" },
 ];
 
 // service name → the extra fields to show when it's selected.
@@ -153,6 +163,14 @@ const SERVICE_SECTIONS: Record<string, { label: string; fields: FieldDef[] }> = 
       { key: "trainingMode", label: "Training Mode", type: "select", options: TRAINING_MODES, placeholder: "Select mode…" },
       { key: "trainingDuration", label: "Training Duration", type: "select", options: TRAINING_DURATIONS, placeholder: "Select duration…" },
       { key: "topicsOfInterest", label: "Topics of Interest", type: "multiselect", options: TRAINING_TOPICS, placeholder: "Select topics…" },
+    ],
+  },
+  "Partner Course Listing": {
+    label: "Course Listing Details",
+    fields: [
+      { key: "courseNames", label: "Course Name(s)", type: "text", placeholder: "e.g. Intro to Kubernetes, Advanced Docker", required: true },
+      { key: "platformUrl", label: "Your Platform URL", type: "text", placeholder: "https://yourplatform.com", required: true },
+      { key: "courseUrl", label: "Course URL(s)", type: "text", placeholder: "https://yourplatform.com/course/…", required: true },
     ],
   },
 };
@@ -301,6 +319,14 @@ const XerxezContactForm = () => {
     if (!form.email.trim() || !validateEmail(form.email)) errs.email = "Please enter a valid email address.";
     if (!form.message.trim() || form.message.trim().length < 10) errs.message = "Message must be at least 10 characters.";
     if (form.phone.trim() && !isValidPhone(form.phone)) errs.phone = "Please enter a valid phone number with country code.";
+    // Required per-service fields (currently: Partner Course Listing's
+    // Course URL + Coupon Code) — same "required" flag drives the label
+    // asterisk above.
+    if (activeSection) {
+      for (const f of activeSection.fields) {
+        if (f.required && !form[f.key].trim()) errs[f.key] = `${f.label} is required.`;
+      }
+    }
 
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
@@ -327,6 +353,8 @@ const XerxezContactForm = () => {
         project_type: form.projectType, project_timeline: form.projectTimeline, approx_budget: form.approxBudget,
         training_team_size: form.trainingTeamSize, training_mode: form.trainingMode, topics_of_interest: form.topicsOfInterest,
         training_duration: form.trainingDuration,
+        course_names: form.courseNames, platform_url: form.platformUrl,
+        course_url: form.courseUrl,
       });
       if (result.success) {
         setSent(true); setForm(EMPTY);
@@ -365,7 +393,8 @@ const XerxezContactForm = () => {
         );
       case "text":
         return (
-          <input type="text" placeholder={f.placeholder} value={form[f.key]} disabled={sending}
+          <input id={`v2c-${f.key}`} type="text" placeholder={f.placeholder} value={form[f.key]} disabled={sending}
+            aria-invalid={!!errors[f.key]}
             style={ctrl(f.key)} {...focusProps(f.key)} onChange={(e) => set(f.key, e.target.value)} />
         );
       case "select":
@@ -645,8 +674,13 @@ const XerxezContactForm = () => {
                   {activeSection.fields.map((f) => (
                     // multiselect fields take a full row; others are half-width
                     <div key={f.key} className={f.type === "multiselect" ? "col-12" : "col-md-6"}>
-                      <label style={v2Label}>{f.label}</label>
+                      <label style={v2Label}>{f.label}{f.required && <span style={{ color: "#e11d2e" }}> *</span>}</label>
                       {renderServiceField(f)}
+                      {errors[f.key] && (
+                        <span role="alert" style={{ display: "block", marginTop: 6, fontFamily: T.fontBody, fontSize: 12, color: "#e11d2e" }}>
+                          {errors[f.key]}
+                        </span>
+                      )}
                       {/* helper text listing what the chosen plan includes */}
                       {f.key === "planInterest" && form.planInterest && (
                         <div style={{ fontFamily: T.fontBody, fontSize: 11.5, color: "#5b6b7c", marginTop: 6, lineHeight: 1.5 }}>
@@ -667,6 +701,14 @@ const XerxezContactForm = () => {
                   )}
                 </div>
               </>
+            )}
+
+            {/* Partner Course Listing — coupon/commission terms note, shown
+                only for this service since it's what the note refers to. */}
+            {form.service === "Partner Course Listing" && (
+              <p style={{ fontFamily: T.fontBody, fontSize: 13, fontStyle: "italic", color: "#8a94a3", margin: "0 0 16px" }}>
+                💬 Coupon codes, commission and revenue terms will be discussed mutually after we review your submission.
+              </p>
             )}
 
             {/* submit + clear */}

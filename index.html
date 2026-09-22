@@ -18,10 +18,18 @@
        "fas fa-...">` icon site-wide silently fails to render (found via a
        real browser console check, not theoretical). `ws(s)://localhost:5173`
        is for Vite's dev-server HMR only; harmless in production where it's
-       unused. `http://127.0.0.1:8000` is the local Django dev server —
-       pair with frontend/.env.local (VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1,
-       gitignored) to develop against a local backend instead of production;
-       also harmless in production since nothing there points at it.
+       unused. `http://127.0.0.1:8000` / `http://localhost:8000` is the local
+       Django dev server — pair with frontend/.env.local (VITE_API_BASE_URL=
+       http://127.0.0.1:8000/api/v1, gitignored) to develop against a local
+       backend instead of production; also harmless in production since
+       nothing there points at it. `blob:` is on img-src/media-src/frame-src/
+       connect-src for lesson content: uploaded videos and documents are
+       fetched then rendered from an in-memory object URL (createObjectURL)
+       rather than a direct cross-origin <video>/<iframe> src in some flows,
+       which the browser reports under the `blob:` scheme. `frame-src`
+       includes the backend origins for the inline PDF viewer (`<iframe src=
+       {document_file}>` in LMALessonPlayer) — without it every uploaded
+       document embed is silently blank.
        Note: `frame-ancestors` is intentionally NOT set here — CSP
        delivered via <meta> ignores frame-ancestors/report-uri/sandbox (spec
        requires a real HTTP header for those); clickjacking protection
@@ -32,9 +40,10 @@
     script-src 'self';
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' data: https://fonts.gstatic.com;
-    img-src 'self' data: https:;
-    media-src 'self' https:;
-    connect-src 'self' https://backend-production-b9f2.up.railway.app http://127.0.0.1:8000 ws://localhost:5173 wss://localhost:5173;
+    img-src 'self' data: blob: https: http://localhost:8000 http://127.0.0.1:8000;
+    media-src 'self' blob: https: http://localhost:8000 http://127.0.0.1:8000;
+    frame-src 'self' blob: https: http://localhost:8000 http://127.0.0.1:8000;
+    connect-src 'self' https://backend-production-b9f2.up.railway.app http://localhost:8000 http://127.0.0.1:8000 https://ipapi.co blob: ws://localhost:5173 wss://localhost:5173;
     object-src 'none';
     base-uri 'self';
     form-action 'self';

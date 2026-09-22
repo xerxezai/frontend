@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { companiesApi } from './companiesApi';
+import PhoneInput from '../../common/PhoneInput';
 
 const INDUSTRIES = ['Engineering & EPC', 'Oil & Gas', 'Construction', 'Manufacturing', 'Facilities Management', 'Other'];
 const PLANS = [
@@ -90,7 +91,7 @@ const AddCompanyModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
           </div>
           <div>
             <label style={labelStyle}>Phone</label>
-            <input value={form.phone} onChange={e => set('phone', e.target.value)} style={inputStyle} />
+            <PhoneInput value={form.phone} onChange={v => set('phone', v)} />
           </div>
         </div>
 

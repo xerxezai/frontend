@@ -62,6 +62,7 @@ const ServicesV2         = lazy(() => import("./page/v2/ServicesV2"));
 const PortfolioV2        = lazy(() => import("./page/v2/PortfolioV2"));
 const ContactV2          = lazy(() => import("./page/v2/ContactV2"));
 const TrainingV2         = lazy(() => import("./page/v2/TrainingV2"));
+const PartnerWithUsPage  = lazy(() => import("./page/v2/PartnerWithUsPage"));
 const CareersV2          = lazy(() => import("./page/v2/CareersV2"));
 const PrivacyPolicyV2    = lazy(() => import("./page/v2/PrivacyPolicyV2"));
 const TermsOfUseV2       = lazy(() => import("./page/v2/TermsOfUseV2"));
@@ -113,6 +114,13 @@ const LMAProfilePage            = lazy(() => import("./page/lma/LMAProfilePage")
 const LMAAdminStudents          = lazy(() => import("./page/lma/LMAAdminStudents"));
 const LMAAdminEnrollments       = lazy(() => import("./page/lma/LMAAdminEnrollments"));
 const LMAAdminAnalytics         = lazy(() => import("./page/lma/LMAAdminAnalytics"));
+const LMAAdminPendingCourses    = lazy(() => import("./page/lma/LMAAdminPendingCourses"));
+const LMALessonPlayer           = lazy(() => import("./page/lma/LMALessonPlayer"));
+const AffiliateApplyPage        = lazy(() => import("./page/lma/AffiliateApplyPage"));
+const AffiliateDashboard        = lazy(() => import("./page/lma/AffiliateDashboard"));
+const LMAAdminAffiliates        = lazy(() => import("./page/lma/LMAAdminAffiliates"));
+const LMAAdminAffiliateCommissions = lazy(() => import("./page/lma/LMAAdminAffiliateCommissions"));
+const PartnerCoursesAdmin        = lazy(() => import("./page/v2/admin/PartnerCoursesAdmin"));
 const PortalHub                 = lazy(() => import("./page/PortalHub"));
 const PartnerApp                = lazy(() => import("./partner/PartnerApp"));
 
@@ -138,6 +146,7 @@ function App() {
           <Route path="/portfolio"               element={<PortfolioV2 />} />
           <Route path="/contact"                 element={<ContactV2 />} />
           <Route path="/training"                element={<TrainingV2 />} />
+          <Route path="/partner-with-us"         element={<PartnerWithUsPage />} />
           <Route path="/careers"                 element={<CareersV2 />} />
           <Route path="/privacy-policy"          element={<PrivacyPolicyV2 />} />
           <Route path="/terms-of-use"            element={<TermsOfUseV2 />} />
@@ -191,6 +200,7 @@ function App() {
           <Route path="/privacy"                 element={<PrivacyPolicyPage />} />
           <Route path="/terms"                   element={<TermsPage />} />
           <Route path="/partners"                element={<PartnersPage />} />
+          <Route path="/admin/partner-courses"   element={<PartnerCoursesAdmin />} />
 
           {/* LMA routes */}
           <Route path="/lma/become-instructor"               element={<LMABecomeInstructorPage />} />
@@ -207,9 +217,15 @@ function App() {
           <Route path="/lma/admin/students"               element={<LMAAdminStudents />} />
           <Route path="/lma/admin/enrollments"            element={<LMAAdminEnrollments />} />
           <Route path="/lma/admin/analytics"              element={<LMAAdminAnalytics />} />
+          <Route path="/lma/admin/pending-courses"        element={<LMAAdminPendingCourses />} />
+          <Route path="/lma/admin/affiliates"             element={<LMAAdminAffiliates />} />
+          <Route path="/lma/admin/affiliate-commissions"  element={<LMAAdminAffiliateCommissions />} />
+          <Route path="/lma/affiliate/apply"              element={<AffiliateApplyPage />} />
+          <Route path="/lma/affiliate/dashboard"          element={<AffiliateDashboard />} />
           <Route path="/lma/instructor/dashboard"         element={<LMAInstructorDashboard />} />
           <Route path="/lma/courses"                      element={<LMACoursesPage />} />
           <Route path="/lma/courses/:id"                  element={<LMACourseDetailPage />} />
+          <Route path="/lma/courses/:courseId/lessons/:lessonId" element={<LMALessonPlayer />} />
 
           <Route path="*"                        element={<NotFoundPage />} />
         </Routes>

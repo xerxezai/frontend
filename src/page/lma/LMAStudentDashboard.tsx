@@ -6,12 +6,10 @@ import {
   BookMarked, CheckCircle2,
   ClipboardList, Star, Clock,
   AlertCircle, RefreshCw, Sparkles,
-  Eye, Share2, Download, X,
-  GraduationCap,
+  Share2, Download,
 } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
-import { downloadCertificatePDF } from "./certificatePdf";
 
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
@@ -134,58 +132,6 @@ const dueBadge = (dueDate: string) => {
   return { label: null, bg: "rgba(217,53,34,0.10)", fg: GOLD, tile: "rgba(217,53,34,0.10)" };
 };
 
-/* ── Certificate preview modal ── */
-const CertPreviewModal = ({ cert, studentName, onClose, onDownload }: {
-  cert: { id: number; course_title: string; issued_at: string };
-  studentName: string;
-  onClose: () => void;
-  onDownload: () => void;
-}) => (
-  <div
-    onClick={onClose}
-    style={{ position: "fixed", inset: 0, background: "rgba(7,26,51,0.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
-  >
-    <div onClick={e => e.stopPropagation()} style={{
-      background: "#fff", borderRadius: 20, maxWidth: 520, width: "100%", overflow: "hidden",
-      boxShadow: "0 40px 100px rgba(0,0,0,0.35)", animation: "lmaPage-in 0.24s ease both",
-    }}>
-      <div style={{
-        position: "relative", background: `linear-gradient(135deg,${DARK},#04101f)`,
-        padding: "40px 32px", textAlign: "center",
-        border: `10px solid transparent`, borderImage: `linear-gradient(135deg,${AMBER},${GOLD}) 1`,
-      }}>
-        <button onClick={onClose} aria-label="Close" style={{
-          position: "absolute", top: 12, right: 12, background: "rgba(255,255,255,0.10)", border: "none",
-          borderRadius: 8, width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
-          cursor: "pointer", color: "#fff",
-        }}>
-          <X size={16} />
-        </button>
-        <GraduationCap size={30} color={AMBER} style={{ marginBottom: 10 }} />
-        <div style={{ fontSize: 10, color: AMBER, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 14 }}>
-          Certificate of Completion
-        </div>
-        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginBottom: 6 }}>This certifies that</div>
-        <div style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 10, fontFamily: FF }}>{studentName}</div>
-        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginBottom: 6 }}>has successfully completed</div>
-        <div style={{ fontSize: 17, fontWeight: 800, color: AMBER, marginBottom: 14, fontFamily: FF }}>{cert.course_title}</div>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.40)" }}>
-          Issued {new Date(cert.issued_at).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}
-        </div>
-      </div>
-      <div style={{ display: "flex", gap: 10, padding: 18 }}>
-        <button onClick={onDownload} style={{
-          flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-          background: GOLD, color: "#fff", fontWeight: 700, fontSize: 13, border: "none",
-          borderRadius: 10, padding: "12px", cursor: "pointer", fontFamily: FF, minHeight: 44,
-        }}>
-          <Download size={15} /> Download PDF
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
 export default function LMAStudentDashboard() {
   const navigate = useNavigate();
   const name = localStorage.getItem("lma_name") ?? "Student";
@@ -193,7 +139,6 @@ export default function LMAStudentDashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [previewCert, setPreviewCert] = useState<{ id: number; course_title: string; issued_at: string } | null>(null);
 
   const loadDashboard = useCallback(() => {
     if (!token) { navigate("/lma/login"); return; }
@@ -529,27 +474,23 @@ export default function LMAStudentDashboard() {
                       </div>
                     </div>
                     <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                      {c.certificate_file && (
+                        <button
+                          onClick={() => shareOnLinkedIn(c.course_title)}
+                          aria-label="Share on LinkedIn"
+                          title="Share on LinkedIn"
+                          style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#0a66c2", background: "#eaf2fb", border: "none", borderRadius: 8, cursor: "pointer" }}
+                        >
+                          <Share2 size={15} />
+                        </button>
+                      )}
                       <button
-                        onClick={() => setPreviewCert(c)}
-                        aria-label="Preview certificate"
-                        title="Preview"
-                        style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#6b7280", background: "#f4f7fa", border: "none", borderRadius: 8, cursor: "pointer" }}
+                        onClick={() => c.certificate_file && window.open(`${API}/lma/certificates/${c.id}/download/`, "_blank")}
+                        disabled={!c.certificate_file}
+                        title={c.certificate_file ? "Download certificate" : "Certificate coming soon"}
+                        style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: c.certificate_file ? "#d97706" : "#9ca3af", background: c.certificate_file ? "#fef3c7" : "#f4f7fa", border: "none", borderRadius: 8, padding: "0 12px", height: 36, cursor: c.certificate_file ? "pointer" : "not-allowed", fontFamily: FF }}
                       >
-                        <Eye size={15} />
-                      </button>
-                      <button
-                        onClick={() => shareOnLinkedIn(c.course_title)}
-                        aria-label="Share on LinkedIn"
-                        title="Share on LinkedIn"
-                        style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#0a66c2", background: "#eaf2fb", border: "none", borderRadius: 8, cursor: "pointer" }}
-                      >
-                        <Share2 size={15} />
-                      </button>
-                      <button
-                        onClick={() => downloadCertificatePDF(c, name)}
-                        style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: "#d97706", background: "#fef3c7", border: "none", borderRadius: 8, padding: "0 12px", height: 36, cursor: "pointer", fontFamily: FF }}
-                      >
-                        <Download size={13} /> Download
+                        <Download size={13} /> {c.certificate_file ? "Download" : "Coming soon"}
                       </button>
                     </div>
                   </div>
@@ -568,14 +509,6 @@ export default function LMAStudentDashboard() {
           }
         `}</style>
 
-        {previewCert && (
-          <CertPreviewModal
-            cert={previewCert}
-            studentName={name}
-            onClose={() => setPreviewCert(null)}
-            onDownload={() => downloadCertificatePDF(previewCert, name)}
-          />
-        )}
       </div>
     </LMAStudentLayout>
   );
