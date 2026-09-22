@@ -3,11 +3,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, BookOpen, Play, Search,
   ClipboardList, Award, TrendingUp, User,
-  LogOut, ChevronRight, Bell, Menu, X,
+  LogOut, ChevronRight, Bell, Menu, X, Globe,
   Maximize, Minimize, CheckCircle2,
-  Users, ListChecks, BarChart3,
+  Users, ListChecks, BarChart3, ClipboardCheck, Handshake,
 } from "lucide-react";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
+import { ensureLmaAccessToken, clearLmaSession, LMA_PROACTIVE_REFRESH_INTERVAL_MS } from "../../utils/lmaAuth";
 
 interface PendingAssignment {
   id: number;
@@ -96,8 +97,36 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
   const location = useLocation();
   const path = location.pathname;
 
-  const token = localStorage.getItem("lma_token");
+  // `token` is state (not a plain localStorage read) so a silent refresh can
+  // update it and have every child that receives `token` as a prop pick up
+  // the new value on the next render — without touching each child's own
+  // fetch calls individually.
+  const [token, setToken] = useState(localStorage.getItem("lma_token") ?? "");
+  const [sessionExpired, setSessionExpired] = useState(false);
   const name = localStorage.getItem("lma_name") ?? "Student";
+
+  // Session persistence: refresh proactively on mount (covers the "closed
+  // the browser overnight, token already expired" case) and again every 7
+  // hours thereafter — inside the 8-hour access/refresh token lifetime — so
+  // an active session's refresh always lands before expiry. If refresh
+  // genuinely fails (refresh token itself expired/blacklisted — i.e. idle
+  // 8+ hours), the token clears and the redirect effect below sends the
+  // user to login with an explicit "session expired" message.
+  useEffect(() => {
+    if (!token) return;
+    let cancelled = false;
+    const check = async () => {
+      const hadToken = !!localStorage.getItem("lma_token");
+      const fresh = await ensureLmaAccessToken();
+      if (cancelled) return;
+      if (!fresh && hadToken) setSessionExpired(true);
+      if (fresh !== token) setToken(fresh);
+    };
+    check();
+    const iv = setInterval(check, LMA_PROACTIVE_REFRESH_INTERVAL_MS);
+    return () => { cancelled = true; clearInterval(iv); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // All hooks must be declared before any conditional return (Rules of Hooks)
   const [sideOpen, setSideOpen] = useState(false);
@@ -178,19 +207,23 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
     else document.exitFullscreen?.();
   };
 
-  // Redirect in an effect — never call navigate() during render
+  // Redirect in an effect — never call navigate() during render. A session
+  // that expired (refresh failed) carries `expired=1` so the login page can
+  // show "Your session has expired. Please login again." instead of the
+  // silent redirect a first-time/never-logged-in visitor gets.
   useEffect(() => {
     if (!token) {
-      navigate(`/lma/login?redirect=${encodeURIComponent(path)}`);
+      const expiredParam = sessionExpired ? "&expired=1" : "";
+      navigate(`/lma/login?redirect=${encodeURIComponent(path)}${expiredParam}`);
     }
-  }, [token, navigate, path]);
+  }, [token, navigate, path, sessionExpired]);
 
   if (!token) return null;
 
   const logout = () => {
-    ["lma_token", "lma_role", "lma_can_instructor", "lma_name"].forEach(k =>
-      localStorage.removeItem(k)
-    );
+    // Was missing lma_refresh — an explicit logout must clear the refresh
+    // token too, or a stale one lingers in localStorage after "signing out".
+    clearLmaSession();
     navigate("/", { replace: true });
   };
 
@@ -229,6 +262,8 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
         { icon: Users,      label: "All Students",     to: "/lma/admin/students" },
         { icon: ListChecks, label: "Enrollments",       to: "/lma/admin/enrollments" },
         { icon: BarChart3,  label: "Course Analytics", to: "/lma/admin/analytics" },
+        { icon: ClipboardCheck, label: "Pending Courses", to: "/lma/admin/pending-courses" },
+        { icon: Handshake,  label: "Affiliates",       to: "/lma/admin/affiliates" },
       ],
     }] : []),
   ];
@@ -350,6 +385,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
         )}
 
         <div style={{ padding: "12px 12px 24px" }}>
+          <SideItem icon={Globe} label="Back to Website" to="/training" />
           <SideItem icon={LogOut} label="Logout" danger onClick={logout} />
         </div>
       </aside>

@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Award, Download } from "lucide-react";
+import { Award, Download, Share2, Clock } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
+const GREEN = "#10b981";
 const FF    = "'DM Sans', sans-serif";
 const BCARD = "0 1px 2px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.06),0 16px 32px rgba(0,0,0,0.03)";
 const BHOV  = "0 2px 4px rgba(0,0,0,0.05),0 12px 36px rgba(0,0,0,0.10),0 28px 64px rgba(217,53,34,0.20)";
@@ -14,7 +15,25 @@ interface Certificate {
   id: number;
   course: number;
   course_title: string;
+  student_name: string;
   issued_at: string;
+  certificate_file: string | null;
+  unique_id: string;
+}
+
+interface Enrollment {
+  id: number;
+  course: number;
+  course_title: string;
+  progress: number;
+  completed: boolean;
+}
+
+interface Row {
+  courseId: number;
+  courseTitle: string;
+  progress: number;
+  certificate: Certificate | null;
 }
 
 /* ── Toast ── */
@@ -80,22 +99,58 @@ const SkeletonCertCard = () => (
 export default function LMACertificatesPage() {
   const navigate = useNavigate();
   const token = localStorage.getItem("lma_token");
-  const [certs, setCerts] = useState<Certificate[]>([]);
+  const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
+  const [generating, setGenerating] = useState<number | null>(null);
 
   useEffect(() => {
     if (!token) { navigate("/lma/login"); return; }
-    fetch(`${API}/lma/certificates/`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json())
-      .then(d => setCerts(Array.isArray(d) ? d : []))
+    const headers = { Authorization: `Bearer ${token}` };
+    Promise.all([
+      fetch(`${API}/lma/student/my-courses/`, { headers }).then(r => (r.ok ? r.json() : [])),
+      fetch(`${API}/lma/certificates/`, { headers }).then(r => (r.ok ? r.json() : [])),
+    ])
+      .then(([enrollments, certs]: [Enrollment[], Certificate[]]) => {
+        const certByCourse = new Map((Array.isArray(certs) ? certs : []).map(c => [c.course, c]));
+        const merged: Row[] = (Array.isArray(enrollments) ? enrollments : []).map(e => ({
+          courseId: e.course,
+          courseTitle: e.course_title,
+          progress: e.progress,
+          certificate: certByCourse.get(e.course) ?? null,
+        }));
+        setRows(merged);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [token, navigate]);
 
-  const handleDownload = () => {
-    setToast("Download feature coming soon — your certificate is recorded.");
+  const handleDownload = (cert: Certificate) => {
+    if (!cert.certificate_file) return;
+    window.open(`${API}/lma/certificates/${cert.id}/download/`, "_blank");
   };
+
+  const handleShareLinkedIn = (cert: Certificate) => {
+    if (!cert.certificate_file) return;
+    const shareUrl = `${API}/lma/certificates/${cert.id}/download/`;
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, "_blank", "noopener,noreferrer");
+  };
+
+  const handleGenerate = async (row: Row) => {
+    if (!token) return;
+    setGenerating(row.courseId);
+    try {
+      const r = await fetch(`${API}/lma/courses/${row.courseId}/generate-certificate/`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` },
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) { setToast(d.error || "Certificate coming soon — the instructor hasn't uploaded a template yet."); return; }
+      setRows(prev => prev.map(x => (x.courseId === row.courseId ? { ...x, certificate: d } : x)));
+    } catch { setToast("Network error"); } finally { setGenerating(null); }
+  };
+
+  const certifiable = rows.filter(r => r.progress >= 100 || r.certificate);
+  const inProgress = rows.filter(r => r.progress < 100 && !r.certificate);
 
   return (
     <LMAStudentLayout>
@@ -109,7 +164,7 @@ export default function LMACertificatesPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 20 }}>
             {[0, 1, 2, 3, 4, 5].map(i => <SkeletonCertCard key={i} />)}
           </div>
-        ) : certs.length === 0 ? (
+        ) : rows.length === 0 ? (
           <div style={{ textAlign: "center", padding: "80px 24px" }}>
             <Award size={64} color="#d1d5db" style={{ display: "block", margin: "0 auto 20px", filter: "grayscale(1)" }} />
             <h3 style={{ fontSize: 18, fontWeight: 700, color: "#6b7280", margin: "0 0 8px", fontFamily: FF }}>
@@ -129,49 +184,96 @@ export default function LMACertificatesPage() {
           </div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 20 }}>
-            {certs.map((cert, i) => (
-              <Card3D key={cert.id} style={{ animation: "lmaPage-in 0.40s ease both", animationDelay: `${i * 80}ms` }}>
-                {/* Gold shimmer decorative bar */}
-                <div style={{
-                  position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
-                  width: "60%", height: 3, background: `linear-gradient(90deg,transparent,${AMBER},transparent)`,
-                  borderRadius: 0,
-                }} />
+            {[...certifiable, ...inProgress].map((row, i) => {
+              const ready = !!row.certificate?.certificate_file;
+              return (
+                <Card3D key={row.courseId} style={{ animation: "lmaPage-in 0.40s ease both", animationDelay: `${i * 80}ms` }}>
+                  <div style={{
+                    position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+                    width: "60%", height: 3, background: `linear-gradient(90deg,transparent,${ready ? GREEN : AMBER},transparent)`,
+                  }} />
 
-                {/* Award icon */}
-                <div style={{
-                  width: 72, height: 72, borderRadius: "50%",
-                  background: `linear-gradient(135deg,rgba(217,53,34,0.14),rgba(217,53,34,0.24))`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  margin: "0 auto 16px",
-                  boxShadow: "0 4px 16px rgba(217,53,34,0.25)",
-                }}>
-                  <Award size={36} color={GOLD} />
-                </div>
+                  <div style={{
+                    width: 72, height: 72, borderRadius: "50%",
+                    background: ready
+                      ? "linear-gradient(135deg,rgba(16,185,129,0.14),rgba(16,185,129,0.24))"
+                      : "linear-gradient(135deg,rgba(217,53,34,0.10),rgba(217,53,34,0.18))",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 16px",
+                    boxShadow: ready ? "0 4px 16px rgba(16,185,129,0.25)" : "0 4px 16px rgba(217,53,34,0.15)",
+                  }}>
+                    {ready ? <Award size={36} color={GREEN} /> : <Clock size={32} color={GOLD} />}
+                  </div>
 
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>
-                  Certificate of Completion
-                </div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 10px", lineHeight: 1.3, fontFamily: FF }}>
-                  {cert.course_title}
-                </h3>
-                <p style={{ fontSize: 12, color: "#9ca3af", margin: "0 0 20px", fontFamily: FF }}>
-                  Issued: {new Date(cert.issued_at).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}
-                </p>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: ready ? GREEN : GOLD, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>
+                    {ready ? "Certificate of Completion" : row.progress >= 100 ? "Certificate Pending" : "In Progress"}
+                  </div>
+                  <h3 style={{ fontSize: 16, fontWeight: 800, color: "#141413", margin: "0 0 10px", lineHeight: 1.3, fontFamily: FF }}>
+                    {row.courseTitle}
+                  </h3>
 
-                <button onClick={handleDownload} style={{
-                  width: "100%", padding: "10px", borderRadius: 10,
-                  border: "none",
-                  background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-                  color: "#0a0806", fontSize: 13, fontWeight: 700,
-                  cursor: "pointer", fontFamily: FF,
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  boxShadow: "0 4px 0 rgba(139,31,23,0.25)",
-                }}>
-                  <Download size={14} /> Download PDF
-                </button>
-              </Card3D>
-            ))}
+                  {ready && row.certificate ? (
+                    <>
+                      <p style={{ fontSize: 12, color: "#9ca3af", margin: "0 0 4px", fontFamily: FF }}>
+                        Issued: {new Date(row.certificate.issued_at).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}
+                      </p>
+                      <p style={{ fontSize: 10.5, color: "#c5c1ba", margin: "0 0 20px", fontFamily: "monospace" }}>
+                        ID: {row.certificate.unique_id}
+                      </p>
+                      <button onClick={() => handleDownload(row.certificate!)} style={{
+                        width: "100%", padding: "10px", borderRadius: 10, border: "none",
+                        background: `linear-gradient(135deg,${GREEN},#059669)`,
+                        color: "#fff", fontSize: 13, fontWeight: 700,
+                        cursor: "pointer", fontFamily: FF, marginBottom: 8,
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                        boxShadow: "0 4px 0 rgba(5,150,105,0.25)",
+                      }}>
+                        <Download size={14} /> Download Certificate
+                      </button>
+                      <button onClick={() => handleShareLinkedIn(row.certificate!)} style={{
+                        width: "100%", padding: "9px", borderRadius: 10, border: "1.5px solid #0a66c2",
+                        background: "#fff", color: "#0a66c2", fontSize: 12.5, fontWeight: 700,
+                        cursor: "pointer", fontFamily: FF,
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                      }}>
+                        <Share2 size={14} /> Share on LinkedIn
+                      </button>
+                    </>
+                  ) : row.progress >= 100 ? (
+                    <>
+                      <p style={{ fontSize: 12.5, color: "#9ca3af", margin: "0 0 20px", fontFamily: FF, lineHeight: 1.6 }}>
+                        Certificate coming soon — the instructor hasn't uploaded a certificate template for this course yet.
+                      </p>
+                      <button onClick={() => handleGenerate(row)} disabled={generating === row.courseId} style={{
+                        width: "100%", padding: "10px", borderRadius: 10, border: "1.5px solid rgba(0,0,0,0.12)",
+                        background: "#fff", color: "#6b7280", fontSize: 12.5, fontWeight: 700,
+                        cursor: generating === row.courseId ? "not-allowed" : "pointer", fontFamily: FF,
+                        opacity: generating === row.courseId ? 0.6 : 1,
+                      }}>
+                        {generating === row.courseId ? "Checking…" : "Check again"}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <p style={{ fontSize: 12.5, color: "#9ca3af", margin: "0 0 12px", fontFamily: FF }}>
+                        {row.progress}% complete
+                      </p>
+                      <div style={{ height: 6, borderRadius: 999, background: "#e5e7eb", overflow: "hidden", marginBottom: 16 }}>
+                        <div style={{ height: "100%", width: `${row.progress}%`, background: GOLD, borderRadius: 999 }} />
+                      </div>
+                      <Link to={`/lma/courses/${row.courseId}?tab=curriculum`} style={{
+                        display: "block", width: "100%", boxSizing: "border-box", padding: "10px", borderRadius: 10,
+                        background: `linear-gradient(135deg,${AMBER},${GOLD})`, textDecoration: "none",
+                        color: "#0a0806", fontSize: 12.5, fontWeight: 700, fontFamily: FF,
+                        boxShadow: "0 4px 0 rgba(139,31,23,0.25)",
+                      }}>
+                        Continue Course
+                      </Link>
+                    </>
+                  )}
+                </Card3D>
+              );
+            })}
           </div>
         )}
       </div>

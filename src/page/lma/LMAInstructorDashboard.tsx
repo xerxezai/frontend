@@ -9,10 +9,19 @@ import {
   ClipboardList, PlusCircle, ChevronRight, ChevronDown,
   Bell, Menu, X, LogOut, Edit3, Trash2, GraduationCap,
   Check, BarChart2, Eye, Clock, AlertCircle, BookMarked,
-  Play, Plus, Save, Layers, Award, UserX, Search, FileCheck,
-  UserCircle, Lock, Maximize, Minimize,
+  Plus, Save, Layers, Award, UserX, Search, FileCheck,
+  UserCircle, Lock, Maximize, Minimize, GripVertical, Globe,
+  Upload, FileImage, Trash, UserPlus, Handshake, Wallet, ExternalLink,
 } from "lucide-react";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
+import { ensureLmaAccessToken, clearLmaSession, LMA_PROACTIVE_REFRESH_INTERVAL_MS } from "../../utils/lmaAuth";
+import LMALessonEditor from "./LMALessonEditor";
+import {
+  DndContext, closestCenter, PointerSensor, useSensor, useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const GOLD  = "#D93522";
@@ -42,6 +51,18 @@ function avatarInit(name: string) {
   if (!p.length) return "I";
   if (p.length === 1) return p[0][0].toUpperCase();
   return (p[0][0] + p[p.length - 1][0]).toUpperCase();
+}
+
+function timeAgo(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins} minute${mins !== 1 ? "s" : ""} ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days} day${days !== 1 ? "s" : ""} ago`;
+  return new Date(iso).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
@@ -410,6 +431,8 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
             </div>
           </Field>
           )}
+
+          {editing && <CertificateTemplateSection courseId={course.id} token={token} showToast={showToast} />}
         </div>
 
         <div style={{ padding: "14px 26px 26px", borderTop: "1px solid rgba(0,0,0,0.07)", display: "flex", gap: 10 }}>
@@ -426,7 +449,120 @@ function CourseFormPanel({ token, course, onClose, showToast, onSaved, isSuperIn
   );
 }
 
+// ── CertificateTemplateSection ───────────────────────────────────────────────
+function CertificateTemplateSection({ courseId, token, showToast }: {
+  courseId: number; token: string; showToast: (m: string, t?: "success" | "error") => void;
+}) {
+  const [templateUrl, setTemplateUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    fetch(`${API}/lma/courses/${courseId}/certificate-template/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => setTemplateUrl(d?.certificate_template ?? null))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [courseId, token]);
+
+  const isImage = !!templateUrl && /\.(png|jpe?g)(\?|$)/i.test(templateUrl);
+
+  const upload = async (file: File) => {
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("certificate_template", file);
+      const r = await fetch(`${API}/lma/courses/${courseId}/upload-certificate-template/`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd,
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) { showToast(d.error || "Upload failed", "error"); return; }
+      setTemplateUrl(d.certificate_template);
+      showToast("Certificate template uploaded!");
+    } catch { showToast("Network error", "error"); } finally { setUploading(false); }
+  };
+
+  const remove = async () => {
+    if (!confirm("Remove this certificate template? Students won't be able to earn a certificate for this course until a new one is uploaded.")) return;
+    try {
+      await fetch(`${API}/lma/courses/${courseId}/upload-certificate-template/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      setTemplateUrl(null);
+      showToast("Certificate template removed");
+    } catch { showToast("Network error", "error"); }
+  };
+
+  return (
+    <Field label="Certificate Template">
+      <p style={{ fontSize: 12, color: "#9ca3af", margin: "0 0 10px", fontFamily: FF, lineHeight: 1.5 }}>
+        Upload your certificate template. Student name, course name and completion date will be added automatically.
+        PNG or JPG is required for the name/date to be overlaid automatically — a PDF can be stored but won't be auto-filled.
+      </p>
+
+      {loading ? (
+        <SkeletonBox h={120} />
+      ) : templateUrl ? (
+        <div>
+          <div style={{ position: "relative", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(0,0,0,0.10)", background: "#f3f4f6" }}>
+            {isImage ? (
+              <img src={templateUrl} alt="Certificate template" style={{ width: "100%", display: "block" }} />
+            ) : (
+              <div style={{ padding: "40px 20px", textAlign: "center" }}>
+                <FileImage size={28} color="#9ca3af" style={{ marginBottom: 8 }} />
+                <p style={{ fontSize: 12.5, color: "#6b7280", margin: 0, fontFamily: FF }}>PDF template uploaded</p>
+              </div>
+            )}
+            {isImage && (
+              <>
+                <div style={{ position: "absolute", left: "20%", right: "20%", top: "44%", border: `1.5px dashed ${GOLD}`, borderRadius: 6, padding: "2px 0", textAlign: "center" }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: GOLD, background: "#fff", padding: "0 5px", fontFamily: FF }}>STUDENT NAME</span>
+                </div>
+                <div style={{ position: "absolute", left: "26%", right: "26%", top: "63%", border: "1.5px dashed #6b7280", borderRadius: 6, padding: "2px 0", textAlign: "center" }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: "#6b7280", background: "#fff", padding: "0 5px", fontFamily: FF }}>DATE</span>
+                </div>
+              </>
+            )}
+          </div>
+          <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+            <a href={templateUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 600, color: GOLD, textDecoration: "none", fontFamily: FF }}>View full size</a>
+            <button type="button" onClick={remove} style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 5, background: "rgba(239,68,68,0.08)", color: "#dc2626", border: "none", borderRadius: 7, padding: "5px 10px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: FF }}>
+              <Trash size={12} /> Remove
+            </button>
+          </div>
+        </div>
+      ) : (
+        <label style={{
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8,
+          border: "1.5px dashed rgba(0,0,0,0.15)", borderRadius: 12, padding: "28px 16px", cursor: uploading ? "not-allowed" : "pointer",
+          background: "#f9f7f4", opacity: uploading ? 0.6 : 1,
+        }}>
+          <Upload size={20} color={GOLD} />
+          <span style={{ fontSize: 12.5, fontWeight: 600, color: "#141413", fontFamily: FF }}>{uploading ? "Uploading…" : "Upload certificate template (PDF, PNG, JPG)"}</span>
+          <input type="file" accept=".pdf,.png,.jpg,.jpeg" disabled={uploading} style={{ display: "none" }}
+            onChange={e => { const f = e.target.files?.[0]; if (f) upload(f); }} />
+        </label>
+      )}
+    </Field>
+  );
+}
+
 // ── ManageCurriculumPanel ────────────────────────────────────────────────────
+function SortableRow({ id, children }: { id: number; children: (props: { handleProps: any }) => React.ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform), transition,
+    opacity: isDragging ? 0.5 : 1, zIndex: isDragging ? 10 : "auto", position: "relative",
+  };
+  return <div ref={setNodeRef} style={style}>{children({ handleProps: { ...attributes, ...listeners } })}</div>;
+}
+
+function DragHandle(props: any) {
+  return (
+    <span {...props} style={{ cursor: "grab", display: "flex", alignItems: "center", color: "#c5c1ba", touchAction: "none", flexShrink: 0 }}>
+      <GripVertical size={14} />
+    </span>
+  );
+}
+
 function ManageCurriculumPanel({ course, token, onClose, showToast }: {
   course: any; token: string; onClose: () => void;
   showToast: (m: string, t?: "success" | "error") => void;
@@ -435,13 +571,12 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  const [modForm, setModForm] = useState<{ show: boolean; id: number | null; title: string; order: string }>({ show: false, id: null, title: "", order: "0" });
-  const [lesForm, setLesForm] = useState<{
-    show: boolean; modId: number | null; id: number | null;
-    title: string; duration: string; order: string; content: string; video_url: string; is_free_preview: boolean;
-  }>({ show: false, modId: null, id: null, title: "", duration: "0", order: "0", content: "", video_url: "", is_free_preview: false });
+  const [modForm, setModForm] = useState<{ show: boolean; id: number | null; title: string; description: string; order: string }>({ show: false, id: null, title: "", description: "", order: "0" });
+  const [editingLesson, setEditingLesson] = useState<{ modId: number; lesson: any | null } | null>(null);
 
   const [saving, setSaving] = useState(false);
+
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   const fetchModules = useCallback(async () => {
     setLoading(true);
@@ -461,7 +596,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
   useEffect(() => { fetchModules(); }, [fetchModules]);
 
   const saveModule = async () => {
-    const { id, title, order } = modForm;
+    const { id, title, description, order } = modForm;
     if (!title.trim()) { showToast("Module title is required", "error"); return; }
     setSaving(true);
     try {
@@ -469,7 +604,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
       const r = await fetch(url, {
         method: id ? "PUT" : "POST",
         headers: hdr(token),
-        body: JSON.stringify({ title, order: Number(order), duration: 0 }),
+        body: JSON.stringify({ title, description, order: Number(order), duration: 0 }),
       });
       if (!r.ok) {
         const err = await r.json().catch(() => ({}));
@@ -479,7 +614,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
         return;
       }
       showToast(id ? "Module updated!" : "Module added!");
-      setModForm({ show: false, id: null, title: "", order: "0" });
+      setModForm({ show: false, id: null, title: "", description: "", order: "0" });
       fetchModules();
     } catch (e) {
       console.error("[LMA] saveModule network error:", e);
@@ -495,41 +630,6 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
     fetchModules();
   };
 
-  const saveLesson = async () => {
-    const { id, modId, title, duration, order, content, video_url, is_free_preview } = lesForm;
-    if (!title.trim()) { showToast("Lesson title is required", "error"); return; }
-    if (!modId) { showToast("Module not selected", "error"); return; }
-    setSaving(true);
-    try {
-      const url = id ? `${API}/lma/lessons/${id}/` : `${API}/lma/modules/${modId}/lessons/`;
-      const r = await fetch(url, {
-        method: id ? "PUT" : "POST",
-        headers: hdr(token),
-        body: JSON.stringify({
-          title,
-          duration: Number(duration) || 0,
-          order: Number(order) || 0,
-          content: content || "",
-          video_url: video_url || "",
-          is_free_preview,
-        }),
-      });
-      if (!r.ok) {
-        const err = await r.json().catch(() => ({}));
-        const msg = err.error ?? err.detail ?? Object.values(err).flat().join(", ") ?? "Failed to save lesson";
-        console.error("[LMA] saveLesson failed:", r.status, err);
-        showToast(String(msg), "error");
-        return;
-      }
-      showToast(id ? "Lesson updated!" : "Lesson added!");
-      setLesForm({ show: false, modId: null, id: null, title: "", duration: "0", order: "0", content: "", video_url: "", is_free_preview: false });
-      fetchModules();
-    } catch (e) {
-      console.error("[LMA] saveLesson network error:", e);
-      showToast("Network error — check console", "error");
-    } finally { setSaving(false); }
-  };
-
   const deleteLesson = async (id: number) => {
     if (!confirm("Delete this lesson?")) return;
     await fetch(`${API}/lma/lessons/${id}/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
@@ -537,12 +637,25 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
     fetchModules();
   };
 
-  const openEditLesson = (mod: any, lesson: any) => setLesForm({
-    show: true, modId: mod.id, id: lesson.id,
-    title: lesson.title, duration: String(lesson.duration), order: String(lesson.order),
-    content: lesson.content ?? "", video_url: lesson.video_url ?? "",
-    is_free_preview: lesson.is_free_preview,
-  });
+  // Drag-to-reorder — optimistic local update, then persist the new `order`
+  // values with sequential PUT calls (no bulk-reorder endpoint exists).
+  const reorderModules = async (from: number, to: number) => {
+    const next = arrayMove(modules, from, to);
+    setModules(next);
+    await Promise.all(next.map((m, i) => fetch(`${API}/lma/modules/${m.id}/`, { method: "PUT", headers: hdr(token), body: JSON.stringify({ order: i }) })));
+    fetchModules();
+  };
+
+  const reorderLessons = async (modId: number, from: number, to: number) => {
+    const mod = modules.find(m => m.id === modId);
+    if (!mod) return;
+    const nextLessons = arrayMove(mod.lessons ?? [], from, to);
+    setModules(ms => ms.map(m => (m.id === modId ? { ...m, lessons: nextLessons } : m)));
+    await Promise.all(nextLessons.map((l: any, i: number) => fetch(`${API}/lma/lessons/${l.id}/`, { method: "PUT", headers: hdr(token), body: JSON.stringify({ order: i }) })));
+    fetchModules();
+  };
+
+  const totalDuration = (mod: any) => (mod.lessons ?? []).reduce((s: number, l: any) => s + (l.duration || 0), 0);
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.50)", zIndex: 650, display: "flex", alignItems: "stretch", justifyContent: "flex-end" }}
@@ -566,7 +679,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
 
           {/* Add Module button */}
           {!modForm.show && (
-            <button type="button" onClick={() => setModForm({ show: true, id: null, title: "", order: String(modules.length) })} style={{
+            <button type="button" onClick={() => setModForm({ show: true, id: null, title: "", description: "", order: String(modules.length) })} style={{
               display: "flex", alignItems: "center", gap: 8, marginBottom: 20,
               background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#0a0806",
               border: "none", borderRadius: 10, padding: "10px 18px", cursor: "pointer",
@@ -582,10 +695,12 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
               <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(20,20,19,0.50)", margin: "0 0 10px", letterSpacing: "0.06em", fontFamily: FF }}>{modForm.id ? "EDIT MODULE" : "NEW MODULE"}</p>
               <input style={{ ...inputStyle, marginBottom: 10 }} value={modForm.title} placeholder="Module title…" autoFocus
                 onChange={e => setModForm(f => ({ ...f, title: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
+              <textarea rows={2} style={{ ...inputStyle, resize: "vertical", marginBottom: 10 }} value={modForm.description} placeholder="Module description (optional)…"
+                onChange={e => setModForm(f => ({ ...f, description: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
               <input type="number" style={{ ...inputStyle, marginBottom: 12 }} value={modForm.order} placeholder="Order"
                 onChange={e => setModForm(f => ({ ...f, order: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
               <div style={{ display: "flex", gap: 8 }}>
-                <button type="button" onClick={() => setModForm({ show: false, id: null, title: "", order: "0" })} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
+                <button type="button" onClick={() => setModForm({ show: false, id: null, title: "", description: "", order: "0" })} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
                 <button type="button" onClick={saveModule} disabled={saving} style={{ flex: 2, padding: "9px", borderRadius: 8, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#0a0806", opacity: saving ? 0.7 : 1 }}>
                   <Save size={13} style={{ verticalAlign: "middle", marginRight: 6 }} />{saving ? "Saving…" : "Save Module"}
                 </button>
@@ -593,7 +708,7 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
             </div>
           )}
 
-          {/* Modules list */}
+          {/* Modules list — drag handle reorders modules */}
           {loading ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[0, 1, 2].map(i => <SkeletonBox key={i} h={60} />)}
@@ -604,103 +719,111 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
               <p style={{ color: "#9ca3af", fontSize: 13, margin: 0, fontFamily: FF }}>No modules yet. Add your first module above.</p>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {modules.map(mod => (
-                <div key={mod.id} style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, overflow: "hidden", boxShadow: BCARD }}>
-                  {/* Module row */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "13px 16px", background: "#fff" }}>
-                    <button type="button" onClick={() => setExpanded(expanded === mod.id ? null : mod.id)}
-                      style={{ background: "none", border: "none", cursor: "pointer", color: GOLD, padding: 0, display: "flex", alignItems: "center", gap: 6, flex: 1, textAlign: "left" }}>
-                      <div style={{ width: 28, height: 28, borderRadius: 7, background: "rgba(217,53,34,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <BookOpen size={13} color={GOLD} />
-                      </div>
-                      <div>
-                        <span style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", fontFamily: FF }}>{mod.title}</span>
-                        <span style={{ fontSize: 11, color: "#9ca3af", marginLeft: 8, fontFamily: FF }}>{mod.lessons?.length ?? 0} lesson{mod.lessons?.length !== 1 ? "s" : ""}</span>
-                      </div>
-                      <ChevronDown size={15} style={{ marginLeft: "auto", transform: expanded === mod.id ? "rotate(180deg)" : "none", transition: "transform 0.22s ease" }} />
-                    </button>
-                    <button type="button" onClick={() => { setModForm({ show: true, id: mod.id, title: mod.title, order: String(mod.order) }); setExpanded(null); }}
-                      style={{ background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: GOLD }}>
-                      <Edit3 size={13} />
-                    </button>
-                    <button type="button" onClick={() => deleteModule(mod.id)}
-                      style={{ background: "rgba(239,68,68,0.08)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: "#dc2626" }}>
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-
-                  {/* Expanded lessons */}
-                  {expanded === mod.id && (
-                    <div style={{ background: "#f9f7f4", borderTop: "1px solid rgba(0,0,0,0.06)", padding: "10px 16px 14px" }}>
-                      {(mod.lessons ?? []).length === 0 ? (
-                        <p style={{ fontSize: 12, color: "#9ca3af", margin: "4px 0 10px", fontFamily: FF }}>No lessons. Add your first lesson below.</p>
-                      ) : (
-                        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
-                          {(mod.lessons ?? []).map((les: any) => (
-                            <div key={les.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", background: "#fff", borderRadius: 9, border: "1px solid rgba(0,0,0,0.06)" }}>
-                              <Play size={12} color={GOLD} fill={GOLD} style={{ flexShrink: 0 }} />
-                              <div style={{ flex: 1, minWidth: 0 }}>
-                                <span style={{ fontSize: 13, fontWeight: 600, color: "#141413", fontFamily: FF }}>{les.title}</span>
-                                <span style={{ fontSize: 11, color: "#9ca3af", marginLeft: 8 }}>{les.duration}min</span>
-                                {les.is_free_preview && <span style={{ fontSize: 10, fontWeight: 700, color: "#059669", background: "rgba(5,150,105,0.10)", padding: "1px 7px", borderRadius: 999, marginLeft: 6 }}>FREE</span>}
-                                {les.video_url && <span style={{ fontSize: 10, fontWeight: 700, color: "#3b82f6", background: "rgba(59,130,246,0.10)", padding: "1px 7px", borderRadius: 999, marginLeft: 4 }}>VIDEO</span>}
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e: DragEndEvent) => {
+              const { active, over } = e;
+              if (!over || active.id === over.id) return;
+              const from = modules.findIndex(m => m.id === active.id);
+              const to = modules.findIndex(m => m.id === over.id);
+              if (from !== -1 && to !== -1) reorderModules(from, to);
+            }}>
+              <SortableContext items={modules.map(m => m.id)} strategy={verticalListSortingStrategy}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {modules.map(mod => (
+                    <SortableRow key={mod.id} id={mod.id}>
+                      {({ handleProps }) => (
+                        <div style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, overflow: "hidden", boxShadow: BCARD, background: "#fff" }}>
+                          {/* Module row */}
+                          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "13px 16px", background: "#fff" }}>
+                            <DragHandle {...handleProps} />
+                            <button type="button" onClick={() => setExpanded(expanded === mod.id ? null : mod.id)}
+                              style={{ background: "none", border: "none", cursor: "pointer", color: GOLD, padding: 0, display: "flex", alignItems: "center", gap: 6, flex: 1, textAlign: "left", minWidth: 0 }}>
+                              <div style={{ width: 28, height: 28, borderRadius: 7, background: "rgba(217,53,34,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                <BookOpen size={13} color={GOLD} />
                               </div>
-                              <button type="button" onClick={() => openEditLesson(mod, les)}
-                                style={{ background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: GOLD }}>
-                                <Edit3 size={12} />
-                              </button>
-                              <button type="button" onClick={() => deleteLesson(les.id)}
-                                style={{ background: "rgba(239,68,68,0.08)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#dc2626" }}>
-                                <Trash2 size={12} />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Lesson form */}
-                      {lesForm.show && lesForm.modId === mod.id ? (
-                        <div style={{ background: "#fff", borderRadius: 10, padding: "14px 16px", border: `1.5px solid rgba(217,53,34,0.25)` }}>
-                          <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(20,20,19,0.50)", margin: "0 0 10px", letterSpacing: "0.06em", fontFamily: FF }}>
-                            {lesForm.id ? "EDIT LESSON" : "NEW LESSON"}
-                          </p>
-                          <input style={{ ...inputStyle, marginBottom: 8 }} value={lesForm.title} placeholder="Lesson title…" autoFocus
-                            onChange={e => setLesForm(f => ({ ...f, title: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 8 }}>
-                            <input type="number" style={inputStyle} value={lesForm.duration} placeholder="Duration (min)"
-                              onChange={e => setLesForm(f => ({ ...f, duration: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-                            <input type="number" style={inputStyle} value={lesForm.order} placeholder="Order"
-                              onChange={e => setLesForm(f => ({ ...f, order: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-                          </div>
-                          <input style={{ ...inputStyle, marginBottom: 8 }} value={lesForm.video_url} placeholder="Video URL (YouTube, Vimeo…)"
-                            onChange={e => setLesForm(f => ({ ...f, video_url: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-                          <textarea rows={3} style={{ ...inputStyle, resize: "vertical", marginBottom: 10 }} value={lesForm.content} placeholder="Lesson content / notes…"
-                            onChange={e => setLesForm(f => ({ ...f, content: e.target.value }))} onFocus={focusGold} onBlur={blurGold} />
-                          <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, cursor: "pointer", fontSize: 13, color: "#141413", fontFamily: FF }}>
-                            <input type="checkbox" checked={lesForm.is_free_preview} onChange={e => setLesForm(f => ({ ...f, is_free_preview: e.target.checked }))} style={{ accentColor: GOLD, width: 16, height: 16 }} />
-                            Free Preview (visible without enrollment)
-                          </label>
-                          <div style={{ display: "flex", gap: 8 }}>
-                            <button type="button" onClick={() => setLesForm({ show: false, modId: null, id: null, title: "", duration: "0", order: "0", content: "", video_url: "", is_free_preview: false })}
-                              style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid #e5e7eb", background: "none", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: FF, color: "#6b7280" }}>Cancel</button>
-                            <button type="button" onClick={saveLesson} disabled={saving}
-                              style={{ flex: 2, padding: "8px", borderRadius: 8, border: "none", background: `linear-gradient(135deg,${AMBER},${GOLD})`, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF, color: "#0a0806", opacity: saving ? 0.7 : 1 }}>
-                              <Save size={12} style={{ verticalAlign: "middle", marginRight: 5 }} />{saving ? "Saving…" : "Save Lesson"}
+                              <div style={{ minWidth: 0 }}>
+                                <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", fontFamily: FF }}>{mod.title}</div>
+                                <div style={{ fontSize: 11, color: "#9ca3af", fontFamily: FF }}>
+                                  {mod.lessons?.length ?? 0} lesson{mod.lessons?.length !== 1 ? "s" : ""}
+                                  {totalDuration(mod) > 0 && ` · ${totalDuration(mod)} min total`}
+                                </div>
+                              </div>
+                              <ChevronDown size={15} style={{ marginLeft: "auto", flexShrink: 0, transform: expanded === mod.id ? "rotate(180deg)" : "none", transition: "transform 0.22s ease" }} />
+                            </button>
+                            <button type="button" onClick={() => { setModForm({ show: true, id: mod.id, title: mod.title, description: mod.description ?? "", order: String(mod.order) }); setExpanded(null); }}
+                              style={{ background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: GOLD, flexShrink: 0 }}>
+                              <Edit3 size={13} />
+                            </button>
+                            <button type="button" onClick={() => deleteModule(mod.id)}
+                              style={{ background: "rgba(239,68,68,0.08)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: "pointer", color: "#dc2626", flexShrink: 0 }}>
+                              <Trash2 size={13} />
                             </button>
                           </div>
+
+                          {mod.description && (
+                            <p style={{ margin: "0 16px 10px 58px", fontSize: 12, color: "#9ca3af", fontFamily: FF, lineHeight: 1.5 }}>{mod.description}</p>
+                          )}
+
+                          {/* Expanded lessons */}
+                          {expanded === mod.id && (
+                            <div style={{ background: "#f9f7f4", borderTop: "1px solid rgba(0,0,0,0.06)", padding: "10px 16px 14px" }}>
+                              {(mod.lessons ?? []).length === 0 ? (
+                                <p style={{ fontSize: 12, color: "#9ca3af", margin: "4px 0 10px", fontFamily: FF }}>No lessons. Add your first lesson below.</p>
+                              ) : (
+                                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e: DragEndEvent) => {
+                                  const { active, over } = e;
+                                  if (!over || active.id === over.id) return;
+                                  const lessons = mod.lessons ?? [];
+                                  const from = lessons.findIndex((l: any) => l.id === active.id);
+                                  const to = lessons.findIndex((l: any) => l.id === over.id);
+                                  if (from !== -1 && to !== -1) reorderLessons(mod.id, from, to);
+                                }}>
+                                  <SortableContext items={(mod.lessons ?? []).map((l: any) => l.id)} strategy={verticalListSortingStrategy}>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
+                                      {(mod.lessons ?? []).map((les: any) => (
+                                        <SortableRow key={les.id} id={les.id}>
+                                          {({ handleProps: lesHandle }) => (
+                                            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", background: "#fff", borderRadius: 9, border: "1px solid rgba(0,0,0,0.06)" }}>
+                                              <DragHandle {...lesHandle} />
+                                              {les.content_type && (
+                                                <span style={{ fontSize: 9.5, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.10)", borderRadius: 5, padding: "2px 6px", flexShrink: 0, textTransform: "uppercase" as const }}>
+                                                  {String(les.content_type).replace("_", " ")}
+                                                </span>
+                                              )}
+                                              <div style={{ flex: 1, minWidth: 0 }}>
+                                                <span style={{ fontSize: 13, fontWeight: 600, color: "#141413", fontFamily: FF }}>{les.title}</span>
+                                                {les.duration > 0 && <span style={{ fontSize: 11, color: "#9ca3af", marginLeft: 8 }}>{les.duration}min</span>}
+                                                {les.is_free_preview && <span style={{ fontSize: 10, fontWeight: 700, color: "#059669", background: "rgba(5,150,105,0.10)", padding: "1px 7px", borderRadius: 999, marginLeft: 6 }}>FREE</span>}
+                                              </div>
+                                              <button type="button" onClick={() => setEditingLesson({ modId: mod.id, lesson: les })}
+                                                style={{ background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: GOLD }}>
+                                                <Edit3 size={12} />
+                                              </button>
+                                              <button type="button" onClick={() => deleteLesson(les.id)}
+                                                style={{ background: "rgba(239,68,68,0.08)", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#dc2626" }}>
+                                                <Trash2 size={12} />
+                                              </button>
+                                            </div>
+                                          )}
+                                        </SortableRow>
+                                      ))}
+                                    </div>
+                                  </SortableContext>
+                                </DndContext>
+                              )}
+
+                              <button type="button" onClick={() => setEditingLesson({ modId: mod.id, lesson: null })}
+                                style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(217,53,34,0.10)", border: "1.5px dashed rgba(217,53,34,0.35)", borderRadius: 9, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontWeight: 700, color: GOLD, fontFamily: FF }}>
+                                <Plus size={13} /> Add Lesson
+                              </button>
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        <button type="button" onClick={() => setLesForm({ show: true, modId: mod.id, id: null, title: "", duration: "0", order: String((mod.lessons ?? []).length), content: "", video_url: "", is_free_preview: false })}
-                          style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(217,53,34,0.10)", border: "1.5px dashed rgba(217,53,34,0.35)", borderRadius: 9, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontWeight: 700, color: GOLD, fontFamily: FF }}>
-                          <Plus size={13} /> Add Lesson
-                        </button>
                       )}
-                    </div>
-                  )}
+                    </SortableRow>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </SortableContext>
+            </DndContext>
           )}
         </div>
 
@@ -714,52 +837,191 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
           }}>Done — Close Curriculum</button>
         </div>
       </div>
+
+      {editingLesson && (
+        <LMALessonEditor
+          token={token} moduleId={editingLesson.modId} lesson={editingLesson.lesson}
+          onClose={() => setEditingLesson(null)}
+          onSaved={fetchModules}
+          showToast={showToast}
+        />
+      )}
     </div>
   );
 }
 
 // ── Section views ─────────────────────────────────────────────────────────────
 
-function DashboardView({ data, earningsChart, onGrade, isSuperInstructor }: {
-  data: any; earningsChart: any[]; onGrade: (s: any) => void; isSuperInstructor: boolean;
+function DashboardView({ data, earningsChart, onGrade, onManage, onCreate, isSuperInstructor }: {
+  data: any; earningsChart: any[]; onGrade: (s: any) => void; onManage: (c: any) => void; onCreate: () => void; isSuperInstructor: boolean;
 }) {
+  const courses = data?.courses ?? [];
+  const totalEarnings = data?.stats?.total_earnings ?? 0;
+
+  const activity = useMemo(() => {
+    const rows: { id: string; at: string; node: React.ReactNode }[] = [
+      ...(data?.recent_enrollments ?? []).map((e: any) => ({
+        id: `enr-${e.id}`, at: e.at,
+        node: (
+          <><UserPlus size={15} color="#3b82f6" style={{ flexShrink: 0 }} />
+            <span><strong style={{ color: "#141413" }}>{e.student_name}</strong> enrolled in <strong style={{ color: "#141413" }}>{e.course_title}</strong></span></>
+        ),
+      })),
+      ...(data?.recent_reviews ?? []).map((r: any) => ({
+        id: `rev-${r.id}`, at: r.at,
+        node: (
+          <><Star size={15} color="#D93522" fill="#D93522" style={{ flexShrink: 0 }} />
+            <span><strong style={{ color: "#141413" }}>{r.student_name}</strong> rated <strong style={{ color: "#141413" }}>{r.course_title}</strong> {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}</span></>
+        ),
+      })),
+      ...(data?.recent_submissions ?? []).map((s: any) => ({
+        id: `sub-${s.id}`, at: s.at,
+        node: (
+          <><FileCheck size={15} color="#10b981" style={{ flexShrink: 0 }} />
+            <span><strong style={{ color: "#141413" }}>{s.student_name}</strong> submitted <strong style={{ color: "#141413" }}>{s.assignment_title}</strong> ({s.course_title})</span></>
+        ),
+      })),
+    ];
+    return rows.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime()).slice(0, 10);
+  }, [data]);
+
   return (
     <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
-      {/* Stats */}
+      {/* Row 1 — Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 16, marginBottom: 28 }}>
         <StatCard index={0} label="Total Courses"   value={data?.stats?.total_courses ?? 0}  icon={BookOpen}     color="#3b82f6" />
         <StatCard index={1} label="Total Students"  value={data?.stats?.total_students ?? 0} icon={Users}        color="#10b981" />
-        <StatCard index={2} label="Pending Reviews" value={data?.stats?.pending_reviews ?? 0} icon={ClipboardList} color="#D93522" />
         {isSuperInstructor && (
-          <StatCard index={3} label="Total Earnings" value={data?.stats?.total_earnings ?? 0} icon={DollarSign} color="#8b5cf6" prefix="₹" />
+          <StatCard index={2} label="Total Earnings" value={totalEarnings} icon={DollarSign} color="#8b5cf6" prefix="₹" />
+        )}
+        <StatCard index={3} label="Pending Reviews" value={data?.stats?.assignments_to_grade ?? 0} icon={ClipboardList} color="#D93522" />
+      </div>
+
+      {/* Row 2 — Your Earnings (super instructor only — see Earnings/Analytics nav gating) */}
+      {isSuperInstructor && (
+        <div style={{
+          background: `linear-gradient(160deg,${DARK} 0%,#04101f 100%)`, borderRadius: 20,
+          padding: "26px 28px", marginBottom: 28, border: "1px solid rgba(217,53,34,0.22)",
+        }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#fff", margin: "0 0 6px", fontFamily: FF }}>Your Earnings</h3>
+          {totalEarnings === 0 ? (
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", margin: "0 0 20px", fontFamily: FF }}>
+              ₹0 — Start earning by publishing courses.
+            </p>
+          ) : (
+            <div style={{ fontSize: 34, fontWeight: 900, color: GOLD, margin: "4px 0 20px", fontFamily: FF }}>
+              ₹{Number(totalEarnings).toLocaleString()}
+            </div>
+          )}
+
+          <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 14, padding: "16px 18px", marginBottom: 18 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 12, fontFamily: FF }}>
+              Monthly Earnings (6 months)
+            </div>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={earningsChart} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" vertical={false} />
+                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "rgba(255,255,255,0.45)", fontFamily: FF }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: "rgba(255,255,255,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={v => `₹${((v as number) / 1000).toFixed(0)}k`} />
+                <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v) => [`₹${Number(v ?? 0).toLocaleString()}`, "Earnings"]} />
+                <Bar dataKey="value" fill={GOLD} radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {courses.length > 0 && (
+            <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 14, overflow: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 460 }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                    {["Course", "Students", "Revenue", "Avg Rating"].map(h => (
+                      <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.40)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF, whiteSpace: "nowrap" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {courses.map((c: any, i: number) => (
+                    <tr key={c.id} style={{ borderBottom: i < courses.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                      <td style={{ padding: "10px 16px", fontSize: 12.5, fontWeight: 600, color: "#fff", fontFamily: FF }}>{c.title}</td>
+                      <td style={{ padding: "10px 16px", fontSize: 12.5, color: "rgba(255,255,255,0.70)", fontFamily: FF }}>{(c.total_students ?? 0).toLocaleString()}</td>
+                      <td style={{ padding: "10px 16px", fontSize: 12.5, fontWeight: 700, color: GOLD, fontFamily: FF }}>₹{((c.total_students ?? 0) * (parseFloat(c.price) ?? 0) * 0.7).toLocaleString()}</td>
+                      <td style={{ padding: "10px 16px", fontSize: 12.5, color: "rgba(255,255,255,0.70)", fontFamily: FF }}>
+                        {c.rating ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Star size={11} color={GOLD} fill={GOLD} />{c.rating}</span> : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Row 3 — My Courses (quick overview) */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>My Courses</h3>
+        </div>
+        {courses.length === 0 ? (
+          <div style={{ background: "#fff", borderRadius: 16, padding: "48px 24px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
+            <BookOpen size={40} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
+            <p style={{ color: "#9ca3af", fontSize: 13.5, margin: "0 0 18px", fontFamily: FF }}>You haven't created any courses yet.</p>
+            <button type="button" onClick={onCreate} style={{ background: `linear-gradient(135deg,${AMBER},${GOLD})`, color: "#fff", border: "none", borderRadius: 10, padding: "10px 24px", cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: FF, boxShadow: "0 4px 0 rgba(139,31,23,0.30)" }}>
+              Create your first course
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 14 }}>
+            {courses.map((c: any) => (
+              <div key={c.id} style={{ background: "#fff", borderRadius: 14, padding: "16px 18px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, borderTop: `3px solid ${GOLD}`, display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(217,53,34,0.10)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <BookOpen size={17} color={GOLD} />
+                  </div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF, lineHeight: 1.35 }}>{c.title}</div>
+                </div>
+                <div style={{ display: "flex", gap: 12, alignItems: "center", fontSize: 11.5, color: "#9ca3af", fontFamily: FF }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Users size={12} /> {(c.total_students ?? 0).toLocaleString()}</span>
+                  {c.rating ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Star size={12} color="#D93522" fill="#D93522" /> {c.rating}</span> : <span>No ratings yet</span>}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
+                  <span style={{ ...STATUS_COLOR[c.status as string], fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999 }}>
+                    {c.status === "pending_review" ? "Pending Review" : c.status.charAt(0).toUpperCase() + c.status.slice(1)}
+                  </span>
+                  <button type="button" onClick={() => onManage(c)} style={{ fontSize: 11.5, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: "5px 12px", cursor: "pointer", fontFamily: FF }}>
+                    Manage
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
-      {/* Chart + Queue */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }} className="lmai-2col">
-        {isSuperInstructor && (
+      {/* Row 4 — Recent Activity + Assignment Review Queue */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="lmai-2col">
         <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: 0, fontFamily: FF }}>Monthly Earnings</h3>
-            <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, background: "rgba(217,53,34,0.10)", padding: "3px 10px", borderRadius: 999 }}>6 months</span>
-          </div>
-          <ResponsiveContainer width="100%" height={160}>
-            <AreaChart data={earningsChart} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-              <defs>
-                <linearGradient id="eg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={GOLD} stopOpacity={0.18} />
-                  <stop offset="95%" stopColor={GOLD} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: "rgba(20,20,19,0.40)", fontFamily: FF }} axisLine={false} tickLine={false} tickFormatter={v => `₹${((v as number) / 1000).toFixed(0)}k`} />
-              <Tooltip contentStyle={{ borderRadius: 10, fontFamily: FF, fontSize: 12 }} formatter={(v) => [`₹${Number(v ?? 0).toLocaleString()}`, "Earnings"]} />
-              <Area type="monotone" dataKey="value" stroke={GOLD} strokeWidth={2.5} fill="url(#eg)" dot={{ fill: GOLD, strokeWidth: 0, r: 4 }} activeDot={{ r: 6, fill: AMBER }} />
-            </AreaChart>
-          </ResponsiveContainer>
+          <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>Recent Activity</h3>
+          {activity.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "28px 0" }}>
+              <Users size={32} color="#d1d5db" style={{ display: "block", margin: "0 auto 8px" }} />
+              <p style={{ color: "#9ca3af", fontSize: 13, margin: 0, fontFamily: FF }}>
+                {courses.length === 0 ? "No activity yet — create a course to get started." : "No students yet — publish your course to get students."}
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 4, maxHeight: 280, overflowY: "auto" }}>
+              {activity.map(a => (
+                <div key={a.id} style={{ display: "flex", gap: 10, alignItems: "center", padding: "9px 4px", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
+                  <div style={{ flex: 1, minWidth: 0, fontSize: 12.5, color: "#374151", fontFamily: FF, display: "flex", alignItems: "center", gap: 8, lineHeight: 1.4 }}>
+                    {a.node}
+                  </div>
+                  <span style={{ fontSize: 10.5, color: "#9ca3af", fontFamily: FF, whiteSpace: "nowrap", flexShrink: 0 }}>{timeAgo(a.at)}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        )}
 
         <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
           <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>Assignment Review Queue</h3>
@@ -769,7 +1031,7 @@ function DashboardView({ data, earningsChart, onGrade, isSuperInstructor }: {
               <p style={{ color: "#9ca3af", fontSize: 13, margin: 0, fontFamily: FF }}>All caught up!</p>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 180, overflowY: "auto" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 280, overflowY: "auto" }}>
               {(data?.pending_submissions ?? []).map((s: any) => (
                 <div key={s.id} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 12px", background: "#f9f7f4", borderRadius: 10 }}>
                   <div style={{ width: 34, height: 34, borderRadius: 9, background: "linear-gradient(135deg,#fef3c7,#fde68a)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -786,24 +1048,6 @@ function DashboardView({ data, earningsChart, onGrade, isSuperInstructor }: {
           )}
         </div>
       </div>
-
-      {/* Recent courses */}
-      {(data?.courses ?? []).length > 0 && (
-        <div>
-          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>Recent Courses</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 14 }}>
-            {(data?.courses ?? []).slice(0, 4).map((c: any) => (
-              <div key={c.id} style={{ background: "#fff", borderRadius: 14, padding: "16px 18px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, borderTop: `3px solid ${GOLD}` }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#141413", marginBottom: 4, fontFamily: FF }}>{c.title}</div>
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <span style={{ ...STATUS_COLOR[c.status as string], fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>{c.status}</span>
-                  <span style={{ fontSize: 11, color: "#9ca3af" }}>{c.total_students} students</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -887,7 +1131,9 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, o
                       {isSuperInstructor ? (
                         <button type="button" title="Delete" onClick={() => onDelete(c)} style={{ color: "#dc2626", background: "rgba(220,38,38,0.08)", border: "none", borderRadius: 7, padding: 7, cursor: "pointer" }}><Trash2 size={13} /></button>
                       ) : (c.status === "draft" || c.status === "rejected") && (
-                        <button type="button" title="Submit for Review" onClick={() => onSubmitReview(c)} style={{ color: "#D93522", background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: "7px 10px", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: FF }}>Submit</button>
+                        <button type="button" title={c.status === "rejected" ? "Resubmit for Review" : "Submit for Review"} onClick={() => onSubmitReview(c)} style={{ color: "#D93522", background: "rgba(217,53,34,0.10)", border: "none", borderRadius: 7, padding: "7px 10px", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: FF, whiteSpace: "nowrap" }}>
+                          {c.status === "rejected" ? "Resubmit" : "Submit"}
+                        </button>
                       )}
                     </div>
                   </td>
@@ -1300,7 +1546,7 @@ function StudentsView({ token }: { token: string }) {
         <div style={{ background: "#fff", borderRadius: 16, padding: "56px", textAlign: "center", border: "1px solid rgba(0,0,0,0.07)" }}>
           <Users size={44} color="#d1d5db" style={{ display: "block", margin: "0 auto 14px" }} />
           <p style={{ color: "#9ca3af", fontSize: 14, margin: 0, fontFamily: FF }}>
-            {search || courseFilter !== "All" || statusFilter !== "All" ? "No students match your filters." : "No students enrolled yet."}
+            {search || courseFilter !== "All" || statusFilter !== "All" ? "No students match your filters." : "No students yet — publish your course to get students."}
           </p>
         </div>
       ) : (
@@ -2353,7 +2599,9 @@ function ApplicationsView({ token, showToast }: {
                     {avatarInit(app.full_name)}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: "#141413", fontFamily: FF }}>{app.full_name}</div>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: "#141413", fontFamily: FF }}>
+                      {app.full_name}{app.company_name ? ` · ${app.company_name}` : ""}
+                    </div>
                     <div style={{ fontSize: 12, color: "#6b7280", fontFamily: FF, marginTop: 2 }}>{app.email}{app.expertise ? ` · ${app.expertise}` : ""}</div>
                   </div>
                   <span style={{ ...pill, fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, flexShrink: 0 }}>{pill.label}</span>
@@ -2374,6 +2622,28 @@ function ApplicationsView({ token, showToast }: {
                         <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Applied</div>
                         <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{new Date(app.applied_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</div>
                       </div>
+                      {app.linkedin_url && (
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>LinkedIn</div>
+                          <a href={app.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: GOLD, fontFamily: FF, textDecoration: "none" }}>{app.linkedin_url}</a>
+                        </div>
+                      )}
+                      {app.website && (
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Website</div>
+                          <a href={app.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: GOLD, fontFamily: FF, textDecoration: "none" }}>{app.website}</a>
+                        </div>
+                      )}
+                      {typeof app.years_experience === "number" && (
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Experience</div>
+                          <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.years_experience} yrs</div>
+                        </div>
+                      )}
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Taught Before?</div>
+                        <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.previous_teaching_experience ? "Yes" : "No"}</div>
+                      </div>
                     </div>
 
                     {app.bio && (
@@ -2387,6 +2657,20 @@ function ApplicationsView({ token, showToast }: {
                       <div style={{ marginBottom: 16 }}>
                         <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 4 }}>Why They Want to Teach</div>
                         <p style={{ fontSize: 13, color: "#374151", fontFamily: FF, lineHeight: 1.6, margin: 0, background: "#f9f7f4", borderRadius: 8, padding: "10px 12px" }}>{app.why_teach}</p>
+                      </div>
+                    )}
+
+                    {app.proposed_course_title && (
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 4 }}>Proposed Course</div>
+                        <div style={{ background: "#f9f7f4", borderRadius: 8, padding: "10px 12px" }}>
+                          <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", fontFamily: FF, marginBottom: 4 }}>{app.proposed_course_title}</div>
+                          {app.course_description && <p style={{ fontSize: 13, color: "#374151", fontFamily: FF, lineHeight: 1.6, margin: "0 0 6px" }}>{app.course_description}</p>}
+                          <div style={{ display: "flex", gap: 14, flexWrap: "wrap", fontSize: 12, color: "#6b7280", fontFamily: FF }}>
+                            {app.target_audience && <span><strong style={{ color: "#141413" }}>Audience:</strong> {app.target_audience}</span>}
+                            {app.estimated_duration && <span><strong style={{ color: "#141413" }}>Duration:</strong> {app.estimated_duration}</span>}
+                          </div>
+                        </div>
                       </div>
                     )}
 
@@ -2446,10 +2730,32 @@ function ApplicationsView({ token, showToast }: {
 export default function LMAInstructorDashboard() {
   const navigate = useNavigate();
   const [name, setName] = useState(localStorage.getItem("lma_name") || "Instructor");
-  const token           = localStorage.getItem("lma_token") ?? "";
+  // State (not a plain localStorage read) so a silent refresh can update it
+  // and flow down to every child via the `token` prop they already receive.
+  const [token, setToken] = useState(localStorage.getItem("lma_token") ?? "");
+  const [sessionExpired, setSessionExpired] = useState(false);
   const canInstructor   = localStorage.getItem("lma_can_instructor") === "true";
   const instructorLevel = localStorage.getItem("lma_instructor_level") ?? "regular";
   const isSuperInstructor = instructorLevel === "super";
+
+  // Session persistence — same pattern as LMAStudentLayout: refresh on mount
+  // and every 7 hours thereafter (inside the 8-hour access/refresh token
+  // lifetime), so an active session's refresh always lands before expiry.
+  useEffect(() => {
+    if (!token) return;
+    let cancelled = false;
+    const check = async () => {
+      const hadToken = !!localStorage.getItem("lma_token");
+      const fresh = await ensureLmaAccessToken();
+      if (cancelled) return;
+      if (!fresh && hadToken) setSessionExpired(true);
+      if (fresh !== token) setToken(fresh);
+    };
+    check();
+    const iv = setInterval(check, LMA_PROACTIVE_REFRESH_INTERVAL_MS);
+    return () => { cancelled = true; clearInterval(iv); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [sideOpen, setSideOpen] = useState(false);
   const [active, setActive] = useState<Section>("Dashboard");
@@ -2464,11 +2770,15 @@ export default function LMAInstructorDashboard() {
   // isAdmin check — never trusted from localStorage, which is trivially
   // editable in DevTools.
   const [isInstructorAdmin, setIsInstructorAdmin] = useState(false);
+  // is_staff or is_superuser specifically — gates the Affiliates/Affiliate
+  // Commissions links, which are Django-admin-only (separate from the
+  // broader ADMIN section above, which instructor-admins also see).
+  const [isStaffOrSuperuser, setIsStaffOrSuperuser] = useState(false);
   useEffect(() => {
     if (!token) return;
     fetch(`${API}/lma/profile/`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => (r.ok ? r.json() : null))
-      .then(d => { if (d) setIsInstructorAdmin(!!d.is_staff); })
+      .then(d => { if (d) { setIsInstructorAdmin(!!d.is_staff); setIsStaffOrSuperuser(!!d.is_staff || !!d.is_superuser); } })
       .catch(() => {});
   }, [token]);
 
@@ -2539,10 +2849,18 @@ export default function LMAInstructorDashboard() {
     setToast({ msg, type });
   }, []);
 
-  // Guard
+  // Guard. A missing token (never logged in, or session expired) goes to the
+  // real login page — `/lma/instructor-access` isn't a registered route, so
+  // it only ever 404'd; kept as-is for the separate "logged in but lacks
+  // instructor access" case, which is unrelated to session expiry.
   useEffect(() => {
-    if (!token || !canInstructor) { navigate("/lma/instructor-access"); return; }
-  }, [token, canInstructor, navigate]);
+    if (!token) {
+      const expiredParam = sessionExpired ? "&expired=1" : "";
+      navigate(`/lma/login?redirect=${encodeURIComponent("/lma/instructor/dashboard")}${expiredParam}`);
+      return;
+    }
+    if (!canInstructor) { navigate("/lma/instructor-access"); return; }
+  }, [token, canInstructor, navigate, sessionExpired]);
 
   // Load dashboard
   const loadDashboard = useCallback(() => {
@@ -2569,7 +2887,9 @@ export default function LMAInstructorDashboard() {
   }, [loadDashboard, token, canInstructor]);
 
   const logout = () => {
-    ["lma_token", "lma_role", "lma_can_instructor", "lma_instructor_level", "lma_name"].forEach(k => localStorage.removeItem(k));
+    // Was missing lma_refresh — an explicit logout must clear the refresh
+    // token too, or a stale one lingers in localStorage after "signing out".
+    clearLmaSession();
     navigate("/");
   };
 
@@ -2639,6 +2959,16 @@ export default function LMAInstructorDashboard() {
     ...(isSuperInstructor || isInstructorAdmin ? [{ section: "ADMIN", items: [
       { icon: Users,      label: "Instructors" as Section },
       { icon: FileCheck,  label: "Applications" as Section },
+      // Affiliates/Affiliate Commissions are separately-routed admin pages
+      // (LMAAdminAffiliates.tsx / LMAAdminAffiliateCommissions.tsx), not
+      // local dashboard sections — hence `href` instead of a Section label.
+      // Gated on is_staff/is_superuser specifically, not the broader
+      // isInstructorAdmin/isSuperInstructor check above.
+      ...(isStaffOrSuperuser ? [
+        { icon: Handshake, label: "Affiliates" as Section, href: "/lma/admin/affiliates" },
+        { icon: Wallet,    label: "Affiliate Commissions" as Section, href: "/lma/admin/affiliate-commissions" },
+        { icon: ExternalLink, label: "Partner Courses" as Section, href: "/admin/partner-courses" },
+      ] : []),
     ]}] : []),
     { section: "ACCOUNT", items: [
       { icon: UserCircle, label: "Profile" as Section },
@@ -2652,7 +2982,7 @@ export default function LMAInstructorDashboard() {
       </div>
     );
     switch (active) {
-      case "Dashboard":      return <DashboardView data={data} earningsChart={earningsChart} onGrade={setGradingSub} isSuperInstructor={isSuperInstructor} />;
+      case "Dashboard":      return <DashboardView data={data} earningsChart={earningsChart} onGrade={setGradingSub} onManage={setManageCourse} onCreate={() => { setShowCreate(true); setActive("My Courses"); }} isSuperInstructor={isSuperInstructor} />;
       case "My Courses":     return <CoursesView courses={courses} loading={false} isSuperInstructor={isSuperInstructor} onEdit={setEditCourse} onManage={setManageCourse} onDelete={setDeletingCourse} onCreate={() => setShowCreate(true)} onSubmitReview={handleSubmitReview} />;
       case "Students":       return <StudentsView token={token} />;
       case "Earnings":       return isSuperInstructor ? <EarningsView data={data} earningsChart={earningsChart} /> : null;
@@ -2683,8 +3013,8 @@ export default function LMAInstructorDashboard() {
             <div key={section}>
               <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.40)", letterSpacing: "0.14em", textTransform: "uppercase", padding: "10px 4px 5px", fontFamily: FF }}>{section}</div>
               {items.map(it => (
-                <SideItem key={it.label} icon={it.icon} label={it.label} active={active === it.label}
-                  onClick={() => { setActive(it.label); setSideOpen(false); }} />
+                <SideItem key={it.label} icon={it.icon} label={it.label} active={!("href" in it) && active === it.label}
+                  onClick={() => { setSideOpen(false); if ("href" in it && it.href) navigate(it.href); else setActive(it.label); }} />
               ))}
             </div>
           ))}
@@ -2699,6 +3029,14 @@ export default function LMAInstructorDashboard() {
         </div>
         )}
         <div style={{ padding: "0 12px 24px" }}>
+          <Link to="/training" style={{
+            display: "flex", alignItems: "center", gap: 10, minHeight: 44,
+            padding: "10px 16px", borderRadius: 10, textDecoration: "none",
+            color: "rgba(255,255,255,0.60)", fontSize: 13.5, fontWeight: 500, fontFamily: FF,
+            marginBottom: 2, transition: "all 0.18s ease",
+          }}>
+            <Globe size={16} /><span style={{ flex: 1 }}>Back to Website</span>
+          </Link>
           <SideItem icon={LogOut} label="Logout" danger onClick={logout} />
         </div>
       </aside>
@@ -2711,9 +3049,9 @@ export default function LMAInstructorDashboard() {
             style={{ background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 8, color: "#141413", display: "none" }}>
             {sideOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div style={{ flex: 1 }}>
-            <span style={{ fontSize: 15, fontWeight: 600, color: "#141413", fontFamily: FF }}>
-              Instructor · <span style={{ color: GOLD, fontWeight: 800 }}>{name.split(" ")[0]}</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ fontSize: 15, fontWeight: 600, color: "#141413", fontFamily: FF, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block" }} title={name}>
+              Instructor · <span style={{ color: GOLD, fontWeight: 800 }}>{name}</span>
             </span>
           </div>
           <button type="button" onClick={() => { setShowCreate(true); setActive("My Courses"); }} style={{

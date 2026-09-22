@@ -8,6 +8,7 @@
 //              via <XerxezCourses>.
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   UserCheck, Laptop, Award, Users, CheckCircle2,
   GraduationCap, ClipboardList, FlaskConical,
@@ -17,7 +18,7 @@ import type { LucideIcon } from "lucide-react";
 import SEO from "../../components/seo/SEO";
 import {
   XerxezShell,
-  XerxezTrainingCard, XerxezCourses,
+  XerxezTrainingCard, XerxezCourses, XerxezPartnerCourses,
   T, Eyebrow, SectionHeading, DotGrid, Btn, Reveal, IconTile, sectionPad, V2_HEADER_H,
 } from "../../components/v2";
 import heroImage from "../../assets/images/training-hero.jpg";
@@ -227,9 +228,31 @@ const TrainingV2 = () => (
               </div>
             </div>
           </div>
-          <div style={{ flex: "1 1 340px", maxWidth: 460 }}>
+          <div style={{ flex: "1 1 340px", maxWidth: 460, display: "flex", flexDirection: "column", gap: 16 }}>
             <Reveal delay={80}>
               <XerxezTrainingCard />
+            </Reveal>
+            <Reveal delay={140}>
+              <div style={{
+                background: "rgba(255,255,255,0.05)", border: "1px solid rgba(217,53,34,0.30)",
+                borderRadius: 16, padding: "16px 20px",
+              }}>
+                <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                  <GraduationCap size={20} color={T.red} strokeWidth={2} style={{ flexShrink: 0, marginTop: 1 }} />
+                  <p style={{ fontFamily: T.fontBody, fontSize: 13, lineHeight: 1.65, color: "rgba(255,255,255,0.75)", margin: 0 }}>
+                    Are you an expert or organization with courses to share? Host your courses on
+                    XERXEZ Academy and reach thousands of learners across UAE &amp; India.
+                  </p>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 18px", marginTop: 12, marginLeft: 32 }}>
+                  <Link to="/lma/become-instructor" style={{ fontFamily: T.fontHead, fontSize: 13, fontWeight: 600, color: T.red, textDecoration: "none" }}>
+                    Become an Instructor →
+                  </Link>
+                  <Link to="/lma/affiliate/apply" style={{ fontFamily: T.fontHead, fontSize: 13, fontWeight: 600, color: T.red, textDecoration: "none" }}>
+                    Become an Affiliate →
+                  </Link>
+                </div>
+              </div>
             </Reveal>
           </div>
         </div>
@@ -237,6 +260,8 @@ const TrainingV2 = () => (
     </section>
 
     <XerxezCourses />
+
+    <XerxezPartnerCourses />
 
     {/* ── Our Advantage — white section, 4 dark 2x2 cards + stat strip. ── */}
     <section style={{ ...sectionPad, background: "#fff" }}>

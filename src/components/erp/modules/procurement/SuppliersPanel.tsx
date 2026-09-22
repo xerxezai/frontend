@@ -4,6 +4,7 @@ import { useERPList, erpDownload } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, StarRating, StarRatingInput } from './procurementShared';
+import PhoneInput from '../../../common/PhoneInput';
 
 const defSupplier = { name: '', email: '', phone: '', address: '', city: '', country: '', gstin: '', payment_terms: '', rating: 0, is_active: 'true' };
 
@@ -104,7 +105,7 @@ export default function SuppliersPanel() {
               <div><label style={lbl}>Name *</label><input value={sF.name} onChange={e => setSF(f => ({ ...f, name: e.target.value }))} style={inp} required /></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div><label style={lbl}>Email</label><input type="email" value={sF.email} onChange={e => setSF(f => ({ ...f, email: e.target.value }))} style={inp} /></div>
-                <div><label style={lbl}>Phone</label><input value={sF.phone} onChange={e => setSF(f => ({ ...f, phone: e.target.value }))} style={inp} /></div>
+                <div><label style={lbl}>Phone</label><PhoneInput value={sF.phone} onChange={v => setSF(f => ({ ...f, phone: v }))} /></div>
               </div>
               <div><label style={lbl}>Address</label><textarea value={sF.address} onChange={e => setSF(f => ({ ...f, address: e.target.value }))} style={{ ...inp, resize: 'vertical', minHeight: 60 }} /></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>

@@ -12,7 +12,7 @@ import { Link, useLocation } from "react-router-dom";                // routing 
 import {
   ChevronDown, Menu, Sparkles,                                      // caret + hamburger + CTA icon
   Brain, Shield, Cloud, Code, GraduationCap, Atom, Smartphone, Server, MessageSquare, Building2,  // service row icons
-  Users, Mail, Briefcase,                                           // "Who We Are" row icons
+  Users, Mail, Briefcase, Handshake, TrendingUp,                    // "Who We Are" / "Academy" row icons
   Wifi, Radar, Factory, Truck, Sprout, HeartPulse, ShoppingBag,      // "IoT Solutions" row + panel icons
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -94,11 +94,25 @@ const WHO_WE_ARE_ICONS: Record<string, LucideIcon> = {
   "About Us":   Users,
   "Contact Us": Mail,
   "Careers":    Briefcase,
+  "Affiliate Program": TrendingUp,
 };
 const WHO_WE_ARE_ITEMS: Sub[] = [
   { title: "About Us",   link: "/about",   desc: "Our story, mission and values" },
   { title: "Contact Us", link: "/contact", desc: "Book a demo or get in touch" },
   { title: "Careers",    link: "/careers", desc: "Join the XERXEZ team" },
+  { title: "Affiliate Program", link: "/lma/affiliate/apply", desc: "Earn by promoting XERXEZ courses" },
+];
+
+// ── Academy mega-menu content ───────────────────────────────────────────
+// Replaces the old plain "AI Training" pill with a 2-item dropdown, same
+// simple single-column white-card style as Who We Are.
+const ACADEMY_ICONS: Record<string, LucideIcon> = {
+  "Our Courses":     GraduationCap,
+  "Partner with Us": Handshake,
+};
+const ACADEMY_ITEMS: Sub[] = [
+  { title: "Our Courses",     link: "/training",         desc: "Learn AI, MLOps, DevSecOps from practitioners" },
+  { title: "Partner with Us", link: "/partner-with-us",  desc: "Host your courses on XERXEZ Academy" },
 ];
 
 // The one page Industry We Serve owns — used both for its nav link and to
@@ -159,6 +173,11 @@ const Nav: MenuNode[] = [
 ];
 for (const item of RawNav) {
   if (item.title === "Contact Us" || item.title === "Careers" || item.title === "Home") continue;
+  if (item.title === "AI Training") {
+    // "Academy" dropdown replaces the old plain "AI Training" pill, same slot.
+    Nav.push({ title: "Academy", link: "/training", hasDropdown: true, submenu: ACADEMY_ITEMS });
+    continue;
+  }
   Nav.push(item);
   if (item.title === "Services") {
     Nav.push({ title: "Industry We Serve", link: INDUSTRY_PAGE_PATH, hasDropdown: true, submenu: INDUSTRY_ITEMS });
@@ -469,7 +488,7 @@ const XerxezHeader = () => {
                   // OWN right edge instead (`position: relative` here + the panel's
                   // `right: 0`) — centering it like the others would push it partly
                   // off-screen.
-                  style={item.title === "Who We Are" ? { position: "relative" } : undefined}
+                  style={(item.title === "Who We Are" || item.title === "Academy") ? { position: "relative" } : undefined}
                   onMouseEnter={() => hasMenu && openMenu(item.title)}
                   onMouseLeave={scheduleClose}
                 >
@@ -592,19 +611,21 @@ const XerxezHeader = () => {
                      absolute; right: 0` against its own per-item wrapper (which DOES
                      get `position: relative`, set above), a single white card with no
                      navy panel. */}
-                  {hasMenu && openKey === item.title && item.title === "Who We Are" ? (
-                    // Who We Are — simple single-column white card, no navy panel.
-                    // Anchored to ITS OWN right edge (not centered under <nav>, unlike
-                    // Services / Industry We Serve) since it sits at the far right of
-                    // the pill and would otherwise clip off-screen.
+                  {hasMenu && openKey === item.title && (item.title === "Who We Are" || item.title === "Academy") ? (
+                    // Who We Are / Academy — simple single-column white card, no navy
+                    // panel. Who We Are sits at the far right of the pill and anchors
+                    // to its OWN right edge; Academy sits mid-pill so it's centered
+                    // under itself instead (both need their wrapper's own `position:
+                    // relative`, set above, rather than resolving against <nav>).
                     <div style={{
-                      position: "absolute", top: "calc(100% + 14px)", right: 0,
+                      position: "absolute", top: "calc(100% + 14px)",
+                      ...(item.title === "Who We Are" ? { right: 0 } : { left: "50%", transform: "translateX(-50%)" }),
                       width: 320, background: "#fff", borderRadius: 16,
                       border: `1px solid ${T.border}`, boxShadow: `0 24px 60px ${T.scrim(0.18)}`,
                       padding: 12,
                     }}>
                       {item.submenu!.map((s) => (
-                        <ServiceRow key={s.link} s={s} to={remap(s.link)} icon={WHO_WE_ARE_ICONS[s.title] ?? Users} />
+                        <ServiceRow key={s.link} s={s} to={remap(s.link)} icon={(item.title === "Academy" ? ACADEMY_ICONS : WHO_WE_ARE_ICONS)[s.title] ?? Users} />
                       ))}
                     </div>
                   ) : hasMenu && openKey === item.title && (

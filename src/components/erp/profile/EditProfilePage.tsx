@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import apiService from '../../../services/api';
+import PhoneInput from '../../common/PhoneInput';
 
 const OG   = '#D93522';
 const OG_G = 'linear-gradient(145deg, #D93522 0%, #D93522 100%)';
@@ -269,7 +270,10 @@ export default function EditProfilePage() {
                 <Field label="Email"    type="email" value={form.email}      onChange={set('email')}    />
                 <Field label="Username"              value={form.username}   onChange={set('username')} disabled />
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                  <Field label="Phone"      type="tel" value={form.phone}      onChange={set('phone')}      />
+                  <div>
+                    <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', fontFamily: FONT, marginBottom: 6 }}>Phone</label>
+                    <PhoneInput value={form.phone} onChange={set('phone')} />
+                  </div>
                   <Field label="Department"           value={form.department} onChange={set('department')} />
                 </div>
                 <Field label="Bio" multiline value={form.bio} onChange={set('bio')} />

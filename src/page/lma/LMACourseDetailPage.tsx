@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
-import { CheckCircle2, Shield, ShieldCheck, X, Lock, PlayCircle, FileText, Star, Users } from "lucide-react";
+import { CheckCircle2, Shield, ShieldCheck, Star, Users, Award, Download, Copy, Check, Share2 } from "lucide-react";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
+import { captureAffiliateRefFromUrl } from "../../utils/affiliateTracking";
 
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
@@ -33,231 +34,21 @@ const THUMB_ICONS = [
   "fas fa-chart-bar", "fas fa-cloud", "fas fa-shield-alt",
 ];
 
-/* ── URL → embed URL ── */
-function toEmbedUrl(url: string): string | null {
-  if (!url) return null;
-  // YouTube: watch?v=ID or youtu.be/ID or already embed
-  const ytWatch = url.match(/[?&]v=([^&\s]+)/);
-  if (ytWatch) return `https://www.youtube.com/embed/${ytWatch[1]}`;
-  const ytShort = url.match(/youtu\.be\/([^?&\s]+)/);
-  if (ytShort) return `https://www.youtube.com/embed/${ytShort[1]}`;
-  if (url.includes("youtube.com/embed/")) return url;
-  // Vimeo: vimeo.com/ID or already embed
-  const vimeo = url.match(/vimeo\.com\/(\d+)/);
-  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
-  if (url.includes("player.vimeo.com/video/")) return url;
-  return null;
-}
-
-/* ── Lesson modal ── */
-const LessonModal = ({ lesson, enrolled, onClose, onEnroll, token, isInstructor }: {
-  lesson: any; enrolled: boolean; onClose: () => void; onEnroll: () => void;
-  token: string; isInstructor: boolean;
-}) => {
-  const canWatch = lesson.is_free_preview || enrolled || isInstructor;
-  const [secureVideoUrl, setSecureVideoUrl] = useState("");
-  const [videoFetching, setVideoFetching] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-
-  // Fetch video URL from authenticated endpoint — never expose URL via public course API
-  useEffect(() => {
-    if (!canWatch) return;
-    setVideoFetching(true);
-    const headers: Record<string, string> = {};
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-    fetch(`${API}/lma/lessons/${lesson.id}/video/`, { headers })
-      .then(r => r.ok ? r.json() : null)
-      .then((d: { video_url?: string } | null) => { if (d?.video_url) setSecureVideoUrl(d.video_url); })
-      .catch(() => {})
-      .finally(() => setVideoFetching(false));
-  }, [lesson.id, canWatch, token]);
-
-  const embedUrl = secureVideoUrl ? toEmbedUrl(secureVideoUrl) : null;
-
-  // Close on Escape
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  return (
-    <div
-      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
-      style={{
-        position: "fixed", inset: 0, background: "rgba(10,8,6,0.78)", zIndex: 600,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "16px", backdropFilter: "blur(4px)",
-        animation: "lmacd-fadeIn 0.22s ease both",
-      }}
-    >
-      <div style={{
-        background: "#fff", borderRadius: 20, width: "100%", maxWidth: 820,
-        maxHeight: "92vh", overflowY: "auto", boxShadow: "0 32px 80px rgba(0,0,0,0.45)",
-        animation: "lmacd-slideUp 0.28s cubic-bezier(0.22,1,0.36,1) both",
-        display: "flex", flexDirection: "column",
-      }}>
-        {/* Header */}
-        <div style={{
-          display: "flex", alignItems: "flex-start", gap: 12,
-          padding: "20px 24px 16px", borderBottom: "1px solid rgba(0,0,0,0.07)",
-          background: DARK, borderRadius: "20px 20px 0 0",
-        }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 9, flexShrink: 0,
-            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            {canWatch
-              ? <PlayCircle size={18} color="#0a0806" />
-              : <Lock size={16} color="#0a0806" />}
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#fff", lineHeight: 1.25, fontFamily: FF }}>{lesson.title}</div>
-            {lesson.duration > 0 && (
-              <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.38)", marginTop: 3, fontFamily: FF }}>
-                {lesson.duration} min{lesson.is_free_preview ? " · Free Preview" : ""}
-              </div>
-            )}
-          </div>
-          <button type="button" onClick={onClose} style={{
-            background: "rgba(255,255,255,0.10)", border: "none", borderRadius: 8,
-            padding: 8, cursor: "pointer", color: "rgba(255,255,255,0.60)",
-            display: "flex", alignItems: "center", flexShrink: 0,
-            transition: "background 0.18s ease",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.20)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.10)")}
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div style={{ padding: "0 0 28px" }}>
-          {/* Video section */}
-          {canWatch ? (
-            videoFetching ? (
-              <div style={{ position: "relative", paddingBottom: "56.25%", background: "#0a0806" }}>
-                <div style={{
-                  position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
-                  background: "#0a0806",
-                }}>
-                  <div style={{
-                    width: 36, height: 36,
-                    border: `3px solid rgba(217,53,34,0.20)`,
-                    borderTop: `3px solid ${GOLD}`,
-                    borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite",
-                  }} />
-                </div>
-              </div>
-            ) : embedUrl ? (
-              <div style={{ position: "relative", paddingBottom: "56.25%", background: "#0a0806" }}>
-                {!videoLoaded && (
-                  <div style={{
-                    position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
-                    background: "#0a0806",
-                  }}>
-                    <div style={{
-                      width: 36, height: 36,
-                      border: `3px solid rgba(217,53,34,0.20)`,
-                      borderTop: `3px solid ${GOLD}`,
-                      borderRadius: "50%", animation: "lmacd-spin 0.8s linear infinite",
-                    }} />
-                  </div>
-                )}
-                <iframe
-                  src={embedUrl}
-                  title={lesson.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  onLoad={() => setVideoLoaded(true)}
-                  style={{
-                    position: "absolute", top: 0, left: 0,
-                    width: "100%", height: "100%", border: "none",
-                  }}
-                />
-              </div>
-            ) : secureVideoUrl ? (
-              // Non-embeddable URL — show direct link
-              <div style={{ padding: "20px 24px 0", background: "#f9f7f4" }}>
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 8, padding: "12px 16px",
-                  background: "rgba(217,53,34,0.08)", borderRadius: 10, border: "1px solid rgba(217,53,34,0.20)",
-                }}>
-                  <PlayCircle size={15} color={GOLD} />
-                  <span style={{ fontSize: 13, color: GOLD, fontWeight: 600, fontFamily: FF }}>Video link: </span>
-                  <a href={secureVideoUrl} target="_blank" rel="noopener noreferrer"
-                    style={{ fontSize: 13, color: GOLD, fontFamily: FF, wordBreak: "break-all" }}>
-                    {secureVideoUrl}
-                  </a>
-                </div>
-              </div>
-            ) : null
-          ) : (
-            /* Locked state */
-            <div style={{
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              padding: "48px 24px", textAlign: "center",
-              background: `linear-gradient(160deg,${DARK} 0%,#04101f 100%)`,
-            }}>
-              <div style={{
-                width: 72, height: 72, borderRadius: "50%",
-                background: "rgba(217,53,34,0.12)", border: `1.5px solid rgba(217,53,34,0.30)`,
-                display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18,
-              }}>
-                <Lock size={28} color={GOLD} />
-              </div>
-              <h3 style={{ fontSize: 18, fontWeight: 800, color: "#fff", margin: "0 0 8px", fontFamily: FF }}>
-                Enroll to watch this lesson
-              </h3>
-              <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.45)", margin: "0 0 24px", maxWidth: 340, lineHeight: 1.6, fontFamily: FF }}>
-                This lesson is only available to enrolled students. Get full access to all {lesson.duration > 0 ? `${lesson.duration}-minute ` : ""}lessons in this course.
-              </p>
-              <button type="button" onClick={onEnroll} style={{
-                background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-                color: "#0a0806", fontWeight: 800, fontSize: 14, fontFamily: FF,
-                border: "none", borderRadius: 11, padding: "13px 32px", cursor: "pointer",
-                boxShadow: "0 4px 0 rgba(139,31,23,0.45),0 8px 24px rgba(217,53,34,0.28)",
-              }}>
-                Enroll Now →
-              </button>
-            </div>
-          )}
-
-          {/* Content / Notes */}
-          {canWatch && lesson.content && (
-            <div style={{ padding: "22px 24px 0" }}>
-              <div style={{
-                display: "flex", alignItems: "center", gap: 8, marginBottom: 12,
-              }}>
-                <FileText size={15} color={GOLD} />
-                <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF }}>Lesson Notes</span>
-              </div>
-              <div style={{
-                fontSize: 14, color: "#374151", lineHeight: 1.75, fontFamily: FF,
-                whiteSpace: "pre-wrap", wordBreak: "break-word",
-              }}>
-                {lesson.content}
-              </div>
-            </div>
-          )}
-
-          {/* No content placeholder for free preview without content */}
-          {canWatch && !lesson.content && !secureVideoUrl && !videoFetching && (
-            <div style={{ padding: "32px 24px", textAlign: "center", color: "rgba(20,20,19,0.40)", fontSize: 13, fontFamily: FF }}>
-              No content has been added for this lesson yet.
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+/* ── Module thumbnail ── */
+// FontAwesome class per lesson content_type — a module's thumbnail shows its
+// first lesson's content type instead of a generic icon cycled by index.
+const MODULE_CONTENT_FA: Record<string, string> = {
+  video: "fas fa-video",
+  document: "fas fa-file-alt",
+  quiz: "fas fa-question-circle",
+  assignment: "fas fa-clipboard-list",
+  live_session: "fas fa-broadcast-tower",
+  text: "fas fa-book-open",
 };
 
-/* ── Module thumbnail ── */
-const ModuleThumbnail = ({ index, size = 80 }: { index: number; size?: number }) => {
+const ModuleThumbnail = ({ index, size = 80, contentType }: { index: number; size?: number; contentType?: string }) => {
   const [a, b] = THUMB_GRADS[index % THUMB_GRADS.length];
+  const icon = (contentType && MODULE_CONTENT_FA[contentType]) || THUMB_ICONS[index % THUMB_ICONS.length];
   return (
     <div style={{
       width: size, height: Math.round(size * 0.7), borderRadius: 8, flexShrink: 0,
@@ -266,7 +57,7 @@ const ModuleThumbnail = ({ index, size = 80 }: { index: number; size?: number })
       position: "relative", overflow: "hidden",
     }}>
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 30% 30%,rgba(255,255,255,0.18) 0%,transparent 60%)" }} />
-      <i className={THUMB_ICONS[index % THUMB_ICONS.length]}
+      <i className={icon}
         style={{ color: "rgba(255,255,255,0.92)", fontSize: size * 0.25, position: "relative", zIndex: 1 }} />
     </div>
   );
@@ -497,34 +288,59 @@ const ReviewsSection = ({ courseId, enrolled, token }: { courseId: string; enrol
 };
 
 /* ── Lesson row ── */
-const LessonRow = ({ lesson, enrolled, onClick }: {
-  lesson: any; enrolled: boolean; onClick: (lesson: any) => void;
+// FontAwesome class per lesson content_type — shown instead of the lock icon
+// whenever the lesson is actually viewable (free preview, or enrolled).
+const CONTENT_TYPE_FA: Record<string, string> = {
+  video: "fas fa-video",
+  document: "fas fa-file-alt",
+  quiz: "fas fa-question-circle",
+  assignment: "fas fa-clipboard-list",
+  live_session: "fas fa-broadcast-tower",
+  text: "fas fa-book-open",
+};
+
+const LessonRow = ({ lesson, enrolled, isOwner, courseId }: {
+  lesson: any; enrolled: boolean; isOwner?: boolean; courseId: string | number;
 }) => {
-  const canWatch = lesson.is_free_preview || enrolled;
+  const navigate = useNavigate();
+  // Free-preview lessons are watchable by anyone, no enrollment needed.
+  // Enrolled students can watch everything. The course's own instructor
+  // can watch everything too, without ever needing to enroll in their own
+  // course. Only a paid lesson viewed by a non-enrolled, non-owner visitor
+  // is actually locked.
+  const canWatch = lesson.is_free_preview || enrolled || isOwner;
+  const hasContent = lesson.has_content !== false;
   const [hov, setHov] = useState(false);
+  const contentIcon = CONTENT_TYPE_FA[lesson.content_type] || "fas fa-play-circle";
+
+  const go = () => hasContent && canWatch && navigate(`/lma/courses/${courseId}/lessons/${lesson.id}`);
+
   return (
     <div
-      onClick={() => onClick(lesson)}
+      onClick={go}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
         display: "flex", alignItems: "center", gap: 10, padding: "9px 8px",
-        borderBottom: "1px solid rgba(0,0,0,0.05)", cursor: "pointer",
+        borderBottom: "1px solid rgba(0,0,0,0.05)", cursor: hasContent && canWatch ? "pointer" : "default",
         borderRadius: 7, transition: "background 0.16s ease",
-        background: hov ? (canWatch ? "rgba(217,53,34,0.06)" : "rgba(0,0,0,0.03)") : "transparent",
+        background: hov && hasContent && canWatch ? "rgba(217,53,34,0.06)" : "transparent",
         margin: "0 -8px",
       }}
     >
       {lesson.is_completed
         ? <i className="fas fa-check-circle" style={{ fontSize: 14, color: "#059669", flexShrink: 0, width: 16 }} />
-        : canWatch
-          ? <i className="fas fa-play-circle" style={{ fontSize: 14, color: hov ? AMBER : GOLD, flexShrink: 0, width: 16, transition: "color 0.16s ease" }} />
-          : <i className="fas fa-lock" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />}
+        : !hasContent
+          ? <i className="fas fa-circle-notch" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />
+          : canWatch
+            ? <i className={contentIcon} style={{ fontSize: 13, color: hov ? AMBER : GOLD, flexShrink: 0, width: 16, transition: "color 0.16s ease" }} />
+            : <i className="fas fa-lock" style={{ fontSize: 12, color: "#c5bfba", flexShrink: 0, width: 16 }} />}
       <span style={{
-        flex: 1, fontSize: 13, lineHeight: 1.45, fontFamily: FF,
+        flex: 1, minWidth: 0, fontSize: 13, lineHeight: 1.45, fontFamily: FF,
         color: canWatch ? "#141413" : "rgba(20,20,19,0.52)",
         fontWeight: hov && canWatch ? 600 : 400,
         transition: "font-weight 0.12s ease",
+        whiteSpace: "normal", overflow: "visible", textOverflow: "clip", wordBreak: "break-word",
       }}>
         {lesson.title}
       </span>
@@ -538,18 +354,19 @@ const LessonRow = ({ lesson, enrolled, onClick }: {
           Free
         </span>
       )}
-      {lesson.has_video && canWatch && (
-        <i className="fas fa-film" style={{ fontSize: 10, color: "rgba(20,20,19,0.28)", flexShrink: 0 }} />
-      )}
-      <span style={{ fontSize: 11.5, color: "rgba(20,20,19,0.38)", flexShrink: 0 }}>{lesson.duration}m</span>
+      {!hasContent ? (
+        <span style={{ fontSize: 10.5, fontStyle: "italic", color: "rgba(20,20,19,0.32)", flexShrink: 0 }}>No content yet</span>
+      ) : lesson.duration > 0 ? (
+        <span style={{ fontSize: 11.5, color: "rgba(20,20,19,0.38)", flexShrink: 0 }}>{lesson.duration}m</span>
+      ) : null}
     </div>
   );
 };
 
 /* ── Module accordion row ── */
-const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLessonClick }: {
+const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, isOwner, courseId }: {
   mod: any; modIndex: number; isOpen: boolean; toggle: () => void; revealDelay: number;
-  enrolled: boolean; onLessonClick: (lesson: any) => void;
+  enrolled: boolean; isOwner?: boolean; courseId: string | number;
 }) => {
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -568,7 +385,7 @@ const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLes
 
   const totalMins = mod.lessons?.reduce((s: number, l: any) => s + (l.duration ?? 0), 0) ?? mod.duration ?? 0;
   const h = Math.floor(totalMins / 60), m = totalMins % 60;
-  const durStr = h > 0 ? `${h}h${m > 0 ? ` ${m}m` : ""}` : `${m}m`;
+  const durStr = totalMins > 0 ? (h > 0 ? `${h}h${m > 0 ? ` ${m}m` : ""}` : `${m}m`) : null;
 
   return (
     <div ref={rowRef} style={{
@@ -583,11 +400,11 @@ const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLes
         background: isOpen ? "#fdfaf6" : "#fff", fontFamily: FF, textAlign: "left",
         transition: "background 0.18s ease",
       }}>
-        <ModuleThumbnail index={modIndex} size={80} />
+        <ModuleThumbnail index={modIndex} size={80} contentType={mod.lessons?.[0]?.content_type} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", marginBottom: 3, lineHeight: 1.3 }}>{mod.title}</div>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: "#141413", marginBottom: 3, lineHeight: 1.3, whiteSpace: "normal", wordBreak: "break-word" }}>{mod.title}</div>
           <div style={{ fontSize: 12, color: "rgba(20,20,19,0.44)" }}>
-            Course {modIndex + 1} · {mod.lessons?.length ?? 0} lessons · {durStr}
+            Module {modIndex + 1} · {mod.lessons?.length ?? 0} lesson{(mod.lessons?.length ?? 0) !== 1 ? "s" : ""}{durStr ? ` · ${durStr}` : ""}
           </div>
         </div>
         <i className={`fas fa-chevron-${isOpen ? "up" : "down"}`}
@@ -599,7 +416,7 @@ const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLes
       }}>
         <div className="lmacd-lesson-indent" style={{ padding: "2px 16px 12px", paddingLeft: 110, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
           {(mod.lessons ?? []).map((l: any) => (
-            <LessonRow key={l.id} lesson={l} enrolled={enrolled} onClick={onLessonClick} />
+            <LessonRow key={l.id} lesson={l} enrolled={enrolled} isOwner={isOwner} courseId={courseId} />
           ))}
         </div>
       </div>
@@ -608,34 +425,59 @@ const ModuleRow = ({ mod, modIndex, isOpen, toggle, revealDelay, enrolled, onLes
 };
 
 /* ── Instructor item — courses/learners are real API numbers only; either one
-   renders "—" rather than a fabricated figure when the API doesn't provide it. ── */
-const InstructorItem = ({ name, designation, courses, learners }: {
+   renders "—" rather than a fabricated figure when the API doesn't provide it.
+   companyName/bio/website are partner-branding fields sourced from the
+   instructor's LMAProfile — each renders only when actually set, never a
+   fabricated placeholder. ── */
+const InstructorItem = ({ name, designation, courses, learners, companyName, bio, website }: {
   name: string; designation: string; courses?: number | null; learners?: number | null;
+  companyName?: string; bio?: string; website?: string;
 }) => {
   const [hov, setHov] = useState(false);
   const initials = name.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase();
   const coursesLabel = courses != null ? `${courses} Course${courses !== 1 ? "s" : ""}` : "—";
   const learnersLabel = learners != null ? `${learners.toLocaleString()} learners` : "—";
   return (
-    <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 14 }}>
-      <div
-        onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-        style={{
-          width: 44, height: 44, borderRadius: "50%", flexShrink: 0,
-          background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          color: "#0a0806", fontWeight: 800, fontSize: 15, cursor: "pointer",
-          boxShadow: hov ? `0 0 0 3px ${GOLD},0 0 18px rgba(217,53,34,0.40)` : "none",
-          transition: "box-shadow 0.22s ease",
-        }}
-      >{initials}</div>
-      <div>
-        <div style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, marginBottom: 2, fontFamily: FF }}>{name}</div>
-        <div style={{ fontSize: 12, color: "rgba(20,20,19,0.52)", marginBottom: 3, fontFamily: FF }}>{designation}</div>
-        <div style={{ fontSize: 11, color: "rgba(20,20,19,0.38)", fontFamily: FF }}>
-          {coursesLabel} · {learnersLabel}
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: bio ? 10 : 0 }}>
+        <div
+          onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+          style={{
+            width: 44, height: 44, borderRadius: "50%", flexShrink: 0,
+            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#0a0806", fontWeight: 800, fontSize: 15, cursor: "pointer",
+            boxShadow: hov ? `0 0 0 3px ${GOLD},0 0 18px rgba(217,53,34,0.40)` : "none",
+            transition: "box-shadow 0.22s ease",
+          }}
+        >{initials}</div>
+        <div>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: GOLD, marginBottom: 2, fontFamily: FF }}>{name}</div>
+          <div style={{ fontSize: 12, color: "rgba(20,20,19,0.52)", marginBottom: 3, fontFamily: FF }}>{designation}</div>
+          <div style={{ fontSize: 11, color: "rgba(20,20,19,0.38)", fontFamily: FF }}>
+            {coursesLabel} · {learnersLabel}
+          </div>
         </div>
       </div>
+
+      {companyName && (
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#141413", fontFamily: FF, marginBottom: bio ? 8 : 0 }}>
+          Offered by {companyName}
+        </div>
+      )}
+
+      {bio && (
+        <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.62)", lineHeight: 1.6, fontFamily: FF, margin: website ? "0 0 6px" : 0 }}>
+          {bio}
+        </p>
+      )}
+
+      {website && (
+        <a href={website} target="_blank" rel="noopener noreferrer"
+          style={{ fontSize: 12, fontWeight: 700, color: GOLD, fontFamily: FF, textDecoration: "none" }}>
+          {website.replace(/^https?:\/\//, "")} ↗
+        </a>
+      )}
     </div>
   );
 };
@@ -768,8 +610,8 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
 /* ════════════════════════════════════════════════════════════════════════════
    3-D HERO COURSE CARD
 ════════════════════════════════════════════════════════════════════════════ */
-const HeroCourseCard = ({ course, totalLessons, enrolled, onEnroll, onPreview }: {
-  course: any; totalLessons: number; enrolled: boolean; onEnroll: () => void; onPreview?: () => void;
+const HeroCourseCard = ({ course, totalLessons, enrolled, isOwner, onEnroll, onManage, onPreview }: {
+  course: any; totalLessons: number; enrolled: boolean; isOwner: boolean; onEnroll: () => void; onManage: () => void; onPreview?: () => void;
 }) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -868,8 +710,18 @@ const HeroCourseCard = ({ course, totalLessons, enrolled, onEnroll, onPreview }:
           </div>
         </div>
 
-        {/* Enroll CTA — hidden once enrolled, replaced with Continue Learning */}
-        {enrolled ? (
+        {/* Enroll CTA — hidden once enrolled, replaced with Continue Learning; hidden entirely for the course's own instructor, replaced with Manage Course */}
+        {isOwner ? (
+          <button type="button" onClick={onManage} style={{
+            width: "100%", padding: "11px", borderRadius: 10,
+            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+            color: "#0a0806", fontWeight: 800, fontSize: 13, fontFamily: FF,
+            border: "none", cursor: "pointer",
+            boxShadow: "0 3px 0 rgba(139,31,23,0.45),0 6px 20px rgba(217,53,34,0.28)",
+          }}>
+            Manage Course →
+          </button>
+        ) : enrolled ? (
           <>
             <span style={{
               display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
@@ -923,20 +775,26 @@ export default function LMACourseDetailPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const action = searchParams.get("action") || "";
+  // Lets deep links (e.g. the lesson player's "back to course" link) land
+  // directly on the Curriculum tab instead of always resetting to About.
+  const initialTab = searchParams.get("tab") === "curriculum" ? "curriculum" : "about";
   const token = localStorage.getItem("lma_token") ?? "";
   const isInstructor = localStorage.getItem("lma_can_instructor") === "true";
 
+  const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
+  const [copiedAffLink, setCopiedAffLink] = useState(false);
   const [course, setCourse]               = useState<any>(null);
   const [courseList, setCourseList]       = useState<any[]>([]);
   const [loading, setLoading]             = useState(true);
   const [openModules, setOpenModules]     = useState<Set<number>>(new Set([0]));
-  const [activeTab, setActiveTab]         = useState<"about" | "curriculum">("about");
+  const [activeTab, setActiveTab]         = useState<"about" | "curriculum">(initialTab);
   const [showPay, setShowPay]             = useState(false);
   const [enrolled, setEnrolled]           = useState(false);
+  const [enrollProgress, setEnrollProgress] = useState(0);
+  const [certificate, setCertificate]     = useState<{ id: number; certificate_file: string | null } | null>(null);
   const [enrollStatusChecked, setEnrollStatusChecked] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [hovCourse, setHovCourse]         = useState<number | null>(null);
-  const [selectedLesson, setSelectedLesson] = useState<any | null>(null);
   const [wordIdx,  setWordIdx ] = useState(0);
   const [fadeIn,   setFadeIn  ] = useState(true);
   const wordTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -944,12 +802,27 @@ export default function LMACourseDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`${API}/lma/courses/${id}/`)
+    fetch(`${API}/lma/courses/${id}/`, { headers: token ? { Authorization: `Bearer ${token}` } : {} })
       .then(r => r.json())
       .then(d => setCourse(d))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, token]);
+
+  // Affiliate link capture — a visitor arriving via .../courses/:id?ref=CODE
+  // gets a 30-day cookie so their enrollment can be attributed at payment
+  // time (see apps.affiliates.services.record_conversion_from_cookie).
+  useEffect(() => { captureAffiliateRefFromUrl(window.location.search); }, []);
+
+  // If the logged-in viewer is themselves an approved affiliate, show them
+  // their own shareable link for this course.
+  useEffect(() => {
+    if (!token) { setAffiliateCode(null); return; }
+    fetch(`${API}/affiliates/dashboard/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => setAffiliateCode(d?.affiliate?.status === "approved" ? d.affiliate.affiliate_code : null))
+      .catch(() => setAffiliateCode(null));
+  }, [token]);
 
   /* Check enrollment status once course is loaded and user is logged in */
   useEffect(() => {
@@ -958,7 +831,11 @@ export default function LMACourseDetailPage() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(r => r.ok ? r.json() : { enrolled: false })
-      .then(d => { setEnrolled(d.enrolled ?? false); })
+      .then(d => {
+        setEnrolled(d.enrolled ?? false);
+        setEnrollProgress(d.progress ?? 0);
+        setCertificate(d.certificate ?? null);
+      })
       .catch(() => {})
       .finally(() => setEnrollStatusChecked(true));
   }, [id, token]);
@@ -1058,6 +935,16 @@ export default function LMACourseDetailPage() {
     setTimeout(() => tabNavRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   }, []);
 
+  // Landing here via ?tab=curriculum (e.g. the lesson player's "back to
+  // course" link) should drop the visitor right into the curriculum list —
+  // not just select the tab while leaving them scrolled at the hero.
+  const didAutoScrollToCurriculum = useRef(false);
+  useEffect(() => {
+    if (initialTab !== "curriculum" || didAutoScrollToCurriculum.current || !course) return;
+    didAutoScrollToCurriculum.current = true;
+    setTimeout(() => tabNavRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+  }, [initialTab, course]);
+
   useEffect(() => {
     if (!course) return;
     const words: string[] = course.tech_stack ?? [];
@@ -1081,6 +968,12 @@ export default function LMACourseDetailPage() {
   };
 
   const totalLessons = course?.modules?.reduce((s: number, m: any) => s + (m.lessons?.length ?? 0), 0) ?? 0;
+  // The course's own instructor sees everything unlocked, no enrollment
+  // required — set server-side (CourseDetailSerializer.is_instructor), not
+  // derived from the generic "can this account access instructor mode"
+  // flag above, so an instructor never gets this on someone else's course.
+  const isOwner = !!course?.is_instructor;
+  const handleManageCourse = () => navigate("/lma/instructor/dashboard");
 
   if (loading) return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", background: CREAM }}>
@@ -1120,7 +1013,18 @@ export default function LMACourseDetailPage() {
             </div>
           )}
         </div>
-        {!enrolled && (
+        {isOwner ? (
+          <button type="button" onClick={handleManageCourse} className="lmacd-shimmer-btn" style={{
+            background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+            color: "#0a0806", fontSize: 13, fontWeight: 800,
+            border: "none", borderRadius: 9, padding: "9px 22px",
+            cursor: "pointer", flexShrink: 0, fontFamily: FF,
+            boxShadow: "0 2px 0 rgba(139,31,23,0.40)",
+            position: "relative", overflow: "hidden",
+          }}>
+            Manage Course →
+          </button>
+        ) : !enrolled && (
           <button type="button" onClick={handleEnroll} className="lmacd-shimmer-btn" style={{
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             color: "#0a0806", fontSize: 13, fontWeight: 800,
@@ -1278,7 +1182,12 @@ export default function LMACourseDetailPage() {
                 display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 32,
                 animation: prefersReduced ? "none" : "lmacd-fadeUp 0.7s ease 0.60s both",
               }}>
-                {enrolled ? (
+                {isOwner ? (
+                  <button type="button" onClick={handleManageCourse} className="lmacd-enroll-btn">
+                    <i className="fas fa-cog" style={{ fontSize: 13 }} />
+                    Manage Course →
+                  </button>
+                ) : enrolled ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     <span style={{
                       display: "inline-flex", alignItems: "center", gap: 6, width: "fit-content",
@@ -1342,7 +1251,7 @@ export default function LMACourseDetailPage() {
 
             {/* ── Right card column ── */}
             <div className="lmacd-hero-card-col">
-              <HeroCourseCard course={course} totalLessons={totalLessons} enrolled={enrolled} onEnroll={handleEnroll} onPreview={scrollToCurriculum} />
+              <HeroCourseCard course={course} totalLessons={totalLessons} enrolled={enrolled} isOwner={isOwner} onEnroll={handleEnroll} onManage={handleManageCourse} onPreview={scrollToCurriculum} />
             </div>
           </div>
         </div>
@@ -1478,23 +1387,10 @@ export default function LMACourseDetailPage() {
                       toggle={() => toggleModule(i)}
                       revealDelay={Math.min(i * 45, 280)}
                       enrolled={enrolled}
-                      onLessonClick={setSelectedLesson}
+                      isOwner={isOwner}
+                      courseId={id ?? ""}
                     />
                   ))}
-                  {!enrolled && (
-                    <div style={{ marginTop: 24, textAlign: "center" }}>
-                      <button type="button" onClick={handleEnroll} style={{
-                        display: "inline-flex", alignItems: "center", gap: 8,
-                        background: `linear-gradient(135deg,${AMBER},${GOLD})`,
-                        color: "#0a0806", fontSize: 14, fontWeight: 700,
-                        padding: "12px 28px", borderRadius: 10, border: "none", cursor: "pointer",
-                        boxShadow: "0 4px 0 rgba(139,31,23,0.38),0 8px 24px rgba(217,53,34,0.22)",
-                        fontFamily: FF,
-                      }}>
-                        Enroll in this course <i className="fas fa-arrow-right" style={{ fontSize: 12 }} />
-                      </button>
-                    </div>
-                  )}
                 </div>
                 )
               )}
@@ -1507,9 +1403,12 @@ export default function LMACourseDetailPage() {
                 <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 18px", fontFamily: FF }}>Instructors</h3>
                 <InstructorItem
                   name={course.instructor_name ?? "Expert Instructor"}
-                  designation="Senior AI Instructor · XERXEZ Academy"
+                  designation="XERXEZ Academy Instructor"
                   courses={course.instructor_courses_count ?? null}
                   learners={course.instructor_total_learners ?? null}
+                  companyName={course.instructor_company_name || undefined}
+                  bio={course.instructor_bio || undefined}
+                  website={course.instructor_website || undefined}
                 />
                 <button type="button" style={{ fontSize: 12.5, fontWeight: 700, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: FF, padding: 0, marginTop: 4 }}>
                   View all instructors →
@@ -1517,6 +1416,75 @@ export default function LMACourseDetailPage() {
               </div>
 
               <div style={{ height: 1, background: "rgba(0,0,0,0.07)", margin: "0 0 16px" }} />
+
+              <div className="lmacd-sidebar-card">
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", display: "flex", alignItems: "center", gap: 8, fontFamily: FF }}>
+                  <Award size={16} color={GOLD} /> Certificate of Completion
+                </h3>
+                {isOwner ? (
+                  <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.52)", lineHeight: 1.6, margin: 0, fontFamily: FF }}>
+                    Certificates are earned by enrolled students, not by the course instructor.
+                  </p>
+                ) : !enrolled ? (
+                  <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.52)", lineHeight: 1.6, margin: 0, fontFamily: FF }}>
+                    Enroll in this course to earn a certificate.
+                  </p>
+                ) : certificate?.certificate_file ? (
+                  <button type="button" onClick={() => window.open(`${API}/lma/certificates/${certificate.id}/download/`, "_blank")} style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", boxSizing: "border-box",
+                    background: "#10b981", color: "#fff", border: "none", borderRadius: 10, padding: "11px", cursor: "pointer",
+                    fontSize: 13, fontWeight: 700, fontFamily: FF,
+                  }}>
+                    <Download size={14} /> Download Certificate
+                  </button>
+                ) : enrollProgress >= 100 ? (
+                  <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.52)", lineHeight: 1.6, margin: 0, fontFamily: FF }}>
+                    Certificate coming soon — the instructor hasn't uploaded a template yet.
+                  </p>
+                ) : (
+                  <>
+                    <p style={{ fontSize: 12.5, color: "rgba(20,20,19,0.52)", margin: "0 0 10px", fontFamily: FF }}>{enrollProgress}% complete</p>
+                    <div style={{ height: 6, borderRadius: 999, background: "#e5e7eb", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${enrollProgress}%`, background: GOLD, borderRadius: 999 }} />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div style={{ height: 1, background: "rgba(0,0,0,0.07)", margin: "0 0 16px" }} />
+
+              {affiliateCode && (
+                <>
+                  <div className="lmacd-sidebar-card">
+                    <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", display: "flex", alignItems: "center", gap: 8, fontFamily: FF }}>
+                      <Share2 size={15} color={GOLD} /> Your Affiliate Link
+                    </h3>
+                    <div style={{ fontSize: 11, color: "rgba(20,20,19,0.5)", fontFamily: "monospace", background: "#f9f7f4", borderRadius: 8, padding: "8px 10px", marginBottom: 10, wordBreak: "break-all" }}>
+                      {window.location.origin}/lma/courses/{id}?ref={affiliateCode}
+                    </div>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                      <button type="button" onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/lma/courses/${id}?ref=${affiliateCode}`).then(() => { setCopiedAffLink(true); setTimeout(() => setCopiedAffLink(false), 1800); });
+                      }} style={{ display: "flex", alignItems: "center", gap: 5, background: copiedAffLink ? "#10b981" : "#fff", color: copiedAffLink ? "#fff" : "#141413", border: `1.5px solid ${copiedAffLink ? "#10b981" : "rgba(0,0,0,0.12)"}`, borderRadius: 8, padding: "7px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
+                        {copiedAffLink ? <Check size={13} /> : <Copy size={13} />} {copiedAffLink ? "Copied" : "Copy"}
+                      </button>
+                      <button type="button" onClick={() => {
+                        const url = `${window.location.origin}/lma/courses/${id}?ref=${affiliateCode}`;
+                        window.open(`https://wa.me/?text=${encodeURIComponent(`Check out "${course.title}" on XERXEZ Academy: ${url}`)}`, "_blank", "noopener,noreferrer");
+                      }} style={{ background: "#25D366", color: "#fff", border: "none", borderRadius: 8, padding: "7px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
+                        WhatsApp
+                      </button>
+                      <button type="button" onClick={() => {
+                        const url = `${window.location.origin}/lma/courses/${id}?ref=${affiliateCode}`;
+                        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, "_blank", "noopener,noreferrer");
+                      }} style={{ display: "flex", alignItems: "center", gap: 5, background: "#0a66c2", color: "#fff", border: "none", borderRadius: 8, padding: "7px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
+                        <Share2 size={12} /> LinkedIn
+                      </button>
+                    </div>
+                  </div>
+                  <div style={{ height: 1, background: "rgba(0,0,0,0.07)", margin: "0 0 16px" }} />
+                </>
+              )}
 
               <div className="lmacd-sidebar-card">
                 <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 14px", fontFamily: FF }}>Offered by</h3>
@@ -1537,7 +1505,17 @@ export default function LMACourseDetailPage() {
                 <div style={{ fontSize: 30, fontWeight: 900, color: GOLD, marginBottom: 14, fontFamily: FF }}>
                   ₹{course.price?.toLocaleString()}
                 </div>
-                {enrolled ? (
+                {isOwner ? (
+                  <button type="button" onClick={handleManageCourse} style={{
+                    width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                    background: `linear-gradient(135deg,${AMBER},${GOLD})`,
+                    color: "#0a0806", fontSize: 14, fontWeight: 700,
+                    border: "none", borderRadius: 10, padding: "12px", cursor: "pointer",
+                    boxShadow: "0 4px 0 rgba(139,31,23,0.45)", fontFamily: FF,
+                  }}>
+                    Manage Course →
+                  </button>
+                ) : enrolled ? (
                   <>
                     <span style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
@@ -1679,17 +1657,6 @@ export default function LMACourseDetailPage() {
           token={token}
           onClose={() => setShowPay(false)}
           onEnrolled={() => { setEnrolled(true); setTimeout(() => navigate("/lma/student/dashboard"), 2000); }}
-        />
-      )}
-
-      {selectedLesson && (
-        <LessonModal
-          lesson={selectedLesson}
-          enrolled={enrolled}
-          token={token}
-          isInstructor={isInstructor}
-          onClose={() => setSelectedLesson(null)}
-          onEnroll={() => { setSelectedLesson(null); handleEnroll(); }}
         />
       )}
 

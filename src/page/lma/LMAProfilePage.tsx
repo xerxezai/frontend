@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Loader, Eye, EyeOff } from "lucide-react";
 import LMAStudentLayout from "./LMAStudentLayout";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
+import PhoneInput from "../../components/common/PhoneInput";
 
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
@@ -258,7 +259,7 @@ export default function LMAProfilePage() {
                   <input value={email} onChange={e => setEmail(e.target.value)} type="email" style={inputStyle} placeholder="your@email.com" />
                 </Field>
                 <Field label="Phone">
-                  <input value={phone} onChange={e => setPhone(e.target.value)} style={inputStyle} placeholder="+91 XXXXX XXXXX" />
+                  <PhoneInput value={phone} onChange={setPhone} />
                 </Field>
                 <Field label="Bio">
                   <textarea

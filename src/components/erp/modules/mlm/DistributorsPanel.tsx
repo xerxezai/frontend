@@ -4,6 +4,7 @@ import { useERPList, erpDownload } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
 import ERPTable from '../../ERPTable';
 import { FF, inp, lbl, SAVE, CNCL, OVR, CRD, DelDlg, useFmtCurrency, today, DISTRIBUTOR_STATUS, StatusBadge } from './mlmShared';
+import PhoneInput from '../../../common/PhoneInput';
 
 const defDist = { name: '', email: '', phone: '', sponsor: '', status: 'active', joining_date: today() };
 
@@ -119,7 +120,7 @@ export default function DistributorsPanel() {
               <div><label style={lbl}>Name *</label><input value={dF.name} onChange={e => setDF(f => ({ ...f, name: e.target.value }))} style={inp} required /></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div><label style={lbl}>Email</label><input type="email" value={dF.email} onChange={e => setDF(f => ({ ...f, email: e.target.value }))} style={inp} /></div>
-                <div><label style={lbl}>Phone</label><input value={dF.phone} onChange={e => setDF(f => ({ ...f, phone: e.target.value }))} style={inp} /></div>
+                <div><label style={lbl}>Phone</label><PhoneInput value={dF.phone} onChange={v => setDF(f => ({ ...f, phone: v }))} /></div>
               </div>
               <div>
                 <label style={lbl}>Sponsor</label>

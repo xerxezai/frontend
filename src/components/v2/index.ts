@@ -41,6 +41,7 @@ export { default as XerxezServiceTemplate, getServiceDetail } from "./04-feature
 export { default as XerxezPortfolio } from "./04-features/portfolio/XerxezPortfolio";
 export { default as XerxezProductsShowcase } from "./04-features/portfolio/XerxezProductsShowcase";
 export { default as XerxezCourses } from "./04-features/training/XerxezCourses";
+export { default as XerxezPartnerCourses } from "./04-features/training/XerxezPartnerCourses";
 export { default as XerxezTrainingCard } from "./04-features/training/XerxezTrainingCard";
 export { default as XerxezContactForm } from "./04-features/contact/XerxezContactForm";
 export { default as XerxezCareersForm, type Position } from "./04-features/careers/XerxezCareersForm";

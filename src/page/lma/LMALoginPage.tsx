@@ -22,7 +22,7 @@ const shadow = {
 };
 const FF = "'DM Sans', sans-serif";
 
-type Role = "student" | "instructor";
+type Role = "student" | "instructor" | "affiliate";
 
 // ── count-up value — parses the leading number out of a stat string and
 //    animates it from 0 once `trigger` flips true; non-numeric strings
@@ -232,6 +232,7 @@ export default function LMALoginPage() {
   const [params] = useSearchParams();
   const redirect = params.get("redirect") || "/lma/student/dashboard";
   const action   = params.get("action")   || "";
+  const expired  = params.get("expired")  === "1";
 
   const [step, setStep]         = useState<1 | 2>(1);
   const [role, setRole]         = useState<Role | null>(null);
@@ -239,7 +240,10 @@ export default function LMALoginPage() {
   const [password, setPassword] = useState("");
   const [showPw, setShowPw]     = useState(false);
   const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState("");
+  // Pre-filled from ?expired=1 — set by LMAStudentLayout/LMAInstructorDashboard
+  // when a silent token refresh genuinely fails (idle 8+ hours), as opposed
+  // to a first-time visitor who's never logged in and sees no message here.
+  const [error, setError]       = useState(expired ? "Your session has expired. Please login again." : "");
   const [remember, setRemember] = useState(false);
   const [shaking, setShaking]   = useState(false);
   const [slideDir, setSlideDir] = useState<"fwd" | "bck">("fwd");
@@ -279,11 +283,27 @@ export default function LMALoginPage() {
       localStorage.setItem("lma_can_instructor",   String(data.can_access_instructor));
       localStorage.setItem("lma_instructor_level", data.instructor_level || "regular");
       localStorage.setItem("lma_name",             data.name);
+
+      if (role === "affiliate") {
+        if (data.affiliate_status === "approved") {
+          navigate("/lma/affiliate/dashboard", { replace: true });
+        } else if (data.affiliate_status === "pending") {
+          setError("Your application is pending approval.");
+        } else if (data.affiliate_status === "rejected") {
+          setError("Your application was rejected.");
+        } else {
+          setError("No affiliate account found for this login.");
+        }
+        return;
+      }
+
       const level = data.instructor_level || "regular";
       if (level === "super") {
         navigate("/home", { replace: true });
       } else if (data.lma_role === "instructor" && level === "regular") {
         navigate("/lma/instructor/dashboard", { replace: true });
+      } else if (data.is_affiliate === true) {
+        navigate("/lma/affiliate/dashboard", { replace: true });
       } else if (data.can_access_student === true) {
         navigate("/lma/student/dashboard", { replace: true });
       } else {
@@ -448,9 +468,12 @@ export default function LMALoginPage() {
                   </div>
                   <Hr />
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
-                    {(["student", "instructor"] as Role[]).map(r => {
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 16 }}>
+                    {(["student", "instructor", "affiliate"] as Role[]).map(r => {
                       const sel = role === r;
+                      const icon = r === "student" ? "fas fa-graduation-cap" : r === "instructor" ? "fas fa-chalkboard-teacher" : "fas fa-link";
+                      const title = r === "student" ? "Student" : r === "instructor" ? "Instructor" : "Affiliate";
+                      const desc = r === "student" ? "Access courses & progress" : r === "instructor" ? "Create & manage courses" : "Track links, clicks & earnings";
                       return (
                         <button
                           key={r}
@@ -458,17 +481,17 @@ export default function LMALoginPage() {
                           className={`lma-role-btn${sel ? " lma-role-selected" : ""}`}
                           style={{
                             border: `1.5px solid ${sel ? C.orange : "rgba(0,0,0,0.11)"}`,
-                            borderRadius: 12, padding: "18px 14px", cursor: "pointer",
+                            borderRadius: 12, padding: "16px 12px", cursor: "pointer",
                             background: sel ? C.orangeLight : C.white,
                             textAlign: "left", outline: "none",
                             boxShadow: sel ? `0 0 0 3px rgba(217,53,34,0.14), ${shadow.card}` : shadow.card,
                           }}
                         >
-                          <div style={{ width: 36, height: 36, borderRadius: 10, marginBottom: 10, background: sel ? C.orangeGrad : "linear-gradient(145deg,#e2e8f0,#cbd5e1)", boxShadow: sel ? shadow.badge : "0 2px 0 rgba(0,0,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", transition: "background 180ms, box-shadow 180ms" }}>
-                            <i className={r === "student" ? "fas fa-graduation-cap" : "fas fa-chalkboard-teacher"} style={{ color: "#fff", fontSize: 14 }} />
+                          <div style={{ width: 32, height: 32, borderRadius: 9, marginBottom: 9, background: sel ? C.orangeGrad : "linear-gradient(145deg,#e2e8f0,#cbd5e1)", boxShadow: sel ? shadow.badge : "0 2px 0 rgba(0,0,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", transition: "background 180ms, box-shadow 180ms" }}>
+                            <i className={icon} style={{ color: "#fff", fontSize: 13 }} />
                           </div>
-                          <div style={{ fontSize: 14, fontWeight: 700, color: C.dark, marginBottom: 3, fontFamily: FF }}>{r === "student" ? "Student" : "Instructor"}</div>
-                          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.4, fontFamily: FF }}>{r === "student" ? "Access courses & progress" : "Create & manage courses"}</div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: C.dark, marginBottom: 3, fontFamily: FF }}>{title}</div>
+                          <div style={{ fontSize: 10.5, color: C.muted, lineHeight: 1.4, fontFamily: FF }}>{desc}</div>
                         </button>
                       );
                     })}
@@ -493,10 +516,10 @@ export default function LMALoginPage() {
                 <>
                   <div style={{ textAlign: "center", marginBottom: 14 }}>
                     <h2 style={{ color: C.dark, fontWeight: 800, fontSize: 20, margin: "0 0 4px", fontFamily: FF, letterSpacing: "-0.02em" }}>
-                      {role === "student" ? "XERXEZ Academy" : "Instructor Portal"}
+                      {role === "student" ? "XERXEZ Academy" : role === "instructor" ? "Instructor Portal" : "Affiliate Portal"}
                     </h2>
                     <p style={{ color: C.muted, fontSize: 12.5, margin: 0, fontFamily: FF }}>
-                      {role === "student" ? "Sign in to access your courses" : "Sign in to manage your courses"}
+                      {role === "student" ? "Sign in to access your courses" : role === "instructor" ? "Sign in to manage your courses" : "Sign in to track your links & earnings"}
                     </p>
                   </div>
                   <Hr />
@@ -597,7 +620,7 @@ export default function LMALoginPage() {
                         </Link>
                       </div>
                     </div>
-                  ) : (
+                  ) : role === "instructor" ? (
                     <div style={{ textAlign: "center", marginBottom: 2 }}>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: C.muted, fontFamily: FF }}>
                         <i className="fas fa-shield-alt" style={{ color: C.orange, fontSize: 11 }} />
@@ -616,6 +639,29 @@ export default function LMALoginPage() {
                           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.gap = "5px"; (e.currentTarget as HTMLElement).style.opacity = "1"; }}
                         >
                           Want to teach? Apply as Instructor
+                          <i className="fas fa-arrow-right" style={{ fontSize: 10 }} />
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center", marginBottom: 2 }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: C.muted, fontFamily: FF }}>
+                        <i className="fas fa-shield-alt" style={{ color: C.orange, fontSize: 11 }} />
+                        Access restricted to approved affiliates only
+                      </span>
+                      <div style={{ marginTop: 10 }}>
+                        <Link
+                          to="/lma/affiliate/apply"
+                          style={{
+                            fontSize: 12.5, color: C.orange, fontWeight: 700,
+                            fontFamily: FF, textDecoration: "none",
+                            display: "inline-flex", alignItems: "center", gap: 5,
+                            transition: "gap 180ms, opacity 180ms",
+                          }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.gap = "8px"; (e.currentTarget as HTMLElement).style.opacity = "0.82"; }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.gap = "5px"; (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                        >
+                          Want to promote our courses? Apply as Affiliate
                           <i className="fas fa-arrow-right" style={{ fontSize: 10 }} />
                         </Link>
                       </div>
