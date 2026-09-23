@@ -394,13 +394,20 @@ export default function LMARegisterPage() {
 
             <ErrBanner msg={err} />
 
+            {/* Decoy fields — Chrome ignores autoComplete="off" on real
+                inputs and autofills them anyway, but it will target the
+                first text/password inputs it finds. These invisible ones
+                absorb that autofill instead of the real fields below. */}
+            <input type="text" name="fake-username" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+            <input type="password" name="fake-password" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+
             {/* Full name */}
             <div style={{ marginBottom: 14 }}>
               <label style={labelCss}>Full name</label>
               <div style={InputRow({ foc: focName })}>
                 <InputBadge icon="user" focused={focName} />
                 <input
-                  type="text" value={name} placeholder="Your full name"
+                  type="text" value={name} placeholder="Your full name" autoComplete="off"
                   onChange={e => setName(e.target.value)}
                   onFocus={() => setFocName(true)} onBlur={() => setFocName(false)}
                   style={iCss()}
@@ -415,7 +422,7 @@ export default function LMARegisterPage() {
               <div style={InputRow({ foc: focEmail })}>
                 <InputBadge icon="envelope" focused={focEmail} />
                 <input
-                  type="email" value={email} placeholder="you@example.com"
+                  type="email" value={email} placeholder="you@example.com" autoComplete="off"
                   onChange={e => setEmail(e.target.value)}
                   onFocus={() => setFocEmail(true)} onBlur={() => setFocEmail(false)}
                   style={iCss()}
@@ -430,7 +437,7 @@ export default function LMARegisterPage() {
               <div style={InputRow({ foc: focPw })}>
                 <InputBadge icon="lock" focused={focPw} />
                 <input
-                  type={showPw ? "text" : "password"} value={pw} placeholder="At least 6 characters"
+                  type={showPw ? "text" : "password"} value={pw} placeholder="At least 6 characters" autoComplete="new-password"
                   onChange={e => setPw(e.target.value)}
                   onFocus={() => setFocPw(true)} onBlur={() => setFocPw(false)}
                   style={iCss(4)}
@@ -449,7 +456,7 @@ export default function LMARegisterPage() {
               <div style={InputRow({ foc: focCf })}>
                 <InputBadge icon="lock" focused={focCf} />
                 <input
-                  type={showCf ? "text" : "password"} value={cf} placeholder="Re-enter your password"
+                  type={showCf ? "text" : "password"} value={cf} placeholder="Re-enter your password" autoComplete="new-password"
                   onChange={e => setCf(e.target.value)}
                   onFocus={() => setFocCf(true)} onBlur={() => setFocCf(false)}
                   style={iCss(4)}

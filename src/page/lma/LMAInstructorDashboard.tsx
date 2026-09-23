@@ -944,7 +944,7 @@ function DashboardView({ data, earningsChart, onGrade, onManage, onCreate, isSup
                     <tr key={c.id} style={{ borderBottom: i < courses.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
                       <td style={{ padding: "10px 16px", fontSize: 12.5, fontWeight: 600, color: "#fff", fontFamily: FF }}>{c.title}</td>
                       <td style={{ padding: "10px 16px", fontSize: 12.5, color: "rgba(255,255,255,0.70)", fontFamily: FF }}>{(c.total_students ?? 0).toLocaleString()}</td>
-                      <td style={{ padding: "10px 16px", fontSize: 12.5, fontWeight: 700, color: GOLD, fontFamily: FF }}>₹{((c.total_students ?? 0) * (parseFloat(c.price) ?? 0) * 0.7).toLocaleString()}</td>
+                      <td style={{ padding: "10px 16px", fontSize: 12.5, fontWeight: 700, color: GOLD, fontFamily: FF }}>₹{((c.total_students ?? 0) * (parseFloat(c.price) ?? 0)).toLocaleString()}</td>
                       <td style={{ padding: "10px 16px", fontSize: 12.5, color: "rgba(255,255,255,0.70)", fontFamily: FF }}>
                         {c.rating ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Star size={11} color={GOLD} fill={GOLD} />{c.rating}</span> : "—"}
                       </td>
@@ -1110,7 +1110,7 @@ function CoursesView({ courses, loading, onEdit, onManage, onDelete, onCreate, o
                   </td>
                   {isSuperInstructor && (
                   <td style={{ padding: "13px 16px", fontSize: 13, fontWeight: 700, color: "#141413", fontFamily: FF }}>
-                    ₹{((c.total_students ?? 0) * (parseFloat(c.price) ?? 0) * 0.7).toLocaleString()}
+                    ₹{((c.total_students ?? 0) * (parseFloat(c.price) ?? 0)).toLocaleString()}
                   </td>
                   )}
                   <td style={{ padding: "13px 16px" }}>
@@ -1648,7 +1648,7 @@ function EarningsView({ data, earningsChart }: { data: any; earningsChart: any[]
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
             <thead>
               <tr style={{ background: "#f9f7f4", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-                {["Course", "Students", "Price", "Revenue (70%)"].map(h => (
+                {["Course", "Students", "Price", "Revenue"].map(h => (
                   <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 10.5, fontWeight: 700, color: "rgba(20,20,19,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FF }}>{h}</th>
                 ))}
               </tr>
@@ -1660,7 +1660,7 @@ function EarningsView({ data, earningsChart }: { data: any; earningsChart: any[]
                   <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413" }}>{(c.total_students ?? 0).toLocaleString()}</td>
                   <td style={{ padding: "13px 16px", fontSize: 13, color: "#141413" }}>₹{parseFloat(c.price ?? 0).toLocaleString()}</td>
                   <td style={{ padding: "13px 16px", fontSize: 14, fontWeight: 800, color: "#8b5cf6", fontFamily: FF }}>
-                    ₹{((c.total_students ?? 0) * parseFloat(c.price ?? 0) * 0.7).toLocaleString()}
+                    ₹{((c.total_students ?? 0) * parseFloat(c.price ?? 0)).toLocaleString()}
                   </td>
                 </tr>
               ))}
@@ -2139,6 +2139,11 @@ function ManageInstructorsView({ token, showToast }: { token: string; showToast:
       {showForm && (
         <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 20, animation: "lmai-pageIn 0.22s ease both" }}>
           <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px", fontFamily: FF }}>New Instructor</h3>
+          {/* Decoy fields — Chrome autofills the first text/password inputs
+              it finds regardless of autoComplete="off"; these invisible ones
+              absorb that instead of the real fields below. */}
+          <input type="text" name="fake-username" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+          <input type="password" name="fake-password" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
             <Field label="Full Name"><input autoComplete="off" style={inputStyle} value={form.name} placeholder="e.g. Sarah Khan" onChange={e => setForm(f => ({ ...f, name: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>
             <Field label="Email"><input type="email" autoComplete="off" style={inputStyle} value={form.email} placeholder="sarah@company.com" onChange={e => setForm(f => ({ ...f, email: e.target.value }))} onFocus={focusGold} onBlur={blurGold} /></Field>

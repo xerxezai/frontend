@@ -36,13 +36,16 @@ const IOT = [
 ];
 
 // Column 4 — Industries → the /v2 industry detail routes.
-const INDUSTRIES = [
+const INDUSTRIES: { to?: string; href?: string; label: string; accent?: boolean }[] = [
   { to: "/industries/epc-engineering",     label: "EPC & Engineering" },
   { to: "/industries/oil-gas",             label: "Oil & Gas" },
   { to: "/industries/construction",        label: "Construction" },
   { to: "/industries/manufacturing",       label: "Manufacturing" },
   { to: "/industries/facility-management", label: "Facility Management" },
   { to: "/industries/healthcare",          label: "Healthcare" },
+  // Referral promo — external, red accent so it stands out from the plain
+  // nav links above it. Opens in a new tab since it leaves the XERXEZ site.
+  { href: "https://app.getstake.com/rewards?c=MOHAMMED30798&n=Mohammed", label: "Invest in Real Estate →", accent: true },
 ];
 
 // Column 5 — Company.
@@ -53,8 +56,6 @@ const COMPANY = [
   { to: "/training",        label: "AI Training" },
   { to: "/careers",         label: "Careers" },
   { to: "/contact",         label: "Contact" },
-  { to: "/partner/training",   label: "Become a Partner" },
-  { to: "/lma/affiliate/apply", label: "Become an Affiliate" },
   { to: "/partner-with-us",     label: "Partner with Us" },
 ];
 
@@ -84,14 +85,29 @@ const hov = {
   onMouseOut:  (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.color = "rgba(255,255,255,0.65)"),
 };
 
-// One link column — heading + a tight (6px gap) list of links.
-const LinkColumn = ({ heading, items }: { heading: string; items: { to: string; label: string }[] }) => (
+// One link column — heading + a tight (6px gap) list of links. Most items
+// are internal routes (`to`); an item can instead carry an external `href`
+// (opens in a new tab) and `accent` (red text) for a promo link like Stake.
+const LinkColumn = ({ heading, items }: { heading: string; items: { to?: string; href?: string; label: string; accent?: boolean }[] }) => (
   <div className="col-lg-2 col-md-4 col-6">
     <h4 style={colHead}>{heading}</h4>
     <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 6 }}>
-      {items.map((it) => (
-        <li key={it.to}><Link to={it.to} style={linkStyle} {...hov}>{it.label}</Link></li>
-      ))}
+      {items.map((it) => {
+        const style: React.CSSProperties = it.accent ? { ...linkStyle, color: T.redLight, fontWeight: 700 } : linkStyle;
+        const accentHov = it.accent ? {
+          onMouseOver: (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.color = "#ffffff"),
+          onMouseOut:  (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.color = T.redLight),
+        } : hov;
+        return (
+          <li key={it.href ?? it.to}>
+            {it.href ? (
+              <a href={it.href} target="_blank" rel="noreferrer" style={style} {...accentHov}>{it.label}</a>
+            ) : (
+              <Link to={it.to!} style={style} {...accentHov}>{it.label}</Link>
+            )}
+          </li>
+        );
+      })}
     </ul>
   </div>
 );

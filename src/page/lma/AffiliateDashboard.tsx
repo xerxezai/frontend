@@ -17,9 +17,14 @@ interface AffiliateData {
   company_name: string; website: string; status: string; commission_rate: string;
   total_clicks: number; total_conversions: number; total_earnings: string;
   bank_details: Record<string, string>;
+  // Set only for a staff/superuser account with no Affiliate row of its
+  // own — the backend then serves a platform-wide aggregate instead of a
+  // personal profile (see apps.affiliates.views._admin_affiliate_view).
+  is_admin_view?: boolean;
 }
 interface Commission {
   id: number; course_title: string; commission_amount: string; status: string; created_at: string;
+  affiliate_name?: string; affiliate_code?: string;
 }
 interface LinkCourse { id: number; title: string; price: string }
 
@@ -59,6 +64,20 @@ export default function AffiliateDashboard() {
   const [bank, setBank] = useState<Record<string, string>>({ account_holder: "", account_number: "", ifsc: "", bank_name: "" });
   const [savingBank, setSavingBank] = useState(false);
   const [toast, setToast] = useState("");
+  // ADMIN nav (All Affiliates / Affiliate Commissions) is shown only once the
+  // backend confirms is_staff/is_superuser via a live /lma/profile/ request —
+  // never from affiliate.is_admin_view (a different, narrower signal: that
+  // flag means "no personal Affiliate row", not "is staff") and never from
+  // anything cached client-side. Same pattern as LMAStudentLayout.tsx /
+  // LMAInstructorDashboard.tsx's ADMIN sidebar sections.
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${API}/lma/profile/`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { if (d) setIsAdmin(!!(d.is_staff || d.is_superuser)); })
+      .catch(() => {});
+  }, [token]);
 
   const load = useCallback(() => {
     if (!token) { navigate("/lma/login"); return; }
@@ -131,8 +150,21 @@ export default function AffiliateDashboard() {
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ color: "#fff", fontSize: 14, fontWeight: 700 }}>{affiliate.full_name}</div>
-          <div style={{ color: GOLD, fontSize: 11.5, fontWeight: 700 }}>Affiliate · {affiliate.affiliate_code}</div>
+          <div style={{ color: GOLD, fontSize: 11.5, fontWeight: 700 }}>
+            {affiliate.is_admin_view ? "Admin View · All Affiliates" : `Affiliate · ${affiliate.affiliate_code}`}
+          </div>
         </div>
+        {isAdmin && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.35)", letterSpacing: "0.08em" }}>ADMIN</span>
+            <button type="button" onClick={() => navigate("/lma/admin/affiliates")} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: FF }}>
+              <Handshake size={13} /> All Affiliates
+            </button>
+            <button type="button" onClick={() => navigate("/lma/admin/affiliate-commissions")} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: FF }}>
+              <Wallet size={13} /> Affiliate Commissions
+            </button>
+          </div>
+        )}
         <button type="button" onClick={logout} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.75)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: FF }}>
           <LogOut size={13} /> Logout
         </button>
@@ -147,44 +179,56 @@ export default function AffiliateDashboard() {
           <StatCard label="Total Earned" value={`₹${Number(affiliate.total_earnings).toLocaleString()}`} icon={Wallet} color="#8b5cf6" />
         </div>
 
-        {/* My Links */}
-        <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 24 }}>
-          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>My Links</h3>
-          {links.length === 0 ? (
-            <p style={{ color: "#9ca3af", fontSize: 13, fontFamily: FF }}>No published courses to promote yet.</p>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {links.map(c => (
-                <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", background: "#f9f7f4", borderRadius: 10, flexWrap: "wrap" }}>
-                  <div style={{ flex: 1, minWidth: 160 }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: "#141413" }}>{c.title}</div>
-                    <div style={{ fontSize: 11, color: "#9ca3af", fontFamily: "monospace" }}>/lma/courses/{c.id}?ref={affiliate.affiliate_code}</div>
+        {/* My Links — admin view has no personal referral code, so it just
+            lists the courses without copy/share actions. */}
+        {!affiliate.is_admin_view && (
+          <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, marginBottom: 24 }}>
+            <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>My Links</h3>
+            {links.length === 0 ? (
+              <p style={{ color: "#9ca3af", fontSize: 13, fontFamily: FF }}>No published courses to promote yet.</p>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {links.map(c => (
+                  <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", background: "#f9f7f4", borderRadius: 10, flexWrap: "wrap" }}>
+                    <div style={{ flex: 1, minWidth: 160 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: "#141413" }}>{c.title}</div>
+                      <a
+                        href={`${window.location.origin}/lma/courses/${c.id}?ref=${affiliate.affiliate_code}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: 11, color: "#2563eb", fontFamily: "monospace", textDecoration: "none" }}
+                      >
+                        /lma/courses/{c.id}?ref={affiliate.affiliate_code}
+                      </a>
+                    </div>
+                    <button type="button" onClick={() => copyLink(c.id)} style={{ display: "flex", alignItems: "center", gap: 5, background: copiedId === c.id ? GREEN : "#fff", color: copiedId === c.id ? "#fff" : "#141413", border: "1.5px solid " + (copiedId === c.id ? GREEN : "rgba(0,0,0,0.12)"), borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
+                      {copiedId === c.id ? <Check size={13} /> : <Copy size={13} />} {copiedId === c.id ? "Copied" : "Copy"}
+                    </button>
+                    <button type="button" onClick={() => shareLink(c.id, c.title, "whatsapp")} style={{ background: "#25D366", color: "#fff", border: "none", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>WhatsApp</button>
+                    <button type="button" onClick={() => shareLink(c.id, c.title, "linkedin")} style={{ display: "flex", alignItems: "center", gap: 5, background: "#0a66c2", color: "#fff", border: "none", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
+                      <Share2 size={12} /> LinkedIn
+                    </button>
                   </div>
-                  <button type="button" onClick={() => copyLink(c.id)} style={{ display: "flex", alignItems: "center", gap: 5, background: copiedId === c.id ? GREEN : "#fff", color: copiedId === c.id ? "#fff" : "#141413", border: "1.5px solid " + (copiedId === c.id ? GREEN : "rgba(0,0,0,0.12)"), borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
-                    {copiedId === c.id ? <Check size={13} /> : <Copy size={13} />} {copiedId === c.id ? "Copied" : "Copy"}
-                  </button>
-                  <button type="button" onClick={() => shareLink(c.id, c.title, "whatsapp")} style={{ background: "#25D366", color: "#fff", border: "none", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>WhatsApp</button>
-                  <button type="button" onClick={() => shareLink(c.id, c.title, "linkedin")} style={{ display: "flex", alignItems: "center", gap: 5, background: "#0a66c2", color: "#fff", border: "none", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FF }}>
-                    <Share2 size={12} /> LinkedIn
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 24 }} className="aff-2col">
           {/* Commissions */}
           <div style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
-            <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>Commissions</h3>
+            <h3 style={{ fontSize: 15, fontWeight: 800, color: "#141413", margin: "0 0 16px" }}>
+              {affiliate.is_admin_view ? "All Commissions" : "Commissions"}
+            </h3>
             {commissions.length === 0 ? (
-              <p style={{ color: "#9ca3af", fontSize: 13, fontFamily: FF }}>No commissions yet — share your links to start earning.</p>
+              <p style={{ color: "#9ca3af", fontSize: 13, fontFamily: FF }}>No commissions yet{affiliate.is_admin_view ? "." : " — share your links to start earning."}</p>
             ) : (
               <div style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 420 }}>
                   <thead>
                     <tr style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-                      {["Course", "Amount", "Status", "Date"].map(h => (
+                      {[...(affiliate.is_admin_view ? ["Affiliate"] : []), "Course", "Amount", "Status", "Date"].map(h => (
                         <th key={h} style={{ textAlign: "left", padding: "8px 10px", fontSize: 10.5, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>{h}</th>
                       ))}
                     </tr>
@@ -192,6 +236,9 @@ export default function AffiliateDashboard() {
                   <tbody>
                     {commissions.map(c => (
                       <tr key={c.id} style={{ borderBottom: "1px solid rgba(0,0,0,0.04)" }}>
+                        {affiliate.is_admin_view && (
+                          <td style={{ padding: "10px", fontSize: 12, color: "#6b7280" }}>{c.affiliate_name} ({c.affiliate_code})</td>
+                        )}
                         <td style={{ padding: "10px", fontSize: 12.5, color: "#141413", fontWeight: 600 }}>{c.course_title}</td>
                         <td style={{ padding: "10px", fontSize: 12.5, fontWeight: 700, color: GOLD }}>₹{Number(c.commission_amount).toLocaleString()}</td>
                         <td style={{ padding: "10px" }}>
@@ -206,7 +253,17 @@ export default function AffiliateDashboard() {
             )}
           </div>
 
-          {/* Bank details + profile */}
+          {/* Bank details + profile — admin view has neither (it's not a
+              real affiliate account), so it gets a short explainer instead. */}
+          {affiliate.is_admin_view ? (
+            <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD, alignSelf: "flex-start" }}>
+              <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: "0 0 10px" }}>Admin View</h3>
+              <p style={{ fontSize: 12.5, color: "#6b7280", lineHeight: 1.6, margin: 0 }}>
+                You're viewing platform-wide affiliate totals as a staff account. Manage individual affiliates
+                and payouts from the admin Affiliates pages.
+              </p>
+            </div>
+          ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid rgba(0,0,0,0.07)", boxShadow: BCARD }}>
               <h3 style={{ fontSize: 14, fontWeight: 800, color: "#141413", margin: "0 0 14px", display: "flex", alignItems: "center", gap: 7 }}>
@@ -229,6 +286,7 @@ export default function AffiliateDashboard() {
               <div style={{ fontSize: 12.5, color: "#374151", display: "flex", alignItems: "center", gap: 7 }}>Commission rate: <strong>{affiliate.commission_rate}%</strong></div>
             </div>
           </div>
+          )}
         </div>
       </div>
 

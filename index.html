@@ -29,7 +29,10 @@
        which the browser reports under the `blob:` scheme. `frame-src`
        includes the backend origins for the inline PDF viewer (`<iframe src=
        {document_file}>` in LMALessonPlayer) — without it every uploaded
-       document embed is silently blank.
+       document embed is silently blank. `checkout.razorpay.com` is on
+       script-src (loads their checkout.js widget) and `api.razorpay.com` /
+       `checkout.razorpay.com` are on connect-src (the widget's own XHR calls
+       during payment) — needed for LMA course enrollment payments.
        Note: `frame-ancestors` is intentionally NOT set here — CSP
        delivered via <meta> ignores frame-ancestors/report-uri/sandbox (spec
        requires a real HTTP header for those); clickjacking protection
@@ -37,13 +40,13 @@
        responses. -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self';
+    script-src 'self' https://checkout.razorpay.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' data: https://fonts.gstatic.com;
     img-src 'self' data: blob: https: http://localhost:8000 http://127.0.0.1:8000;
     media-src 'self' blob: https: http://localhost:8000 http://127.0.0.1:8000;
     frame-src 'self' blob: https: http://localhost:8000 http://127.0.0.1:8000;
-    connect-src 'self' https://backend-production-b9f2.up.railway.app http://localhost:8000 http://127.0.0.1:8000 https://ipapi.co blob: ws://localhost:5173 wss://localhost:5173;
+    connect-src 'self' https://backend-production-b9f2.up.railway.app http://localhost:8000 http://127.0.0.1:8000 https://ipapi.co https://api.razorpay.com https://checkout.razorpay.com blob: ws://localhost:5173 wss://localhost:5173;
     object-src 'none';
     base-uri 'self';
     form-action 'self';

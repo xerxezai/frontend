@@ -33,6 +33,7 @@ export { default as XerxezIndustries } from "./03-sections/industries/XerxezIndu
 export { default as XerxezProcess } from "./03-sections/process/XerxezProcess";
 export { default as XerxezTrustedBy } from "./03-sections/trusted/XerxezTrustedBy";
 export { default as XerxezTechStack, XerxezTechLogoStrip, LOGOS } from "./03-sections/trusted/XerxezTechStack";
+export { default as XerxezStakePromo, STAKE_REFERRAL_URL } from "./03-sections/stake/XerxezStakePromo";
 
 // ── 04-features ─────────────────────────────────────────────────────────────
 export { default as XerxezServicesGrid } from "./04-features/services/XerxezServicesGrid";

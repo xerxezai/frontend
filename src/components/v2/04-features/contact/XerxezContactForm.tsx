@@ -556,7 +556,7 @@ const XerxezContactForm = () => {
           </V2FormSuccess>
         ) : (
           // The actual form
-          <form onSubmit={handleSubmit} noValidate>{/* noValidate → our handleSubmit validation runs */}
+          <form onSubmit={handleSubmit} noValidate autoComplete="off">{/* noValidate → our handleSubmit validation runs */}
             {/* deep-link banner: "Enquiring about: <service>" */}
             {showServiceBanner && preselectedService && (
               <div style={{
@@ -587,12 +587,12 @@ const XerxezContactForm = () => {
             {stepHead(1, "Personal Information")}
             <div className="row g-3" style={{ marginBottom: 22 }}>
               <V2Field label="Full Name" required htmlFor="v2c-name" error={errors.fullName}>
-                <input id="v2c-name" type="text" placeholder="John Smith" value={form.fullName} disabled={sending}
+                <input id="v2c-name" type="text" placeholder="John Smith" value={form.fullName} disabled={sending} autoComplete="off"
                   aria-invalid={!!errors.fullName}
                   style={ctrl("fullName")} {...focusProps("fullName")} onChange={(e) => set("fullName", e.target.value)} />
               </V2Field>
               <V2Field label="Email Address" required htmlFor="v2c-email" error={errors.email}>
-                <input id="v2c-email" type="email" placeholder="john@company.com" value={form.email} disabled={sending}
+                <input id="v2c-email" type="email" placeholder="john@company.com" value={form.email} disabled={sending} autoComplete="off"
                   aria-invalid={!!errors.email}
                   style={ctrl("email")} {...focusProps("email")} onChange={(e) => set("email", e.target.value)} />
               </V2Field>

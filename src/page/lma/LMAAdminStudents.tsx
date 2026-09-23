@@ -452,6 +452,11 @@ function CreateUserModal({ token, onClose, onCreated }: {
           stops the browser from offering to autofill the logged-in admin's
           own saved credentials into this (different person's) account form. */}
       <form onSubmit={submit} autoComplete="off">
+        {/* Decoy fields — Chrome autofills the first text/password inputs it
+            finds regardless of autoComplete="off"; these invisible ones
+            absorb that instead of the real fields below. */}
+        <input type="text" name="fake-username" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+        <input type="password" name="fake-password" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
         <Field label="Full Name">
           <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Priya Sharma" autoComplete="off" onFocus={focusGold} onBlur={blurGold} required />
         </Field>

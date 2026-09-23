@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Handshake, Check, ArrowRight, Building2, Globe, Users, Megaphone } from "lucide-react";
+import { Handshake, Check, X, ArrowRight, Building2, Globe, Users, Megaphone, Loader2, Lock, Eye, EyeOff } from "lucide-react";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 
 const GOLD = "#D93522";
@@ -27,14 +27,48 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+type CodeStatus = "idle" | "too_short" | "invalid_chars" | "checking" | "available" | "taken" | "check_failed";
+
 export default function AffiliateApplyPage() {
   const [form, setForm] = useState({
     full_name: "", email: "", affiliate_code: "", company_name: "",
     website: "", promotion_method: "", audience_size: AUDIENCE_SIZES[0],
+    password: "", confirm_password: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
+  const [showPw, setShowPw] = useState(false);
+
+  // Real-time affiliate-code availability — the applicant picks this
+  // themselves (it's their brand/name, not assigned to them), so they need
+  // to see right away whether their choice is free to take.
+  const [codeStatus, setCodeStatus] = useState<CodeStatus>("idle");
+  const codeCheckTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const codeCheckId = useRef(0);
+
+  useEffect(() => {
+    const code = form.affiliate_code;
+    if (codeCheckTimer.current) clearTimeout(codeCheckTimer.current);
+
+    if (!code) { setCodeStatus("idle"); return; }
+    if (code.length < 3) { setCodeStatus("too_short"); return; }
+    if (!/^[A-Z0-9]+$/.test(code)) { setCodeStatus("invalid_chars"); return; }
+
+    setCodeStatus("checking");
+    const myCheckId = ++codeCheckId.current;
+    codeCheckTimer.current = setTimeout(() => {
+      fetch(`${API}/affiliates/check-code/?code=${encodeURIComponent(code)}`)
+        .then(r => r.json())
+        .then(d => {
+          if (myCheckId !== codeCheckId.current) return; // a newer keystroke superseded this check
+          setCodeStatus(d.available ? "available" : "taken");
+        })
+        .catch(() => { if (myCheckId === codeCheckId.current) setCodeStatus("check_failed"); });
+    }, 400);
+
+    return () => { if (codeCheckTimer.current) clearTimeout(codeCheckTimer.current); };
+  }, [form.affiliate_code]);
 
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
 
@@ -45,6 +79,15 @@ export default function AffiliateApplyPage() {
     }
     if (!/^[A-Za-z0-9]{3,20}$/.test(form.affiliate_code.trim())) {
       setError("Affiliate code must be 3-20 letters/numbers, e.g. LINUXFOUNDATION."); return;
+    }
+    if (codeStatus === "taken") {
+      setError("That affiliate code is already taken — please choose another."); return;
+    }
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters."); return;
+    }
+    if (form.password !== form.confirm_password) {
+      setError("Passwords don't match."); return;
     }
     setSubmitting(true);
     try {
@@ -95,15 +138,83 @@ export default function AffiliateApplyPage() {
             </div>
           )}
 
+          {/* Decoy fields — Chrome autofills the first text/password inputs
+              it finds regardless of autoComplete="off"; these invisible
+              ones absorb that instead of the real fields below. */}
+          <input type="text" name="fake-username" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+          <input type="password" name="fake-password" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+
           <Field label="Full Name *">
-            <input style={inputStyle} value={form.full_name} onChange={e => set("full_name", e.target.value)} onFocus={focusGold} onBlur={blurGold} placeholder="Jane Doe" />
+            <input style={inputStyle} value={form.full_name} onChange={e => set("full_name", e.target.value)} onFocus={focusGold} onBlur={blurGold} placeholder="Jane Doe" autoComplete="off" />
           </Field>
           <Field label="Email *">
-            <input type="email" style={inputStyle} value={form.email} onChange={e => set("email", e.target.value)} onFocus={focusGold} onBlur={blurGold} placeholder="jane@example.com" />
+            <input type="email" style={inputStyle} value={form.email} onChange={e => set("email", e.target.value)} onFocus={focusGold} onBlur={blurGold} placeholder="jane@example.com" autoComplete="off" />
           </Field>
-          <Field label="Affiliate Code * — this becomes your link, e.g. xerxez.com/lma/courses/1?ref=CODE">
-            <input style={{ ...inputStyle, textTransform: "uppercase" }} value={form.affiliate_code} onChange={e => set("affiliate_code", e.target.value.toUpperCase())} onFocus={focusGold} onBlur={blurGold} placeholder="LINUXFOUNDATION" maxLength={20} />
+          <Field label="Choose Your Affiliate Code *">
+            <div style={{ position: "relative" }}>
+              <input
+                style={{ ...inputStyle, textTransform: "uppercase", paddingRight: 36 }}
+                value={form.affiliate_code}
+                onChange={e => set("affiliate_code", e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
+                onFocus={focusGold} onBlur={blurGold}
+                placeholder="e.g. JOHNSMITH or LINUXFOUNDATION"
+                maxLength={20}
+              />
+              <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", display: "flex", alignItems: "center" }}>
+                {codeStatus === "checking" && <Loader2 size={16} color="rgba(255,255,255,0.45)" style={{ animation: "aa-spin 0.7s linear infinite" }} />}
+                {codeStatus === "available" && <Check size={16} color="#10b981" />}
+                {(codeStatus === "taken" || codeStatus === "invalid_chars") && <X size={16} color="#ef4444" />}
+              </span>
+            </div>
+            <style>{`@keyframes aa-spin { to { transform: rotate(360deg); } }`}</style>
+            {codeStatus === "taken" && (
+              <p style={{ fontSize: 11.5, color: "#f87171", margin: "6px 0 0" }}>❌ This code is already taken — try another.</p>
+            )}
+            {codeStatus === "available" && (
+              <p style={{ fontSize: 11.5, color: "#34d399", margin: "6px 0 0" }}>✅ This code is available!</p>
+            )}
+            {codeStatus === "too_short" && (
+              <p style={{ fontSize: 11.5, color: "rgba(255,255,255,0.40)", margin: "6px 0 0" }}>Minimum 3 characters.</p>
+            )}
+            {codeStatus === "check_failed" && (
+              <p style={{ fontSize: 11.5, color: "rgba(255,255,255,0.40)", margin: "6px 0 0" }}>Couldn't check availability — we'll verify again on submit.</p>
+            )}
+            <p style={{ fontSize: 11.5, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, margin: "6px 0 0" }}>
+              This will be your unique tracking code. Choose something memorable — your name, brand or company name. Only letters and numbers, no spaces.
+            </p>
           </Field>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <Field label="Password * — minimum 8 characters">
+              <div style={{ position: "relative" }}>
+                <Lock size={14} color="rgba(255,255,255,0.35)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                <input
+                  type={showPw ? "text" : "password"} style={{ ...inputStyle, paddingLeft: 34, paddingRight: 34 }}
+                  value={form.password} onChange={e => set("password", e.target.value)}
+                  onFocus={focusGold} onBlur={blurGold} placeholder="At least 8 characters" autoComplete="new-password"
+                />
+                <button type="button" onClick={() => setShowPw(v => !v)} aria-label={showPw ? "Hide password" : "Show password"}
+                  style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.35)", padding: 4, display: "flex" }}>
+                  {showPw ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
+              </div>
+              {form.password.length > 0 && form.password.length < 8 && (
+                <p style={{ fontSize: 11.5, color: "#f87171", margin: "6px 0 0" }}>Minimum 8 characters.</p>
+              )}
+            </Field>
+            <Field label="Confirm Password *">
+              <div style={{ position: "relative" }}>
+                <Lock size={14} color="rgba(255,255,255,0.35)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                <input
+                  type={showPw ? "text" : "password"} style={{ ...inputStyle, paddingLeft: 34 }}
+                  value={form.confirm_password} onChange={e => set("confirm_password", e.target.value)}
+                  onFocus={focusGold} onBlur={blurGold} placeholder="Re-enter your password" autoComplete="new-password"
+                />
+              </div>
+              {form.confirm_password.length > 0 && form.password !== form.confirm_password && (
+                <p style={{ fontSize: 11.5, color: "#f87171", margin: "6px 0 0" }}>Passwords don't match.</p>
+              )}
+            </Field>
+          </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             <Field label="Company / Organization">
               <div style={{ position: "relative" }}>
@@ -111,10 +222,10 @@ export default function AffiliateApplyPage() {
                 <input style={{ ...inputStyle, paddingLeft: 34 }} value={form.company_name} onChange={e => set("company_name", e.target.value)} onFocus={focusGold} onBlur={blurGold} placeholder="Optional" />
               </div>
             </Field>
-            <Field label="Website">
+            <Field label="Website (optional)">
               <div style={{ position: "relative" }}>
                 <Globe size={14} color="rgba(255,255,255,0.35)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
-                <input style={{ ...inputStyle, paddingLeft: 34 }} value={form.website} onChange={e => set("website", e.target.value)} onFocus={focusGold} onBlur={blurGold} placeholder="https://" />
+                <input style={{ ...inputStyle, paddingLeft: 34 }} value={form.website} onChange={e => set("website", e.target.value)} onFocus={focusGold} onBlur={blurGold} placeholder="https://yourwebsite.com or leave blank" />
               </div>
             </Field>
           </div>
@@ -133,11 +244,12 @@ export default function AffiliateApplyPage() {
             </div>
           </Field>
 
-          <button type="button" onClick={submit} disabled={submitting} style={{
+          <button type="button" onClick={submit} disabled={submitting || codeStatus === "checking" || codeStatus === "taken"} style={{
             width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
             background: `linear-gradient(135deg,${GOLD},#b32a1a)`, color: "#fff", border: "none",
-            borderRadius: 11, padding: "13px", fontSize: 14, fontWeight: 700, cursor: submitting ? "not-allowed" : "pointer",
-            marginTop: 8, opacity: submitting ? 0.7 : 1, fontFamily: FF,
+            borderRadius: 11, padding: "13px", fontSize: 14, fontWeight: 700,
+            cursor: submitting || codeStatus === "checking" || codeStatus === "taken" ? "not-allowed" : "pointer",
+            marginTop: 8, opacity: submitting || codeStatus === "checking" || codeStatus === "taken" ? 0.7 : 1, fontFamily: FF,
           }}>
             {submitting ? "Submitting…" : "Submit Application"} <ArrowRight size={15} />
           </button>

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircle2, Shield, ShieldCheck, Star, Users, Award, Download, Copy, Check, Share2 } from "lucide-react";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
-import { captureAffiliateRefFromUrl } from "../../utils/affiliateTracking";
+import { captureAffiliateRefFromUrl, getAffiliateRefCookie } from "../../utils/affiliateTracking";
 
 const GOLD  = "#D93522";
 const AMBER = "#D93522";
@@ -19,6 +19,27 @@ function decodeHtmlEntities(text: string): string {
   if (!text) return text;
   const doc = new DOMParser().parseFromString(text, "text/html");
   return doc.documentElement.textContent ?? text;
+}
+
+declare global {
+  interface Window { Razorpay: new (options: Record<string, unknown>) => { open: () => void; on: (event: string, cb: (...args: any[]) => void) => void } }
+}
+
+/** Injects Razorpay's checkout.js from their CDN on first use and caches the
+ * loading promise, so the script is only ever fetched once even if the
+ * payment modal is opened/closed/reopened repeatedly. */
+let razorpayScriptPromise: Promise<boolean> | null = null;
+function loadRazorpayScript(): Promise<boolean> {
+  if (typeof window !== "undefined" && window.Razorpay) return Promise.resolve(true);
+  if (razorpayScriptPromise) return razorpayScriptPromise;
+  razorpayScriptPromise = new Promise(resolve => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+  return razorpayScriptPromise;
 }
 
 const THUMB_GRADS = [
@@ -547,17 +568,57 @@ const DetailsToKnow = ({ hours, lessonsCount, level }: { hours: number; lessonsC
 const PaymentModal = ({ course, token, onClose, onEnrolled }: {
   course: any; token: string; onClose: () => void; onEnrolled: () => void;
 }) => {
-  const [step, setStep] = useState<"confirm" | "processing" | "done">("confirm");
+  const [step, setStep] = useState<"confirm" | "processing" | "done" | "failed">("confirm");
 
   const pay = async () => {
     setStep("processing");
     try {
-      const r = await fetch(`${API}/lma/mock-payment/${course.id}/`, {
+      const orderRes = await fetch(`${API}/lma/courses/${course.id}/create-order/`, {
         method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
-      if (r.ok) { setStep("done"); setTimeout(() => { onEnrolled(); onClose(); }, 2000); }
-      else setStep("confirm");
-    } catch { setStep("confirm"); }
+      const order = await orderRes.json();
+      if (!orderRes.ok) { setStep("failed"); return; }
+
+      const scriptOk = await loadRazorpayScript();
+      if (!scriptOk || !window.Razorpay) { setStep("failed"); return; }
+
+      const rzp = new window.Razorpay({
+        key: order.key,
+        amount: order.amount,
+        currency: order.currency,
+        name: "XERXEZ Academy",
+        description: order.course_title,
+        order_id: order.order_id,
+        theme: { color: GOLD },
+        // Reopening the confirm step on dismiss (rather than leaving the
+        // "processing" spinner stuck) is what lets the student retry — the
+        // popup closing isn't itself a failure, just an abandoned attempt.
+        modal: { ondismiss: () => setStep("confirm") },
+        handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
+          try {
+            const verifyRes = await fetch(`${API}/lma/courses/${course.id}/verify-payment/`, {
+              method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                // The affiliate_ref cookie lives on this page's own origin,
+                // but the API is usually on a different origin (Railway), so
+                // a cross-origin fetch() never forwards it automatically —
+                // send the code explicitly instead of relying on
+                // request.COOKIES server-side.
+                affiliate_ref: getAffiliateRefCookie(),
+              }),
+            });
+            if (!verifyRes.ok) { setStep("failed"); return; }
+            setStep("done");
+            setTimeout(() => { onEnrolled(); onClose(); }, 2000);
+          } catch { setStep("failed"); }
+        },
+      });
+      rzp.on("payment.failed", () => setStep("failed"));
+      rzp.open();
+    } catch { setStep("failed"); }
   };
 
   return (
@@ -598,8 +659,23 @@ const PaymentModal = ({ course, token, onClose, onEnrolled }: {
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#d1fae5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
               <CheckCircle2 size={28} color="#059669" />
             </div>
-            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#141413", margin: "0 0 6px", fontFamily: FF }}>Enrolled!</h3>
+            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#141413", margin: "0 0 6px", fontFamily: FF }}>Enrolled successfully!</h3>
             <p style={{ fontSize: 13, color: "rgba(20,20,19,0.55)", fontFamily: FF }}>Redirecting to your dashboard…</p>
+          </div>
+        )}
+        {step === "failed" && (
+          <div style={{ textAlign: "center", padding: "20px 0" }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#fee2e2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+              <Shield size={26} color="#dc2626" />
+            </div>
+            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#141413", margin: "0 0 6px", fontFamily: FF }}>Payment failed</h3>
+            <p style={{ fontSize: 13, color: "rgba(20,20,19,0.55)", margin: "0 0 20px", fontFamily: FF }}>Payment failed, please try again.</p>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button type="button" onClick={onClose} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF }}>Cancel</button>
+              <button type="button" onClick={() => setStep("confirm")} style={{ flex: 2, fontSize: 13, fontWeight: 700, color: "#fff", background: `linear-gradient(135deg,${AMBER},${GOLD})`, border: "none", borderRadius: 11, padding: 13, cursor: "pointer", fontFamily: FF, boxShadow: "0 3px 0 rgba(139,31,23,0.40)" }}>
+                Try Again
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -793,6 +869,8 @@ export default function LMACourseDetailPage() {
   const [enrollProgress, setEnrollProgress] = useState(0);
   const [certificate, setCertificate]     = useState<{ id: number; certificate_file: string | null } | null>(null);
   const [enrollStatusChecked, setEnrollStatusChecked] = useState(false);
+  const [freeEnrolling, setFreeEnrolling]  = useState(false);
+  const [enrollToast, setEnrollToast]      = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [hovCourse, setHovCourse]         = useState<number | null>(null);
   const [wordIdx,  setWordIdx ] = useState(0);
@@ -840,7 +918,36 @@ export default function LMACourseDetailPage() {
       .finally(() => setEnrollStatusChecked(true));
   }, [id, token]);
 
-  /* Auto-trigger payment when action=enroll and conditions are met */
+  useEffect(() => {
+    if (!enrollToast) return;
+    const t = setTimeout(() => setEnrollToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [enrollToast]);
+
+  // Free courses (price 0) skip Razorpay entirely — enroll directly against
+  // the existing /lma/enroll/ endpoint with no payment modal in between.
+  // Paid courses still go through <PaymentModal> (Razorpay checkout).
+  const startEnroll = useCallback(async () => {
+    if (!course) return;
+    if (Number(course.price) > 0) { setShowPay(true); return; }
+    setFreeEnrolling(true);
+    try {
+      const r = await fetch(`${API}/lma/enroll/${course.id}/`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ affiliate_ref: getAffiliateRefCookie() }),
+      });
+      if (!r.ok) throw new Error();
+      setEnrolled(true);
+      setEnrollToast({ type: "success", text: "Enrolled successfully!" });
+      setTimeout(() => navigate("/lma/student/dashboard"), 1500);
+    } catch {
+      setEnrollToast({ type: "error", text: "Payment failed, please try again." });
+    } finally {
+      setFreeEnrolling(false);
+    }
+  }, [course, token, navigate]);
+
+  /* Auto-trigger enrollment when action=enroll and conditions are met */
   useEffect(() => {
     if (action !== "enroll") return;
     if (loading || !enrollStatusChecked) return;
@@ -848,8 +955,8 @@ export default function LMACourseDetailPage() {
     if (enrolled) { navigate("/lma/student/dashboard"); return; }
     if (isInstructor) return;
     if (!token) return;
-    setShowPay(true);
-  }, [action, loading, enrollStatusChecked, course, enrolled, isInstructor, token, navigate]);
+    startEnroll();
+  }, [action, loading, enrollStatusChecked, course, enrolled, isInstructor, token, navigate, startEnroll]);
 
   useEffect(() => {
     fetch(`${API}/lma/courses/`)
@@ -964,7 +1071,7 @@ export default function LMACourseDetailPage() {
       return;
     }
     if (enrolled) { navigate("/lma/student/dashboard"); return; }
-    setShowPay(true);
+    startEnroll();
   };
 
   const totalLessons = course?.modules?.reduce((s: number, m: any) => s + (m.lessons?.length ?? 0), 0) ?? 0;
@@ -1025,15 +1132,15 @@ export default function LMACourseDetailPage() {
             Manage Course →
           </button>
         ) : !enrolled && (
-          <button type="button" onClick={handleEnroll} className="lmacd-shimmer-btn" style={{
+          <button type="button" onClick={handleEnroll} disabled={freeEnrolling} className="lmacd-shimmer-btn" style={{
             background: `linear-gradient(135deg,${AMBER},${GOLD})`,
             color: "#0a0806", fontSize: 13, fontWeight: 800,
             border: "none", borderRadius: 9, padding: "9px 22px",
-            cursor: "pointer", flexShrink: 0, fontFamily: FF,
-            boxShadow: "0 2px 0 rgba(139,31,23,0.40)",
+            cursor: freeEnrolling ? "not-allowed" : "pointer", flexShrink: 0, fontFamily: FF,
+            boxShadow: "0 2px 0 rgba(139,31,23,0.40)", opacity: freeEnrolling ? 0.7 : 1,
             position: "relative", overflow: "hidden",
           }}>
-            Enroll Now
+            {freeEnrolling ? "Enrolling…" : "Enroll Now"}
           </button>
         )}
       </div>
@@ -1656,8 +1763,23 @@ export default function LMACourseDetailPage() {
           course={course}
           token={token}
           onClose={() => setShowPay(false)}
-          onEnrolled={() => { setEnrolled(true); setTimeout(() => navigate("/lma/student/dashboard"), 2000); }}
+          onEnrolled={() => {
+            setEnrolled(true);
+            setEnrollToast({ type: "success", text: "Enrolled successfully!" });
+            setTimeout(() => navigate("/lma/student/dashboard"), 2000);
+          }}
         />
+      )}
+
+      {enrollToast && (
+        <div style={{
+          position: "fixed", bottom: 24, right: 24, zIndex: 900,
+          background: enrollToast.type === "success" ? "#059669" : "#dc2626", color: "#fff",
+          padding: "12px 18px", borderRadius: 10, fontSize: 13, fontWeight: 600, fontFamily: FF,
+          boxShadow: "0 10px 30px rgba(0,0,0,0.20)",
+        }}>
+          {enrollToast.text}
+        </div>
       )}
 
       <style>{`

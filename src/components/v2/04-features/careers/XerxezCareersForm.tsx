@@ -150,15 +150,15 @@ const XerxezCareersForm = ({
   });
 
   return (
-    <form onSubmit={submit} noValidate>{/* noValidate → our validate() runs instead of the browser's */}
+    <form onSubmit={submit} noValidate autoComplete="off">{/* noValidate → our validate() runs instead of the browser's */}
       <div className="row g-3">
         <V2Field label="Full Name" required htmlFor="v2j-name" error={errors.name}>
-          <input id="v2j-name" style={errCtrl("name", errors.name)} value={form.name}
+          <input id="v2j-name" style={errCtrl("name", errors.name)} value={form.name} autoComplete="off"
             onFocus={() => setFoc("name")} onBlur={() => setFoc(null)}
             onChange={(e) => set("name", e.target.value)} placeholder="Your full name" />
         </V2Field>
         <V2Field label="Email" required htmlFor="v2j-email" error={errors.email}>
-          <input id="v2j-email" type="email" style={errCtrl("email", errors.email)} value={form.email}
+          <input id="v2j-email" type="email" style={errCtrl("email", errors.email)} value={form.email} autoComplete="off"
             onFocus={() => setFoc("email")} onBlur={() => setFoc(null)}
             onChange={(e) => set("email", e.target.value)} placeholder="you@example.com" />
         </V2Field>
