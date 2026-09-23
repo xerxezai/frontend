@@ -16,6 +16,7 @@ import {
   XerxezIndustries,   // the interactive "pick your industry" section (signature)
   XerxezProductsShowcase,
   XerxezWhyChoose,
+  XerxezStakePromo,
   XerxezProcess,
   XerxezCtaBand,
 } from "../../components/v2";
@@ -38,6 +39,7 @@ const HomeV2 = () => (
     <XerxezIndustries />
     <XerxezProductsShowcase />
     <XerxezWhyChoose />
+    <XerxezStakePromo />
     <XerxezProcess />
     <XerxezCtaBand />
   </XerxezShell>

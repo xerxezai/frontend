@@ -285,7 +285,11 @@ export default function LMALoginPage() {
       localStorage.setItem("lma_name",             data.name);
 
       if (role === "affiliate") {
-        if (data.affiliate_status === "approved") {
+        // is_affiliate is true for an approved affiliate AND for any
+        // is_staff/is_superuser account (admins get the affiliate dashboard
+        // too, showing platform-wide data instead of a personal profile) —
+        // checked first so an admin with no affiliate_status still gets in.
+        if (data.is_affiliate === true) {
           navigate("/lma/affiliate/dashboard", { replace: true });
         } else if (data.affiliate_status === "pending") {
           setError("Your application is pending approval.");

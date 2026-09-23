@@ -903,6 +903,11 @@ export default function BecomeInstructorPage() {
                 )}
 
                 <form onSubmit={handleSubmit} noValidate autoComplete="off" style={{ display: step === 0 ? "none" : "block" }}>
+                  {/* Decoy fields — Chrome autofills the first text/password
+                      inputs it finds regardless of autoComplete="off"; these
+                      invisible ones absorb that instead of the real fields. */}
+                  <input type="text" name="fake-username" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+                  <input type="password" name="fake-password" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
                   {step === 1 && (
                     <div key="step1" style={{ animation: "biFadeUp 0.32s cubic-bezier(0.22,1,0.36,1) both" }}>
                       <FloatLabel id="fullName" label={isCompany ? "Contact Person Full Name" : "Full Name"} value={fullName} onChange={setFullName}
