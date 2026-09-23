@@ -224,7 +224,7 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
     // Was missing lma_refresh — an explicit logout must clear the refresh
     // token too, or a stale one lingers in localStorage after "signing out".
     clearLmaSession();
-    navigate("/", { replace: true });
+    navigate("/training", { replace: true });
   };
 
   const hour = new Date().getHours();

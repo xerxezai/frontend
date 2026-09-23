@@ -2895,7 +2895,7 @@ export default function LMAInstructorDashboard() {
     // Was missing lma_refresh — an explicit logout must clear the refresh
     // token too, or a stale one lingers in localStorage after "signing out".
     clearLmaSession();
-    navigate("/");
+    navigate("/training");
   };
 
   const handleSubmitReview = async (course: any) => {
@@ -2926,16 +2926,24 @@ export default function LMAInstructorDashboard() {
 
   const onDeleteConfirm = async () => {
     if (!deletingCourse) return;
+    const courseId = deletingCourse.id;
     try {
-      const r = await fetch(`${API}/lma/courses/${deletingCourse.id}/delete/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const r = await fetch(`${API}/lma/courses/${courseId}/delete/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       if (r.status === 400) {
         const body = await r.json().catch(() => ({}));
         showToast(body.error ?? "Cannot delete this course.", "error");
         setDeletingCourse(null);
         return;
       }
-      if (!r.ok) throw new Error("Delete failed");
-      showToast("Course deleted");
+      // 204 No Content is a valid success response for a DELETE (r.ok already
+      // covers it — 204 is in the 200-299 range — but this endpoint currently
+      // returns 200; checking both explicitly means it stays correct either way.
+      if (!r.ok && r.status !== 204) throw new Error("Delete failed");
+      // Remove the course from the list immediately rather than waiting on
+      // the next loadDashboard() round-trip — the list should never show a
+      // course the user just watched get deleted.
+      setData((prev: any) => (prev ? { ...prev, courses: (prev.courses ?? []).filter((c: any) => c.id !== courseId) } : prev));
+      showToast("Course deleted successfully");
       loadDashboard();
     } catch { showToast("Delete failed", "error"); }
     setDeletingCourse(null);

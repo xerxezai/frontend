@@ -127,7 +127,7 @@ export default function AffiliateDashboard() {
     } catch { /* ignore */ } finally { setSavingBank(false); }
   };
 
-  const logout = () => { localStorage.removeItem("lma_token"); localStorage.removeItem("lma_refresh"); navigate("/lma/login"); };
+  const logout = () => { localStorage.removeItem("lma_token"); localStorage.removeItem("lma_refresh"); navigate("/training"); };
 
   if (loading) {
     return <div style={{ minHeight: "100vh", background: "#F4F7FA", display: "flex", alignItems: "center", justifyContent: "center" }}>
