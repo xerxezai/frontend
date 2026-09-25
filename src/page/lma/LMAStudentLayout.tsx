@@ -5,7 +5,7 @@ import {
   ClipboardList, Award, TrendingUp, User,
   LogOut, ChevronRight, Bell, Menu, X, Globe,
   Maximize, Minimize, CheckCircle2,
-  Users, ListChecks, BarChart3, ClipboardCheck, Handshake,
+  Users, ListChecks, BarChart3, ClipboardCheck,
 } from "lucide-react";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 import { ensureLmaAccessToken, clearLmaSession, LMA_PROACTIVE_REFRESH_INTERVAL_MS } from "../../utils/lmaAuth";
@@ -192,9 +192,18 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
         if (!d) return;
         setCanInstructor(!!d.can_access_instructor);
         setIsAdmin(!!(d.is_staff || d.is_superuser));
+        // Cross-role access guard — an account that logged in as instructor
+        // or affiliate (lma_role, set at login) must not be able to open the
+        // student dashboard just by navigating here directly. Waits for this
+        // live is_staff/is_superuser check (not the cached localStorage
+        // value) before redirecting, so a real admin never gets bounced.
+        const storedRole = localStorage.getItem("lma_role");
+        if (!(d.is_staff || d.is_superuser) && storedRole && storedRole !== "student") {
+          navigate("/lma/login", { replace: true });
+        }
       })
       .catch(() => {});
-  }, [token]);
+  }, [token, navigate]);
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -263,7 +272,6 @@ export default function LMAStudentLayout({ children, pendingBadge }: LMAStudentL
         { icon: ListChecks, label: "Enrollments",       to: "/lma/admin/enrollments" },
         { icon: BarChart3,  label: "Course Analytics", to: "/lma/admin/analytics" },
         { icon: ClipboardCheck, label: "Pending Courses", to: "/lma/admin/pending-courses" },
-        { icon: Handshake,  label: "Affiliates",       to: "/lma/admin/affiliates" },
       ],
     }] : []),
   ];
