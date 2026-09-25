@@ -76,12 +76,12 @@ const LIVE_PRODUCTS: {
   {
     key: "erp", icon: Layers, name: "Xerxez ERP", subtitle: "AI-Powered ERP Platform",
     desc: "Enterprise resource planning with AI-driven forecasting, automated workflows and real-time analytics — live and running for engineering and industrial clients.",
-    domain: "xerxez.com/erp", url: "http://localhost:5173/erp/login", cta: "Try live",
+    domain: "xerxez.com/erp", url: "/erp/login", cta: "Try live",
   },
   {
     key: "academy", icon: GraduationCap, name: "Xerxez Academy", subtitle: "AI Training Platform",
     desc: "Courses in AI, MLOps, DevSecOps, Full Stack Development and Cloud Architecture — taught by practitioners, with certificates on completion.",
-    domain: "xerxez.com/lma", url: "http://localhost:5173/lma/courses", cta: "Explore",
+    domain: "xerxez.com/lma", url: "/lma/courses", cta: "Explore",
   },
 ];
 

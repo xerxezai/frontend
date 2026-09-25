@@ -11,7 +11,7 @@ import {
   Check, BarChart2, Eye, Clock, AlertCircle, BookMarked,
   Plus, Save, Layers, Award, UserX, Search, FileCheck,
   UserCircle, Lock, Maximize, Minimize, GripVertical, Globe,
-  Upload, FileImage, Trash, UserPlus, Handshake, Wallet, ExternalLink,
+  Upload, FileImage, Trash, UserPlus, ExternalLink,
 } from "lucide-react";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
 import { ensureLmaAccessToken, clearLmaSession, LMA_PROACTIVE_REFRESH_INTERVAL_MS } from "../../utils/lmaAuth";
@@ -852,8 +852,8 @@ function ManageCurriculumPanel({ course, token, onClose, showToast }: {
 
 // ── Section views ─────────────────────────────────────────────────────────────
 
-function DashboardView({ data, earningsChart, onGrade, onManage, onCreate, isSuperInstructor }: {
-  data: any; earningsChart: any[]; onGrade: (s: any) => void; onManage: (c: any) => void; onCreate: () => void; isSuperInstructor: boolean;
+function DashboardView({ data, earningsChart, onGrade, onManage, onCreate, isStaffOrSuperuser }: {
+  data: any; earningsChart: any[]; onGrade: (s: any) => void; onManage: (c: any) => void; onCreate: () => void; isStaffOrSuperuser: boolean;
 }) {
   const courses = data?.courses ?? [];
   const totalEarnings = data?.stats?.total_earnings ?? 0;
@@ -891,19 +891,21 @@ function DashboardView({ data, earningsChart, onGrade, onManage, onCreate, isSup
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 16, marginBottom: 28 }}>
         <StatCard index={0} label="Total Courses"   value={data?.stats?.total_courses ?? 0}  icon={BookOpen}     color="#3b82f6" />
         <StatCard index={1} label="Total Students"  value={data?.stats?.total_students ?? 0} icon={Users}        color="#10b981" />
-        {isSuperInstructor && (
-          <StatCard index={2} label="Total Earnings" value={totalEarnings} icon={DollarSign} color="#8b5cf6" prefix="₹" />
-        )}
+        <StatCard index={2} label={isStaffOrSuperuser ? "Platform Earnings" : "Total Earnings"} value={totalEarnings} icon={DollarSign} color="#8b5cf6" prefix="₹" />
         <StatCard index={3} label="Pending Reviews" value={data?.stats?.assignments_to_grade ?? 0} icon={ClipboardList} color="#D93522" />
       </div>
 
-      {/* Row 2 — Your Earnings (super instructor only — see Earnings/Analytics nav gating) */}
-      {isSuperInstructor && (
-        <div style={{
+      {/* Row 2 — Earnings summary. Visible to every instructor — scope (own
+          courses vs platform-wide) is decided by is_staff on the backend
+          (instructor_dashboard's stats.total_earnings), not the
+          instructor_level tier. */}
+      <div style={{
           background: `linear-gradient(160deg,${DARK} 0%,#04101f 100%)`, borderRadius: 20,
           padding: "26px 28px", marginBottom: 28, border: "1px solid rgba(217,53,34,0.22)",
         }}>
-          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#fff", margin: "0 0 6px", fontFamily: FF }}>Your Earnings</h3>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#fff", margin: "0 0 6px", fontFamily: FF }}>
+            {isStaffOrSuperuser ? "Platform Earnings" : "Your Earnings"}
+          </h3>
           {totalEarnings === 0 ? (
             <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", margin: "0 0 20px", fontFamily: FF }}>
               ₹0 — Start earning by publishing courses.
@@ -954,8 +956,7 @@ function DashboardView({ data, earningsChart, onGrade, onManage, onCreate, isSup
               </table>
             </div>
           )}
-        </div>
-      )}
+      </div>
 
       {/* Row 3 — My Courses (quick overview) */}
       <div style={{ marginBottom: 28 }}>
@@ -1611,15 +1612,17 @@ function StudentsView({ token }: { token: string }) {
   );
 }
 
-function EarningsView({ data, earningsChart }: { data: any; earningsChart: any[] }) {
+function EarningsView({ data, earningsChart, isStaffOrSuperuser }: { data: any; earningsChart: any[]; isStaffOrSuperuser: boolean }) {
   const courses = data?.courses ?? [];
   const total = data?.stats?.total_earnings ?? 0;
 
   return (
     <div style={{ animation: "lmai-pageIn 0.32s ease both" }}>
-      <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: "0 0 20px", fontFamily: FF }}>Earnings</h2>
+      <h2 style={{ fontSize: 20, fontWeight: 900, color: "#141413", margin: "0 0 20px", fontFamily: FF }}>
+        {isStaffOrSuperuser ? "Platform Earnings" : "My Earnings"}
+      </h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 16, marginBottom: 24 }}>
-        <StatCard index={0} label="Total Earnings" value={total} icon={DollarSign} color="#8b5cf6" prefix="₹" />
+        <StatCard index={0} label={isStaffOrSuperuser ? "Total Platform Earnings" : "Total Earnings"} value={total} icon={DollarSign} color="#8b5cf6" prefix="₹" />
         <StatCard index={1} label="Total Students" value={data?.stats?.total_students ?? 0} icon={Users} color="#10b981" />
         <StatCard index={2} label="Total Courses" value={data?.stats?.total_courses ?? 0} icon={BookOpen} color="#3b82f6" />
       </div>
@@ -2617,10 +2620,30 @@ function ApplicationsView({ token, showToast }: {
                 {isExp && (
                   <div style={{ padding: "0 20px 18px", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
                     <div style={{ paddingTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Email</div>
+                        <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.email}</div>
+                      </div>
                       {app.phone && (
                         <div>
                           <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Phone</div>
                           <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.phone}</div>
+                        </div>
+                      )}
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Applicant Type</div>
+                        <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.applicant_type === "company" ? "Company / Organisation" : "Individual"}</div>
+                      </div>
+                      {app.applicant_type === "company" && app.company_name && (
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Company Name</div>
+                          <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.company_name}</div>
+                        </div>
+                      )}
+                      {app.applicant_type === "company" && app.company_size && (
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Company Size</div>
+                          <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.company_size}</div>
                         </div>
                       )}
                       <div>
@@ -2635,8 +2658,16 @@ function ApplicationsView({ token, showToast }: {
                       )}
                       {app.website && (
                         <div>
-                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Website</div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>
+                            {app.applicant_type === "company" ? "Company Website" : "Personal Website"}
+                          </div>
                           <a href={app.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: GOLD, fontFamily: FF, textDecoration: "none" }}>{app.website}</a>
+                        </div>
+                      )}
+                      {app.expertise && (
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Area of Expertise</div>
+                          <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.expertise}</div>
                         </div>
                       )}
                       {typeof app.years_experience === "number" && (
@@ -2648,6 +2679,14 @@ function ApplicationsView({ token, showToast }: {
                       <div>
                         <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Taught Before?</div>
                         <div style={{ fontSize: 13, color: "#141413", fontFamily: FF }}>{app.previous_teaching_experience ? "Yes" : "No"}</div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Agreed to Terms</div>
+                        <div style={{ fontSize: 13, color: app.agree_terms ? "#141413" : "#dc2626", fontFamily: FF }}>{app.agree_terms ? "Yes" : "No"}</div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(20,20,19,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: FF, marginBottom: 3 }}>Agreed to Content Rights</div>
+                        <div style={{ fontSize: 13, color: app.confirm_rights ? "#141413" : "#dc2626", fontFamily: FF }}>{app.confirm_rights ? "Yes" : "No"}</div>
                       </div>
                     </div>
 
@@ -2887,7 +2926,7 @@ export default function LMAInstructorDashboard() {
   useEffect(() => {
     if (!token || !canInstructor) return;
     loadDashboard();
-    const iv = setInterval(loadDashboard, 30_000);
+    const iv = setInterval(loadDashboard, 420_000); // 7 minutes — was 30s, too frequent
     return () => clearInterval(iv);
   }, [loadDashboard, token, canInstructor]);
 
@@ -2958,28 +2997,27 @@ export default function LMAInstructorDashboard() {
     ...(isSuperInstructor ? [{ section: "REVIEW", items: [
       { icon: ClipboardList, label: "Pending Reviews" as Section },
     ]}] : []),
-    ...(isSuperInstructor ? [{ section: "ANALYTICS", items: [
+    // Earnings is visible to every instructor now — scope (own courses vs
+    // platform-wide) is decided by is_staff, not the instructor_level tier;
+    // see instructor_dashboard's stats.total_earnings/earnings_scope.
+    // Analytics/Reviews stay as before (always shown).
+    { section: "ANALYTICS", items: [
       { icon: DollarSign, label: "Earnings" as Section },
       { icon: BarChart2,  label: "Analytics" as Section },
       { icon: Star,       label: "Reviews" as Section },
-    ]}] : [{ section: "ANALYTICS", items: [
-      { icon: BarChart2, label: "Analytics" as Section },
-      { icon: Star,      label: "Reviews" as Section },
-    ]}]),
+    ]},
     { section: "TEACHING", items: [
       { icon: ClipboardList, label: "Assignments" as Section },
     ]},
     ...(isSuperInstructor || isInstructorAdmin ? [{ section: "ADMIN", items: [
       { icon: Users,      label: "Instructors" as Section },
       { icon: FileCheck,  label: "Applications" as Section },
-      // Affiliates/Affiliate Commissions are separately-routed admin pages
-      // (LMAAdminAffiliates.tsx / LMAAdminAffiliateCommissions.tsx), not
-      // local dashboard sections — hence `href` instead of a Section label.
-      // Gated on is_staff/is_superuser specifically, not the broader
-      // isInstructorAdmin/isSuperInstructor check above.
+      // Partner Courses is a separately-routed admin page
+      // (PartnerCoursesAdmin.tsx), not a local dashboard section — hence
+      // `href` instead of a Section label. Gated on is_staff/is_superuser
+      // specifically, not the broader isInstructorAdmin/isSuperInstructor
+      // check above.
       ...(isStaffOrSuperuser ? [
-        { icon: Handshake, label: "Affiliates" as Section, href: "/lma/admin/affiliates" },
-        { icon: Wallet,    label: "Affiliate Commissions" as Section, href: "/lma/admin/affiliate-commissions" },
         { icon: ExternalLink, label: "Partner Courses" as Section, href: "/admin/partner-courses" },
       ] : []),
     ]}] : []),
@@ -2995,10 +3033,10 @@ export default function LMAInstructorDashboard() {
       </div>
     );
     switch (active) {
-      case "Dashboard":      return <DashboardView data={data} earningsChart={earningsChart} onGrade={setGradingSub} onManage={setManageCourse} onCreate={() => { setShowCreate(true); setActive("My Courses"); }} isSuperInstructor={isSuperInstructor} />;
+      case "Dashboard":      return <DashboardView data={data} earningsChart={earningsChart} onGrade={setGradingSub} onManage={setManageCourse} onCreate={() => { setShowCreate(true); setActive("My Courses"); }} isStaffOrSuperuser={isStaffOrSuperuser} />;
       case "My Courses":     return <CoursesView courses={courses} loading={false} isSuperInstructor={isSuperInstructor} onEdit={setEditCourse} onManage={setManageCourse} onDelete={setDeletingCourse} onCreate={() => setShowCreate(true)} onSubmitReview={handleSubmitReview} />;
       case "Students":       return <StudentsView token={token} />;
-      case "Earnings":       return isSuperInstructor ? <EarningsView data={data} earningsChart={earningsChart} /> : null;
+      case "Earnings":       return <EarningsView data={data} earningsChart={earningsChart} isStaffOrSuperuser={isStaffOrSuperuser} />;
       case "Analytics":      return <AnalyticsView token={token} isSuperInstructor={isSuperInstructor} />;
       case "Reviews":        return <ReviewsView token={token} />;
       case "Assignments":    return <AssignmentsView data={data} onGrade={setGradingSub} />;

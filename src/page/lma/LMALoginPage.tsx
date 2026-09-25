@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import SEO from "../../components/seo/SEO";
 import { V2_API_BASE as API } from "../../components/v2/01-core/v2theme";
+import { isLmaTokenExpired, clearLmaSession } from "../../utils/lmaAuth";
 
 // ── colour tokens — identical to ERPLogin ────────────────────────────────────
 const C = {
@@ -258,6 +259,25 @@ export default function LMALoginPage() {
   useEffect(() => {
     const t = setTimeout(() => setStatsLive(true), 550);
     return () => clearTimeout(t);
+  }, []);
+
+  // Already logged in? Skip the login form entirely — redirect straight to
+  // the dashboard matching the stored role, unless the stored token has
+  // actually expired (idle session), in which case clear it and show the
+  // same "session expired" message the ?expired=1 flow uses.
+  useEffect(() => {
+    const token = localStorage.getItem("lma_token");
+    if (!token) return;
+    if (isLmaTokenExpired(token)) {
+      clearLmaSession();
+      setError("Your session has expired. Please login again.");
+      return;
+    }
+    const storedRole = localStorage.getItem("lma_role");
+    if (storedRole === "student") navigate("/lma/student/dashboard", { replace: true });
+    else if (storedRole === "instructor") navigate("/lma/instructor/dashboard", { replace: true });
+    else if (storedRole === "affiliate") navigate("/lma/affiliate/dashboard", { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const shake = () => { setShaking(true); setTimeout(() => setShaking(false), 520); };

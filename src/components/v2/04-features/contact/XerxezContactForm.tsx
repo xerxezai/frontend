@@ -28,13 +28,27 @@ const SERVICES = [
   "Software Development", "AI Training & Consulting", "AI Training & Upskilling",
   "Quantum Computing", "Mobile Application",
   "Web & Mobile Hosting", "Software Consulting", "Partner Course Listing",
+  "Become an Affiliate", "Student Enrollment", "Instructor Partnership",
 ];
 // Short slugs used by deep-links that don't want to URL-encode the full label
 // (e.g. TrainingV2's "Enterprise training" CTA → /contact?service=ai-training;
-// PartnerWithUsPage's "List Your Courses" CTA → /contact?service=partner-courses).
+// PartnerWithUsPage's "List Your Courses" CTA → /contact?service=partner-courses;
+// affiliate/student/instructor → the XERXEZ Academy surfaces' "Contact us" links).
 const SERVICE_SLUGS: Record<string, string> = {
   "ai-training": "AI Training & Upskilling",
   "partner-courses": "Partner Course Listing",
+  "affiliate": "Become an Affiliate",
+  "student": "Student Enrollment",
+  "instructor": "Instructor Partnership",
+};
+// These 3 services have their own dedicated flow elsewhere on the site —
+// picking one sends the visitor straight there instead of showing the
+// contact form (there's nothing for a "New Affiliate Enquiry" contact-form
+// submission to add that the real application form doesn't already do).
+const REDIRECT_SERVICES: Record<string, { message: string; label: string; to: string }> = {
+  "Student Enrollment": { message: "Create your free student account to get started", label: "Create Student Account", to: "/lma/register" },
+  "Become an Affiliate": { message: "Apply to join the XERXEZ Affiliate Program", label: "Apply Now", to: "/lma/affiliate/apply" },
+  "Instructor Partnership": { message: "Apply to become a XERXEZ Academy instructor", label: "Apply as Instructor", to: "/lma/become-instructor" },
 };
 const COUNTRIES = ["India", "UAE", "Other"];
 const HEAR_ABOUT_US = ["Google Search", "Social Media", "LinkedIn", "Referral", "Existing Customer", "Event/Conference", "Other"];
@@ -68,6 +82,7 @@ const PROJECT_TIMELINES = ["1-3 months", "3-6 months", "6+ months"];
 const TRAINING_MODES = ["Online (Live Sessions)", "Offline (In-person)", "Hybrid (Online + In-person)", "Self-paced (Recorded)"];
 const TRAINING_TEAM_SIZES = ["1-5 people", "6-15 people", "16-30 people", "30+ people"];
 const TRAINING_DURATIONS = ["1 Day Workshop", "1 Week Bootcamp", "1 Month Program", "3 Month Program", "Custom Duration"];
+const COURSE_FORMATS = ["Online Video", "Live Sessions", "PDF/Documents", "Mixed (Video + Documents)", "Other"];
 const TRAINING_TOPICS = [
   "Large Language Models (LLMs)", "MLOps & Model Deployment", "Full Stack AI Development",
   "Prompt Engineering", "Machine Learning Fundamentals", "Computer Vision",
@@ -86,7 +101,7 @@ interface F {
   cloudProvider: string; currentInfra: string; migrationNeeded: string;
   projectType: string; projectTimeline: string; approxBudget: string;
   trainingTeamSize: string; trainingMode: string; topicsOfInterest: string; trainingDuration: string;
-  courseNames: string; platformUrl: string; courseUrl: string;
+  courseNames: string; platformUrl: string; courseUrl: string; courseFormat: string; additionalDetails: string;
 }
 const EMPTY: F = {
   fullName: "", email: "", phone: "", company: "",
@@ -97,7 +112,7 @@ const EMPTY: F = {
   cloudProvider: "", currentInfra: "", migrationNeeded: "",
   projectType: "", projectTimeline: "", approxBudget: "",
   trainingTeamSize: "", trainingMode: "", topicsOfInterest: "", trainingDuration: "",
-  courseNames: "", platformUrl: "", courseUrl: "",
+  courseNames: "", platformUrl: "", courseUrl: "", courseFormat: "", additionalDetails: "",
 };
 // Fields that count toward the "form completion" progress bar (plus any active
 // service-section fields, added at runtime).
@@ -108,7 +123,7 @@ const COMMON_TRACKED: (keyof F)[] = ["fullName", "email", "phone", "company", "s
 // Course Listing section below) — every other service's fields are all
 // optional today, same as before this flag existed.
 type FieldDef = { key: keyof F; label: string; placeholder: string; required?: boolean } &
-  ({ type: "text" } | { type: "select"; options: string[] } | { type: "multiselect"; options: string[] });
+  ({ type: "text" } | { type: "textarea" } | { type: "select"; options: string[] } | { type: "multiselect"; options: string[] });
 
 // Validated field → the DOM id of its control, in the order focus should be
 // attempted after a failed submit (top-to-bottom through the form).
@@ -169,8 +184,10 @@ const SERVICE_SECTIONS: Record<string, { label: string; fields: FieldDef[] }> = 
     label: "Course Listing Details",
     fields: [
       { key: "courseNames", label: "Course Name(s)", type: "text", placeholder: "e.g. Intro to Kubernetes, Advanced Docker", required: true },
-      { key: "platformUrl", label: "Your Platform URL", type: "text", placeholder: "https://yourplatform.com", required: true },
-      { key: "courseUrl", label: "Course URL(s)", type: "text", placeholder: "https://yourplatform.com/course/…", required: true },
+      { key: "platformUrl", label: "Your Platform URL (optional)", type: "text", placeholder: "https://yourplatform.com" },
+      { key: "courseUrl", label: "Course URL(s) (optional)", type: "text", placeholder: "https://yourplatform.com/course/…" },
+      { key: "courseFormat", label: "Course Format", type: "select", placeholder: "Select format…", options: COURSE_FORMATS },
+      { key: "additionalDetails", label: "Additional Details (optional)", type: "textarea", placeholder: "Tell us more about your courses, content format, target audience or any other details" },
     ],
   },
 };
@@ -295,6 +312,7 @@ const XerxezContactForm = () => {
   }, []);
 
   const activeSection = SERVICE_SECTIONS[form.service];   // extra fields for the chosen service, or undefined
+  const redirectInfo = REDIRECT_SERVICES[form.service];   // set → show the redirect panel instead of the form
 
   // Which fields count toward the progress bar: the common ones + the active
   // service section's fields + "timeline" (ERP only).
@@ -354,7 +372,8 @@ const XerxezContactForm = () => {
         training_team_size: form.trainingTeamSize, training_mode: form.trainingMode, topics_of_interest: form.topicsOfInterest,
         training_duration: form.trainingDuration,
         course_names: form.courseNames, platform_url: form.platformUrl,
-        course_url: form.courseUrl,
+        course_url: form.courseUrl, course_format: form.courseFormat,
+        additional_details: form.additionalDetails,
       });
       if (result.success) {
         setSent(true); setForm(EMPTY);
@@ -396,6 +415,12 @@ const XerxezContactForm = () => {
           <input id={`v2c-${f.key}`} type="text" placeholder={f.placeholder} value={form[f.key]} disabled={sending}
             aria-invalid={!!errors[f.key]}
             style={ctrl(f.key)} {...focusProps(f.key)} onChange={(e) => set(f.key, e.target.value)} />
+        );
+      case "textarea":
+        return (
+          <textarea id={`v2c-${f.key}`} rows={3} placeholder={f.placeholder} value={form[f.key]} disabled={sending}
+            aria-invalid={!!errors[f.key]}
+            style={ctrl(f.key, { resize: "vertical", minHeight: 80 })} {...focusProps(f.key)} onChange={(e) => set(f.key, e.target.value)} />
         );
       case "select":
         return (
@@ -554,6 +579,37 @@ const XerxezContactForm = () => {
               </Link>
             </div>
           </V2FormSuccess>
+        ) : redirectInfo ? (
+          // Redirect panel — "Student Enrollment" / "Become an Affiliate" /
+          // "Instructor Partnership" each have a real dedicated flow already
+          // (registration / affiliate apply / instructor apply), so picking
+          // one sends the visitor straight there instead of a contact form
+          // that would just duplicate what that flow already collects.
+          <div>
+            <V2Field label="Service of Interest" htmlFor="v2c-service-redirect">
+              <select id="v2c-service-redirect" value={form.service} style={{ ...ctrl("service"), cursor: "pointer" }}
+                onChange={(e) => set("service", e.target.value)}>
+                <option value="">Select a service…</option>
+                {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </V2Field>
+            <div style={{
+              textAlign: "center", background: T.lightAlt, borderRadius: T.rx,
+              padding: "36px 28px", marginTop: 8,
+            }}>
+              <p style={{ fontFamily: T.fontBody, fontSize: 15, color: T.headNavy, fontWeight: 600, margin: "0 0 20px" }}>
+                {redirectInfo.message}
+              </p>
+              <Link to={redirectInfo.to} style={{
+                display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 9,
+                background: T.red, color: "#fff", textDecoration: "none",
+                fontFamily: T.fontHead, fontWeight: 700, fontSize: 14,
+                padding: "13px 26px", borderRadius: T.rx,
+              }}>
+                {redirectInfo.label} →
+              </Link>
+            </div>
+          </div>
         ) : (
           // The actual form
           <form onSubmit={handleSubmit} noValidate autoComplete="off">{/* noValidate → our handleSubmit validation runs */}
@@ -673,7 +729,7 @@ const XerxezContactForm = () => {
                 <div className="row g-3" style={{ marginBottom: 22 }}>
                   {activeSection.fields.map((f) => (
                     // multiselect fields take a full row; others are half-width
-                    <div key={f.key} className={f.type === "multiselect" ? "col-12" : "col-md-6"}>
+                    <div key={f.key} className={f.type === "multiselect" || f.type === "textarea" ? "col-12" : "col-md-6"}>
                       <label style={v2Label}>{f.label}{f.required && <span style={{ color: "#e11d2e" }}> *</span>}</label>
                       {renderServiceField(f)}
                       {errors[f.key] && (
@@ -703,12 +759,17 @@ const XerxezContactForm = () => {
               </>
             )}
 
-            {/* Partner Course Listing — coupon/commission terms note, shown
-                only for this service since it's what the note refers to. */}
+            {/* Partner Course Listing — coupon/commission terms + "no URL yet"
+                notes, shown only for this service since they refer to it. */}
             {form.service === "Partner Course Listing" && (
-              <p style={{ fontFamily: T.fontBody, fontSize: 13, fontStyle: "italic", color: "#8a94a3", margin: "0 0 16px" }}>
-                💬 Coupon codes, commission and revenue terms will be discussed mutually after we review your submission.
-              </p>
+              <>
+                <p style={{ fontFamily: T.fontBody, fontSize: 13, fontStyle: "italic", color: "#8a94a3", margin: "0 0 8px" }}>
+                  💬 Don't have a URL yet? Just fill in the course name and details — we'll discuss the rest.
+                </p>
+                <p style={{ fontFamily: T.fontBody, fontSize: 13, fontStyle: "italic", color: "#8a94a3", margin: "0 0 16px" }}>
+                  💬 Coupon codes, commission and revenue terms will be discussed mutually after we review your submission.
+                </p>
+              </>
             )}
 
             {/* submit + clear */}

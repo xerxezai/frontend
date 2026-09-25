@@ -35,6 +35,18 @@ export function isLmaTokenExpiringSoon(token: string, bufferMs = 60_000): boolea
   return Date.now() >= exp - bufferMs;
 }
 
+/** True if the token is missing, unparseable, or already past its `exp`
+ * claim right now — no early buffer (unlike isLmaTokenExpiringSoon). Used by
+ * the login page's already-logged-in check: a token that's merely expiring
+ * soon is still fine to redirect in on, only a genuinely expired one should
+ * bounce back to the login form. */
+export function isLmaTokenExpired(token: string): boolean {
+  if (!token) return true;
+  const exp = decodeJwtExpMs(token);
+  if (exp === null) return true;
+  return Date.now() >= exp;
+}
+
 export function clearLmaSession() {
   ["lma_token", "lma_refresh", "lma_role", "lma_can_instructor", "lma_instructor_level", "lma_name"]
     .forEach(k => localStorage.removeItem(k));
