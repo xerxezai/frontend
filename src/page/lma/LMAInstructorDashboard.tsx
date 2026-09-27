@@ -2822,9 +2822,22 @@ export default function LMAInstructorDashboard() {
     if (!token) return;
     fetch(`${API}/lma/profile/`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => (r.ok ? r.json() : null))
-      .then(d => { if (d) { setIsInstructorAdmin(!!d.is_staff); setIsStaffOrSuperuser(!!d.is_staff || !!d.is_superuser); } })
+      .then(d => {
+        if (!d) return;
+        setIsInstructorAdmin(!!d.is_staff);
+        setIsStaffOrSuperuser(!!d.is_staff || !!d.is_superuser);
+        // Cross-role access guard — an account that logged in as student or
+        // affiliate (lma_role, set at login) must not be able to open the
+        // instructor dashboard just by navigating here directly. Waits for
+        // this live is_staff/is_superuser check (not the cached localStorage
+        // value) before redirecting, so a real admin never gets bounced.
+        const storedRole = localStorage.getItem("lma_role");
+        if (!(d.is_staff || d.is_superuser) && storedRole && storedRole !== "instructor") {
+          navigate("/lma/login", { replace: true });
+        }
+      })
       .catch(() => {});
-  }, [token]);
+  }, [token, navigate]);
 
   // Notifications
   const [notifications, setNotifications] = useState<any[]>([]);

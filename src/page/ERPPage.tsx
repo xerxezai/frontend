@@ -99,6 +99,9 @@ const RiskRegister      = lazy(() => import('../components/erp/modules/qhse/Risk
 const SafetyChecklist   = lazy(() => import('../components/erp/modules/qhse/SafetyChecklist'));
 const ComplianceTracker = lazy(() => import('../components/erp/modules/qhse/ComplianceTracker'));
 
+// Executive Overview — aggregates every module, admin-only — lazy loaded
+const ExecutiveOverview = lazy(() => import('../components/erp/modules/executive/ExecutiveOverview'));
+
 // RBAC — lazy loaded
 const UserManagement = lazy(() => import('../components/erp/rbac/UserManagement'));
 const AccessDenied   = lazy(() => import('../components/erp/rbac/AccessDenied'));
@@ -144,6 +147,27 @@ const DashboardRoute = () => {
   return userRole === 'regular_user' ? <MyDashboard /> : <ERPDashboard />;
 };
 
+/** /erp/executive-overview — aggregates every module's data, so it's gated on is_staff/
+ * is_superuser directly (same JWT decode as ERPLayout.tsx's isAdminUser()) rather than one
+ * rbacModule. Non-admins never reach the component — ExecutiveOverview.tsx re-checks this on
+ * mount too, so a stale/forged route entry still redirects. */
+const ExecutiveOverviewRoute = () => {
+  let isAdmin = false;
+  try {
+    const stored = localStorage.getItem('auth_tokens');
+    if (stored) {
+      const payload = JSON.parse(atob(JSON.parse(stored).access.split('.')[1]));
+      isAdmin = payload.is_staff === true || payload.is_superuser === true;
+    }
+  } catch { /* malformed token — treat as non-admin */ }
+  if (!isAdmin) {
+    const role = localStorage.getItem('xerxez_role') || '';
+    isAdmin = role === 'admin' || role === 'super_admin' || role === 'superuser';
+  }
+  if (!isAdmin) return <Navigate to="/erp/dashboard" replace />;
+  return <ExecutiveOverview />;
+};
+
 const ERPPage = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -180,6 +204,7 @@ const ERPPage = () => {
         <Routes>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard"          element={<DashboardRoute />} />
+          <Route path="executive-overview" element={<ExecutiveOverviewRoute />} />
 
           {/* CRM — one of the 8 RBAC-controlled modules; every route below requires 'crm' access. */}
           <Route path="crm"                element={<ProtectedModuleRoute module="crm"><CustomersPanel /></ProtectedModuleRoute>} />

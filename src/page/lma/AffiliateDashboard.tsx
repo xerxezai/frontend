@@ -101,6 +101,19 @@ export default function AffiliateDashboard() {
   useEffect(() => { load(); }, [load]);
   useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(""), 3000); return () => clearTimeout(t); }, [toast]);
 
+  // Cross-role access guard — a student or instructor account (no approved
+  // Affiliate row of their own) must not be able to sit on this dashboard.
+  // `dash.affiliate` from /affiliates/dashboard/ is only ever null here once
+  // loading finishes for a genuinely non-affiliate, non-staff account — a
+  // staff/superuser account with no Affiliate row still gets a truthy
+  // synthetic aggregate object back (see apps.affiliates.views.
+  // _admin_affiliate_view), so this doesn't need a separate is_staff check.
+  useEffect(() => {
+    if (!loading && token && !affiliate) {
+      navigate("/lma/login", { replace: true });
+    }
+  }, [loading, token, affiliate, navigate]);
+
   const copyLink = (courseId: number) => {
     if (!affiliate) return;
     const url = `${window.location.origin}/lma/courses/${courseId}?ref=${affiliate.affiliate_code}`;
