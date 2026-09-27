@@ -30,18 +30,17 @@ type NavEntry = NavItem | NavDivider;
 // access to it. The 4 EPC modules are restricted to Super Admins only (their hasAccess
 // check in AccessContext returns isSuperAdmin).
 const NAV: NavEntry[] = [
+  { divider: true, label: 'WORKSPACE' },
+  { to: '/erp/executive-overview', icon: 'fas fa-satellite-dish', label: 'Executive Overview', adminOnly: true },
   { to: '/erp/dashboard',   icon: 'fas fa-th-large',      label: 'Dashboard' },
+  { divider: true, label: 'MODULES' },
   { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM',         rbacModule: 'crm' },
   { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales',       rbacModule: 'sales' },
   { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement', rbacModule: 'procurement' },
   { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics',   rbacModule: 'logistics' },
   { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting',  rbacModule: 'accounting' },
-  { to: '/erp/mlm',         icon: 'fas fa-sitemap',       label: 'MLM',         rbacModule: 'mlm' },
   { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview', rbacModule: 'hr' },
-  { divider: true, label: 'EPC Modules' },
-  { to: '/erp/documents',   icon: 'fas fa-folder-open',   label: 'Document Management', rbacModule: 'document_management' },
-  { to: '/erp/projects',    icon: 'fas fa-project-diagram', label: 'Project Management', rbacModule: 'project_management' },
-  { to: '/erp/assets',      icon: 'fas fa-toolbox',       label: 'Asset Management',    rbacModule: 'asset_management' },
+  { divider: true, label: 'EPC' },
   { to: '/erp/qhse',        icon: 'fas fa-hard-hat',      label: 'QHSE',                rbacModule: 'qhse' },
 ];
 
@@ -349,6 +348,15 @@ const ERPLayout = ({ children }: Props) => {
           border-radius: 10px;
           overflow: hidden;
         }
+        .erp-subnav-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #071a33 transparent;
+          scroll-behavior: smooth;
+        }
+        .erp-subnav-scroll::-webkit-scrollbar { width: 5px; }
+        .erp-subnav-scroll::-webkit-scrollbar-track { background: transparent; }
+        .erp-subnav-scroll::-webkit-scrollbar-thumb { background: #071a33; border-radius: 3px; }
+        .erp-subnav-scroll::-webkit-scrollbar-thumb:hover { background: #0f2c4d; }
         .erp-subnav-item {
           display: flex; align-items: center; gap: 9px;
           padding: 8px 16px 8px 40px;
@@ -366,6 +374,12 @@ const ERPLayout = ({ children }: Props) => {
         .erp-subnav-active {
           color: #ffffff !important; background: #D93522 !important;
           border-left-color: #D93522 !important; font-weight: 700 !important;
+          position: relative;
+        }
+        .erp-subnav-active::after {
+          content: '';
+          position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+          width: 6px; height: 6px; border-radius: 50%; background: #ffffff;
         }
 
         .erp-icon-badge {
@@ -564,14 +578,15 @@ const ERPLayout = ({ children }: Props) => {
         <nav style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', paddingTop: 10, paddingBottom: 10 }}>
           {NAV.map((item, idx) => {
             if ('divider' in item) {
-              // The EPC Modules divider only makes sense when the EPC items below it
-              // render — which is Super Admins only.
-              if (item.label === 'EPC Modules' && !accessLoading && !isSuperAdmin) return null;
+              // The EPC divider only makes sense when the EPC items below it render —
+              // which is Super Admins only.
+              if (item.label === 'EPC' && !accessLoading && !isSuperAdmin) return null;
+              const isFirst = idx === 0;
               return (
                 <div key={`divider-${item.label}`} style={{
-                  margin: collapsed ? '14px 10px 6px' : '18px 16px 8px',
-                  paddingTop: 14,
-                  borderTop: '1px solid rgba(255,255,255,0.07)',
+                  margin: collapsed ? (isFirst ? '4px 10px 6px' : '16px 10px 6px') : (isFirst ? '2px 16px 8px' : '16px 16px 8px'),
+                  paddingTop: isFirst ? 0 : 14,
+                  borderTop: isFirst ? 'none' : '1px solid rgba(255,255,255,0.07)',
                 }}>
                   {!collapsed && (
                     <span style={{
@@ -608,12 +623,15 @@ const ERPLayout = ({ children }: Props) => {
                     <span style={{ flex: 1 }}>{item.label}</span>
                     <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
                   </button>
-                  <div style={{
-                    overflow: 'hidden',
-                    maxHeight: isOpen ? visibleSubmenu.length * 44 + 8 : 0,
-                    margin: isOpen ? '4px 8px 8px' : '0 8px',
-                    transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
-                  }}>
+                  <div
+                    className="erp-subnav-scroll"
+                    style={{
+                      overflowY: isOpen && visibleSubmenu.length * 44 + 8 > 280 ? 'auto' : 'hidden',
+                      maxHeight: isOpen ? Math.min(visibleSubmenu.length * 44 + 8, 280) : 0,
+                      margin: isOpen ? '4px 8px 8px' : '0 8px',
+                      transition: 'max-height 0.3s cubic-bezier(0.22,1,0.36,1), margin 0.3s ease',
+                    }}
+                  >
                     <div className="erp-subnav-panel">
                       {visibleSubmenu.map(s => (
                         <NavLink
@@ -659,6 +677,18 @@ const ERPLayout = ({ children }: Props) => {
         </nav>
 
         {/* RBAC: User Management (super admins only) / Request Module Access (everyone else) */}
+        {!accessLoading && isSuperAdmin && (
+          <div style={{ margin: collapsed ? '10px 10px 0' : '16px 16px 0', paddingTop: 14, borderTop: '1px solid rgba(255,255,255,0.07)', flexShrink: 0 }}>
+            {!collapsed && (
+              <span style={{
+                fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.35)', fontFamily: "'DM Sans', sans-serif",
+              }}>
+                ADMIN
+              </span>
+            )}
+          </div>
+        )}
         {!accessLoading && (
           isSuperAdmin ? (
             <div style={{ padding: '10px 10px 0', flexShrink: 0 }}>
