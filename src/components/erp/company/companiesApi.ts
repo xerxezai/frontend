@@ -6,6 +6,7 @@ export const companiesApi = {
   createCompany: (data: any) => erpFetch('companies/', { method: 'POST', body: JSON.stringify(data) }),
   updateCompany: (id: number, data: any) => erpFetch(`companies/${id}/`, { method: 'PUT', body: JSON.stringify(data) }),
   deactivateCompany: (id: number) => erpFetch(`companies/${id}/`, { method: 'DELETE' }),
+  permanentDeleteCompany: (id: number) => erpFetch(`companies/${id}/permanent-delete/`, { method: 'DELETE' }),
   getCompanyUsers: (id: number) => erpFetch(`companies/${id}/users/`),
   addCompanyUser: (id: number, data: any) => erpFetch(`companies/${id}/users/`, { method: 'POST', body: JSON.stringify(data) }),
 

@@ -47,34 +47,42 @@ const AddCompanyModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
       justifyContent: 'center', zIndex: 9999, overflow: 'auto', padding: 20,
     }}>
       <div style={{
-        background: '#fff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 520,
+        background: '#fff', borderRadius: 14, padding: 22, width: '100%', maxWidth: 400,
+        maxHeight: '90vh', overflowY: 'auto',
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)', fontFamily: "'DM Sans',sans-serif",
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-          <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>Add Company</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#666' }}>&times;</button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800 }}>Add Company</h3>
+          <button onClick={onClose} aria-label="Close" style={{ background: 'none', border: 'none', fontSize: 18, cursor: 'pointer', color: '#666', lineHeight: 1, padding: 2 }}>&times;</button>
         </div>
 
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 10 }}>
           <label style={labelStyle}>Company Name *</label>
           <input value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Trojan General Contracting" style={inputStyle} />
         </div>
 
-        <div style={{ marginBottom: 14 }}>
-          <label style={labelStyle}>Maximum Users Allowed *</label>
-          <input
-            type="number" min={1} max={500} value={form.max_users}
-            onChange={e => set('max_users', Math.max(1, Math.min(500, Number(e.target.value) || 1)))}
-            placeholder="e.g. 10" style={inputStyle}
-          />
-          <p style={{ fontSize: 11.5, color: '#9ca3af', margin: '5px 0 0' }}>Set the maximum number of users this company can have.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+          <div>
+            <label style={labelStyle}>Max Users *</label>
+            <input
+              type="number" min={1} max={500} value={form.max_users}
+              onChange={e => set('max_users', Math.max(1, Math.min(500, Number(e.target.value) || 1)))}
+              placeholder="10" style={inputStyle}
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Plan</label>
+            <select value={form.plan} onChange={e => set('plan', e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
+              {PLANS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+            </select>
+          </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
           <div>
             <label style={labelStyle}>Industry</label>
             <select value={form.industry} onChange={e => set('industry', e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
-              <option value="">Select industry...</option>
+              <option value="">Select...</option>
               {INDUSTRIES.map(i => <option key={i} value={i}>{i}</option>)}
             </select>
           </div>
@@ -84,7 +92,7 @@ const AddCompanyModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
           <div>
             <label style={labelStyle}>City</label>
             <input value={form.city} onChange={e => set('city', e.target.value)} style={inputStyle} />
@@ -95,30 +103,33 @@ const AddCompanyModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
           </div>
         </div>
 
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>Email</label>
           <input type="email" value={form.email} onChange={e => set('email', e.target.value)} placeholder="contact@company.com" style={inputStyle} />
         </div>
 
-        <div style={{ marginBottom: 20 }}>
-          <label style={labelStyle}>Plan</label>
-          <select value={form.plan} onChange={e => set('plan', e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
-            {PLANS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
-          </select>
+        {error && <p style={{ color: '#ef4444', fontSize: 12.5, marginBottom: 10 }}>{error}</p>}
+
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={onClose}
+            style={{
+              flex: 1, background: '#F8F7F4', color: '#374151', border: '1px solid rgba(0,0,0,0.10)',
+              padding: '10px 16px', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+            }}>
+            Cancel
+          </button>
+          <button
+            onClick={submit}
+            disabled={loading}
+            style={{
+              flex: 2, background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none',
+              padding: '10px 16px', borderRadius: 8, fontWeight: 700, fontSize: 13,
+              cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.75 : 1,
+            }}>
+            {loading ? 'Adding...' : 'Add Company'}
+          </button>
         </div>
-
-        {error && <p style={{ color: '#ef4444', fontSize: 13, marginBottom: 14 }}>{error}</p>}
-
-        <button
-          onClick={submit}
-          disabled={loading}
-          style={{
-            width: '100%', background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none',
-            padding: '13px 20px', borderRadius: 8, fontWeight: 700, fontSize: 14,
-            cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.75 : 1,
-          }}>
-          {loading ? 'Adding...' : 'Add Company'}
-        </button>
       </div>
     </div>
   );

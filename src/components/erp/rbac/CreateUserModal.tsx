@@ -12,6 +12,8 @@ const ROLES = [
   { value: 'read_only', label: 'Read Only' },
 ];
 
+// MLM and the 4 EPC modules (Document Management, Project Management, Asset Management,
+// QHSE) are deliberately excluded — they're never granted through this form.
 const ALL_MODULES = [
   { name: 'dashboard', label: 'Dashboard' },
   { name: 'crm', label: 'CRM' },
@@ -19,7 +21,6 @@ const ALL_MODULES = [
   { name: 'procurement', label: 'Procurement' },
   { name: 'logistics', label: 'Logistics' },
   { name: 'accounting', label: 'Accounting' },
-  { name: 'mlm', label: 'MLM' },
   { name: 'hr', label: 'HR Overview' },
 ];
 
@@ -50,6 +51,10 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
   const submit = async () => {
     if (!form.full_name || !form.username || !form.email || !form.password || !form.role) {
       setError('Please fill all required fields');
+      return;
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(form.username)) {
+      setError('Username can only contain letters, numbers and underscore');
       return;
     }
     if (!form.company) {
@@ -121,7 +126,7 @@ const CreateUserModal = ({ onClose, onSuccess }: { onClose?: () => void; onSucce
           </div>
           <div>
             <label style={labelStyle}>Username *</label>
-            <input value={form.username} onChange={e => set('username', e.target.value)} placeholder="username" style={inputStyle} />
+            <input value={form.username} onChange={e => set('username', e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))} placeholder="username" style={inputStyle} />
           </div>
         </div>
 

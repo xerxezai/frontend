@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Bot,
@@ -59,10 +59,17 @@ const FloatingChat = () => {
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isErpPage = location.pathname.startsWith("/erp");
 
   useEffect(() => {
     if (open) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open, loading]);
+
+  // The ERP app has its own in-app navigation, header and support surfaces — the marketing
+  // site's floating AI assistant bubble doesn't belong there, so it never renders on any
+  // /erp/* route (hooks above still run unconditionally, per the Rules of Hooks).
+  if (isErpPage) return null;
 
   const askAI = async (text: string) => {
     const userMsg: Message = { role: "user", content: text };

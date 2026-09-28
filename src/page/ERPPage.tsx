@@ -121,9 +121,14 @@ const EditProfilePage     = lazy(() => import('../components/erp/profile/EditPro
 const AccountSettingsPage = lazy(() => import('../components/erp/profile/AccountSettingsPage'));
 const PrivacySettingsPage = lazy(() => import('../components/erp/profile/PrivacySettingsPage'));
 
+// Fills the full content area (not a small 220px box) with a clearly-visible spinner + label
+// — the previous version was easy to mistake for a blank/broken page on a slow first load
+// (e.g. the initial rbac/my-access/ fetch), since a small faint spinner on an otherwise-white
+// page reads as "nothing happened" rather than "loading".
 const ModuleLoader = () => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
-    <div className="spinner-border" style={{ color: '#C9883A' }} role="status"></div>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, minHeight: 'calc(100vh - 64px)' }}>
+    <div className="spinner-border" style={{ color: '#D93522', width: 40, height: 40 }} role="status"></div>
+    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13.5, fontWeight: 600, color: '#6B6B6B' }}>Loading…</span>
   </div>
 );
 
@@ -138,13 +143,15 @@ const ProtectedModuleRoute = ({ module, children }: { module: string; children: 
   return <>{children}</>;
 };
 
-/** The main /erp/dashboard route — Regular User gets the personal "My Dashboard" (own
- * attendance/leave/payslips/performance only); Super Admin/Company Admin/Module Admin keep
- * the company-wide ERPDashboard. */
+/** The main /erp/dashboard route — Regular User and Read Only both get the personal
+ * "My Dashboard" (own attendance/leave/payslips/performance only, no company-wide data or
+ * write actions); Super Admin/Company Admin/Module Admin keep the company-wide ERPDashboard
+ * (which itself filters its tabs down to a Module Admin's assigned modules — see
+ * ERPDashboard.tsx). */
 const DashboardRoute = () => {
   const { userRole, isLoading } = useAccess();
   if (isLoading) return <ModuleLoader />;
-  return userRole === 'regular_user' ? <MyDashboard /> : <ERPDashboard />;
+  return userRole === 'regular_user' || userRole === 'read_only' ? <MyDashboard /> : <ERPDashboard />;
 };
 
 /** /erp/executive-overview — aggregates every module's data, so it's gated on is_staff/

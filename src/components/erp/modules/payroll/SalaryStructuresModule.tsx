@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useERPList } from '../../../../hooks/useERPApi';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
@@ -153,11 +153,24 @@ export default function SalaryStructuresModule() {
   const [saveOk, setSaveOk] = useState(false);
   const [deleting, setDeleting] = useState<any>(null);
   const [deleteBusy, setDeleteBusy] = useState(false);
+  // The create/edit form is a permanently-visible sticky panel, not a modal — clicking "New"
+  // while it's already showing an empty form (e.g. on first load) resets state with no visible
+  // change, which reads as "the button does nothing". Scroll it into view + a brief highlight
+  // flash makes the click's effect unmistakable, especially once the layout stacks on narrow
+  // screens and the panel isn't on screen at all.
+  const formPanelRef = useRef<HTMLDivElement>(null);
+  const [justReset, setJustReset] = useState(false);
+  const flashPanel = () => {
+    formPanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setJustReset(true);
+    setTimeout(() => setJustReset(false), 700);
+  };
 
   const openNew = () => {
     setSelected(null);
     setForm(emptyForm);
     setSaveErr(''); setSaveOk(false);
+    flashPanel();
   };
 
   const openEdit = (s: any) => {
@@ -170,6 +183,7 @@ export default function SalaryStructuresModule() {
       deductions: objToPairs(s.deductions),
     });
     setSaveErr(''); setSaveOk(false);
+    flashPanel();
   };
 
   const totalAllowances = form.allowances.reduce((s, a) => s + (parseFloat(a.value) || 0), 0);
@@ -294,7 +308,14 @@ export default function SalaryStructuresModule() {
         </div>
 
         {/* Right: form */}
-        <div style={{ background: C.white, borderRadius: 14, border: `1px solid ${C.border}`, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.05)', position: 'sticky', top: 80 }}>
+        <div ref={formPanelRef} style={{
+          background: C.white, borderRadius: 14,
+          border: `1px solid ${justReset ? C.orange : C.border}`,
+          padding: 24,
+          boxShadow: justReset ? '0 0 0 4px rgba(217,53,34,0.14), 0 1px 4px rgba(0,0,0,0.05)' : '0 1px 4px rgba(0,0,0,0.05)',
+          position: 'sticky', top: 80,
+          transition: 'border-color 250ms ease, box-shadow 250ms ease',
+        }}>
           <h5 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: C.dark, margin: '0 0 18px' }}>
             {selected ? 'Edit Structure' : 'New Salary Structure'}
           </h5>

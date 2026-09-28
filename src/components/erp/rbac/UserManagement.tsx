@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import ERPTable from '../ERPTable';
 import { rbacApi } from './rbacApi';
 import CreateUserModal from './CreateUserModal';
+import { useAccess } from '../../../context/AccessContext';
 
 /** Decodes the JWT access token and returns the logged-in user's id, if any —
  * same decode approach as isSuperUser()/isAdminUser() elsewhere in the ERP. */
@@ -42,7 +43,19 @@ const ROLE_BADGE: Record<string, { label: string; bg: string; color: string }> =
   module_admin:  { label: 'Module Admin',  bg: '#dbeafe', color: '#1d4ed8' },
   regular_user:  { label: 'Regular User',  bg: '#d1fae5', color: '#065f46' },
   read_only:     { label: 'Read Only',     bg: '#f1f5f9', color: '#64748b' },
+  no_access:     { label: 'No Access',     bg: '#f3f4f6', color: '#9ca3af' },
 };
+
+// Assignable per-module roles — matches apps.rbac.models.UserModuleAccess.ROLE_CHOICES minus
+// 'super_admin'/'company_admin' (those aren't granted per-module through this screen) plus a
+// synthetic 'no_access' option: the backend has no such stored role, so picking it in the Edit
+// modal calls revokeAccess() (soft-deletes the UserModuleAccess row) instead of grantAccess().
+const ASSIGNABLE_ROLES: { value: string; label: string }[] = [
+  { value: 'module_admin', label: 'Module Admin' },
+  { value: 'regular_user', label: 'Regular User' },
+  { value: 'read_only', label: 'Read Only' },
+];
+const EDIT_ROLES: { value: string; label: string }[] = [...ASSIGNABLE_ROLES, { value: 'no_access', label: 'No Access (remove)' }];
 
 const STATUS_BADGE: Record<string, { label: string; bg: string; color: string }> = {
   pending:  { label: 'Pending',  bg: '#fef3c7', color: '#92400e' },
@@ -131,6 +144,139 @@ function EditAccessModal({ user, onClose, onSaved }: { user: any; onClose: () =>
   );
 }
 
+// ── Module Access tab — flattened User × Module × Role rows ────────────────────────────────
+interface AccessRow {
+  userId: number; userName: string; userEmail: string;
+  moduleName: string; moduleDisplay: string; role: string;
+}
+
+function EditModuleRoleModal({ row, onClose, onSaved }: { row: AccessRow; onClose: () => void; onSaved: () => void }) {
+  const [role, setRole] = useState(row.role);
+  const [saving, setSaving] = useState(false);
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      if (role === 'no_access') {
+        await rbacApi.revokeAccess(row.userId, { module_name: row.moduleName });
+        toast.success('Access removed');
+      } else {
+        await rbacApi.grantAccess(row.userId, { module_name: row.moduleName, role });
+        toast.success('Role updated');
+      }
+      onSaved(); onClose();
+    } catch (e: any) { toast.error(e.message || 'Update failed'); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 420, boxShadow: '0 20px 60px rgba(0,0,0,0.3)', fontFamily: FF }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800 }}>Edit Role</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#666' }}>&times;</button>
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 }}>User</label>
+          <div style={{ padding: '10px 14px', borderRadius: 8, background: '#F8F7F4', fontSize: 13.5, color: '#1A1A1A' }}>{row.userName} <span style={{ color: '#9ca3af' }}>({row.userEmail})</span></div>
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 }}>Module</label>
+          <div style={{ padding: '10px 14px', borderRadius: 8, background: '#F8F7F4', fontSize: 13.5, color: '#1A1A1A' }}>{row.moduleDisplay}</div>
+        </div>
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 }}>Role</label>
+          <select value={role} onChange={e => setRole(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}>
+            {EDIT_ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+          </select>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onClose} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '10px', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
+          <button onClick={save} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+            {saving ? 'Saving…' : 'Save'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddAccessModal({ users, onClose, onSaved }: { users: any[]; onClose: () => void; onSaved: () => void }) {
+  const [userId, setUserId] = useState('');
+  const [moduleName, setModuleName] = useState('');
+  const [role, setRole] = useState('regular_user');
+  const [saving, setSaving] = useState(false);
+
+  const eligibleUsers = users.filter(u => !u.is_superuser);
+
+  const save = async () => {
+    if (!userId || !moduleName) { toast.error('Select a user and a module.'); return; }
+    setSaving(true);
+    try {
+      await rbacApi.grantAccess(Number(userId), { module_name: moduleName, role });
+      toast.success('Access granted');
+      onSaved(); onClose();
+    } catch (e: any) { toast.error(e.message || 'Could not grant access'); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 420, boxShadow: '0 20px 60px rgba(0,0,0,0.3)', fontFamily: FF }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800 }}>Add Module Access</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#666' }}>&times;</button>
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 }}>User</label>
+          <select value={userId} onChange={e => setUserId(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}>
+            <option value="">— Select user —</option>
+            {eligibleUsers.map(u => <option key={u.id} value={u.id}>{u.full_name} ({u.email})</option>)}
+          </select>
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 }}>Module</label>
+          <select value={moduleName} onChange={e => setModuleName(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}>
+            <option value="">— Select module —</option>
+            {ALL_MODULES.map(m => <option key={m.name} value={m.name}>{m.label}</option>)}
+          </select>
+        </div>
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#666', marginBottom: 6 }}>Role</label>
+          <select value={role} onChange={e => setRole(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}>
+            {ASSIGNABLE_ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+          </select>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onClose} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '10px', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
+          <button onClick={save} disabled={saving} style={{ flex: 1, background: 'linear-gradient(145deg,#D93522,#D93522)', color: '#fff', border: 'none', borderRadius: 9, padding: '10px', fontFamily: FF, fontWeight: 700, fontSize: 13, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+            {saving ? 'Saving…' : 'Grant Access'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DeleteAccessConfirm({ row, busy, onCancel, onConfirm }: { row: AccessRow; busy: boolean; onCancel: () => void; onConfirm: () => void }) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onCancel}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 400, width: '100%', borderTop: '2px solid #ef4444', fontFamily: FF, boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight: 800, marginBottom: 8, color: '#1A1A1A' }}>Remove module access?</h6>
+        <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 20 }}>
+          <strong style={{ color: '#1A1A1A' }}>{row.userName}</strong> will lose <strong style={{ color: '#1A1A1A' }}>{row.moduleDisplay}</strong> access immediately.
+        </p>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onCancel} disabled={busy} style={{ flex: 1, background: '#F8F7F4', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 9, padding: '9px', cursor: 'pointer', fontFamily: FF, fontWeight: 600, fontSize: 13 }}>Cancel</button>
+          <button onClick={onConfirm} disabled={busy} style={{ flex: 1, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: '9px', cursor: busy ? 'wait' : 'pointer', color: '#ef4444', fontFamily: FF, fontWeight: 700, fontSize: 13 }}>
+            {busy ? 'Removing…' : 'Remove Access'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DeactivateConfirm({ userName, onCancel, onConfirm }: { userName: string; onCancel: () => void; onConfirm: () => void }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onCancel}>
@@ -167,8 +313,13 @@ function PermanentDeleteConfirm({ userName, onCancel, onConfirm, busy }: { userN
 }
 
 export default function UserManagement() {
-  const [tab, setTab] = useState<'users' | 'requests'>('users');
+  const { isSuperAdmin } = useAccess();
+  const [tab, setTab] = useState<'users' | 'requests' | 'access'>('users');
   const [users, setUsers] = useState<any[]>([]);
+  const [editingAccess, setEditingAccess] = useState<AccessRow | null>(null);
+  const [addingAccess, setAddingAccess] = useState(false);
+  const [deletingAccess, setDeletingAccess] = useState<AccessRow | null>(null);
+  const [deletingAccessBusy, setDeletingAccessBusy] = useState(false);
   const [requests, setRequests] = useState<any[]>([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [requestsLoading, setRequestsLoading] = useState(true);
@@ -202,6 +353,28 @@ export default function UserManagement() {
   useEffect(() => { loadUsers(); loadRequests(); }, [loadUsers, loadRequests]);
 
   const pendingCount = useMemo(() => requests.filter(r => r.status === 'pending').length, [requests]);
+
+  // Flattened User × Module × Role rows for the Module Access tab — one row per active
+  // UserModuleAccess grant, excluding Super Admins (whose access is implicit/global, not a
+  // grantable row) and excluding is_active=false rows (already-revoked grants the backend
+  // keeps around for audit history but that no longer mean anything for access purposes).
+  const accessRows: AccessRow[] = useMemo(() => users.flatMap(u => u.is_superuser ? [] :
+    (u.module_access || [])
+      .filter((a: any) => a.is_active !== false)
+      .map((a: any) => ({ userId: u.id, userName: u.full_name, userEmail: u.email, moduleName: a.module_name, moduleDisplay: a.module_display, role: a.role }))
+  ), [users]);
+
+  const confirmDeleteAccess = async () => {
+    if (!deletingAccess) return;
+    setDeletingAccessBusy(true);
+    try {
+      await rbacApi.revokeAccess(deletingAccess.userId, { module_name: deletingAccess.moduleName });
+      toast.success('Access removed');
+      setDeletingAccess(null);
+      loadUsers();
+    } catch (e: any) { toast.error(e.message || 'Could not remove access'); }
+    finally { setDeletingAccessBusy(false); }
+  };
 
   const confirmDeactivate = async () => {
     if (!deactivating) return;
@@ -339,12 +512,12 @@ export default function UserManagement() {
       </div>
 
       <div style={{ display: 'flex', gap: 6, marginBottom: 20, borderBottom: `1px solid ${BORDER}` }}>
-        {(['users', 'requests'] as const).map(t => (
+        {(isSuperAdmin ? (['users', 'requests', 'access'] as const) : (['users', 'requests'] as const)).map(t => (
           <button key={t} onClick={() => setTab(t)} style={{
             background: 'none', border: 'none', cursor: 'pointer', padding: '10px 16px', fontFamily: FF, fontWeight: 700, fontSize: 12.5,
             color: tab === t ? OG : '#6B6B6B', borderBottom: tab === t ? `2px solid ${OG}` : '2px solid transparent', marginBottom: -1,
           }}>
-            {t === 'users' ? 'Users' : `Access Requests${pendingCount ? ` (${pendingCount} pending)` : ''}`}
+            {t === 'users' ? 'Users' : t === 'requests' ? `Access Requests${pendingCount ? ` (${pendingCount} pending)` : ''}` : 'Module Access'}
           </button>
         ))}
       </div>
@@ -492,12 +665,84 @@ export default function UserManagement() {
             </div>
           )}
         </div>
+      ) : tab === 'access' && isSuperAdmin ? (
+        <div>
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <h5 className="fw-bold mb-0" style={{ color: '#1a1a2e', fontSize: 15 }}>Module Access</h5>
+            <button
+              onClick={() => setAddingAccess(true)}
+              style={{ background: 'linear-gradient(145deg,#D93522 0%,#D93522 100%)', color: '#fff', border: 'none', borderRadius: 9, padding: '7px 14px', fontFamily: FF, fontWeight: 700, fontSize: 12, boxShadow: '0 3px 0 rgba(150,95,30,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+            >
+              <i className="fas fa-plus" style={{ fontSize: 10 }}></i> Add Access
+            </button>
+          </div>
+
+          {usersLoading ? (
+            <div className="d-flex flex-column align-items-center justify-content-center py-5 gap-3 text-muted">
+              <div className="spinner-border" style={{ color: OG }} role="status"></div>
+              <p>Loading Module Access…</p>
+            </div>
+          ) : accessRows.length === 0 ? (
+            <div className="erp-table-card" style={{
+              textAlign: 'center', padding: '64px 24px', background: '#fff', borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`,
+              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
+            }}>
+              <p className="mb-0" style={{ color: '#6B6B6B', fontFamily: FF, fontSize: 13.5, fontWeight: 600 }}>No module access grants yet. Add one above.</p>
+            </div>
+          ) : (
+            <div className="erp-table-card" style={{
+              background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', borderTop: `3px solid ${OG}`,
+              boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(217,53,34,0.06)',
+              overflowX: 'auto',
+            }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
+                <thead>
+                  <tr style={{ background: '#fafaf8' }}>
+                    <th style={TH}>User</th>
+                    <th style={TH}>Email</th>
+                    <th style={TH}>Module</th>
+                    <th style={TH}>Current Role</th>
+                    <th style={{ ...TH, width: 90, minWidth: 90 }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {accessRows.map(row => (
+                    <tr key={`${row.userId}-${row.moduleName}`}>
+                      <td style={TD}>{row.userName}</td>
+                      <td style={TD}>{row.userEmail}</td>
+                      <td style={TD}>{row.moduleDisplay}</td>
+                      <td style={TD}><Badge map={ROLE_BADGE} value={row.role} /></td>
+                      <td style={{ ...TD, width: 90 }}>
+                        <div style={{ display: 'flex', gap: 5 }}>
+                          <button title="Edit role" onClick={() => setEditingAccess(row)}
+                            style={{ background: 'rgba(217,53,34,0.08)', color: OG, border: '1px solid rgba(217,53,34,0.22)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
+                            <i className="fas fa-pen" style={{ fontSize: 10 }}></i>
+                          </button>
+                          <button title="Remove access" onClick={() => setDeletingAccess(row)}
+                            style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', flexShrink: 0 }}>
+                            <i className="fas fa-trash" style={{ fontSize: 10 }}></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       ) : (
         <ERPTable title="Access Requests" columns={requestCols} data={requests} loading={requestsLoading} error={null} isAdmin={false} />
       )}
 
       {showCreate && <CreateUserModal onClose={() => setShowCreate(false)} onSuccess={loadUsers} />}
       {editing && <EditAccessModal user={editing} onClose={() => setEditing(null)} onSaved={loadUsers} />}
+      {editingAccess && <EditModuleRoleModal row={editingAccess} onClose={() => setEditingAccess(null)} onSaved={loadUsers} />}
+      {addingAccess && <AddAccessModal users={users} onClose={() => setAddingAccess(false)} onSaved={loadUsers} />}
+      {deletingAccess && (
+        <DeleteAccessConfirm row={deletingAccess} busy={deletingAccessBusy} onCancel={() => setDeletingAccess(null)} onConfirm={confirmDeleteAccess} />
+      )}
       {deactivating && <DeactivateConfirm userName={deactivating.full_name} onCancel={() => setDeactivating(null)} onConfirm={confirmDeactivate} />}
       {permanentDeleting && (
         <PermanentDeleteConfirm
