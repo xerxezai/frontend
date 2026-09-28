@@ -22,6 +22,11 @@ interface AccessContextType {
   hasAccess: (module: string) => boolean;
   isReadOnly: (module: string) => boolean;
   canWrite: (module: string) => boolean;
+  /** True only when the rbac/my-access/ fetch itself failed (network error, 5xx, etc.) —
+   * distinct from a legitimately empty accessibleModules for a user who just has no module
+   * grants. Lets the sidebar show "couldn't load access — retry" instead of silently
+   * rendering an empty MODULES section indistinguishable from "no access". */
+  hasAccessError: boolean;
   /** "HR Manager" — module_admin scoped to the hr module specifically. Used (alongside
    * isSuperAdmin/isCompanyAdmin) to gate full company-wide visibility of Attendance/Leave/
    * Payroll data, as opposed to a regular employee who only sees their own records. */
@@ -41,6 +46,7 @@ const AccessContext = createContext<AccessContextType>({
   hasAccess: () => false,
   isReadOnly: () => false,
   canWrite: () => false,
+  hasAccessError: false,
   isHRManager: false,
   isLoading: true,
   refreshAccess: () => {},
@@ -54,11 +60,13 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
   const [maxUsers, setMaxUsers] = useState(0);
   const [currentUsers, setCurrentUsers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasAccessError, setHasAccessError] = useState(false);
   const isCompanyAdmin = userRole === 'company_admin';
   const isHRManager = accessibleModules.some(m => m.name === 'hr' && m.role === 'module_admin');
 
   const fetchAccess = async () => {
     setIsLoading(true);
+    setHasAccessError(false);
     try {
       const data = await erpFetch('rbac/my-access/');
       setUserRole(data.role);
@@ -84,6 +92,7 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error) {
       console.error('Access fetch failed:', error);
+      setHasAccessError(true);
     } finally {
       setIsLoading(false);
     }
@@ -117,7 +126,7 @@ export const AccessProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AccessContext.Provider value={{
       userRole, isSuperAdmin, isCompanyAdmin, accessibleModules, companyName, maxUsers, currentUsers,
-      hasAccess, isReadOnly, canWrite, isHRManager, isLoading,
+      hasAccess, isReadOnly, canWrite, hasAccessError, isHRManager, isLoading,
       refreshAccess: fetchAccess,
     }}>
       {children}

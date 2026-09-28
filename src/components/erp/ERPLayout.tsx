@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { erpFetch } from '../../hooks/useERPApi';
 import { useCurrency, CURRENCIES } from '../../context/CurrencyContext';
 import { useAccess } from '../../context/AccessContext';
 import { useCompany } from '../../context/CompanyContext';
@@ -21,7 +22,7 @@ const C = {
   border:     "rgba(0,0,0,0.07)",
 };
 
-type NavItem = { to: string; icon: string; label: string; adminOnly?: boolean; rbacModule?: string };
+type NavItem = { to: string; icon: string; label: string; adminOnly?: boolean; rbacModule?: string; num?: number };
 type SubNavItem = { to: string; icon: string; label: string; adminOnly?: boolean };
 type NavDivider = { divider: true; label: string };
 type NavEntry = NavItem | NavDivider;
@@ -33,15 +34,16 @@ const NAV: NavEntry[] = [
   { divider: true, label: 'WORKSPACE' },
   { to: '/erp/executive-overview', icon: 'fas fa-satellite-dish', label: 'Executive Overview', adminOnly: true },
   { to: '/erp/dashboard',   icon: 'fas fa-th-large',      label: 'Dashboard' },
+  { to: '/erp/executive-overview?tab=approvals', icon: 'fas fa-clipboard-check', label: 'Approvals', adminOnly: true },
   { divider: true, label: 'MODULES' },
-  { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM',         rbacModule: 'crm' },
-  { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales',       rbacModule: 'sales' },
-  { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement', rbacModule: 'procurement' },
-  { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics',   rbacModule: 'logistics' },
-  { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting',  rbacModule: 'accounting' },
-  { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview', rbacModule: 'hr' },
-  { divider: true, label: 'EPC' },
-  { to: '/erp/qhse',        icon: 'fas fa-hard-hat',      label: 'QHSE',                rbacModule: 'qhse' },
+  { to: '/erp/crm',         icon: 'fas fa-users',         label: 'CRM',         rbacModule: 'crm',         num: 1 },
+  { to: '/erp/sales',       icon: 'fas fa-shopping-cart', label: 'Sales',       rbacModule: 'sales',       num: 2 },
+  { to: '/erp/procurement', icon: 'fas fa-truck',         label: 'Procurement', rbacModule: 'procurement', num: 3 },
+  { to: '/erp/hr',          icon: 'fas fa-user-tie',      label: 'HR Overview', rbacModule: 'hr',          num: 4 },
+  { to: '/erp/accounting',  icon: 'fas fa-book',          label: 'Accounting',  rbacModule: 'accounting',  num: 5 },
+  { to: '/erp/logistics',   icon: 'fas fa-shipping-fast', label: 'Logistics',   rbacModule: 'logistics',   num: 6 },
+  { to: '/erp/inventory',   icon: 'fas fa-boxes',         label: 'Inventory',   rbacModule: 'procurement', num: 7 },
+  { to: '/erp/qhse',        icon: 'fas fa-hard-hat',      label: 'QHSE',        rbacModule: 'qhse',        num: 8 },
 ];
 
 // Expandable CRM submenu — Customers/Leads/Activities/Pipeline are each their
@@ -185,6 +187,7 @@ interface Props { children: React.ReactNode; }
 
 const ERPLayout = ({ children }: Props) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [switchingToAcademy, setSwitchingToAcademy] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchVal, setSearchVal] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
@@ -220,7 +223,7 @@ const ERPLayout = ({ children }: Props) => {
   const adminName = localStorage.getItem('xerxez_name') || 'Admin';
   const initial   = adminName.charAt(0).toUpperCase();
   const isAdmin   = isAdminUser();
-  const { hasAccess, isSuperAdmin, isCompanyAdmin, userRole, isLoading: accessLoading } = useAccess();
+  const { hasAccess, isSuperAdmin, isCompanyAdmin, userRole, hasAccessError, refreshAccess, isLoading: accessLoading } = useAccess();
   const { isPlatformAdmin, currentCompany } = useCompany();
   // Regular User sees only their own personal HR data — a cut-down "My X" HR submenu and
   // a personal dashboard in place of the company-wide one (see MyDashboard.tsx / ERPPage.tsx).
@@ -277,7 +280,31 @@ const ERPLayout = ({ children }: Props) => {
     navigate('/');
   };
 
-  const sidebarW = collapsed ? 68 : 240;
+  /** Super Admin shortcut — auto-logs into the LMA as an instructor using the ERP session's
+   * own JWT (POST /lma/auth/switch/, superuser-only server-side) instead of sending them to
+   * /lma/login to re-enter credentials. Mirrors exactly the localStorage keys LMALoginPage.tsx
+   * sets on a normal login, so the rest of the LMA app can't tell the difference. */
+  const handleSwitchToAcademy = async () => {
+    setSwitchingToAcademy(true);
+    try {
+      const data = await erpFetch('lma/auth/switch/', { method: 'POST' });
+      localStorage.setItem('lma_token', data.lma_token);
+      localStorage.setItem('lma_refresh', data.lma_refresh);
+      localStorage.setItem('lma_role', data.lma_role);
+      localStorage.setItem('lma_can_instructor', String(data.can_access_instructor));
+      localStorage.setItem('lma_instructor_level', data.instructor_level || 'regular');
+      localStorage.setItem('lma_name', data.name);
+      navigate('/lma/instructor/dashboard', { replace: true });
+    } catch {
+      // Not a superuser, or the endpoint failed — fall back to the normal credential flow
+      // rather than leaving the click silently do nothing.
+      navigate('/lma/login');
+    } finally {
+      setSwitchingToAcademy(false);
+    }
+  };
+
+  const sidebarW = collapsed ? 64 : 260;
 
   return (
     <div
@@ -308,12 +335,12 @@ const ERPLayout = ({ children }: Props) => {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 12px 16px;
-          margin: 3px 8px;
+          padding: 10px 16px;
+          margin: 2px 8px;
           border-left: 3px solid transparent;
           border-radius: 10px;
           text-decoration: none;
-          color: rgba(255,255,255,0.60);
+          color: rgba(255,255,255,0.82);
           font-size: 14px;
           font-weight: 600;
           line-height: 1.3;
@@ -325,13 +352,13 @@ const ERPLayout = ({ children }: Props) => {
           box-sizing: border-box;
         }
         .erp-nav-item:hover {
-          color: rgba(255,255,255,0.92);
-          background: rgba(217,53,34,0.15);
+          color: #ffffff;
+          background: rgba(255,255,255,0.08);
         }
         .erp-nav-active {
           color: #ffffff !important;
-          background: #D93522 !important;
-          border-left-color: #ffffff !important;
+          background: rgba(255,255,255,0.08) !important;
+          border-left-color: #D93522 !important;
           font-weight: 700 !important;
         }
         .erp-nav-chevron {
@@ -516,7 +543,11 @@ const ERPLayout = ({ children }: Props) => {
         className={`erp-sidebar${mobileOpen ? ' erp-sidebar-mobile-open' : ''}`}
         style={{
           width: sidebarW,
-          background: `linear-gradient(180deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)`,
+          background: `
+            radial-gradient(circle at 15% 8%, rgba(217,53,34,0.10) 0%, transparent 42%),
+            radial-gradient(circle at 90% 92%, rgba(217,53,34,0.07) 0%, transparent 50%),
+            linear-gradient(180deg, ${C.warmDark} 0%, ${C.warmDarker} 100%)
+          `,
           flexDirection: 'column',
           position: 'fixed',
           top: 0, left: 0, bottom: 0,
@@ -529,7 +560,7 @@ const ERPLayout = ({ children }: Props) => {
         {/* brand */}
         <div style={{
           position: 'relative',
-          padding: '22px 16px 16px',
+          padding: '14px 16px 10px',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           flexShrink: 0,
         }}>
@@ -537,64 +568,69 @@ const ERPLayout = ({ children }: Props) => {
             <button
               onClick={() => navigate('/')}
               aria-label="Go to Xerxez website"
-              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex' }}
+              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
             >
-              {!collapsed ? (
-                <img src="/assets/img/logo/xerxez_logo.png" alt="Xerxez"
-                  style={{ height: 68, width: 'auto', display: 'block', objectFit: 'contain' }} />
-              ) : (
-                <img src="/assets/img/logo/icon-logo.svg" alt="Xerxez"
-                  style={{ height: 32, width: 32, display: 'block', objectFit: 'contain' }} />
-              )}
+              <span style={{
+                fontFamily: "'Poppins', sans-serif", fontWeight: 800, color: '#ffffff', lineHeight: 1,
+                fontSize: collapsed ? 15 : 20, letterSpacing: collapsed ? 1 : 2,
+              }}>
+                {collapsed ? 'X' : 'XERXEZ'}
+              </span>
             </button>
           </div>
           {!collapsed && (
             <div style={{
-              marginTop: 7, fontSize: 10, color: 'rgba(255,255,255,0.65)', fontWeight: 700,
-              letterSpacing: '0.14em', textTransform: 'uppercase',
+              marginTop: 6, fontSize: 10, color: 'rgba(255,255,255,0.50)', fontWeight: 700,
+              letterSpacing: 1, textTransform: 'uppercase',
               fontFamily: "'DM Sans', sans-serif",
             }}>
               Enterprise · ERP
             </div>
           )}
-          <button
-            onClick={() => setCollapsed(c => !c)}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              padding: '5px 6px', borderRadius: 6,
-              color: 'rgba(255,255,255,0.28)',
-              transition: 'color 0.2s',
-              position: 'absolute', right: 10, top: 18,
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.28)')}
-          >
-            <i className={`fas fa-${collapsed ? 'chevron-right' : 'chevron-left'}`} style={{ fontSize: 11 }}></i>
-          </button>
         </div>
 
-        {/* nav */}
-        <nav style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', paddingTop: 10, paddingBottom: 10 }}>
+        {/* scrollable middle — WORKSPACE + MODULES + ADMINISTRATION. This is the only
+            scrolling region in the sidebar; Switch to Academy/Logout/Collapse below stay
+            fixed at the bottom regardless of how long this content gets. `minHeight: 0` is
+            required here — without it a flex child with overflow:auto refuses to shrink
+            below its content's natural height in a column flex container, which is what was
+            actually causing the ADMINISTRATION block to spill past the bottom-fixed buttons
+            instead of scrolling within its own region. */}
+        <div style={{ flex: '1 1 auto', minHeight: 0, display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
+        <nav style={{ paddingTop: 6, paddingBottom: 6 }}>
           {NAV.map((item, idx) => {
             if ('divider' in item) {
-              // The EPC divider only makes sense when the EPC items below it render —
-              // which is Super Admins only.
-              if (item.label === 'EPC' && !accessLoading && !isSuperAdmin) return null;
               const isFirst = idx === 0;
               return (
                 <div key={`divider-${item.label}`} style={{
-                  margin: collapsed ? (isFirst ? '4px 10px 6px' : '16px 10px 6px') : (isFirst ? '2px 16px 8px' : '16px 16px 8px'),
-                  paddingTop: isFirst ? 0 : 14,
+                  margin: collapsed ? (isFirst ? '2px 10px 4px' : '10px 10px 4px') : (isFirst ? '0 16px 6px' : '10px 16px 6px'),
+                  paddingTop: isFirst ? 0 : 9,
                   borderTop: isFirst ? 'none' : '1px solid rgba(255,255,255,0.07)',
                 }}>
                   {!collapsed && (
                     <span style={{
-                      fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
-                      color: 'rgba(255,255,255,0.35)', fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.40)', fontFamily: "'DM Sans', sans-serif",
                     }}>
                       {item.label}
                     </span>
+                  )}
+                  {/* Distinguishes "your account genuinely has no module grants" (correctly
+                      empty section, no message) from "the access check itself failed" (network
+                      error, 5xx) — the latter used to fail silently, leaving the whole MODULES
+                      section permanently empty with no way to recover short of a hard reload. */}
+                  {!collapsed && item.label === 'MODULES' && hasAccessError && (
+                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 11, color: 'rgba(248,113,113,0.85)', fontFamily: "'DM Sans', sans-serif" }}>
+                        Couldn't load your access.
+                      </span>
+                      <button
+                        onClick={() => refreshAccess()}
+                        style={{ background: 'none', border: 'none', padding: 0, color: '#D93522', fontSize: 11, fontWeight: 700, fontFamily: "'DM Sans', sans-serif", cursor: 'pointer', textDecoration: 'underline' }}
+                      >
+                        Retry
+                      </button>
+                    </div>
                   )}
                 </div>
               );
@@ -620,8 +656,8 @@ const ERPLayout = ({ children }: Props) => {
                     <span className="erp-icon-badge">
                       <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
                     </span>
-                    <span style={{ flex: 1 }}>{item.label}</span>
-                    <i className="fas fa-chevron-down" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
+                    <span style={{ flex: 1 }}>{item.num ? `${item.num}. ` : ''}{item.label}</span>
+                    <i className="fas fa-chevron-right" style={{ fontSize: 10, transition: 'transform 0.3s ease', transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}></i>
                   </button>
                   <div
                     className="erp-subnav-scroll"
@@ -652,22 +688,29 @@ const ERPLayout = ({ children }: Props) => {
             }
 
             const navLabel = item.to === '/erp/dashboard' && isRegularUser ? 'My Dashboard' : item.label;
+            // react-router's NavLink only ever matches on pathname, never on search params —
+            // so "Executive Overview" (/erp/executive-overview) and "Approvals"
+            // (/erp/executive-overview?tab=approvals) would both light up together on that
+            // page no matter what `end` is set to. Compute active state ourselves instead so
+            // exactly one item highlights.
+            const [itemPath, itemQuery] = item.to.split('?');
+            const isActive = itemQuery
+              ? location.pathname === itemPath && location.search === `?${itemQuery}`
+              : location.pathname === itemPath
+                || (location.pathname.startsWith(itemPath + '/') && !(itemPath === '/erp/executive-overview' && location.search));
             return (
               <NavLink
                 key={item.to}
                 to={item.to}
-                end={item.to === '/erp/hr'}
                 title={navLabel}
                 onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`
-                }
+                className={`erp-nav-item erp-nav-slide${isActive ? ' erp-nav-active' : ''}`}
                 style={{ animationDelay: `${idx * 0.028}s` }}
               >
                 <span className="erp-icon-badge">
                   <i className={item.icon} style={{ color: 'inherit', fontSize: 13 }}></i>
                 </span>
-                {!collapsed && <span style={{ flex: 1 }}>{navLabel}</span>}
+                {!collapsed && <span style={{ flex: 1 }}>{item.num ? `${item.num}. ` : ''}{navLabel}</span>}
                 {!collapsed && (
                   <i className="fas fa-chevron-right erp-nav-chevron" style={{ fontSize: 10 }}></i>
                 )}
@@ -678,13 +721,13 @@ const ERPLayout = ({ children }: Props) => {
 
         {/* RBAC: User Management (super admins only) / Request Module Access (everyone else) */}
         {!accessLoading && isSuperAdmin && (
-          <div style={{ margin: collapsed ? '10px 10px 0' : '16px 16px 0', paddingTop: 14, borderTop: '1px solid rgba(255,255,255,0.07)', flexShrink: 0 }}>
+          <div style={{ margin: collapsed ? '6px 10px 0' : '10px 16px 0', paddingTop: 9, borderTop: '1px solid rgba(255,255,255,0.07)', flexShrink: 0 }}>
             {!collapsed && (
               <span style={{
-                fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.35)', fontFamily: "'DM Sans', sans-serif",
+                fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.40)', fontFamily: "'DM Sans', sans-serif",
               }}>
-                ADMIN
+                ADMINISTRATION
               </span>
             )}
           </div>
@@ -757,7 +800,7 @@ const ERPLayout = ({ children }: Props) => {
                     style={{ width: '100%', background: 'none', textAlign: 'left' }}
                   >
                     <span className="erp-icon-badge">
-                      <i className="fas fa-user-shield" style={{ color: 'inherit', fontSize: 13 }}></i>
+                      <i className="fas fa-cog" style={{ color: 'inherit', fontSize: 13 }}></i>
                     </span>
                     <span style={{ flex: 1 }}>Admin</span>
                     {newInquiriesCount > 0 && !adminGroupOpen && (
@@ -770,7 +813,7 @@ const ERPLayout = ({ children }: Props) => {
                         {newInquiriesCount > 99 ? '99+' : newInquiriesCount}
                       </span>
                     )}
-                    <i className="fas fa-chevron-down" style={{ fontSize: 10, marginLeft: 6, transition: 'transform 0.3s ease', transform: adminGroupOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}></i>
+                    <i className="fas fa-chevron-right" style={{ fontSize: 10, marginLeft: 6, transition: 'transform 0.3s ease', transform: adminGroupOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}></i>
                   </button>
                   <div style={{
                     overflow: 'hidden',
@@ -882,20 +925,25 @@ const ERPLayout = ({ children }: Props) => {
             </NavLink>
           </div>
         )}
+        </div>
+        {/* end scrollable middle */}
 
         {/* switch to academy — Super Admin only */}
         {isSuperAdmin && (
           <div style={{ padding: '10px 10px 0', flexShrink: 0, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <button
-              onClick={() => navigate('/lma/courses')}
+              onClick={handleSwitchToAcademy}
+              disabled={switchingToAcademy}
               aria-label="Switch to Academy"
               style={{
                 display: 'flex', alignItems: 'center', gap: 10,
                 width: '100%', justifyContent: collapsed ? 'center' : 'flex-start',
+                opacity: switchingToAcademy ? 0.7 : 1,
+                cursor: switchingToAcademy ? 'wait' : 'pointer',
                 background: 'rgba(217,53,34,0.07)',
                 border: '1px solid rgba(217,53,34,0.16)',
                 borderRadius: 10, padding: '9px 13px',
-                cursor: 'pointer', color: C.orange,
+                color: C.orange,
                 fontSize: 13.5, fontWeight: 600,
                 fontFamily: "'DM Sans', sans-serif",
                 transition: 'background 0.2s, border-color 0.2s',
@@ -903,8 +951,8 @@ const ERPLayout = ({ children }: Props) => {
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.14)'; e.currentTarget.style.borderColor = 'rgba(217,53,34,0.32)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'rgba(217,53,34,0.07)'; e.currentTarget.style.borderColor = 'rgba(217,53,34,0.16)'; }}
             >
-              <i className="fas fa-graduation-cap" style={{ fontSize: 13, flexShrink: 0 }}></i>
-              {!collapsed && <span>Switch to Academy</span>}
+              <i className={`fas ${switchingToAcademy ? 'fa-spinner fa-spin' : 'fa-graduation-cap'}`} style={{ fontSize: 13, flexShrink: 0 }}></i>
+              {!collapsed && <span>{switchingToAcademy ? 'Switching…' : 'Switch to Academy'}</span>}
             </button>
           </div>
         )}
@@ -919,6 +967,27 @@ const ERPLayout = ({ children }: Props) => {
           >
             <i className="fas fa-sign-out-alt" style={{ fontSize: 13, flexShrink: 0 }}></i>
             {!collapsed && <span>Logout</span>}
+          </button>
+        </div>
+
+        {/* collapse sidebar */}
+        <div style={{ padding: '4px 10px 12px', flexShrink: 0, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <button
+            onClick={() => setCollapsed(c => !c)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              width: '100%', justifyContent: collapsed ? 'center' : 'flex-start',
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '10px 6px', borderRadius: 8, marginTop: 6,
+              color: 'rgba(255,255,255,0.45)', fontSize: 13, fontWeight: 600,
+              fontFamily: "'DM Sans', sans-serif", transition: 'color 0.2s, background 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; e.currentTarget.style.background = 'transparent'; }}
+          >
+            <i className={`fas fa-${collapsed ? 'chevron-right' : 'chevron-left'}`} style={{ fontSize: 12, flexShrink: 0 }}></i>
+            {!collapsed && <span>Collapse sidebar</span>}
           </button>
         </div>
       </aside>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Camera, User, Mail, Phone, Building2, Cake, MapPin, ShieldAlert } from 'lucide-react';
-import { useERPList, erpUpload, erpFetch } from '../../../../hooks/useERPApi';
+import { useERPList, erpUpload, erpFetch, isSuperUser } from '../../../../hooks/useERPApi';
 import { useAccess } from '../../../../context/AccessContext';
 import { toast } from 'react-toastify';
 import ERPTable from '../../ERPTable';
@@ -115,9 +115,15 @@ function DelDlg({ onCancel, onConfirm }: { onCancel:()=>void; onConfirm:()=>void
 }
 
 const defEmp = {
-  full_name:'',email:'',phone:'',department:'',designation:'',status:'active',salary:'',joined_on:'',user:'',
+  full_name:'',email:'',phone:'',department:'',designation:'',status:'active',salary:'',salary_currency:'INR',joined_on:'',user:'',
   date_of_birth:'',gender:'',address:'',emergency_contact_name:'',emergency_contact_phone:'',
 };
+
+const SALARY_CURRENCIES: { code: 'AED' | 'INR'; label: string; flag: string; symbol: string }[] = [
+  { code: 'INR', label: 'Indian Rupee', flag: '🇮🇳', symbol: '₹' },
+  { code: 'AED', label: 'UAE Dirham',   flag: '🇦🇪', symbol: 'AED' },
+];
+const salaryCurrencySymbol = (code?: string) => SALARY_CURRENCIES.find(c => c.code === code)?.symbol ?? '₹';
 
 export default function EmployeesPanel() {
   const { userRole } = useAccess();
@@ -126,9 +132,14 @@ export default function EmployeesPanel() {
 }
 
 function AdminEmployeesView() {
-  const { canWrite } = useAccess();
-  const isAdmin = canWrite('hr');
-  const { formatAmount, symbol, selectedCurrency } = useCurrency();
+  const { isCompanyAdmin, isHRManager } = useAccess();
+  // Matches the backend's _is_hr_privileged gate on EmployeeViewSet.perform_create/
+  // perform_destroy exactly (apps/hr/views.py) — canWrite('hr') was too loose here: it also
+  // returns true for a plain regular_user who merely has "hr" module access granted, which
+  // showed the Add/Delete buttons but then had every POST/DELETE rejected 403 "Admin only."
+  // by the backend. Every other HR panel (HRExitPage, HROnboardingPage, OvertimeModule, etc.)
+  // already uses this exact isSuperUser() || isCompanyAdmin || isHRManager check.
+  const isAdmin = isSuperUser() || isCompanyAdmin || isHRManager;
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -142,6 +153,7 @@ function AdminEmployeesView() {
   const [empF,      setEmpF]      = useState({...defEmp});
   const [photoFile,    setPhotoFile]    = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState('');
+  const [saving,       setSaving]       = useState(false);
 
   // Arrived here via "Yes, Create Profile" from the post-user-creation prompt — open the
   // Add Employee form pre-filled with the account we just created, then drop the nav state
@@ -168,12 +180,17 @@ function AdminEmployeesView() {
 
   const saveEmployee = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Guards against a double-click or double form-submit (e.g. Enter + click landing in the
+    // same tick) firing two POSTs before the first response comes back and creating two
+    // Employee rows for one submission.
+    if (saving) return;
+    setSaving(true);
     try {
       const fields: Record<string, any> = {
         full_name: empF.full_name, email: empF.email, phone: empF.phone, designation: empF.designation, status: empF.status,
+        salary_currency: empF.salary_currency,
         gender: empF.gender, address: empF.address,
         emergency_contact_name: empF.emergency_contact_name, emergency_contact_phone: empF.emergency_contact_phone,
-        salary_currency: selectedCurrency,
       };
       if (empF.department) fields.department = Number(empF.department);
       if (empF.salary) fields.salary = Number(empF.salary);
@@ -196,6 +213,7 @@ function AdminEmployeesView() {
       toast.success(editing ? 'Employee updated' : 'Employee created');
       close();
     } catch (err: any) { toast.error(err.message || 'Save failed'); }
+    finally { setSaving(false); }
   };
 
   const confirmDel = async () => {
@@ -210,7 +228,7 @@ function AdminEmployeesView() {
     { key:'department_name', label:'Department',  render:(r:any)=>r.department_name||r.department||'—' },
     { key:'designation',     label:'Designation', render:(r:any)=>r.designation||'—' },
     { key:'status',          label:'Status',      render:(r:any)=>sbadge(r.status||'active',empStatusColors) },
-    { key:'salary',          label:'Salary',      render:(r:any)=>r.salary?formatAmount(r.salary):'—' },
+    { key:'salary',          label:'Salary',      render:(r:any)=>r.salary?`${salaryCurrencySymbol(r.salary_currency)} ${Number(r.salary).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}`:'—' },
   ];
 
   return (
@@ -223,7 +241,7 @@ function AdminEmployeesView() {
           setEditing(r);
           setEmpF({
             full_name:r.full_name||'',email:r.email||'',phone:r.phone||'',department:String(r.department||''),designation:r.designation||'',
-            status:r.status||'active',salary:r.salary?String(r.salary):'',joined_on:r.joined_on||'',user:r.user?String(r.user):'',
+            status:r.status||'active',salary:r.salary?String(r.salary):'',salary_currency:r.salary_currency||'INR',joined_on:r.joined_on||'',user:r.user?String(r.user):'',
             date_of_birth:r.date_of_birth||'',gender:r.gender||'',address:r.address||'',
             emergency_contact_name:r.emergency_contact_name||'',emergency_contact_phone:r.emergency_contact_phone||'',
           });
@@ -282,8 +300,14 @@ function AdminEmployeesView() {
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
                 <div><label style={lbl}>Salary</label>
                   <div style={{display:'flex'}}>
-                    <span style={{display:'flex',alignItems:'center',padding:'0 12px',height:44,background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRight:'none',borderRadius:'9px 0 0 9px',fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700,color:'#6B6B6B',flexShrink:0}}>{symbol}</span>
-                    <input type="number" value={empF.salary} onChange={e=>setEmpF(f=>({...f,salary:e.target.value}))} style={{...inp,borderRadius:'0 9px 9px 0'}} step="0.01" min="0" />
+                    <select
+                      value={empF.salary_currency}
+                      onChange={e=>setEmpF(f=>({...f,salary_currency:e.target.value}))}
+                      style={{display:'flex',alignItems:'center',padding:'0 10px',height:44,background:'#F8F7F4',border:'1px solid rgba(0,0,0,0.10)',borderRight:'none',borderRadius:'9px 0 0 9px',fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700,color:'#6B6B6B',flexShrink:0,cursor:'pointer'}}
+                    >
+                      {SALARY_CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
+                    </select>
+                    <input type="number" value={empF.salary} onChange={e=>setEmpF(f=>({...f,salary:e.target.value}))} style={{...inp,borderRadius:'0 9px 9px 0'}} step="0.01" min="0" placeholder={salaryCurrencySymbol(empF.salary_currency)} />
                   </div>
                 </div>
                 <div><label style={lbl}>Date Joined</label><input type="date" value={empF.joined_on} onChange={e=>setEmpF(f=>({...f,joined_on:e.target.value}))} style={inp} /></div>
@@ -317,7 +341,7 @@ function AdminEmployeesView() {
                   ))}
                 </select>
               </div>
-              <div style={{display:'flex',gap:10,marginTop:4}}><button type="button" onClick={close} style={CNCL}>Cancel</button><button type="submit" style={SAVE}>{editing?'Update':'Save'}</button></div>
+              <div style={{display:'flex',gap:10,marginTop:4}}><button type="button" onClick={close} disabled={saving} style={CNCL}>Cancel</button><button type="submit" disabled={saving} style={{...SAVE,opacity:saving?0.7:1,cursor:saving?'wait':'pointer'}}>{saving?'Saving…':editing?'Update':'Save'}</button></div>
             </form>
           </div>
         </div>

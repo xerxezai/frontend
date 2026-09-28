@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import { useERPList, erpFetch } from '../../../../hooks/useERPApi';
 import { useCurrency } from '../../../../context/CurrencyContext';
 
@@ -121,6 +122,30 @@ function ConfirmGenerateDlg({ monthLabel, year, count, totalCost, busy, onCancel
   );
 }
 
+// ── Delete confirmation dialog ──────────────────────────────────────────────────
+function ConfirmDeleteDlg({ employeeName, busy, onCancel, onConfirm }: {
+  employeeName: string; busy: boolean; onCancel: () => void; onConfirm: () => void;
+}) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1060, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(3px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onCancel}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, padding: 24, maxWidth: 400, width: '100%', borderTop: '2px solid #ef4444', fontFamily: "'DM Sans', sans-serif", boxShadow: '0 20px 50px rgba(0,0,0,0.18)' }}>
+        <h6 style={{ fontWeight: 800, marginBottom: 8, color: C.dark }}>Delete payroll record?</h6>
+        <p style={{ fontSize: 13.5, color: C.muted, marginBottom: 20, lineHeight: 1.6 }}>
+          Are you sure you want to delete this payroll record for <strong style={{ color: C.dark }}>{employeeName}</strong>? This cannot be undone.
+        </p>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onCancel} disabled={busy} style={{ flex: 1, background: C.cream, border: `1px solid ${C.border}`, borderRadius: 9, padding: 9, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 13, color: C.muted }}>Cancel</button>
+          <button onClick={onConfirm} disabled={busy}
+            style={{ flex: 1, background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 9, padding: 9, cursor: busy ? 'wait' : 'pointer', color: '#ef4444', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            {busy && <span className="spinner-border spinner-border-sm" style={{ width: 12, height: 12 }} />}
+            {busy ? 'Deleting…' : 'Delete'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function GeneratePayrollModule() {
   const { formatAmount } = useCurrency();
   const now = new Date();
@@ -137,6 +162,8 @@ export default function GeneratePayrollModule() {
 
   const payrolls = useERPList<any>(`hr/payroll/?month=${month}&year=${year}`);
   const [actioning, setActioning] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState<any>(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
 
   const loadPreview = useCallback(async () => {
     setPreviewLoading(true); setPreviewErr('');
@@ -187,6 +214,19 @@ export default function GeneratePayrollModule() {
       await payrolls.reload();
     } catch {}
     finally { setActioning(null); }
+  };
+
+  const confirmDeletePayroll = async () => {
+    setDeleteBusy(true);
+    try {
+      await payrolls.remove(deleting.id);
+      toast.success('Payroll record deleted');
+      setDeleting(null);
+    } catch (err: any) {
+      toast.error(err.message || 'Could not delete this payroll record');
+    } finally {
+      setDeleteBusy(false);
+    }
   };
 
   const rows = payrolls.data;
@@ -375,7 +415,11 @@ export default function GeneratePayrollModule() {
                             Mark Paid
                           </button>
                         )}
-                        {r.status === 'paid' && <span style={{ color: C.muted, fontSize: 11, fontFamily: "'DM Sans', sans-serif" }}>—</span>}
+                        <button onClick={() => setDeleting(r)} disabled={actioning === r.id}
+                          style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.20)', borderRadius: 7, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+                          title="Delete">
+                          <i className="fas fa-trash" style={{ fontSize: 10 }} />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -391,6 +435,9 @@ export default function GeneratePayrollModule() {
           monthLabel={MONTHS[parseInt(month) - 1]} year={year} count={preview.count} totalCost={formatAmount(preview.total_net)}
           busy={generating} onCancel={() => setShowConfirm(false)} onConfirm={handleGenerate}
         />
+      )}
+      {deleting && (
+        <ConfirmDeleteDlg employeeName={deleting.employee_name} busy={deleteBusy} onCancel={() => setDeleting(null)} onConfirm={confirmDeletePayroll} />
       )}
     </div>
   );

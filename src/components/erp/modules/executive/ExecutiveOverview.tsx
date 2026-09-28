@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCurrency } from '../../../../context/CurrencyContext';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   OG, DARK, PAGE_BG, WHITE, BORDER, FF, FF_TITLE, LiveBadge, injectExecutiveKeyframes,
   isExecutiveAdmin,
@@ -25,7 +24,6 @@ const TABS: { key: TabKey; label: string }[] = [
 
 export default function ExecutiveOverview() {
   const navigate = useNavigate();
-  const { selectedCurrency, setCurrency } = useCurrency();
 
   // Admin-only page: aggregates every module, so it's gated on is_staff/is_superuser rather
   // than one rbacModule. Checked again here (ERPPage.tsx's route guard checks the same thing)
@@ -39,7 +37,9 @@ export default function ExecutiveOverview() {
     if (!ok) navigate('/erp/dashboard', { replace: true });
   }, [navigate]);
 
-  const [tab, setTab] = useState<TabKey>('overview');
+  const [searchParams] = useSearchParams();
+  const initialTab = TABS.some(t => t.key === searchParams.get('tab')) ? (searchParams.get('tab') as TabKey) : 'overview';
+  const [tab, setTab] = useState<TabKey>(initialTab);
   const [period, setPeriod] = useState<'monthly' | 'ytd'>('monthly');
   const [updatedAt, setUpdatedAt] = useState(new Date());
 
@@ -66,16 +66,6 @@ export default function ExecutiveOverview() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', gap: 4, background: WHITE, borderRadius: 10, padding: 4, border: `1px solid ${BORDER}` }}>
-            {['AED', 'INR'].map(c => (
-              <button key={c} onClick={() => setCurrency(c)} style={{
-                border: 'none', borderRadius: 7, padding: '7px 14px', fontFamily: FF, fontWeight: 700, fontSize: 12.5, cursor: 'pointer',
-                background: selectedCurrency === c ? 'linear-gradient(145deg,#D93522 0%,#D93522 100%)' : 'transparent',
-                color: selectedCurrency === c ? '#fff' : '#6B6B6B',
-              }}>{c}</button>
-            ))}
-          </div>
-
           <div style={{ display: 'flex', gap: 4, background: WHITE, borderRadius: 10, padding: 4, border: `1px solid ${BORDER}` }}>
             {([['monthly', 'Monthly'], ['ytd', 'YTD']] as [typeof period, string][]).map(([val, label]) => (
               <button key={val} onClick={() => setPeriod(val)} style={{
