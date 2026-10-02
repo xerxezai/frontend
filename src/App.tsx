@@ -81,6 +81,12 @@ const SmartAssetTrackingPage = lazy(() => import("./page/v2/iot/SmartAssetTracki
 const IndustrialIoTPage = lazy(() => import("./page/v2/iot/IndustrialIoTPage"));
 const SmartBuildingPage = lazy(() => import("./page/v2/iot/SmartBuildingPage"));
 const FleetManagementPage = lazy(() => import("./page/v2/iot/FleetManagementPage"));
+const TS101BasicPage = lazy(() => import("./page/v2/iot/TS101BasicPage"));
+const UX101ALPage = lazy(() => import("./page/v2/iot/UX101ALPage"));
+const UX101ALPlusPage = lazy(() => import("./page/v2/iot/UX101ALPlusPage"));
+const Bharat101PlusPage = lazy(() => import("./page/v2/iot/Bharat101PlusPage"));
+const Bharat101IRNSSPage = lazy(() => import("./page/v2/iot/Bharat101IRNSSPage"));
+const AT101Page = lazy(() => import("./page/v2/iot/AT101Page"));
 const AgricultureIoTPage = lazy(() => import("./page/v2/iot/AgricultureIoTPage"));
 const HealthcareIoTPage = lazy(() => import("./page/v2/iot/HealthcareIoTPage"));
 const SmartRetailPage = lazy(() => import("./page/v2/iot/SmartRetailPage"));
@@ -164,6 +170,12 @@ function App() {
           <Route path="/iot/industrial-iot" element={<IndustrialIoTPage />} />
           <Route path="/iot/smart-building-solutions" element={<SmartBuildingPage />} />
           <Route path="/iot/fleet-management-systems" element={<FleetManagementPage />} />
+          <Route path="/iot/fleet-management-systems/ts101basic-4g" element={<TS101BasicPage />} />
+          <Route path="/iot/fleet-management-systems/ux101-al" element={<UX101ALPage />} />
+          <Route path="/iot/fleet-management-systems/ux101-al-plus" element={<UX101ALPlusPage />} />
+          <Route path="/iot/fleet-management-systems/bharat101plus-4g" element={<Bharat101PlusPage />} />
+          <Route path="/iot/fleet-management-systems/bharat101-irnss" element={<Bharat101IRNSSPage />} />
+          <Route path="/iot/fleet-management-systems/at101-4g" element={<AT101Page />} />
           <Route path="/iot/agriculture-iot" element={<AgricultureIoTPage />} />
           <Route path="/iot/healthcare-iot" element={<HealthcareIoTPage />} />
           <Route path="/iot/smart-retail" element={<SmartRetailPage />} />
