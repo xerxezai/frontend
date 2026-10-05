@@ -262,8 +262,8 @@ function SupportCard() {
         <a href="mailto:info@xerxez.com" style={{ ...btnStyle, marginTop: 0, background: '#fafaf8', border: '1.5px solid #E4DFD8', color: '#5a5650' }}>
           <i className="fas fa-envelope" style={{ fontSize: 11 }} /> info@xerxez.com
         </a>
-        <a href="https://wa.me/971567867451" target="_blank" rel="noopener noreferrer" style={btnStyle}>
-          <i className="fab fa-whatsapp" style={{ fontSize: 13 }} /> +971 56 786 7451
+        <a href="#" target="_blank" rel="noopener noreferrer" style={btnStyle}>
+          <i className="fab fa-whatsapp" style={{ fontSize: 13 }} /> +971 56 XXX XXX
         </a>
       </div>
     </div>

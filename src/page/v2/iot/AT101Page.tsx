@@ -26,8 +26,8 @@ import cordlessImage from "../../../assets/images/iot/accessory-fuel-sensor-v3.j
 import connectivityImage from "../../../assets/images/iot/devices/at101-4g-connectivity.jpg";
 import motionDetectionImage from "../../../assets/images/iot/devices/motion-detection.jpg";
 import multiIndustryImage from "../../../assets/images/iot/devices/multi-industry.jpg";
-import panicButtonImage from "../../../assets/images/iot/accessory-panic-button-v2.jpg";
-import fuelSensorImage from "../../../assets/images/iot/accessory-fuel-sensor-v3.jpg";
+import panicButtonImage from "../../../assets/images/iot/devices/emergency-stop-button.jpg";
+import fuelSensorImage from "../../../assets/images/iot/devices/fuel-gauge-sensor.jpg";
 import shipmentImage from "../../../assets/images/iot/devices/shipment-security-v2.jpg";
 import constructionImage from "../../../assets/images/iot/devices/construction.jpg";
 import agricultureImage from "../../../assets/images/iot/devices/agriculture.jpg";

@@ -26,8 +26,8 @@ import { XerxezShell, T, Eyebrow, SectionHeading, Reveal, Btn, V2_HEADER_H } fro
 import evCompliantImage from "../../../assets/images/iot/devices/ts101basic-ev-compliant.jpg";
 import movementImage from "../../../assets/images/iot/devices/ts101basic-movement.jpg";
 import geofencingImage from "../../../assets/images/iot/devices/geofencing-v2.jpg";
-import panicButtonImage from "../../../assets/images/iot/accessory-panic-button-v2.jpg";
-import fuelSensorImage from "../../../assets/images/iot/accessory-fuel-sensor-v3.jpg";
+import panicButtonImage from "../../../assets/images/iot/devices/emergency-stop-button.jpg";
+import fuelSensorImage from "../../../assets/images/iot/devices/fuel-gauge-sensor.jpg";
 import externalAntennaImage from "../../../assets/images/iot/devices/external-antenna.jpg";
 import logisticsImage from "../../../assets/images/iot/devices/logistics.jpg";
 import constructionImage from "../../../assets/images/iot/devices/mining.jpg";

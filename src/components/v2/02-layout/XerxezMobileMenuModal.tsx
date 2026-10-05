@@ -80,10 +80,10 @@ const XerxezMobileMenuModal = ({ isOpen, toggle }: V2MobileMenuModalProps) => {
                 ))}
               </div>
               <div className="social-icon d-flex align-items-center">
-                <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" target="_blank" rel="noreferrer">
+                <a href="#" target="_blank" rel="noreferrer">
                   <i className="fab fa-linkedin-in"></i>
                 </a>
-                <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer">
+                <a href="#" target="_blank" rel="noreferrer">
                   <i className="fab fa-github"></i>
                 </a>
               </div>
@@ -96,7 +96,7 @@ const XerxezMobileMenuModal = ({ isOpen, toggle }: V2MobileMenuModalProps) => {
                   </li>
                   <li>
                     <span>Phone:</span>
-                    <a href="tel:+971567867451">+971 56 786 7451</a>
+                    <a href="tel:+97156XXXXXXX">+971 56 XXX XXX</a>
                   </li>
                   <li>
                     <span>Email:</span>

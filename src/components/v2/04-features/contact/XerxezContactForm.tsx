@@ -488,7 +488,7 @@ const XerxezContactForm = () => {
         <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 16 }}>
           {[
             { label: "Email", value: "info@xerxez.com", href: "mailto:info@xerxez.com" },
-            { label: "Phone", value: "+971 56 786 7451", href: "tel:+971567867451" },
+            { label: "Phone", value: "+971 56 XXX XXX", href: "tel:+97156XXXXXXX" },
             { label: "Location", value: "India & UAE — Remote-first" },   // no href → plain text
           ].map((r) => (
             <li key={r.label}>
@@ -560,7 +560,7 @@ const XerxezContactForm = () => {
           <V2FormSuccess title="Message sent!">
             We'll contact you within 24 hours.
             <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 300, margin: "28px auto 0" }}>
-              <a href="https://wa.me/971567867451" target="_blank" rel="noopener noreferrer"
+              <a href="#" target="_blank" rel="noopener noreferrer"
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
                   background: "#25D366", color: "#fff", textDecoration: "none",
@@ -791,7 +791,7 @@ const XerxezContactForm = () => {
 
             <p style={{ fontFamily: T.fontBody, fontSize: 11.5, color: T.muted, marginTop: 16 }}>
               Your data is encrypted &amp; never shared ·{" "}
-              <a href="tel:+971567867451" style={{ color: T.red, textDecoration: "none", fontWeight: 600 }}>+971 56 786 7451</a>
+              <a href="tel:+97156XXXXXXX" style={{ color: T.red, textDecoration: "none", fontWeight: 600 }}>+971 56 XXX XXX</a>
             </p>
           </form>
         )}

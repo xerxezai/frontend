@@ -68,8 +68,8 @@ const ReadyCTA = () => (
       }}>
         <span>
           Or call us:{" "}
-          <a href="tel:+971567867451" style={{ color: "#E8A84E", textDecoration: "none", fontWeight: 700 }}>
-            +971 56 786 7451
+          <a href="tel:+97156XXXXXXX" style={{ color: "#E8A84E", textDecoration: "none", fontWeight: 700 }}>
+            +971 56 XXX XXX
           </a>
         </span>
         <span style={{ color: "rgba(201,136,58,0.40)" }}>·</span>

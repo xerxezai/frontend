@@ -53,12 +53,12 @@ const FooterSection = () => {
                     solutions that transform how enterprises operate at scale.
                   </p>
                   <div className="social-icon">
-                    <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/"
+                    <a href="#"
                       target="_blank" rel="noreferrer"
                       style={{ color: NAV.icon }} {...linkHover}>
                       <i className="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="https://github.com/"
+                    <a href="#"
                       target="_blank" rel="noreferrer"
                       style={{ color: NAV.icon }} {...linkHover}>
                       <i className="fab fa-github"></i>
@@ -113,9 +113,9 @@ const FooterSection = () => {
                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                     <Phone size={16} color={NAV.icon} style={{ flexShrink: 0 }} />
-                    <a href="tel:+971567867451"
+                    <a href="tel:+97156XXXXXXX"
                       style={{ color: NAV.link, textDecoration: "none", fontSize: 14 }}
-                      {...linkHover}>+971 56 786 7451</a>
+                      {...linkHover}>+971 56 XXX XXX</a>
                   </li>
                   <li style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
                     <Mail size={16} color={NAV.icon} style={{ flexShrink: 0 }} />
