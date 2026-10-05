@@ -110,6 +110,14 @@ const ACADEMY_ICONS: Record<string, LucideIcon> = {
   "Our Courses":     GraduationCap,
   "Partner with Us": Handshake,
 };
+// Sign-in dropdown row icons, keyed by SIGNIN_OPTIONS' `to` path — reuses
+// ServiceRow (same red-left-border hover as every other mega-menu row)
+// instead of the previous bespoke background-only hover treatment.
+const SIGNIN_ICONS: Record<string, LucideIcon> = {
+  "/erp/login": Building2,
+  "/partner/login": Handshake,
+  "/lma/login": GraduationCap,
+};
 const ACADEMY_ITEMS: Sub[] = [
   { title: "Our Courses",     link: "/training",         desc: "Learn AI, MLOps, DevSecOps from practitioners" },
   { title: "Partner with Us", link: "/partner-with-us",  desc: "Host your courses on XERXEZ Academy" },
@@ -197,12 +205,13 @@ Nav.push({ title: "Who We Are", link: "/about", hasDropdown: true, submenu: WHO_
 // panel) drops the description and shrinks the icon/padding so the row is
 // name-only and the panel stays tight instead of needing to fit 8 full
 // descriptions.
-const ServiceRow = ({ s, to, icon: Icon, compact = false, descMaxWidth }: { s: Sub; to: string; icon: LucideIcon; compact?: boolean; descMaxWidth?: number }) => {
+const ServiceRow = ({ s, to, icon: Icon, compact = false, descMaxWidth, onClick }: { s: Sub; to: string; icon: LucideIcon; compact?: boolean; descMaxWidth?: number; onClick?: () => void }) => {
   const [hover, setHover] = useState(false);
   const tile = compact ? 30 : 36;
   return (
     <Link
       to={to}
+      onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -349,37 +358,13 @@ const V2SignIn = ({ className }: { className?: string }) => {
           zIndex: 3, padding: 8,
         }}>
           {SIGNIN_OPTIONS.map((opt) => (
-            <Link
+            <ServiceRow
               key={opt.to}
+              s={{ title: opt.label, link: opt.to, desc: opt.subtitle }}
               to={opt.to}
+              icon={SIGNIN_ICONS[opt.to] ?? Building2}
               onClick={() => setOpen(false)}          // close after choosing
-              style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "6px 10px 6px 8px", textDecoration: "none",
-                borderRadius: 12,
-                transition: "background 140ms ease",
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.background = T.lightAlt)}
-              onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-            >
-              {/* icon tile — Academy Login gets the lucide GraduationCap icon;
-                  the other two render their FontAwesome class from SIGNIN_OPTIONS. */}
-              <span style={{
-                width: 30, height: 30, borderRadius: 9, flexShrink: 0,
-                background: T.tileBg, color: T.red,
-                display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 13,
-              }}>
-                {opt.to === "/lma/login" ? <GraduationCap size={16} /> : <i className={opt.icon} />}
-              </span>
-              <span>
-                <span style={{ display: "block", fontFamily: T.fontHead, fontSize: 13.5, fontWeight: 700, color: T.headNavy }}>
-                  {opt.label}
-                </span>
-                <span style={{ display: "block", fontFamily: T.fontBody, fontSize: 11.5, color: "#6b7280", marginTop: 1 }}>
-                  {opt.subtitle}
-                </span>
-              </span>
-            </Link>
+            />
           ))}
         </div>
       )}

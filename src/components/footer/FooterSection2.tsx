@@ -35,8 +35,8 @@ const NAV = [
 ];
 
 const SOCIAL = [
-  { href: "https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/", icon: "fab fa-linkedin-in", label: "LinkedIn" },
-  { href: "https://github.com/xerxezai",                                                    icon: "fab fa-github",      label: "GitHub"   },
+  { href: "#", icon: "fab fa-linkedin-in", label: "LinkedIn" },
+  { href: "#",                                                    icon: "fab fa-github",      label: "GitHub"   },
   { href: "mailto:info@xerxez.com",                                                        icon: "fas fa-envelope",    label: "Email"    },
 ];
 
@@ -233,8 +233,8 @@ const FooterSection2 = () => (
                 {
                   icon: <Phone size={12} />,
                   content: (
-                    <a href="tel:+971567867451" style={linkBase} {...linkHov}>
-                      +971 56 786 7451
+                    <a href="tel:+97156XXXXXXX" style={linkBase} {...linkHov}>
+                      +971 56 XXX XXX
                     </a>
                   ),
                 },

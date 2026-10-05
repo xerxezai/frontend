@@ -29,6 +29,7 @@ import ts101basicCardImage from "../../../assets/images/iot/ts101basic-card.png"
 import ux101alCardImage from "../../../assets/images/iot/ux101al-device.png";
 import ux101alPlusCardImage from "../../../assets/images/iot/ux101alplus-device.png";
 import bharat101plusCardImage from "../../../assets/images/iot/bharat101plus-device.png";
+import bharat101irnssCardImage from "../../../assets/images/iot/bharat101irnss-device.png";
 import at101CardImage from "../../../assets/images/iot/at101-device.png";
 
 const industryPad = { padding: "60px 0" };
@@ -222,6 +223,7 @@ const TRACKING_DEVICES: {
       "Equipped with 1x RS232 port and IP65-rated rugged design for harsh environments",
     ],
     detailRoute: "/iot/fleet-management-systems/bharat101-irnss",
+    image: bharat101irnssCardImage,
     features: [
       "AIS-140 + IRNSS navigation", "Indian NavIC GPS system", "Emergency SOS button",
       "Accelerometer + Gyroscope", "Main battery removal alert", "VLTD compliant",
@@ -400,6 +402,7 @@ const FleetManagementPage = () => {
       ctaButtons={[
         { label: "Request a Demo", to: "/contact" },
         { label: "View Capabilities", href: "#capabilities", variant: "outline", arrow: false },
+        { label: "View Devices", href: "#devices", variant: "outline", arrow: false },
       ]}
       overlayOpacity={0.70}
     />
@@ -533,7 +536,7 @@ const FleetManagementPage = () => {
     </section>
 
     {/* ── Devices — certified GPS tracking hardware. ── */}
-    <section style={{ ...industryPad, background: "#fff" }}>
+    <section id="devices" style={{ ...industryPad, background: "#fff", scrollMarginTop: V2_HEADER_H + 20 }}>
       <div className="container">
         <Reveal>
           <SectionHeading

@@ -27,8 +27,8 @@ import monitoringImage from "../../../assets/images/iot/devices/intelligent-moni
 import dualCanImage from "../../../assets/images/iot/devices/dual-can-new.jpg";
 import edgeProcessingImage from "../../../assets/images/iot/devices/vfota.jpg";
 import harshConditionsImage from "../../../assets/images/iot/devices/construction.jpg";
-import panicButtonImage from "../../../assets/images/iot/accessory-panic-button-v2.jpg";
-import fuelSensorImage from "../../../assets/images/iot/accessory-fuel-sensor-v3.jpg";
+import panicButtonImage from "../../../assets/images/iot/devices/emergency-stop-button.jpg";
+import fuelSensorImage from "../../../assets/images/iot/devices/fuel-gauge-sensor.jpg";
 import optimizingOpsImage from "../../../assets/images/iot/devices/optimizing-operations.jpg";
 import miningImage from "../../../assets/images/iot/devices/mining.jpg";
 import logisticsImage from "../../../assets/images/iot/devices/logistics.jpg";

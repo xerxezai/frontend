@@ -453,14 +453,14 @@ const AboutV2 = () => (
                 </span>
                 <div>
                   <div style={{ fontFamily: T.fontHead, fontSize: 18, fontWeight: 700, color: T.headNavy }}>
-                    Er. Mohammed Tanzeem Agra
+                    Co-Founder & CEO
                   </div>
                   <div style={{ fontFamily: T.fontBody, fontSize: 13.5, color: T.muted, margin: "3px 0 12px" }}>
                     Founder · BE, MTech (CSE)
                   </div>
                   {/* the founder LinkedIn already used in the site footer / SEO */}
                   <a
-                    href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/"
+                    href="#"
                     target="_blank" rel="noreferrer"
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 7,

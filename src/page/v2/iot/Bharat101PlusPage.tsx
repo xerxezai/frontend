@@ -26,8 +26,8 @@ import motionDetectionImage from "../../../assets/images/iot/devices/ts101basic-
 import tamperProtectionImage from "../../../assets/images/iot/devices/tamper-protection.jpg";
 import rs232Image from "../../../assets/images/iot/devices/vfota.jpg";
 import remoteConfigImage from "../../../assets/images/iot/devices/vfota-ux101.jpg";
-import panicButtonImage from "../../../assets/images/iot/accessory-panic-button-v2.jpg";
-import fuelSensorImage from "../../../assets/images/iot/accessory-fuel-sensor-v3.jpg";
+import panicButtonImage from "../../../assets/images/iot/devices/emergency-stop-button.jpg";
+import fuelSensorImage from "../../../assets/images/iot/devices/fuel-gauge-sensor.jpg";
 import generatorImage from "../../../assets/images/iot/devices/generator-equipment.jpg";
 import constructionAssetImage from "../../../assets/images/iot/devices/mining.jpg";
 import miningFleetImage from "../../../assets/images/iot/devices/oil-gas.jpg";

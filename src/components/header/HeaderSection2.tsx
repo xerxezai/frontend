@@ -52,10 +52,10 @@ const HeaderSection2 = ({ variant }: Props) => {
               </li>
             </ul>
             <div className="social-icon">
-              <a href="https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" target="_blank" rel="noreferrer" title="LinkedIn">
+              <a href="#" target="_blank" rel="noreferrer" title="LinkedIn">
                 <i className="fab fa-linkedin-in"></i>
               </a>
-              <a href="https://github.com/xerxezai" target="_blank" rel="noreferrer" title="GitHub">
+              <a href="#" target="_blank" rel="noreferrer" title="GitHub">
                 <i className="fab fa-github"></i>
               </a>
             </div>

@@ -29,9 +29,9 @@ const TRUST_SIGNALS: { icon: LucideIcon; text: string }[] = [
 // one row falls back to the FontAwesome class in `fa` instead.
 const METHODS: { icon?: LucideIcon; fa?: string; title: string; label: string; href: string }[] = [
   { icon: Mail,          title: "Email",    label: "info@xerxez.com",  href: "mailto:info@xerxez.com" },
-  { icon: Phone,         title: "Phone",    label: "+971 56 786 7451", href: "tel:+971567867451" },
-  { icon: MessageCircle, title: "WhatsApp", label: "Chat with us",     href: "https://wa.me/971567867451" },
-  { fa: "fab fa-linkedin-in", title: "LinkedIn", label: "Connect with us", href: "https://www.linkedin.com/in/er-mohammed-tanzeem-agra-be-mtech-cse-438b1b74/" },
+  { icon: Phone,         title: "Phone",    label: "+971 56 XXX XXX", href: "tel:+97156XXXXXXX" },
+  { icon: MessageCircle, title: "WhatsApp", label: "Chat with us",     href: "#" },
+  { fa: "fab fa-linkedin-in", title: "LinkedIn", label: "Connect with us", href: "#" },
 ];
 
 // The "what you can expect" columns.
